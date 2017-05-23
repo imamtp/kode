@@ -1,0 +1,30 @@
+Ext.define('TabReportAP', {
+    extend: 'Ext.tab.Panel',
+    id: 'TabReportAP',
+    alias: 'widget.TabReportAP',
+    activeTab: 0,
+    plain:true,
+    autoWidth: '100%',
+    autoScroll: true,
+    defaults: {
+        autoScroll: true
+    },
+    items: [
+        {
+            xtype:'GridAPOutstanding'
+        },
+        {
+            xtype:'GridAPOutstandingDetail'
+        },
+        {
+            xtype:'GridAPAging'
+        },
+    ], listeners: {
+        render: {
+            scope: this,
+            fn: function(grid) {
+                // disableUnitMasterCustomer();
+            }
+        }
+    }
+});

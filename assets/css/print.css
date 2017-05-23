@@ -1,0 +1,14 @@
+ .borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+}
+.panel-heading{
+  padding: 3px 5px;
+}
+.panel-body{
+  padding: 5px;
+}
+
+body{
+	margin-top: 20px;
+	/*body {margin:0;padding:0}*/
+}

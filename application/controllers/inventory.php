@@ -1,0 +1,1116 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class inventory extends MY_Controller {
+
+    public function index() {
+
+    }
+
+    function SaveInventoryV2($input = null)
+    {
+        $statusformInventory2 = $this->input->post('statusformInventory2');
+
+        $opsion = $statusformInventory2 == 'input' ? 'add' : 'edit';
+        $retAkses = $this->cekAksesUser(19,$opsion);
+        if(!$retAkses['success'])
+        {
+            echo json_encode($retAkses);
+            exit;
+        }
+
+        $config['upload_path'] = './upload/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '10000';
+        $config['max_width'] = '1024';
+        $config['max_height'] = '768';
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('images')) {
+            $error = $this->upload->display_errors();
+            // echo $error;
+            if ($error != '<p>You did not select a file to upload.</p>') {
+                echo "{success:false, message:'" . $error . "'}";
+            } else {
+                // echo "{success:false, message:'simpan prosess'}";
+                $this->prosesSaveProfileV2(null, $input);
+            }
+        } else {
+            // $data = $this->upload->data());
+            // print_r($this->upload->data());
+            // echo "{success:true, message:'".print_r($this->upload->data())."'}";
+            $this->prosesSaveProfileV2($this->upload->data()['orig_name'], $input);
+            // $this->load->view('upload_success', $data);
+        }
+    }
+
+    function idinventory($post_id_data){
+         if($post_id_data==null)
+        {
+            //input baru
+             $q = $this->db->query("select max(idinventory) as id from inventory");
+            if($q->num_rows()>0)
+            {
+                $r = $q->row();
+                return $r->id+1;
+            } else {
+                return 1;
+            }
+        } else {
+            //edit
+            return $post_id_data;
+        }
+    }
+
+    function prosesSaveProfileV2($images, $input = null)
+    {
+        $this->db->trans_begin();
+        $idinventory = $this->idinventory($this->input->post('idinventory'));
+        $namaunit2 = $this->input->post('namaunit2');
+        $idsupplier = $this->input->post('idsupplier');
+        
+        $isinventory = $this->input->post('cbpersediaan') == 'on' ? 'TRUE' : 'FALSE';
+        $issell = $this->input->post('cbdijual') == 'on' ? 'TRUE' : 'FALSE';
+        $isbuy = $this->input->post('cbdibeli') == 'on' ? 'TRUE' : 'FALSE';
+
+        $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $this->input->post('namaunit'));
+        $invno = $this->input->post('invno');
+
+        $d = array(
+            'invno' => $invno,
+            'nameinventory' => $this->input->post('nameinventory'),
+            'inventory_type' => $this->input->post('inventory_type'),
+            'description' => $this->input->post('description'),
+            'isinventory' => $isinventory,
+            // 'idsupplier' => $this->input->post('idsupplier'),
+            'issell' => $issell,
+            'isbuy' => $isbuy,
+//            'images'=>$images,
+//            'userin'=>$this->session->userdata('userid'),
+            'usermod' => $this->session->userdata('userid'),
+//            'datein'=>date('Y-m-d H:m:s'),
+            'datemod' => date('Y-m-d H:m:s'),
+            // 'idinventorycat' => $this->m_data->getID('inventorycat', 'namecat', 'idinventorycat', $this->input->post('namecat')),
+            'idinventorycat'=>$this->input->post('idinventorycat'),
+            // 'idsupplier' => $this->input->post('idsupplier'),
+            'measurement_id_one' => $this->input->post('measurement_id_one'),
+            'measurement_id_two' => $this->input->post('measurement_id_two'),
+            'measurement_id_tre' => $this->input->post('measurement_id_tre'),
+            'brand_id' => $this->input->post('brand_id'),
+            'sku_no' => $this->input->post('sku_no'),
+            'bahan_coil_id' => $this->input->post('bahan_coil_id'),
+            'diameter' => $this->input->post('diameter'),
+            'ketebalan' => $this->input->post('ketebalan'),
+            'berat' => $this->input->post('berat'),
+            'lebar' => $this->input->post('lebar'),
+            'tinggi' => $this->input->post('tinggi'),
+            'panjang' => $this->input->post('panjang'),
+            'konversi_coil_name' => $this->input->post('konversi_coil_name'),
+            'panjang_satuan_id' =>$this->input->post('panjang_satuan_id'),
+            'tinggi_satuan_id' =>$this->input->post('tinggi_satuan_id'),
+            'lebar_satuan_id' =>$this->input->post('lebar_satuan_id'),
+            'berat_satuan_id' =>$this->input->post('berat_satuan_id'),
+            'ketebalan_satuan_id' =>$this->input->post('ketebalan_satuan_id'),
+            'diameter_satuan_id' =>$this->input->post('diameter_satuan_id')
+        );
+
+        if ($idinventory == null || $idinventory == '') {
+                foreach ($namaunit2 as $idunit) {
+                   // $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
+                   $sql = "select b.invno
+                            from inventoryunit a
+                            join inventory b ON a.idinventory = b.idinventory
+                            where a.idunit=$idunit and b.invno='$invno'";
+                    $q = $this->db->query($sql);
+                    // echo $sql.'        ';
+                    if($q->num_rows()>0)
+                    {
+                        echo "{success:false, message:'Gagal disimpan. No Inventory sudah ada di unit ".$u.".'}";
+                        exit;
+                    }
+                }
+        }
+
+        //buy
+        if($isbuy!='FALSE')
+        {
+            $datebuy = $this->input->post('datebuy');
+            if($datebuy!='')
+            {
+                $tgl = explode("/", $datebuy);
+                $d['yearbuy'] = $tgl[2];
+                $d['monthbuy'] = $tgl[1];
+                $d['datebuy'] = backdate($datebuy);
+            }
+
+            $d['cosaccount'] = $this->input->post('cosaccount')=='' ? null : $this->input->post('cosaccount');
+            $d['cost'] = $this->input->post('cost')=='' ? null : $this->input->post('cost');
+            $d['unitmeasure'] = $this->input->post('unitmeasure')=='' ? null : $this->input->post('unitmeasure');
+            // $d['usermod'] = $this->session->userdata('userid');
+            $d['idprimarysupplier'] = $this->m_data->getID('supplier', 'namesupplier', 'idsupplier', $this->input->post('namesupplier'));
+            // $d['datemod'] = date('Y-m-d H:m:s');
+            
+            $d['idbuytax'] = $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametaxbuy'));
+        }
+        //end buy
+
+        //sell
+        if($issell!='FALSE')
+        {
+            $d['incomeaccount'] = $this->input->post('incomeaccount') == '' ? null : $this->input->post('incomeaccount');
+            $d['sellingprice'] = $this->input->post('sellingprice')=='' ? null : $this->input->post('sellingprice');
+            $d['unitmeasuresell'] = $this->input->post('unitmeasuresell')=='' ? null : $this->input->post('unitmeasuresell');
+            $d['usermod'] = $this->session->userdata('userid');
+    //            'idprimarysupplier'=>$this->m_data->getID('supplier', 'namesupplier', 'idsupplier', $this->input->post('namesupplier')),
+            $d['datemod'] = date('Y-m-d H:m:s');
+            $d['idselingtax'] = $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametax'));
+        }
+        //end sell
+
+        //inventory
+         // $d = array(
+        if($isinventory!='FALSE')
+        {
+            $d['qtystock'] = $this->input->post('qtystock');
+            $d['umur'] = $this->input->post('umur');
+            $d['residu'] = str_replace(",", "", cleardot2($this->input->post('residu')));
+            $d['akumulasibeban'] = str_replace(",", "", cleardot2($this->input->post('akumulasibeban')));
+            $d['bebanberjalan'] = str_replace(",", "", cleardot2($this->input->post('bebanberjalan')));
+            $d['nilaibuku'] = str_replace(",", "", cleardot2($this->input->post('nilaibuku')));
+            $d['bebanperbulan'] = str_replace(",", "", cleardot2($this->input->post('bebanperbulan')));
+            // $d['usermod'] = $this->session->userdata('userid'),
+            // $d['datemod'] = date('Y-m-d H:m:s'),
+            $d['akumulasiakhir'] = str_replace(",", "", cleardot2($this->input->post('akumulasiakhir')));
+        }
+        // );
+        //end inventory
+
+        if ($images != '' || $images != null) {
+            $d['images'] = $images;
+        } else {
+
+            $d['images'] = 'inventory.png';
+        }
+
+        // echo 'idinventory:'.$idinventory;
+        if($this->input->post('statusformInventory2')!='input'){
+        // if ($idinventory != null || $idinventory != '') {
+            // $this->db->where('idinventory', $idinventory);
+            // $this->db->delete('inventoryunit');
+            // $qunit = $this->db->get_where('unit',array('idcompany'=>$this->session->userdata('idcompany')));
+            // foreach ($qunit->result() as $runit) {
+                $idunitdiremove=null;
+
+                $qcekremove = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
+                foreach ($qcekremove->result() as $rremove) {
+                    $idunitdiremove[]=$rremove->idunit;
+                }
+
+                foreach ($namaunit2 as $u) {
+                    $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
+                    // $idunit = $u;
+                    $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
+                    if($qcek->num_rows()>0)
+                    {
+
+                    } else {
+                        $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
+                    }
+                }
+            // }
+            
+
+            $this->db->where('idinventory', $idinventory);
+            $this->db->update('inventory', $d);
+        } else {
+            // $qseq = $this->db->query("select nextval('seq_inventory') as id")->row();
+            // $idinventory = $qseq->id;
+            $d['idinventory'] = $idinventory;
+/*<<<<<<< HEAD
+            foreach ($namaunit2 as $idunit) {
+                $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+            }
+=======
+>>>>>>> ad604b887366c19f3b714a69d4a4bcb9d4363987*/
+        // print_r($d);
+            $d['userin'] = $this->session->userdata('userid');
+            $d['datein'] = date('Y-m-d H:m:s');
+            $this->db->insert('inventory', $d);
+            foreach ($namaunit2 as $u) {
+                // $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
+                 $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
+            }
+        }
+
+        //insert by supplier
+        // print_r($idsupplier); die;
+        if($idsupplier[0]=='Choose Suppler...'){
+            echo "{success:false, message:'Tentukan supplier terlebih dahulu'}";
+            return false;
+        }
+
+        if(is_array($idsupplier)>0){
+             $this->db->delete('inventory_supplier',array('idinventory'=>$idinventory));
+            foreach ($idsupplier as $u) {
+                    // $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
+                 $this->db->insert('inventory_supplier',array('idinventory'=>$idinventory,'idsupplier'=>$u));
+            }
+        }
+       
+
+        if($this->input->post('persediaanawal')=='true')
+        {
+            //diinput dari menu pengaturan persediaan awal
+            $werArr = array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u));
+            $arrayAkun = array(
+                  'assetaccount'   => $this->input->post('assetaccount'),
+                  'akumpenyusutaccount' => $this->input->post('akumpenyusutaccountOpening'),
+                  'depresiasiaccount' => $this->input->post('depresiasiaccountOpening'),
+                );
+            $this->db->where($werArr);
+            $this->db->update('inventoryunit',$arrayAkun);
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo "{success:false, message:'Gagal Menyimpan Inventory'}";
+        } else {
+            $this->db->trans_commit();
+            echo "{success:true, message:'Sukses Menyimpan Inventory'}";
+        }
+    }
+
+    function getSupplier(){
+         $idinventory = $this->input->post('idinventory');
+        // $q = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
+        $sql = "select idinventory,idsupplier 
+                from inventory_supplier a
+                where a.idinventory=$idinventory";
+        $q = $this->db->query($sql);
+        $d = array();
+        $num = $q->num_rows();
+        $i=1;
+        $str = null;
+        foreach ($q->result() as $r) {
+            $str.=$r->idsupplier;
+            if($i!=$num)
+            {
+                $str.=",";
+            }
+            $i++;
+            // $d[] = $r->namaunit;
+        }
+        // echo json_encode($d);
+        echo $str;
+    }
+
+    function saveProfile($input = null) {
+
+
+
+        $config['upload_path'] = './upload/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '10000';
+        $config['max_width'] = '1024';
+        $config['max_height'] = '768';
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('images')) {
+            $error = $this->upload->display_errors();
+            // echo $error;
+            if ($error != '<p>You did not select a file to upload.</p>') {
+                echo "{success:false, message:'" . $error . "'}";
+            } else {
+                // echo "{success:false, message:'simpan prosess'}";
+                $this->prosesSaveProfile(null, $input);
+            }
+        } else {
+            // $data = $this->upload->data());
+            // print_r($this->upload->data());
+            // echo "{success:true, message:'".print_r($this->upload->data())."'}";
+            $this->prosesSaveProfile($this->upload->data()['orig_name'], $input);
+            // $this->load->view('upload_success', $data);
+        }
+    }
+
+    function deleteinventoryunit($unitpost,$idinventory)
+    {
+        $idinventory=21;
+        $idunitdiremove=null;
+        $idunitada=array();
+
+        $qcekremove = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
+        foreach ($qcekremove->result() as $rremove) {
+            $idunitdiremove[]=$rremove->idunit;
+        }
+        // print_r($idunitdiremove);
+
+        // $unitpost[]="Unit 1";
+        // $unitpost[]="SMIP";
+
+        foreach ($unitpost as $u) {
+            $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
+            $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+            if($qcek->num_rows()>0)
+            {
+                // echo 'udah ada ';
+            } else {
+
+                // $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+            }
+
+             // print_r(array('idinventory'=>$idinventory,'idunit'=>$idunit));
+                foreach ($idunitdiremove as $key => $value) {
+                    // echo $value;
+                    if($value==$idunit)
+                    {
+                        $idunitada[]=$idunit;
+                    }
+                }
+        }
+
+        $aman=null;
+        $gakaman=null;
+        foreach ($idunitdiremove as $key => $value) {
+            foreach ($idunitada as $key2 => $value2) {
+                 if($value2==$value)
+                {
+                    $aman.=$value;
+                } else {
+                    $gakaman.=$value;
+                    $sql = "delete from inventoryunit where idinventory=$idinventory and idunit";
+                }
+            }
+           
+        }
+        // echo $gakaman;
+        // print_r($idunitada);
+        // $sql = "delete from inventoryunit where idinventory=$idinventory and idunit"
+
+    }
+
+    function prosesSaveProfile($images, $input = null) {
+        $this->db->trans_begin();
+        $idinventory = $this->input->post('idinventory');
+        $namaunit2 = $this->input->post('namaunit2');
+        
+
+        $d = array(
+            'invno' => $this->input->post('invno'),
+            'nameinventory' => $this->input->post('nameinventory'),
+            'description' => $this->input->post('description'),
+            'isinventory' => $this->input->post('cbpersediaan') == 'on' ? 'TRUE' : 'FALSE',
+            'issell' => $this->input->post('cbdijual') == 'on' ? 'TRUE' : 'FALSE',
+            'isbuy' => $this->input->post('cbdibeli') == 'on' ? 'TRUE' : 'FALSE',
+//            'images'=>$images,
+//            'userin'=>$this->session->userdata('userid'),
+            'usermod' => $this->session->userdata('userid'),
+//            'datein'=>date('Y-m-d H:m:s'),
+            'datemod' => date('Y-m-d H:m:s'),
+            'idinventorycat' => $this->m_data->getID('inventorycat', 'namecat', 'idinventorycat', $this->input->post('namecat')),
+            'idunit' => $this->m_data->getID('unit', 'namaunit', 'idunit', $this->input->post('namaunit'))
+        );
+//        print_r($d);
+
+         if ($images != '' || $images != null) {
+            $d['images'] = $images;
+        } else {
+
+            $d['images'] = 'inventory.png';
+        }
+
+        if ($idinventory != null) {
+            // $this->db->where('idinventory', $idinventory);
+            // $this->db->delete('inventoryunit');
+            // $qunit = $this->db->get_where('unit',array('idcompany'=>$this->session->userdata('idcompany')));
+            // foreach ($qunit->result() as $runit) {
+                $idunitdiremove=null;
+
+                $qcekremove = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
+                foreach ($qcekremove->result() as $rremove) {
+                    $idunitdiremove[]=$rremove->idunit;
+                }
+
+                foreach ($namaunit2 as $u) {
+                    $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
+                    $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+                    if($qcek->num_rows()>0)
+                    {
+
+                    } else {
+                        $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+                    }
+                }
+            // }
+            
+
+            $this->db->where('idinventory', $idinventory);
+            $this->db->update('inventory', $d);
+        } else {
+            $qseq = $this->db->query("select nextval('seq_inventory') as id")->row();
+            $idinventory = $qseq->id;
+            $d['idinventory'] = $idinventory;
+            foreach ($namaunit2 as $u) {
+                $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
+            }
+
+             $d['userin'] = $this->session->userdata('userid');
+            $d['datein'] = date('Y-m-d H:m:s');
+            $this->db->insert('inventory', $d);
+        }
+
+        
+
+        // if ($images != '' || $images != null) {
+        //     $d['images'] = $images;
+        // } else {
+
+        //     $d['images'] = 'inventory.png';
+        // }
+
+        // if ($idinventory != null) {
+
+        //     $this->db->where('idinventory', $idinventory);
+        //     $this->db->update('inventory', $d);
+        // } else {
+        //     $d['userin'] = $this->session->userdata('userid');
+        //     $d['datein'] = date('Y-m-d H:m:s');
+        //     $this->db->insert('inventory', $d);
+        // }
+// echo $this->db->last_query();
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo "{success:false, message:'Gagal menyimpan data'}";
+        } else {
+            $this->db->trans_commit();
+            echo "{success:true, message:'Sukses menyimpan data'}";
+        }
+    }
+
+    function saveBuy() {
+        $datebuy = $this->input->post('datebuy');
+        $tgl = explode("/", $datebuy);
+
+        $this->db->trans_begin();
+
+        $d = array(
+            'cosaccount' => $this->input->post('cosaccount')=='' ? null : $this->input->post('cosaccount'),
+            'cost' => $this->input->post('cost'),
+            'unitmeasure' => $this->input->post('unitmeasure'),
+            'usermod' => $this->session->userdata('userid'),
+            'idprimarysupplier' => $this->m_data->getID('supplier', 'namesupplier', 'idsupplier', $this->input->post('namesupplier')),
+            'datemod' => date('Y-m-d H:m:s'),
+            'yearbuy' => $tgl[2],
+            'monthbuy' => $tgl[1],
+            'datebuy' => backdate($datebuy),
+            'idbuytax' => $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametax'))
+        );
+
+        $this->db->where('idinventory', $this->input->post('idinventory'));
+        $this->db->update('inventory', $d);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo "{success:false, message:'Gagal menyimpan data'}";
+        } else {
+            $this->db->trans_commit();
+            echo "{success:true, message:'Sukses menyimpan data'}";
+        }
+    }
+
+    function saveSell() {
+        $this->db->trans_begin();
+
+        $d = array(
+            'incomeaccount' => $this->input->post('incomeaccount'),
+            'sellingprice' => $this->input->post('sellingprice'),
+            'unitmeasuresell' => $this->input->post('unitmeasuresell'),
+            'usermod' => $this->session->userdata('userid'),
+//            'idprimarysupplier'=>$this->m_data->getID('supplier', 'namesupplier', 'idsupplier', $this->input->post('namesupplier')),
+            'datemod' => date('Y-m-d H:m:s'),
+            'idselingtax' => $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametax'))
+        );
+
+        $this->db->where('idinventory', $this->input->post('idinventory'));
+        $this->db->update('inventory', $d);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo "{success:false, message:'Gagal menyimpan data'}";
+        } else {
+            $this->db->trans_commit();
+            echo "{success:true, message:'Sukses menyimpan data'}";
+        }
+    }
+
+    function saveInventory() {
+        $this->db->trans_begin();
+
+// residu:1000000
+// umur:8
+// akumulasibeban:1,125,000
+// bebanberjalan:1,125,000
+// nilaibuku:11,875,000
+// bebanperbulan:125,000
+
+        $d = array(
+            'qtystock' => $this->input->post('qtystock'),
+            'umur' => $this->input->post('umur'),
+            'residu' => str_replace(",", "", cleardot2($this->input->post('residu'))),
+            'akumulasibeban' => str_replace(",", "", cleardot2($this->input->post('akumulasibeban'))),
+            'bebanberjalan' => str_replace(",", "", cleardot2($this->input->post('bebanberjalan'))),
+            'nilaibuku' => str_replace(",", "", cleardot2($this->input->post('nilaibuku'))),
+            'bebanperbulan' => str_replace(",", "", cleardot2($this->input->post('bebanperbulan'))),
+            'usermod' => $this->session->userdata('userid'),
+            'datemod' => date('Y-m-d H:m:s'),
+            'akumulasiakhir'=>str_replace(",", "", cleardot2($this->input->post('akumulasiakhir'))),
+        );
+
+        $this->db->where('idinventory', $this->input->post('idinventory'));
+        $this->db->update('inventory', $d);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo "{success:false, message:'Gagal menyimpan data'}";
+        } else {
+            $this->db->trans_commit();
+            echo "{success:true, message:'Sukses menyimpan data'}";
+        }
+    }
+
+    function recordAdjusment() {
+//nojurnalAdj:213213
+//cbUnitEntryAdj:1
+//tanggalAdj:2014-09-20T00:00:00
+//memoAdj:dadas
+//datagrid:[{"idinventory":"13","idaccount":"19","qty":"3","unitcost":"31111","amount":"93333","memo":"memo","invno":"xxx","nameinventory":"xxx","accnumber":"1-1500"}]
+
+        $tgl = explode("-", date('Y-m-d'));
+
+
+        $datagrid = json_decode($this->input->post('datagrid'));
+        $nojurnalAdj = $this->input->post('nojurnalAdj');
+        $cbUnitEntryAdj = $this->input->post('cbUnitEntryAdj');
+        $tanggalAdj = backdate2(inputDate($this->input->post('tanggalAdj')));
+        $memoAdj = $this->input->post('memoAdj');
+
+        $this->db->trans_begin();
+
+        $seq = $this->db->query("select nextval('seq_inventoryadjusment') as id")->row();
+
+        $d = array(
+            'idinvadjusment' => $seq->id,
+            'nojournal' => $nojurnalAdj,
+            'memo' => $memoAdj,
+            'userin' => $this->session->userdata('userid'),
+            'usermod' => $this->session->userdata('userid'),
+            'datein' => date('Y-m-d H:m:s'),
+            'datemod' => date('Y-m-d H:m:s'),
+            'idunit' => $cbUnitEntryAdj,
+            'dateadj' => $tanggalAdj,
+            'month' => $tgl[1],
+            'year' => $tgl[0],
+        );
+
+        $this->db->insert('inventoryadjusment', $d);
+
+        foreach ($datagrid as $key => $value) {
+            $ditem = array(
+                'idinvadjusment' => $seq->id,
+                'idinventory' => $value->idinventory,
+                'idaccount' => $value->idaccount,
+                //            onhand integer,
+//                'counted' =>$value->qty,
+                'diference' => $value->qty,
+                //            qty integer,
+                //            unitcost double precision,
+                //            amount double precision,
+                'memo' => $value->memo
+            );
+            $this->db->insert('inventoryadjitem', $ditem);
+            
+            //query account persediaan
+            $weracc = array('idaccount'=>$value->idaccount,'idunit'=>$cbUnitEntryAdj);
+            $qacc = $this->db->get_where('account',$weracc)->row();
+            
+            //penyesuaian jumlah di inventory
+            // $jum = explode("-", $value->qty);
+            // $wer = array('idinventory'=>$value->idinventory,'idunit'=>$cbUnitEntryAdj);
+            // $qinv = $this->db->get_where('inventory',$wer)->row();
+            // if(count($jum)>1)
+            // {
+            //     //pengurangan                
+            //     $qty = $qinv->qtystock-$jum[1];    
+                
+            //     $amount = $qinv->cost*$jum[1];
+            //     $newAmount = $qacc->balance-$amount;
+            // } else {
+            //     //penambahan
+            //     $qty = $qinv->qtystock+$value->qty;    
+            //     $amount = $qinv->cost*$value->qty; 
+            //     $newAmount = $qacc->balance+$amount;
+            // }
+            
+            // $this->db->where($wer);
+            // $this->db->update('inventory',array('qtystock'=>$qty));
+            
+            //penyesuaian jumlah di account            
+            // $this->db->where($weracc);
+            // $this->db->update('account',array('balance'=>$newAmount));
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $json = array('success' => false, 'message' => 'Penyesuaian Persediaan gagal');
+        } else {
+            $this->db->trans_commit();
+            $json = array('success' => true, 'message' => 'Penyesuaian Persediaan berhasil');
+        }
+
+        echo json_encode($json);
+    }
+
+    function getUnit()
+    {
+        $idinventory = $this->input->post('idinventory');
+        // $q = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
+        $sql = "select namaunit 
+                from inventoryunit a
+                join unit b ON a.idunit = b.idunit
+                where idinventory=$idinventory";
+        $q = $this->db->query($sql);
+        $d = array();
+        $num = $q->num_rows();
+        $i=1;
+        $str = null;
+        foreach ($q->result() as $r) {
+            $str.=$r->namaunit;
+            if($i!=$num)
+            {
+                $str.=",";
+            }
+            $i++;
+            // $d[] = $r->namaunit;
+        }
+        // echo json_encode($d);
+        echo $str;
+    }
+
+    function itungPenyusutan($hargabeli,$residu,$tahun,$tgl,$ambilTahun=null)
+    {
+        $akumulasiPenyusutanAkhir= number_format($this->akumulasiTerakhir($hargabeli,$residu,$tahun,$tgl));
+
+        if($tahun==0)
+        {
+            $tahun=1;
+        }
+
+        //tanggal ambil bulan
+        $explode = explode("-", $tgl);
+        $bulan = intval($explode[1]);
+        // $tahun = intval($explode[0]);
+        //umur ekonomis dikalikan bulan 
+        $umur = $tahun*12;
+        $tahunAkhir = intval($explode[0])+$tahun;
+
+        //penyusutan tiap tahun
+        $penyusutanTahun = ($hargabeli-$residu)/$tahun;
+        $penyusutanBulan = ($hargabeli-$residu)/$umur;
+        // echo $penyusutanBulan;
+
+        //penyusutan akhir tahun berjalan
+        // echo (13-$bulan);
+        $penyusutanBerjalan = (13-$bulan)/12*$penyusutanTahun;
+
+        //penyusutan tahun akhir
+        // echo $penyusutanTahun;
+        $penyusutanAkhir = (12-(13-$bulan))/12*$penyusutanTahun;
+        // echo $penyusutanAkhir;
+        
+        $akumulasiPenyusutan=0;
+        
+        for ($i=$explode[0]; $i <$tahunAkhir+1 ; $i++) { 
+            $bebanBerjalan = 0;
+            if($i==$explode[0])
+            {
+                //beban penyusutan tahun berjalan awal
+                $akumulasiPenyusutan+=$penyusutanBerjalan;
+                $bebanBerjalan = $penyusutanBerjalan;
+            } else if($i==$tahunAkhir)
+            {
+                //selesai
+                $akumulasiPenyusutan+=$penyusutanAkhir;
+                $bebanBerjalan = $penyusutanAkhir;
+            } else {
+                $akumulasiPenyusutan+=$penyusutanTahun;
+                $bebanBerjalan=$penyusutanTahun;
+            }
+
+            $hargabeli-=$bebanBerjalan;
+
+            // echo $i.' '.$ambilTahun.'<br>';
+
+            $d = array(
+                'tahun'=>$i,
+                'penyusutanBulan'=>number_format($penyusutanBulan),
+                'bebanBerjalan'=>number_format($bebanBerjalan),
+                'akumulasiPenyusutan'=>number_format($akumulasiPenyusutan),
+                'nilaiBuku'=>number_format($hargabeli),
+                'akumulasiPenyusutanAkhir'=>$akumulasiPenyusutanAkhir
+            );
+
+
+           
+            if($ambilTahun!=null)
+            {
+                if($i==$ambilTahun)
+                {
+                    // print_r($d);
+                    // echo '<hr>';
+                    echo json_encode($d);
+                    break;
+                }
+            } else if($hargabeli==0)
+                {
+                    break;
+                } else {
+                     // print_r($d);
+                     // echo '<hr>';
+                    echo json_encode($d);
+                }
+        }
+    }
+
+    function akumulasiTerakhir($hargabeli,$residu,$tahun,$tgl)
+    {
+        if($tahun==0)
+        {
+            $tahun=1;
+        }
+
+        //tanggal ambil bulan
+        $explode = explode("-", $tgl);
+        $bulan = intval($explode[1]);
+        // $tahun = intval($explode[0]);
+        //umur ekonomis dikalikan bulan 
+        $umur = $tahun*12;
+        $tahunAkhir = intval($explode[0])+$tahun;
+
+        //penyusutan tiap tahun
+        $penyusutanTahun = ($hargabeli-$residu)/$tahun;
+        $penyusutanBulan = ($hargabeli-$residu)/$umur;
+        // echo $penyusutanBulan;
+
+        //penyusutan akhir tahun berjalan
+        // echo (13-$bulan);
+        $penyusutanBerjalan = (13-$bulan)/12*$penyusutanTahun;
+
+        //penyusutan tahun akhir
+        // echo $penyusutanTahun;
+        $penyusutanAkhir = (12-(13-$bulan))/12*$penyusutanTahun;
+        // echo $penyusutanAkhir;
+//        echo $explode[0].'+'.$tahun;
+        $ambilTahun = $explode[0]+$tahun;
+// echo $ambilTahun;
+        $akumulasiPenyusutan=0;
+        $akumulasiPenyusutanAkhir=0;
+        for ($i=$explode[0]; $i <$tahunAkhir+1 ; $i++) { 
+            $bebanBerjalan = 0;
+            if($i==$explode[0])
+            {
+                //beban penyusutan tahun berjalan awal
+                $akumulasiPenyusutan+=$penyusutanBerjalan;
+                $bebanBerjalan = $penyusutanBerjalan;
+            } else if($i==$tahunAkhir)
+            {
+                //selesai
+                $akumulasiPenyusutan+=$penyusutanAkhir;
+                $bebanBerjalan = $penyusutanAkhir;
+            } else {
+                $akumulasiPenyusutan+=$penyusutanTahun;
+                $bebanBerjalan=$penyusutanTahun;
+            }
+
+            $hargabeli-=$bebanBerjalan;
+            $akumulasiPenyusutanAkhir+=$akumulasiPenyusutan;
+            // echo $akumulasiPenyusutan.'<br>';
+
+           
+            if($ambilTahun!=null)
+            {
+                if($i==$ambilTahun)
+                {
+                    // print_r($d);
+                    // echo '<hr>';
+                    // echo json_encode($d);
+                    return $akumulasiPenyusutan;
+                    break;
+                }
+            } else if($hargabeli==0)
+                {
+                    break;
+                } else {
+                     // print_r($d);
+                     // echo '<hr>';
+                    return $akumulasiPenyusutan;
+                }
+        }
+    }
+
+    function saveAccInventory()
+    {
+        $idinventory = $this->input->post('idinventory');
+        $idunit = $this->input->post('idunit');
+
+        $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+        if($qcek->num_rows()>0)
+        {
+            $this->db->where(array('idinventory'=>$idinventory,'idunit'=>$idunit));
+            $this->db->update('inventoryunit',array(
+                    'idinventory'=>$idinventory,
+                    'idunit'=>$idunit,
+                    'assetaccount'=>$this->input->post('assetaccount'),
+                    'akumpenyusutaccount'=>$this->input->post('akumpenyusutaccount') =='' ? null : $this->input->post('akumpenyusutaccount'),
+                    'depresiasiaccount'=>$this->input->post('depresiasiaccount') =='' ? null : $this->input->post('depresiasiaccount')
+                ));
+        } else {
+            $this->db->insert('inventoryunit',array(
+                    'idinventory'=>$idinventory,
+                    'idunit'=>$idunit,
+                    'assetaccount'=>$this->input->post('assetaccount'),
+                    'akumpenyusutaccount'=>$this->input->post('akumpenyusutaccount') =='' ? null : $this->input->post('akumpenyusutaccount'),
+                    'depresiasiaccount'=>$this->input->post('depresiasiaccount') =='' ? null : $this->input->post('depresiasiaccount')
+                ));
+        }
+
+        if($this->db->affected_rows()>0)
+        {
+            $json = array('success' => true, 'message' => 'Berhasil');
+        } else {
+            $json = array('success' => false, 'message' => 'Gagal menyimpan data');
+        }
+            echo json_encode($json);
+    }
+
+    function save_transfer_stock(){
+        $this->load->model('inventory/m_stock');
+
+        $this->db->trans_begin();
+
+        $statusform = $this->input->post('statusform');
+        $mode = $this->input->post('mode');
+        $idunit = $this->input->post('idunit');
+        $transfer_stock_id = $this->m_data->getPrimaryID($this->input->post('transfer_stock_id'),'inventory_transfer', 'transfer_stock_id', $idunit);
+
+        $data = array(
+                'transfer_stock_id' => $transfer_stock_id,
+                'idunit' =>$idunit,        
+                'no_transfer' => $this->input->post('no_trans'),
+                'memo' =>$this->input->post('memo'),
+                'userin' =>$this->session->userdata('userid'),
+                'datein' => date('Y-m-d H:m:s')
+        );
+
+        if($mode=='request'){
+            $data['request_date'] = backdate($this->input->post('date_transfer'));
+            $data['requestedby_d'] = $this->session->userdata('userid');
+        } else {
+            $data['approved_date'] = date('Y-m-d');
+            $data['approvedby_id'] = $this->session->userdata('userid');
+        }
+
+        if($statusform=='input'){
+            $this->db->insert('inventory_transfer',$data);
+        } else {
+            $this->db->where('transfer_stock_id',$transfer_stock_id);
+            $this->db->update('inventory_transfer',$data);
+        }
+
+        $items = json_decode($this->input->post('datagrid'));
+
+        $totalprice_retur = 0;
+        foreach ($items as $value) {
+            $warehouse_id_source = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
+            $warehouse_id_dest = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_dest,'warehouse_id','warehouse',$idunit);
+            // $inventory_transfer_item_id = inventory_transfer_item_id;
+            // echo $warehouse_id;
+            $ditem = array(
+                    // 'inventory_transfer_item_id'=>$inventory_transfer_item_id,
+                    'transfer_stock_id'=> $transfer_stock_id,
+                    'idunit'=> $idunit,
+                    'idinventory'=> $value->idinventory,
+                    'warehouse_source_id'=> $warehouse_id_source,
+                    'warehouse_dest_id'=> $warehouse_id_dest,
+                    'qty_transfer'=>$value->qty_transfer,
+                    'note'=> $value->note,
+                    'datein'=> date('Y-m-d H:m:s')
+            );
+
+             if($statusform == 'input'){
+                $q_seq = $this->db->query("select nextval('seq_inventory')");
+                $ditem['inventory_transfer_item_id'] = $q_seq->result_array()[0]['nextval'];
+                $this->db->insert('inventory_transfer_item', $ditem);
+            }
+            else if($statusform == 'edit'){
+                $ditem['inventory_transfer_item_id'] = $value->inventory_transfer_item_id;
+                $this->db->where('inventory_transfer_item_id', $ditem['inventory_transfer_item_id']);
+                $this->db->update('inventory_transfer_item', $ditem);
+            }
+
+            if($mode=='apply'){
+                 //update history stock - warehouse source - pengurangan
+                $this->m_stock->update_history(11,$value->qty_transfer,$value->idinventory,$idunit,$warehouse_id_source,date('Y-m-d H:m:s'),'Inventory Transfer Out: '.$this->input->post('no_trans'));
+
+                //update history stock - warehouse destination - penambahan
+                $this->m_stock->update_history(10,$value->qty_transfer,$value->idinventory,$idunit,$warehouse_id_dest,date('Y-m-d H:m:s'),'Inventory Transfer In: '.$this->input->post('no_trans'));
+            }
+           
+        }
+        
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);        
+    }
+
+    function save_real_count(){
+        $this->load->model('inventory/m_stock');
+
+        $this->db->trans_begin();
+
+        $statusform = $this->input->post('statusform_inventorycount');
+        $idunit = $this->session->userdata('idunit');
+        $status = $this->input->post('status');
+        $inventory_count_id = $this->m_data->getPrimaryID($this->input->post('inventory_count_id'),'inventory_count', 'inventory_count_id', $idunit);
+
+        $data = array(
+                'inventory_count_id' => $inventory_count_id,
+                'idunit' =>$idunit,        
+                'status' => $status,
+                'type_id' =>$this->input->post('type_id'),
+                'notes' =>$this->input->post('notes'),
+                'date_count' =>backdate($this->input->post('date_count')),
+                'userin' =>$this->session->userdata('userid'),
+                'datein' => date('Y-m-d H:m:s')
+        );
+
+        if($statusform=='input'){
+            $this->db->insert('inventory_count',$data);
+        } else {
+            $this->db->where('inventory_count_id',$inventory_count_id);
+            $this->db->update('inventory_count',$data);
+        }
+
+        $items = json_decode($this->input->post('ItemGrid'));
+
+        foreach ($items as $value) {
+            $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
+
+            $ditem = array(
+                    // 'inventory_transfer_item_id'=>$inventory_transfer_item_id,
+                    'inventory_count_id'=> $inventory_count_id,
+                    'idunit'=> $idunit,
+                    'idinventory'=> $value->idinventory,
+                    'warehouse_id'=> $warehouse_id,
+                    'qty_stock'=>$value->qty_stock,
+                    'qty_count'=>$value->qty_count,
+                    'variance'=>$value->variance,
+                    'item_value'=>$value->item_value,
+                    'total_value'=>$value->total_value,
+                    'cost'=> $value->cost,
+                    'sellingprice'=> $value->sellingprice,
+                    'datein'=> date('Y-m-d H:m:s')
+            );
+
+             if($statusform == 'input'){
+                $q_seq = $this->db->query("select nextval('seq_inventory')");
+                $ditem['inventory_count_item_id'] = $q_seq->result_array()[0]['nextval'];
+                $this->db->insert('inventory_count_items', $ditem);
+            }
+            else if($statusform == 'edit'){
+                $ditem['inventory_count_item_id'] = $value->inventory_count_item_id;
+                $this->db->where('inventory_count_item_id', $ditem['inventory_count_item_id']);
+                $this->db->update('inventory_count_items', $ditem);
+            }
+
+            if($status==2){
+                //confirmed
+                if($value->qty_stock>$value->qty_count){
+                    //pengurangan
+                     $this->m_stock->update_history(5,$value->variance,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d H:m:s'),'Inventory Real Count (-): '.$data['date_count']);
+                } else {
+                    //penambahan
+                    $this->m_stock->update_history(4,$value->variance,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d H:m:s'),'Inventory Real Count (+): '.$data['date_count']);
+                }
+            }
+        }
+
+         if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);   
+    }
+
+    // function hapusInventory()
+    // {
+    //     //delete:inventorydeprec,inventorydeprecitem 
+    //     //hidden:inventory by unit
+    //     //decrese amount: inventoryunit(assetaccount,akumpenyusutaccount,depresiasiaccount) by unit
+
+    //     $records = json_decode($this->input->post('postdata'));
+    //     foreach ($records as $id) {
+    //         $arrWer = array('idinventory'=>$id);
+    //         $this->db->where($arrWer);
+    //         $this->db->delete('inventorydeprecitem');
+    //         $this->db->where($arrWer);
+    //         $this->db->delete('inventorydeprec');
+
+    //         $qstok = $this->db->get_where('inventory',array('idinventory'=>$id))->row();
+    //         $amount = $qstok->cost*$qtystock->qtystock;
+
+    //         //decrese amount: inventoryunit(assetaccount,akumpenyusutaccount,depresiasiaccount) by unit
+    //         $this->db->select('idunit');
+    //         $q = $this->db->get_where('inventoryunit',$arrWer);
+    //         foreach ($q->result() as $r) {
+    //             # code...
+    //         }
+    //     }
+    // }
+
+    // function hapusInventory()
+    // {
+    //     $records = json_decode($this->input->post('postdata'));
+    //     foreach ($records as $id) {
+    //         $q = $this->db->get_where('purchaseitem',array('idinventory'=>$id));
+    //         foreach ($q->result() as $r) {
+    //             $qpurchase = $this->db->get_where('purchase',array('idpurchase'=>$r->idpurchase))->row();
+    //             $idjournal = $qpurchase->idjournal;
+
+    //             //ambil akun inventory
+    //             $qacc = $this->db->get_where('inventoryunit',array('idinventory'=>$id,'idunit'=>$qpurchase->idunit))->row();
+
+    //             //kurangin di debit
+    //             $qlog = $this->db->get_where('accountlog',array('idaccount'=>$id,'idunit'=>$qpurchase->idunit))->row();
+    //             $this->db->
+    //         }
+    //     }
+    // }
+
+}
+
+
+
+?>

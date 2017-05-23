@@ -1,0 +1,160 @@
+<?php
+
+class m_salesorder extends CI_Model {
+
+    function tableName() {
+        return 'sales';
+    }
+
+    function pkField() {
+        return 'idsales';
+    }
+
+    function searchField() {
+        $field = "no_sales_order";
+        return explode(",", $field);
+    }
+
+    function selectField() {
+        return "a.idsales,a.idpayment,a.idemployee,g.no_do,g.delivery_date,a.idjournal,a.idtax,a.idcustomer,a.date_sales,a.no_sales_order,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,nocustomer,a.noinvoice,a.invoice_status,
+        f.address as address_customer, f.telephone as telephone_customer, f.handphone as handphone_customer, a.idunit,a.paidtoday,a.balance,a.delivery_date,totalitem,COALESCE(totalitemkirim, 0) as totalitemkirim,((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,g.delivery_order_id,idsales_quote,
+        i.no_sales_quote as no_sales_order_quote,i.idsales as idsales_quote,i.date_quote as date_sales_quote,a.salesman_id,j.rate";
+    }
+    
+    function fieldCek()
+    {
+        //field yang perlu dicek didatabase apakah sudah ada apa belum
+        $f = array(
+          'invno'=>'Kode Inventory'  
+        );
+        return $f;
+    }
+
+    function query() {
+        $query = "select " . $this->selectField() . "
+                    from " . $this->tableName()." a 
+                    left join payment b ON a.idpayment = b.idpayment
+                    left join currency c ON a.idcurrency = c.idcurrency
+                    left join employee d ON a.idemployee = d.idemployee
+                    left join (select idsales,count(*) as totalitem
+                            from salesitem
+                            group by idsales) e ON a.idsales = e.idsales
+                    left join customer f ON a.idcustomer = f.idcustomer
+                    left join delivery_order g ON a.idsales = g.idsales
+                    left join tax j ON a.idtax = j.idtax
+                    left join(select
+                                    idsales,
+                                    sum(qty_kirim) as totalitemkirim
+                                from salesitem
+                                group by idsales) h ON a .idsales = h.idsales
+                    left join (select no_sales_quote,idsales,date_quote
+                                from sales ) i ON a.idsales_quote = i.idsales";
+
+        return $query;
+    }
+
+    function whereQuery() {
+        return " a.type = 2 and a.display is null";
+    }
+
+    function orderBy() {
+        return " a.datein desc";
+    }
+
+    function updateField() { 
+        $data = array(
+            'idtax' => $this->input->post('idtax') == '' ? $this->m_data->getSeqVal('seq_tax') : $this->input->post('idtax'),
+            'idtaxtype' => $this->m_data->getID('taxtype', 'nametypetax', 'idtaxtype', $this->input->post('nametypetax')),
+            'code' => $this->input->post('code'),
+            'nametax' => $this->input->post('nametax'),
+            'description' => $this->input->post('description'),
+            'rate' => $this->input->post('rate'),
+            'acccollectedtax' => $this->input->post('idacccollected'),
+            'acctaxpaid' => $this->input->post('idaccpaid')
+        );
+        return $data;
+    }
+
+     function query_itemsales($idsales,$item_selector_sr=false,$token=null){
+        
+        if($item_selector_sr==true){
+            // $token = $this->input->get('token');
+
+            $wer = " and a.idsalesitem not in (select idsalesitem from sales_return_tmp where token = '$token')";
+        } else {
+            $wer = null;
+        }
+
+        $q = $this->db->query("select a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size
+                                ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,qty_kirim,sum(qty-qty_kirim) as qtysisakirim
+                                from salesitem a
+                                join inventory b ON a.idinventory = b.idinventory
+                                left join productmeasurement c ON c.measurement_id = a.measurement_id
+                                left join warehouse d ON d.warehouse_id = a.warehouse_id
+                                left join productmeasurement e ON a.measurement_id_size = e.measurement_id
+                                where idsales = $idsales $wer
+                                group by a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement");
+
+        return $q->result_array();
+    }
+
+    function cetak_so($idsales){
+         //generate data buat keperluan cetak
+        $dtcetak = array();
+
+        $sql = $this->query();
+        $sql.= " WHERE a.idsales=$idsales";
+        // echo $sql;
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            //detail pembayaran
+            $i=0;
+            $total=0;
+
+            //build item sales data
+            // foreach ($this->query_itempurchase($r->idpurchase) as $ritem) {
+            //     $detail[$i] = $ritem;
+            //     $i++;
+            // }
+
+            $dtcetak['customer']['namecustomer'] = $r->namecustomer;
+            $dtcetak['customer']['nocustomer'] = $r->nocustomer;
+            $dtcetak['customer']['address'] = $r->address_customer;
+            $dtcetak['customer']['telephone'] = $r->telephone_customer;
+            $dtcetak['customer']['handphone'] = $r->handphone_customer;
+
+            $dtcetak['detail'] = $this->query_itemsales($r->idsales);
+            $dtcetak['detailtotal'] = number_format($r->subtotal);
+
+            $dtcetak['no'] = $r->no_sales_order;
+
+
+            // //get receivefrom,total,memo,tax
+            $dtcetak['dp'] = $r->paidtoday;
+            $dtcetak['freigthcost'] = $r->freight;
+            // $dtcetak['receivefrom'] = $r->userin;
+            $dtcetak['totaltax'] = $r->tax;
+            $dtcetak['total'] = $r->totalamount;
+            $dtcetak['terbilang'] = terbilang($r->totalamount);
+            $dtcetak['totalowed'] = $r->balance;
+            $dtcetak['memo'] = $r->comments;
+            $dtcetak['datetrans'] = $r->date_sales;
+
+            // $dtcetak['receivedby'] = $r->userin;
+            //get logo,address,namaunit
+            $runit = $this->m_data->dataunit($r->idunit);
+            $dtcetak['logo'] = $runit['logo'];
+            $dtcetak['namaunit'] = $runit['namaunit'];
+            $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['telp'] = $runit['telp'];
+            $dtcetak['fax'] = $runit['fax'];
+        }
+        return $dtcetak;
+    }
+
+
+}
+
+?>
