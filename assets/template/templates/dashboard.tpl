@@ -81,7 +81,7 @@
         <script src='{$assets_url}/js/app/data/models.js'></script>
         <script src='{$assets_url}/js/app/combox.js'></script>
         <script src='{$assets_url}/js/util.js'></script>
-        <!-- // <script src='{$assets_url}/js/offline.min.js'></script>         -->
+        <script src='{$assets_url}/js/offline.min.js'></script>        
         <script src='{$assets_url}/ext/NumericField.js'></script>
 
 
@@ -103,6 +103,17 @@
           <center><img src="{$assets_url}/icons/loadingIcon.gif"></center>
         </div>
         <script type="text/javascript">
+             Ext.Ajax.on('beforerequest', function(connection,options){
+                Ext.getBody().mask('Loading...');
+            });
+
+            Ext.Ajax.on('requestcomplete', function(connection,options){
+                Ext.getBody().unmask();
+            });
+
+            Ext.Ajax.on('requestexception', function(connection,options){
+                Ext.getBody().unmask();
+            });
 
             // Offline.options({
             //   checkOnLoad: false,
@@ -119,7 +130,7 @@
             // Ext.require(['*']);
 
             Ext.require([ 
-                dir_sys+'sales.deliveryOrderGrid',
+                // dir_sys+'sales.deliveryOrderGrid',
                 dir_sys+'production.WorkOrderJobTab',
                 dir_sys+'production.WindowSaleOrderWoList',
                 dir_sys+'production.WorkOrderGrid',

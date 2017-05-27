@@ -96,10 +96,9 @@ function addTab(title, menu_link, idmenu, first_load_store_id) {
         var tab = tabPanel.getComponent(title);
 
 
-        if(menu_link == 'DashboardPanel')
-        {
+        if (menu_link == 'DashboardPanel') {
             tabPanel.setActiveTab(tabPanel.getComponent('mydashboard'));
-        } else 
+        } else
         if (menu_link == 'inputInventory') {
             menu_link = 'Input Persediaan Baru';
             showInputInv();
@@ -129,8 +128,44 @@ function addTab(title, menu_link, idmenu, first_load_store_id) {
             Ext.getCmp('TabItemInventory').items.getAt(1).setDisabled(true);
 
             formInventoryV2.reset();
-        }
-        else {
+        } else if (first_load_store_id != '' && first_load_store_id != null) {
+
+
+            if (!Ext.isDefined(tab)) {
+                var mm = Ext.create(dir_sys + menu_link, {
+                    autoDestroy: false
+                });
+
+                var tab = tabPanel.add({
+                    title: title,
+                    itemId: title,
+                    layout: 'fit',
+                    border: true,
+                    autoScroll: true,
+                    closeAction: 'hide',
+                    closable: true,
+                    listeners: {
+                        close: function() {}
+                    },
+                    border: false,
+                    items: [
+                        mm
+                        // Ext.create(dir_sys+menu_link, {
+                        //     autoDestroy: false
+                        // })
+                    ]
+                });
+
+                tabPanel.doLayout();
+            }
+
+            if (first_load_store_id != '') {
+                //store id yg diload pertama kali saat modul dibuka
+                Ext.getCmp(first_load_store_id).getStore().load();
+            }
+
+            tabPanel.setActiveTab(tab);
+        } else {
 
             if (menu_link == 'ms_pegawai') {
                 var vClose = false;
