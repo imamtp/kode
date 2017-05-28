@@ -13,7 +13,7 @@
         
 
         <style type="text/css">
-            .loader {
+          /*  .loader {
               position: fixed;
               background-color: #FFF;
               opacity: 1;
@@ -22,7 +22,7 @@
               top: 0;
               left: 0;
               z-index: 10;
-            }
+            }*/
 
             p {
                 margin:5px;
@@ -81,7 +81,7 @@
         <script src='{$assets_url}/js/app/data/models.js'></script>
         <script src='{$assets_url}/js/app/combox.js'></script>
         <script src='{$assets_url}/js/util.js'></script>
-        <script src='{$assets_url}/js/offline.min.js'></script>        
+        <!-- // <script src='{$assets_url}/js/offline.min.js'></script>         -->
         <script src='{$assets_url}/ext/NumericField.js'></script>
 
 
@@ -100,7 +100,7 @@
     </head>
     <body>
         <div class="loader">
-          <center><img src="{$assets_url}/icons/loadingIcon.gif"></center>
+          <!-- <center><img src="{$assets_url}/icons/loadingIcon.gif"></center> -->
         </div>
         <script type="text/javascript">
              Ext.Ajax.on('beforerequest', function(connection,options){
@@ -131,22 +131,22 @@
 
             Ext.require([ 
                 // dir_sys+'sales.deliveryOrderGrid',
-                dir_sys+'production.WorkOrderJobTab',
-                dir_sys+'production.WindowSaleOrderWoList',
-                dir_sys+'production.WorkOrderGrid',
-                dir_sys+'production.WindowEntryWorkOrder',
-                dir_sys+'production.WOScheduleGrid',
-                dir_sys+'production.ReceiptWOGrid',
-                dir_sys+'production.WOMaterialUsageGrid',
-                dir_sys+'employee.employeeAccessTab',
-                dir_sys+'sales.TabSalesInvoicePanel',
-                dir_sys+'sales.SalesReturnGrid',
-                dir_sys+'purchase2.PurchaseRequisitionGrid',
-                dir_sys+'purchase2.PurchaseOrderGrid',
-                dir_sys+'purchase2.GoodsReceiptGrid',
-                dir_sys+'purchase2.TabPurchaseInvoicePanel',
-                dir_sys+'purchase2.PurchaseReturnGrid',
-                dir_sys+'inventory.GridInventoryCount'                
+                // dir_sys+'production.WorkOrderJobTab',
+                // dir_sys+'production.WindowSaleOrderWoList',
+                // dir_sys+'production.WorkOrderGrid',
+                // dir_sys+'production.WindowEntryWorkOrder',
+                // dir_sys+'production.WOScheduleGrid',
+                // dir_sys+'production.ReceiptWOGrid',
+                // dir_sys+'production.WOMaterialUsageGrid',
+                // dir_sys+'employee.employeeAccessTab',
+                // dir_sys+'sales.TabSalesInvoicePanel',
+                // dir_sys+'sales.SalesReturnGrid',
+                // dir_sys+'purchase2.PurchaseRequisitionGrid',
+                // dir_sys+'purchase2.PurchaseOrderGrid',
+                // dir_sys+'purchase2.GoodsReceiptGrid',
+                // dir_sys+'purchase2.TabPurchaseInvoicePanel',
+                // dir_sys+'purchase2.PurchaseReturnGrid',
+                // dir_sys+'inventory.GridInventoryCount'                
             ]);
 
 
@@ -817,7 +817,7 @@
              // storeLabaRugi.loadData(generateDataLabaRugi(Ext.getCmp('idunitOption').getValue(),Ext.getCmp('monthOption').getValue(),Ext.getCmp('tahunOption').getSubmitValue()));
          </script>
          <style>
-            .loader {
+          /*  .loader {
                 -webkit-animation: load-out 1s;
                 animation: load-out 1s;
                 -webkit-animation-fill-mode: forwards;
@@ -846,7 +846,7 @@
                     top: 100%;
                     opacity: 0;
                 }
-            }
+            }*/
             </style>
     </body>
 </html>

@@ -1,6 +1,15 @@
 function loadWoData(job_order_id){
+    Ext.create(dir_sys + 'production.WindowEntryWorkOrder')
 
-    WindowEntryWorkOrder.show();
+    // if (typeof(Ext.getCmp('WindowEntryWorkOrder').show()) == "undefined"){
+    //     ;
+
+    //     Ext.getCmp('WindowEntryWorkOrder').show();
+    // } else {
+    //     Ext.getCmp('WindowEntryWorkOrder').show()
+    // }
+    Ext.getCmp('WindowEntryWorkOrder').show()
+    
      storeUnit.load();
 
      var workOrderHeaderForm = Ext.getCmp('workOrderHeaderForm').getForm();

@@ -113,7 +113,7 @@ Ext.define('GridReceiptWorkOrderList', {
             }
             
             Ext.getCmp('job_no_receiptwoform').setValue(selectedRecord.get('job_no'));
-            Ext.getCmp('cbUnitWOForm').setValue(selectedRecord.get('idunit'));
+            Ext.getCmp('cbUnit_receiptwoform').setValue(selectedRecord.get('idunit'));
             Ext.getCmp('req_ship_date_receiptwoform').setValue(selectedRecord.get('req_ship_date'));
             Ext.getCmp('start_date_receiptwoform').setValue(selectedRecord.get('startdate_job'));
             Ext.getCmp('end_date_receiptwoform').setValue(selectedRecord.get('enddate_job'));
