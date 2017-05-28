@@ -13,6 +13,7 @@
         
 
         <style type="text/css">
+           
           /*  .loader {
               position: fixed;
               background-color: #FFF;
@@ -479,7 +480,7 @@
         <script src='{$assets_url}js/app/account/gridAccount.js'></script>
         <!-- // <script src='{$assets_url}js/app/account/ChooserListAccount.js'></script> -->
 
-        <script src='{$assets_url}js/app/hutangpiutang/regPiutang.js'></script>
+        <!-- // <script src='{$assets_url}js/app/hutangpiutang/regPiutang.js'></script> -->
         
         
         <script src='{$assets_url}/js/app/setup/company.js'></script>
@@ -631,13 +632,13 @@
         <!-- <script src='{$assets_url}/js/app/purchase/entryPurchaseRequisition.js'></script> -->
         <!-- // <script src='{$assets_url}/js/app/purchase/entryReturn.js'></script> -->
         <!-- // <script src='{$assets_url}/js/app/purchase/formaddrowReturn.js'></script> -->
-        <script src='{$assets_url}/js/app/purchase/formaddrowReturn.js'></script>
-        <script src='{$assets_url}/js/app/purchase/entryReturn.js'></script>
-        <script src='{$assets_url}/js/app/purchase/ChooserListPurchase.js'></script>
-        <script src='{$assets_url}/js/app/purchase/FormGoodsReceipt.js'></script>
-        <script src='{$assets_url}/js/app/purchase/GridGoodsReceipt.js'></script>
-        <script src='{$assets_url}/js/app/purchase/FormPurchase.js'></script>
-        <script src='{$assets_url}/js/app/purchase/GridPurchase.js'></script>
+       <!--  // <script src='{$assets_url}/js/app/purchase/formaddrowReturn.js'></script>
+        // <script src='{$assets_url}/js/app/purchase/entryReturn.js'></script>
+        // <script src='{$assets_url}/js/app/purchase/ChooserListPurchase.js'></script>
+        // <script src='{$assets_url}/js/app/purchase/FormGoodsReceipt.js'></script>
+        // <script src='{$assets_url}/js/app/purchase/GridGoodsReceipt.js'></script>
+        // <script src='{$assets_url}/js/app/purchase/FormPurchase.js'></script>
+        // <script src='{$assets_url}/js/app/purchase/GridPurchase.js'></script> -->
         
         <script src='{$assets_url}/js/app/sales/gridItemSalesOrderPopUp.js'></script>
         <script src='{$assets_url}/js/app/sales/WindowSaleQuoteList.js'></script>
@@ -647,7 +648,7 @@
         <script src='{$assets_url}/js/app/sales/entrySalesQuotation.js'></script>
         <script src='{$assets_url}/js/app/sales/salesQuotationGrid.js'></script>
 
-        <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script>
+        <!-- // <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script> -->
         <script src='{$assets_url}/js/app/money/gridReceiveMoney.js'></script>
         <script src='{$assets_url}/js/app/money/AccListAddRowReceive.js'></script>
         <script src='{$assets_url}/js/app/money/formaddrowReceive.js'></script>        
