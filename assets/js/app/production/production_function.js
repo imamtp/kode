@@ -1,5 +1,5 @@
 function loadWoData(job_order_id){
-    Ext.create(dir_sys + 'production.WindowEntryWorkOrder')
+    // Ext.create(dir_sys + 'production.WindowEntryWorkOrder')
 
     // if (typeof(Ext.getCmp('WindowEntryWorkOrder').show()) == "undefined"){
     //     ;
@@ -8,6 +8,11 @@ function loadWoData(job_order_id){
     // } else {
     //     Ext.getCmp('WindowEntryWorkOrder').show()
     // }
+    if (!Ext.isDefined(Ext.getCmp('WindowEntryWorkOrder'))) {
+        Ext.create(dir_sys + 'production.WindowEntryWorkOrder')
+    } else {
+        
+    }
     Ext.getCmp('WindowEntryWorkOrder').show()
     
      storeUnit.load();

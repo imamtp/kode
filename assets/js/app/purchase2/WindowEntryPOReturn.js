@@ -245,6 +245,7 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
 
                         }
                         Ext.Msg.alert('Info', d.message);
+                        Ext.getCmp('PurchaseReturnGridID').getStore().load();
                     },
                     failure: function(form, action) {
                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');

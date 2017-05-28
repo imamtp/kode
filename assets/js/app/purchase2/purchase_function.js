@@ -637,3 +637,42 @@ function clearFormPR(){
     
 }
 
+function loadReturnPoData(record){
+    Ext.getCmp('WindowViewReturnPO').show();
+
+    Ext.getCmp('supplier_viewporeturn').getStore().load();
+    Ext.getCmp('cb_tax_id_viewporeturn').getStore().load();
+
+    Ext.getCmp('WindowPOReturnList').hide();
+    
+    Ext.getCmp('purchase_return_id_viewporeturn').setValue(record.data.purchase_return_id);
+    Ext.getCmp('noreturn_viewporeturn').setValue(record.data.noreturn);
+    Ext.getCmp('return_date_viewporeturn').setValue(record.data.date_return);
+    
+    Ext.getCmp('nopo_viewporeturn').setValue(record.data.nopurchase);
+    Ext.getCmp('po_date_viewporeturn').setValue(record.data.po_date);
+    Ext.getCmp('cbUnit_viewporeturn').setValue(record.data.idunit);
+    Ext.getCmp('cb_tax_id_viewporeturn').setValue(record.data.idtax);
+    Ext.getCmp('supplier_viewporeturn').setValue(record.data.idsupplier);
+    Ext.getCmp('cb_status_viewporeturn').setValue(record.data.return_status*1);
+
+    Ext.getCmp('idaccount_coa_viewretur_po').setValue(record.data.idaccount_return);
+    Ext.getCmp('accname_coa_viewretur_po').setValue(record.data.accname);
+    Ext.getCmp('accnumber_coa_viewretur_po').setValue(record.data.accnumber);
+
+    Ext.getCmp('totalPajak_viewporeturn').setValue(renderNomor(record.data.tax));
+    Ext.getCmp('total_viewporeturn').setValue(renderNomor(record.data.totalamount));
+    Ext.getCmp('subtotal_viewporeturn').setValue(renderNomor(record.data.subtotal));
+
+    var ViewReturnPO = Ext.getCmp('ViewReturnPO');
+    var ViewReturnPOStore = ViewReturnPO.getStore().load();
+
+    ViewReturnPOStore.on('beforeload',function(store, operation,eOpts){
+        operation.params={
+               'extraparams': 'a.purchase_return_id:'+record.data.purchase_return_id
+            //    'option':'delivered_po'
+               // 'wherenotinschedule':'true'
+             };
+         });
+    ViewReturnPOStore.load();
+}

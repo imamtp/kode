@@ -16,7 +16,7 @@ class m_purchasereturn extends CI_Model {
     }
 
     function selectField() {
-        return "a.purchase_return_id,a.idpurchase,a.idunit,a.noreturn,a.idjournal,a.userin,a.datein,a.return_status,a.date_return,b.nopurchase,c.namesupplier,a.return_amount,num_retur_items,c.companyaddress,c.telephone,c.fax,sum_amount_items";
+        return "a.purchase_return_id,b.idsupplier,a.idpurchase,a.idunit,a.noreturn,a.idjournal,a.userin,a.datein,a.return_status,a.date_return,b.idtax,b.nopurchase,b.date as po_date,c.namesupplier,a.return_amount,num_retur_items,c.companyaddress,c.telephone,c.fax,sum_amount_items,a.idaccount_return,f.accname,f.accnumber";
     }
     
     function fieldCek()
@@ -38,7 +38,8 @@ class m_purchasereturn extends CI_Model {
                             group by purchase_return_id) d ON a.purchase_return_id = d.purchase_return_id
                     join (select purchase_return_id, sum(total_amount_item) as sum_amount_items
                             from purchase_returnitem
-                            group by purchase_return_id) e ON a.purchase_return_id = e.purchase_return_id";
+                            group by purchase_return_id) e ON a.purchase_return_id = e.purchase_return_id
+                    left join account f ON a.idaccount_return = f.idaccount and a.idunit = f.idunit";
 
         return $query;
     }

@@ -87,7 +87,8 @@ Ext.define('workOrderHeaderForm', {
                 listeners: {
                     render: function(component) {
                         component.getEl().on('click', function(event, el) {
-                            insertNoRef(4, Ext.getCmp('cbUnitWOForm').getValue(), 'job_no_wo_form','WO');
+                            insertNoID(4, Ext.getCmp('cbUnitWOForm').getValue(),'job_order_id','job_order','job_no_wo_form','WO');
+                            // insertNoRef(4, Ext.getCmp('cbUnitWOForm').getValue(), 'job_no_wo_form','WO');
                         });
                     }
                 },

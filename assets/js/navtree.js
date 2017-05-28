@@ -89,6 +89,8 @@ function closeAllTab() {
 }
 
 function addTab(title, menu_link, idmenu, first_load_store_id) {
+     // Ext.getBody().mask('Loading...');
+
     var id = tabPanel.items.length;
     // console.log(menu_link);
     // console.log(Offline.check());
@@ -130,6 +132,7 @@ function addTab(title, menu_link, idmenu, first_load_store_id) {
             formInventoryV2.reset();
         } else if (first_load_store_id != '' && first_load_store_id != null) {
 
+            
 
             if (!Ext.isDefined(tab)) {
                 var mm = Ext.create(dir_sys + menu_link, {

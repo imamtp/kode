@@ -936,7 +936,7 @@ class purchase extends MY_Controller {
     function get_poreturn_pk(){
         $q = $this->db->query("select max(purchase_return_id) as idporetur
                                 from purchase_return
-                                where idunit = ".$idunit."")->row();
+                                where idunit = ".$this->input->get('idunit')."")->row();
         echo json_encode(array('id'=>$q->idporetur+=1));
     }
 
@@ -945,11 +945,13 @@ class purchase extends MY_Controller {
         $items = json_decode($this->input->post('data'));
         $opsi = $this->input->post('opsi');
         $purchase_return_id = $this->input->post('purchase_return_id');
+        $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$items->warehouse_code,'warehouse_id','warehouse',$items->idunit);
 
           $wer = array(
                     'purchase_return_id'=> $purchase_return_id,
-                    'idinventory'=> $items->idinventory,
-                    'idpurchaseitem'=> $items->idpurchaseitem
+                    // 'idinventory'=> $items->idinventory,
+                    // 'idpurchaseitem'=> $items->idpurchaseitem,
+                    'purchase_batch_id'=> $items->purchase_batch_id
                     // 'is_tmp' => 1
                 );
              
@@ -962,6 +964,7 @@ class purchase extends MY_Controller {
                     'idpurchaseitem'=> $items->idpurchaseitem,
                     'notes'=> isset($items->notes) ? $items->notes : null,
                     'qty_retur' => $items->qty,
+                    'idwarehouse' => $idwarehouse,
                     // 'is_received' =>,
                     'is_tmp' => 1,
                     // 'notes'=>$items->notes,
@@ -983,6 +986,7 @@ class purchase extends MY_Controller {
         } else {
             $this->db->where($wer);
             $this->db->delete('purchase_returnitem');   
+            echo $this->db->last_query();
         }
     }
 
@@ -1046,14 +1050,18 @@ class purchase extends MY_Controller {
     function cek_poreturn_item(){
         //cek qty retur yg udah diinsert dari
          $wer = array(
-                    'purchase_return_id'=> $this->input->post('purchase_return_id'),
+                    // 'purchase_return_id'=> $this->input->post('purchase_return_id'),
                     // 'idinventory'=> $items->idinventory,
                     'idpurchaseitem'=>$this->input->post('idpurchaseitem'),
                     'is_tmp' => 1
                 );
         $q = $this->db->get_where('purchase_returnitem',$wer);
-
-        echo json_encode(array('data'=>$q->result_array()[0])); 
+        if($q->num_rows()>0){
+            $json = json_encode(array('success'=>true,'data'=>$q->result_array()[0])); 
+        } else {
+            $json = json_encode(array('success'=>false));
+        }
+        echo  $json;
     }
 
     function save_return(){
@@ -1070,6 +1078,7 @@ class purchase extends MY_Controller {
         $ret_date = backdate($this->input->post('ret_date'));
         $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
         $idunit = $this->input->post('idunit');
+        $status = $this->input->post('status');
 
         $dt_header = array(
                 'purchase_return_id'=>$purchase_return_id,
@@ -1079,7 +1088,8 @@ class purchase extends MY_Controller {
                 // 'idjournal'=>$this->session->userdata('idunit'),
                 'userin'=>$this->session->userdata('iduser'),
                 'datein'=>date('Y-m-d H:m:s'),
-                'return_status'=>$this->input->post('status'),
+                'return_status'=>$status,
+                'idaccount_return'=>$coaretur,
                 'date_return'=>$ret_date
         );
         $this->db->insert('purchase_return',$dt_header);
@@ -1127,8 +1137,13 @@ class purchase extends MY_Controller {
                     // $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
                     $idwarehouse = $value['warehouse_id'];
                     // echo $idwarehouse.' - '. $value->warehouse_code .'<br>';
+
                     //update stock
-                    $this->m_stock->update_history(7,$value['qty'],$value['idinventory'],$idunit,$idwarehouse,date('Y-m-d'),'Purchase Return: '.$noreturn,null);
+                    if($status==3){
+                        //confirmed
+                         $this->m_stock->update_history(7,$value['qty'],$value['idinventory'],$idunit,$idwarehouse,date('Y-m-d'),'Purchase Return: '.$noreturn,null);
+                    }
+                   
 
                     $num_return_items++;
                 }
@@ -1153,20 +1168,78 @@ class purchase extends MY_Controller {
             $this->db->update('purchase_returnitem',array('is_tmp'=>0,'total_amount_item'=>$total_amount_item));
 
              //update stock
-            $this->m_stock->update_history(7,$r->qty_retur,$r->idinventory,$idunit,$r->warehouse_id,date('Y-m-d'),'Purchase Return: '.$noreturn,null);
+            if($status==3){
+                //confirmed
+                $this->m_stock->update_history(7,$r->qty_retur,$r->idinventory,$idunit,$r->warehouse_id,date('Y-m-d'),'Purchase Return: '.$noreturn,null);
+            }
 
             $num_return_items++;
         }
         
+         if($status==3){
+            //confirmed
+            //buat jurnal
+            $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$idpurchase,$coaretur,'Purchase Return: '.$noreturn,$idunit);
 
-        //buat jurnal
-        $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$idpurchase,$coaretur,'Purchase Return: '.$noreturn,$idunit);
-
-        //update id jurnal ke purchase_return
-        $this->db->where(array('purchase_return_id'=>$purchase_return_id));
-        $this->db->update('purchase_return',array('idjournal'=>$idjournal));
-
+            //update id jurnal ke purchase_return
+            $this->db->where(array('purchase_return_id'=>$purchase_return_id));
+            $this->db->update('purchase_return',array('idjournal'=>$idjournal));
+         }
           if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);
+    }
+
+    function update_return(){
+        $this->load->model('journal/m_jpurchase','jmodel');
+        $this->load->model('inventory/m_stock');
+
+        $this->db->trans_begin();
+
+        $purchase_return_id = $this->input->post('purchase_return_id');
+        $ret_date = backdate($this->input->post('ret_date'));
+        $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
+        $status = $this->input->post('status');
+
+        $dt_header = array(
+                'purchase_return_id'=>$purchase_return_id,
+                'return_status'=>$status,
+                'idaccount_return'=>$coaretur,
+                'date_return'=>$ret_date
+        );
+        $this->db->where('purchase_return_id',$purchase_return_id);
+        $this->db->update('purchase_return',$dt_header);
+
+
+        //nilai retur
+        $q = $this->db->query("select sum(total_amount_item) as totalamount
+                                from purchase_returnitem
+                                where purchase_return_id = $purchase_return_id")->row();
+        $nilairetur = $q->totalamount;                        
+        //end nilai retur
+
+        //q retur
+        $qpo = $this->db->query("select idpurchase,idunit,noreturn
+                                from purchase_return
+                                where purchase_return_id = $purchase_return_id")->row();
+        //end query retur
+
+         if($status==3){
+            //confirmed
+            //buat jurnal
+            $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$qpo->idpurchase,$coaretur,'Purchase Return: '.$qpo->noreturn,$qpo->idunit);
+
+            //update id jurnal ke purchase_return
+            $this->db->where(array('purchase_return_id'=>$purchase_return_id));
+            $this->db->update('purchase_return',array('idjournal'=>$idjournal));
+         }
+
+        if($this->db->trans_status() === false){
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');
         } else{

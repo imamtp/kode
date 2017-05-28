@@ -33,7 +33,8 @@ var storeGridReturnPurchaseOrderList = Ext.create('Ext.data.Store', {
 
 storeGridReturnPurchaseOrderList.on('beforeload',function(store, operation,eOpts){
    operation.params={
-             'extraparams': 'a.invoice_status:'+2
+             'extraparams': 'a.invoice_status:'+2,
+             'option':'po_not_in_open_return_status'
              };
          });
 

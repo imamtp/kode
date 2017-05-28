@@ -2,12 +2,12 @@
 //     dir_sys+'purchase2.EntryGoodsReceipt',
 // ]);
 var WindowPOReturnList = Ext.create(dir_sys+'purchase2.WindowPOReturnList');
-// var WindowEntryPurchaseReturn = Ext.create(dir_sys+'purchase2.WindowEntryPurchaseReturn');
+var WindowViewReturnPO = Ext.create(dir_sys+'purchase2.WindowViewReturnPO');
 
 Ext.define('PurchaseReturnGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-       'purchase_return_id','noreturn','idpurchase','idunit','idjournal','userin','datein','return_status','date_return','nopurchase','namesupplier','return_amount','num_retur_items','sum_amount_items'
+       'purchase_return_id','noreturn','idpurchase','idaccount_return','accname','accnumber','idtax','idunit','idsupplier','idjournal','userin','datein','return_status','date_return','nopurchase','po_date','namesupplier','return_amount','num_retur_items','sum_amount_items'
     ],
     idProperty: 'id'
 });
@@ -85,11 +85,11 @@ var smPurchaseReturnGrid = Ext.create('Ext.selection.CheckboxModel', {
             }
         },
         select: function(model, record, index) {
-            if(record.data.noinvoice===null) {
-                 Ext.getCmp('createInvoicePOGrid').enable();
-            } else {
-                Ext.getCmp('createInvoicePOGrid').disable();
-            }
+            // if(record.data.noinvoice===null) {
+            //      Ext.getCmp('createInvoicePOGrid').enable();
+            // } else {
+            //     Ext.getCmp('createInvoicePOGrid').disable();
+            // }
             //
         }
     }
@@ -100,7 +100,7 @@ Ext.define(dir_sys+'purchase2.PurchaseReturnGrid', {
     alias: 'widget.PurchaseReturnGrid',
 // Ext.define('PurchaseReturnGrid', {
     title: 'Purchase Return',
-    selModel:smPurchaseReturnGrid,
+    // selModel:smPurchaseReturnGrid,
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'PurchaseReturnGridID',
     id: 'PurchaseReturnGridID',
@@ -340,26 +340,28 @@ Ext.define(dir_sys+'purchase2.PurchaseReturnGrid', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
-            // var formAgama = Ext.create('formAgama');
-            var formPurchaseReturnGrid = Ext.getCmp('formPurchaseReturnGrid');
-            wPurchaseReturnGrid.show();
-            formPurchaseReturnGrid.getForm().load({
-                url: SITE_URL + 'backend/loadFormData/PurchaseReturnGrid/1',
-                params: {
-                    extraparams: 'a.idsupplier:' + record.data.idsupplier
-                },
-                success: function(form, action) {
-                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                }
-            })
-            //            
-            //            Ext.getCmp('kddaerahS').setReadOnly(true);
-            Ext.getCmp('statusformPurchaseReturnGrid').setValue('edit');
 
-            Ext.getCmp('TabSupplier').setActiveTab(0);
+            loadReturnPoData(record);
+            // var formAgama = Ext.create('formAgama');
+            // var formPurchaseReturnGrid = Ext.getCmp('formPurchaseReturnGrid');
+            // wPurchaseReturnGrid.show();
+            // formPurchaseReturnGrid.getForm().load({
+            //     url: SITE_URL + 'backend/loadFormData/PurchaseReturnGrid/1',
+            //     params: {
+            //         extraparams: 'a.idsupplier:' + record.data.idsupplier
+            //     },
+            //     success: function(form, action) {
+            //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //     },
+            //     failure: function(form, action) {
+            //         Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //     }
+            // })
+            // //            
+            // //            Ext.getCmp('kddaerahS').setReadOnly(true);
+            // Ext.getCmp('statusformPurchaseReturnGrid').setValue('edit');
+
+            // Ext.getCmp('TabSupplier').setActiveTab(0);
         }
     }
 });

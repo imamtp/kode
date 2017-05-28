@@ -3,7 +3,7 @@
 Ext.define('GridBatchItemPOReturnListModel', {
     extend: 'Ext.data.Model',
      fields: [
-       'purchase_batch_id','idpurchaseitem','idpurchase','nameinventory','qty','measurement_id','invno','sku_no','idunit','idinventory','is_tmp','no','warehouse_id','warehouse_code','short_desc','stock_kedua','satuan_kedua'
+      'purchase_batch_id','idpurchaseitem','qty','measurement_id','idunit','idinventory','no','warehouse_id','warehouse_code','short_desc','nameinventory','sku_no','invno'
     ],
     idProperty: 'id'
 });
@@ -15,7 +15,7 @@ var storeGridBatchItemPOReturnList = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-         url: SITE_URL + 'backend/ext_get_all/PurchaseOrder/purchase',
+         url: SITE_URL + 'backend/ext_get_all/itembatchpurchase/purchase',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
