@@ -1,13 +1,13 @@
 <?php
 
-class m_salesreturn extends CI_Model {
+class m_salesitemreturn extends CI_Model {
 
     function tableName() {
-        return 'sales_return';
+        return 'sales_return_item';
     }
 
     function pkField() {
-        return 'sales_return_id';
+        return 'idsalesitem';
     }
 
     function searchField() {
@@ -16,7 +16,7 @@ class m_salesreturn extends CI_Model {
     }
 
     function selectField() {
-        return "a.sales_return_id,a.idunit,a.return_date,a.noreturn,a.idcustomer,a.memo,a.return_amount,a.idaccount_return,a.userin,a.datein,b.namecustomer,c.accname,c.accnumber,a.notes,a.totaldisc,a.aftertax,a.totaltax,a.subtotal,d.accname as accnamebank,d.accnumber as accnumberbank,a.idaccount_bank,a.status";
+        return "a.sales_return_id,a.idsalesitem,a.idinventory,a.qty_return,a.resend,a.notes,a.warehouse_id,b.qty,b.price,b.disc,b.total,b.ratetax,b.size,b.measurement_id_size,b.qty_kirim,c.invno,c.nameinventory,c.sku_no,c.measurement_id_one,d.short_desc,e.short_desc as size_measurement,f.warehouse_code";
     }
     
     function fieldCek()
@@ -31,15 +31,17 @@ class m_salesreturn extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join customer b ON a.idcustomer = b.idcustomer
-                    join account c ON a.idaccount_return = c.idaccount and a.idunit = c.idunit
-                    join account d ON a.idaccount_bank = d.idaccount and a.idunit = d.idunit";
+                    join salesitem b ON a.idsalesitem = b.idsalesitem
+                    join inventory c ON b.idinventory = c.idinventory
+                    left join productmeasurement d ON c.measurement_id_one = d.measurement_id
+                    left join productmeasurement e ON b.measurement_id_size = e.measurement_id
+                    join warehouse f ON a.warehouse_id = f.warehouse_id";
 
         return $query;
     }
 
     function whereQuery() {
-        return " a.deleted = 0";
+        return null;
     }
 
     function orderBy() {

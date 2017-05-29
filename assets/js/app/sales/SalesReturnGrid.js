@@ -1,12 +1,12 @@
 
-var WindowEntrySalesReturn = Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
+// var WindowEntrySalesReturn = Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
 // var WindowEntrySalesInvoice = Ext.create(dir_sys + 'sales.WindowEntrySalesInvoice');
 
 
 Ext.define('SalesReturnGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'sales_return_id','idunit','return_date','noreturn','idcustomer','memo','return_amount','idaccount_return','userin','datein','namecustomer','accname','accnumber','notes'
+        'sales_return_id','idunit','return_date','noreturn','idcustomer','memo','return_amount','idaccount_return','userin','datein','namecustomer','accname','accnumber','notes','totaldisc','aftertax','totaltax','subtotal','notes','accnamebank','accnumberbank','idaccount_bank','status'
     ],
     idProperty: 'id'
 });
@@ -197,7 +197,12 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
             text: 'Create New Sales Return',
             iconCls: 'add-icon',
             handler: function() {
-                WindowEntrySalesReturn.show();
+                // WindowEntrySalesReturn.show();
+                if (!Ext.isDefined(Ext.getCmp('WindowEntrySalesReturn'))) {
+                Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
+                }
+                Ext.getCmp('WindowEntrySalesReturn').show();
+
                 Ext.getCmp('cbUnitEntrySalesReturn').setValue(idunit);
 
                 Ext.getCmp('tokenSalesReturnGrid_sr').setValue(randomString(12));
@@ -205,6 +210,13 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
 
                 clearFormSR();
 
+                Ext.getCmp('WindowEntrySalesReturn').setTitle('Edit Sales Return');
+                Ext.getCmp('status_sr').setReadOnly(true);
+                Ext.getCmp('status_sr').setValue(1);
+
+                Ext.getCmp('btnRecordSalesReturn').enable();  
+
+                Ext.getCmp('statusformSalesReturnGrid_sr').setValue('input');   
                 // storeCustomer.load();
                 // storeUnit.load();
                 // productMeasurementStore.load();
@@ -319,7 +331,7 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
-            // loadMemberForm(record.data.id_member)
+            loadReturnSOData(record)
         }
     }
 });

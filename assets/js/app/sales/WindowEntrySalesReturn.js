@@ -77,7 +77,7 @@ var wAccReturnAmountPopup = Ext.create('widget.window', {
 
 Ext.define('ItemSalesReturnModel', {
     extend: 'Ext.data.Model',
-    fields: ['idsalesitem','idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','price','qty','total','ratetax','disc','short_desc','warehouse_code','notes','qty_return','size','size_measurement'],
+    fields: ['sales_return_id','idsalesitem','idinventory','qty_return','resend','notes','warehouse_id','qty','price','disc','total','ratetax','size','measurement_id_size','qty_kirim','invno','nameinventory','sku_no','measurement_id_one','short_desc','size_measurement','warehouse_code'],
     idProperty: 'id'
 });
 
@@ -88,7 +88,7 @@ var storeGridItemSalesReturn = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/ItemSalesReturn/sales',
+        url: SITE_URL + 'backend/ext_get_all/salesitemreturn/sales',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -134,28 +134,35 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
 //                    id: 'idinventory'
                 },
                 {
+                    header: 'No SKU',
+                    dataIndex: 'sku_no',
+//                    id: 'invno',
+                    minWidth: 130
+                },
+                {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
 //                    id: 'invno',
-                    width: 100
+                    minWidth: 120
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
-                    width: 150,
+                    flex:1,
+                    minWidth: 200,
 //                    id: 'nameinventory'
                 },  
                 {
                     xtype: 'numbercolumn',
                     header: 'Harga',
                     dataIndex: 'price',
-                    width: 130,
+                    minWidth: 130,
                     align: 'right'
                 },
                 {
                     xtype: 'numbercolumn',
                     header: 'Qty Order',
-                    width: 70,
+                    minWidth: 70,
                     dataIndex: 'qty',
                     align: 'right',
                     // editor: {
@@ -173,7 +180,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     xtype: 'numbercolumn',
                     header: 'Ukuran',
-                    width: 70,
+                    minWidth: 70,
                     dataIndex: 'size',
                     align: 'right'
                 },
@@ -185,7 +192,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     xtype: 'numbercolumn',
                     header: 'Disc (%)',
-                    width: 70,
+                    minWidth: 70,
                     dataIndex: 'disc',
                     align: 'right',
                     // editor: {
@@ -203,18 +210,18 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     xtype: 'numbercolumn',
                     header: 'Qty Retur',
-                    width: 70,
+                    minWidth: 70,
                     dataIndex: 'qty_return',
                     align: 'right',
-                    // editor: {
-                    //     xtype: 'numberfield',
-                    //     allowBlank: false,
-                    //     minValue: 1
-                    // }
+                    editor: {
+                        xtype: 'numberfield',
+                        allowBlank: false,
+                        minValue: 1
+                    }
                 },
                 {
-                    header: 'Ke Gudang',
-                    width: 120,
+                    header: 'Warehouse',
+                    minWidth: 120,
                     dataIndex: 'warehouse_code',
                     editor: {
                         xtype: 'comboxWarehouse',
@@ -227,12 +234,12 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     // xtype: 'numbercolumn',
                     header: 'Catatan',
-                    width: 150,
+                    minWidth: 150,
                     dataIndex: 'notes',
-                    // editor: {
-                    //     xtype: 'textfield',
-                    //     allowBlank: false
-                    // }
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    }
                 },
 //                 {
 //                     header: 'Pajak',
@@ -247,7 +254,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
 //                 },
                 {
                     xtype: 'actioncolumn',
-                    width: 30,
+                    minWidth: 30,
                     align: 'center',
                     sortable: false,
                     menuDisabled: true,
@@ -296,7 +303,12 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             valueField: 'idunit',
                             id: 'cbUnitEntrySalesReturn'
 //                            ,multiSelect:true
-                        },                        
+                        },               
+                        {
+                            xtype:'comboxReturnSalesStatus',
+                            name:'status',
+                            id:'status_sr'
+                        }         
                         // {
                         //     xtype:'comboxtaxtype',
                         //     labelWidth: 100,
@@ -318,6 +330,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                         '->',
                          {
                             itemId: 'recordPayment',
+                            id:'btnRecordSalesReturn',
                             text: 'Record Sales Return ',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordSalesReturn, this, 'noprint', true)
@@ -449,9 +462,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             },
                             items: [{
                                 xtype: 'textfield',
-                                allowBlank: false,
-                                // fieldLabel: 'Akun Kas/Bank Tujuan',
-                                
+                                allowBlank: false,                                
                                 name: 'accnametujuan',
                                 id: 'accname_coa_sales_return',
                                 listeners: {
@@ -556,11 +567,6 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                                 xtype: 'hiddenfield',
                                 name:'idaccount',
                                 id: 'idaccount_sales_return',
-                            },
-                            {
-                                xtype:'hiddenfield',
-                                name:'sales_return_id',
-                                id:'sales_return_id'
                             }]
                         }, 
                         '->',
@@ -586,6 +592,9 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     fn: function(grid) {
                         // disableEntrySalesReturn();
                     }
+                },
+                itemdblclick: function(dv, record, item, index, e) {
+                    // loadReturnSOData(record);
                 }
             }
         });
@@ -602,7 +611,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
         this.on({
             scope: this,
             edit: function() {
-                updateGridSalesReturn('general');
+                // updateGridSalesReturn('general');
             }
         });
     },
@@ -651,6 +660,8 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 url: SITE_URL + 'sales/saveSalesReturn',
                 method: 'POST',
                 params: {
+                    statusform: Ext.getCmp('statusformSalesReturnGrid_sr').getValue(),
+                    sales_return_id: Ext.getCmp('sales_return_id_sr').getValue(),
                     noreturn: Ext.getCmp('nojurnalSalesReturn_sr').getValue(),
                     tanggal: Ext.getCmp('tanggalSalesReturn_sr').getSubmitValue(),
                     idunit: Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
@@ -666,6 +677,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     totaldisc: Ext.getCmp('totalDiskonSalesReturn_sr').getValue(),
                     aftertax: Ext.getCmp('totalSalesReturn_sr').getValue(),
                     idaccount_return: Ext.getCmp('idaccount_coa_sales_return').getValue(),
+                    status: Ext.getCmp('status_sr').getValue(),                    
                     datagrid: json
                 },
                 success: function(form, action) {

@@ -633,12 +633,13 @@ class sales extends MY_Controller {
         $this->db->trans_begin();
 
         $sales_return_id = $this->m_data->getPrimaryID($this->input->post('sales_return_id'),'sales_return', 'sales_return_id', $this->input->post('idunit'));
-            
+        $statusform = $this->input->post('statusform');
         $noreturn = $this->input->post('noreturn');
+        $status = $this->input->post('status');
 
         $data = array(
                 'sales_return_id' => $sales_return_id,
-                // 'idsales' => $this->input->post('idsales'),
+                'status' => $status,
                 'idunit' =>$this->input->post('idunit'),
                 'return_date' => backdate($this->input->post('tanggal')),
                 'noreturn' => $noreturn,
@@ -657,7 +658,13 @@ class sales extends MY_Controller {
                 'datein' => date('Y-m-d H:m:s')
         );
 
-        $this->db->insert('sales_return',$data);
+        if($statusform=='edit'){
+            $this->db->where('sales_return_id',$sales_return_id);
+            $this->db->update('sales_return',$data);
+        } else {
+            $this->db->insert('sales_return',$data);
+        }
+        
 
         $items = json_decode($this->input->post('datagrid'));
 
@@ -674,18 +681,36 @@ class sales extends MY_Controller {
                     'notes'=> $value->notes,
                     'resend'=>2
             );
-            $this->db->insert('sales_return_item',$ditem);
+
+            if($statusform=='edit'){
+                $this->db->where(
+                    array(
+                        'sales_return_id'=>$sales_return_id,
+                        'idsalesitem'=> $value->idsalesitem,
+                        'idinventory'=> $value->idinventory
+                    )
+                );
+                $this->db->update('sales_return_item',$ditem);
+            } else {
+                $this->db->insert('sales_return_item',$ditem);
+            }
+            // $this->db->insert('sales_return_item',$ditem);
 
             //query nilainya
             $qprice = $this->db->query("select price from salesitem where idsalesitem = ".$value->idsalesitem." ")->row();
             $totalprice_retur += $qprice->price*$value->qty_return;
 
              //update history stock
-            $this->m_stock->update_history(6,$value->qty_return,$value->idinventory,$this->input->post('idunit'),$warehouse_id,date('Y-m-d H:m:s'),'Sales Return: '.$noreturn);
+            if($status==3)
+            {
+                $this->m_stock->update_history(6,$value->qty_return,$value->idinventory,$this->input->post('idunit'),$warehouse_id,date('Y-m-d H:m:s'),'Sales Return: '.$noreturn);
+            }
         }
 
         //create journal Retur Penjualan Tunai
-        $this->m_jsales->sales_retur_tunai(date('Y-m-d'),$totalprice_retur,'Return Penjualan: '.$noreturn,$this->input->post('idunit'),$this->input->post('idaccount_return'));
+        if($status==3){
+            $this->m_jsales->sales_retur_tunai(date('Y-m-d'),$totalprice_retur,'Return Penjualan: '.$noreturn,$this->input->post('idunit'),$this->input->post('idaccount_return'));
+        }
 
         //hapus data temporary
         $this->db->where(array('token' =>$this->input->post('token')));

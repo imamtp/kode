@@ -135,6 +135,22 @@ Ext.define('comboxSalesStatus', {
     })  
 });
 
+var ArrReturnSalesStatus = [[1,'Open'], [2, 'Canceled'], [3, 'Confirmed'], [4, 'Closed']];
+Ext.define('comboxReturnSalesStatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxReturnSalesStatus',
+    fieldLabel: 'Status',
+    displayField: 'text',
+    valueField: 'value',
+    name: 'value',
+    editable: false,
+    triggerAction: 'all',
+    store: new Ext.data.ArrayStore({
+        fields: ['value', 'text'],
+        data: ArrReturnSalesStatus,
+    })  
+});
+
 var ArrPOReturnStatus = [[1,'Open'], [2, 'Canceled'], [3, 'Confirmed'], [4, 'Partial Received'], [5, 'Full Received'], [6, 'Closed']];
 Ext.define('comboxPOReturnStatus', {
     extend: 'Ext.form.ComboBox',

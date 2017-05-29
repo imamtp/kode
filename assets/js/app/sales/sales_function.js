@@ -1,4 +1,58 @@
- function showSalesOrderData(record){
+function loadReturnSOData(record){
+    console.log(record);
+
+    if (!Ext.isDefined(Ext.getCmp('WindowEntrySalesReturn'))) {
+       Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
+    }
+    Ext.getCmp('WindowEntrySalesReturn').show();
+
+    Ext.getCmp('status_sr').setReadOnly(false);
+    Ext.getCmp('status_sr').setValue(record.data.status*1);
+
+    if(record.data.status*1==1){
+        Ext.getCmp('btnRecordSalesReturn').enable();         
+    } else {
+        Ext.getCmp('btnRecordSalesReturn').disable();   
+    }
+    
+    Ext.getCmp('nojurnalSalesReturn_sr').setValue(record.data.noreturn);
+    Ext.getCmp('tanggalSalesReturn_sr').setValue(record.data.return_date);
+    Ext.getCmp('cbUnitEntrySalesReturn').setValue(record.data.idunit);
+    Ext.getCmp('nominal_sales_return').setValue(record.data.return_amount);
+
+    Ext.getCmp('customerSalesReturn_sr').getStore().load();
+    Ext.getCmp('customerSalesReturn_sr').setValue(record.data.idcustomer);
+
+    Ext.getCmp('memoSalesReturn_sr').setValue(record.data.memo);
+    Ext.getCmp('sales_return_id_sr').setValue(record.data.sales_return_id);
+    
+    Ext.getCmp('accnumber_coa_sales_return').setValue(record.data.accnumber);
+    Ext.getCmp('idaccount_coa_sales_return').setValue(record.data.idaccount_return);
+    Ext.getCmp('accname_coa_sales_return').setValue(record.data.accname);
+
+    Ext.getCmp('accnumber_sales_return').setValue(record.data.accnumberbank);
+    Ext.getCmp('idaccount_sales_return').setValue(record.data.idaccount_bank);
+    Ext.getCmp('accname_sales_return').setValue(record.data.accnamebank);
+
+    // Ext.getCmp('statusformSalesReturnGrid_sr').setValue(record.data.noreturn);
+    Ext.getCmp('subtotalSalesReturn_sr').setValue(record.data.subtotal);
+    Ext.getCmp('totalDiskonSalesReturn_sr').setValue(record.data.totaldisc);
+    Ext.getCmp('totalPajakSalesReturn_sr').setValue(record.data.totaltax);
+    Ext.getCmp('totalSalesReturn_sr').setValue(record.data.aftertax);
+
+    var EntrySalesReturnStore = Ext.getCmp('EntrySalesReturn').getStore();
+    EntrySalesReturnStore.on('beforeload',function(store, operation,eOpts){
+        operation.params={
+                    'extraparams': 'a.sales_return_id:'+record.data.sales_return_id
+                    };
+                });
+    EntrySalesReturnStore.load();
+
+    Ext.getCmp('WindowEntrySalesReturn').setTitle('Edit Sales Return');
+    Ext.getCmp('statusformSalesReturnGrid_sr').setValue('edit');
+}
+
+function showSalesOrderData(record){
     console.log(record);
 
     wSalesOrderGrid.show();
