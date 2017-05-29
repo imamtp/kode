@@ -278,7 +278,7 @@ Ext.define(dir_sys + 'production.WindowEntryReceiptWO', {
     closeAction: 'hide',
     //    autoWidth: true,
     width: panelW - 50,
-    height: sizeH+100,
+    height: sizeH,
     // height: sizeH,
     layout: 'fit',
     border: false,

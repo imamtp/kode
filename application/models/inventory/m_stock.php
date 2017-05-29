@@ -16,6 +16,7 @@ class m_stock extends CI_Model {
 			10: Stock In By Transfer (+)
 			11: Stock Out By Transfer (-)
 			12: Stock In By Received Material From Production (+)
+			13: Stock In By Received Return PO (+)
 		*/
 
 		//cek qty sebelumnya
@@ -44,7 +45,7 @@ class m_stock extends CI_Model {
 			$old_qty = 0;
 		}
 
-		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12) {
+		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12 || $type==13) {
 			$balance = $old_qty+$qty;
 		} else if($type==7 || $type==5 || $type==8 || $type==11) {
 			$balance = $old_qty-$qty;

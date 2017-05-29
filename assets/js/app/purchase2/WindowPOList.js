@@ -214,7 +214,7 @@ Ext.define('GridPurchaseOrderList', {
         xtype: 'toolbar',
         dock: 'top',
         items: [
-            '->',
+            // '->',
             'Searching: ', ' ',
             {
                 xtype: 'searchGridPurchaseOrderList',

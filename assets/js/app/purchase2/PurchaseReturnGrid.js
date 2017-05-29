@@ -2,7 +2,7 @@
 //     dir_sys+'purchase2.EntryGoodsReceipt',
 // ]);
 var WindowPOReturnList = Ext.create(dir_sys+'purchase2.WindowPOReturnList');
-var WindowViewReturnPO = Ext.create(dir_sys+'purchase2.WindowViewReturnPO');
+// var WindowViewReturnPO = Ext.create(dir_sys+'purchase2.WindowViewReturnPO');
 
 Ext.define('PurchaseReturnGridModel', {
     extend: 'Ext.data.Model',
@@ -149,9 +149,9 @@ Ext.define(dir_sys+'purchase2.PurchaseReturnGrid', {
         dataIndex: 'return_status',
         minWidth: 150,xtype:'numbercolumn',align:'right',
         renderer: function(value) {
-            return customColumnStatus(ArrSalesStatus,value);
+            return customColumnStatus(ArrPOReturnStatus,value);
         }
-    },],
+    }],
     dockedItems: [
         {
             xtype: 'toolbar',

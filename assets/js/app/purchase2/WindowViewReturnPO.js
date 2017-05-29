@@ -2,7 +2,7 @@
 
 Ext.define('GridViewReturnItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['purchase_batch_id','idinventory','idpurchaseitem','qty_retur','qty_received','is_received','nameinventory','sku_no','invno','measurement_id_one','short_desc','warehouse_id','warehouse_code','notes'],
+    fields: ['purchase_batch_id','idinventory','idpurchaseitem','qty_retur','qty_received','is_received','nameinventory','sku_no','invno','measurement_id_one','short_desc','warehouse_id','warehouse_code','notes','warehouse_code_received'],
     idProperty: 'id'
 });
 
@@ -34,20 +34,20 @@ Ext.define(dir_sys+'purchase2.ViewReturnPO', {
     id: 'ViewReturnPO',
     alias: 'widget.ViewReturnPO',
     // selModel:smViewReturnPOGrid,
-    // xtype: 'cell-editing',
+    xtype: 'cell-editing',
     // title: 'Input Sales Order',
 //    frame: true,    
     initComponent: function() {
 
-        // this.cellEditing = new Ext.grid.plugin.CellEditing({
-        //     clicksToEdit: 1
-        // });
+        this.cellEditing = new Ext.grid.plugin.CellEditing({
+            clicksToEdit: 1
+        });
 
         Ext.apply(this, {
             width: panelW-60,
             height: sizeH-120,
             // forceFit: true,
-            // plugins: [this.cellEditing],
+            plugins: [this.cellEditing],
             store: storeGridViewItemPurchaseOrder,
             columns: [
                 {
@@ -77,25 +77,25 @@ Ext.define(dir_sys+'purchase2.ViewReturnPO', {
                     header: 'SKU No',
                     dataIndex: 'sku_no',
 //                    id: 'invno',
-                    width: 150
+                    minWidth: 150
                 },
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
 //                    id: 'invno',
-                    width: 150
+                    minWidth: 150
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
                     flex:1,
-                    width: 150,
+                    minWidth: 150,
 //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
                     header: 'Qty',
-                    width: 70,
+                    minWidth: 70,
                     dataIndex: 'qty_retur',
                     align: 'right',
                     // editor: {
@@ -119,7 +119,7 @@ Ext.define(dir_sys+'purchase2.ViewReturnPO', {
                     xtype: 'numbercolumn',
                     hidden:true,
                     header: 'Qty #2',
-                    width: 70,
+                    minWidth: 70,
                     dataIndex: 'stock_kedua',
                     align: 'right',
                     // editor: {
@@ -142,6 +142,7 @@ Ext.define(dir_sys+'purchase2.ViewReturnPO', {
                 },   
                 {
                     header: 'Warehouse',
+                    hidden:true,
                     minWidth: 150,
                     dataIndex: 'warehouse_code',
                     editor: {
@@ -152,13 +153,37 @@ Ext.define(dir_sys+'purchase2.ViewReturnPO', {
                         labelWidth: 100
                     }
                 },
+                // {
+                //     header: 'Catatan',
+                //     minWidth: 150,
+                //     dataIndex: 'notes',
+                //     editor: {
+                //         xtype: 'textfield',
+                //         hideLabel:true,
+                //         labelWidth: 100
+                //     }
+                // }
                 {
-                    header: 'Catatan',
-                    minWidth: 150,
-                    dataIndex: 'notes',
+                    xtype: 'numbercolumn',
+                    header: 'Qty Terima',
+                    minWidth: 70,
+                    dataIndex: 'qty_received',
+                    align: 'right',
                     editor: {
-                        xtype: 'textfield',
+                        xtype: 'numberfield',
+                        allowBlank: false,
+                        minValue: 1
+                    }
+                },
+                {
+                    header: 'Warehouse Terima',
+                    minWidth: 150,
+                    dataIndex: 'warehouse_code_received',
+                    editor: {
+                        xtype: 'comboxWarehouse',
                         hideLabel:true,
+                        valueField: 'warehouse_code',
+                        displayField: 'warehouse_code',
                         labelWidth: 100
                     }
                 }
@@ -460,19 +485,19 @@ Ext.define(dir_sys+'purchase2.ViewReturnPO', {
 
         this.callParent();
 
-        // this.on('afterlayout', this.loadStore, this, {
-        //     delay: 1,
-        //     single: true
-        // });
+        this.on('afterlayout', this.loadStore, this, {
+            delay: 1,
+            single: true
+        });
 
-        // this.on('afteredit', this.onAfterEdit, this);
+        this.on('afteredit', this.onAfterEdit, this);
 
-        // this.on({
-        //     scope: this,
-        //     edit: function() {
-        //         // updateGridPurchaseOrder('general');
-        //     }
-        // });
+        this.on({
+            scope: this,
+            edit: function() {
+                // updateGridPurchaseOrder('general');
+            }
+        });
     },
     onAfterEdit: function(o) {
         // handle after edit
@@ -655,6 +680,7 @@ Ext.define(dir_sys + 'purchase2.WindowViewReturnPO', {
         }
     },{
         text: 'Update Purchase Return',
+        id:'btnUpdateReturnPo',
         handler: function() {
             var storeEntryReturnPO = Ext.getCmp('EntryReturnPO').getStore();
             // var storeGridBatchPoReturn = Ext.getCmp('GridBatchPoReturn').getStore();
@@ -679,6 +705,47 @@ Ext.define(dir_sys + 'purchase2.WindowViewReturnPO', {
                     success: function(form, action) {
                         var d = Ext.decode(form.responseText);
                         if(d.status){
+                            
+                        } else {
+
+                        }
+                        Ext.getCmp('WindowViewReturnPO').hide();
+                        Ext.Msg.alert('Info', d.message);
+                        Ext.getCmp('PurchaseReturnGridID').getStore().load();
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    }
+                });
+        }
+    }, 
+    {
+        text: 'Record Receipt Purchase Return',
+        id:'btnRecordReceiptReturnPo',
+        handler: function() {
+            var ViewReturnPOStore = Ext.getCmp('ViewReturnPO').getStore();
+            // var storeGridBatchPoReturn = Ext.getCmp('GridBatchPoReturn').getStore();
+            var ViewReturnPOStoreJson = Ext.encode(Ext.pluck(ViewReturnPOStore.data.items, 'data'));
+            // var itemBatchPoReturn = Ext.encode(Ext.pluck(storeGridBatchPoReturn.data.items, 'data'));
+            
+
+              Ext.Ajax.request({
+                    url: SITE_URL + 'purchase/receipt_return',
+                    method: 'POST',
+                    params: {
+                        itemgrid:ViewReturnPOStoreJson,                        
+                        // itembatch:itemBatchPoReturn,
+                        // idunit : Ext.getCmp('cbUnit_poreturn').getValue(),
+                        idaccount_return : Ext.getCmp('idaccount_coa_viewretur_po').getValue(),
+                        // idpurchase:Ext.getCmp('idpurchase_poreturn').getValue(),
+                        purchase_return_id:Ext.getCmp('purchase_return_id_viewporeturn').getValue(),
+                        // noreturn: Ext.getCmp('noreturn_poreturn').getValue(),
+                        status: Ext.getCmp('cb_status_viewporeturn').getValue(),
+                        ret_date: Ext.getCmp('return_date_viewporeturn').getSubmitValue()
+                    },
+                    success: function(form, action) {
+                        var d = Ext.decode(form.responseText);
+                        if(d.status){
                             Ext.getCmp('WindowViewReturnPO').hide();
                         } else {
 
@@ -691,5 +758,6 @@ Ext.define(dir_sys + 'purchase2.WindowViewReturnPO', {
                     }
                 });
         }
-    }, ]
+    }, 
+    ]
 });

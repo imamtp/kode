@@ -261,8 +261,8 @@ Ext.define(dir_sys + 'production.WindowEntryWorkOrder', {
     modal: true,
     closeAction: 'hide',
     //    autoWidth: true,
-    width: panelW - 200,
-    height: sizeH+150,
+    width: panelW - 100,
+    height: sizeH,
     layout: 'fit',
     border: false,
     items: [{

@@ -45,6 +45,11 @@ class m_purchasereturn extends CI_Model {
     }
 
     function whereQuery() {
+        if($this->input->post('option')=='notyetdelivered'){
+            $wer = " a.idpurchase not in (select idpurchase from purchase_return where (return_status = 2 OR return_status = 4 OR return_status = 5 OR return_status = 6) )";
+        }
+
+        return " ".$wer;
     }
 
     function orderBy() {

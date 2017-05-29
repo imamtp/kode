@@ -1249,6 +1249,95 @@ class purchase extends MY_Controller {
         echo json_encode($json);
     }
 
+    function receipt_return(){
+        $this->load->model('journal/m_jpurchase','jmodel');
+        $this->load->model('inventory/m_stock');
+
+        $this->db->trans_begin();
+
+        $purchase_return_id = $this->input->post('purchase_return_id');
+        $ret_date = backdate($this->input->post('ret_date'));
+        $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
+        $status = $this->input->post('status');
+        $items = json_decode($this->input->post('itemgrid'));
+
+        $dt_header = array(
+                'purchase_return_id'=>$purchase_return_id,
+                'return_status'=>$status,
+                'idaccount_return'=>$coaretur,
+                'date_return'=>$ret_date
+        );
+        $this->db->where('purchase_return_id',$purchase_return_id);
+        $this->db->update('purchase_return',$dt_header);
+
+
+        //nilai retur
+        // $q = $this->db->query("select sum(total_amount_item) as totalamount
+        //                         from purchase_returnitem
+        //                         where purchase_return_id = $purchase_return_id")->row();
+        // $nilairetur = $q->totalamount;                        
+        //end nilai retur
+
+        //q retur
+        $qpo = $this->db->query("select idpurchase,idunit,noreturn,total_qty_retur
+                                    from purchase_return a
+                                    join (select sum(qty_retur) as total_qty_retur,purchase_return_id
+                                        from purchase_returnitem
+                                        group by purchase_return_id) b ON a.purchase_return_id = b.purchase_return_id
+                                    where a.purchase_return_id =  $purchase_return_id")->row();
+        //end query retur
+
+         if($status==3){
+            //confirmed
+            //buat jurnal
+            // $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$qpo->idpurchase,$coaretur,'Purchase Return: '.$qpo->noreturn,$qpo->idunit);
+
+            // //update id jurnal ke purchase_return
+            // $this->db->where(array('purchase_return_id'=>$purchase_return_id));
+            // $this->db->update('purchase_return',array('idjournal'=>$idjournal));
+            foreach ($items as $value) {
+                $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_received,'warehouse_id','warehouse',$qpo->idunit);
+
+                //update stock
+                $this->m_stock->update_history(13,$value->qty_received,$value->idinventory,$qpo->idunit,$warehouse_id,date('Y-m-d'),'Receipt Return PO: '.$qpo->noreturn,null);
+            }
+          
+         }
+
+         $total_received = 0;
+         foreach ($items as $value) {
+             $this->db->where(array(
+                 'idpurchaseitem'=>$value->idpurchaseitem,
+                 'idinventory'=>$value->idinventory,
+                 'purchase_batch_id'=>$value->purchase_batch_id
+             ));
+             $this->db->update('purchase_returnitem',array('qty_received'=>$value->qty_received));
+             $total_received+=$value->qty_received;
+         }
+
+         if(intval($qpo->total_qty_retur) >= $total_received){
+             //full received
+             $return_status = 5;
+         } else {
+             //partial
+             $return_status = 4;
+         }
+
+        $this->db->where(array(
+            'purchase_return_id'=>$purchase_return_id
+        ));
+        $this->db->update('purchase_return',array('return_status'=>$return_status));
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);
+    }
+
     function update_detail_batch_item_gr(){
         $items = json_decode($this->input->post('datagrid'));
         // print_r($items);

@@ -1,7 +1,8 @@
 // Ext.require([ 
 //     dir_sys+'purchase2.EntryGoodsReceipt',
 // ]);
-var WindowPOList = Ext.create(dir_sys+'purchase2.WindowPOList');
+
+var WindowReceiptPOList = Ext.create(dir_sys+'purchase2.WindowReceiptPOList');
 var WindowEntryPurchaseInvoice = Ext.create(dir_sys+'purchase2.WindowEntryPurchaseInvoice');
 
 Ext.define('GoodsReceiptGridModel', {
@@ -242,7 +243,8 @@ Ext.define(dir_sys+'purchase2.GoodsReceiptGrid', {
             text: 'Create New Goods Receipt',
             iconCls: 'add-icon',
             handler: function() {
-                WindowPOList.show();
+                WindowReceiptPOList.show();
+
                 Ext.getCmp('GridPurchaseOrderList').getStore().load();
                 Ext.getCmp('WindowEntryGoodsReceipt').setTitle('Entry Goods Receipt');
             }   

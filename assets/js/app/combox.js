@@ -135,7 +135,7 @@ Ext.define('comboxSalesStatus', {
     })  
 });
 
-var ArrPOReturnStatus = [[1,'Open'], [2, 'Canceled'], [3, 'Confirmed'], [4, 'Partial Received'], [5, 'Closed']];
+var ArrPOReturnStatus = [[1,'Open'], [2, 'Canceled'], [3, 'Confirmed'], [4, 'Partial Received'], [5, 'Full Received'], [6, 'Closed']];
 Ext.define('comboxPOReturnStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxPOReturnStatus',

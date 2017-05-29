@@ -638,6 +638,9 @@ function clearFormPR(){
 }
 
 function loadReturnPoData(record){
+    if (!Ext.isDefined(Ext.getCmp('WindowViewReturnPO'))) {
+        Ext.create(dir_sys+'purchase2.WindowViewReturnPO');
+    }
     Ext.getCmp('WindowViewReturnPO').show();
 
     Ext.getCmp('supplier_viewporeturn').getStore().load();
@@ -675,4 +678,10 @@ function loadReturnPoData(record){
              };
          });
     ViewReturnPOStore.load();
+
+    Ext.getCmp('btnRecordReceiptReturnPo').hide();
+    Ext.getCmp('btnUpdateReturnPo').show();
+
+    Ext.getCmp('ViewReturnPO').columns[12].setVisible(false); //hide qty terima
+    Ext.getCmp('ViewReturnPO').columns[13].setVisible(false); //hide warehouse terima
 }
