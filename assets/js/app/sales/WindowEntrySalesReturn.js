@@ -711,6 +711,8 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
             params: {
                 statusform: Ext.getCmp('statusformSalesReturnGrid_sr').getValue(),
                 sales_return_id: Ext.getCmp('sales_return_id_sr').getValue(),
+                noreturn: Ext.getCmp('nojurnalSalesReturn_sr').getValue(),
+                idunit: Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
                 notes: Ext.getCmp('notes_sr').getValue(),
                 status: Ext.getCmp('status_sr').getValue(),
                 datagrid: json

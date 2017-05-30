@@ -150,7 +150,8 @@ var ArrReturnSalesStatus = [
     [3, 'Confirmed'],
     [4, 'Picking Up'],
     [5, 'Partial Delivering'],
-    [6, 'Closed']
+    [6, 'Full Delivering'],
+    [7, 'Closed']
 ];
 Ext.define('comboxReturnSalesStatus', {
     extend: 'Ext.form.ComboBox',

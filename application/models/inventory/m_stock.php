@@ -48,7 +48,7 @@ class m_stock extends CI_Model {
 
 		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12 || $type==13) {
 			$balance = $old_qty+$qty;
-		} else if($type==7 || $type==5 || $type==8 || $type==11) {
+		} else if($type==7 || $type==5 || $type==8 || $type==11 || $type==14) {
 			$balance = $old_qty-$qty;
 		}
 
