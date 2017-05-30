@@ -559,7 +559,7 @@ class Setup extends MY_Controller {
         $table = $this->input->get('table');
         $fieldpk = $this->input->get('fieldpk');
 
-        $q = $this->db->query("select max($fieldpk) from $table");
+        $q = $this->db->query("select max($fieldpk) from $table where to_char(datein, 'MMYY') = '".date('my')."'");
         $row = $q->result_array();
 
         $last_id = $row[0]['max'];
@@ -575,7 +575,7 @@ class Setup extends MY_Controller {
         }
         
          $num = sprintf("%0".$digit."d", $insert_id);
-         echo json_encode(array('success'=>true,'noref'=>$type.$idunit.$num));
+         echo json_encode(array('success'=>true, 'noref'=>date('ym').$num));
     }
 
     function saveLinkTaxUnit()
