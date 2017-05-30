@@ -17,6 +17,7 @@ class m_stock extends CI_Model {
 			11: Stock Out By Transfer (-)
 			12: Stock In By Received Material From Production (+)
 			13: Stock In By Received Return PO (+)
+			14: Delivery Sales Return (-)
 		*/
 
 		//cek qty sebelumnya

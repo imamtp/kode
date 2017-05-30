@@ -193,7 +193,7 @@ Ext.define(dir_sys+'sales.deliveryOrderGrid', {
                     xtype: 'datefield',
                     format: 'd/m/Y',
                     // value: datenow(),
-                    fieldLabel: 'Delivery Order',
+                    fieldLabel: 'Date',
                 },
                 ' to ',
                 {
