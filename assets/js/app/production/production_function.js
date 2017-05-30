@@ -28,13 +28,13 @@ function loadWoData(job_order_id) {
             workOrderHeaderForm.findField("status").setValue(obj.data.status * 1);
             workOrderHeaderForm.findField("status").setReadOnly(false);
 
-            storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
+            var WorkOrderJobTabStore = Ext.getCmp('WorkOrderJobTab').getStore();
+            WorkOrderJobTabStore.on('beforeload', function(store, operation, eOpts) {
                 operation.params = {
                     'extraparams': 'a.job_order_id:' + job_order_id
                 };
             });
-
-            storeGridItemJobWO.load();
+            WorkOrderJobTabStore.load();
 
             if (obj.data.startdate_job === '') {
                 Ext.getCmp('btnSaveWo').enable();
