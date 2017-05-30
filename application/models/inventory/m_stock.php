@@ -19,20 +19,7 @@ class m_stock extends CI_Model {
 			13: Stock In By Received Return PO (+)
 			14: Delivery Sales Return (-)
 		*/
-
-		//cek qty sebelumnya
-		// $sql = $this->db->query("select balance
-		// 							from stock_history
-		// 							where idinventory = $idinventory and warehouse_id = $idwarehouse and idunit = $idunit
-		// 							and (datein <= '".$tanggal."')
-		// 							order by datein");
-		// if($sql->num_rows()>0)
-		// {
-		// 	$r = $sql->row();
-		// 	$old_qty = $r->balance;
-		// } else {
-		// 	$old_qty = 0;
-		// }
+		
 		$qoldstok = $this->db->get_where('warehouse_stock',array(
 				'idinventory' =>$idinventory,
 				'warehouse_id' =>$idwarehouse
