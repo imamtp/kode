@@ -18,7 +18,7 @@ class m_salesorder extends CI_Model {
     function selectField() {
         return "a.idsales,a.idpayment,a.idemployee,g.no_do,g.delivery_date,a.idjournal,a.idtax,a.idcustomer,a.date_sales,a.no_sales_order,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,nocustomer,a.noinvoice,a.invoice_status,
         f.address as address_customer, f.telephone as telephone_customer, f.handphone as handphone_customer, a.idunit,a.paidtoday,a.balance,a.delivery_date,totalitem,COALESCE(totalitemkirim, 0) as totalitemkirim,((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,g.delivery_order_id,idsales_quote,
-        i.no_sales_quote as no_sales_order_quote,i.idsales as idsales_quote,i.date_quote as date_sales_quote,a.salesman_id,j.rate";
+        i.no_sales_quote as no_sales_order_quote,i.idsales as idsales_quote,i.date_quote as date_sales_quote,a.salesman_id,j.rate,k.job_order_id,k.status as statuswo";
     }
     
     function fieldCek()
@@ -48,7 +48,8 @@ class m_salesorder extends CI_Model {
                                 from salesitem
                                 group by idsales) h ON a .idsales = h.idsales
                     left join (select no_sales_quote,idsales,date_quote
-                                from sales ) i ON a.idsales_quote = i.idsales";
+                                from sales ) i ON a.idsales_quote = i.idsales
+                    left join job_order k ON a.idsales = k.idsales";
 
         return $query;
     }

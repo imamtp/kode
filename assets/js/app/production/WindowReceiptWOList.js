@@ -117,7 +117,11 @@ Ext.define('GridReceiptWorkOrderList', {
                 Ext.getCmp('req_ship_date_receiptwoform').setValue(selectedRecord.get('req_ship_date'));
                 Ext.getCmp('start_date_receiptwoform').setValue(selectedRecord.get('startdate_job'));
                 Ext.getCmp('end_date_receiptwoform').setValue(selectedRecord.get('enddate_job'));
-                Ext.getCmp('comboxWorkOrderStatus_receiptwoform').setValue(selectedRecord.get('status') * 1);
+
+                var comboxWorkOrderStatus = Ext.getCmp('comboxWorkOrderStatus_receiptwoform');
+                comboxWorkOrderStatus.setValue(4);
+                comboxWorkOrderStatus.setReadOnly(true);
+
                 Ext.getCmp('remarks_receiptwoform').setValue(selectedRecord.get('remarks'));
                 Ext.getCmp('pic_name_receiptwoform').setValue(selectedRecord.get('firstname'));
 
@@ -226,7 +230,8 @@ Ext.define('GridReceiptWorkOrderList', {
                 // Ext.getCmp('addItemProdCostWo').hide();
 
             }
-        }, {
+        },
+        {
             header: 'job_order_id',
             dataIndex: 'job_order_id',
             hidden: true
@@ -235,7 +240,8 @@ Ext.define('GridReceiptWorkOrderList', {
             header: 'idsales',
             dataIndex: 'idsales',
             hidden: true
-        }, {
+        },
+        {
             header: 'WO Number',
             dataIndex: 'job_no',
             minWidth: 150

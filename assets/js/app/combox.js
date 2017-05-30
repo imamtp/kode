@@ -263,8 +263,8 @@ var arrWorkOrderStatus = [
     [1, 'Open'],
     [2, 'Confirmed'],
     [3, 'On Progress'],
-    [4, 'Pending'],
-    [5, 'Finished'],
+    [4, 'Received'],
+    [5, 'Ready To Delivery'],
     [6, 'Canceled']
 ];
 

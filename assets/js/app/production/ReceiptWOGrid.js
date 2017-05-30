@@ -50,12 +50,16 @@ var smGridReceiptWOGrid = Ext.create('Ext.selection.CheckboxModel', {
         deselect: function(model, record, index) {
             var selectedLen = smGridReceiptWOGrid.getSelection().length;
             if (selectedLen == 0) {
-                console.log(selectedLen);
-                Ext.getCmp('btnDeleteReceiptWOGrid').disable();
+                Ext.getCmp('btnSetToReadyForDeliver').disable();
             }
         },
         select: function(model, record, index) {
-            Ext.getCmp('btnDeleteReceiptWOGrid').enable();
+            // var selectedLen = smGridReceiptWOGrid.getSelection().length;
+            if (record.data.status * 1 == 5) {
+                Ext.getCmp('btnSetToReadyForDeliver').disable();
+            } else {
+                Ext.getCmp('btnSetToReadyForDeliver').enable();
+            }
         }
     }
 });
@@ -66,6 +70,7 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.ReceiptWOGrid',
     store: storeGridReceiptWOGrid,
+    selModel: smGridReceiptWOGrid,
     loadMask: true,
     columns: [
 
@@ -82,6 +87,14 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
             header: 'WO Number',
             dataIndex: 'job_no',
             minWidth: 150
+        },
+        {
+            header: 'Status',
+            dataIndex: 'status',
+            minWidth: 150,
+            renderer: function(value) {
+                return customColumnStatus(arrWorkOrderStatus, value);
+            }
         }, {
             header: 'SO Number',
             dataIndex: 'no_sales_order',
@@ -139,14 +152,6 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
             header: 'Total Cost Item',
             dataIndex: 'totalcostitem',
             minWidth: 150
-        },
-        {
-            header: 'Status',
-            dataIndex: 'status',
-            minWidth: 150,
-            renderer: function(value) {
-                return customColumnStatus(arrWorkOrderStatus, value);
-            }
         }
     ],
     dockedItems: [{
@@ -205,108 +210,158 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                itemId: 'addReceiptWOGrid',
-                text: 'Create New Receipt',
-                iconCls: 'add-icon',
-                handler: function() {
-                    WindowReceiptWOList.show();
-                    Ext.getCmp('btnRecordReceiptWo').enable();
-                }
-            }, {
-                text: 'Print',
-                iconCls: 'print-icon',
-                handler: function() {
-
-                    var grid = Ext.getCmp('ReceiptWOGrid');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                    } else {
-
-                        Ext.create('Ext.window.Window', {
-                            title: 'Preview Receipt Work Order',
-                            modal: true,
-                            width: panelW - 100,
-                            height: panelH - 200,
-                            items: [{
-                                xtype: 'component',
-                                html: '<iframe src="' + SITE_URL + 'production/print_receipt_wo/' + selectedRecord.data.job_order_id + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
-                            }],
-                            buttons: [{
-                                text: 'Print',
-                                iconCls: 'print-icon',
-                                handler: function() {
-                                    window.open(SITE_URL + 'production/print_receipt_wo/' + selectedRecord.data.job_order_id + '/print', '_blank');
-                                }
-                            }]
-                        }).show();
+                    itemId: 'addReceiptWOGrid',
+                    text: 'Create New Receipt',
+                    iconCls: 'add-icon',
+                    handler: function() {
+                        WindowReceiptWOList.show();
+                        Ext.getCmp('btnRecordReceiptWo').enable();
                     }
+                }, {
+                    text: 'Print',
+                    iconCls: 'print-icon',
+                    handler: function() {
 
+                        var grid = Ext.getCmp('ReceiptWOGrid');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
 
-                }
-            }, {
-                itemId: 'editReceiptWOGrid',
-                text: 'Ubah',
-                hidden: true,
-                iconCls: 'edit-icon',
-                handler: function() {
-                    // var grid = Ext.ComponentQuery.query('GridReceiptWOGridID')[0];
-                    var grid = Ext.getCmp('GridReceiptWOGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
-                    } else {
-                        loadMemberForm(selectedRecord.data.id_member)
-                    }
-                }
-            }, {
-                id: 'btnDeleteReceiptWOGrid',
-                text: 'Hapus',
-                hidden: true,
-                iconCls: 'delete-icon',
-                handler: function() {
-                    Ext.Msg.show({
-                        title: 'Confirm',
-                        msg: 'Delete Selected ?',
-                        buttons: Ext.Msg.YESNO,
-                        fn: function(btn) {
-                            if (btn == 'yes') {
-                                var grid = Ext.getCmp('GridReceiptWOGridID');
-                                var sm = grid.getSelectionModel();
-                                selected = [];
-                                Ext.each(sm.getSelection(), function(item) {
-                                    selected.push(item.data[Object.keys(item.data)[0]]);
-                                });
-                                Ext.Ajax.request({
-                                    url: SITE_URL + 'backend/ext_delete/ReceiptWOGrid',
-                                    method: 'POST',
-                                    params: {
-                                        postdata: Ext.encode(selected),
-                                        idmenu: 95
-                                    },
-                                    success: function(form, action) {
-                                        var d = Ext.decode(form.responseText);
-                                        if (!d.success) {
-                                            Ext.Msg.alert('Informasi', d.message);
-                                        }
-                                    },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                            Ext.create('Ext.window.Window', {
+                                title: 'Preview Receipt Work Order',
+                                modal: true,
+                                width: panelW - 100,
+                                height: panelH - 200,
+                                items: [{
+                                    xtype: 'component',
+                                    html: '<iframe src="' + SITE_URL + 'production/print_receipt_wo/' + selectedRecord.data.job_order_id + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                                }],
+                                buttons: [{
+                                    text: 'Print',
+                                    iconCls: 'print-icon',
+                                    handler: function() {
+                                        window.open(SITE_URL + 'production/print_receipt_wo/' + selectedRecord.data.job_order_id + '/print', '_blank');
                                     }
-                                });
-                                storeGridReceiptWOGrid.load();
-                            }
+                                }]
+                            }).show();
                         }
-                    });
+
+
+                    }
                 },
-                //                    disabled: true
-            }, '->', 'Searching: ', ' ', {
-                xtype: 'searchGridReceiptWOGrid',
-                text: 'Left Button'
-            }]
-        }, {
+                {
+                    id: 'btnSetToReadyForDeliver',
+                    disabled: true,
+                    text: 'Set To Ready For Deliver',
+                    iconCls: 'tick-icon',
+                    handler: function() {
+                        var grid = Ext.getCmp('ReceiptWOGrid');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            Ext.MessageBox.show({
+                                title: 'Set To Ready For Deliver',
+                                msg: 'Apakah anda yakin untuk memproses work order terpilih untuk dapat dibuatkan Surat Pengiriman Barang?',
+                                buttons: Ext.MessageBox.YESNOCANCEL,
+                                icon: Ext.MessageBox.WARNING,
+                                fn: function(btn) {
+                                    if (btn == 'yes') {
+                                        // alert(selectedRecord.data.job_order_id)
+                                        Ext.Ajax.request({
+                                            url: SITE_URL + 'production/set_deliver_ready',
+                                            method: 'POST',
+                                            params: {
+                                                job_order_id: selectedRecord.data.job_order_id
+                                            },
+                                            success: function(form, action) {
+                                                var d = Ext.decode(form.responseText);
+                                                Ext.getCmp('ReceiptWOGrid').getStore().load();
+                                            },
+                                            failure: function(form, action) {
+                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                            }
+                                        });
+                                    } else {
+                                        return;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                },
+                {
+                    itemId: 'editReceiptWOGrid',
+                    text: 'Ubah',
+                    hidden: true,
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('GridReceiptWOGridID')[0];
+                        var grid = Ext.getCmp('GridReceiptWOGridID');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
+                        } else {
+                            loadMemberForm(selectedRecord.data.id_member)
+                        }
+                    }
+                },
+                {
+                    id: 'btnDeleteReceiptWOGrid',
+                    text: 'Hapus',
+                    hidden: true,
+                    iconCls: 'delete-icon',
+                    handler: function() {
+                        Ext.Msg.show({
+                            title: 'Confirm',
+                            msg: 'Delete Selected ?',
+                            buttons: Ext.Msg.YESNO,
+                            fn: function(btn) {
+                                if (btn == 'yes') {
+                                    var grid = Ext.getCmp('GridReceiptWOGridID');
+                                    var sm = grid.getSelectionModel();
+                                    selected = [];
+                                    Ext.each(sm.getSelection(), function(item) {
+                                        selected.push(item.data[Object.keys(item.data)[0]]);
+                                    });
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'backend/ext_delete/ReceiptWOGrid',
+                                        method: 'POST',
+                                        params: {
+                                            postdata: Ext.encode(selected),
+                                            idmenu: 95
+                                        },
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            if (!d.success) {
+                                                Ext.Msg.alert('Informasi', d.message);
+                                            }
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                        }
+                                    });
+                                    storeGridReceiptWOGrid.load();
+                                }
+                            }
+                        });
+                    },
+                    //                    disabled: true
+                },
+                '->',
+                'Searching: ',
+                ' ',
+                {
+                    xtype: 'searchGridReceiptWOGrid',
+                    text: 'Left Button'
+                }
+            ]
+        },
+        {
             xtype: 'pagingtoolbar',
             store: storeGridReceiptWOGrid, // same store GridPanel is using
             dock: 'bottom',
