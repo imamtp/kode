@@ -16,7 +16,7 @@ class m_receiptwo extends CI_Model {
     }
 
     function selectField() {
-        return "a.job_order_id,a.idsales,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.finished_date,a.status,a.pic_id,a.approvedby_id,b.no_sales_order,b.date_sales,c.firstname as pic_name,d.firstname as approveby_name,totaljob,totalcostitem,totalmaterialitem,a.req_ship_date";
+        return "a.job_order_id,a.idsales,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.finished_date,a.status,a.pic_id,a.approvedby_id,b.no_sales_order,b.date_sales,c.firstname as pic_name,d.firstname as approveby_name,totaljob,totalcostitem,totalmaterialitem,a.req_ship_date,namecustomer,nocustomer,h.address as address_customer, h.telephone as telephone_customer, h.handphone as handphone_customer";
     }
     
     function fieldCek()
@@ -42,7 +42,8 @@ class m_receiptwo extends CI_Model {
                         group by job_order_id) f ON a.job_order_id = f.job_order_id
                     join (select job_order_id,count(*) as totalmaterialitem
                         from prod_material
-                        group by job_order_id) g ON a.job_order_id = g.job_order_id";
+                        group by job_order_id) g ON a.job_order_id = g.job_order_id
+                    left join customer h ON b.idcustomer = h.idcustomer";
 
         return $query;
     }
@@ -68,6 +69,34 @@ class m_receiptwo extends CI_Model {
             'acctaxpaid' => $this->input->post('idaccpaid')
         );
         return $data;
+    }
+
+    function cetak_receipt_wo($job_order_id){
+
+        $sql = $this->query();
+        $sql.= " WHERE a.job_order_id=$job_order_id";
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $dtcetak = $q->result_array()[0];
+            
+            $runit = $this->m_data->dataunit($dtcetak['idunit']);
+            $dtcetak['logo'] = $runit['logo'];
+            $dtcetak['namaunit'] = $runit['namaunit'];
+            $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['telp'] = $runit['telp'];
+            $dtcetak['fax'] = $runit['fax'];
+
+            //detail finished goods
+            $this->load->model('production/m_itemjobwo');
+            $sql = $this->m_itemjobwo->query()." WHERE ".$this->m_itemjobwo->whereQuery()." AND a.job_order_id=$job_order_id";
+            $query = $this->db->query($sql);
+            $dtcetak['fg_list'] = $query->result_array();
+
+            return $dtcetak;
+        } else {
+            echo 'Data not found';
+        }
     }
 
 }

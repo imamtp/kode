@@ -771,5 +771,13 @@ class production extends MY_Controller {
 
         echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . '}';
     }
+
+    function print_receipt_wo($job_order_id,$print=null){
+        $this->load->model('production/m_receiptwo','model');
+        $d['data'] = $this->model->cetak_receipt_wo($job_order_id);
+        $d['title'] = 'Receipt Work Order';
+        $d['print'] = $print;
+        $this->load->view('tplcetak/production_receipt_wo',$d);
+    }
 }
 ?>
