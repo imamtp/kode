@@ -192,6 +192,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             labelWidth: 120,
                             id: 'nojurnalSalesInvoice_si',
                             fieldLabel: 'NO Invoice #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {

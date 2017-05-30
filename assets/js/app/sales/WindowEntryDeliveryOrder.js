@@ -225,6 +225,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             labelWidth: 120,
                             id: 'nojurnalDO_do',
                             fieldLabel: 'NO DO #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {                                        

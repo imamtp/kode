@@ -457,6 +457,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             labelWidth: 120,
                             id: 'nojurnalPurchaseRequisition',
                             fieldLabel: 'NO PR #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
