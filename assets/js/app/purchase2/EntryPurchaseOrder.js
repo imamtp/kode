@@ -243,6 +243,8 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseOrder', {
                                 {
                                     Ext.getCmp('no_purchase_req').hide();
                                     Ext.getCmp('purchase_req_date').hide();
+                                    Ext.getCmp('no_purchase_req').setValue();
+                                    Ext.getCmp('purchase_req_date').setValue();
                                 } else {
                                     Ext.getCmp('no_purchase_req').show();
                                     Ext.getCmp('purchase_req_date').show();
@@ -281,7 +283,16 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseOrder', {
                             hidden:true,
                             margin: '0 0 0 7',
                             fieldLabel:'Request Date',
-                            id:'purchase_req_date'
+                            id:'purchase_req_date',
+                            listeners:{
+                                change: function(grid, newVal, oldVal, eOpts){
+                                    var picker = Ext.getCmp('po_date_PurchaseOrder');
+                                    if(new Date(new Date(picker.getValue()), new Date(newVal)))
+                                        picker.setValue(newVal);
+
+                                    picker.setMinValue(new Date(newVal));
+                                } 
+                            }
                         },
                         {
                             xtype:'hiddenfield',
@@ -325,7 +336,8 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseOrder', {
                             name:'po_date',
                             id: 'po_date_PurchaseOrder',
                             format: 'd/m/Y',
-                            fieldLabel: 'PO Date'
+                            fieldLabel: 'PO Date',
+                            maxValue: new Date(),
                         }, 
                         {
                             xtype: 'datefield',
