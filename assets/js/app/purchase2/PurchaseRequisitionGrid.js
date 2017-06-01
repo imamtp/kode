@@ -49,6 +49,10 @@ var wPurchaseRequisitionGrid = Ext.create('widget.window', {
     listeners: {
         'show': function(){
             storePurchaseRequisitionGrid.load();
+        },
+        'hide': function(){
+            Ext.getCmp('supplierPurchaseRequisition').setValue();
+            Ext.getCmp('requestby_pr').setValue();
         }
     }
 });
