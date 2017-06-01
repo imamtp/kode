@@ -1,6 +1,6 @@
 Ext.define('GridItemSalesInvoiceModel', {
     extend: 'Ext.data.Model',
-    fields: ['idsalesitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'warehouse_code','size_measurement','size'],
+    fields: ['idsalesitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'warehouse_code', 'size_measurement', 'size'],
     idProperty: 'id'
 });
 
@@ -113,7 +113,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     //     labelWidth: 100
                     // }
                 },
-                 {
+                {
                     xtype: 'numbercolumn',
                     header: 'Ukuran',
                     width: 70,
@@ -156,7 +156,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 },
                 {
                     header: 'Pajak',
-                    hidden:true,
+                    hidden: true,
                     //                    width:50,
                     dataIndex: 'ratetax',
                     editor: {
@@ -195,7 +195,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(),'idsales','sales','nojurnalSalesInvoice_si','INV');
+                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesInvoice_si', 'INV');
                                         // insertNoRef(4, Ext.getCmp('idunit_si').getValue(), 'nojurnalSalesInvoice_si', 'INV');
                                     });
                                 }
@@ -203,7 +203,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         },
                         {
                             xtype: 'datefield',
-                            readOnly:true,
+                            readOnly: true,
                             labelWidth: 120,
                             id: 'tanggalSalesInvoice_si',
                             format: 'd/m/Y',
@@ -211,23 +211,23 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         },
                         {
                             xtype: 'comboxunit',
-                            readOnly:true,
+                            readOnly: true,
                             valueField: 'idunit',
                             labelWidth: 100,
                             valueField: 'idunit',
                             id: 'cbUnitEntrySalesInvoice'
-                            //                            ,multiSelect:true
+                                //                            ,multiSelect:true
                         },
                         {
-                            xtype:'comboxtaxtype',
+                            xtype: 'comboxtaxtype',
                             labelWidth: 100,
-                            readOnly:true,
-                            valueField:'rate',
-                            id:'cb_tax_id_inv',                            
-                              listeners: {
+                            readOnly: true,
+                            valueField: 'rate',
+                            id: 'cb_tax_id_inv',
+                            listeners: {
                                 select: function(combo, record, index) {
-                                  // alert(combo.getValue()); // Return Unitad States and no USA
-                                  // updateGridSalesOrder();
+                                    // alert(combo.getValue()); // Return Unitad States and no USA
+                                    // updateGridSalesOrder();
                                 }
                             }
                         }
@@ -240,7 +240,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
 
                         {
                             xtype: 'comboxCustomer',
-                            readOnly:true,
+                            readOnly: true,
                             id: 'customerSalesInvoice_si',
                             labelWidth: 120
                         },
@@ -258,14 +258,13 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                    ]
+                    items: []
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [{
-                            id:'btnRecordSalesOrderInvoice',
+                            id: 'btnRecordSalesOrderInvoice',
                             text: 'Record Sales Invoice',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordSalesInvoice, this, 'noprint', true)
@@ -290,10 +289,9 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxshipping',
-                            readOnly:true,
+                            readOnly: true,
                             fieldLabel: 'Metode Pengiriman',
                             labelWidth: 120,
                             name: 'idshipping',
@@ -301,7 +299,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         },
                         {
                             xtype: 'textfield',
-                            readOnly:true,
+                            readOnly: true,
                             labelWidth: 120,
                             name: 'driver_name',
                             id: 'driver_name_si',
@@ -310,14 +308,14 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             xtype: 'textfield',
                             labelWidth: 120,
                             name: 'vehicle_number',
-                            readOnly:true,
+                            readOnly: true,
                             id: 'vehicle_number_si',
                             fieldLabel: 'No Mobil',
                         },
                         '->',
                         {
                             xtype: 'textfield',
-                            readOnly:true,
+                            readOnly: true,
                             id: 'angkutSalesInvoice_si',
                             align: 'right',
                             //                            readOnly: true,
@@ -341,7 +339,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     dock: 'bottom',
                     items: [{
                             xtype: 'textfield',
-                            readOnly:true,
+                            readOnly: true,
                             name: 'ship_address',
                             id: 'shipaddressSalesInvoice_si',
                             labelWidth: 120,
@@ -379,7 +377,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         }, '->',
                         {
                             xtype: 'textfield',
-                            readOnly:true,
+                            readOnly: true,
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
@@ -394,7 +392,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     dock: 'bottom',
                     items: [{
                             xtype: 'datefield',
-                            readOnly:true,
+                            readOnly: true,
                             labelWidth: 120,
                             id: 'tanggalDeliverySalesInvoice_si',
                             format: 'd/m/Y',
@@ -415,8 +413,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'datefield',
                             labelWidth: 120,
                             id: 'invoice_date_si',
@@ -425,7 +422,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         },
                         {
                             xtype: 'comboxpaymentterm',
-                            id:'comboxpaymentterm_si',
+                            id: 'comboxpaymentterm_si',
                             // cls:'my-mandatory-field',
                             name: 'idpayment',
                             margin: {
@@ -561,8 +558,8 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         },
                         {
                             xtype: 'comboxcurrency',
-                            hidden:true,
-                            readOnly:true,
+                            hidden: true,
+                            readOnly: true,
                             id: 'comboxcurrencySalesInvoice_si',
                             labelWidth: 120
                         },
@@ -577,12 +574,11 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             fieldStyle: 'text-align: right;'
                         }
                     ]
-                },                
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                         {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
                             // cls:'my-mandatory-field',
@@ -595,7 +591,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         {
                             xtype: 'textfield',
                             // cls:'my-mandatory-field',
-                            name:'pembayaran_si',
+                            name: 'pembayaran_si',
                             id: 'pembayaranSalesInvoice_si',
                             align: 'right',
                             //                            readOnly: true,
@@ -611,7 +607,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                                 }
                             }
                         }
-                        
+
                     ]
                 }
             ],
@@ -621,6 +617,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     scope: this,
                     fn: function(grid) {
                         // disableEntrySalesInvoice();
+                        updateSelisih();
                     }
                 }
             }
@@ -682,19 +679,18 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
         // var json = Ext.encode(Ext.pluck(storeGridItemSalesInvoice.data.items, 'data'));
         //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesInvoice').getValue());
 
-        if(validasiSalesInvoice())
-        {
-            var aftertax = str_replace('.','',Ext.getCmp('totalSalesInvoice_si').getValue())*1;
-            var biayaangkut = str_replace('.','',Ext.getCmp('angkutSalesInvoice_si').getValue())*1;
+        if (validasiSalesInvoice()) {
+            var aftertax = str_replace('.', '', Ext.getCmp('totalSalesInvoice_si').getValue()) * 1;
+            var biayaangkut = str_replace('.', '', Ext.getCmp('angkutSalesInvoice_si').getValue()) * 1;
 
-           Ext.Ajax.request({
+            Ext.Ajax.request({
                 url: SITE_URL + 'sales/save_sales_invoice',
                 method: 'POST',
                 params: {
                     idsales: Ext.getCmp('id_sales_order_si').getValue(),
                     noinvoice: Ext.getCmp('nojurnalSalesInvoice_si').getValue(),
                     idpayment: Ext.getCmp('comboxpaymentterm_si').getValue(),
-                    memo : Ext.getCmp('memoSalesInvoice_si').getValue(),
+                    memo: Ext.getCmp('memoSalesInvoice_si').getValue(),
                     ddays: Ext.getCmp('ddaysSalesInvoice').getValue(),
                     eomddays: Ext.getCmp('eomddaysSalesInvoice').getValue(),
                     percentagedisc: Ext.getCmp('percentagediscSalesInvoice').getValue(),
@@ -702,11 +698,11 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     notes_si: Ext.getCmp('notes_si').getValue(),
                     pembayaran: Ext.getCmp('pembayaranSalesInvoice_si').getValue(),
                     sisa_bayar: Ext.getCmp('sisaBayarSalesInvoice_si').getValue(),
-                    total_amount: aftertax+biayaangkut,
+                    total_amount: aftertax + biayaangkut,
                     idunit: Ext.getCmp('cbUnitEntrySalesInvoice').getValue(),
                     invoice_date: Ext.getCmp('invoice_date_si').getSubmitValue(),
-                    biayaangkut:biayaangkut
-                    // datagrid: json
+                    biayaangkut: biayaangkut
+                        // datagrid: json
                 },
                 success: function(form, action) {
 
@@ -727,10 +723,10 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 failure: function(form, action) {
                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                 }
-            }); 
+            });
         }
 
-        
+
         // }
 
 
@@ -868,27 +864,27 @@ function updateGridSalesInvoice(tipe) {
 
 }
 
-function updateSelisih(){
-    var totalPayment = str_replace('.','',Ext.getCmp('totalSalesInvoice_si').getValue())*1+str_replace('.','',Ext.getCmp('angkutSalesInvoice_si').getValue())*1;
-    // console.log('totalPayment:'+totalPayment);
+function updateSelisih() {
+    var totalPayment = str_replace('.', '', Ext.getCmp('totalSalesInvoice_si').getValue()) * 1 + str_replace('.', '', Ext.getCmp('angkutSalesInvoice_si').getValue()) * 1;
+    // console.log('totalPayment:' + totalPayment);
 
-    var sisa = totalPayment - str_replace('.','',Ext.getCmp('pembayaranSalesInvoice_si').getValue())*1;
-    console.log(sisa);
+    var sisa = totalPayment - str_replace('.', '', Ext.getCmp('pembayaranSalesInvoice_si').getValue()) * 1;
+    // console.log(sisa);
     // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(sisa.toLocaleString('null', {
     //     minimumFractionDigits: 0
     // }));
 
-     Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(sisa));
+    Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(sisa));
 }
 
 function validasiSalesInvoice() {
     //    alert(Ext.getCmp('comboxcurrencySalesInvoice').getValue());   
     // var pembayaran = str_replace('.','',Ext.getCmp('pembayaranSalesInvoice_si').getValue());
-    var sisa = str_replace('.','',Ext.getCmp('sisaBayarSalesInvoice_si').getValue())*1;
+    var sisa = str_replace('.', '', Ext.getCmp('sisaBayarSalesInvoice_si').getValue()) * 1;
 
     if (Ext.getCmp('comboxpaymentterm_si').getValue() == null) {
         Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih');
-    } else if(sisa<0){
+    } else if (sisa < 0) {
         Ext.Msg.alert('Failed', 'Kelebihan bayar');
     }
     // else if (Ext.getCmp('paymentSalesInvoice').getValue() == 1 && Ext.getCmp('idaccountSalesInvoice').getValue() == '')
