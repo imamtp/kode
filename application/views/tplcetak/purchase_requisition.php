@@ -90,8 +90,6 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                           <!-- <th>Price</th> -->
                           <th>Qty</th>
                           <th>Measurement</th>
-                          <th>Size/Length</th>
-                          <th>Measurement</th>
                           <!-- <th>Discount(%)</th> -->
                           <!-- <th>Tax %</th> -->
                            <!-- <th>Total</th> -->
@@ -107,8 +105,6 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                               <td><?=$value['nameinventory']?></td>  
                               <td align="right"><?=$value['qty']?></td>
                               <td><?=$value['short_desc']?></td>
-                              <td align="right"><?=$value['size']?></td>
-                              <td><?=$value['size_measurement']?></td>
                               <?php //if($data['totaltax']!=0) { echo "<td>".$value['ratetax']."</td>"; } ?>
                             </tr>
                            <?php
