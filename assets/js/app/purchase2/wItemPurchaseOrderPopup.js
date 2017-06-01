@@ -3,7 +3,7 @@
 
 Ext.define('GridItemPurchaseOrderPopupModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','sku_no','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','totalstock','stock_kedua','satuan_pertama','satuan_kedua'],
+    fields: ['idinventory','invno','sku_no','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','totalstock','stock_kedua','satuan_pertama','satuan_kedua', 'lebar', 'ketebalan'],
     idProperty: 'id'
 });
 
@@ -99,8 +99,8 @@ Ext.define(dir_sys+'purchase2.GridItemPurchaseOrderPopup', {
             dataIndex: 'satuan_kedua',
             minWidth: 100
         },
-        {header: 'Beli', dataIndex: 'cost', minWidth: 130,xtype:'numbercolumn',align:'right'},
-        {header: 'Jual', dataIndex: 'sellingprice', minWidth: 130,xtype:'numbercolumn',align:'right'}
+        {header: 'Lebar', dataIndex: 'lebar', minWidth: 130,xtype:'numbercolumn',align:'right'},
+        {header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130,xtype:'numbercolumn',align:'right'}
     ]
     , dockedItems: [
         {
