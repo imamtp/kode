@@ -402,6 +402,15 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                             Ext.getCmp('btnRecordSalesOrderInvoice').show();
 
                             Ext.getCmp('WindowEntrySalesInvoice').setTitle('Create Sales Invoice');
+
+                            // console.log(Ext.getCmp('totalSalesInvoice_si').getValue());
+
+                            // Ext.getCmp('pembayaranSalesInvoice_si').setValue(renderNomor(0));
+                            // Ext.getCmp('angkutSalesInvoice_si').setValue(0);
+                            // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(213213));
+
+
+
                         }
                     }
                 }
