@@ -1123,10 +1123,13 @@ function validasiPurchaseRequisition()
     } else if (Ext.getCmp('memoPurchaseRequisition').getValue() == '')
     {
         Ext.Msg.alert('Failed', 'Masukkan Memo PR');
-    } else if (Ext.getCmp('totalItemPurchaseRequisition').getValue() == null)
+    } else if (Ext.getCmp('totalItemPurchaseRequisition').getValue() == null || Ext.getCmp('EntryPurchaseRequisition').getStore().getRange().length == 0)
     {
         Ext.Msg.alert('Failed', 'Masukkan barang');
-    } 
+    } else if (Ext.getCmp('requestby_pr').getValue() == '')
+    {
+        Ext.Msg.alert('Failed', 'Masukkan Requested By');
+    }
     // else if (Ext.getCmp('paymentPurchaseRequisition').getValue() == null)
     // {
         // Ext.Msg.alert('Failed', 'Tentukan pembayaran');
