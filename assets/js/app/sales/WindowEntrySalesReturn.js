@@ -1,5 +1,5 @@
-var WindowSelectorSalesReturn = Ext.create(dir_sys+'sales.WindowSelectorSalesReturn');
-var wAccReturnSalesCOAPopup = Ext.create(dir_sys+'sales.wAccReturnSalesCOAPopup');
+var WindowSelectorSalesReturn = Ext.create(dir_sys + 'sales.WindowSelectorSalesReturn');
+var wAccReturnSalesCOAPopup = Ext.create(dir_sys + 'sales.wAccReturnSalesCOAPopup');
 
 //acc list
 Ext.define('GridAccReturnAmount', {
@@ -9,8 +9,7 @@ Ext.define('GridAccReturnAmount', {
     alias: 'widget.GridAccReturnAmount',
     store: storeGridAccount,
     loadMask: true,
-    columns: [
-    {
+    columns: [{
             text: 'Edit',
             width: 45,
             // menuDisabled: true,
@@ -19,38 +18,36 @@ Ext.define('GridAccReturnAmount', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-               setValueAcc(selectedRecord,'wAccReturnAmountPopup','_sales_return');
+                setValueAcc(selectedRecord, 'wAccReturnAmountPopup', '_sales_return');
             }
         },
-        {header: 'idaccount', dataIndex: 'idaccount', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'No Akun', dataIndex: 'accnumber',},
-        {header: 'Nama Akun', dataIndex: 'accname', minWidth: 150,flex:1},
-        {header: 'Saldo', dataIndex: 'balance', minWidth: 150,xtype:'numbercolumn',align:'right',hidden:true},
-        {header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170},
+        { header: 'idaccount', dataIndex: 'idaccount', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'No Akun', dataIndex: 'accnumber', },
+        { header: 'Nama Akun', dataIndex: 'accname', minWidth: 150, flex: 1 },
+        { header: 'Saldo', dataIndex: 'balance', minWidth: 150, xtype: 'numbercolumn', align: 'right', hidden: true },
+        { header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170 },
         // {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridAcc',
-                    text: 'Left Button'
-                }
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridAcc',
+                text: 'Left Button'
+            }
 
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridAccount, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ]
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridAccount, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }]
 });
 
 var wAccReturnAmountPopup = Ext.create('widget.window', {
@@ -62,13 +59,13 @@ var wAccReturnAmountPopup = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: 660,
     height: panelHeight,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridAccReturnAmount'
+        xtype: 'GridAccReturnAmount'
     }]
 });
 //END LIST ACC TUJUAN
@@ -77,7 +74,7 @@ var wAccReturnAmountPopup = Ext.create('widget.window', {
 
 Ext.define('ItemSalesReturnModel', {
     extend: 'Ext.data.Model',
-    fields: ['sales_return_id','idsalesitem','idinventory','qty_return','resend','notes','warehouse_id','qty','price','disc','total','ratetax','size','measurement_id_size','qty_kirim','invno','nameinventory','sku_no','measurement_id_one','short_desc','size_measurement','warehouse_code'],
+    fields: ['sales_return_id', 'idsalesitem', 'idinventory', 'qty_return', 'qty_sent', 'qty_sisa_kirim', 'resend', 'notes', 'warehouse_id', 'qty', 'price', 'disc', 'total', 'ratetax', 'size', 'measurement_id_size', 'qty_kirim', 'invno', 'nameinventory', 'sku_no', 'measurement_id_one', 'short_desc', 'size_measurement', 'warehouse_code'],
     idProperty: 'id'
 });
 
@@ -97,9 +94,9 @@ var storeGridItemSalesReturn = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 Ext.define(dir_sys + 'sales.EntrySalesReturn', {
@@ -108,7 +105,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
     alias: 'widget.EntrySalesReturn',
     xtype: 'cell-editing',
     // title: 'Input Sales Return ',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -121,37 +118,36 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
             forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemSalesReturn,
-            columns: [
-                {
+            columns: [{
                     header: 'idsalesitem',
                     hidden: true,
                     dataIndex: 'idsalesitem',
-//                    id: 'idinventory'
-                },{
+                    //                    id: 'idinventory'
+                }, {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'No SKU',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     minWidth: 130
                 },
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     minWidth: 120
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
-                    flex:1,
+                    flex: 1,
                     minWidth: 200,
-//                    id: 'nameinventory'
-                },  
+                    //                    id: 'nameinventory'
+                },
                 {
                     xtype: 'numbercolumn',
                     header: 'Harga',
@@ -173,7 +169,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 },
                 {
                     header: 'Satuan Order',
-                    hidden:true,
+                    hidden: true,
                     dataIndex: 'short_desc'
                 },
 
@@ -186,7 +182,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 },
                 {
                     header: 'Satuan Ukuran',
-                    hidden:true,
+                    hidden: true,
                     dataIndex: 'size_measurement'
                 },
                 {
@@ -207,6 +203,8 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     width: 130,
                     align: 'right'
                 },
+
+                //bisa diedit
                 {
                     xtype: 'numbercolumn',
                     header: 'Qty Retur',
@@ -225,12 +223,47 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     dataIndex: 'warehouse_code',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
                     }
-                }, 
+                },
+                //end bisa diedit
+
+                //ga bisa diedit. buat delivery retur
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Retur',
+                    minWidth: 70,
+                    dataIndex: 'qty_return',
+                    align: 'right',
+                },
+                {
+                    header: 'Warehouse',
+                    minWidth: 120,
+                    dataIndex: 'warehouse_code'
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Kirim',
+                    minWidth: 70,
+                    dataIndex: 'qty_kirim',
+                    align: 'right',
+                    editor: {
+                        xtype: 'numberfield',
+                        allowBlank: false,
+                        minValue: 1
+                    }
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Sisa',
+                    minWidth: 70,
+                    dataIndex: 'qty_sisa_kirim',
+                    align: 'right',
+                },
+                //end
                 {
                     // xtype: 'numbercolumn',
                     header: 'Catatan',
@@ -241,17 +274,17 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                         allowBlank: false
                     }
                 },
-//                 {
-//                     header: 'Pajak',
-//                     hidden:true,
-// //                    width:50,
-//                     dataIndex: 'ratetax',
-//                     editor: {
-//                         xtype: 'comboxtax',
-//                         valueField: 'rate',
-//                         labelWidth: 40
-//                     }
-//                 },
+                //                 {
+                //                     header: 'Pajak',
+                //                     hidden:true,
+                // //                    width:50,
+                //                     dataIndex: 'ratetax',
+                //                     editor: {
+                //                         xtype: 'comboxtax',
+                //                         valueField: 'rate',
+                //                         labelWidth: 40
+                //                     }
+                //                 },
                 {
                     xtype: 'actioncolumn',
                     minWidth: 30,
@@ -259,23 +292,22 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     sortable: false,
                     menuDisabled: true,
                     items: [{
-                            icon: BASE_URL + 'assets/icons/fam/cross.gif',
-                            tooltip: 'Hapus',
-                            scope: this,
-                            handler: this.onRemoveClick
-                        }]
+                        icon: BASE_URL + 'assets/icons/fam/cross.gif',
+                        tooltip: 'Hapus',
+                        scope: this,
+                        handler: this.onRemoveClick
+                    }]
                 }
             ],
             selModel: {
                 selType: 'cellmodel'
             },
-            dockedItems: [ 
-            
+            dockedItems: [
+
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
                             id: 'nojurnalSalesReturn_sr',
@@ -284,32 +316,32 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        insertNoRef(4, Ext.getCmp('cbUnitEntrySalesReturn').getValue(), 'nojurnalSalesReturn_sr','SR');
+                                        insertNoRef(4, Ext.getCmp('cbUnitEntrySalesReturn').getValue(), 'nojurnalSalesReturn_sr', 'SR');
                                     });
                                 }
                             }
-                        }, 
+                        },
                         {
                             xtype: 'datefield',
                             labelWidth: 120,
                             id: 'tanggalSalesReturn_sr',
                             format: 'd/m/Y',
                             fieldLabel: 'Return Date'
-                        }, 
+                        },
                         {
                             xtype: 'comboxunit',
                             valueField: 'idunit',
                             labelWidth: 100,
-                            value:idunit,
+                            value: idunit,
                             valueField: 'idunit',
                             id: 'cbUnitEntrySalesReturn'
-//                            ,multiSelect:true
-                        },               
+                                //                            ,multiSelect:true
+                        },
                         {
-                            xtype:'comboxReturnSalesStatus',
-                            name:'status',
-                            id:'status_sr'
-                        }         
+                            xtype: 'comboxReturnSalesStatus',
+                            name: 'status',
+                            id: 'status_sr'
+                        }
                         // {
                         //     xtype:'comboxtaxtype',
                         //     labelWidth: 100,
@@ -323,18 +355,25 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                         //     }
                         // }
                     ]
-                } ,
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
                         '->',
-                         {
-                            itemId: 'recordPayment',
-                            id:'btnRecordSalesReturn',
+                        {
+                            // itemId: 'recordPayment',
+                            id: 'btnRecordSalesReturn',
                             text: 'Record Sales Return ',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordSalesReturn, this, 'noprint', true)
+                        },
+                        {
+                            // itemId: 'recordPayment',
+                            id: 'btnRecordDeliverySalesReturn',
+                            text: 'Record Delivery Sales Return ',
+                            iconCls: 'disk',
+                            handler: Ext.bind(this.recordDeliverySalesReturn, this, 'noprint', true)
                         }
                         // ,{
                         //     text: 'Print and Record Sales Return ',
@@ -359,7 +398,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [
-                        
+
                         {
                             xtype: 'comboxCustomer',
                             id: 'customerSalesReturn_sr',
@@ -369,7 +408,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             xtype: 'textfield',
                             width: 620,
                             labelWidth: 120,
-                            value:'Sales Return ',
+                            value: 'Sales Return ',
                             id: 'memoSalesReturn_sr',
                             fieldLabel: 'Memo'
                         }
@@ -378,28 +417,27 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             text: 'Tambah Barang',
                             iconCls: 'add-icon',
                             scope: this,
                             handler: this.onAddClick
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'sales_return_id_sr',
-                            name:'sales_return_id'
+                            xtype: 'hiddenfield',
+                            id: 'sales_return_id_sr',
+                            name: 'sales_return_id'
                         },
-                       
+
                         {
-                            xtype:'hiddenfield',
-                            id:'statusformSalesReturnGrid_sr',
-                            name:'statusFormSalesReturn'
+                            xtype: 'hiddenfield',
+                            id: 'statusformSalesReturnGrid_sr',
+                            name: 'statusFormSalesReturn'
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'tokenSalesReturnGrid_sr',
-                            name:'token'
+                            xtype: 'hiddenfield',
+                            id: 'tokenSalesReturnGrid_sr',
+                            name: 'token'
                         }
                     ]
                 },
@@ -408,9 +446,9 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-                            
-                         '->',
-                          {
+
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -424,17 +462,16 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
-                            labelWidth:150,
-                            name:'notes',
-                            id:'notes_sr',
+                            labelWidth: 150,
+                            name: 'notes',
+                            id: 'notes_sr',
                             width: 500,
                             fieldLabel: 'Catatan'
                         },
-                         '->',
-                         {
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -443,14 +480,13 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
                         }
-                        
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'fieldcontainer',
                             fieldLabel: 'Akun Retur Penjualan',
                             combineErrors: true,
@@ -463,7 +499,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             },
                             items: [{
                                 xtype: 'textfield',
-                                allowBlank: false,                                
+                                allowBlank: false,
                                 name: 'accnametujuan',
                                 id: 'accname_coa_sales_return',
                                 listeners: {
@@ -473,10 +509,10 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                                                 Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
                                             } else {
                                                 wAccReturnSalesCOAPopup.show();
-                                                storeGridAccount.on('beforeload',function(store, operation,eOpts){
-                                                    operation.params={
-                                                                'idunit': Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
-                                                                'idaccounttype': '12,16'
+                                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                                    operation.params = {
+                                                        'idunit': Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
+                                                        'idaccounttype': '12,16'
                                                     };
                                                 });
                                                 storeGridAccount.load();
@@ -489,13 +525,13 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                                 id: 'accnumber_coa_sales_return',
                             }, {
                                 xtype: 'hiddenfield',
-                                name:'idaccount',
+                                name: 'idaccount',
                                 id: 'idaccount_coa_sales_return',
                             }]
-                        }, 
-                      
-                         '->',
-                          {
+                        },
+
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -509,13 +545,12 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
-                            labelWidth:150,
+                            labelWidth: 150,
                             allowBlank: false,
-                            name:'nominal',
-                            id:'nominal_sales_return',
+                            name: 'nominal',
+                            id: 'nominal_sales_return',
                             fieldLabel: 'Nominal Dana Retur',
                             fieldStyle: 'text-align: right;',
                             listeners: {
@@ -526,7 +561,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                                     }, c);
                                 }
                             }
-                        },{
+                        }, {
                             xtype: 'fieldcontainer',
                             fieldLabel: 'Akun Kas/Bank',
                             combineErrors: true,
@@ -550,10 +585,10 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                                                 Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
                                             } else {
                                                 wAccReturnAmountPopup.show();
-                                                storeGridAccount.on('beforeload',function(store, operation,eOpts){
-                                                    operation.params={
-                                                                'idunit': Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
-                                                                'idaccounttype': '19,17,1'
+                                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                                    operation.params = {
+                                                        'idunit': Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
+                                                        'idaccounttype': '19,17,1'
                                                     };
                                                 });
                                                 storeGridAccount.load();
@@ -566,10 +601,10 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                                 id: 'accnumber_sales_return',
                             }, {
                                 xtype: 'hiddenfield',
-                                name:'idaccount',
+                                name: 'idaccount',
                                 id: 'idaccount_sales_return',
                             }]
-                        }, 
+                        },
                         '->',
                         {
                             xtype: 'textfield',
@@ -580,14 +615,13 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             fieldLabel: 'Subtotal',
                             fieldStyle: 'text-align: right;'
                         }
-                       
-                      
+
+
                     ]
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -612,7 +646,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
         this.on({
             scope: this,
             edit: function() {
-                // updateGridSalesReturn('general');
+                updateGridSalesReturn();
             }
         });
     },
@@ -620,119 +654,90 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesReturn: function(button, event, mode)
-    {
-        // console.log(Ext.getCmp('idaccountSalesReturn').getValue())
-        // if (validasiSalesReturn())
-        // {
-            // var dp = Ext.getCmp('angkutSalesReturn').getValue();
-            // if(dp!='')
-            // {
-            //     //cek link dp
-            //     Ext.Ajax.request({
-            //         url: SITE_URL + 'account/cekAccLink',
-            //         method: 'POST',
-            //         params: {
-            //             idacclink: 17,
-            //             idunit:Ext.getCmp('cbUnitEntrySalesReturn').getValue()
-            //         },
-            //         success: function(form, action) {
+    recordSalesReturn: function(button, event, mode) {
 
-            //             var d = Ext.decode(form.responseText);
-            //             if (!d.success)
-            //             {
-            //                 Ext.Msg.alert('Peringatan', d.message);
-            //             } else {
-            //                 // Ext.getCmp('wEntryPayment').hide();
-            //                 // PaymentGridStore.load();
-            //             }
+        var json = Ext.encode(Ext.pluck(storeGridItemSalesReturn.data.items, 'data'));
+        //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesReturn').getValue());
 
-            //         },
-            //         failure: function(form, action) {
-            //             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            //         }
-            //     });
-            // } 
-            
-            var json = Ext.encode(Ext.pluck(storeGridItemSalesReturn.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesReturn').getValue());
+        Ext.Ajax.request({
+            url: SITE_URL + 'sales/saveSalesReturn',
+            method: 'POST',
+            params: {
+                statusform: Ext.getCmp('statusformSalesReturnGrid_sr').getValue(),
+                sales_return_id: Ext.getCmp('sales_return_id_sr').getValue(),
+                noreturn: Ext.getCmp('nojurnalSalesReturn_sr').getValue(),
+                tanggal: Ext.getCmp('tanggalSalesReturn_sr').getSubmitValue(),
+                idunit: Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
+                idcustomer: Ext.getCmp('customerSalesReturn_sr').getValue(),
+                memo: Ext.getCmp('memoSalesReturn_sr').getValue(),
+                notes: Ext.getCmp('notes_sr').getValue(),
+                // idsales: Ext.getCmp('idsales_order_sr').getValue(),
+                token: Ext.getCmp('tokenSalesReturnGrid_sr').getValue(),
+                nominal: Ext.getCmp('nominal_sales_return').getValue(),
+                idaccount_bank: Ext.getCmp('idaccount_sales_return').getValue(),
+                subtotal: Ext.getCmp('subtotalSalesReturn_sr').getValue(),
+                totaltax: Ext.getCmp('totalPajakSalesReturn_sr').getValue(),
+                totaldisc: Ext.getCmp('totalDiskonSalesReturn_sr').getValue(),
+                aftertax: Ext.getCmp('totalSalesReturn_sr').getValue(),
+                idaccount_return: Ext.getCmp('idaccount_coa_sales_return').getValue(),
+                status: Ext.getCmp('status_sr').getValue(),
+                datagrid: json
+            },
+            success: function(form, action) {
 
-            Ext.Ajax.request({
-                url: SITE_URL + 'sales/saveSalesReturn',
-                method: 'POST',
-                params: {
-                    statusform: Ext.getCmp('statusformSalesReturnGrid_sr').getValue(),
-                    sales_return_id: Ext.getCmp('sales_return_id_sr').getValue(),
-                    noreturn: Ext.getCmp('nojurnalSalesReturn_sr').getValue(),
-                    tanggal: Ext.getCmp('tanggalSalesReturn_sr').getSubmitValue(),
-                    idunit: Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
-                    idcustomer: Ext.getCmp('customerSalesReturn_sr').getValue(),
-                    memo: Ext.getCmp('memoSalesReturn_sr').getValue(),
-                    notes: Ext.getCmp('notes_sr').getValue(),
-                    // idsales: Ext.getCmp('idsales_order_sr').getValue(),
-                    token: Ext.getCmp('tokenSalesReturnGrid_sr').getValue(),
-                    nominal: Ext.getCmp('nominal_sales_return').getValue(),
-                    idaccount_bank: Ext.getCmp('idaccount_sales_return').getValue(),
-                    subtotal: Ext.getCmp('subtotalSalesReturn_sr').getValue(),
-                    totaltax: Ext.getCmp('totalPajakSalesReturn_sr').getValue(),
-                    totaldisc: Ext.getCmp('totalDiskonSalesReturn_sr').getValue(),
-                    aftertax: Ext.getCmp('totalSalesReturn_sr').getValue(),
-                    idaccount_return: Ext.getCmp('idaccount_coa_sales_return').getValue(),
-                    status: Ext.getCmp('status_sr').getValue(),                    
-                    datagrid: json
-                },
-                success: function(form, action) {
+                var d = Ext.decode(form.responseText);
+                if (!d.success) {
+                    Ext.Msg.alert('Peringatan', d.message);
+                } else {
+                    Ext.Msg.alert('Success', d.message);
 
-                    var d = Ext.decode(form.responseText);
-                    if (!d.success)
-                    {
-                        Ext.Msg.alert('Peringatan', d.message);
-                    } else {
-                        Ext.Msg.alert('Success', d.message);
+                    Ext.getCmp('WindowEntrySalesReturn').hide();
+                    Ext.getCmp('WindowSaleOrderList').hide();
 
-                        // Ext.getCmp('customerSalesReturn').setValue(null);
-                        // Ext.getCmp('tanggalSalesReturn').setValue(null);
-                        // Ext.getCmp('shipaddressSalesReturn').setValue(null);
-                        // Ext.getCmp('nojurnalSalesReturn').setValue(null);
-                        // Ext.getCmp('memoSalesReturn').setValue(null);
-                        // Ext.getCmp('subtotalSalesReturn').setValue(null);
-                        // Ext.getCmp('totalSalesReturn').setValue(null);
-                        // Ext.getCmp('totalPajak').setValue(null);
-                        // Ext.getCmp('shippingSalesReturn').setValue(null);
-                        // Ext.getCmp('angkutSalesReturn').setValue(null);
-                        // Ext.getCmp('pembayaranSalesReturn').setValue(null);
-                        // Ext.getCmp('sisaBayarSalesReturn').setValue(null);
-                        // Ext.getCmp('paymentSalesReturn').setValue(null);
-                        // Ext.getCmp('tglPelunasanSalesReturn').setValue(null);
-                        // Ext.getCmp('comboxcurrencySalesReturn').setValue(null);
-
-                        // storeGridItemSalesReturn.removeAll();
-                        // storeGridItemSalesReturn.sync();
-                        // updateGridSalesReturn('general');
-
-                        // if(mode=='print')
-                        // {
-                        //     cetak('FAKTUR Sales Return ','SalesReturn',d.id);
-                        // }
-
-                        Ext.getCmp('WindowEntrySalesReturn').hide();
-                        Ext.getCmp('WindowSaleOrderList').hide();
-
-                        Ext.getCmp('SalesReturnGrid').getStore.load();
-                    }
-
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    Ext.getCmp('SalesReturnGrid').getStore.load();
                 }
-            });
-        // }
 
+            },
+            failure: function(form, action) {
+                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            }
+        });
 
     },
+    recordDeliverySalesReturn: function(button, event, mode) {
+        var json = Ext.encode(Ext.pluck(storeGridItemSalesReturn.data.items, 'data'));
+        Ext.Ajax.request({
+            url: SITE_URL + 'sales/saveDeliverySalesReturn',
+            method: 'POST',
+            params: {
+                statusform: Ext.getCmp('statusformSalesReturnGrid_sr').getValue(),
+                sales_return_id: Ext.getCmp('sales_return_id_sr').getValue(),
+                noreturn: Ext.getCmp('nojurnalSalesReturn_sr').getValue(),
+                idunit: Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
+                notes: Ext.getCmp('notes_sr').getValue(),
+                status: Ext.getCmp('status_sr').getValue(),
+                datagrid: json
+            },
+            success: function(form, action) {
+
+                var d = Ext.decode(form.responseText);
+                if (!d.success) {
+                    Ext.Msg.alert('Peringatan', d.message);
+                } else {
+                    Ext.Msg.alert('Success', d.message);
+
+                    Ext.getCmp('WindowEntrySalesReturn').hide();
+                    Ext.getCmp('deliveryOrderReturnGrid').getStore.load();
+                }
+
+            },
+            failure: function(form, action) {
+                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            }
+        });
+    },
     saveRecurr: function() {
-        if (validasiSalesReturn())
-        {
+        if (validasiSalesReturn()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -740,81 +745,57 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('customerSalesReturn').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
-            WindowSelectorSalesReturn.show();
+        //        console.log(Ext.getCmp('customerSalesReturn').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        WindowSelectorSalesReturn.show();
 
-            var store = Ext.getCmp('GridSOSelectorSalesReturn').getStore();
+        var store = Ext.getCmp('GridSOSelectorSalesReturn').getStore();
 
-            store.on('beforeload',function(store, operation,eOpts){
-                operation.params={
-                   'extraparams': 'a.invoice_status:'+2
-                   // 'item_selector_sr': true
-                 };
-             });
+        store.on('beforeload', function(store, operation, eOpts) {
+            operation.params = {
+                'extraparams': 'a.invoice_status:' + 2
+                    // 'item_selector_sr': true
+            };
+        });
 
-            store.load();
+        store.load();
 
-
-
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
     },
     onRemoveClick: function(grid, rowIndex) {
         console.log(this.getStore().getAt(rowIndex));
         var obj = this.getStore().getAt(rowIndex);
         this.getStore().removeAt(rowIndex);
-        
+
 
         Ext.Ajax.request({
-                    url: SITE_URL + 'sales/del_return_item',
-                    method: 'POST',
-                    params: {
-                        idsalesitem:obj.data.idsalesitem,
-                        token:Ext.getCmp('tokenSalesReturnGrid_sr').getValue()
-                    },
-                    success: function(form, action) {
-
-                        // var d = Ext.decode(form.responseText);
-                        // if (!d.success)
-                        // {
-                        //     Ext.Msg.alert('Peringatan', d.message);
-                        // } else {
-                        //     // Ext.getCmp('wEntryPayment').hide();
-                        //     // PaymentGridStore.load();
-                        // }
-                        updateGridSalesReturn()
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                    }
+            url: SITE_URL + 'sales/del_return_item',
+            method: 'POST',
+            params: {
+                idsalesitem: obj.data.idsalesitem,
+                token: Ext.getCmp('tokenSalesReturnGrid_sr').getValue()
+            },
+            success: function(form, action) {
+                updateGridSalesReturn()
+            },
+            failure: function(form, action) {
+                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            }
         });
     },
     onEdit: function(editor, e) {
@@ -823,109 +804,66 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
 });
 
 
-Ext.define(dir_sys+'sales.WindowEntrySalesReturn', {
+Ext.define(dir_sys + 'sales.WindowEntrySalesReturn', {
     extend: 'Ext.window.Window',
     alias: 'widget.WindowEntrySalesReturn',
-    id:'WindowEntrySalesReturn',
+    id: 'WindowEntrySalesReturn',
     title: 'Entry Sales Return ',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
-    autoDestroy:false,
-    modal:true,
+    autoDestroy: false,
+    modal: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: panelW,
     height: sizeH,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'EntrySalesReturn'
+        xtype: 'EntrySalesReturn'
     }]
 });
 
-function updateGridSalesReturn(tipe)
-{
+function updateGridSalesReturn() {
     console.log('update run');
-
-    var addprefix = 'SalesReturn_sr';
-
-
-    var subtotalSalesReturn = 0 * 1;
-    var totalSalesReturn = 0 * 1;
-    var totalPajak = 0 * 1;
-    // var angkutSalesReturn = Ext.getCmp('angkutSalesReturn').getValue();
-    var angkutSalesReturn = 0;
-    // var pembayaranSalesReturn = Ext.getCmp('pembayaranSalesReturn').getValue();
-    var pembayaranSalesReturn = 0;
-    var sisaBayarSalesReturn = 0 * 1;
+    // var total_sisa_kirim = 0;
 
     Ext.each(storeGridItemSalesReturn.data.items, function(obj, i) {
-        var total = (obj.data.qty * obj.data.price) * obj.data.size;
-        var diskon = (total / 100) * obj.data.disc;
-
-        var net = total - diskon;
-        subtotalSalesReturn += net;
-        totalPajak += (net / 100) * obj.data.ratetax * 1;
-        obj.set('total', net);
+        if (obj.data.qty_kirim === null) {
+            var kirim = 0;
+        } else {
+            var kirim = obj.data.qty_kirim * 1;
+        }
+        var total_sisa = (obj.data.qty_return * 1 - kirim);
+        obj.set('qty_sisa_kirim', total_sisa);
     });
-
-    console.log(totalPajak);
-    totalSalesReturn = subtotalSalesReturn + angkutSalesReturn * 1;
-//     console.log(totalSalesReturn+' '+totalPajak);
-    totalSalesReturn = totalSalesReturn + totalPajak;
-//     console.log(totalSalesReturn);
-    sisaBayarSalesReturn = totalSalesReturn - pembayaranSalesReturn;
-
-    // totalDiskonSalesReturn_sr
-    // Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesReturn.toLocaleString('null', {minimumFractionDigits: 2}));
-    // Ext.getCmp('total' + addprefix).setValue(totalSalesReturn.toLocaleString('null', {minimumFractionDigits: 2}));
-    // Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', {minimumFractionDigits: 2}));
-
-    Ext.getCmp('subtotal' + addprefix).setValue(renderNomor(subtotalSalesReturn));
-    Ext.getCmp('total' + addprefix).setValue(renderNomor(totalSalesReturn));
-    Ext.getCmp('totalPajak' + addprefix).setValue(renderNomor(totalPajak));
-
-    // Ext.getCmp('angkut' + addprefix).setValue(angkutSalesReturn.toLocaleString('null', {minimumFractionDigits: 2}));
-    // Ext.getCmp('pembayaran' + addprefix).setValue(pembayaranSalesReturn.toLocaleString('null', {minimumFractionDigits: 2}));
-    // Ext.getCmp('sisaBayar' + addprefix).setValue(sisaBayarSalesReturn.toLocaleString('null', {minimumFractionDigits: 2}));
-
 }
 
-function validasiSalesReturn()
-{
-//    alert(Ext.getCmp('comboxcurrencySalesReturn').getValue());   
+function validasiSalesReturn() {
+    //    alert(Ext.getCmp('comboxcurrencySalesReturn').getValue());   
 
-    if (Ext.getCmp('customerSalesReturn').getValue() == null)
-    {
+    if (Ext.getCmp('customerSalesReturn').getValue() == null) {
         Ext.Msg.alert('Failed', 'Supplier belum dipilih');
 
-    } else if (Ext.getCmp('tanggalSalesReturn').getValue() == null)
-    {
+    } else if (Ext.getCmp('tanggalSalesReturn').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Sales Return ');
-    } else if (Ext.getCmp('shipaddressSalesReturn').getValue() == '')
-    {
+    } else if (Ext.getCmp('shipaddressSalesReturn').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan alamat pengiriman');
-    } else if (Ext.getCmp('nojurnalSalesReturn').getValue() == '')
-    {
+    } else if (Ext.getCmp('nojurnalSalesReturn').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan NO SO');
-    } else if (Ext.getCmp('memoSalesReturn').getValue() == '')
-    {
+    } else if (Ext.getCmp('memoSalesReturn').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan Memo Sales Return ');
-    } else if (Ext.getCmp('totalSalesReturn').getValue() == '')
-    {
+    } else if (Ext.getCmp('totalSalesReturn').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan barang');
-    } else if (Ext.getCmp('paymentSalesReturn').getValue() == null)
-    {
+    } else if (Ext.getCmp('paymentSalesReturn').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan pembayaran');
-    } else if (Ext.getCmp('paymentSalesReturn').getValue() == 3 && Ext.getCmp('tglPelunasanSalesReturn').getValue() == null)
-    {
+    } else if (Ext.getCmp('paymentSalesReturn').getValue() == 3 && Ext.getCmp('tglPelunasanSalesReturn').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal pelunasan');
-    } else if(Ext.getCmp('paymentSalesReturn').getValue()==1 && Ext.getCmp('pembayaranSalesReturn').getValue()==0)
-    {
-         Ext.Msg.alert('Failed', 'Jumlah Pembayaran Tunai Belum Diinput');
+    } else if (Ext.getCmp('paymentSalesReturn').getValue() == 1 && Ext.getCmp('pembayaranSalesReturn').getValue() == 0) {
+        Ext.Msg.alert('Failed', 'Jumlah Pembayaran Tunai Belum Diinput');
     }
     // else if (Ext.getCmp('paymentSalesReturn').getValue() == 1 && Ext.getCmp('idaccountSalesReturn').getValue() == '')
     // {

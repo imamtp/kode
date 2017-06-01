@@ -1,5 +1,3 @@
-
-
 Ext.define('TabInventory', {
     extend: 'Ext.tab.Panel',
     id: 'TabInventory',
@@ -7,29 +5,30 @@ Ext.define('TabInventory', {
     activeTab: 0,
     autoWidth: '100%',
     autoScroll: true,
-    plain:true,
+    plain: true,
     defaults: {
         autoScroll: true
     },
-    items: [
-        {
+    items: [{
             xtype: 'GridInventoryAll'
         },
         {
-            xtype:'GridInventoryInvGrid',
-            hidden:true,
+            xtype: 'GridInventoryInvGrid',
+            hidden: true,
         },
         {
-            xtype:'GridInventoryBuyGrid'
+            xtype: 'GridInventoryBuyGrid'
         },
         {
-            xtype:'GridInventorySellGrid'
+            xtype: 'GridInventorySellGrid'
         }
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
                 disableUnitInventory();
+                Ext.getCmp('idsupplier_forminv').getStore().load();
             }
         }
     }

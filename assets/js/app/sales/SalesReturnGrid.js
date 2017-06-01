@@ -1,4 +1,3 @@
-
 // var WindowEntrySalesReturn = Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
 // var WindowEntrySalesInvoice = Ext.create(dir_sys + 'sales.WindowEntrySalesInvoice');
 
@@ -6,7 +5,7 @@
 Ext.define('SalesReturnGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'sales_return_id','idunit','return_date','noreturn','idcustomer','memo','return_amount','idaccount_return','userin','datein','namecustomer','accname','accnumber','notes','totaldisc','aftertax','totaltax','subtotal','notes','accnamebank','accnumberbank','idaccount_bank','status'
+        'sales_return_id', 'idunit', 'return_date', 'noreturn', 'idcustomer', 'memo', 'return_amount', 'idaccount_return', 'userin', 'datein', 'namecustomer', 'accname', 'accnumber', 'notes', 'totaldisc', 'aftertax', 'totaltax', 'subtotal', 'notes', 'accnamebank', 'accnumberbank', 'idaccount_bank', 'status'
     ],
     idProperty: 'id'
 });
@@ -59,7 +58,7 @@ var smGridSalesReturnGrid = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define(dir_sys+'sales.SalesReturnGrid', {
+Ext.define(dir_sys + 'sales.SalesReturnGrid', {
     title: 'Sales Return',
     itemId: 'SalesReturnGrid',
     id: 'SalesReturnGrid',
@@ -68,128 +67,137 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
     store: storeGridSalesReturnGrid,
     loadMask: true,
     columns: [{
-        header: 'sales_return_id',
-        dataIndex: 'sales_return_id',
-        hidden: true
-    },{
-        header: 'No Return',
-        dataIndex: 'noreturn',
-        minWidth: 150
-    },
-    {
-        header: 'Sales Return Date',
-        dataIndex: 'return_date',
-        minWidth: 150
-    },
-    // {
-    //     header: 'Date Sales',
-    //     dataIndex: 'date_sales',
-    //     minWidth: 150
-    // },
-    {
-        header: 'Customer Name',flex:1,
-        dataIndex: 'namecustomer',
-        minWidth: 150
-    },
+            header: 'sales_return_id',
+            dataIndex: 'sales_return_id',
+            hidden: true
+        }, {
+            header: 'No Return',
+            dataIndex: 'noreturn',
+            minWidth: 150
+        },
+        {
+            header: 'Sales Return Date',
+            dataIndex: 'return_date',
+            minWidth: 150
+        },
+        // {
+        //     header: 'Date Sales',
+        //     dataIndex: 'date_sales',
+        //     minWidth: 150
+        // },
+        {
+            header: 'Customer Name',
+            flex: 1,
+            dataIndex: 'namecustomer',
+            minWidth: 150
+        },
 
-    {
-        header: 'Return Amount',xtype:'numbercolumn',align:'right',
-        dataIndex: 'return_amount',
-        minWidth: 150
-    },
-    {
-        header: 'Return CoA',
-        dataIndex: 'accname',
-        minWidth: 150
-    },
-    {
-        header: 'Notes',
-        dataIndex: 'notes',
-        minWidth: 150
-    },
-    {
-        header: 'memo',
-        dataIndex: 'memo',
-        minWidth: 150
-    }
-    // {
-    //     header: 'Total Tax',
-    //     dataIndex: 'tax',
-    //     minWidth: 150,xtype:'numbercolumn',align:'right'
-    // },
-    // {
-    //     header: 'Total Discount',
-    //     dataIndex: 'disc',
-    //     minWidth: 150,xtype:'numbercolumn',align:'right'
-    // },
-    // {
-    //     header: 'Shipping Cost',
-    //     dataIndex: 'freight',
-    //     minWidth: 150,xtype:'numbercolumn',align:'right'
-    // },
-    // {
-    //     header: 'Total Paid',
-    //     dataIndex: 'paidtoday',
-    //     minWidth: 150,xtype:'numbercolumn',align:'right'
-    // },
-    // {
-    //     header: 'Total Amount',
-    //     dataIndex: 'totalamount',
-    //     minWidth: 150,xtype:'numbercolumn',align:'right'
-    // },
-    // {
-    //     header: 'Status',
-    //     dataIndex: 'status',
-    //     minWidth: 150,xtype:'numbercolumn',align:'right',
-    //     renderer: function(value) {
-    //         return customColumnStatus(ArrDeliveryOrder,value);
-    //     }
-    // },
+        {
+            header: 'Return Amount',
+            xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'return_amount',
+            minWidth: 150
+        },
+        {
+            header: 'Return CoA',
+            dataIndex: 'accname',
+            minWidth: 150
+        },
+        {
+            header: 'Notes',
+            dataIndex: 'notes',
+            minWidth: 150
+        },
+        {
+            header: 'Status',
+            dataIndex: 'status',
+            minWidth: 150,
+            renderer: function(value) {
+                return customColumnStatus(ArrReturnSalesStatus, value);
+            }
+        },
+        {
+            header: 'memo',
+            dataIndex: 'memo',
+            minWidth: 150
+        }
+        // {
+        //     header: 'Total Tax',
+        //     dataIndex: 'tax',
+        //     minWidth: 150,xtype:'numbercolumn',align:'right'
+        // },
+        // {
+        //     header: 'Total Discount',
+        //     dataIndex: 'disc',
+        //     minWidth: 150,xtype:'numbercolumn',align:'right'
+        // },
+        // {
+        //     header: 'Shipping Cost',
+        //     dataIndex: 'freight',
+        //     minWidth: 150,xtype:'numbercolumn',align:'right'
+        // },
+        // {
+        //     header: 'Total Paid',
+        //     dataIndex: 'paidtoday',
+        //     minWidth: 150,xtype:'numbercolumn',align:'right'
+        // },
+        // {
+        //     header: 'Total Amount',
+        //     dataIndex: 'totalamount',
+        //     minWidth: 150,xtype:'numbercolumn',align:'right'
+        // },
+        // {
+        //     header: 'Status',
+        //     dataIndex: 'status',
+        //     minWidth: 150,xtype:'numbercolumn',align:'right',
+        //     renderer: function(value) {
+        //         return customColumnStatus(ArrDeliveryOrder,value);
+        //     }
+        // },
     ],
-    dockedItems: [
-     {
-            xtype:'toolbar',
-            dock:'top',
-            items:[
-                {
-                    xtype: 'datefield',
-                    format: 'd/m/Y',
-                    // value: datenow(),
-                    fieldLabel: 'Sales Return',
-                },
-                ' to ',
-                {
-                    xtype: 'datefield',
-                    format: 'd/m/Y',
-                    // value: datenow(),
-                    hideLabel:true
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                xtype: 'datefield',
+                format: 'd/m/Y',
+                // value: datenow(),
+                fieldLabel: 'Sales Return',
+            },
+            ' to ',
+            {
+                xtype: 'datefield',
+                format: 'd/m/Y',
+                // value: datenow(),
+                hideLabel: true
                     // fieldLabel: 'Date Order',
-                },'-',
-                {
-                    xtype:'comboxunit',
-                    valueField:'idunit',
-                    id:'cbSalesReturnGrid',
-                    listeners: {
-                        'change': function(field, newValue, oldValue) {
-                            storeGridSalesReturnGrid.load({
-                                params: {
-                                  'extraparams': 'a.idunit:'+Ext.getCmp('cbSalesReturnGrid').getValue()+','+'a.idanggotatype:'+Ext.getCmp('cbUnitPelangganType').getValue()
+            }, '-',
+            {
+                xtype: 'comboxunit',
+                valueField: 'idunit',
+                id: 'cbSalesReturnGrid',
+                listeners: {
+                    'change': function(field, newValue, oldValue) {
+                        storeGridSalesReturnGrid.load({
+                            params: {
+                                'extraparams': 'a.idunit:' + Ext.getCmp('cbSalesReturnGrid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
 
-                                }
-                            });
-                        }
+                            }
+                        });
                     }
-                },
-                {
-                    text: 'Search',
-                    handler: function() {}
-                },
-                {
-                    text: 'Clear Filter',
-                    handler: function() {}
                 }
-            ]
-        },{
+            },
+            {
+                text: 'Search',
+                handler: function() {}
+            },
+            {
+                text: 'Clear Filter',
+                handler: function() {}
+            }
+        ]
+    }, {
         xtype: 'toolbar',
         dock: 'top',
         items: [{
@@ -199,7 +207,7 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
             handler: function() {
                 // WindowEntrySalesReturn.show();
                 if (!Ext.isDefined(Ext.getCmp('WindowEntrySalesReturn'))) {
-                Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
+                    Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
                 }
                 Ext.getCmp('WindowEntrySalesReturn').show();
 
@@ -214,37 +222,40 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
                 Ext.getCmp('status_sr').setReadOnly(true);
                 Ext.getCmp('status_sr').setValue(1);
 
-                Ext.getCmp('btnRecordSalesReturn').enable();  
+                Ext.getCmp('btnRecordSalesReturn').enable();
 
-                Ext.getCmp('statusformSalesReturnGrid_sr').setValue('input');   
-                // storeCustomer.load();
-                // storeUnit.load();
-                // productMeasurementStore.load();
-                // StorePayment.load();
-                // // storeGridSalesOrderList.load();
+                Ext.getCmp('statusformSalesReturnGrid_sr').setValue('input');
 
-                // //apus dulu data di grid entry Sales Return
-                // Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
-                // Ext.getCmp('EntryDeliveryOrder').getStore().sync();
+                //hide kolom
+                Ext.getCmp('EntrySalesReturn').columns[12].setVisible(true);
+                Ext.getCmp('EntrySalesReturn').columns[13].setVisible(true);
+
+                Ext.getCmp('EntrySalesReturn').columns[14].setVisible(false);
+                Ext.getCmp('EntrySalesReturn').columns[15].setVisible(false);
+                Ext.getCmp('EntrySalesReturn').columns[16].setVisible(false);
+                Ext.getCmp('EntrySalesReturn').columns[17].setVisible(false);
+                Ext.getCmp('EntrySalesReturn').columns[19].setVisible(true); //show delete row button
+
+                Ext.getCmp('btnRecordSalesReturn').show();
+                Ext.getCmp('btnRecordDeliverySalesReturn').hide();
             }
-        },{
-            hidden:true,
+        }, {
+            hidden: true,
             text: 'Create Invoice',
             iconCls: 'edit-icon',
             handler: function() {
                 var grid = Ext.ComponentQuery.query('SalesReturnGrid')[0];
-                 // var grid = Ext.getCmp('GridSalesReturnGridID');
+                // var grid = Ext.getCmp('GridSalesReturnGridID');
                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
                 var data = grid.getSelectionModel().getSelection();
                 if (data.length == 0) {
                     Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                 } else {
-                      
-                    if(selectedRecord.data.noinvoice!==null)
-                    {
+
+                    if (selectedRecord.data.noinvoice !== null) {
                         Ext.Msg.alert('Failure', 'Invoice untuk data Sales Return terpilih sudah terbentuk. Silahkan pilih data Sales Return yang lain');
                     } else {
-                         WindowEntrySalesInvoice.show();
+                        WindowEntrySalesInvoice.show();
 
                         var EntrySalesInvoice = Ext.getCmp('EntrySalesInvoice').getStore();
                         EntrySalesInvoice.removeAll();
@@ -257,11 +268,11 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
         }, {
             itemId: 'editSalesReturnGrid',
             text: 'Ubah',
-            hidden:true,
+            hidden: true,
             iconCls: 'edit-icon',
             handler: function() {
                 // var grid = Ext.ComponentQuery.query('GridSalesReturnGridID')[0];
-                 var grid = Ext.getCmp('GridSalesReturnGridID');
+                var grid = Ext.getCmp('GridSalesReturnGridID');
                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
                 var data = grid.getSelectionModel().getSelection();
                 if (data.length == 0) {
@@ -273,7 +284,7 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
         }, {
             id: 'btnDeleteSalesReturnGrid',
             text: 'Hapus',
-            hidden:true,
+            hidden: true,
             iconCls: 'delete-icon',
             handler: function() {
                 Ext.Msg.show({
@@ -293,7 +304,7 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
                                 method: 'POST',
                                 params: {
                                     postdata: Ext.encode(selected),
-                                    idmenu:95
+                                    idmenu: 95
                                 },
                                 success: function(form, action) {
                                     var d = Ext.decode(form.responseText);
@@ -320,7 +331,7 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
         store: storeGridSalesReturnGrid, // same store GridPanel is using
         dock: 'bottom',
         displayInfo: true
-        // pageSize:20
+            // pageSize:20
     }],
     listeners: {
         render: {
@@ -332,48 +343,7 @@ Ext.define(dir_sys+'sales.SalesReturnGrid', {
         },
         itemdblclick: function(dv, record, item, index, e) {
             loadReturnSOData(record)
+            Ext.getCmp('btnRecordDeliverySalesReturn').hide();
         }
     }
 });
-
-
-function loadMemberForm(id)
-{
-    // anggotaTypeStore.load();
-
-        // var formSalesReturnGrid = Ext.getCmp('formSalesReturnGrid');
-        // wSalesReturnGrid.show();
-        // formSalesReturnGrid.getForm().load({
-        //     url: SITE_URL + 'backend/loadFormData/SalesReturnGrid/1/member',
-        //     params: {
-        //         extraparams: 'a.id_member:' + id
-        //     },
-        //     success: function(form, action) {
-        //         var obj = Ext.decode(action.response.responseText); 
-        //         // console.log(obj);
-        //         Ext.getCmp('comboxStatusMember').setValue(obj.data.status*1);
-        //         formSalesReturnGrid.getForm().findField("id_member_type").setValue(obj.data.id_member_type);
-        //         formSalesReturnGrid.getForm().findField("marital_status").setValue(obj.data.marital_status*1);
-        //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
-        //     },
-        //     failure: function(form, action) {
-        //         Ext.Msg.alert("Load failed", action.result.errorMessage);
-        //     }
-        // })
-
-        // Ext.getCmp('memberFormDetailID').getForm().load({
-        //     url: SITE_URL + 'backend/loadFormData/SalesReturnGrid/1/member',
-        //     params: {
-        //         extraparams: 'a.id_member:' + id
-        //     },
-        //     success: function(form, action) {
-        //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
-        //     },
-        //     failure: function(form, action) {
-        //         Ext.Msg.alert("Load failed", action.result.errorMessage);
-        //     }
-        // })
-
-        // Ext.getCmp('statusformSalesReturnGrid').setValue('edit');
-        // Ext.getCmp('Tabanggota').setActiveTab(0);
-}

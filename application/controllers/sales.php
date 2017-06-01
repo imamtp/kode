@@ -625,6 +625,70 @@ class sales extends MY_Controller {
             ));
     }
 
+    function saveDeliverySalesReturn(){
+        $this->db->trans_begin();
+
+        $this->load->model('inventory/m_stock');
+        $this->load->model('journal/m_jsales');
+
+        $sales_return_id = $this->input->post('sales_return_id');
+        $idunit = $this->input->post('idunit');
+        $noreturn = $this->input->post('noreturn');
+        $items = json_decode($this->input->post('datagrid'));
+
+        // $qso = $this->db->query("")
+
+        $qty_retur = 0;
+        $qty_kirim = 0;
+        foreach ($items as $value) {
+            $qty_kirim+=$value->qty_kirim;
+            $qty_retur+=$value->qty_return;
+
+            $ditem = array(
+                    'qty_sent'=>$value->qty_kirim,
+                    'notes'=> $value->notes
+            );
+            $this->db->where(
+                array(
+                    'sales_return_id'=>$sales_return_id,
+                    'idsalesitem'=> $value->idsalesitem,
+                    'idinventory'=> $value->idinventory
+                )
+            );
+            $this->db->update('sales_return_item',$ditem);
+
+            $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
+
+            //update history stock
+            $this->m_stock->update_history(14,$value->qty_kirim,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d H:m:s'),'Delivery Sales Return: '.$noreturn);
+        }
+
+        if($qty_retur>=$qty_kirim){
+            //full delvering
+            $status = 6;
+        } else {
+            $status = 5; //partial
+        }
+
+        $this->db->where(
+                array(
+                    'sales_return_id'=>$sales_return_id
+                )
+        );
+        $this->db->update('sales_return',array(
+            'status'=>$status
+        ));
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);
+    }
+
     function saveSalesReturn(){
 
         $this->load->model('inventory/m_stock');
@@ -701,10 +765,10 @@ class sales extends MY_Controller {
             $totalprice_retur += $qprice->price*$value->qty_return;
 
              //update history stock
-            if($status==3)
-            {
-                $this->m_stock->update_history(6,$value->qty_return,$value->idinventory,$this->input->post('idunit'),$warehouse_id,date('Y-m-d H:m:s'),'Sales Return: '.$noreturn);
-            }
+            // if($status==3)
+            // {
+            //     $this->m_stock->update_history(6,$value->qty_return,$value->idinventory,$this->input->post('idunit'),$warehouse_id,date('Y-m-d H:m:s'),'Sales Return: '.$noreturn);
+            // }
         }
 
         //create journal Retur Penjualan Tunai
@@ -750,6 +814,19 @@ class sales extends MY_Controller {
         $d['title'] = 'Picking Note Delivery Order';
         $d['print'] = $print;
         $this->load->view('tplcetak/sales_picking_note',$d);
+    }
+
+    function print_picking_note_return($sales_return_id,$print=null){
+        $this->load->model('sales/m_salesreturn','model');
+        $d['data'] = $this->model->cetak_so_return($sales_return_id);
+        $d['title'] = 'Picking Note Return Order';
+        $d['print'] = $print;
+        $this->load->view('tplcetak/sales_picking_note_return',$d);
+    }
+
+    function set_picking_return(){
+        $this->db->where('sales_return_id',$this->input->post('sales_return_id'));
+        $this->db->update('sales_return',array('status'=>4));
     }
 
     function set_picking(){

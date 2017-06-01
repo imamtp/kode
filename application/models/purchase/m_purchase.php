@@ -206,7 +206,7 @@ class m_purchase extends CI_Model {
 
             // $dtcetak['receivedby'] = $r->userin;
             //get logo,address,namaunit
-           $runit = $this->m_data->dataunit($r->idunit);
+            $runit = $this->m_data->dataunit($r->idunit);
             $dtcetak['logo'] = $runit['logo'];
             $dtcetak['namaunit'] = $runit['namaunit'];
             $dtcetak['alamat'] = $runit['alamat'];

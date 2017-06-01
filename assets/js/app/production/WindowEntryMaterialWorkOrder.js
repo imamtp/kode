@@ -27,191 +27,188 @@ Ext.define('MaterialWorkOrderHeaderForm', {
         anchor: '100%'
     },
 
-    items: [
-    {
-        xtype:'hiddenfield',
-        name:'idsales',
-        id:'idsales_materialwoform'
-    },
-    {
-        xtype:'hiddenfield',
-        name:'job_order_id',
-        id:'job_order_id_materialwoform'
-    },
-    {
-        xtype:'hiddenfield',
-        name:'token_tmp',
-        id:'token_tmp_materialwoform'
-    },
-    {
-        xtype:'hiddenfield',
-        name:'statusform',
-        id:'statusform_materialwoform'
-    },
-    {
-        xtype: 'container',
-        layout: 'hbox',
-        items: [{
+    items: [{
+            xtype: 'hiddenfield',
+            name: 'idsales',
+            id: 'idsales_materialwoform'
+        },
+        {
+            xtype: 'hiddenfield',
+            name: 'job_order_id',
+            id: 'job_order_id_materialwoform'
+        },
+        {
+            xtype: 'hiddenfield',
+            name: 'token_tmp',
+            id: 'token_tmp_materialwoform'
+        },
+        {
+            xtype: 'hiddenfield',
+            name: 'statusform',
+            id: 'statusform_materialwoform'
+        },
+        {
             xtype: 'container',
-            flex: 1,
-            border: false,
-            layout: 'anchor',
-            defaultType: 'textfield',
-            items: [
-                {
+            layout: 'hbox',
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                border: false,
+                layout: 'anchor',
+                defaultType: 'textfield',
+                items: [{
                     xtype: 'radiogroup',
-                    labelWidth:140,
-                    id:'RGWoMaterialEntry',
-                    readOnly:true,
+                    labelWidth: 140,
+                    id: 'RGWoMaterialEntry',
+                    readOnly: true,
                     // labelWidth:220,
                     fieldLabel: 'Load from SO?',
                     // columns: 2,
                     vertical: true,
                     items: [
-                        {boxLabel: 'Yes', name: 'is_from_so', inputValue: 1,  width:50},
-                        {boxLabel: 'No', name: 'is_from_so', inputValue: 2, checked: true, width:50}
+                        { boxLabel: 'Yes', name: 'is_from_so', inputValue: 1, width: 50 },
+                        { boxLabel: 'No', name: 'is_from_so', inputValue: 2, checked: true, width: 50 }
                     ],
                     listeners: {
-                      change: function(radiogroup, radio) {
-                        if(radio.is_from_so==2)
-                        {
-                            Ext.getCmp('no_sales_order_materialwoform').hide();
-                        } else {
-                            Ext.getCmp('no_sales_order_materialwoform').show();
+                        change: function(radiogroup, radio) {
+                            if (radio.is_from_so == 2) {
+                                Ext.getCmp('no_sales_order_materialwoform').hide();
+                            } else {
+                                Ext.getCmp('no_sales_order_materialwoform').show();
+                            }
                         }
-                      }
                     }
-                },{
-                fieldLabel: 'No. Work Order #',
-                labelWidth:140,
-                name:'job_no',
-                readOnly:true,
-                id:'job_no_materialwo_form',
-                anchor: '95%'
-            }, {
-                xtype: 'datefield',
-                labelWidth:140,
-                anchor: '95%',
-                readOnly:true,
-                name: 'req_ship_date',
-                format: 'd/m/Y',
-                fieldLabel: 'Req. Finish Date'
-            }]
-        }, {
-            xtype: 'container',
-            flex: 1,
-            layout: 'anchor',
-            defaultType: 'textfield',
-            items: [
-            {
-                fieldLabel: 'Sales Order',
-                readOnly:true,
-                name: 'no_sales_order',
-                hidden:true,
-                id:'no_sales_order_materialwoform'
-            }, {
-                xtype: 'comboxunit',
-                name:'idunit',
-                readOnly:true,
-                id:'cbUnitMaterialWOForm'
-            },
-                {
-                    xtype: 'textfield',
-                    readOnly:true,
-                    fieldLabel: 'Remarks',
-                    name: 'remarks'
+                }, {
+                    fieldLabel: 'No. Work Order #',
+                    labelWidth: 140,
+                    name: 'job_no',
+                    readOnly: true,
+                    id: 'job_no_materialwo_form',
+                    anchor: '95%'
+                }, {
+                    xtype: 'datefield',
+                    labelWidth: 140,
+                    anchor: '95%',
+                    readOnly: true,
+                    name: 'req_ship_date',
+                    format: 'd/m/Y',
+                    fieldLabel: 'Req. Finish Date'
                 }]
-        }, {
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: 'anchor',
+                defaultType: 'textfield',
+                items: [{
+                        fieldLabel: 'Sales Order',
+                        readOnly: true,
+                        name: 'no_sales_order',
+                        hidden: true,
+                        id: 'no_sales_order_materialwoform'
+                    }, {
+                        xtype: 'comboxunit',
+                        name: 'idunit',
+                        readOnly: true,
+                        id: 'cbUnitMaterialWOForm'
+                    },
+                    {
+                        xtype: 'textfield',
+                        readOnly: true,
+                        fieldLabel: 'Remarks',
+                        name: 'remarks'
+                    }
+                ]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: 'anchor',
+                defaultType: 'textfield',
+                items: [
+                    // {
+                    //         xtype: 'comboxWorkOrderStatus',
+                    //         name:'status',
+                    //         id:'comboxMaterialWorkOrderStatus'
+                    //     }
+                ]
+            }]
+        },
+        {
             xtype: 'container',
-            flex: 1,
-            layout: 'anchor',
-            defaultType: 'textfield',
-            items: [
-            // {
-            //         xtype: 'comboxWorkOrderStatus',
-            //         name:'status',
-            //         id:'comboxMaterialWorkOrderStatus'
-            //     }
-            ]
-        }]
-    },
-    {
-            xtype: 'container',
-            id:'containerScheduleWo',
+            id: 'containerScheduleWo',
             flex: 1,
             layout: 'anchor',
             defaultType: 'datefield',
-            items: [
-            {
-                // xtype: 'datefield',
-                name: 'startdate_job',
-                hidden:true,
-                id: 'start_date_materialwoform',
-                labelWidth:140,
-                anchor: '32%',
-                format: 'd/m/Y H:m:s',
-                fieldLabel: 'Start Date'
-            },{
-                name: 'enddate_job',
-                hidden:true,
-                id: 'end_date_materialwoform',
-                labelWidth:140,
-                anchor: '32%',
-                format: 'd/m/Y H:m:s',
-                fieldLabel: 'Estimate Finish Time'
-            },
-            // {
-            //     xtype: 'textfield',
-            //     fieldLabel: 'Person in Charge',
-            //     labelWidth: 140,
-            //     name: 'pic_name',
-            //     id: 'pic_name_materialwoform'
-            // },
-            {
-                xtype:'hiddenfield',
-                name: 'pic_id',
-                id: 'pic_id_materialwoform',
-            }]
+            items: [{
+                    // xtype: 'datefield',
+                    name: 'startdate_job',
+                    hidden: true,
+                    id: 'start_date_materialwoform',
+                    labelWidth: 140,
+                    anchor: '32%',
+                    format: 'd/m/Y H:m:s',
+                    fieldLabel: 'Start Date'
+                }, {
+                    name: 'enddate_job',
+                    hidden: true,
+                    id: 'end_date_materialwoform',
+                    labelWidth: 140,
+                    anchor: '32%',
+                    format: 'd/m/Y H:m:s',
+                    fieldLabel: 'Estimate Finish Time'
+                },
+                // {
+                //     xtype: 'textfield',
+                //     fieldLabel: 'Person in Charge',
+                //     labelWidth: 140,
+                //     name: 'pic_name',
+                //     id: 'pic_name_materialwoform'
+                // },
+                {
+                    xtype: 'hiddenfield',
+                    name: 'pic_id',
+                    id: 'pic_id_materialwoform',
+                }
+            ]
         }, {
-        xtype: 'tabpanel',
-        plain: true,
-        activeTab: 0,
-        defaults: {
-            // bodyPadding: 10
-        },
-        items: [
-            {
-                xtype:'containerMaterialFinishedGoods'
+            xtype: 'tabpanel',
+            plain: true,
+            activeTab: 0,
+            defaults: {
+                // bodyPadding: 10
             },
-            // MaterialWorkOrderJobTab,
-            // MaterialWorkOrderMaterialTab,
-            // MaterialWorkOrderCostTab
-            // Ext.create(dir_sys + 'production.MaterialWorkOrderJobTab', {
-            //     listeners: {
-            //         activate: function() {
-            //             // storeGridMemberSavingGrid.load();
-            //             // Ext.getCmp('GridMemberLoanGridID').getStore().load();
-            //         }
-            //     }
-            // }),
-            // Ext.create(dir_sys + 'production.MaterialWorkOrderMaterialTab', {
-            //     listeners: {
-            //         activate: function() {
-            //             // storeGridMemberSavingGrid.load();
-            //             // Ext.getCmp('GridMemberLoanGridID').getStore().load();
-            //         }
-            //     }
-            // }),
-            // Ext.create(dir_sys + 'production.MaterialWorkOrderCostTab', {
-            //     listeners: {
-            //         activate: function() {
-            //             // storeGridMemberSavingGrid.load();
-            //             // Ext.getCmp('GridMemberLoanGridID').getStore().load();
-            //         }
-            //     }
-            // })
-        ]
-    }]
+            items: [{
+                    xtype: 'containerMaterialFinishedGoods'
+                },
+                // MaterialWorkOrderJobTab,
+                // MaterialWorkOrderMaterialTab,
+                // MaterialWorkOrderCostTab
+                // Ext.create(dir_sys + 'production.MaterialWorkOrderJobTab', {
+                //     listeners: {
+                //         activate: function() {
+                //             // storeGridMemberSavingGrid.load();
+                //             // Ext.getCmp('GridMemberLoanGridID').getStore().load();
+                //         }
+                //     }
+                // }),
+                // Ext.create(dir_sys + 'production.MaterialWorkOrderMaterialTab', {
+                //     listeners: {
+                //         activate: function() {
+                //             // storeGridMemberSavingGrid.load();
+                //             // Ext.getCmp('GridMemberLoanGridID').getStore().load();
+                //         }
+                //     }
+                // }),
+                // Ext.create(dir_sys + 'production.MaterialWorkOrderCostTab', {
+                //     listeners: {
+                //         activate: function() {
+                //             // storeGridMemberSavingGrid.load();
+                //             // Ext.getCmp('GridMemberLoanGridID').getStore().load();
+                //         }
+                //     }
+                // })
+            ]
+        }
+    ]
 });
 
 
@@ -231,22 +228,21 @@ Ext.define(dir_sys + 'production.WindowEntryMaterialWorkOrder', {
     closeAction: 'hide',
     //    autoWidth: true,
     width: panelW - 200,
-    height: sizeH+150,
+    height: sizeH,
     layout: 'fit',
     border: false,
     items: [{
         xtype: 'MaterialWorkOrderHeaderForm'
     }],
-    buttons: [
-    {
+    buttons: [{
         text: 'Cancel',
         handler: function() {
             // this.up('form').getForm().reset();
             Ext.getCmp('WindowEntryMaterialWorkOrder').hide();
         }
-    },{
+    }, {
         text: 'Save Material Usage',
-        id:'btnSaveMaterialUsageWo',
+        id: 'btnSaveMaterialUsageWo',
         handler: function() {
 
             var WorkOrderMaterialUsageTabStore = Ext.getCmp('WorkOrderMaterialUsageTab').getStore();
@@ -255,16 +251,16 @@ Ext.define(dir_sys + 'production.WindowEntryMaterialWorkOrder', {
             var formWO = Ext.getCmp('MaterialWorkOrderHeaderForm').getForm();
             if (formWO.isValid()) {
                 formWO.submit({
-                    params:{
-                        gridmaterial:ItemWOMaterialjson
+                    params: {
+                        gridmaterial: ItemWOMaterialjson
                     },
-                    success: function(form, action) {                        
+                    success: function(form, action) {
 
                         Ext.getCmp('MaterialWorkOrderHeaderForm').getForm().reset();
 
                         Ext.Msg.alert('Success', action.result.message);
                         Ext.getCmp('WindowEntryMaterialWorkOrder').hide();
-                       
+
                         Ext.getCmp('WOMaterialUsageGrid').getStore().load();
 
                         Ext.getCmp('WindowMaterialUsageWOList').hide();

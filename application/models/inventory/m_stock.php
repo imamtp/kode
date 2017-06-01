@@ -17,21 +17,9 @@ class m_stock extends CI_Model {
 			11: Stock Out By Transfer (-)
 			12: Stock In By Received Material From Production (+)
 			13: Stock In By Received Return PO (+)
+			14: Delivery Sales Return (-)
 		*/
-
-		//cek qty sebelumnya
-		// $sql = $this->db->query("select balance
-		// 							from stock_history
-		// 							where idinventory = $idinventory and warehouse_id = $idwarehouse and idunit = $idunit
-		// 							and (datein <= '".$tanggal."')
-		// 							order by datein");
-		// if($sql->num_rows()>0)
-		// {
-		// 	$r = $sql->row();
-		// 	$old_qty = $r->balance;
-		// } else {
-		// 	$old_qty = 0;
-		// }
+		
 		$qoldstok = $this->db->get_where('warehouse_stock',array(
 				'idinventory' =>$idinventory,
 				'warehouse_id' =>$idwarehouse
@@ -47,7 +35,7 @@ class m_stock extends CI_Model {
 
 		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12 || $type==13) {
 			$balance = $old_qty+$qty;
-		} else if($type==7 || $type==5 || $type==8 || $type==11) {
+		} else if($type==7 || $type==5 || $type==8 || $type==11 || $type==14) {
 			$balance = $old_qty-$qty;
 		}
 

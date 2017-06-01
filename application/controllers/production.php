@@ -771,5 +771,31 @@ class production extends MY_Controller {
 
         echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . '}';
     }
+
+    function print_receipt_wo($job_order_id,$print=null){
+        $this->load->model('production/m_receiptwo','model');
+        $d['data'] = $this->model->cetak_receipt_wo($job_order_id);
+        $d['title'] = 'Receipt Work Order';
+        $d['print'] = $print;
+        $this->load->view('tplcetak/production_receipt_wo',$d);
+    }
+
+    function set_deliver_ready(){
+        $this->db->trans_begin();
+
+        $this->db->where('job_order_id',$this->input->post('job_order_id'));
+        $this->db->update('job_order',array(
+            'status'=>5
+        ));
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);
+    }
 }
 ?>
