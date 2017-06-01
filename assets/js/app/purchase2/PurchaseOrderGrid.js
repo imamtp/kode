@@ -6,7 +6,7 @@ var EntryPurchaseOrder = Ext.create(dir_sys+'purchase2.EntryPurchaseOrder');
 Ext.define('PurchaseOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase','idshipping','idpurchasetype','idpurchasestatus','idtax','idpayment','date','requestdate','tax','totalamount','memo','datein','idunit','idcurrency','subtotal','nopurchase','idsupplier','nametax','rate','namesupplier','disc','idpurchase_req','nopurchase_req','date_req'
+        'idpurchase','idshipping','idpurchasetype','idpurchasestatus','idtax','idpayment','date','requestdate','tax','totalamount','memo','datein','idunit','idcurrency','subtotal','nopurchase','idsupplier','nametax','rate','namesupplier','disc','idpurchase_req','nopurchase_req','date_req', 'idpurchasestatusname'
     ],
     idProperty: 'id'
 });
@@ -115,6 +115,11 @@ Ext.define(dir_sys+'purchase2.PurchaseOrderGrid', {
     }, {
         header: 'No Purchase',
         dataIndex: 'nopurchase',
+        minWidth: 150
+    }, {
+        header: 'Status',
+        flex:1,
+        dataIndex: 'idpurchasestatusname',
         minWidth: 150
     }, {
         header: 'Supplier Name',
