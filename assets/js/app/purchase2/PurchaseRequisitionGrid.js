@@ -3,7 +3,7 @@ var EntryPurchaseRequisition = Ext.create(dir_sys + 'purchase2.EntryPurchaseRequ
 Ext.define('PurchaseRequisitionGridModel', {
     extend: 'Ext.data.Model',
      fields: [
-        'idpurchase','idpurchase_req','idshipping','idpurchasetype','idpurchasestatus','idtax','idpayment','date','requestdate','tax','totalamount','memo','datein','idunit','idcurrency','subtotal','nopurchase','idsupplier','nametax','rate','namesupplier','disc','idpurchase_req','requestby_name','requestbyid'
+        'idpurchase','idpurchase_req','idshipping','idpurchasetype','idpurchasestatus','idtax','idpayment','date','requestdate','tax','totalamount','memo','datein','idunit','idcurrency','subtotal','nopurchase','idsupplier','nametax','rate','namesupplier','disc','idpurchase_req','requestby_name','requestbyid','status'
     ],
     idProperty: 'id'
 });
@@ -112,9 +112,17 @@ Ext.define(dir_sys+'purchase2.PurchaseRequisitionGrid', {
         dataIndex: 'nopurchase',
         minWidth: 150
     }, {
+        header: 'Status',
+        dataIndex: 'status',
+        minWidth: 100
+    }, {
         header: 'Supplier Name',
         flex:1,
         dataIndex: 'namesupplier',
+        minWidth: 150
+    }, {
+        header: 'Request BY',
+        dataIndex: 'requestby_name',
         minWidth: 150
     }, {
         header: 'Date Requisition',
@@ -135,15 +143,15 @@ Ext.define(dir_sys+'purchase2.PurchaseRequisitionGrid', {
         minWidth: 150,xtype:'numbercolumn',align:'right'
     },{
         header: 'Total Tax',
-        dataIndex: 'tax',
+        dataIndex: 'tax',hidden:true,
         minWidth: 150,xtype:'numbercolumn',align:'right'
     }, {
         header: 'Total Discount',
-        dataIndex: 'disc',
+        dataIndex: 'disc',hidden:true,
         minWidth: 150,xtype:'numbercolumn',align:'right'
     }, {
         header: 'Total Amount',
-        dataIndex: 'totalamount',
+        dataIndex: 'totalamount',hidden:true,
         minWidth: 150,xtype:'numbercolumn',align:'right'
     }],
     dockedItems: [
