@@ -1,6 +1,7 @@
 function showPurchaseRequestData(record){
 
-    wPurchaseRequisitionGrid.show();
+    // wPurchaseRequisitionGrid.show();
+    Ext.getCmp('windowPopupPurchaseRequisitionGrid').show();
 
     clearFormPR();
 
