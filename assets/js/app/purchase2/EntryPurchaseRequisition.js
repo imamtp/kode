@@ -472,7 +472,9 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             labelWidth: 120,
                             id: 'tanggalPurchaseRequisition',
                             format: 'd/m/Y',
-                            fieldLabel: 'Requisition Date'
+                            fieldLabel: 'Requisition Date',
+                            maxValue: new Date(),
+
                         }, 
                         {
                             xtype: 'textfield',
