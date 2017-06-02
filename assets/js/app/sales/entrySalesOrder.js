@@ -274,6 +274,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             labelWidth: 120,
                             id: 'nojurnalSalesOrder',
                             fieldLabel: 'NO SO #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {

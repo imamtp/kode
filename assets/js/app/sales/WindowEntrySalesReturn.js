@@ -312,6 +312,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
                             labelWidth: 120,
                             id: 'nojurnalSalesReturn_sr',
                             fieldLabel: 'No Doc #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {

@@ -7,7 +7,7 @@
 //               });
     Ext.define('GridItemSelectPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','short_desc'],
+    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','short_desc', 'lebar', 'ketebalan'],
     idProperty: 'id'
 });
 
@@ -82,8 +82,8 @@ Ext.define('GridItemSelectPurchaseRequisition', {
         {header: 'No SKU', dataIndex: 'sku_no', minWidth: 150},
         {header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex:1},
         {header: 'Merk', dataIndex: 'brand_name', minWidth: 150},
-        {header: 'Beli', dataIndex: 'cost', minWidth: 130,xtype:'numbercolumn',align:'right'},
-        {header: 'Jual', dataIndex: 'sellingprice', minWidth: 130,xtype:'numbercolumn',align:'right'},
+        {header: 'Lebar', dataIndex: 'lebar', minWidth: 130,xtype:'numbercolumn',align:'right'},
+        {header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130,xtype:'numbercolumn',align:'right'},
         {header: 'Stok Sekarang', dataIndex: 'qtystock', minWidth: 100,align:'right'},
     ]
     , dockedItems: [

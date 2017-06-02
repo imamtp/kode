@@ -34,7 +34,7 @@ var storeGridItemPurchaseRequisition = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemSelectPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','short_desc','totalstock','stock_kedua','satuan_pertama','satuan_kedua'],
+    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','short_desc','totalstock','stock_kedua','satuan_pertama','satuan_kedua', 'lebar','ketebalan'],
     idProperty: 'id'
 });
 
@@ -131,8 +131,8 @@ Ext.define('GridItemSelectPurchaseRequisition', {
         //     dataIndex: 'satuan_kedua',
         //     minWidth: 100
         // },
-        {header: 'Beli', dataIndex: 'cost', minWidth: 130,xtype:'numbercolumn',align:'right'},
-        {header: 'Jual', dataIndex: 'sellingprice', minWidth: 130,xtype:'numbercolumn',align:'right'}
+        {header: 'Lebar', dataIndex: 'lebar', minWidth: 130,xtype:'numbercolumn',align:'right'},
+        {header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130,xtype:'numbercolumn',align:'right'},
     ]
     , dockedItems: [
         {
@@ -457,6 +457,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             labelWidth: 120,
                             id: 'nojurnalPurchaseRequisition',
                             fieldLabel: 'NO PR #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
@@ -471,7 +472,9 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             labelWidth: 120,
                             id: 'tanggalPurchaseRequisition',
                             format: 'd/m/Y',
-                            fieldLabel: 'Requisition Date'
+                            fieldLabel: 'Requisition Date',
+                            maxValue: new Date(),
+
                         }, 
                         {
                             xtype: 'textfield',

@@ -195,6 +195,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             labelWidth: 120,
                             id: 'nojurnalSalesQuotation',
                             fieldLabel: 'NO SQ #',
+                            readOnly: true,
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
