@@ -1,6 +1,6 @@
 Ext.define('GridItemSalesQuotationModel', {
     extend: 'Ext.data.Model',
-    fields: ['idsalesitem','idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','price','qty','total','ratetax','disc','short_desc','size','size_measurement'],
+    fields: ['idsalesitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'size', 'size_measurement'],
     idProperty: 'id'
 });
 
@@ -20,9 +20,9 @@ var storeGridItemSalesQuotation = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 //end store head
@@ -32,9 +32,9 @@ var storeGridItemSalesQuotation = Ext.create('Ext.data.Store', {
 //                     'extraparams': 'b.namesupplier:'+Ext.getCmp('supplierPurchase').getValue()
 //                   };
 //               });
-    Ext.define('GridItemSelectSalesQuotationModel', {
+Ext.define('GridItemSelectSalesQuotationModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','short_desc'],
+    fields: ['idinventory', 'invno', 'nameinventory', 'totalstock', 'stock_kedua', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'size_measurement', 'satuan_pertama', 'satuan_kedua'],
     idProperty: 'id'
 });
 
@@ -45,7 +45,7 @@ var storeGridItemSelectSalesQuotation = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/ItemSalesQuotation/sales',
+        url: SITE_URL + 'backend/ext_get_all/inventoryall/inventory',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -54,9 +54,9 @@ var storeGridItemSelectSalesQuotation = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 // storeGridItemSelectSalesQuotation.on('beforeload',function(store, operation,eOpts){
@@ -64,7 +64,7 @@ var storeGridItemSelectSalesQuotation = Ext.create('Ext.data.Store', {
 //                     'extraparams': 'b.namesupplier:'+Ext.getCmp('supplierPurchase').getValue()
 //                   };
 //               });
-              
+
 Ext.define('MY.searchGridItemSelectSalesQuotation', {
     extend: 'Ext.ux.form.SearchField',
     alias: 'widget.searchGridItemSelectSalesQuotation',
@@ -91,9 +91,9 @@ var smGridItemSelectSalesQuotation = Ext.create('Ext.selection.CheckboxModel', {
 
 Ext.define('GridItemSelectSalesQuotation', {
     // renderTo:'mytabpanel',
-//    multiSelect: true,
-//    selModel: smGridItemSelectSalesQuotation,
-//    title: 'Daftar Barang',
+    //    multiSelect: true,
+    //    selModel: smGridItemSelectSalesQuotation,
+    //    title: 'Daftar Barang',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GridItemSelectSalesQuotationID',
     id: 'GridItemSelectSalesQuotationID',
@@ -101,134 +101,119 @@ Ext.define('GridItemSelectSalesQuotation', {
     alias: 'widget.GridItemSelectSalesQuotation',
     store: storeGridItemSelectSalesQuotation,
     loadMask: true,
-    columns: [
-        {header: 'idinventory', dataIndex: 'idinventory', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'assetaccount', dataIndex: 'assetaccount', hidden: true},
-        {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},
-        {header: 'No SKU', dataIndex: 'sku_no', minWidth: 150},
-        {header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex:1},
-        {header: 'Merk', dataIndex: 'brand_name', minWidth: 150},
-        {header: 'Beli', dataIndex: 'cost', minWidth: 130,xtype:'numbercolumn',align:'right'},
-        {header: 'Jual', dataIndex: 'sellingprice', minWidth: 130,xtype:'numbercolumn',align:'right'},
-        {header: 'Stok Sekarang', dataIndex: 'qtystock', minWidth: 100,align:'right'},
-    ]
-    , dockedItems: [
+    columns: [{
+            text: 'Pilih',
+            width: 45,
+            xtype: 'actioncolumn',
+            tooltip: 'Pilih ini',
+            align: 'center',
+            icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
+            handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+
+                var recPO = new GridItemSalesQuotationModel({
+                    idinventory: selectedRecord.get('idinventory'),
+                    invno: selectedRecord.get('invno'),
+                    nameinventory: selectedRecord.get('nameinventory'),
+                    short_desc: selectedRecord.get('satuan_pertama'),
+                    price: selectedRecord.get('sellingprice'),
+                    idunit: idunit,
+                    assetaccount: selectedRecord.get('assetaccount'),
+                    qty: 1,
+                    size: 1,
+                    size_measurement: selectedRecord.get('satuan_kedua'),
+                    disc: 0,
+                    total: selectedRecord.get('sellingprice'),
+                    ratetax: 0
+                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                });
+
+                var gridPO = Ext.getCmp('EntrySalesQuotation');
+                gridPO.getStore().insert(0, recPO);
+                updateGridSalesOrder('general');
+
+                Ext.getCmp('wItemSelectSalesQuotationPopup').hide();
+
+            }
+        },
+        { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
+        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
+        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        // { header: 'Merk', dataIndex: 'brand_name', minWidth: 150 },
         {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    itemId: 'chooseItemSelectSalesQuotation',
-                    text: 'Pilih Barang',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridItemSelectSalesQuotation')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih Barang terlebih dahulu!');
-                        } else {
-//                            Ext.getCmp('accnamejurnal').setValue(selectedRecord.get('text'));
-//                            Ext.getCmp('idaccountjurnal').setValue(selectedRecord.get('id'));
-//                            Ext.getCmp('accnumberjurnal').setValue(selectedRecord.get('accnumber'));
-// console.log(selectedRecord)
-                              var recSQ = new GridItemSalesQuotationModel({
-                                    idinventory: selectedRecord.get('idinventory'),
-                                    invno: selectedRecord.get('invno'),
-                                    nameinventory: selectedRecord.get('nameinventory'),
-                                    price: selectedRecord.get('sellingprice')*1,
-                                    idunit:idunit,
-                                    assetaccount:selectedRecord.get('assetaccount'),
-                                    qty: 1,
-                                    size: 1,
-                                    disc: 0,
-                                    total: selectedRecord.get('sellingprice')*1,
-                                    short_desc: selectedRecord.get('short_desc')
-                                    // ratetax: Ext.getCmp('cb_tax_id_sq').getValue()
-            //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
-                                });
-
-                                var gridSQ = Ext.getCmp('EntrySalesQuotation');
-                                gridSQ.getStore().insert(0, recSQ);
-                                updateGridSalesQuotation();
-                        
-                               Ext.getCmp('wItemSelectSalesQuotationPopup').hide();
-
-                            
-                        }
-
-
-                    }
-                },'-',
-                {
-                    text: 'Tambah Barang',
-                    hidden:true,
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        showInputInv();     
-                        Ext.getCmp('fieldsetInvBuy').setDisabled(true);
-                        Ext.getCmp('fieldsetInvSell').setDisabled(true);                   
-                        Ext.getCmp('fieldsetInvPersediaan').setDisabled(true);
-                        storeGridAccInv.removeAll();
-                        storeGridAccInv.sync();
-
-                        Ext.getCmp('cbpersediaan').setDisabled(true);
-                        Ext.getCmp('formInventoryV2').getForm().findField('cbpersediaan').hide();
-                        Ext.getCmp('fieldsetInvPersediaan').hide();
-                        Ext.getCmp('datebuy').hide();                        
-                        Ext.getCmp('TabItemInventory').items.getAt(1).setDisabled(true);
-                        Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(true);
-
-                        Ext.getCmp('inputdaripurchase').setValue('true');
-                    }
-                },
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridItemSelectSalesQuotation',
-                    text: 'Left Button'
-                }
-
-            ]
+            header: 'Total Stock',
+            dataIndex: 'totalstock',
+            minWidth: 120,
+            align: 'right'
+        },
+        {
+            header: 'Satuan',
+            dataIndex: 'satuan_pertama',
+            minWidth: 100
         }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridItemSelectSalesQuotation, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
+            header: 'Stock #2',
+            dataIndex: 'stock_kedua',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #2',
+            dataIndex: 'satuan_kedua',
+            minWidth: 100
         }
-    ], listeners: {
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridItemSelectSalesQuotation',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridItemSelectSalesQuotation, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
-//                storeGridItemSelectSalesQuotation.load();
+                //                storeGridItemSelectSalesQuotation.load();
 
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
 
             // var formAgama = Ext.create('formAgama');
-//            var formItemSelectSalesQuotation = Ext.getCmp('formItemSelectSalesQuotation');
-//            wItemSelectSalesQuotation.show();
-//
-//            formItemSelectSalesQuotation.getForm().load({
-//                url: SITE_URL + 'backend/loadFormData/ItemSelectSalesQuotation/1/setup',
-//                params: {
-//                    extraparams: 'a.idtax:' + record.data.idtax
-//                },
-//                success: function(form, action) {
-//                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                },
-//                failure: function(form, action) {
-//                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                }
-//            })
-//
-////            
-////            Ext.getCmp('kddaerahS').setReadOnly(true);
-//            Ext.getCmp('statusformItemSelectSalesQuotation').setValue('edit');
+            //            var formItemSelectSalesQuotation = Ext.getCmp('formItemSelectSalesQuotation');
+            //            wItemSelectSalesQuotation.show();
+            //
+            //            formItemSelectSalesQuotation.getForm().load({
+            //                url: SITE_URL + 'backend/loadFormData/ItemSelectSalesQuotation/1/setup',
+            //                params: {
+            //                    extraparams: 'a.idtax:' + record.data.idtax
+            //                },
+            //                success: function(form, action) {
+            //                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //                },
+            //                failure: function(form, action) {
+            //                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //                }
+            //            })
+            //
+            ////            
+            ////            Ext.getCmp('kddaerahS').setReadOnly(true);
+            //            Ext.getCmp('statusformItemSelectSalesQuotation').setValue('edit');
         }
     }
 });
@@ -242,13 +227,13 @@ var wItemSelectSalesQuotationPopup = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
-    modal:true,
-    width: panelW-100,
-    height: sizeH-100,
+    //    autoWidth: true,
+    modal: true,
+    width: panelW - 100,
+    height: sizeH - 100,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridItemSelectSalesQuotation'
+        xtype: 'GridItemSelectSalesQuotation'
     }]
 });
