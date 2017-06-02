@@ -222,7 +222,10 @@ function showSalesQuotationData(record) {
         Ext.getCmp('btnRecordSalesQuote').disable();
     }
 
-
+    if (record.data.idsales_quote !== null) {
+        //udah jadi sales order gaboleh edit
+        Ext.getCmp('btnRecordSalesQuote').disable();
+    }
 
     var sales_quotation_date = Ext.getCmp('sales_quotation_date');
     sales_quotation_date.setValue(record.data.date_quote);

@@ -16,7 +16,7 @@ class m_salesquotation extends CI_Model {
     }
 
     function selectField() {
-        return "a.idsales,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments";
+        return "a.idsales,h.idsales_quote,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments";
     }
     
     function fieldCek()
@@ -38,13 +38,19 @@ class m_salesquotation extends CI_Model {
                             from salesitem
                             group by idsales) e ON a.idsales = e.idsales
                     left join customer f ON a.idcustomer = f.idcustomer
-                    join tax g ON a.idtax = g.idtax";
+                    join tax g ON a.idtax = g.idtax
+                    left join (select idsales_quote from sales where type = 2) h ON a.idsales = h.idsales_quote";
 
         return $query;
     }
 
     function whereQuery() {
-        return " a.type = 1 and a.display is null";
+        $wer = null;
+        if($this->input->post('option')=='not_in_salesorder'){
+            $wer = " and a.idsales not in (select idsales_quote from sales where type = 2) ";
+        }
+        return " a.type = 1 and a.display is null $wer
+         group by a.idsales,h.idsales_quote,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments";
     }
 
     function orderBy() {

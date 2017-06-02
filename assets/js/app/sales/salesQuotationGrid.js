@@ -1,7 +1,7 @@
 Ext.define('GridSalesQuotationGridModel', {
     extend: 'Ext.data.Model',
-     fields: [
-        'idsales','idpayment','idemployee','idjournal','idcustomer','date_quote','no_sales_quote','shipto','subtotal','freight','tax','disc','totalamount','comments','userin','datein','status','idcurrency','namecurr','namepayment','firstname','lastname','totalitem','namecustomer','idunit','idtax','rate','comments'
+    fields: [
+        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_quote', 'no_sales_quote', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'idtax', 'rate', 'comments', 'idsales_quote'
     ],
     idProperty: 'id'
 });
@@ -32,7 +32,7 @@ var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
     // autoWidth:true,
     height: 370,
     url: SITE_URL + 'backend/saveform/SalesQuotationGrid',
-    baseParams: {idmenu:24},
+    baseParams: { idmenu: 24 },
     bodyStyle: 'padding:5px',
     labelAlign: 'top',
     autoScroll: true,
@@ -44,11 +44,10 @@ var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
         msgTarget: 'side',
         blankText: 'Tidak Boleh Kosong',
         labelWidth: 160,
-        anchor:'100%'
-        // width: 380
+        anchor: '100%'
+            // width: 380
     },
-    items: [
-    {
+    items: [{
         items: [{
             xtype: 'hiddenfield',
             name: 'idsupplier',
@@ -63,7 +62,7 @@ var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
             allowBlank: false,
             name: 'code'
         }, {
-            xtype:'comboxsupplier_type'
+            xtype: 'comboxsupplier_type'
         }, {
             xtype: 'textfield',
             fieldLabel: 'Nama Supplier',
@@ -78,12 +77,12 @@ var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
             xtype: 'textarea',
             fieldLabel: 'Alamat Pengiriman',
             name: 'shipaddress'
-        },{
+        }, {
             xtype: 'textfield',
             fieldLabel: 'No Telepon',
             allowBlank: false,
             name: 'telephone'
-        },{
+        }, {
             xtype: 'textfield',
             fieldLabel: 'No Handphone',
             name: 'handphone'
@@ -93,7 +92,7 @@ var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
             xtype: 'textfield',
             fieldLabel: 'No Fax',
             name: 'fax'
-        },{
+        }, {
             xtype: 'textfield',
             fieldLabel: 'Email',
             name: 'email'
@@ -127,8 +126,7 @@ var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
             fieldLabel: 'Catatan',
             name: 'notes'
         }]
-    }
-    ],
+    }],
     buttons: [{
         text: 'Batal',
         handler: function() {
@@ -174,14 +172,12 @@ var wSalesQuotationGrid = Ext.create('widget.window', {
     autoHeight: true,
     layout: 'fit',
     border: false,
-    items: [
-        {
-            xtype:'EntrySalesQuotation'
-        }
-    ],
+    items: [{
+        xtype: 'EntrySalesQuotation'
+    }],
     modal: true,
     listeners: {
-        'show': function(){
+        'show': function() {
             storeGridSalesQuotationGrid.load();
         }
     }
@@ -392,24 +388,24 @@ Ext.define('GridSalesQuotationGrid', {
     store: storeGridSalesQuotationGrid,
     loadMask: true,
     columns: [{
-        dataIndex:'idsales',
-        hidden:true,
-        header:'idsales'
-    },{
-        dataIndex:'idunit',
-        hidden:true,
-        header:'idunit'
-    },{
-        dataIndex:'comments',
-        hidden:true,
-        header:'comments'
+        dataIndex: 'idsales',
+        hidden: true,
+        header: 'idsales'
+    }, {
+        dataIndex: 'idunit',
+        hidden: true,
+        header: 'idunit'
+    }, {
+        dataIndex: 'comments',
+        hidden: true,
+        header: 'comments'
     }, {
         header: 'No Quotation',
         dataIndex: 'no_sales_quote',
         minWidth: 150
     }, {
         header: 'Customer Name',
-        flex:1,
+        flex: 1,
         dataIndex: 'namecustomer',
         minWidth: 150
     }, {
@@ -419,206 +415,211 @@ Ext.define('GridSalesQuotationGrid', {
     }, {
         header: 'Total Item',
         dataIndex: 'totalitem',
-        minWidth: 80,xtype:'numbercolumn',align:'right'
-    },{
+        minWidth: 80,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
         header: 'Total Tax',
         dataIndex: 'tax',
-        minWidth: 150,xtype:'numbercolumn',align:'right'
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
     }, {
         header: 'Total Discount',
         dataIndex: 'disc',
-        minWidth: 150,xtype:'numbercolumn',align:'right'
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
     }, {
         header: 'Total Amount',
         dataIndex: 'totalamount',
-        minWidth: 150,xtype:'numbercolumn',align:'right'
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
     }],
-    dockedItems: [
+    dockedItems: [{
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [{
+                    xtype: 'datefield',
+                    format: 'd/m/Y',
+                    // value: datenow(),
+                    fieldLabel: 'Date Quotation',
+                },
+                ' to ',
+                {
+                    xtype: 'datefield',
+                    format: 'd/m/Y',
+                    // value: datenow(),
+                    hideLabel: true
+                        // fieldLabel: 'Date Quotation',
+                },
+                {
+                    xtype: 'comboxSalesStatus'
+                }
+            ]
+        },
         {
             xtype: 'toolbar',
             dock: 'top',
-            items: [ {
-                        xtype: 'datefield',
-                        format: 'd/m/Y',
-                        // value: datenow(),
-                        fieldLabel: 'Date Quotation',
-                    },
-                    ' to ',
-                    {
-                        xtype: 'datefield',
-                        format: 'd/m/Y',
-                        // value: datenow(),
-                        hideLabel:true
-                        // fieldLabel: 'Date Quotation',
-                    },
-                    {
-                        xtype:'comboxSalesStatus'
-                    }]
+            items: [{
+                    xtype: 'comboxunit'
+                },
+                {
+                    xtype: 'comboxCustomer'
+                },
+                {
+                    xtype: 'comboxpayment'
+                },
+                {
+                    text: 'Search',
+                    handler: function() {}
+                },
+                {
+                    text: 'Clear Filter',
+                    handler: function() {}
+                }
+            ]
         },
-    {
-        xtype: 'toolbar',
-        dock: 'top',
-        items: [
-            {
-                xtype:'comboxunit'
-            },
-            {
-                xtype:'comboxCustomer'
-            },
-            {
-                xtype:'comboxpayment'
-            },
-            {
-                text: 'Search',
-                handler: function() {}
-            },
-            {
-                text: 'Clear Filter',
-                handler: function() {}
-            }
-        ]
-    },
-    {
-        xtype: 'toolbar',
-        dock: 'top',
-        items: [{
-            itemId: 'addSalesQuotationGrid',
-            text: 'Add New Quotation',
-            iconCls: 'add-icon',
-            handler: function() {
-                wSalesQuotationGrid.show();
-                storeCustomer.load();
-                storeUnit.load();
-                Ext.getCmp('cbUnitEntrySalesQuotation').setValue(idunit);
-                Ext.getCmp('statusformSalesQuotationGrid').setValue('input');
+        {
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [{
+                itemId: 'addSalesQuotationGrid',
+                text: 'Add New Quotation',
+                iconCls: 'add-icon',
+                handler: function() {
+                    wSalesQuotationGrid.show();
+                    storeCustomer.load();
+                    storeUnit.load();
+                    Ext.getCmp('cbUnitEntrySalesQuotation').setValue(idunit);
+                    Ext.getCmp('statusformSalesQuotationGrid').setValue('input');
 
-                productMeasurementStore.load();
-                Ext.getCmp('cbSalesQuotation').setValue(1);
-                Ext.getCmp('cbSalesQuotation').setReadOnly(true);
+                    productMeasurementStore.load();
+                    Ext.getCmp('cbSalesQuotation').setValue(1);
+                    Ext.getCmp('cbSalesQuotation').setReadOnly(true);
 
-                // Ext.getCmp('cb_tax_id_sq').setValue('1');
-            }
-        },{
-            text: 'Print',
-            iconCls: 'print-icon',
-            handler: function() {
-                // var grid = Ext.ComponentQuery.query('GridSalesQuotationGridID')[0];
-                 var grid = Ext.getCmp('GridSalesQuotationGridID');
-                var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                var data = grid.getSelectionModel().getSelection();
-                if (data.length == 0) {
-                    Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                } else {
-                      
-                    Ext.create('Ext.window.Window', {
-                        title: 'Preview Sales Quotation',
-                        modal:true,
-                        width: panelW-100,
-                        height: panelH-200,
-                        items: [
-                            {
+                    // Ext.getCmp('cb_tax_id_sq').setValue('1');
+                }
+            }, {
+                text: 'Print',
+                iconCls: 'print-icon',
+                handler: function() {
+                    // var grid = Ext.ComponentQuery.query('GridSalesQuotationGridID')[0];
+                    var grid = Ext.getCmp('GridSalesQuotationGridID');
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                    } else {
+
+                        Ext.create('Ext.window.Window', {
+                            title: 'Preview Sales Quotation',
+                            modal: true,
+                            width: panelW - 100,
+                            height: panelH - 200,
+                            items: [{
                                 xtype: 'component',
                                 html: '<iframe src="' + SITE_URL + 'sales/print_quotation/' + selectedRecord.data.idsales + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
-                            }
-                        ],
-                        buttons: [
-                            {
+                            }],
+                            buttons: [{
                                 text: 'Print',
                                 iconCls: 'print-icon',
-                                handler: function () {
+                                handler: function() {
                                     window.open(SITE_URL + 'sales/print_quotation/' + selectedRecord.data.idsales + '/print', '_blank');
                                 }
                             }]
-                    }).show();
-                }
-            }
-        }, {
-            itemId: 'editSalesQuotationGrid',
-            text: 'Edit',
-            hidden:true,
-            iconCls: 'edit-icon',
-            handler: function() {
-                supplierTypeStore.load();
-                
-                var grid = Ext.ComponentQuery.query('GridSalesQuotationGrid')[0];
-                var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                var data = grid.getSelectionModel().getSelection();
-                if (data.length == 0) {
-                    Ext.Msg.alert('Failure', 'Pilih data supplier terlebih dahulu!');
-                } else {
-                    //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-                    var formSalesQuotationGrid = Ext.getCmp('formSalesQuotationGrid');
-                    formSalesQuotationGrid.getForm().load({
-                        url: SITE_URL + 'backend/loadFormData/SalesQuotationGrid/1',
-                        params: {
-                            extraparams: 'a.idsupplier:' + selectedRecord.data.idsupplier
-                        },
-                        success: function(form, action) {
-                            // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                        },
-                        failure: function(form, action) {
-                            Ext.Msg.alert("Load failed", action.result.errorMessage);
-                        }
-                    })
-                    wSalesQuotationGrid.show();
-                    Ext.getCmp('statusformSalesQuotationGrid').setValue('edit');
-                    Ext.getCmp('TabSupplier').setActiveTab(0);
-                }
-            }
-        }, {
-            id: 'btnDeleteSalesQuotationGrid',
-            hidden:true,
-            text: 'Delete',
-            iconCls: 'delete-icon',
-            handler: function() {
-                Ext.Msg.show({
-                    title: 'Confirm',
-                    msg: 'Delete Selected ?',
-                    buttons: Ext.Msg.YESNO,
-                    fn: function(btn) {
-                        if (btn == 'yes') {
-                            var grid = Ext.ComponentQuery.query('GridSalesQuotationGrid')[0];
-                            var sm = grid.getSelectionModel();
-                            selected = [];
-                            Ext.each(sm.getSelection(), function(item) {
-                                selected.push(item.data[Object.keys(item.data)[0]]);
-                            });
-                            Ext.Ajax.request({
-                                url: SITE_URL + 'backend/ext_delete/SalesQuotationGrid',
-                                method: 'POST',
-                                params: {
-                                    postdata: Ext.encode(selected),
-                                    idmenu:24
-                                },
-                                success: function(form, action) {
-                                    var d = Ext.decode(form.responseText);
-                                    if (!d.success) {
-                                        Ext.Msg.alert('Informasi', d.message);
-                                    } else {
-                                        storeGridSalesQuotationGrid.load();
-                                    }
-                                },
-                                failure: function(form, action) {
-                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                }
-                            });
-                            
-                        }
+                        }).show();
                     }
-                });
-            },
-            //                    disabled: true
-        }, '->', 'Searching: ', ' ', {
-            xtype: 'searchGridSalesQuotationGrid',
-            text: 'Left Button'
-        }]
-    }, {
-        xtype: 'pagingtoolbar',
-        store: storeGridSalesQuotationGrid, // same store GridPanel is using
-        dock: 'bottom',
-        displayInfo: true
-        // pageSize:20
-    }],
+                }
+            }, {
+                itemId: 'editSalesQuotationGrid',
+                text: 'Edit',
+                hidden: true,
+                iconCls: 'edit-icon',
+                handler: function() {
+                    supplierTypeStore.load();
+
+                    var grid = Ext.ComponentQuery.query('GridSalesQuotationGrid')[0];
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih data supplier terlebih dahulu!');
+                    } else {
+                        //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
+                        var formSalesQuotationGrid = Ext.getCmp('formSalesQuotationGrid');
+                        formSalesQuotationGrid.getForm().load({
+                            url: SITE_URL + 'backend/loadFormData/SalesQuotationGrid/1',
+                            params: {
+                                extraparams: 'a.idsupplier:' + selectedRecord.data.idsupplier
+                            },
+                            success: function(form, action) {
+                                // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert("Load failed", action.result.errorMessage);
+                            }
+                        })
+                        wSalesQuotationGrid.show();
+                        Ext.getCmp('statusformSalesQuotationGrid').setValue('edit');
+                        Ext.getCmp('TabSupplier').setActiveTab(0);
+                    }
+                }
+            }, {
+                id: 'btnDeleteSalesQuotationGrid',
+                hidden: true,
+                text: 'Delete',
+                iconCls: 'delete-icon',
+                handler: function() {
+                    Ext.Msg.show({
+                        title: 'Confirm',
+                        msg: 'Delete Selected ?',
+                        buttons: Ext.Msg.YESNO,
+                        fn: function(btn) {
+                            if (btn == 'yes') {
+                                var grid = Ext.ComponentQuery.query('GridSalesQuotationGrid')[0];
+                                var sm = grid.getSelectionModel();
+                                selected = [];
+                                Ext.each(sm.getSelection(), function(item) {
+                                    selected.push(item.data[Object.keys(item.data)[0]]);
+                                });
+                                Ext.Ajax.request({
+                                    url: SITE_URL + 'backend/ext_delete/SalesQuotationGrid',
+                                    method: 'POST',
+                                    params: {
+                                        postdata: Ext.encode(selected),
+                                        idmenu: 24
+                                    },
+                                    success: function(form, action) {
+                                        var d = Ext.decode(form.responseText);
+                                        if (!d.success) {
+                                            Ext.Msg.alert('Informasi', d.message);
+                                        } else {
+                                            storeGridSalesQuotationGrid.load();
+                                        }
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    }
+                                });
+
+                            }
+                        }
+                    });
+                },
+                //                    disabled: true
+            }, '->', 'Searching: ', ' ', {
+                xtype: 'searchGridSalesQuotationGrid',
+                text: 'Left Button'
+            }]
+        }, {
+            xtype: 'pagingtoolbar',
+            store: storeGridSalesQuotationGrid, // same store GridPanel is using
+            dock: 'bottom',
+            displayInfo: true
+                // pageSize:20
+        }
+    ],
     listeners: {
         render: {
             scope: this,
@@ -628,24 +629,24 @@ Ext.define('GridSalesQuotationGrid', {
         },
         itemdblclick: function(dv, record, item, index, e) {
             showSalesQuotationData(record)
-            // var formAgama = Ext.create('formAgama');
-            // var formSalesQuotationGrid = Ext.getCmp('formSalesQuotationGrid');
-            // wSalesQuotationGrid.show();
-            // formSalesQuotationGrid.getForm().load({
-            //     url: SITE_URL + 'backend/loadFormData/SalesQuotationGrid/1',
-            //     params: {
-            //         extraparams: 'a.idsupplier:' + record.data.idsupplier
-            //     },
-            //     success: function(form, action) {
-            //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
-            //     },
-            //     failure: function(form, action) {
-            //         Ext.Msg.alert("Load failed", action.result.errorMessage);
-            //     }
-            // })
-            // //            
-            // //            Ext.getCmp('kddaerahS').setReadOnly(true);
-            // Ext.getCmp('statusformSalesQuotationGrid').setValue('edit');
+                // var formAgama = Ext.create('formAgama');
+                // var formSalesQuotationGrid = Ext.getCmp('formSalesQuotationGrid');
+                // wSalesQuotationGrid.show();
+                // formSalesQuotationGrid.getForm().load({
+                //     url: SITE_URL + 'backend/loadFormData/SalesQuotationGrid/1',
+                //     params: {
+                //         extraparams: 'a.idsupplier:' + record.data.idsupplier
+                //     },
+                //     success: function(form, action) {
+                //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                //     },
+                //     failure: function(form, action) {
+                //         Ext.Msg.alert("Load failed", action.result.errorMessage);
+                //     }
+                // })
+                // //            
+                // //            Ext.getCmp('kddaerahS').setReadOnly(true);
+                // Ext.getCmp('statusformSalesQuotationGrid').setValue('edit');
 
             // Ext.getCmp('TabSupplier').setActiveTab(0);
         }
