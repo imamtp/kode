@@ -16,7 +16,7 @@ class m_deliveryordergrid extends CI_Model {
     }
 
     function selectField() {
-        return "a.delivery_order_id,a.idunit,a.date_created,a.idsales,a.remarks,a.userin,a.status,b.totalamount,b.tax,b.disc,b.freight,b.paidtoday,b.balance,b.date_sales,b.no_sales_order,c.namecustomer,b.noinvoice,qtyorder,qtykirim";
+        return "a.delivery_order_id,a.delivery_date,a.idunit,a.date_created,a.idsales,a.remarks,a.userin,a.status,b.totalamount,b.tax,b.disc,b.freight,b.paidtoday,b.balance,b.date_sales,b.no_sales_order,c.namecustomer,b.noinvoice,qtyorder,qtykirim, c.address as address_customer, c.telephone as telephone_customer, c.handphone as handphone_customer,nocustomer";
     }
     
     function fieldCek()
@@ -60,6 +60,60 @@ class m_deliveryordergrid extends CI_Model {
             'acctaxpaid' => $this->input->post('idaccpaid')
         );
         return $data;
+    }
+
+    function cetak_do($delivery_order_id){
+
+        $dtcetak = array();
+
+        $sql = $this->query();
+        $sql.= " WHERE a.delivery_order_id=$delivery_order_id";
+        // echo $sql;
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            //detail pembayaran
+            $i=0;
+            $total=0;
+            
+            $dtcetak['header'] = $q->result_array()[0];
+
+            // $dtcetak['customer']['namecustomer'] = $r->namecustomer;
+            // $dtcetak['customer']['nocustomer'] = $r->nocustomer;
+            // $dtcetak['customer']['address'] = $r->address_customer;
+            // $dtcetak['customer']['telephone'] = $r->telephone_customer;
+            // $dtcetak['customer']['handphone'] = $r->handphone_customer;
+
+            $this->load->model('sales/m_salesorder');
+            $dtcetak['detail'] = $this->m_salesorder->query_itemsales($r->idsales);
+            $dtcetak['detailtotal'] = 0;
+
+            $dtcetak['no'] = $r->no_sales_order;
+
+
+            // //get receivefrom,total,memo,tax
+            $dtcetak['dp'] = $r->paidtoday;
+            $dtcetak['freigthcost'] = $r->freight;
+            // $dtcetak['receivefrom'] = $r->userin;
+            $dtcetak['totaltax'] = $r->tax;
+            $dtcetak['total'] = $r->totalamount;
+            $dtcetak['terbilang'] = terbilang($r->totalamount);
+            $dtcetak['totalowed'] = $r->balance;
+            $dtcetak['memo'] = $r->remarks;
+            $dtcetak['datetrans'] = $r->delivery_date;
+
+            // $dtcetak['receivedby'] = $r->userin;
+            //get logo,address,namaunit
+            $runit = $this->m_data->dataunit($r->idunit);
+            $dtcetak['logo'] = $runit['logo'];
+            $dtcetak['namaunit'] = $runit['namaunit'];
+            $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['telp'] = $runit['telp'];
+            $dtcetak['fax'] = $runit['fax'];
+        }
+        return $dtcetak;
+
     }
 
 }
