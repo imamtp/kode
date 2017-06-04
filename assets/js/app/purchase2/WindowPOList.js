@@ -61,7 +61,7 @@ Ext.define('MY.searchGridPurchaseOrderList', {
 //     }
 // });
 var gridInsertBaruGRPO = Ext.getCmp('EntryGoodsReceipt');
-var EntryGoodsReceiptRM = Ext.getCmp('EntryGoodsReceipt').getStore();
+// var EntryGoodsReceiptRM = Ext.getCmp('EntryGoodsReceipt').getStore();
 
 Ext.define('GridPurchaseOrderList', {
     itemId: 'GridPurchaseOrderList',
@@ -104,9 +104,13 @@ Ext.define('GridPurchaseOrderList', {
 
             Ext.getCmp('memo_poreceipt').setValue('Delivery Order ' + selectedRecord.get('nopurchase'));
 
-
-            EntryGoodsReceiptRM.removeAll();
-            EntryGoodsReceiptRM.sync();
+            gridInsertBaruGRPO.getStore().load({
+                params: {
+                    'extraparams': 'a.status:' + 99 //asal aja. buat ngapus grid doang. karena kalo pake removeAll() bikin error
+                }
+            });
+            // EntryGoodsReceiptRM.removeAll();
+            // EntryGoodsReceiptRM.sync();
 
             //insert item to grid
             Ext.Ajax.request({
@@ -157,6 +161,13 @@ Ext.define('GridPurchaseOrderList', {
             Ext.getCmp('cb_status_poreceipt').hide();
 
             Ext.getCmp('received_date_poreceipt').setReadOnly(false);
+
+            Ext.getCmp('btnRecordGR').enable();
+
+            //hapus data
+            Ext.getCmp('received_poreceipt').setValue(null);
+            Ext.getCmp('receivedid_poreceipt').setValue(null);
+            Ext.getCmp('received_date_poreceipt').setValue(null);
         }
     }, {
         dataIndex: 'idpurchase',
