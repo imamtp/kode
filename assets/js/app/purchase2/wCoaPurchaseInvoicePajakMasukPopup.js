@@ -1,9 +1,9 @@
 //acc list
-Ext.define('GridCOAHutangInvoicePurchasePopup', {
-    itemId: 'GridCOAHutangInvoicePurchasePopup',
-    id: 'GridCOAHutangInvoicePurchasePopup',
+Ext.define('GridCOAPajakMasukInvoicePurchasePopup', {
+    itemId: 'GridCOAPajakMasukInvoicePurchasePopup',
+    id: 'GridCOAPajakMasukInvoicePurchasePopup',
     extend: 'Ext.grid.Panel',
-    alias: 'widget.GridCOAHutangInvoicePurchasePopup',
+    alias: 'widget.GridCOAPajakMasukInvoicePurchasePopup',
     store: storeGridAccount,
     loadMask: true,
     columns: [{
@@ -15,7 +15,7 @@ Ext.define('GridCOAHutangInvoicePurchasePopup', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-                setValueAcc(selectedRecord, 'wCoaPurchaseInvoiceHutangPopup', '_coa_hutang_pi');
+                setValueAcc(selectedRecord, 'wCoaPurchaseInvoicePajakMasukPopup', '_coa_pajakmasuk_pi');
             }
         },
         { header: 'idaccount', dataIndex: 'idaccount', hidden: true },
@@ -47,10 +47,10 @@ Ext.define('GridCOAHutangInvoicePurchasePopup', {
     }]
 });
 
-Ext.define(dir_sys + 'purchase2.wCoaPurchaseInvoiceHutangPopup', {
+Ext.define(dir_sys + 'purchase2.wCoaPurchaseInvoicePajakMasukPopup', {
     extend: 'Ext.window.Window',
-    id: 'wCoaPurchaseInvoiceHutangPopup',
-    alias: 'widget.wCoaPurchaseInvoiceHutangPopup',
+    id: 'wCoaPurchaseInvoicePajakMasukPopup',
+    alias: 'widget.wCoaPurchaseInvoicePajakMasukPopup',
     title: 'Pilih Akun',
     header: {
         titlePosition: 2,
@@ -64,6 +64,6 @@ Ext.define(dir_sys + 'purchase2.wCoaPurchaseInvoiceHutangPopup', {
     layout: 'fit',
     border: false,
     items: [{
-        xtype: 'GridCOAHutangInvoicePurchasePopup'
+        xtype: 'GridCOAPajakMasukInvoicePurchasePopup'
     }]
 });

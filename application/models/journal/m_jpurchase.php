@@ -2,7 +2,7 @@
 
 class m_jpurchase extends CI_Model {
 
-    function purchase_ap($date_po,$memo,$totalAmount,$idunit,$idaccount_coa_hutang,$idaccount_coa_beli){
+    function purchase_ap($date_po,$memo,$totalAmount,$idunit,$idaccount_coa_hutang,$idaccount_coa_beli,$idaccount_coa_pajakmasuk,$total_pajak){
          //D: kena hutang
         //K: hutang
 
@@ -55,8 +55,28 @@ class m_jpurchase extends CI_Model {
         $this->m_account->saveNewBalance($idacc, $newBalance, $idunit);
         $this->m_account->saveAccountLog($idunit,$idacc,0,$amount,$date_po,$qseq->id);
 
+          //D: Pajak masukkan
+        $amount = $total_pajak;
+        $idacc = $idaccount_coa_pajakmasuk;
+        $curBalance = $this->m_account->getCurrBalance($idacc, $idunit);       
+        $newBalance = $curBalance + $amount;  //itung saldo baru
+
+        $ditem = array(
+            'idjournal' => $qseq->id,
+            'idaccount' => $idacc,
+//            'idtax' integer,
+            'debit' => $total_pajak,
+            'credit' => 0,
+//            'memo' character varying(225),
+            'lastbalance' => $curBalance,
+            'currbalance' => $newBalance
+        );
+        $this->db->insert('journalitem', $ditem);
+        $this->m_account->saveNewBalance($idacc, $newBalance, $idunit);
+        $this->m_account->saveAccountLog($idunit,$idacc,0,$amount,$date_po,$qseq->id);
+
         //K: hutang
-        $amount = $totalAmount;
+        $amount = $totalAmount+$total_pajak;
         // $idacc = $this->m_data->getIdAccount(24, $idunit);
         $idacc = $idaccount_coa_hutang;
         $curBalance = $this->m_account->getCurrBalance($idacc, $idunit);       
@@ -76,7 +96,6 @@ class m_jpurchase extends CI_Model {
         $this->db->insert('journalitem', $ditem2);
         //update saldo baru
         $this->m_account->saveNewBalance($idacc, $newBalance, $idunit);
-
         $this->m_account->saveAccountLog($idunit,$idacc,$amount,0,$date_po,$qseq->id);
 
         return $qseq->id;

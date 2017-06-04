@@ -83,14 +83,14 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                       <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
                         <tr>
                           <th width="30">No</th>  
-                          <th>Item Code</th>                       
-                          <th>Item Name</th>                     
-                          <th>Price</th>
+                          <th>Kode Barang</th>                       
+                          <th>Nama Barang</th>                     
+                          <th>Harga</th>
                           <th>Qty</th>
-                          <th>Measurement</th>
-                          <th>Size/Length</th>
-                          <th>Measurement</th>
-                          <th>Discount(%)</th>
+                          <th>Satuan</th>
+                          <th>Ukuran</th>
+                          <th>Satuan Ukuran</th>
+                          <th>Diskon(%)</th>
                           <!-- <th>Tax %</th> -->
                            <th>Total</th>
                         </tr>

@@ -634,10 +634,12 @@ class purchase extends MY_Controller {
 
         $saldo = str_replace('.', '', $this->input->post('sisa_bayar'));
         $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
+        $total_pajak = $this->input->post('total_pajak') == '' ? 0 : str_replace('.', '', $this->input->post('total_pajak'));
         $nopo = $this->input->post('nopo');
         $total_amount = $this->input->post('total_amount');
         $idaccount_coa_hutang = $this->input->post('idaccount_coa_hutang');
         $idaccount_coa_beli = $this->input->post('idaccount_coa_beli');
+        $idaccount_coa_pajakmasuk = $this->input->post('idaccount_coa_pajakmasuk');
         // if(intval($saldo)>0) {
         //     // $invoice_status = 4; //Partially Paid
         // }
@@ -656,7 +658,9 @@ class purchase extends MY_Controller {
                 'balance'=>$total_amount,
                 'idaccount_coa_hutang'=>$idaccount_coa_hutang,
                 'idaccount_coa_beli'=>$idaccount_coa_beli,
+                'idaccount_coa_pajakmasuk'=>$idaccount_coa_pajakmasuk,
                 'idpayment' => $idpayment,
+                // 'tax' => $total_pajak, //ga perlu lagi karena udah diinput saat PO
                 'freigthcost'=> str_replace('.', '', $this->input->post('biayaangkut')),
                 'ddays' => $this->input->post('ddays')=='' ? null : $this->input->post('ddays'),
                 'eomddays' => $this->input->post('eomddays')=='' ? null : $this->input->post('eomddays'),
@@ -671,7 +675,7 @@ class purchase extends MY_Controller {
 
         //buat jurnal hutang
         $this->load->model('journal/m_jpurchase','jmodel');
-        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_beli);
+        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_beli,$idaccount_coa_pajakmasuk,$total_pajak);
         // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
           if($this->db->trans_status() === false){
@@ -691,7 +695,7 @@ class purchase extends MY_Controller {
                                 from (
                                     select sum(paidtoday) as totalPaid
                                     from purchase
-                                    where  (invoice_status = 2)  and idpurchasetype = 2 and deleted = 0 and idunit = $idunit and idpurchasetype = 2
+                                    where  (invoice_status = 2 OR invoice_status = 4)  and idpurchasetype = 2 and deleted = 0 and idunit = $idunit and idpurchasetype = 2
                                 ) a,
                                 ( 
                                     select sum(balance) as totalUnpaid
@@ -725,7 +729,7 @@ class purchase extends MY_Controller {
         $balance_purchase = str_replace('.', '', $this->input->post('balance_Purchase'));
         $amount = str_replace('.', '', $this->input->post('amount'));
         $selisih = intval($balance_purchase-$amount);
-        $idaccount = $this->input->post('idaccount');
+        $idaccount = $this->input->post('idaccount'); //coa kas/bank
 
         $idunit = $this->session->userdata('idunit');
 
