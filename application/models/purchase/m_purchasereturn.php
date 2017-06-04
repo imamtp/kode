@@ -16,7 +16,7 @@ class m_purchasereturn extends CI_Model {
     }
 
     function selectField() {
-        return "a.purchase_return_id,b.idsupplier,a.idpurchase,a.idunit,a.noreturn,a.idjournal,a.userin,a.datein,a.return_status,a.date_return,b.idtax,b.nopurchase,b.date as po_date,c.namesupplier,a.return_amount,num_retur_items,c.companyaddress,c.telephone,c.fax,sum_amount_items,a.idaccount_return,f.accname,f.accnumber";
+        return "a.purchase_return_id,b.idsupplier,a.idpurchase,a.idunit,a.noreturn,a.idjournal,a.userin,a.datein,a.return_status,a.date_return,b.idtax,b.nopurchase,b.date as po_date,c.namesupplier,a.return_amount,num_retur_items,c.companyaddress,c.telephone,c.fax,sum_amount_items,a.idaccount_return,f.accname,f.accnumber,num_retur_qty,num_received_qty";
     }
     
     function fieldCek()
@@ -33,7 +33,7 @@ class m_purchasereturn extends CI_Model {
                     from " . $this->tableName()." a
                     join purchase b ON a.idpurchase = b.idpurchase
                     join supplier c oN b.idsupplier = c.idsupplier
-                    join (select purchase_return_id, count(*) as num_retur_items
+                    join (select purchase_return_id, count(*) as num_retur_items, sum(qty_retur) as num_retur_qty, sum(qty_received) as num_received_qty
                             from purchase_returnitem
                             group by purchase_return_id) d ON a.purchase_return_id = d.purchase_return_id
                     join (select purchase_return_id, sum(total_amount_item) as sum_amount_items
@@ -45,11 +45,13 @@ class m_purchasereturn extends CI_Model {
     }
 
     function whereQuery() {
+        $wer = null;
         if($this->input->post('option')=='notyetdelivered'){
-            $wer = " a.idpurchase not in (select idpurchase from purchase_return where (return_status = 2 OR return_status = 4 OR return_status = 5 OR return_status = 6) )";
+            // $wer = " and a.idpurchase not in (select idpurchase from purchase_return where (return_status = 2 OR return_status = 4 OR return_status = 5 OR return_status = 6) )";
+             $wer = " and (return_status = 3 OR return_status = 4)";
         }
 
-        return " ".$wer;
+        return " a.deleted = 0 ".$wer;
     }
 
     function orderBy() {

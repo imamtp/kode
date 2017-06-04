@@ -964,7 +964,7 @@ class purchase extends MY_Controller {
                     'idpurchaseitem'=> $items->idpurchaseitem,
                     'notes'=> isset($items->notes) ? $items->notes : null,
                     'qty_retur' => $items->qty,
-                    'idwarehouse' => $idwarehouse,
+                    'warehouse_id' => $idwarehouse,
                     // 'is_received' =>,
                     'is_tmp' => 1,
                     // 'notes'=>$items->notes,
@@ -1287,8 +1287,8 @@ class purchase extends MY_Controller {
                                     where a.purchase_return_id =  $purchase_return_id")->row();
         //end query retur
 
-         if($status==3){
-            //confirmed
+         if($status==6){
+            //status closed
             //buat jurnal
             // $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$qpo->idpurchase,$coaretur,'Purchase Return: '.$qpo->noreturn,$qpo->idunit);
 
@@ -1302,20 +1302,58 @@ class purchase extends MY_Controller {
                 $this->m_stock->update_history(13,$value->qty_received,$value->idinventory,$qpo->idunit,$warehouse_id,date('Y-m-d'),'Receipt Return PO: '.$qpo->noreturn,null);
             }
           
+            /* buat jurnal
+                retur -> debit
+                hutang -> kredit
+            */
+            $qp = $this->db->query("select a.idpurchase,a.noreturn,a.idunit,a.idaccount_return,a.idjournal,b.totaldebit
+                                    from purchase_return a
+                                    join journal b ON a.idjournal = b.idjournal
+                                    where purchase_return_id = $purchase_return_id and a.idunit = ".$qpo->idunit."")->row();
+             $idjournal = $this->jmodel->purchase_return_receive(date('Y-m-d'),$qp->totaldebit,$qp->idpurchase,$qp->idaccount_return,'Received Purchase Return: '.$qp->noreturn,$qp->idunit);
+
+            //update id jurnal ke purchase_return
+            $this->db->where(array('purchase_return_id'=>$purchase_return_id));
+            $this->db->update('purchase_return',array('idjournal_received'=>$idjournal));
          }
 
-         $total_received = 0;
+        //  $total_received = 0;
          foreach ($items as $value) {
-             $this->db->where(array(
-                 'idpurchaseitem'=>$value->idpurchaseitem,
-                 'idinventory'=>$value->idinventory,
-                 'purchase_batch_id'=>$value->purchase_batch_id
-             ));
+
+             if($value->purchase_batch_id==null){
+                 //bukan item yg di-batch-kan
+                 $arrWer = array(
+                    'purchase_return_id'=>$purchase_return_id,
+                    'idpurchaseitem'=>$value->idpurchaseitem,
+                    'idinventory'=>$value->idinventory,
+                    //  'purchase_batch_id'=>$value->purchase_batch_id
+                );
+                 
+             } else {
+                 $arrWer = array(
+                    'purchase_return_id'=>$purchase_return_id,
+                    'idpurchaseitem'=>$value->idpurchaseitem,
+                     'idinventory'=>$value->idinventory,
+                    'purchase_batch_id'=>$value->purchase_batch_id
+                );
+             }
+              //current received qty
+            //  $qCurrent = $this->db->get_where('purchase_returnitem',$arrWer);
+            //  $current_qty = $qCurrent->qty_received==null ? 0 : $qCurrent->qty_received;
+            //  $totalreceived = $current_qty + $value->qty_received;
+             
+             $this->db->where($arrWer);
              $this->db->update('purchase_returnitem',array('qty_received'=>$value->qty_received));
-             $total_received+=$value->qty_received;
+            //  $total_received+=$value->qty_received;
          }
 
-         if(intval($qpo->total_qty_retur) >= $total_received){
+         //hitung total yang diterima
+         $qtotal = $this->db->query("select sum(qty_retur) as totalreturn,sum(qty_received) as totalreceived
+                                        from purchase_returnitem a
+                                        where a.purchase_return_id = $purchase_return_id")->row();
+         //end 
+
+         if(intval($qtotal->totalreceived) >= $qtotal->totalreturn){
              //full received
              $return_status = 5;
          } else {

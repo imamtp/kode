@@ -1,5 +1,5 @@
-var EntryReturnPO = Ext.create(dir_sys+'purchase2.EntryReturnPO');
-var WindowBatchItemListPoReturn = Ext.create(dir_sys+'purchase2.WindowBatchItemListPoReturn');
+var EntryReturnPO = Ext.create(dir_sys + 'purchase2.EntryReturnPO');
+var WindowBatchItemListPoReturn = Ext.create(dir_sys + 'purchase2.WindowBatchItemListPoReturn');
 
 // var rTabPanel = Ext.create('Ext.panel.Panel', {
 //                     // hidden: true,
@@ -66,7 +66,7 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
     autoDestroy: false,
     modal: true,
     closeAction: 'hide',
-       // autoWidth: true,
+    // autoWidth: true,
     width: panelW - 50,
     // width:'100%',
     // autoHeight:true,
@@ -81,33 +81,30 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
         split: true,
         // bodyPadding: 15
     },
-    items: [
-      {
+    items: [{
             title: 'Batch Item',
             // collapsed:true,
             region: 'south',
             // collapsible: false,
             // hidden:true,
-            id:'batch_item_panel',
+            id: 'batch_item_panel',
             height: 250,
             minHeight: 175,
             maxHeight: 350,
-            items:[
-                {
-                    xtype:'GridBatchPoReturn'
-                }
-            ]
-            // html: 'Footer content'
-            // items: [EntryReturnPO]
+            items: [{
+                    xtype: 'GridBatchPoReturn'
+                }]
+                // html: 'Footer content'
+                // items: [EntryReturnPO]
         },
-         {
+        {
             title: 'Qty Return',
-            collapsed:true,
+            collapsed: true,
             region: 'south',
             bodyPadding: 10,
             // collapsible: false,
-            hidden:true,
-            id:'qtyreturn_item_panel',
+            hidden: true,
+            id: 'qtyreturn_item_panel',
             height: 80,
             // minHeight: 55,
             // maxHeight: 50,
@@ -117,23 +114,22 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
             //     }
             // ]
             // html: 'Footer content'
-            items: [
-                {
-                    xtype: 'fieldcontainer',
-                    margins: '5 0 0 5',
-                    width:800,
-                    layout: 'hbox',
-                    defaultType: 'textfield',
-                    
-                    fieldDefaults: {
-                        labelAlign: 'left'
-                    },
-                    items: [{
+            items: [{
+                xtype: 'fieldcontainer',
+                margins: '5 0 0 5',
+                width: 800,
+                layout: 'hbox',
+                defaultType: 'textfield',
+
+                fieldDefaults: {
+                    labelAlign: 'left'
+                },
+                items: [{
                         // flex: 1,
                         xtype: 'numberfield',
                         width: 200,
-                        id:'qty_retur',
-                        fieldLabel:'Qty Retur',
+                        id: 'qty_retur',
+                        fieldLabel: 'Qty Retur',
                         allowBlank: false,
                         minValue: 1
                     },
@@ -150,20 +146,20 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
                         // flex: 2,
                         width: 230,
                         xtype: 'textfield',
-                        fieldLabel:'Notes',
-                        id:'notes_qty_retur',
+                        fieldLabel: 'Notes',
+                        id: 'notes_qty_retur',
                         margins: '0 0 0 5'
                     },
                     {
                         text: 'Save',
                         margins: '0 0 0 5',
-                        xtype:'button',
+                        xtype: 'button',
                         handler: function() {
                             var qty_retur = Ext.getCmp('qty_retur').getValue();
                             var griditems = Ext.getCmp('EntryReturnPO');
                             var selectedRecord = griditems.getSelectionModel().getSelection()[0];
 
-                            if(qty_retur*1>selectedRecord.data.qty*1){
+                            if (qty_retur * 1 > selectedRecord.data.qty * 1) {
                                 Ext.Msg.alert('Failed', 'Kuantitas retur tidak boleh melebihi kuantitas order');
                             } else {
                                 var item = Ext.encode(selectedRecord.data);
@@ -174,8 +170,8 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
                                     params: {
                                         purchase_return_id: Ext.getCmp('purchase_return_id_poreturn').getValue(),
                                         qty_retur: qty_retur,
-                                        item : item,
-                                        opsi :'insert',
+                                        item: item,
+                                        opsi: 'insert',
                                         notes: Ext.getCmp('notes_qty_retur').getValue(),
                                     },
                                     success: function(form, action) {
@@ -188,12 +184,12 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
                                 });
                             }
                             console.log(selectedRecord);
-                            
+
                             // this.up('form').getForm().isValid();
                         }
-                    }]
-                }
-            ]
+                    }
+                ]
+            }]
         },
         {
             // title: 'Main Content',
@@ -201,57 +197,55 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
             region: 'center',
             // margins: '5 0 0 0',
             items: [EntryReturnPO]
-            // html: 'Main Page This is where the main content would go'
+                // html: 'Main Page This is where the main content would go'
         },
         // rTabPanel
-        ],
-    buttons: [
-    {
+    ],
+    buttons: [{
         text: 'Cancel',
         handler: function() {
-           
+
             // this.up('form').getForm().reset();
             Ext.getCmp('WindowEntryPOReturn').hide();
-           
+
         }
-    },{
+    }, {
         text: 'Record Purchase Return',
         handler: function() {
             var storeEntryReturnPO = Ext.getCmp('EntryReturnPO').getStore();
             var storeGridBatchPoReturn = Ext.getCmp('GridBatchPoReturn').getStore();
             var ItemGRjson = Ext.encode(Ext.pluck(storeEntryReturnPO.data.items, 'data'));
             var itemBatchPoReturn = Ext.encode(Ext.pluck(storeGridBatchPoReturn.data.items, 'data'));
-            
 
-              Ext.Ajax.request({
-                    url: SITE_URL + 'purchase/save_return',
-                    method: 'POST',
-                    params: {
-                        itemgrid:ItemGRjson,                        
-                        itembatch:itemBatchPoReturn,
-                        idunit : Ext.getCmp('cbUnit_poreturn').getValue(),
-                        idaccount_return : Ext.getCmp('idaccount_coa_retur_po').getValue(),
-                        idpurchase:Ext.getCmp('idpurchase_poreturn').getValue(),
-                        purchase_return_id:Ext.getCmp('purchase_return_id_poreturn').getValue(),
-                        noreturn: Ext.getCmp('noreturn_poreturn').getValue(),
-                        status: Ext.getCmp('cb_status_poreturn').getValue(),
-                        ret_date: Ext.getCmp('return_date_poreturn').getSubmitValue()
-                    },
-                    success: function(form, action) {
-                        var d = Ext.decode(form.responseText);
-                        if(d.status){
-                            Ext.getCmp('WindowEntryPOReturn').hide();
-                        } else {
 
-                        }
-                        Ext.Msg.alert('Info', d.message);
-                        Ext.getCmp('PurchaseReturnGridID').getStore().load();
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            Ext.Ajax.request({
+                url: SITE_URL + 'purchase/save_return',
+                method: 'POST',
+                params: {
+                    itemgrid: ItemGRjson,
+                    itembatch: itemBatchPoReturn,
+                    idunit: Ext.getCmp('cbUnit_poreturn').getValue(),
+                    idaccount_return: Ext.getCmp('idaccount_coa_retur_po').getValue(),
+                    idpurchase: Ext.getCmp('idpurchase_poreturn').getValue(),
+                    purchase_return_id: Ext.getCmp('purchase_return_id_poreturn').getValue(),
+                    noreturn: Ext.getCmp('noreturn_poreturn').getValue(),
+                    status: Ext.getCmp('cb_status_poreturn').getValue(),
+                    ret_date: Ext.getCmp('return_date_poreturn').getSubmitValue()
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
+                    if (d.success) {
+                        Ext.getCmp('WindowEntryPOReturn').hide();
+                    } else {
+
                     }
-                });
+                    Ext.Msg.alert('Info', d.message);
+                    Ext.getCmp('PurchaseReturnGridID').getStore().load();
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
         }
     }, ]
 });
-
