@@ -3,8 +3,8 @@ var WindowEntryPOReturn = Ext.create(dir_sys + 'purchase2.WindowEntryPOReturn');
 
 Ext.define('GridReturnPurchaseOrderListModel', {
     extend: 'Ext.data.Model',
-     fields: [
-        'idpurchase','idshipping','idpurchasetype','idpurchasestatus','idtax','idpayment','date','requestdate','tax','totalamount','memo','datein','idunit','idcurrency','subtotal','nopurchase','idsupplier','nametax','rate','namesupplier','disc'
+    fields: [
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc'
     ],
     idProperty: 'id'
 });
@@ -16,7 +16,7 @@ var storeGridReturnPurchaseOrderList = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-         url: SITE_URL + 'backend/ext_get_all/PurchaseOrder/purchase',
+        url: SITE_URL + 'backend/ext_get_all/PurchaseOrder/purchase',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -31,12 +31,12 @@ var storeGridReturnPurchaseOrderList = Ext.create('Ext.data.Store', {
 });
 
 
-storeGridReturnPurchaseOrderList.on('beforeload',function(store, operation,eOpts){
-   operation.params={
-             'extraparams': 'a.invoice_status:'+2,
-             'option':'po_not_in_open_return_status'
-             };
-         });
+storeGridReturnPurchaseOrderList.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'a.invoice_status:' + 2,
+        'option': 'po_not_in_open_return_status'
+    };
+});
 
 Ext.define('MY.searchGridReturnPurchaseOrderList', {
     extend: 'Ext.ux.form.SearchField',
@@ -66,9 +66,9 @@ Ext.define('GridReturnPurchaseOrderList', {
     id: 'GridReturnPurchaseOrderList',
     extend: 'Ext.grid.Panel',
     alias: 'widget.GridReturnPurchaseOrderList',
-    store: storeGridReturnPurchaseOrderList,    
+    store: storeGridReturnPurchaseOrderList,
     loadMask: true,
-    columns:[{
+    columns: [{
         text: 'Pilih',
         width: 45,
         xtype: 'actioncolumn',
@@ -76,11 +76,11 @@ Ext.define('GridReturnPurchaseOrderList', {
         align: 'center',
         icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
         handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-                
+
             // ContainerPurchaseReturn.show(); return false;
 
             WindowEntryPOReturn.show();
-            
+
             // Ext.getCmp('cb_status_poreturn').getStore().load();
             Ext.getCmp('supplier_poreturn').getStore().load();
             Ext.getCmp('cb_tax_id_poreturn').getStore().load();
@@ -102,92 +102,93 @@ Ext.define('GridReturnPurchaseOrderList', {
             Ext.getCmp('cb_status_poreturn').hide();
 
             var EntryReturnPO = Ext.getCmp('EntryReturnPO').getStore();
-            EntryReturnPO.removeAll();
-            EntryReturnPO.sync();
+            EntryReturnPO.load();
+            // EntryReturnPO.removeAll();
+            // EntryReturnPO.sync();
 
-             //insert item to grid
-              Ext.Ajax.request({
-                    url: SITE_URL + 'purchase/get_po_items',
-                    method: 'GET',
-                    params: {
-                        idpurchase: selectedRecord.get('idpurchase')
-                    },
-                    success: function(form, action) {
-                        var d = Ext.decode(form.responseText);
-                        
-                        var grid = Ext.getCmp('EntryReturnPO');
+            //insert item to grid
+            Ext.Ajax.request({
+                url: SITE_URL + 'purchase/get_po_items',
+                method: 'GET',
+                params: {
+                    idpurchase: selectedRecord.get('idpurchase')
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
 
-                        Ext.each(d.data, function(obj, i) {
-                            // console.log(obj);
+                    var grid = Ext.getCmp('EntryReturnPO');
 
-                             var recDO = new GridReturnItemPurchaseOrderModel({
-                                    idpurchaseitem: obj.idpurchaseitem,
-                                    idinventory: obj.idinventory,
-                                    sku_no: obj.sku_no,
-                                    batch: obj.batch,
-                                    invno: obj.invno,
-                                    nameinventory: obj.nameinventory,
-                                    qty: obj.qty,
-                                    price: obj.price,
-                                    disc: obj.disc,
-                                    total: obj.total,
-                                    ratetax: obj.ratetax,
-                                    tax: obj.tax,
-                                    size: obj.size,
-                                    short_desc: obj.short_desc,
-                                    size_measurement: obj.size_measurement,
-                                    warehouse_code: obj.warehouse_code
-                            });
+                    Ext.each(d.data, function(obj, i) {
+                        // console.log(obj);
 
-                            
-                            grid.getStore().insert(0, recDO);
+                        var recDO = new GridReturnItemPurchaseOrderModel({
+                            idpurchaseitem: obj.idpurchaseitem,
+                            idinventory: obj.idinventory,
+                            sku_no: obj.sku_no,
+                            batch: obj.batch,
+                            invno: obj.invno,
+                            nameinventory: obj.nameinventory,
+                            qty: obj.qty,
+                            price: obj.price,
+                            disc: obj.disc,
+                            total: obj.total,
+                            ratetax: obj.ratetax,
+                            tax: obj.tax,
+                            size: obj.size,
+                            short_desc: obj.short_desc,
+                            size_measurement: obj.size_measurement,
+                            warehouse_code: obj.warehouse_code
                         });
 
-                        // var bottombatch = Ext.getCmp('batch_item_panel');
-                        // var bottomqty = Ext.getCmp('qtyreturn_item_panel');
-                        // bottombatch.toggleCollapse(true);
-                        // bottomqty.toggleCollapse(true);
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                    }
-                });
 
-                Ext.Ajax.request({
-                    url: SITE_URL + 'purchase/get_poreturn_pk',
-                    method: 'GET',
-                    params: {
-                        idunit: selectedRecord.get('idunit')
-                    },
-                    success: function(form, action) {
-                        var d = Ext.decode(form.responseText);
-                        Ext.getCmp('purchase_return_id_poreturn').setValue(d.id);
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                    }
-                });
-            
+                        grid.getStore().insert(0, recDO);
+                    });
+
+                    // var bottombatch = Ext.getCmp('batch_item_panel');
+                    // var bottomqty = Ext.getCmp('qtyreturn_item_panel');
+                    // bottombatch.toggleCollapse(true);
+                    // bottomqty.toggleCollapse(true);
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
+
+            Ext.Ajax.request({
+                url: SITE_URL + 'purchase/get_poreturn_pk',
+                method: 'GET',
+                params: {
+                    idunit: selectedRecord.get('idunit')
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
+                    Ext.getCmp('purchase_return_id_poreturn').setValue(d.id);
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
+
         }
-    },{
-        dataIndex:'idpurchase',
-        hidden:true,
-        header:'idpurchase'
-    },{
-        dataIndex:'idunit',
-        hidden:true,
-        header:'idunit'
-    },{
-        dataIndex:'comments',
-        hidden:true,
-        header:'comments'
+    }, {
+        dataIndex: 'idpurchase',
+        hidden: true,
+        header: 'idpurchase'
+    }, {
+        dataIndex: 'idunit',
+        hidden: true,
+        header: 'idunit'
+    }, {
+        dataIndex: 'comments',
+        hidden: true,
+        header: 'comments'
     }, {
         header: 'No Purchase',
         dataIndex: 'nopurchase',
         minWidth: 150
     }, {
         header: 'Supplier Name',
-        flex:1,
+        flex: 1,
         dataIndex: 'namesupplier',
         minWidth: 150
     }, {
@@ -196,54 +197,69 @@ Ext.define('GridReturnPurchaseOrderList', {
         minWidth: 150
     }, {
         header: 'Total Item',
-        hidden:true,
+        hidden: true,
         dataIndex: 'totalitem',
-        minWidth: 80,xtype:'numbercolumn',align:'right'
-    },{
+        minWidth: 80,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
         header: 'Subtotal',
-        dataIndex: 'subtotal',hidden:true,
-        minWidth: 150,xtype:'numbercolumn',align:'right'
-    },{
+        dataIndex: 'subtotal',
+        hidden: true,
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
         header: 'Shipping Cost',
-        dataIndex: 'freight',hidden:true,
-        minWidth: 150,xtype:'numbercolumn',align:'right'
-    },{
+        dataIndex: 'freight',
+        hidden: true,
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
         header: 'Total Tax',
         dataIndex: 'tax',
-        minWidth: 150,xtype:'numbercolumn',align:'right'
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
     }, {
         header: 'Total Discount',
         dataIndex: 'disc',
-        minWidth: 150,xtype:'numbercolumn',align:'right'
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
     }, {
         header: 'Total Amount',
         dataIndex: 'totalamount',
-        minWidth: 150,xtype:'numbercolumn',align:'right'
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
     }],
     dockedItems: [{
-        xtype: 'toolbar',
-        dock: 'top',
-        items: [
-            // '->',
-            'Searching: ', ' ',
-            {
-                xtype: 'searchGridReturnPurchaseOrderList',
-                text: 'Left Button',
-                placeHolder:'Customer Name...'
-            }
-        ]
-    },
-    {
-        xtype: 'pagingtoolbar',
-        store: storeGridReturnPurchaseOrderList, // same store GridPanel is using
-        dock: 'bottom',
-        displayInfo: true
-        // pageSize:20
-    }],
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [
+                // '->',
+                'Searching: ', ' ',
+                {
+                    xtype: 'searchGridReturnPurchaseOrderList',
+                    text: 'Left Button',
+                    placeHolder: 'Customer Name...'
+                }
+            ]
+        },
+        {
+            xtype: 'pagingtoolbar',
+            store: storeGridReturnPurchaseOrderList, // same store GridPanel is using
+            dock: 'bottom',
+            displayInfo: true
+                // pageSize:20
+        }
+    ],
     listeners: {
         render: {
             scope: this,
-            fn: function(grid){
+            fn: function(grid) {
                 storeGridReturnPurchaseOrderList.load();
             }
         }
@@ -251,30 +267,30 @@ Ext.define('GridReturnPurchaseOrderList', {
 });
 
 
-Ext.define(dir_sys+'purchase2.WindowPOReturnList', {
+Ext.define(dir_sys + 'purchase2.WindowPOReturnList', {
     extend: 'Ext.window.Window',
     alias: 'widget.WindowPOReturnList',
-    id:'WindowPOReturnList',
+    id: 'WindowPOReturnList',
     title: 'Choose Purchase Order',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
-    autoDestroy:false,
-    modal:true,
+    autoDestroy: false,
+    modal: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: panelW,
-    height: sizeH-200,
+    height: sizeH - 200,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridReturnPurchaseOrderList'
+        xtype: 'GridReturnPurchaseOrderList'
     }],
     listeners: {
-            show: function() {
-                // this.el.setStyle('top', '');
-            }
+        show: function() {
+            // this.el.setStyle('top', '');
         }
+    }
 });

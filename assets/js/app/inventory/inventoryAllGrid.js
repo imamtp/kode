@@ -145,9 +145,9 @@ var wInventoryAll = Ext.create('widget.window', {
 
 Ext.define('GridInventoryAllModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'sku_no','satuan_pertama','invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
+    fields: ['idinventory', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
         'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
-        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku','totalstock','stock_kedua','satuan_kedua'
+        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua'
     ],
     idProperty: 'id'
 });
@@ -217,7 +217,7 @@ Ext.define('GridInventoryAll', {
             dataIndex: 'idinventory',
             hidden: true
         },
-         {
+        {
             header: 'No SKU',
             dataIndex: 'sku_no',
             minWidth: 120
@@ -236,7 +236,7 @@ Ext.define('GridInventoryAll', {
         },
         {
             header: 'Brand',
-            hidden:true,
+            hidden: true,
             dataIndex: 'brand_name',
             minWidth: 200
         },
@@ -250,7 +250,7 @@ Ext.define('GridInventoryAll', {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
             minWidth: 100
-        },{
+        }, {
             header: 'Stock #2',
             dataIndex: 'stock_kedua',
             minWidth: 70,
@@ -333,7 +333,7 @@ Ext.define('GridInventoryAll', {
                         showInputInv();
 
                         Ext.getCmp('formInventoryV2').getForm().reset();
-                        
+
                         Ext.getCmp('fieldsetInvBuy').setDisabled(true);
                         Ext.getCmp('fieldsetInvSell').setDisabled(true);
 
@@ -349,6 +349,7 @@ Ext.define('GridInventoryAll', {
                         Ext.getCmp('TabItemInventory').items.getAt(1).setDisabled(true);
                         Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(true);
                         Ext.getCmp('TabItemInventory').items.getAt(3).setDisabled(true);
+                        Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(true);
                         Ext.getCmp('statusformInventory2').setValue('input');
 
                         brandStore.load();
@@ -398,6 +399,7 @@ Ext.define('GridInventoryAll', {
                         }
                         Ext.getCmp('statusformInventory2').setValue('edit');
                         Ext.getCmp('TabItemInventory').items.getAt(3).setDisabled(false);
+                        Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(false);
 
                         brandStore.load();
                         // Ext.getCmp("fotokaryawanthumb").el.dom.src = 'http://192.168.56.101/aktivaabg/assets/libs/php-barcode-master/barcode.php?code=123456789123';
@@ -407,54 +409,54 @@ Ext.define('GridInventoryAll', {
                     text: 'Hapus',
                     iconCls: 'delete-icon',
                     handler: function() {
-                        Ext.Msg.show({
-                            title: 'Confirm',
-                            msg: 'Delete Selected ?',
-                            buttons: Ext.Msg.YESNO,
-                            fn: function(btn) {
-                                if (btn == 'yes') {
-                                    var grid = Ext.ComponentQuery.query('GridInventoryAll')[0];
-                                    var sm = grid.getSelectionModel();
-                                    selected = [];
-                                    Ext.each(sm.getSelection(), function(item) {
-                                        selected.push(item.data[Object.keys(item.data)[0]]);
-                                    });
-                                    Ext.Ajax.request({
-                                        url: SITE_URL + 'backend/ext_delete/InventoryAll/inventory',
-                                        method: 'POST',
-                                        params: {
-                                            postdata: Ext.encode(selected),
-                                            idmenu: 19
-                                        },
-                                        success: function(form, action) {
-                                            var d = Ext.decode(form.responseText);
-                                            if (!d.success) {
-                                                Ext.Msg.alert('Informasi', d.message);
-                                            } else {
-                                                storeGridInventoryAll.load();
+                            Ext.Msg.show({
+                                title: 'Confirm',
+                                msg: 'Delete Selected ?',
+                                buttons: Ext.Msg.YESNO,
+                                fn: function(btn) {
+                                    if (btn == 'yes') {
+                                        var grid = Ext.ComponentQuery.query('GridInventoryAll')[0];
+                                        var sm = grid.getSelectionModel();
+                                        selected = [];
+                                        Ext.each(sm.getSelection(), function(item) {
+                                            selected.push(item.data[Object.keys(item.data)[0]]);
+                                        });
+                                        Ext.Ajax.request({
+                                            url: SITE_URL + 'backend/ext_delete/InventoryAll/inventory',
+                                            method: 'POST',
+                                            params: {
+                                                postdata: Ext.encode(selected),
+                                                idmenu: 19
+                                            },
+                                            success: function(form, action) {
+                                                var d = Ext.decode(form.responseText);
+                                                if (!d.success) {
+                                                    Ext.Msg.alert('Informasi', d.message);
+                                                } else {
+                                                    storeGridInventoryAll.load();
+                                                }
+                                            },
+                                            failure: function(form, action) {
+                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                                             }
-                                        },
-                                        failure: function(form, action) {
-                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                        }
-                                    });
-                                    // Ext.Ajax.request({
-                                    //     url: SITE_URL + 'inventory/hapusInventory',
-                                    //     method: 'POST',
-                                    //     params: {postdata: Ext.encode(selected)}
-                                    // });
-                                    // storeGridInventoryAll.remove(sm.getSelection());
-                                    // sm.select(0);
+                                        });
+                                        // Ext.Ajax.request({
+                                        //     url: SITE_URL + 'inventory/hapusInventory',
+                                        //     method: 'POST',
+                                        //     params: {postdata: Ext.encode(selected)}
+                                        // });
+                                        // storeGridInventoryAll.remove(sm.getSelection());
+                                        // sm.select(0);
 
 
-                                    // storeGridInventoryInvGrid.load();
-                                    // storeGridInventoryBuyGrid.load();
-                                    // storeGridInventorySellGrid.load();
+                                        // storeGridInventoryInvGrid.load();
+                                        // storeGridInventoryBuyGrid.load();
+                                        // storeGridInventorySellGrid.load();
+                                    }
                                 }
-                            }
-                        });
-                    }
-                    //                    disabled: true
+                            });
+                        }
+                        //                    disabled: true
                 }, '->',
                 'Pencarian: ', ' ',
                 {
@@ -468,7 +470,7 @@ Ext.define('GridInventoryAll', {
             store: storeGridInventoryAll, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
-            // pageSize:20
+                // pageSize:20
         }
     ],
     listeners: {

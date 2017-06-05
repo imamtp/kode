@@ -1,5 +1,4 @@
-function showInputInv()
-{
+function showInputInv() {
     // Ext.getCmp('idFormBuy').setDisabled(true);
     // Ext.getCmp('idFormSell').setDisabled(true);
     // Ext.getCmp('idFormInventoried').setDisabled(true);
@@ -14,15 +13,14 @@ function showInputInv()
     Ext.getCmp('qtystockInv').setDisabled(false);
 }
 
-function showEditInv(idinventory)
-{
+function showEditInv(idinventory) {
     WindowInventory.show();
 
     // storeUnit.load();
-     // Ext.getCmp('nameinventory').setValue(1);
+    // Ext.getCmp('nameinventory').setValue(1);
     var formInventory = Ext.getCmp('formInventoryV2').getForm();
     Ext.Ajax.request({
-        url: SITE_URL+'inventory/getUnit',
+        url: SITE_URL + 'inventory/getUnit',
         method: 'POST',
         params: { idinventory: idinventory },
         success: function(form, action) {
@@ -40,9 +38,9 @@ function showEditInv(idinventory)
             Ext.Msg.alert("Load failed", action.result.errorMessage);
         }
     });
-   
+
     Ext.Ajax.request({
-        url: SITE_URL+'inventory/getSupplier',
+        url: SITE_URL + 'inventory/getSupplier',
         method: 'POST',
         params: { idinventory: idinventory },
         success: function(form, action) {
@@ -60,7 +58,7 @@ function showEditInv(idinventory)
             Ext.Msg.alert("Load failed", action.result.errorMessage);
         }
     });
-                            
+
     formInventory.findField('idinventoryInv').setValue(idinventory);
 
     var fotothumb = Ext.ComponentQuery.query('fotothumb')[0];
@@ -97,55 +95,52 @@ function showEditInv(idinventory)
 
             // formInventory.findField('comboxInventoryType_inv_form').setValue(action.result.data.inventory_type*1);
 
-            if(action.result.data.isbuy=='t')
-            {
+            if (action.result.data.isbuy == 't') {
                 formInventory.findField('cbdibeli').setValue(true);
-               Ext.getCmp('fieldsetInvBuy').setDisabled(false);
+                Ext.getCmp('fieldsetInvBuy').setDisabled(false);
             } else {
                 formInventory.findField('cbdibeli').setValue(false);
                 Ext.getCmp('fieldsetInvBuy').setDisabled(true);
             }
 
-            if(action.result.data.issell=='t')
-            {
+            if (action.result.data.issell == 't') {
                 formInventory.findField('cbdijual').setValue(true);
-               Ext.getCmp('fieldsetInvSell').setDisabled(false);
+                Ext.getCmp('fieldsetInvSell').setDisabled(false);
             } else {
                 formInventory.findField('cbdijual').setValue(false);
-                 Ext.getCmp('fieldsetInvSell').setDisabled(true);
+                Ext.getCmp('fieldsetInvSell').setDisabled(true);
             }
 
-            if(action.result.data.isinventory=='t')
-            {
+            if (action.result.data.isinventory == 't') {
                 formInventory.findField('cbpersediaan').setValue(true);
                 // Ext.getCmp('fieldsetInvPersediaan').setDisabled(false);
                 setPenyusutan(false)
                 Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(false);
             } else {
-                 formInventory.findField('cbpersediaan').setValue(false);
-                 // Ext.getCmp('fieldsetInvPersediaan').setDisabled(true);
-                 setPenyusutan(true)
-                 Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(true);
+                formInventory.findField('cbpersediaan').setValue(false);
+                // Ext.getCmp('fieldsetInvPersediaan').setDisabled(true);
+                setPenyusutan(true)
+                Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(true);
             }
 
             // console.log(Ext.getCmp('imginventory'));
-//                                    FormProfileID.getForm().findField('fotothumb').el.dom.src = BASE_URL + "/upload/" + action.result.data.images;
-//                                    fotothumb.autoEl.src = BASE_URL + "upload/" + action.result.data.images;
+            //                                    FormProfileID.getForm().findField('fotothumb').el.dom.src = BASE_URL + "/upload/" + action.result.data.images;
+            //                                    fotothumb.autoEl.src = BASE_URL + "upload/" + action.result.data.images;
 
-             FormProfileID.query('.field').forEach(function(field) {
-//                                         console.log(field)
-//                                        field.setReadOnly(false);
-//                                        if (field.inputEl.id == 'pegawainid-inputEl') {
-//                                            field.inputEl.dom.setAttribute('setReadOnly', false);
-//                                        }
-//                                        else if (field.id == 'pegawainid-inputEl') {
-//                                            field.readOnly = false;
-//                                        }
+            FormProfileID.query('.field').forEach(function(field) {
+                //                                         console.log(field)
+                //                                        field.setReadOnly(false);
+                //                                        if (field.inputEl.id == 'pegawainid-inputEl') {
+                //                                            field.inputEl.dom.setAttribute('setReadOnly', false);
+                //                                        }
+                //                                        else if (field.id == 'pegawainid-inputEl') {
+                //                                            field.readOnly = false;
+                //                                        }
             });
 
-             //disable field stok
-             // Ext.getCmp('qtystockInv').setDisabled(true);
-              Ext.getCmp('qtystockInv').setReadOnly(true);
+            //disable field stok
+            // Ext.getCmp('qtystockInv').setDisabled(true);
+            Ext.getCmp('qtystockInv').setReadOnly(true);
 
         },
         failure: function(form, action) {
@@ -158,8 +153,7 @@ function showEditInv(idinventory)
         params: {
             extraparams: 'a.idinventory:' + idinventory
         },
-        success: function(form, action) {
-        },
+        success: function(form, action) {},
         failure: function(form, action) {
             Ext.Msg.alert("Load failed", action.result.message);
         }
@@ -170,35 +164,34 @@ function showEditInv(idinventory)
         params: {
             extraparams: 'a.idinventory:' + idinventory
         },
-        success: function(form, action) {
-        },
+        success: function(form, action) {},
         failure: function(form, action) {
             Ext.Msg.alert("Load failed", action.result.message);
         }
     });
 
-    Ext.getCmp('formInventoryV2').getForm().load({
-        url: SITE_URL + 'backend/loadFormData/InventoryInv/1/inventory',
-        params: {
-            extraparams: 'a.idinventory:' + idinventory
-        },
-        success: function(form, action) {
-            console.log(action.result.data)
-            Ext.getCmp('akumulasibeban').setValue(renderNomor(action.result.data.akumulasibeban));
-            Ext.getCmp('bebanberjalan').setValue(renderNomor(action.result.data.bebanberjalan));
-            Ext.getCmp('nilaibuku').setValue(renderNomor(action.result.data.nilaibuku));
-            Ext.getCmp('bebanperbulan').setValue(renderNomor(action.result.data.bebanperbulan));
-            Ext.getCmp('akumulasiAkhir').setValue(renderNomor(action.result.data.akumulasiakhir));
-        },
-        failure: function(form, action) {
-            Ext.Msg.alert("Load failed", action.result.message);
-        }
-    });
+    // Ext.getCmp('formInventoryV2').getForm().load({
+    //     url: SITE_URL + 'backend/loadFormData/InventoryInv/1/inventory',
+    //     params: {
+    //         extraparams: 'a.idinventory:' + idinventory
+    //     },
+    //     success: function(form, action) {
+    //         console.log(action.result.data)
+    //         Ext.getCmp('akumulasibeban').setValue(renderNomor(action.result.data.akumulasibeban));
+    //         Ext.getCmp('bebanberjalan').setValue(renderNomor(action.result.data.bebanberjalan));
+    //         Ext.getCmp('nilaibuku').setValue(renderNomor(action.result.data.nilaibuku));
+    //         Ext.getCmp('bebanperbulan').setValue(renderNomor(action.result.data.bebanperbulan));
+    //         Ext.getCmp('akumulasiAkhir').setValue(renderNomor(action.result.data.akumulasiakhir));
+    //     },
+    //     failure: function(form, action) {
+    //         Ext.Msg.alert("Load failed", action.result.message);
+    //     }
+    // });
 
     //load unit
     // namaunitFormInv
 
-    
+
 
 
     // Ext.Ajax.request({
@@ -219,4 +212,6 @@ function showEditInv(idinventory)
     // Ext.getCmp('nameinventory').setValue(1);
 
     // Ext.getCmp('WindowInventory').setTitle('Data Inventory');
+
+    Ext.getCmp('GridStockInventoryTab').getStore().load();
 }

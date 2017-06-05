@@ -3,7 +3,7 @@ var WindowGridRequestByPRPopup = Ext.create(dir_sys + 'purchase2.WindowGridReque
 
 Ext.define('GridItemPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem','idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','price','qty','total','ratetax','disc','short_desc'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc'],
     idProperty: 'id'
 });
 
@@ -23,9 +23,9 @@ var storeGridItemPurchaseRequisition = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 //end store head
@@ -34,7 +34,7 @@ var storeGridItemPurchaseRequisition = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemSelectPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','short_desc','totalstock','stock_kedua','satuan_pertama','satuan_kedua', 'lebar','ketebalan'],
+    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan'],
     idProperty: 'id'
 });
 
@@ -45,7 +45,9 @@ var storeGridItemSelectPurchaseRequisition = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
+
         url: SITE_URL + 'backend/ext_get_all/inventoryallbysku/inventory',
+
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -54,9 +56,9 @@ var storeGridItemSelectPurchaseRequisition = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 // storeGridItemSelectPurchaseRequisition.on('beforeload',function(store, operation,eOpts){
@@ -64,7 +66,7 @@ var storeGridItemSelectPurchaseRequisition = Ext.create('Ext.data.Store', {
 //                     'extraparams': 'b.namesupplier:'+Ext.getCmp('supplierPurchase').getValue()
 //                   };
 //               });
-              
+
 Ext.define('MY.searchGridItemSelectPurchaseRequisition', {
     extend: 'Ext.ux.form.SearchField',
     alias: 'widget.searchGridItemSelectPurchaseRequisition',
@@ -91,9 +93,9 @@ var smGridItemSelectPurchaseRequisition = Ext.create('Ext.selection.CheckboxMode
 
 Ext.define('GridItemSelectPurchaseRequisition', {
     // renderTo:'mytabpanel',
-//    multiSelect: true,
-//    selModel: smGridItemSelectPurchaseRequisition,
-//    title: 'Daftar Barang',
+    //    multiSelect: true,
+    //    selModel: smGridItemSelectPurchaseRequisition,
+    //    title: 'Daftar Barang',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GridItemSelectPurchaseRequisitionID',
     id: 'GridItemSelectPurchaseRequisitionID',
@@ -101,13 +103,45 @@ Ext.define('GridItemSelectPurchaseRequisition', {
     alias: 'widget.GridItemSelectPurchaseRequisition',
     store: storeGridItemSelectPurchaseRequisition,
     loadMask: true,
-    columns: [
-        {header: 'idinventory', dataIndex: 'idinventory', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'assetaccount', dataIndex: 'assetaccount', hidden: true},
-        {header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150},
-        {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},        
-        {header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex:1},
+    columns: [{
+            text: 'Pilih',
+            width: 55,
+            xtype: 'actioncolumn',
+            tooltip: 'Pilih ini',
+            align: 'center',
+            icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
+            handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+
+                var recSQ = new GridItemPurchaseRequisitionModel({
+                    idinventory: selectedRecord.get('idinventory'),
+                    invno: selectedRecord.get('invno'),
+                    nameinventory: selectedRecord.get('nameinventory'),
+                    price: selectedRecord.get('cost')*1,
+                    idunit:idunit,
+                    assetaccount:selectedRecord.get('assetaccount'),
+                    sku_no: selectedRecord.get('sku_no'),
+                    qty: 1,
+                    disc: 0,
+                    total: selectedRecord.get('cost')*1,
+                    short_desc: selectedRecord.get('short_desc'),
+                    ratetax: Ext.getCmp('cb_tax_id_pr').getValue()
+                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                });
+
+                var gridSQ = Ext.getCmp('EntryPurchaseRequisition');
+                gridSQ.getStore().insert(0, recSQ);
+                updateGridPurchaseRequisition();
+
+                Ext.getCmp('wItemSelectPurchaseRequisitionPopup').hide();
+
+            }
+        },
+        { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
+        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
+        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
             header: 'Total Stock',
             dataIndex: 'totalstock',
@@ -118,138 +152,68 @@ Ext.define('GridItemSelectPurchaseRequisition', {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
             minWidth: 100
-        },
-        // {
-        //     header: 'Stock #2',
-        //     dataIndex: 'stock_kedua',
-        //     minWidth: 70,
-        //     xtype: 'numbercolumn',
-        //     align: 'right'
-        // },
-        // {
-        //     header: 'Satuan #2',
-        //     dataIndex: 'satuan_kedua',
-        //     minWidth: 100
-        // },
-        {header: 'Lebar', dataIndex: 'lebar', minWidth: 130,xtype:'numbercolumn',align:'right'},
-        {header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130,xtype:'numbercolumn',align:'right'},
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    itemId: 'chooseItemSelectPurchaseRequisition',
-                    text: 'Pilih Barang',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridItemSelectPurchaseRequisition')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih Barang terlebih dahulu!');
-                        } else {
-//                            Ext.getCmp('accnamejurnal').setValue(selectedRecord.get('text'));
-//                            Ext.getCmp('idaccountjurnal').setValue(selectedRecord.get('id'));
-//                            Ext.getCmp('accnumberjurnal').setValue(selectedRecord.get('accnumber'));
-// console.log(selectedRecord)
-                              var recSQ = new GridItemPurchaseRequisitionModel({
-                                    idinventory: selectedRecord.get('idinventory'),
-                                    invno: selectedRecord.get('invno'),
-                                    nameinventory: selectedRecord.get('nameinventory'),
-                                    price: selectedRecord.get('cost')*1,
-                                    idunit:idunit,
-                                    assetaccount:selectedRecord.get('assetaccount'),
-                                    sku_no: selectedRecord.get('sku_no'),
-                                    qty: 1,
-                                    disc: 0,
-                                    total: selectedRecord.get('cost')*1,
-                                    short_desc: selectedRecord.get('short_desc'),
-                                    ratetax: Ext.getCmp('cb_tax_id_pr').getValue()
-            //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
-                                });
-
-                                var gridSQ = Ext.getCmp('EntryPurchaseRequisition');
-                                gridSQ.getStore().insert(0, recSQ);
-                                updateGridPurchaseRequisition();
-                        
-                               Ext.getCmp('wItemSelectPurchaseRequisitionPopup').hide();
-
-                            
-                        }
-
-
-                    }
-                },'-',
-                {
-                    text: 'Tambah Barang',
-                    hidden:true,
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        showInputInv();     
-                        Ext.getCmp('fieldsetInvBuy').setDisabled(true);
-                        Ext.getCmp('fieldsetInvSell').setDisabled(true);                   
-                        Ext.getCmp('fieldsetInvPersediaan').setDisabled(true);
-                        storeGridAccInv.removeAll();
-                        storeGridAccInv.sync();
-
-                        Ext.getCmp('cbpersediaan').setDisabled(true);
-                        Ext.getCmp('formInventoryV2').getForm().findField('cbpersediaan').hide();
-                        Ext.getCmp('fieldsetInvPersediaan').hide();
-                        Ext.getCmp('datebuy').hide();                        
-                        Ext.getCmp('TabItemInventory').items.getAt(1).setDisabled(true);
-                        Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(true);
-
-                        Ext.getCmp('inputdaripurchase').setValue('true');
-                    }
-                },
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridItemSelectPurchaseRequisition',
-                    text: 'Left Button'
-                }
-
-            ]
         }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridItemSelectPurchaseRequisition, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ], listeners: {
+            header: 'Stock #2',
+            dataIndex: 'stock_kedua',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #2',
+            dataIndex: 'satuan_kedua',
+            minWidth: 100
+        }],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [
+            
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridItemSelectPurchaseRequisition',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridItemSelectPurchaseRequisition, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
-//                storeGridItemSelectPurchaseRequisition.load();
+                //                storeGridItemSelectPurchaseRequisition.load();
 
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
 
             // var formAgama = Ext.create('formAgama');
-//            var formItemSelectPurchaseRequisition = Ext.getCmp('formItemSelectPurchaseRequisition');
-//            wItemSelectPurchaseRequisition.show();
-//
-//            formItemSelectPurchaseRequisition.getForm().load({
-//                url: SITE_URL + 'backend/loadFormData/ItemSelectPurchaseRequisition/1/setup',
-//                params: {
-//                    extraparams: 'a.idtax:' + record.data.idtax
-//                },
-//                success: function(form, action) {
-//                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                },
-//                failure: function(form, action) {
-//                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                }
-//            })
-//
-////            
-////            Ext.getCmp('kddaerahS').setReadOnly(true);
-//            Ext.getCmp('statusformItemSelectPurchaseRequisition').setValue('edit');
+            //            var formItemSelectPurchaseRequisition = Ext.getCmp('formItemSelectPurchaseRequisition');
+            //            wItemSelectPurchaseRequisition.show();
+            //
+            //            formItemSelectPurchaseRequisition.getForm().load({
+            //                url: SITE_URL + 'backend/loadFormData/ItemSelectPurchaseRequisition/1/setup',
+            //                params: {
+            //                    extraparams: 'a.idtax:' + record.data.idtax
+            //                },
+            //                success: function(form, action) {
+            //                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //                },
+            //                failure: function(form, action) {
+            //                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //                }
+            //            })
+            //
+            ////            
+            ////            Ext.getCmp('kddaerahS').setReadOnly(true);
+            //            Ext.getCmp('statusformItemSelectPurchaseRequisition').setValue('edit');
         }
     }
 });
@@ -257,42 +221,42 @@ Ext.define('GridItemSelectPurchaseRequisition', {
 var wItemSelectPurchaseRequisitionPopup = Ext.create('Ext.window.Window', {
     // extend: 'Ext.window.Window',
     alias: 'widget.wItemSelectPurchaseRequisitionPopup',
-    id:'wItemSelectPurchaseRequisitionPopup',
+    id: 'wItemSelectPurchaseRequisitionPopup',
     title: 'Choose Item',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
-    autoDestroy:false,
+    autoDestroy: false,
     closeAction: 'hide',
-     modal:true,
-    width: panelW-100,
-    height: sizeH-100,
+    modal: true,
+    width: panelW - 100,
+    height: sizeH - 100,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridItemSelectPurchaseRequisition'
+        xtype: 'GridItemSelectPurchaseRequisition'
     }],
-    listeners:{
-         'close':function(win){
-                 // load_tmp_sales_return()
-          },
-         'hide':function(win){
-                 // load_tmp_sales_return()
-          }
+    listeners: {
+        'close': function(win) {
+            // load_tmp_sales_return()
+        },
+        'hide': function(win) {
+            // load_tmp_sales_return()
+        }
     }
 });
 // var wItemSelectPurchaseRequisitionPopup = Ext.create('wItemSelectPurchaseRequisitionPopup');
 //end grid selector
 
-Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
+Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
     extend: 'Ext.grid.Panel',
     id: 'EntryPurchaseRequisition',
     alias: 'widget.EntryPurchaseRequisition',
     xtype: 'cell-editing',
     // title: 'Input Sales Quotation',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -303,20 +267,19 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
             width: panelW,
             height: sizeH,
             forceFit: true,
-            autoScroll:true,
+            autoScroll: true,
             plugins: [this.cellEditing],
             store: storeGridItemPurchaseRequisition,
-            columns: [
-                {
-                    header:'idpurchaseitem',
-                    hidden:true,
-                    dataIndex:'idpurchaseitem'
+            columns: [{
+                    header: 'idpurchaseitem',
+                    hidden: true,
+                    dataIndex: 'idpurchaseitem'
                 },
                 {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -338,11 +301,11 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
-                    hidden:true,
+                    hidden: true,
                     header: 'Harga',
                     dataIndex: 'price',
                     width: 150,
@@ -365,7 +328,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     dataIndex: 'short_desc',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -373,7 +336,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    hidden:true,
+                    hidden: true,
                     header: 'Disc (%)',
                     width: 100,
                     dataIndex: 'disc',
@@ -385,7 +348,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     }
                 }, {
                     xtype: 'numbercolumn',
-                    hidden:true,
+                    hidden: true,
                     header: 'Total',
                     dataIndex: 'total',
                     width: 150,
@@ -393,8 +356,8 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                 },
                 {
                     header: 'Pajak',
-                    hidden:true,
-//                    width:50,
+                    hidden: true,
+                    //                    width:50,
                     dataIndex: 'ratetax',
                     editor: {
                         xtype: 'comboxtax',
@@ -409,51 +372,49 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     sortable: false,
                     menuDisabled: true,
                     items: [{
-                            icon: BASE_URL + 'assets/icons/fam/cross.gif',
-                            tooltip: 'Hapus',
-                            scope: this,
-                            handler: this.onRemoveClick
-                        }]
+                        icon: BASE_URL + 'assets/icons/fam/cross.gif',
+                        tooltip: 'Hapus',
+                        scope: this,
+                        handler: this.onRemoveClick
+                    }]
                 }
             ],
             selModel: {
                 selType: 'cellmodel'
             },
-            dockedItems: [ 
+            dockedItems: [
 
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             text: 'Tambah Barang',
                             iconCls: 'add-icon',
                             scope: this,
                             handler: this.onAddClick
                         }, '->', {
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             fieldLabel: 'No Invoice',
                             name: 'noinvoice',
                             id: 'noinvoicePurchaseRequisition'
                         },
                         {
-                            xtype:'hiddenfield',
-                            name:'statusform',
-                            id:'statusformPurchaseRequisitionGrid'
+                            xtype: 'hiddenfield',
+                            name: 'statusform',
+                            id: 'statusformPurchaseRequisitionGrid'
                         },
                         {
-                            xtype:'hiddenfield',
-                            name:'idpurchase',
-                            id:'idpurchase_pr'
+                            xtype: 'hiddenfield',
+                            name: 'idpurchase',
+                            id: 'idpurchase_pr'
                         }
                     ]
                 },
-                 {
+                {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
                             id: 'nojurnalPurchaseRequisition',
@@ -463,7 +424,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
                                         // insertNoRef(4, Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(), 'nojurnalPurchaseRequisition','PR');
-                                        insertNoID(4, Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(),'idpurchase','purchase','nojurnalPurchaseRequisition','PR');
+                                        insertNoID(4, Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(), 'idpurchase', 'purchase', 'nojurnalPurchaseRequisition', 'PR');
                                     });
                                 }
                             }
@@ -476,7 +437,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             fieldLabel: 'Requisition Date',
                             maxValue: new Date(),
 
-                        }, 
+                        },
                         {
                             xtype: 'textfield',
                             labelWidth: 120,
@@ -486,72 +447,71 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                            WindowGridRequestByPRPopup.show();
+                                        WindowGridRequestByPRPopup.show();
 
-                                            var GridRequestByPRPopupID = Ext.getCmp('GridRequestByPRPopupID').getStore();
-                                            
-                                            GridRequestByPRPopupID.on('beforeload',function(store, operation,eOpts){
-                                                operation.params={
-                                                            'extraparams': 'a.status:'+1
-                                                };
-                                            });
-                                            GridRequestByPRPopupID.load();
+                                        var GridRequestByPRPopupID = Ext.getCmp('GridRequestByPRPopupID').getStore();
+
+                                        GridRequestByPRPopupID.on('beforeload', function(store, operation, eOpts) {
+                                            operation.params = {
+                                                'extraparams': 'a.status:' + 1
+                                            };
+                                        });
+                                        GridRequestByPRPopupID.load();
 
                                     });
                                 }
                             }
                         },
                         {
-                            xtype:'hiddenfield',
+                            xtype: 'hiddenfield',
                             name: 'requestbyid',
                             id: 'requestbyid_pr',
                         },
                         {
-                            xtype:'comboxtaxtype',
+                            xtype: 'comboxtaxtype',
                             labelWidth: 120,
-                            hidden:true,
-                            valueField:'rate',
-                            id:'cb_tax_id_pr',                            
-                              listeners: {
+                            hidden: true,
+                            valueField: 'rate',
+                            id: 'cb_tax_id_pr',
+                            listeners: {
                                 select: function(combo, record, index) {
-                                  // alert(combo.getValue()); // Return Unitad States and no USA
-                                  updateGridPurchaseRequisition();
+                                    // alert(combo.getValue()); // Return Unitad States and no USA
+                                    updateGridPurchaseRequisition();
                                 }
                             }
                         },
                         {
                             xtype: 'datefield',
-                            hidden:true,
+                            hidden: true,
                             id: 'tglPelunasanPurchaseRequisition',
                             format: 'd/m/Y',
                             fieldLabel: 'Tgl Pelunasan'
                         }
                     ]
-                }, 
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxunit',
                             valueField: 'idunit',
                             labelWidth: 120,
                             valueField: 'idunit',
                             id: 'cbUnitEntryPurchaseRequisition'
-//                            ,multiSelect:true
+                                //                            ,multiSelect:true
                         },
                         {
                             xtype: 'comboxidsupplier',
-                            fieldLabel:'Recom. Supplier',
+                            fieldLabel: 'Recom. Supplier',
                             id: 'supplierPurchaseRequisition',
                             labelWidth: 120
                         },
                         {
-                            xtype:'comboxpurchasestatus',
+                            xtype: 'comboxpurchasestatus',
                             labelWidth: 120,
-                            name:'pr_status',
+                            name: 'pr_status',
                             // hidden:true,
-                            id:'cbPurchaseRequisition'
+                            id: 'cbPurchaseRequisition'
                         }
                         // {
                         //     xtype: 'textfield',
@@ -563,7 +523,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                         //             component.getEl().on('click', function(event, el) {
 
                         //                     wGridSupplierListPopup.show();
-                                            
+
                         //                     storeGridSupplierList.on('beforeload',function(store, operation,eOpts){
                         //                         operation.params={
                         //                                     'idunit': Ext.getCmp('idunitRequisition').getValue(),
@@ -575,92 +535,89 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                         //         }
                         //     }
                         // },
-//                         {
-//                             xtype: 'comboxpayment',
-//                             labelWidth: 120,
-//                             id: 'paymentPurchaseRequisition',
-//                             valueField: 'idpayment',
-//                             listeners: {
-//                                 select: {
-//                                     fn: function(combo, value) {
-//                                         if (combo.getValue() == 3)
-//                                         {
-//                                             //kredit
-//                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setDisabled(false);
-//                                             Ext.getCmp('pembayaranPurchaseRequisition').setValue(0);
-// //                                                Ext.getCmp('pembayaranPurchaseRequisition').setReadOnly(true);
-//                                         } else if (combo.getValue() == 4)
-//                                         {
-//                                             //cod
-//                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setDisabled(true);
-//                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setValue(null);
-//                                             Ext.getCmp('pembayaranPurchaseRequisition').setValue(0);
-//                                             Ext.getCmp('pembayaranPurchaseRequisition').setReadOnly(false);
-//                                         } else if (combo.getValue() == 1)
-//                                         {
-//                                             //tunai
-//                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setDisabled(true);
-//                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setValue(null);
-//                                             Ext.getCmp('pembayaranPurchaseRequisition').setValue(0);
-//                                             Ext.getCmp('pembayaranPurchaseRequisition').setReadOnly(false);
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                         }
+                        //                         {
+                        //                             xtype: 'comboxpayment',
+                        //                             labelWidth: 120,
+                        //                             id: 'paymentPurchaseRequisition',
+                        //                             valueField: 'idpayment',
+                        //                             listeners: {
+                        //                                 select: {
+                        //                                     fn: function(combo, value) {
+                        //                                         if (combo.getValue() == 3)
+                        //                                         {
+                        //                                             //kredit
+                        //                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setDisabled(false);
+                        //                                             Ext.getCmp('pembayaranPurchaseRequisition').setValue(0);
+                        // //                                                Ext.getCmp('pembayaranPurchaseRequisition').setReadOnly(true);
+                        //                                         } else if (combo.getValue() == 4)
+                        //                                         {
+                        //                                             //cod
+                        //                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setDisabled(true);
+                        //                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setValue(null);
+                        //                                             Ext.getCmp('pembayaranPurchaseRequisition').setValue(0);
+                        //                                             Ext.getCmp('pembayaranPurchaseRequisition').setReadOnly(false);
+                        //                                         } else if (combo.getValue() == 1)
+                        //                                         {
+                        //                                             //tunai
+                        //                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setDisabled(true);
+                        //                                             Ext.getCmp('tglPelunasanPurchaseRequisition').setValue(null);
+                        //                                             Ext.getCmp('pembayaranPurchaseRequisition').setValue(0);
+                        //                                             Ext.getCmp('pembayaranPurchaseRequisition').setReadOnly(false);
+                        //                                         }
+                        //                                     }
+                        //                                 }
+                        //                             }
+                        //                         }
                     ]
                 },
-                 {
+                {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
-                            xtype: 'textfield',
-                            width: 620,
-                            labelWidth: 120,
-                            value:'Purchase Requisition',
-                            id: 'memoPurchaseRequisition',
-                            fieldLabel: 'Memo'
-                        }, '->'
-                    ]
+                    items: [{
+                        xtype: 'textfield',
+                        width: 620,
+                        labelWidth: 120,
+                        value: 'Purchase Requisition',
+                        id: 'memoPurchaseRequisition',
+                        fieldLabel: 'Memo'
+                    }, '->']
                 },
-              
+
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: ['->',
-                         {
+                        {
                             itemId: 'recordPayment',
                             text: 'Record Purchase Requisition',
-                            id:'recordPurchaseRequisitionBtnSave',
+                            id: 'recordPurchaseRequisitionBtnSave',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordPurchaseRequisition, this, 'noprint', true)
-                        },{
+                        }, {
                             text: 'Print and Record Purchase Requisition',
                             iconCls: 'drive_disk-icon',
-                            hidden:true,
+                            hidden: true,
                             handler: Ext.bind(this.recordPurchaseRequisition, this, 'print', true)
                         },
-                         
-                         
+
+
                         {
                             xtype: 'textfield',
                             id: 'sisaBayarPurchaseRequisition',
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
-                            hidden:true,
+                            hidden: true,
                             fieldLabel: 'Saldo Terhutang ',
                             fieldStyle: 'text-align: right;'
                         }
-                        
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'hiddenfield',
                             id: 'idaccountPurchaseRequisition',
                             name: 'idaccount',
@@ -699,10 +656,10 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                         }, '->',
                         {
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             id: 'angkutPurchaseRequisition',
                             align: 'right',
-//                            readOnly: true,
+                            //                            readOnly: true,
                             labelWidth: 120,
                             fieldLabel: 'Biaya Angkut',
                             fieldStyle: 'text-align: right;',
@@ -719,10 +676,9 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                       {
+                    items: [{
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             id: 'shipaddressPurchaseRequisition',
                             labelWidth: 120,
                             width: 500,
@@ -731,11 +687,10 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
 
-                                        if (group_id == 99)
-                                        {
+                                        if (group_id == 99) {
                                             var extraparams = null;
                                         } else {
-                                            var extraparams = 'a.idunit:'+Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue();
+                                            var extraparams = 'a.idunit:' + Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue();
                                         }
 
                                         var FormChooseAddress = Ext.getCmp('FormChooseAddress');
@@ -770,31 +725,30 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                         {
                             xtype: 'textfield',
                             align: 'right',
-                            hidden:true,
+                            hidden: true,
                             readOnly: true,
                             labelWidth: 120,
                             id: 'totalPurchaseRequisition',
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
                         }
-                        
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxshipping',
                             labelWidth: 120,
-                            hidden:true,
+                            hidden: true,
                             id: 'shippingPurchaseRequisition'
                         }, '->',
-                         {
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
-                            hidden:true,
+                            hidden: true,
                             labelWidth: 120,
                             id: 'totalPajakPurchaseRequisition',
                             fieldLabel: 'Pajak',
@@ -805,15 +759,14 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxcurrency',
-                            hidden:true,
+                            hidden: true,
                             id: 'comboxcurrencyPurchaseRequisition',
                             labelWidth: 120
                         },
-                         '->',
-                         {
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -822,11 +775,11 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                             fieldLabel: 'Total Qty',
                             fieldStyle: 'text-align: right;'
                         },
-                         {
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
-                            hidden:true,
+                            hidden: true,
                             labelWidth: 120,
                             id: 'subtotalPurchaseRequisition',
                             fieldLabel: 'Subtotal',
@@ -838,21 +791,21 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-//                        {
-//                            itemId: 'useRecuringPurchaseRequisition',
-//                            text: 'Gunakan Sales Quotation Tersimpan',
-//                            iconCls: 'add-icon',
-//                            handler: function() {
-//                                wGridRecurringPopup.show();
-//                                storeGridRecurringPopup.load();
-//                            }
-//                        }, {
-//                            itemId: 'recordandsavePurchaseRequisition',
-//                            text: 'Simpan Sebagai Sales Quotation Berulang',
-//                            iconCls: 'add-icon',
-//                            handler: this.saveRecurr
-//                        },
-                       
+                        //                        {
+                        //                            itemId: 'useRecuringPurchaseRequisition',
+                        //                            text: 'Gunakan Sales Quotation Tersimpan',
+                        //                            iconCls: 'add-icon',
+                        //                            handler: function() {
+                        //                                wGridRecurringPopup.show();
+                        //                                storeGridRecurringPopup.load();
+                        //                            }
+                        //                        }, {
+                        //                            itemId: 'recordandsavePurchaseRequisition',
+                        //                            text: 'Simpan Sebagai Sales Quotation Berulang',
+                        //                            iconCls: 'add-icon',
+                        //                            handler: this.saveRecurr
+                        //                        },
+
                         // {
                         //     itemId: 'recordPurchaseRequisition',
                         //     text: 'Rekam Sales Quotation',
@@ -860,12 +813,12 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                         //     handler: this.recordPurchaseRequisition
                         // }
                         , '->',
-                         {
+                        {
                             xtype: 'textfield',
                             id: 'pembayaranPurchaseRequisition',
                             align: 'right',
-//                            readOnly: true,
-                            hidden:true,
+                            //                            readOnly: true,
+                            hidden: true,
                             labelWidth: 120,
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
@@ -877,13 +830,12 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                                 }
                             }
                         }
-                       
+
                     ]
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -913,21 +865,19 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
         // handle after edit
         console.log('after edit');
     },
-    recordPurchaseRequisition: function(button, event, mode)
-    {
+    recordPurchaseRequisition: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountPurchaseRequisition').getValue())
-        if (validasiPurchaseRequisition())
-        {
-            
+        if (validasiPurchaseRequisition()) {
+
             var json = Ext.encode(Ext.pluck(storeGridItemPurchaseRequisition.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue());
+            //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue());
 
             Ext.Ajax.request({
                 url: SITE_URL + 'purchase/saveRequisition',
                 method: 'POST',
                 params: {
                     idpurchase: Ext.getCmp('idpurchase_pr').getValue(),
-                    requestbyid:Ext.getCmp('requestbyid_pr').getValue(),
+                    requestbyid: Ext.getCmp('requestbyid_pr').getValue(),
                     supplierPurchaseRequisition: Ext.getCmp('supplierPurchaseRequisition').getValue(),
                     tanggalPurchaseRequisition: Ext.getCmp('tanggalPurchaseRequisition').getValue(),
                     shipaddressPurchaseRequisition: Ext.getCmp('shipaddressPurchaseRequisition').getValue(),
@@ -946,17 +896,16 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     idaccountPurchaseRequisition: Ext.getCmp('idaccountPurchaseRequisition').getValue(),
                     noinvoice: Ext.getCmp('noinvoicePurchaseRequisition').getValue(),
                     unit: Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(),
-                    supplierPurchaseRequisition : Ext.getCmp('supplierPurchaseRequisition').getValue(),
-                    statusform : Ext.getCmp('statusformPurchaseRequisitionGrid').getValue(),
+                    supplierPurchaseRequisition: Ext.getCmp('supplierPurchaseRequisition').getValue(),
+                    statusform: Ext.getCmp('statusformPurchaseRequisitionGrid').getValue(),
                     ratetax: Ext.getCmp('cb_tax_id_pr').getValue(),
-                    pr_status : Ext.getCmp('cbPurchaseRequisition').getValue(),
+                    pr_status: Ext.getCmp('cbPurchaseRequisition').getValue(),
                     datagrid: json
                 },
                 success: function(form, action) {
 
                     var d = Ext.decode(form.responseText);
-                    if (!d.success)
-                    {
+                    if (!d.success) {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
@@ -1001,8 +950,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
 
     },
     saveRecurr: function() {
-        if (validasiPurchaseRequisition())
-        {
+        if (validasiPurchaseRequisition()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -1010,45 +958,45 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('supplierPurchaseRequisition').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        //        console.log(Ext.getCmp('supplierPurchaseRequisition').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
         // if (Ext.getCmp('supplierPurchaseRequisition').getValue() == null)
         // {
         //     Ext.Msg.alert('Peringatan', 'Supplier belum dipilih!');
         // } else {
-            wItemSelectPurchaseRequisitionPopup.show();
-            storeGridItemSelectPurchaseRequisition.load();
+        wItemSelectPurchaseRequisitionPopup.show();
+        storeGridItemSelectPurchaseRequisition.load();
         // }
 
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
+        //        var rec = new JournalStore({
+        //            idaccount: null,
+        //            accname: null,
+        //            accnumber: null,
+        //            debit: null,
+        //            credit: null
+        //        });
+        //
+        //        this.getStore().insert(0, rec);
+        //        this.cellEditing.startEditByPosition({
+        //            row: 0,
+        //            column: 0
+        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);
@@ -1059,8 +1007,7 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
     }
 });
 
-function updateGridPurchaseRequisition()
-{
+function updateGridPurchaseRequisition() {
     console.log('update run');
     var addprefix = 'PurchaseRequisition';
 
@@ -1085,44 +1032,38 @@ function updateGridPurchaseRequisition()
         obj.set('total', net);
 
         totalitem++;
-        totalqty+=obj.data.qty;
+        totalqty += obj.data.qty;
     });
 
-//     console.log(subtotalPurchaseRequisition);
+    //     console.log(subtotalPurchaseRequisition);
     totalPurchaseRequisition = subtotalPurchaseRequisition + angkutPurchaseRequisition * 1;
-//     console.log(totalPurchaseRequisition+' '+totalPajak);
+    //     console.log(totalPurchaseRequisition+' '+totalPajak);
     totalPurchaseRequisition = totalPurchaseRequisition + totalPajak;
-//     console.log(totalPurchaseRequisition);
+    //     console.log(totalPurchaseRequisition);
     sisaBayarPurchaseRequisition = totalPurchaseRequisition - pembayaranPurchaseRequisition;
 
-    Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseRequisition.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('total' + addprefix).setValue(totalPurchaseRequisition.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('angkut' + addprefix).setValue(angkutPurchaseRequisition.toLocaleString('null', {minimumFractionDigits: 2}));
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseRequisition.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalPurchaseRequisition.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('angkut' + addprefix).setValue(angkutPurchaseRequisition.toLocaleString('null', { minimumFractionDigits: 2 }));
     // Ext.getCmp('pembayaranPurchaseRequisition').setValue(pembayaranPurchaseRequisition.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarPurchaseRequisition').setValue(sisaBayarPurchaseRequisition.toLocaleString('null', {minimumFractionDigits: 2}));
 
-     Ext.getCmp('totalItemPurchaseRequisition').setValue(totalitem);
-     Ext.getCmp('totalQtyPurchaseRequisition').setValue(renderNomor(totalqty));
+    Ext.getCmp('totalItemPurchaseRequisition').setValue(totalitem);
+    Ext.getCmp('totalQtyPurchaseRequisition').setValue(renderNomor(totalqty));
 }
 
-function validasiPurchaseRequisition()
-{
-//    alert(Ext.getCmp('comboxcurrencyPurchaseRequisition').getValue());   
+function validasiPurchaseRequisition() {
+    //    alert(Ext.getCmp('comboxcurrencyPurchaseRequisition').getValue());   
 
-    if (Ext.getCmp('supplierPurchaseRequisition').getValue() == null)
-    {
+    if (Ext.getCmp('supplierPurchaseRequisition').getValue() == null) {
         Ext.Msg.alert('Failed', 'Supplier belum dipilih');
 
-    } else if (Ext.getCmp('tanggalPurchaseRequisition').getValue() == null)
-    {
+    } else if (Ext.getCmp('tanggalPurchaseRequisition').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Sales Quotation');
-    } 
-     else if (Ext.getCmp('nojurnalPurchaseRequisition').getValue() == '')
-    {
+    } else if (Ext.getCmp('nojurnalPurchaseRequisition').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan NO PR');
-    } else if (Ext.getCmp('memoPurchaseRequisition').getValue() == '')
-    {
+    } else if (Ext.getCmp('memoPurchaseRequisition').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan Memo PR');
     } else if (Ext.getCmp('totalItemPurchaseRequisition').getValue() == null || Ext.getCmp('EntryPurchaseRequisition').getStore().getRange().length == 0)
     {
@@ -1130,10 +1071,11 @@ function validasiPurchaseRequisition()
     } else if (Ext.getCmp('requestby_pr').getValue() == '')
     {
         Ext.Msg.alert('Failed', 'Masukkan Requested By');
+
     }
     // else if (Ext.getCmp('paymentPurchaseRequisition').getValue() == null)
     // {
-        // Ext.Msg.alert('Failed', 'Tentukan pembayaran');
+    // Ext.Msg.alert('Failed', 'Tentukan pembayaran');
     // } 
     // else if (Ext.getCmp('paymentPurchaseRequisition').getValue() == 3 && Ext.getCmp('tglPelunasanPurchaseRequisition').getValue() == null)
     // {

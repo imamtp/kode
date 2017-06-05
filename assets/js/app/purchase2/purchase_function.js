@@ -1,4 +1,4 @@
-function showPurchaseRequestData(record){
+function showPurchaseRequestData(record) {
 
     // wPurchaseRequisitionGrid.show();
     Ext.getCmp('windowPopupPurchaseRequisitionGrid').show();
@@ -27,69 +27,69 @@ function showPurchaseRequestData(record){
     var memoPurchaseRequisition = Ext.getCmp('memoPurchaseRequisition');
     memoPurchaseRequisition.setValue(record.data.memo);
 
-     //insert item to grid
-      Ext.Ajax.request({
-            url: SITE_URL + 'purchase/get_item_pr',
-            method: 'GET',
-            params: {
-                idpurchase: record.data.idpurchase
-            },
-            success: function(form, action) {
-                var d = Ext.decode(form.responseText);
+    //insert item to grid
+    Ext.Ajax.request({
+        url: SITE_URL + 'purchase/get_item_pr',
+        method: 'GET',
+        params: {
+            idpurchase: record.data.idpurchase
+        },
+        success: function(form, action) {
+            var d = Ext.decode(form.responseText);
 
-                var gridSQ = Ext.getCmp('EntryPurchaseRequisition');
+            var gridSQ = Ext.getCmp('EntryPurchaseRequisition');
 
-                var totalitem = 0;
-                var totalqty = 0;
-                Ext.each(d.data, function(obj, i) {
+            var totalitem = 0;
+            var totalqty = 0;
+            Ext.each(d.data, function(obj, i) {
 
-                    var recSQ = new GridItemPurchaseRequisitionModel({
-                        idpurchaseitem: obj.idpurchaseitem,
-                        idinventory: obj.idinventory,
-                        invno: obj.invno,
-                        nameinventory: obj.nameinventory,
-                        price: obj.cost,
-                        idunit:obj.idunit,
-                        qty: obj.qty,
-                        disc: obj.disc,
-                        total: obj.total,
-                        short_desc: obj.short_desc
-                    });
-                    
-                    gridSQ.getStore().insert(0, recSQ);
-
-                    totalitem++;
-                    totalqty+=obj.qty;
-
+                var recSQ = new GridItemPurchaseRequisitionModel({
+                    idpurchaseitem: obj.idpurchaseitem,
+                    idinventory: obj.idinventory,
+                    invno: obj.invno,
+                    nameinventory: obj.nameinventory,
+                    price: obj.cost,
+                    idunit: obj.idunit,
+                    qty: obj.qty,
+                    disc: obj.disc,
+                    total: obj.total,
+                    short_desc: obj.short_desc
                 });
 
-                Ext.getCmp('totalItemPurchaseRequisition').setValue(totalitem);
-                Ext.getCmp('totalQtyPurchaseRequisition').setValue(renderNomor(totalqty));
+                gridSQ.getStore().insert(0, recSQ);
 
-            },
-            failure: function(form, action) {
-                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            }
-        });
-    
+                totalitem++;
+                totalqty += obj.qty;
+
+            });
+
+            Ext.getCmp('totalItemPurchaseRequisition').setValue(totalitem);
+            Ext.getCmp('totalQtyPurchaseRequisition').setValue(renderNomor(totalqty));
+
+        },
+        failure: function(form, action) {
+            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+        }
+    });
+
     var cbPurchaseRequisition = Ext.getCmp('cbPurchaseRequisition');
     cbPurchaseRequisition.getStore().load();
 
-    if(record.data.idpurchase_req===null){
-        Ext.getCmp('recordPurchaseRequisitionBtnSave').enable();    
-        Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus);  
+    if (record.data.idpurchase_req === null) {
+        Ext.getCmp('recordPurchaseRequisitionBtnSave').enable();
+        Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus);
         cbPurchaseRequisition.setReadOnly(false);
-                  
+
     } else {
         Ext.getCmp('cbPurchaseRequisition').setValue('3');
         Ext.getCmp('recordPurchaseRequisitionBtnSave').disable();
         cbPurchaseRequisition.setReadOnly(true);
     }
-    
+
     cbPurchaseRequisition.show();
 }
 
-function showPurchaseOrderData(record){
+function showPurchaseOrderData(record) {
     wPurchaseOrderGrid.show();
 
     productMeasurementStore.load();
@@ -108,7 +108,7 @@ function showPurchaseOrderData(record){
     var cb_purchase_order_status = Ext.getCmp('cb_purchase_order_status');
     cb_purchase_order_status.getStore().load();
     cb_purchase_order_status.setValue(record.data.idpurchasestatus);
-    if(record.data.idpurchasestatus*1!==1){
+    if (record.data.idpurchasestatus * 1 !== 1) {
         //selain dari open disable tombol record
         cb_purchase_order_status.setReadOnly(true);
         Ext.getCmp('btnRecordPurchaseOrder').disable();
@@ -116,7 +116,7 @@ function showPurchaseOrderData(record){
         cb_purchase_order_status.setReadOnly(false);
         Ext.getCmp('btnRecordPurchaseOrder').enable();
     }
-    
+
 
     Ext.getCmp('nojurnalPurchaseOrder').setValue(record.data.nopurchase);
     Ext.getCmp('supplierPurchaseOrder').setValue(record.data.idsupplier);
@@ -127,67 +127,67 @@ function showPurchaseOrderData(record){
     Ext.getCmp('totalPajakPurchaseOrder').setValue(renderNomor(record.data.tax));
     Ext.getCmp('totalPurchaseOrder').setValue(renderNomor(record.data.totalamount));
 
-    if(record.data.idpurchase_req!==null){
-        Ext.getCmp('rg_is_from_pr_poform').setValue({is_from_pr:1});
+    if (record.data.idpurchase_req !== null) {
+        Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 1 });
         Ext.getCmp('no_purchase_req').setValue(record.data.nopurchase_req);
         Ext.getCmp('purchase_req_date').setValue(record.data.date_req);
     } else {
-        Ext.getCmp('rg_is_from_pr_poform').setValue({is_from_pr:2});
+        Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 2 });
     }
 
     var EntryGoodsReceiptRM = Ext.getCmp('EntryPurchaseOrder').getStore();
     EntryGoodsReceiptRM.removeAll();
     EntryGoodsReceiptRM.sync();
 
-     //insert item to grid
-      Ext.Ajax.request({
-            url: SITE_URL + 'purchase/get_po_items',
-            method: 'GET',
-            params: {
-                idpurchase: record.data.idpurchase
-            },
-            success: function(form, action) {
-                var d = Ext.decode(form.responseText);
-                
-                var gridInsertBaruGRPO = Ext.getCmp('EntryPurchaseOrder');
+    //insert item to grid
+    Ext.Ajax.request({
+        url: SITE_URL + 'purchase/get_po_items',
+        method: 'GET',
+        params: {
+            idpurchase: record.data.idpurchase
+        },
+        success: function(form, action) {
+            var d = Ext.decode(form.responseText);
 
-                Ext.each(d.data, function(obj, i) {
-                    // console.log(obj);
+            var gridInsertBaruGRPO = Ext.getCmp('EntryPurchaseOrder');
 
-                     var recDO = new GridItemPurchaseOrderModel({
-                            idpurchaseitem: obj.idpurchaseitem,
-                            idinventory: obj.idinventory,
-                            sku_no: obj.sku_no,
-                            invno: obj.invno,
-                            nameinventory: obj.nameinventory,
-                            qty: obj.qty,
-                            price: obj.price,
-                            disc: obj.disc,
-                            total: obj.total,
-                            ratetax: obj.ratetax,
-                            tax: obj.tax,
-                            size: obj.size,
-                            short_desc: obj.short_desc,
-                            size_measurement: obj.size_measurement,
-                            warehouse_code: obj.warehouse_code
-                    });
+            Ext.each(d.data, function(obj, i) {
+                // console.log(obj);
 
-                    
-                    gridInsertBaruGRPO.getStore().insert(0, recDO);
+                var recDO = new GridItemPurchaseOrderModel({
+                    idpurchaseitem: obj.idpurchaseitem,
+                    idinventory: obj.idinventory,
+                    sku_no: obj.sku_no,
+                    invno: obj.invno,
+                    nameinventory: obj.nameinventory,
+                    qty: obj.qty,
+                    price: obj.price,
+                    disc: obj.disc,
+                    total: obj.total,
+                    ratetax: obj.ratetax,
+                    tax: obj.tax,
+                    size: obj.size,
+                    short_desc: obj.short_desc,
+                    size_measurement: obj.size_measurement,
+                    warehouse_code: obj.warehouse_code
                 });
 
 
+                gridInsertBaruGRPO.getStore().insert(0, recDO);
+            });
 
-            },
-            failure: function(form, action) {
-                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            }
-        });
-    
+
+
+        },
+        failure: function(form, action) {
+            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+        }
+    });
+
     // 'idpurchase_req','nopurchase_req','date_req'
 }
 
-function showGoodsReceiptData(record){
+function showGoodsReceiptData(record) {
     var wWindowEntryGoodsReceipt = Ext.getCmp('WindowEntryGoodsReceipt');
     wWindowEntryGoodsReceipt.show();
     wWindowEntryGoodsReceipt.setTitle('View Goods Receipt');
@@ -209,7 +209,7 @@ function showGoodsReceiptData(record){
     Ext.getCmp('receivedid_poreceipt').setValue(record.data.receivedby_id);
     Ext.getCmp('memo_poreceipt').setValue(record.data.memo);
     Ext.getCmp('notes_poreceipt').setValue(record.data.notes_receipt);
-    
+
     var received_date_poreceipt = Ext.getCmp('received_date_poreceipt');
     received_date_poreceipt.setValue(record.data.delivereddate);
 
@@ -217,7 +217,7 @@ function showGoodsReceiptData(record){
     cb_status_poreceipt.setValue(record.data.idpurchasestatus);
 
     // console.log(record.data.idpurchasestatus);
-    if(record.data.idpurchasestatus*1===1){
+    if (record.data.idpurchasestatus * 1 === 1) {
         Ext.getCmp('btnRecordGR').enable();
         received_date_poreceipt.setReadOnly(false);
 
@@ -240,123 +240,123 @@ function showGoodsReceiptData(record){
     EntryGoodsReceiptRM.removeAll();
     EntryGoodsReceiptRM.sync();
 
-     //insert item to grid
-      Ext.Ajax.request({
-            url: SITE_URL + 'purchase/get_po_items',
-            method: 'GET',
-            params: {
-                idpurchase: record.data.idpurchase
-            },
-            success: function(form, action) {
-                var d = Ext.decode(form.responseText);
-                
-                
+    //insert item to grid
+    Ext.Ajax.request({
+        url: SITE_URL + 'purchase/get_po_items',
+        method: 'GET',
+        params: {
+            idpurchase: record.data.idpurchase
+        },
+        success: function(form, action) {
+            var d = Ext.decode(form.responseText);
 
-                Ext.each(d.data, function(obj, i) {
-                    // console.log(obj);
 
-                     var recDO = new GridReceiptItemPurchaseOrderModel({
-                            idpurchaseitem: obj.idpurchaseitem,
-                            idinventory: obj.idinventory,
-                            sku_no: obj.sku_no,
-                            invno: obj.invno,
-                            nameinventory: obj.nameinventory,
-                            qty: obj.qty,
-                            price: obj.price,
-                            disc: obj.disc,
-                            total: obj.total,
-                            ratetax: obj.ratetax,
-                            tax: obj.tax,
-                            size: obj.size,
-                            short_desc: obj.short_desc,
-                            size_measurement: obj.size_measurement,
-                            warehouse_code: obj.warehouse_code
-                    });
 
-                    
-                    gridInsertBaruGRPO.getStore().insert(0, recDO);
+            Ext.each(d.data, function(obj, i) {
+                // console.log(obj);
+
+                var recDO = new GridReceiptItemPurchaseOrderModel({
+                    idpurchaseitem: obj.idpurchaseitem,
+                    idinventory: obj.idinventory,
+                    sku_no: obj.sku_no,
+                    invno: obj.invno,
+                    nameinventory: obj.nameinventory,
+                    qty: obj.qty,
+                    price: obj.price,
+                    disc: obj.disc,
+                    total: obj.total,
+                    ratetax: obj.ratetax,
+                    tax: obj.tax,
+                    size: obj.size,
+                    short_desc: obj.short_desc,
+                    size_measurement: obj.size_measurement,
+                    warehouse_code: obj.warehouse_code
                 });
 
 
+                gridInsertBaruGRPO.getStore().insert(0, recDO);
+            });
 
-            },
-            failure: function(form, action) {
-                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            }
-        });
+
+
+        },
+        failure: function(form, action) {
+            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+        }
+    });
 
 }
 
-function loadDataFormPurchaseInvoice(selectedRecord){
-            Ext.getCmp('supplier_poinvoice').getStore().load();
-            Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
+function loadDataFormPurchaseInvoice(selectedRecord) {
+    Ext.getCmp('supplier_poinvoice').getStore().load();
+    Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
 
 
-            Ext.getCmp('idpurchase_poinvoice').setValue(selectedRecord.get('idpurchase'));
-            Ext.getCmp('nopo_poinvoice').setValue(selectedRecord.get('nopurchase'));
-            Ext.getCmp('po_date_poinvoice').setValue(selectedRecord.get('date'));
-            Ext.getCmp('cbUnit_poinvoice').setValue(selectedRecord.get('idunit'));
-            Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('nametax'));
-            Ext.getCmp('supplier_poinvoice').setValue(selectedRecord.get('idsupplier'));
-            Ext.getCmp('memo_poinvoice').setValue(selectedRecord.get('memo'));
-            // Ext.getCmp('cb_status_poinvoice').setValue(5);
+    Ext.getCmp('idpurchase_poinvoice').setValue(selectedRecord.get('idpurchase'));
+    Ext.getCmp('nopo_poinvoice').setValue(selectedRecord.get('nopurchase'));
+    Ext.getCmp('po_date_poinvoice').setValue(selectedRecord.get('date'));
+    Ext.getCmp('cbUnit_poinvoice').setValue(selectedRecord.get('idunit'));
+    Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('nametax'));
+    Ext.getCmp('supplier_poinvoice').setValue(selectedRecord.get('idsupplier'));
+    Ext.getCmp('memo_poinvoice').setValue(selectedRecord.get('memo'));
+    // Ext.getCmp('cb_status_poinvoice').setValue(5);
 
-            Ext.getCmp('totalPajak_poinvoice').setValue(renderNomor(selectedRecord.get('tax')));
-            Ext.getCmp('total_poinvoice').setValue(renderNomor(selectedRecord.get('totalamount')));
-            Ext.getCmp('subtotal_poinvoice').setValue(renderNomor(selectedRecord.get('subtotal')));
+    Ext.getCmp('totalPajak_poinvoice').setValue(renderNomor(selectedRecord.get('tax')));
+    Ext.getCmp('total_poinvoice').setValue(renderNomor(selectedRecord.get('totalamount')));
+    Ext.getCmp('subtotal_poinvoice').setValue(renderNomor(selectedRecord.get('subtotal')));
 
-             Ext.getCmp('sisaBayar_poinvoice').setValue(renderNomor(selectedRecord.get('totalamount')));
+    Ext.getCmp('sisaBayar_poinvoice').setValue(renderNomor(selectedRecord.get('totalamount')));
 
-            var EntryPurchaseInvoice = Ext.getCmp('EntryPurchaseInvoice').getStore();
-            EntryPurchaseInvoice.removeAll();
-            EntryPurchaseInvoice.sync();
+    var EntryPurchaseInvoice = Ext.getCmp('EntryPurchaseInvoice').getStore();
+    EntryPurchaseInvoice.removeAll();
+    EntryPurchaseInvoice.sync();
 
-             //insert item to grid
-              Ext.Ajax.request({
-                    url: SITE_URL + 'purchase/get_po_items',
-                    method: 'GET',
-                    params: {
-                        idpurchase: selectedRecord.get('idpurchase')
-                    },
-                    success: function(form, action) {
-                        var d = Ext.decode(form.responseText);
-                        
-                        var grid = Ext.getCmp('EntryPurchaseInvoice');
+    //insert item to grid
+    Ext.Ajax.request({
+        url: SITE_URL + 'purchase/get_po_items',
+        method: 'GET',
+        params: {
+            idpurchase: selectedRecord.get('idpurchase')
+        },
+        success: function(form, action) {
+            var d = Ext.decode(form.responseText);
 
-                        Ext.each(d.data, function(obj, i) {
-                            // console.log(obj);
+            var grid = Ext.getCmp('EntryPurchaseInvoice');
 
-                             var recDO = new GridItemPurchaseInvoiceModel({
-                                    idpurchaseitem: obj.idpurchaseitem,
-                                    idinventory: obj.idinventory,
-                                    invno: obj.invno,
-                                    nameinventory: obj.nameinventory,
-                                    qty: obj.qty,
-                                    price: obj.price,
-                                    disc: obj.disc,
-                                    total: obj.total,
-                                    ratetax: obj.ratetax,
-                                    tax: obj.tax,
-                                    size: obj.size,
-                                    short_desc: obj.short_desc,
-                                    size_measurement: obj.size_measurement,
-                                    warehouse_code: obj.warehouse_code
-                            });
+            Ext.each(d.data, function(obj, i) {
+                // console.log(obj);
 
-                            
-                            grid.getStore().insert(0, recDO);
-                        });
-
-
-                        // updateSelisih();
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                    }
+                var recDO = new GridItemPurchaseInvoiceModel({
+                    idpurchaseitem: obj.idpurchaseitem,
+                    idinventory: obj.idinventory,
+                    invno: obj.invno,
+                    nameinventory: obj.nameinventory,
+                    qty: obj.qty,
+                    price: obj.price,
+                    disc: obj.disc,
+                    total: obj.total,
+                    ratetax: obj.ratetax,
+                    tax: obj.tax,
+                    size: obj.size,
+                    short_desc: obj.short_desc,
+                    size_measurement: obj.size_measurement,
+                    warehouse_code: obj.warehouse_code
                 });
+
+
+                grid.getStore().insert(0, recDO);
+            });
+
+
+            // updateSelisih();
+        },
+        failure: function(form, action) {
+            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+        }
+    });
 }
 
-var wCoaPurchasePaymentPopup = Ext.create(dir_sys+'purchase2.wCoaPurchasePaymentPopup');
+var wCoaPurchasePaymentPopup = Ext.create(dir_sys + 'purchase2.wCoaPurchasePaymentPopup');
 var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
     id: 'windowPopupWindowPurchasePayment',
     title: 'Add Payment',
@@ -374,7 +374,7 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
             xtype: 'form',
             id: 'form_PurchasePayment',
             autoWidth: true,
-            url: SITE_URL+'purchase/save_payment',
+            url: SITE_URL + 'purchase/save_payment',
             autoHeight: true,
             bodyPadding: 5,
             // width:400,
@@ -391,7 +391,7 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
                 {
                     xtype: 'hiddenfield',
                     name: 'purchase_payment_id'
-                },{
+                }, {
                     xtype: 'hiddenfield',
                     name: 'idpurchase',
                     id: 'idpurchase_paymentPurchase'
@@ -476,24 +476,20 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
                     listeners: {
                         render: function(component) {
                             component.getEl().on('click', function(event, el) {
-                                if (Ext.getCmp('cbUnitEntrySalesReturn').getValue() == null) {
-                                    Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
-                                } else {
-                                    wCoaPurchasePaymentPopup.show();
-                                    storeGridAccount.on('beforeload',function(store, operation,eOpts){
-                                        operation.params={
-                                                    'idunit': Ext.getCmp('cbUnitEntrySalesReturn').getValue(),
-                                                    'idaccounttype': '1,19'
-                                        };
-                                    });
-                                    storeGridAccount.load();
-                                }
+                                wCoaPurchasePaymentPopup.show();
+                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                    operation.params = {
+                                        'idunit': idunit,
+                                        'idaccounttype': '1,19'
+                                    };
+                                });
+                                storeGridAccount.load();
                             });
                         }
                     }
                 }, {
                     xtype: 'hiddenfield',
-                    name:'idaccount',
+                    name: 'idaccount',
                     id: 'idaccount_coa_purchasepayment',
                 }, {
                     xtype: 'textarea',
@@ -526,9 +522,10 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
 
                             setHeaderPurchaseInvoice();
 
-                            storeGridPurchaseInvoicePaidGrid.load();
-                            storeGridPurchaseInvoiceOverdueGrid.load();
-                            storeGridPurchaseInvoiceUnpaidGrid.load();
+                            Ext.getCmp('PurchaseInvoiceUnpaidGrid').getStore().load();
+                            // storeGridPurchaseInvoicePaidGrid.load();
+                            // storeGridPurchaseInvoiceOverdueGrid.load();
+                            // storeGridPurchaseInvoiceUnpaidGrid.load();
 
                             Ext.getCmp('GoodsReceiptGridID').getStore().load();
                         },
@@ -566,12 +563,12 @@ function windowPurchasePayment(data) {
     Ext.getCmp('balance_Purchase_paymentPurchase').setValue(renderNomor(data.balance));
 }
 
-function updateSelisihPurchasePayment(){
-     var selisih = str_replace('.', '', Ext.getCmp('balance_Purchase_paymentPurchase').getValue()) * 1 - str_replace('.', '', Ext.getCmp('amount_PurchasePayment').getValue()) * 1
+function updateSelisihPurchasePayment() {
+    var selisih = str_replace('.', '', Ext.getCmp('balance_Purchase_paymentPurchase').getValue()) * 1 - str_replace('.', '', Ext.getCmp('amount_PurchasePayment').getValue()) * 1
     Ext.getCmp('balance_paymentPurchase').setValue(renderNomor(selisih));
 }
 
-function setHeaderPurchaseInvoice(){
+function setHeaderPurchaseInvoice() {
     Ext.Ajax.request({
         url: SITE_URL + 'purchase/get_sum_invoice',
         method: 'GET',
@@ -580,9 +577,9 @@ function setHeaderPurchaseInvoice(){
         // },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
-            Ext.getCmp('sumPurchaseInvUnpaid').update('<center><h2><span style=color:#FF6D00>'+d.totalUnpaid+'</span></h2>');
-            Ext.getCmp('sumPurchaseInvPaid').update('<center><h2><span style=color:#64DD17>'+d.totalPaid+'</span></h2>');
-            Ext.getCmp('sumPurchaseInvDue').update('<center><h2><span style=color:#d50000>'+d.totalDue+'</span></h2>');
+            Ext.getCmp('sumPurchaseInvUnpaid').update('<center><h2><span style=color:#FF6D00>' + d.totalUnpaid + '</span></h2>');
+            Ext.getCmp('sumPurchaseInvPaid').update('<center><h2><span style=color:#64DD17>' + d.totalPaid + '</span></h2>');
+            Ext.getCmp('sumPurchaseInvDue').update('<center><h2><span style=color:#d50000>' + d.totalDue + '</span></h2>');
             // storeGridWindowSalesPayment.load();
         },
         failure: function(form, action) {
@@ -591,12 +588,12 @@ function setHeaderPurchaseInvoice(){
     });
 }
 
-function clearFormPO(){
+function clearFormPO() {
     Ext.getCmp('idpurchase_order').setValue(null);
     Ext.getCmp('idpurchase_req_PurchaseOrder').setValue(null);
 
     var cb_purchase_order_status = Ext.getCmp('cb_purchase_order_status');
-    cb_purchase_order_status.setValue(null);    
+    cb_purchase_order_status.setValue(null);
 
     Ext.getCmp('nojurnalPurchaseOrder').setValue(null);
     Ext.getCmp('supplierPurchaseOrder').setValue(null);
@@ -607,15 +604,15 @@ function clearFormPO(){
     Ext.getCmp('totalPajakPurchaseOrder').setValue(null);
     Ext.getCmp('totalPurchaseOrder').setValue(null);
 
-    Ext.getCmp('rg_is_from_pr_poform').setValue({is_from_pr:2});
+    Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 2 });
 
     var EntryGoodsReceiptRM = Ext.getCmp('EntryPurchaseOrder').getStore();
     EntryGoodsReceiptRM.removeAll();
     EntryGoodsReceiptRM.sync();
 }
 
-function clearFormPR(){
-     var EntryPurchaseRequisition = Ext.getCmp('EntryPurchaseRequisition').getStore();
+function clearFormPR() {
+    var EntryPurchaseRequisition = Ext.getCmp('EntryPurchaseRequisition').getStore();
     EntryPurchaseRequisition.removeAll();
     EntryPurchaseRequisition.sync();
 
@@ -635,12 +632,12 @@ function clearFormPR(){
     // Ext.getCmp('shippingPurchaseRequisition').setValue(null);
     Ext.getCmp('totalPajakPurchaseRequisition').setValue(null);
     Ext.getCmp('subtotalPurchaseRequisition').setValue(null);
-    
+
 }
 
-function loadReturnPoData(record){
+function loadReturnPoData(record) {
     if (!Ext.isDefined(Ext.getCmp('WindowViewReturnPO'))) {
-        Ext.create(dir_sys+'purchase2.WindowViewReturnPO');
+        Ext.create(dir_sys + 'purchase2.WindowViewReturnPO');
     }
     Ext.getCmp('WindowViewReturnPO').show();
 
@@ -648,17 +645,17 @@ function loadReturnPoData(record){
     Ext.getCmp('cb_tax_id_viewporeturn').getStore().load();
 
     Ext.getCmp('WindowPOReturnList').hide();
-    
+
     Ext.getCmp('purchase_return_id_viewporeturn').setValue(record.data.purchase_return_id);
     Ext.getCmp('noreturn_viewporeturn').setValue(record.data.noreturn);
     Ext.getCmp('return_date_viewporeturn').setValue(record.data.date_return);
-    
+
     Ext.getCmp('nopo_viewporeturn').setValue(record.data.nopurchase);
     Ext.getCmp('po_date_viewporeturn').setValue(record.data.po_date);
     Ext.getCmp('cbUnit_viewporeturn').setValue(record.data.idunit);
     Ext.getCmp('cb_tax_id_viewporeturn').setValue(record.data.idtax);
     Ext.getCmp('supplier_viewporeturn').setValue(record.data.idsupplier);
-    Ext.getCmp('cb_status_viewporeturn').setValue(record.data.return_status*1);
+    Ext.getCmp('cb_status_viewporeturn').setValue(record.data.return_status * 1);
 
     Ext.getCmp('idaccount_coa_viewretur_po').setValue(record.data.idaccount_return);
     Ext.getCmp('accname_coa_viewretur_po').setValue(record.data.accname);
@@ -671,13 +668,13 @@ function loadReturnPoData(record){
     var ViewReturnPO = Ext.getCmp('ViewReturnPO');
     var ViewReturnPOStore = ViewReturnPO.getStore().load();
 
-    ViewReturnPOStore.on('beforeload',function(store, operation,eOpts){
-        operation.params={
-               'extraparams': 'a.purchase_return_id:'+record.data.purchase_return_id
-            //    'option':'delivered_po'
-               // 'wherenotinschedule':'true'
-             };
-         });
+    ViewReturnPOStore.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.purchase_return_id:' + record.data.purchase_return_id
+                //    'option':'delivered_po'
+                // 'wherenotinschedule':'true'
+        };
+    });
     ViewReturnPOStore.load();
 
     Ext.getCmp('btnRecordReceiptReturnPo').hide();

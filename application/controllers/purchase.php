@@ -634,10 +634,12 @@ class purchase extends MY_Controller {
 
         $saldo = str_replace('.', '', $this->input->post('sisa_bayar'));
         $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
+        $total_pajak = $this->input->post('total_pajak') == '' ? 0 : str_replace('.', '', $this->input->post('total_pajak'));
         $nopo = $this->input->post('nopo');
         $total_amount = $this->input->post('total_amount');
         $idaccount_coa_hutang = $this->input->post('idaccount_coa_hutang');
         $idaccount_coa_beli = $this->input->post('idaccount_coa_beli');
+        $idaccount_coa_pajakmasuk = $this->input->post('idaccount_coa_pajakmasuk');
         // if(intval($saldo)>0) {
         //     // $invoice_status = 4; //Partially Paid
         // }
@@ -656,7 +658,9 @@ class purchase extends MY_Controller {
                 'balance'=>$total_amount,
                 'idaccount_coa_hutang'=>$idaccount_coa_hutang,
                 'idaccount_coa_beli'=>$idaccount_coa_beli,
+                'idaccount_coa_pajakmasuk'=>$idaccount_coa_pajakmasuk,
                 'idpayment' => $idpayment,
+                // 'tax' => $total_pajak, //ga perlu lagi karena udah diinput saat PO
                 'freigthcost'=> str_replace('.', '', $this->input->post('biayaangkut')),
                 'ddays' => $this->input->post('ddays')=='' ? null : $this->input->post('ddays'),
                 'eomddays' => $this->input->post('eomddays')=='' ? null : $this->input->post('eomddays'),
@@ -671,7 +675,7 @@ class purchase extends MY_Controller {
 
         //buat jurnal hutang
         $this->load->model('journal/m_jpurchase','jmodel');
-        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_beli);
+        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_beli,$idaccount_coa_pajakmasuk,$total_pajak);
         // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
           if($this->db->trans_status() === false){
@@ -691,7 +695,7 @@ class purchase extends MY_Controller {
                                 from (
                                     select sum(paidtoday) as totalPaid
                                     from purchase
-                                    where  (invoice_status = 2)  and idpurchasetype = 2 and deleted = 0 and idunit = $idunit and idpurchasetype = 2
+                                    where  (invoice_status = 2 OR invoice_status = 4)  and idpurchasetype = 2 and deleted = 0 and idunit = $idunit and idpurchasetype = 2
                                 ) a,
                                 ( 
                                     select sum(balance) as totalUnpaid
@@ -725,7 +729,7 @@ class purchase extends MY_Controller {
         $balance_purchase = str_replace('.', '', $this->input->post('balance_Purchase'));
         $amount = str_replace('.', '', $this->input->post('amount'));
         $selisih = intval($balance_purchase-$amount);
-        $idaccount = $this->input->post('idaccount');
+        $idaccount = $this->input->post('idaccount'); //coa kas/bank
 
         $idunit = $this->session->userdata('idunit');
 
@@ -964,7 +968,7 @@ class purchase extends MY_Controller {
                     'idpurchaseitem'=> $items->idpurchaseitem,
                     'notes'=> isset($items->notes) ? $items->notes : null,
                     'qty_retur' => $items->qty,
-                    'idwarehouse' => $idwarehouse,
+                    'warehouse_id' => $idwarehouse,
                     // 'is_received' =>,
                     'is_tmp' => 1,
                     // 'notes'=>$items->notes,
@@ -1287,8 +1291,8 @@ class purchase extends MY_Controller {
                                     where a.purchase_return_id =  $purchase_return_id")->row();
         //end query retur
 
-         if($status==3){
-            //confirmed
+         if($status==6){
+            //status closed
             //buat jurnal
             // $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$qpo->idpurchase,$coaretur,'Purchase Return: '.$qpo->noreturn,$qpo->idunit);
 
@@ -1302,20 +1306,58 @@ class purchase extends MY_Controller {
                 $this->m_stock->update_history(13,$value->qty_received,$value->idinventory,$qpo->idunit,$warehouse_id,date('Y-m-d'),'Receipt Return PO: '.$qpo->noreturn,null);
             }
           
+            /* buat jurnal
+                retur -> debit
+                hutang -> kredit
+            */
+            $qp = $this->db->query("select a.idpurchase,a.noreturn,a.idunit,a.idaccount_return,a.idjournal,b.totaldebit
+                                    from purchase_return a
+                                    join journal b ON a.idjournal = b.idjournal
+                                    where purchase_return_id = $purchase_return_id and a.idunit = ".$qpo->idunit."")->row();
+             $idjournal = $this->jmodel->purchase_return_receive(date('Y-m-d'),$qp->totaldebit,$qp->idpurchase,$qp->idaccount_return,'Received Purchase Return: '.$qp->noreturn,$qp->idunit);
+
+            //update id jurnal ke purchase_return
+            $this->db->where(array('purchase_return_id'=>$purchase_return_id));
+            $this->db->update('purchase_return',array('idjournal_received'=>$idjournal));
          }
 
-         $total_received = 0;
+        //  $total_received = 0;
          foreach ($items as $value) {
-             $this->db->where(array(
-                 'idpurchaseitem'=>$value->idpurchaseitem,
-                 'idinventory'=>$value->idinventory,
-                 'purchase_batch_id'=>$value->purchase_batch_id
-             ));
+
+             if($value->purchase_batch_id==null){
+                 //bukan item yg di-batch-kan
+                 $arrWer = array(
+                    'purchase_return_id'=>$purchase_return_id,
+                    'idpurchaseitem'=>$value->idpurchaseitem,
+                    'idinventory'=>$value->idinventory,
+                    //  'purchase_batch_id'=>$value->purchase_batch_id
+                );
+                 
+             } else {
+                 $arrWer = array(
+                    'purchase_return_id'=>$purchase_return_id,
+                    'idpurchaseitem'=>$value->idpurchaseitem,
+                     'idinventory'=>$value->idinventory,
+                    'purchase_batch_id'=>$value->purchase_batch_id
+                );
+             }
+              //current received qty
+            //  $qCurrent = $this->db->get_where('purchase_returnitem',$arrWer);
+            //  $current_qty = $qCurrent->qty_received==null ? 0 : $qCurrent->qty_received;
+            //  $totalreceived = $current_qty + $value->qty_received;
+             
+             $this->db->where($arrWer);
              $this->db->update('purchase_returnitem',array('qty_received'=>$value->qty_received));
-             $total_received+=$value->qty_received;
+            //  $total_received+=$value->qty_received;
          }
 
-         if(intval($qpo->total_qty_retur) >= $total_received){
+         //hitung total yang diterima
+         $qtotal = $this->db->query("select sum(qty_retur) as totalreturn,sum(qty_received) as totalreceived
+                                        from purchase_returnitem a
+                                        where a.purchase_return_id = $purchase_return_id")->row();
+         //end 
+
+         if(intval($qtotal->totalreceived) >= $qtotal->totalreturn){
              //full received
              $return_status = 5;
          } else {

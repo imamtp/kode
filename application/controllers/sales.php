@@ -826,6 +826,14 @@ class sales extends MY_Controller {
         $this->load->view('tplcetak/sales_picking_note_return',$d);
     }
 
+    function print_delivery_order($delivery_order_id,$print=null){
+        $this->load->model('sales/m_deliveryordergrid','model');
+        $d['data'] = $this->model->cetak_do($delivery_order_id);
+        $d['title'] = 'Delivery Order';
+        $d['print'] = $print;
+        $this->load->view('tplcetak/delivery_order',$d);
+    }
+
     function set_picking_return(){
         $this->db->where('sales_return_id',$this->input->post('sales_return_id'));
         $this->db->update('sales_return',array('status'=>4));

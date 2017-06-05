@@ -48,7 +48,7 @@ if (curnipeg == '') {
         id: 'tabcontent',
         contentEl: 'center2',
         title: 'Dashboard'
-        // closable: true
+            // closable: true
     }
 }
 
@@ -89,7 +89,7 @@ function closeAllTab() {
 }
 
 function addTab(title, menu_link, idmenu, first_load_store_id) {
-     // Ext.getBody().mask('Loading...');
+    // Ext.getBody().mask('Loading...');
 
     var id = tabPanel.items.length;
     // console.log(menu_link);
@@ -131,43 +131,126 @@ function addTab(title, menu_link, idmenu, first_load_store_id) {
 
             formInventoryV2.reset();
         } else if (first_load_store_id != '' && first_load_store_id != null) {
+            Ext.getBody().mask('Loading...');
 
-            
+            var mod = explode('.', menu_link);
+            // console.log(Ext.ClassManager.getByAlias('widget.' + mod[1]));
+            console.log(Ext.ClassManager.get(dir_sys + menu_link));
 
-            if (!Ext.isDefined(tab)) {
-                var mm = Ext.create(dir_sys + menu_link, {
-                    autoDestroy: false
-                });
+            if (Ext.ClassManager.get(dir_sys + menu_link) === null) { //cek dulu, nama classnya udah ada apa belum. kalo belum load filenya
+                Ext.Loader.loadScript({
+                    url: 'assets/js/app/' + mod[0] + '/' + mod[1] + '.js',
+                    onLoad: function() {
+                        console.log('ok');
+                        if (!Ext.isDefined(tab)) {
+                            var tab = tabPanel.add({
+                                title: title,
+                                itemId: title,
+                                layout: 'fit',
+                                border: true,
+                                autoScroll: true,
+                                closeAction: 'hide',
+                                closable: true,
+                                listeners: {
+                                    close: function() {}
+                                },
+                                border: false,
+                                items: [{
+                                    xtype: mod[1],
+                                    autoDestroy: false
+                                }]
+                            });
 
-                var tab = tabPanel.add({
-                    title: title,
-                    itemId: title,
-                    layout: 'fit',
-                    border: true,
-                    autoScroll: true,
-                    closeAction: 'hide',
-                    closable: true,
-                    listeners: {
-                        close: function() {}
+                            tabPanel.doLayout();
+                        }
+
+                        Ext.getBody().unmask();
+
+                        if (first_load_store_id != '') {
+                            //store id yg diload pertama kali saat modul dibuka
+                            if (Ext.getCmp(first_load_store_id) !== null) {
+                                // Ext.getCmp(first_load_store_id).getStore().load();
+                            }
+
+                        }
+
+                        tabPanel.setActiveTab(tab);
+
+
                     },
-                    border: false,
-                    items: [
-                        mm
-                        // Ext.create(dir_sys+menu_link, {
-                        //     autoDestroy: false
-                        // })
-                    ]
+                    onError: function() {
+                        Ext.Msg.alert('Failed', 'Failed while loading file ' + menu_link);
+                    }
                 });
+            } else {
+                //class udah ada di DOM. tinggal panggil dan buatkan tabnya
+                Ext.getBody().unmask();
 
-                tabPanel.doLayout();
+                if (!Ext.isDefined(tab)) {
+                    var tab = tabPanel.add({
+                        title: title,
+                        itemId: title,
+                        layout: 'fit',
+                        border: true,
+                        autoScroll: true,
+                        closeAction: 'hide',
+                        closable: true,
+                        listeners: {
+                            close: function() {}
+                        },
+                        border: false,
+                        items: [{
+                            xtype: mod[1],
+                            autoDestroy: false
+                        }]
+                    });
+
+                    tabPanel.doLayout();
+                }
+
+                if (first_load_store_id != '') {
+                    //store id yg diload pertama kali saat modul dibuka
+                    // Ext.getCmp(first_load_store_id).getStore().load();
+                }
+
+                tabPanel.setActiveTab(tab);
             }
 
-            if (first_load_store_id != '') {
-                //store id yg diload pertama kali saat modul dibuka
-                Ext.getCmp(first_load_store_id).getStore().load();
-            }
 
-            tabPanel.setActiveTab(tab);
+            // if (!Ext.isDefined(tab)) {
+            //     // var mm = Ext.create(dir_sys + menu_link, {
+            //     //     autoDestroy: false
+            //     // });
+
+            //     var tab = tabPanel.add({
+            //         title: title,
+            //         itemId: title,
+            //         layout: 'fit',
+            //         border: true,
+            //         autoScroll: true,
+            //         closeAction: 'hide',
+            //         closable: true,
+            //         listeners: {
+            //             close: function() {}
+            //         },
+            //         border: false,
+            //         items: [
+            //             // mm
+            //             // Ext.create(dir_sys+menu_link, {
+            //             //     autoDestroy: false
+            //             // })
+            //         ]
+            //     });
+
+            //     tabPanel.doLayout();
+            // }
+
+            // if (first_load_store_id != '') {
+            //     //store id yg diload pertama kali saat modul dibuka
+            //     Ext.getCmp(first_load_store_id).getStore().load();
+            // }
+
+            // tabPanel.setActiveTab(tab);
         } else {
 
             if (menu_link == 'ms_pegawai') {
@@ -242,8 +325,6 @@ function addTab(title, menu_link, idmenu, first_load_store_id) {
 
             tabPanel.setActiveTab(tab);
         }
-
-
     }
 }
 

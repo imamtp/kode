@@ -31,7 +31,10 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         </div>
         <div class="col-xs-6 text-right">
           <h2><?=$title?></h2>
-          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?></small></h3>
+          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>
+              Tanggal Pengiriman: <?=$data['header']['delivery_date']?><br>
+              NO: #<?=$data['no']?></small><br>
+          </h3>
         </div>
       </div>
       
@@ -53,14 +56,14 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Supplier: <?//=$data['namesupplier']?></h4>
+              <h4>Delivery To<?//=$data['namecustomer']?></h4>
             </div>
             <div class="panel-body">
              <p>
-                <?=$data['supplier']['namesupplier'].'<br>'.
-                $data['supplier']['companyaddress']?> <br>
-                Phone: <?=$data['supplier']['telephone']?> <br>
-                Fax: <?=$data['supplier']['fax']?> <br>
+                <?=$data['header']['namecustomer'].'<br>'.
+                $data['header']['address_customer']?> <br>
+                Phone: <?=$data['header']['telephone_customer']?> <br>
+                Mobile: <?=$data['header']['handphone_customer']?> <br>
               </p>
             </div>
           </div>
@@ -84,15 +87,17 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                         <tr>
                           <th width="30">No</th>  
                           <th>Kode Barang</th>                       
-                          <th>Nama Barang</th>                                               
-                          <th>Qty</th>
+                          <th>Nama Barang</th>
+                          <!-- <th>Warehouse</th>                           -->
+                          <!--<th>Price</th>-->
+                          <th>Qty Order</th>
                           <th>Satuan</th>
-                          <th>Harga</th>
                           <th>Ukuran</th>
                           <th>Satuan Ukuran</th>
-                          <th>Diskon(%)</th>
+                          <!--<th>Discount(%)</th>-->
                           <!-- <th>Tax %</th> -->
-                           <th>Total</th>
+                           <!--<th>Total</th>-->
+                           <th>Qty Kirim</th>
                         </tr>
                         <?php
                         // print_r($data['detail']);
@@ -103,14 +108,16 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                               <td width="30"><?=$i?></td>
                               <td><?=$value['invno']?></td>
                               <td><?=$value['nameinventory']?></td>  
-                              <td align="right"><?=number_format($value['price'])?></td>
+                              <!-- <td><?=$value['warehouse_desc']?></td>                            -->
+                              <!--<td align="right"><?=number_format($value['price'])?></td>-->
                               <td align="right"><?=$value['qty']?></td>
                               <td><?=$value['short_desc']?></td>
                               <td align="right"><?=$value['size']?></td>
                               <td><?=$value['size_measurement']?></td>
-                              <td align="right"><?=number_format($value['disc'])?></td>
+                              <!--<td align="right"><?=number_format($value['disc'])?></td>-->
                               <?php //if($data['totaltax']!=0) { echo "<td>".$value['ratetax']."</td>"; } ?>
-                              <td align="right"><?=number_format($value['total'])?></td>
+                              <!--<td align="right"><?=number_format($value['total'])?></td>-->
+                              <td><?=$value['qty_kirim']?></td>
                             </tr>
                            <?php
                          
@@ -127,28 +134,40 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                   <tr>
                       <td></td>
                        <td> </td>
-                      <td align="right"><b>Subtotal</b></td>
+                      <td align="right"><b>Total Qty Order</b></td>
                       <td align="right" width="200"><?=$data['detailtotal']?></td>
                     </tr>
-                     <tr>
+                    <tr>
+                      <td></td>
+                       <td> </td>
+                      <td align="right"><b>Total Qty Kirim</b></td>
+                      <td align="right" width="200"><?=$data['detailtotal']?></td>
+                    </tr>
+                    <!--<tr>
+                      <td></td>
+                       <td> </td>
+                      <td align="right"><b>Subtotal</b></td>
+                      <td align="right" width="200"><?=$data['detailtotal']?></td>
+                    </tr>-->
+                     <!--<tr>
                         <td></td>
                          <td> </td>
                         <td align="right"><b>Biaya Angkut (+)</b></td>
                         <td align="right"><?=number_format($data['freigthcost'])?></td>
-                      </tr>
-                       <tr>
+                      </tr>-->
+                       <!--<tr>
                         <td></td>
                          <td> </td>
                         <td align="right"><b>Pajak (+)</b></td>
                         <td align="right"><?=number_format($data['totaltax'])?></td>
                       </tr>
-                
-                     <tr>
+                -->
+                     <!--<tr>
                       <td></td>
                        <td> </td>
                       <td align="right"><b>Total Setelah Pajak</b></td>
                       <td align="right" width="200"><?=number_format($data['total'])?></td>
-                    </tr>
+                    </tr>-->
 
                     <?php 
 
@@ -183,7 +202,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         </table>
       </div>
       
-      <div class="row">
+      <!--<div class="row">
         <div class="col-xs-6">
           <b>Amount in Words: </b><?=$data['terbilang']?>
         </div>

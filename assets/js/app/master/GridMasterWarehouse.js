@@ -1,6 +1,6 @@
 Ext.define('GridMasterWarehouseModel', {
     extend: 'Ext.data.Model',
-    fields: ['warehouse_id','warehouse_code','warehouse_address','warehouse_cogs_standard','warehouse_type','warehouse_desc', 'status'],
+    fields: ['warehouse_id', 'warehouse_code', 'warehouse_address', 'warehouse_cogs_standard', 'warehouse_type', 'warehouse_desc', 'status'],
     idProperty: 'id'
 });
 var storeGridMasterWarehouse = Ext.create('Ext.data.Store', {
@@ -27,11 +27,11 @@ var storeGridMasterWarehouse = Ext.create('Ext.data.Store', {
 var formMasterWarehouse = Ext.create('Ext.form.Panel', {
     id: 'formMasterWarehouse',
     // width: 740,
-    autoWidth:true,
+    autoWidth: true,
     // height: 370,
-    autoHeight:true,
+    autoHeight: true,
     url: SITE_URL + 'backend/saveform/MasterWarehouse/master',
-     bodyStyle: 'padding:5px',
+    bodyStyle: 'padding:5px',
     labelAlign: 'top',
     autoScroll: true,
     fieldDefaults: {
@@ -40,47 +40,45 @@ var formMasterWarehouse = Ext.create('Ext.form.Panel', {
         labelWidth: 130,
         width: 400
     },
-    items: [
-    {
-            xtype: 'hiddenfield',
-            name: 'warehouse_id',
-            id: 'warehouse_id'
-        }, {
-            xtype: 'hiddenfield',
-            name: 'statusformMasterWarehouse',
-            id: 'statusformMasterWarehouse'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'Code',
-            allowBlank: false,
-            name: 'warehouse_code'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'Address',
-            allowBlank: false,
-            name: 'warehouse_address'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'COGS Standard',
-            allowBlank: false,
-            name: 'warehouse_cogs_standard'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'Type',
-            allowBlank: false,
-            name: 'warehouse_type'
-        }, {
-            xtype: 'comboxswitch',
-            name: 'status',
-            fieldLabel: 'Status',
-            allowBlank: false,
-        }, {
-            xtype: 'textarea',
-            fieldLabel: 'Description',
-            allowBlank: true,
-            name: 'warehouse_desc'
-        }
-    ],
+    items: [{
+        xtype: 'hiddenfield',
+        name: 'warehouse_id',
+        id: 'warehouse_id'
+    }, {
+        xtype: 'hiddenfield',
+        name: 'statusformMasterWarehouse',
+        id: 'statusformMasterWarehouse'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'Code',
+        allowBlank: false,
+        name: 'warehouse_code'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'Name',
+        allowBlank: false,
+        name: 'warehouse_type'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'Address',
+        allowBlank: false,
+        name: 'warehouse_address'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'COGS Standard',
+        allowBlank: false,
+        name: 'warehouse_cogs_standard'
+    }, {
+        xtype: 'comboxswitch',
+        name: 'status',
+        fieldLabel: 'Status',
+        allowBlank: false,
+    }, {
+        xtype: 'textarea',
+        fieldLabel: 'Description',
+        allowBlank: true,
+        name: 'warehouse_desc'
+    }],
     buttons: [{
         text: 'Batal',
         handler: function() {
@@ -169,7 +167,12 @@ Ext.define('GridMasterWarehouse', {
         dataIndex: 'warehouse_code',
         minWidth: 150
     }, {
+        header: 'Name',
+        dataIndex: 'warehouse_type',
+        minWidth: 150
+    }, {
         header: 'Address',
+        flex: 1,
         dataIndex: 'warehouse_address',
         minWidth: 150
     }, {
@@ -177,15 +180,11 @@ Ext.define('GridMasterWarehouse', {
         dataIndex: 'warehouse_cogs_standard',
         minWidth: 150
     }, {
-        header: 'Type',
-        dataIndex: 'warehouse_type',
-        minWidth: 150
-    }, {
         header: 'Status',
         dataIndex: 'status',
     }, {
         header: 'Description',
-        flex:1,
+        flex: 1,
         dataIndex: 'warehouse_desc',
         minWidth: 150
     }],
@@ -252,7 +251,7 @@ Ext.define('GridMasterWarehouse', {
                                 method: 'POST',
                                 params: {
                                     postdata: Ext.encode(selected),
-                                    idmenu:24
+                                    idmenu: 24
                                 },
                                 success: function(form, action) {
                                     var d = Ext.decode(form.responseText);
@@ -266,7 +265,7 @@ Ext.define('GridMasterWarehouse', {
                                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                                 }
                             });
-                            
+
                         }
                     }
                 });
@@ -281,7 +280,7 @@ Ext.define('GridMasterWarehouse', {
         store: storeGridMasterWarehouse, // same store GridPanel is using
         dock: 'bottom',
         displayInfo: true
-        // pageSize:20
+            // pageSize:20
     }],
     listeners: {
         render: {
@@ -295,19 +294,19 @@ Ext.define('GridMasterWarehouse', {
             var formMasterWarehouse = Ext.getCmp('formMasterWarehouse');
             wMasterWarehouse.show();
             formMasterWarehouse.getForm().load({
-                url: SITE_URL + 'backend/loadFormData/MasterWarehouse/1/master',
-                params: {
-                    extraparams: 'a.warehouse_id:' + record.data.warehouse_id
-                },
-                success: function(form, action) {
-                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                }
-            })
-            //            
-            //            Ext.getCmp('kddaerahS').setReadOnly(true);
+                    url: SITE_URL + 'backend/loadFormData/MasterWarehouse/1/master',
+                    params: {
+                        extraparams: 'a.warehouse_id:' + record.data.warehouse_id
+                    },
+                    success: function(form, action) {
+                        // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    }
+                })
+                //            
+                //            Ext.getCmp('kddaerahS').setReadOnly(true);
             Ext.getCmp('statusformMasterWarehouse').setValue('edit');
 
             Ext.getCmp('TabSupplier').setActiveTab(0);

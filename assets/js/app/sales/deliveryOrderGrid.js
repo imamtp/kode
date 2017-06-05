@@ -31,11 +31,12 @@ var storeGriddeliveryOrderGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
-//storeGridInventoryAll.on('beforeload',function(store, operation,eOpts){
-//        operation.params={
-//                    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitAnggota').getValue()
-//                  };
-//              });
+storeGriddeliveryOrderGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        //    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitAnggota').getValue()
+        'option': 'delivery_order'
+    };
+});
 
 Ext.define('MY.searchGriddeliveryOrderGrid', {
     extend: 'Ext.ux.form.SearchField',
@@ -80,6 +81,12 @@ var smGriddeliveryOrderGrid = Ext.create('Ext.selection.CheckboxModel', {
                 Ext.getCmp('createDOformGrid').enable();
             } else {
                 Ext.getCmp('createDOformGrid').disable();
+            }
+
+            if (record.data.delivery_order_id === null || record.data.delivery_order_id === '') {
+                Ext.getCmp('btnPrintDO').disable();
+            } else {
+                Ext.getCmp('btnPrintDO').enable();
             }
         }
     }
@@ -283,189 +290,234 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                id: 'btnPickingNote',
-                text: 'Print Picking Note',
-                iconCls: 'print-icon',
-                handler: function() {
-                    // var grid = Ext.ComponentQuery.query('PurchaseRequisitionGridID')[0];
-                    var grid = Ext.getCmp('deliveryOrderGrid');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                    } else {
-
-                        Ext.create('Ext.window.Window', {
-                            title: 'Preview Picking Note',
-                            modal: true,
-                            width: panelW - 100,
-                            height: panelH - 200,
-                            items: [{
-                                xtype: 'component',
-                                html: '<iframe src="' + SITE_URL + 'sales/print_picking_note/' + selectedRecord.data.idsales + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
-                            }],
-                            buttons: [{
-                                    text: 'Print Picking Note',
-                                    iconCls: 'print-icon',
-                                    handler: function() {
-                                        window.open(SITE_URL + 'sales/print_picking_note/' + selectedRecord.data.idsales + '/print', '_blank');
-                                        this.hide();
-                                    }
-                                },
-                                {
-                                    text: 'Print Picking Note and Set Picking Status',
-                                    iconCls: 'print-icon',
-                                    handler: function() {
-                                        window.open(SITE_URL + 'sales/print_picking_note/' + selectedRecord.data.idsales + '/print', '_blank');
-
-                                        Ext.Ajax.request({
-                                            url: SITE_URL + 'sales/set_picking',
-                                            method: 'POST',
-                                            params: {
-                                                idsales: selectedRecord.data.idsales
-                                            },
-                                            success: function(form, action) {
-                                                var d = Ext.decode(form.responseText);
-                                                storeGriddeliveryOrderGrid.load();
-
-                                                this.hide();
-                                                // if (!d.success) {
-                                                //     Ext.Msg.alert('Informasi', d.message);
-                                                // }
-                                            },
-                                            failure: function(form, action) {
-                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                            }
-                                        });
-                                    }
-                                }
-                            ]
-                        }).show();
-                    }
-                }
-            }, {
-                itemId: 'adddeliveryOrderGrid',
-                hidden: true,
-                text: 'Create New Delivery Order',
-                iconCls: 'add-icon',
-                handler: function() {
-                    WindowSaleOrderList.show();
-                    Ext.getCmp('GridSalesOrderList').getStore().load();
-
-                    storeCustomer.load();
-                    storeUnit.load();
-                    productMeasurementStore.load();
-                    StorePayment.load();
-                    // storeGridSalesOrderList.load();
-
-                    //apus dulu data di grid entry delivery order
-                    Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
-                    Ext.getCmp('EntryDeliveryOrder').getStore().sync();
-                }
-            }, {
-                id: 'createDOformGrid',
-                disabled: true,
-                text: 'Set Delivery Order',
-                iconCls: 'edit-icon',
-                handler: function() {
-                    // var grid = Ext.ComponentQuery.query('deliveryOrderGrid')[0];
-                    var grid = Ext.getCmp('deliveryOrderGrid');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-
-                    formDO(selectedRecord);
-                }
-            }, {
-                id: 'createInvoiceDOGrid',
-                disabled: true,
-                text: 'Create Invoice',
-                iconCls: 'edit-icon',
-                handler: function() {
-                    var grid = Ext.ComponentQuery.query('deliveryOrderGrid')[0];
-                    // var grid = Ext.getCmp('GriddeliveryOrderGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                    } else {
-
-                        if (selectedRecord.data.noinvoice !== null) {
-                            Ext.Msg.alert('Failure', 'Invoice untuk data Delivery Order terpilih sudah terbentuk. Silahkan pilih data Delivery Order yang lain');
+                    id: 'btnPickingNote',
+                    text: 'Print Picking Note',
+                    iconCls: 'print-icon',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('PurchaseRequisitionGridID')[0];
+                        var grid = Ext.getCmp('deliveryOrderGrid');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                         } else {
-                            WindowEntrySalesInvoice.show();
 
-                            var EntrySalesInvoice = Ext.getCmp('EntrySalesInvoice').getStore();
-                            EntrySalesInvoice.removeAll();
-                            EntrySalesInvoice.sync();
-
-                            loadDataFormInvoice(selectedRecord.data.idsales);
-
-                            Ext.getCmp('btnRecordSalesOrderInvoice').show();
-
-                            Ext.getCmp('WindowEntrySalesInvoice').setTitle('Create Sales Invoice');
-                        }
-                    }
-                }
-            }, {
-                itemId: 'editdeliveryOrderGrid',
-                text: 'Ubah',
-                hidden: true,
-                iconCls: 'edit-icon',
-                handler: function() {
-                    // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
-                    var grid = Ext.getCmp('GriddeliveryOrderGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
-                    } else {
-                        loadMemberForm(selectedRecord.data.id_member)
-                    }
-                }
-            }, {
-                id: 'btnDeletedeliveryOrderGrid',
-                text: 'Hapus',
-                hidden: true,
-                iconCls: 'delete-icon',
-                handler: function() {
-                    Ext.Msg.show({
-                        title: 'Confirm',
-                        msg: 'Delete Selected ?',
-                        buttons: Ext.Msg.YESNO,
-                        fn: function(btn) {
-                            if (btn == 'yes') {
-                                var grid = Ext.getCmp('GriddeliveryOrderGridID');
-                                var sm = grid.getSelectionModel();
-                                selected = [];
-                                Ext.each(sm.getSelection(), function(item) {
-                                    selected.push(item.data[Object.keys(item.data)[0]]);
-                                });
-                                Ext.Ajax.request({
-                                    url: SITE_URL + 'backend/ext_delete/deliveryOrderGrid',
-                                    method: 'POST',
-                                    params: {
-                                        postdata: Ext.encode(selected),
-                                        idmenu: 95
-                                    },
-                                    success: function(form, action) {
-                                        var d = Ext.decode(form.responseText);
-                                        if (!d.success) {
-                                            Ext.Msg.alert('Informasi', d.message);
+                            Ext.create('Ext.window.Window', {
+                                title: 'Preview Picking Note',
+                                modal: true,
+                                width: panelW - 100,
+                                height: panelH - 200,
+                                items: [{
+                                    xtype: 'component',
+                                    html: '<iframe src="' + SITE_URL + 'sales/print_picking_note/' + selectedRecord.data.idsales + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                                }],
+                                buttons: [{
+                                        text: 'Print Picking Note',
+                                        iconCls: 'print-icon',
+                                        handler: function() {
+                                            window.open(SITE_URL + 'sales/print_picking_note/' + selectedRecord.data.idsales + '/print', '_blank');
+                                            this.hide();
                                         }
                                     },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    {
+                                        text: 'Print Picking Note and Set Picking Status',
+                                        iconCls: 'print-icon',
+                                        handler: function() {
+                                            window.open(SITE_URL + 'sales/print_picking_note/' + selectedRecord.data.idsales + '/print', '_blank');
+
+                                            Ext.Ajax.request({
+                                                url: SITE_URL + 'sales/set_picking',
+                                                method: 'POST',
+                                                params: {
+                                                    idsales: selectedRecord.data.idsales
+                                                },
+                                                success: function(form, action) {
+                                                    var d = Ext.decode(form.responseText);
+                                                    storeGriddeliveryOrderGrid.load();
+
+                                                    this.hide();
+                                                    // if (!d.success) {
+                                                    //     Ext.Msg.alert('Informasi', d.message);
+                                                    // }
+                                                },
+                                                failure: function(form, action) {
+                                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                }
+                                            });
+                                        }
                                     }
-                                });
-                                storeGriddeliveryOrderGrid.load();
+                                ]
+                            }).show();
+                        }
+                    }
+                }, {
+                    itemId: 'adddeliveryOrderGrid',
+                    hidden: true,
+                    text: 'Create New Delivery Order',
+                    iconCls: 'add-icon',
+                    handler: function() {
+                        WindowSaleOrderList.show();
+                        Ext.getCmp('GridSalesOrderList').getStore().load();
+
+                        storeCustomer.load();
+                        storeUnit.load();
+                        productMeasurementStore.load();
+                        StorePayment.load();
+                        // storeGridSalesOrderList.load();
+
+                        //apus dulu data di grid entry delivery order
+                        Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
+                        Ext.getCmp('EntryDeliveryOrder').getStore().sync();
+                    }
+                }, {
+                    id: 'createDOformGrid',
+                    disabled: true,
+                    text: 'Set Delivery Order',
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('deliveryOrderGrid')[0];
+                        var grid = Ext.getCmp('deliveryOrderGrid');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+
+                        formDO(selectedRecord);
+                    }
+                },
+                {
+                    id: 'btnPrintDO',
+                    disabled: true,
+                    text: 'Print Delivery Order',
+                    iconCls: 'print-icon',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('PurchaseRequisitionGridID')[0];
+                        var grid = Ext.getCmp('deliveryOrderGrid');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            console.log(selectedRecord.data.job_order_id);
+                            Ext.create('Ext.window.Window', {
+                                title: 'Preview Delivery Order',
+                                modal: true,
+                                width: panelW - 100,
+                                height: panelH - 200,
+                                items: [{
+                                    xtype: 'component',
+                                    html: '<iframe src="' + SITE_URL + 'sales/print_delivery_order/' + selectedRecord.data.delivery_order_id + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                                }],
+                                buttons: [{
+                                    text: 'Print Delivery Order',
+                                    iconCls: 'print-icon',
+                                    handler: function() {
+                                        window.open(SITE_URL + 'sales/print_delivery_order/' + selectedRecord.data.delivery_order_id + '/print', '_blank');
+                                        this.hide();
+                                    }
+                                }]
+                            }).show();
+                        }
+                    }
+                }, {
+                    id: 'createInvoiceDOGrid',
+                    disabled: true,
+                    text: 'Create Invoice',
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        var grid = Ext.ComponentQuery.query('deliveryOrderGrid')[0];
+                        // var grid = Ext.getCmp('GriddeliveryOrderGridID');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+
+                            if (selectedRecord.data.noinvoice !== null) {
+                                Ext.Msg.alert('Failure', 'Invoice untuk data Delivery Order terpilih sudah terbentuk. Silahkan pilih data Delivery Order yang lain');
+                            } else {
+                                WindowEntrySalesInvoice.show();
+
+                                var EntrySalesInvoice = Ext.getCmp('EntrySalesInvoice').getStore();
+                                EntrySalesInvoice.removeAll();
+                                EntrySalesInvoice.sync();
+
+                                loadDataFormInvoice(selectedRecord.data.idsales);
+
+                                Ext.getCmp('btnRecordSalesOrderInvoice').show();
+
+                                Ext.getCmp('WindowEntrySalesInvoice').setTitle('Create Sales Invoice');
+
+                                // console.log(Ext.getCmp('totalSalesInvoice_si').getValue());
+
+                                // Ext.getCmp('pembayaranSalesInvoice_si').setValue(renderNomor(0));
+                                // Ext.getCmp('angkutSalesInvoice_si').setValue(0);
+                                // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(213213));
+
+
+
                             }
                         }
-                    });
-                },
-                //                    disabled: true
-            }, '->', 'Pencarian: ', ' ', {
-                xtype: 'searchGriddeliveryOrderGrid',
-                text: 'Left Button'
-            }]
+                    }
+                }, {
+                    itemId: 'editdeliveryOrderGrid',
+                    text: 'Ubah',
+                    hidden: true,
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                        var grid = Ext.getCmp('GriddeliveryOrderGridID');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
+                        } else {
+                            loadMemberForm(selectedRecord.data.id_member)
+                        }
+                    }
+                }, {
+                    id: 'btnDeletedeliveryOrderGrid',
+                    text: 'Hapus',
+                    hidden: true,
+                    iconCls: 'delete-icon',
+                    handler: function() {
+                        Ext.Msg.show({
+                            title: 'Confirm',
+                            msg: 'Delete Selected ?',
+                            buttons: Ext.Msg.YESNO,
+                            fn: function(btn) {
+                                if (btn == 'yes') {
+                                    var grid = Ext.getCmp('GriddeliveryOrderGridID');
+                                    var sm = grid.getSelectionModel();
+                                    selected = [];
+                                    Ext.each(sm.getSelection(), function(item) {
+                                        selected.push(item.data[Object.keys(item.data)[0]]);
+                                    });
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'backend/ext_delete/deliveryOrderGrid',
+                                        method: 'POST',
+                                        params: {
+                                            postdata: Ext.encode(selected),
+                                            idmenu: 95
+                                        },
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            if (!d.success) {
+                                                Ext.Msg.alert('Informasi', d.message);
+                                            }
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                        }
+                                    });
+                                    storeGriddeliveryOrderGrid.load();
+                                }
+                            }
+                        });
+                    },
+                    //                    disabled: true
+                }, '->', 'Pencarian: ', ' ', {
+                    xtype: 'searchGriddeliveryOrderGrid',
+                    text: 'Left Button'
+                }
+            ]
         }, {
             xtype: 'pagingtoolbar',
             store: storeGriddeliveryOrderGrid, // same store GridPanel is using

@@ -99,7 +99,7 @@ class inventory extends MY_Controller {
             'measurement_id_one' => $this->input->post('measurement_id_one'),
             'measurement_id_two' => $this->input->post('measurement_id_two'),
             'measurement_id_tre' => $this->input->post('measurement_id_tre'),
-            'brand_id' => $this->input->post('brand_id'),
+            'brand_id' => $this->input->post('brand_id') !=null ? $this->input->post('brand_id') : null,
             'sku_no' => $this->input->post('sku_no'),
             'bahan_coil_id' => $this->input->post('bahan_coil_id'),
             'diameter' => $this->input->post('diameter'),
@@ -109,12 +109,12 @@ class inventory extends MY_Controller {
             'tinggi' => $this->input->post('tinggi'),
             'panjang' => $this->input->post('panjang'),
             'konversi_coil_name' => $this->input->post('konversi_coil_name'),
-            'panjang_satuan_id' =>$this->input->post('panjang_satuan_id'),
-            'tinggi_satuan_id' =>$this->input->post('tinggi_satuan_id'),
-            'lebar_satuan_id' =>$this->input->post('lebar_satuan_id'),
-            'berat_satuan_id' =>$this->input->post('berat_satuan_id'),
-            'ketebalan_satuan_id' =>$this->input->post('ketebalan_satuan_id'),
-            'diameter_satuan_id' =>$this->input->post('diameter_satuan_id')
+            'panjang_satuan_id' =>$this->input->post('panjang_satuan_id') !=null ? $this->input->post('panjang_satuan_id') : null,
+            'tinggi_satuan_id' =>$this->input->post('tinggi_satuan_id') !=null ? $this->input->post('tinggi_satuan_id') : null,
+            'lebar_satuan_id' =>$this->input->post('lebar_satuan_id') !=null ? $this->input->post('lebar_satuan_id') : null,
+            'berat_satuan_id' =>$this->input->post('berat_satuan_id') !=null ? $this->input->post('berat_satuan_id') : null,
+            'ketebalan_satuan_id' =>$this->input->post('ketebalan_satuan_id') !=null ? $this->input->post('ketebalan_satuan_id') : null,
+            'diameter_satuan_id' =>$this->input->post('diameter_satuan_id') !=null ? $this->input->post('diameter_satuan_id') : null
         );
 
         if ($idinventory == null || $idinventory == '') {
@@ -212,12 +212,13 @@ class inventory extends MY_Controller {
                 foreach ($namaunit2 as $u) {
                     $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
                     // $idunit = $u;
-                    $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
+                    $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
                     if($qcek->num_rows()>0)
                     {
 
                     } else {
-                        $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
+                        $idunit = $idunit == '' ? $u : $idunit;
+                        $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
                     }
                 }
             // }
@@ -251,8 +252,8 @@ class inventory extends MY_Controller {
             echo "{success:false, message:'Tentukan supplier terlebih dahulu'}";
             return false;
         }
-
-        if(is_array($idsupplier)>0){
+// print_r($idsupplier);
+        if($idsupplier[0]!=null){
              $this->db->delete('inventory_supplier',array('idinventory'=>$idinventory));
             foreach ($idsupplier as $u) {
                     // $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
