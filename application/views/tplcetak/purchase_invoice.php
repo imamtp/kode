@@ -84,10 +84,10 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                         <tr>
                           <th width="30">No</th>  
                           <th>Kode Barang</th>                       
-                          <th>Nama Barang</th>                     
-                          <th>Harga</th>
+                          <th>Nama Barang</th>                                               
                           <th>Qty</th>
                           <th>Satuan</th>
+                          <th>Harga</th>
                           <th>Ukuran</th>
                           <th>Satuan Ukuran</th>
                           <th>Diskon(%)</th>
