@@ -26,6 +26,14 @@ var storeGridPurchaseRequestList = Ext.create('Ext.data.Store', {
     }]
 });
 
+storeGridPurchaseRequestList.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        // 'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitWOScheduleGrid').getValue()
+        'option': 'not_yet_po'
+            // 'wherenotinschedule':'true'
+    };
+});
+
 Ext.define('MY.searchGridPurchaseRequestList', {
     extend: 'Ext.ux.form.SearchField',
     alias: 'widget.searchGridPurchaseRequestList',
@@ -210,17 +218,25 @@ Ext.define('GridPurchaseRequestList', {
         align: 'right'
     }],
     dockedItems: [{
-        xtype: 'toolbar',
-        dock: 'top',
-        items: [
-            '->',
-            'Pencarian: ', ' ',
-            {
-                xtype: 'searchGridPurchaseRequestList',
-                text: 'Left Button'
-            }
-        ]
-    }],
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [
+                '->',
+                'Pencarian: ', ' ',
+                {
+                    xtype: 'searchGridPurchaseRequestList',
+                    text: 'Left Button'
+                }
+            ]
+        },
+        {
+            xtype: 'pagingtoolbar',
+            store: storeGridPurchaseRequestList, // same store GridPanel is using
+            dock: 'bottom',
+            displayInfo: true
+                // pageSize:20
+        }
+    ],
     listeners: {
         render: {
             scope: this,
@@ -244,7 +260,7 @@ Ext.define(dir_sys + 'purchase2.wGridPurchaseRequestListPopup', {
     closable: true,
     closeAction: 'hide',
     // autoWidth: true,
-    width: 750,
+    width: 950,
     modal: true,
     height: 450,
     layout: 'fit',

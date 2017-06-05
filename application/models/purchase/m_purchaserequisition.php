@@ -45,7 +45,12 @@ class m_purchaserequisition extends CI_Model {
     }
 
     function whereQuery() {
-    	return " idpurchasetype = 1 and a.status = 1";
+        $wer = null;
+        if($this->input->post('option')=='not_yet_po'){
+            //pr belum menjadi po
+            $wer = " AND a.idpurchase not in (select idpurchase_req from purchase where idpurchasetype = 2 and deleted = 0)";
+        }
+    	return " idpurchasetype = 1 and a.status = 1 $wer";
     }
 
     function orderBy() {
