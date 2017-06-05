@@ -125,7 +125,7 @@ class m_jsales extends CI_Model {
         return $json;
 	}
 
-	function sales_pelunasan_full($tgljournal,$memo,$totalAmount,$idunit,$idcurrency){
+	function sales_pelunasan_full($tgljournal,$memo,$totalAmount,$idunit,$idcurrency,$idaccount_coa_kas){
 		/*
 			KAS (D)
 			Piutang Usaha (K)
@@ -163,7 +163,8 @@ class m_jsales extends CI_Model {
 
 			//KAS
 			$amount = $totalAmount;
-			$idacc = $this->m_data->getIdAccount(15, $idunit);
+			// $idacc = $this->m_data->getIdAccount(15, $idunit);
+			$idacc = $idaccount_coa_kas;
 
 			$curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
 			//itung saldo baru
@@ -220,7 +221,7 @@ class m_jsales extends CI_Model {
         return $json;
 	}
 
-	function sales_pelunasan_sebagian($tgljournal,$memo,$totalAmount,$idunit,$idcurrency){
+	function sales_pelunasan_sebagian($tgljournal,$memo,$totalAmount,$idunit,$idcurrency,$idaccount_coa_kas){
 		/*
 			 Kas/Bank (D)
 			 Piutang Usaha (K)
@@ -258,7 +259,8 @@ class m_jsales extends CI_Model {
 
         	//KAS
 			$amount = $totalAmount;
-			$idacc = $this->m_data->getIdAccount(15, $idunit);
+			// $idacc = $this->m_data->getIdAccount(15, $idunit);
+			$idacc = $idaccount_coa_kas;
 
 			$curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
 			//itung saldo baru

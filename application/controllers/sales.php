@@ -488,11 +488,11 @@ class sales extends MY_Controller {
         if($selisih==0)
         {
             $invoice_status = 2; //paid
-            $journal = $this->jmodel->sales_pelunasan_full(date('Y-m-d'),'Pelunasan Piutang',$amount,$idunit,null);
+            $journal = $this->jmodel->sales_pelunasan_full(date('Y-m-d'),'Pelunasan Piutang',$amount,$idunit,null,$idaccount_coa_kas);
         } else if($amount<$balance_sales)
         {
             $invoice_status = 4; //Partially Paid
-            $journal = $this->jmodel->sales_pelunasan_sebagian(date('Y-m-d'),'Pelunasan Piutang Sebagian',$amount,$idunit,null);
+            $journal = $this->jmodel->sales_pelunasan_sebagian(date('Y-m-d'),'Pelunasan Piutang Sebagian',$amount,$idunit,null,$idaccount_coa_kas);
         } else {
             $invoice_status = 1; //Unpaid
             $journal['idjournal'] = null;
@@ -507,6 +507,7 @@ class sales extends MY_Controller {
                 'date_payment'=>backdate($this->input->post('date_payment')),
                 'notes'=> $this->input->post('notes'),
                 'userin' => $this->session->userdata('userid'),
+                'idaccount_coa_kas'=>$idaccount_coa_kas,
                 'datein' => date('Y-m-d H:m:s')
             );
         $this->db->insert('sales_payment',$data);
