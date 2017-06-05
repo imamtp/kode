@@ -103,7 +103,7 @@ Ext.define('GridItemSelectSalesQuotation', {
     loadMask: true,
     columns: [{
             text: 'Pilih',
-            width: 45,
+            width: 55,
             xtype: 'actioncolumn',
             tooltip: 'Pilih ini',
             align: 'center',
