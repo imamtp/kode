@@ -110,38 +110,38 @@ function showSalesOrderData(record) {
     Ext.getCmp('salesman_id_so').setValue(record.data.salesman_id);
 
     //insert item to grid
-      Ext.Ajax.request({
-            url: SITE_URL + 'sales/get_item_sales',
-            method: 'GET',
-            params: {
-                idsales: record.data.idsales
-            },
-            success: function(form, action) {
-                var d = Ext.decode(form.responseText);
+    Ext.Ajax.request({
+        url: SITE_URL + 'sales/get_item_sales',
+        method: 'GET',
+        params: {
+            idsales: record.data.idsales
+        },
+        success: function(form, action) {
+            var d = Ext.decode(form.responseText);
 
-                var gridDO = Ext.getCmp('EntrySalesOrder');
+            var gridDO = Ext.getCmp('EntrySalesOrder');
 
-                Ext.each(d.data, function(obj, i) {
-                    console.log(obj);
+            Ext.each(d.data, function(obj, i) {
+                console.log(obj);
 
-                     var recDO = new GridItemSalesOrderModel({
-                            idsalesitem: obj.idsalesitem,
-                            idinventory: obj.idinventory,
-                            invno: obj.invno,
-                            nameinventory: obj.nameinventory,
-                            warehouse_code:obj.warehouse_code,
-                            price: obj.price*1,
-                            short_desc:obj.short_desc,
-                            size:obj.size,
-                            size_measurement:obj.size_measurement,
-                            // assetaccount:obj.idsalesitem,
-                            sku_no: obj.sku_no,
-                            qty: obj.qty*1,
-                            disc: obj.disc*1,
-                            total: obj.total*1,
-                            ratetax: obj.ratetax*1
-//                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
-                    });
+                var recDO = new GridItemSalesOrderModel({
+                    idsalesitem: obj.idsalesitem,
+                    idinventory: obj.idinventory,
+                    invno: obj.invno,
+                    nameinventory: obj.nameinventory,
+                    warehouse_code: obj.warehouse_code,
+                    price: obj.price * 1,
+                    short_desc: obj.short_desc,
+                    size: obj.size,
+                    size_measurement: obj.size_measurement,
+                    // assetaccount:obj.idsalesitem,
+                    sku_no: obj.sku_no,
+                    qty: obj.qty * 1,
+                    disc: obj.disc * 1,
+                    total: obj.total * 1,
+                    ratetax: obj.ratetax * 1
+                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                });
 
                 gridDO.getStore().insert(0, recDO);
             });
@@ -275,23 +275,23 @@ function showSalesQuotationData(record) {
 
             Ext.each(d.data, function(obj, i) {
 
-                 var recSO = new GridItemSalesQuotationModel({
-                        idsalesitem: obj.idsalesitem,
-                        idinventory: obj.idinventory,
-                        invno: obj.invno,
-                        nameinventory: obj.nameinventory,
-                        short_desc: obj.short_desc,
-                        price: obj.price*1,
-                        // idunit:obj.idsalesitem,
-                        // assetaccount:obj.idsalesitem,
-                        qty: obj.qty*1,
-                        sku_no: obj.sku_no,
-                        size:1,
-                        size_measurement: obj.short_desc,
-                        disc: obj.disc*1,
-                        total: obj.total*1,
-                        ratetax: obj.ratetax*1
-//                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                var recSO = new GridItemSalesQuotationModel({
+                    idsalesitem: obj.idsalesitem,
+                    idinventory: obj.idinventory,
+                    invno: obj.invno,
+                    nameinventory: obj.nameinventory,
+                    short_desc: obj.short_desc,
+                    price: obj.price * 1,
+                    // idunit:obj.idsalesitem,
+                    // assetaccount:obj.idsalesitem,
+                    qty: obj.qty * 1,
+                    sku_no: obj.sku_no,
+                    size: 1,
+                    size_measurement: obj.short_desc,
+                    disc: obj.disc * 1,
+                    total: obj.total * 1,
+                    ratetax: obj.ratetax * 1
+                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
                 });
 
 
@@ -555,9 +555,19 @@ var windowPopupWindowSalesPayment = Ext.create('widget.window', {
                             Ext.getCmp('windowPopupWindowSalesPayment').hide();
 
                             setHeaderInvoice();
-                            storeGridSalesInvoicePaidGrid.load();
-                            storeGridSalesInvoiceOverdueGrid.load();
-                            storeGridSalesInvoiceUnpaidGrid.load();
+
+                            if (Ext.isDefined(Ext.getCmp('SalesInvoicePaidGrid'))) {
+                                Ext.getCmp('SalesInvoicePaidGrid').getStore().load();
+                            }
+                            if (Ext.isDefined(Ext.getCmp('SalesInvoiceUnpaidGrid'))) {
+                                Ext.getCmp('SalesInvoiceUnpaidGrid').getStore().load();
+                            }
+                            if (Ext.isDefined(Ext.getCmp('SalesInvoiceOverdueGrid'))) {
+                                Ext.getCmp('SalesInvoiceOverdueGrid').getStore().load();
+                            }
+                            // storeGridSalesInvoicePaidGrid.load();
+                            // storeGridSalesInvoiceOverdueGrid.load();
+                            // storeGridSalesInvoiceUnpaidGrid.load();
                         },
                         failure: function(form, action) {
                             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
