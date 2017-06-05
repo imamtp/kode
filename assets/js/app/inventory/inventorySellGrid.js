@@ -1,8 +1,9 @@
 Ext.define('GridInventorySellGridModel', {
     extend: 'Ext.data.Model',
-    fields: ['nametax','accname','accnumber','idinventory','invno','nameinventory','description','isinventory','issell','isbuy','cosaccount',
-        'incomeaccount','assetaccount','qtystock','images','cost','unitmeasure','numperunit','minstock','idprimarysupplier',
-        'sellingprice','idselingtax','unitmeasuresell','numperunitsell','notes','display','namesupplier','yearbuy','monthbuy','datebuy'],
+    fields: ['idinventory', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
+        'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
+        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua'
+    ],
     idProperty: 'id'
 });
 
@@ -13,7 +14,7 @@ var storeGridInventorySellGrid = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/inventorysell/inventory/'+idunit,
+        url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/' + idunit,
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -22,9 +23,15 @@ var storeGridInventorySellGrid = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
+});
+
+storeGridInventorySellGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'a.issell:' + 't'
+    };
 });
 
 Ext.define('MY.searchGridInventorySellGrid', {
@@ -60,20 +67,75 @@ Ext.define('GridInventorySellGrid', {
     alias: 'widget.GridInventorySellGrid',
     store: storeGridInventorySellGrid,
     loadMask: true,
-    columns: [
-        {header: 'idinventory', dataIndex: 'idinventory', hidden: true},
-        {header: 'No Inventory', dataIndex: 'invno', minWidth: 100},
-        {header: 'Nama', dataIndex: 'nameinventory', minWidth: 200},
-        {header: 'Jumlah Persediaan', dataIndex: 'qtystock', minWidth: 150,align:'right'},
-        {header: 'Akun Penjualan', dataIndex: 'accname', minWidth: 150},
-        {header: 'No Akun', dataIndex: 'accnumber', minWidth: 100},
-        {header: 'Harga Beli', dataIndex: 'cost', minWidth: 100,xtype:'numbercolumn',align:'right'},
-        {header: 'Harga Jual', dataIndex: 'sellingprice', minWidth: 100,xtype:'numbercolumn',align:'right'},
-        {header: 'Satuan', dataIndex: 'unitmeasuresell', minWidth: 100},
-        {header: 'Pajak Penjualan', dataIndex: 'nametax', minWidth: 110},
-        {header: 'Supplier', dataIndex: 'namesupplier', minWidth: 110},
-        {header: 'Tgl Pembelian', dataIndex: 'datebuy', minWidth: 130}
-//        {header: 'invno', dataIndex: 'invno', minWidth: 100}
+    columns: [{
+            header: 'idinventory',
+            dataIndex: 'idinventory',
+            hidden: true
+        },
+        {
+            header: 'No SKU',
+            dataIndex: 'sku_no',
+            minWidth: 120
+        },
+        {
+            header: 'No Barang',
+            dataIndex: 'invno',
+            minWidth: 120
+        },
+        // {header: 'Unit', dataIndex: 'namaunit', minWidth: 100},
+        {
+            header: 'Inventory Name',
+            dataIndex: 'nameinventory',
+            minWidth: 300,
+            flex: 1
+        },
+        {
+            header: 'Brand',
+            hidden: true,
+            dataIndex: 'brand_name',
+            minWidth: 200
+        },
+        {
+            header: 'Total Stock',
+            dataIndex: 'totalstock',
+            minWidth: 120,
+            align: 'right'
+        },
+        {
+            header: 'Satuan',
+            dataIndex: 'satuan_pertama',
+            minWidth: 100
+        }, {
+            header: 'Stock #2',
+            dataIndex: 'stock_kedua',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #2',
+            dataIndex: 'satuan_kedua',
+            minWidth: 100
+        },
+        {
+            header: 'Buying Cost',
+            dataIndex: 'cost',
+            minWidth: 100,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Selling Price',
+            dataIndex: 'sellingprice',
+            minWidth: 100,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Minimum Stok',
+            dataIndex: 'minstock',
+            minWidth: 110
+        }
     ],
     // plugins: [{
     //         ptype: 'rowexpander',
@@ -83,37 +145,33 @@ Ext.define('GridInventorySellGrid', {
     //             '<p><b>Foto:</b><br/> <img src='+BASE_URL+'upload/{images} width=120/></p><br>'
     //         )
     // }],
-    dockedItems: [
-        {
-            xtype:'toolbar',
-            dock:'top',
-            items:[
-                {
-                    xtype:'comboxunit',
-                    valueField:'idunit',
-                    id:'cbUnitInvSell',
-                    listeners: {
-                        'change': function(field, newValue, oldValue) {
-                            storeGridInventorySellGrid.load({
-                                params: {
-                                  'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitInvSell').getValue()
-                                }
-                            });
-                        }
+    dockedItems: [{
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [{
+                xtype: 'comboxunit',
+                valueField: 'idunit',
+                id: 'cbUnitInvSell',
+                listeners: {
+                    'change': function(field, newValue, oldValue) {
+                        storeGridInventorySellGrid.load({
+                            params: {
+                                'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitInvSell').getValue()
+                            }
+                        });
                     }
                 }
-            ]
+            }]
         },
         {
             xtype: 'toolbar',
             dock: 'top',
-            items: [
-                {
+            items: [{
                     itemId: 'addInventorySellGrid',
                     text: 'Tambah',
                     iconCls: 'add-icon',
                     handler: function() {
-                    showInputInv();
+                        showInputInv();
                     }
                 },
                 {
@@ -124,14 +182,13 @@ Ext.define('GridInventorySellGrid', {
                         var grid = Ext.ComponentQuery.query('GridInventorySellGrid')[0];
                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
+                        if (data.length == 0) {
                             Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                         } else {
                             //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
 
                             showEditInv(selectedRecord.data.idinventory);
-                            
+
                             Ext.getCmp('statusformInventory').setValue('edit');
                         }
 
@@ -156,7 +213,7 @@ Ext.define('GridInventorySellGrid', {
                                     Ext.Ajax.request({
                                         url: SITE_URL + 'backend/ext_delete/InventorySellGrid/inventory',
                                         method: 'POST',
-                                        params: {postdata: Ext.encode(selected)}
+                                        params: { postdata: Ext.encode(selected) }
                                     });
                                     storeGridInventorySellGrid.remove(sm.getSelection());
                                     sm.select(0);
@@ -164,7 +221,7 @@ Ext.define('GridInventorySellGrid', {
                             }
                         });
                     },
-//                    disabled: true
+                    //                    disabled: true
                 }, '->',
                 'Pencarian: ', ' ',
                 {
@@ -179,7 +236,8 @@ Ext.define('GridInventorySellGrid', {
             dock: 'bottom',
             displayInfo: true
         }
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
@@ -206,8 +264,8 @@ Ext.define('GridInventorySellGrid', {
                 }
             })
 
-//            
-//            Ext.getCmp('kddaerahS').setReadOnly(true);
+            //            
+            //            Ext.getCmp('kddaerahS').setReadOnly(true);
             Ext.getCmp('statusformInventorySellGrid').setValue('edit');
         }
     }
