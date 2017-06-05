@@ -16,7 +16,7 @@ class m_itemsalesquotation extends CI_Model {
     }
 
     function selectField() {
-        return "a.idunit,a.idinventory,brand_name,a.invno,a.nameinventory,a.description,a.isinventory,a.issell,
+        return "a.idunit,a.idinventory,brand_name,a.sku_no,a.invno,a.nameinventory,a.description,a.isinventory,a.issell,
             a.isbuy,a.cosaccount,a.incomeaccount,a.assetaccount,a.qtystock,a.images,a.cost,
             a.unitmeasure,a.numperunit,a.minstock,a.idprimarysupplier,a.sellingprice,a.idselingtax,
             a.unitmeasuresell,a.numperunitsell,a.notes,a.display,a.namesupplier,yearbuy,monthbuy,datebuy,a.namecat,saldopersediaan,a.short_desc";
@@ -55,7 +55,8 @@ class m_itemsalesquotation extends CI_Model {
             'description' => $this->input->post('description'),
             'rate' => $this->input->post('rate'),
             'acccollectedtax' => $this->input->post('idacccollected'),
-            'acctaxpaid' => $this->input->post('idaccpaid')
+            'acctaxpaid' => $this->input->post('idaccpaid'),
+            'sku_no'=> $this->input->psot('sku_no'),
         );
         return $data;
     }

@@ -39,8 +39,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     dataIndex: 'assetaccount'
                 },
                 {
-                    header: 'Kode Barang',
-                    dataIndex: 'invno',
+                    header: 'No SKU',
+                    dataIndex: 'sku_no',
 //                    id: 'invno',
                     width: 100
                 },

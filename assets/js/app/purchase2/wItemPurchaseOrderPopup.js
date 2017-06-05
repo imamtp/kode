@@ -14,7 +14,7 @@ var storeGridItemPurchaseOrderPopup = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/',
+        url: SITE_URL + 'backend/ext_get_all/InventoryAllBySku/inventory/',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -75,7 +75,6 @@ Ext.define(dir_sys+'purchase2.GridItemPurchaseOrderPopup', {
         {header: 'idunit', dataIndex: 'idunit', hidden: true},
         {header: 'assetaccount', dataIndex: 'assetaccount', hidden: true},
         {header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150},
-        {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},        
         {header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex:1},
         {
             header: 'Total Stock',
@@ -155,6 +154,7 @@ Ext.define(dir_sys+'purchase2.GridItemPurchaseOrderPopup', {
                                 short_desc: selectedRecord.get('satuan_pertama'),
                                 price: selectedRecord.get('cost'),
                                 idunit:idunit,
+                                sku_no: selectedRecord.get('sku_no'),
                                 assetaccount:selectedRecord.get('assetaccount'),
                                 qty: 1,
                                 size: 1,

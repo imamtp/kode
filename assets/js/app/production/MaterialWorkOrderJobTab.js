@@ -80,8 +80,8 @@ Ext.define(dir_sys+'production.MaterialWorkOrderJobTab', {
                     dataIndex: 'assetaccount'
                 },
                 {
-                    header: 'Kode Barang',
-                    dataIndex: 'invno',
+                    header: 'No SKU',
+                    dataIndex: 'sku_no',
 //                    id: 'invno',
                     width: 100
                 },

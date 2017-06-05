@@ -77,7 +77,7 @@ Ext.define('GridMaterialUsageWOList', {
         icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
         handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
             
-            WindowEntryMaterialWorkOrder.show();
+            Ext.getCmp('WindowEntryMaterialWorkOrder').show();
 
             var MaterialWorkOrderHeaderForm = Ext.getCmp('MaterialWorkOrderHeaderForm').getForm();
             MaterialWorkOrderHeaderForm.load({

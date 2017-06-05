@@ -41,8 +41,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     dataIndex: 'assetaccount'
                 },
                 {
-                    header: 'Kode Barang',
-                    dataIndex: 'invno',
+                    header: 'No SKU',
+                    dataIndex: 'sku_no',
 //                    id: 'invno',
                     width: 100
                 },
@@ -180,7 +180,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             id:'statusformSalesQuotationGrid'
                         },
                         {
-                            xtype:'hiddenfield',
+                            xtype:'textfield',
                             name:'idsales',
                             id:'idsales_quotation'
                         }

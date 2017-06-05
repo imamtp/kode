@@ -45,7 +45,7 @@ var storeGridItemSelectPurchaseRequisition = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/inventoryall/inventory',
+        url: SITE_URL + 'backend/ext_get_all/inventoryallbysku/inventory',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -162,6 +162,7 @@ Ext.define('GridItemSelectPurchaseRequisition', {
                                     price: selectedRecord.get('cost')*1,
                                     idunit:idunit,
                                     assetaccount:selectedRecord.get('assetaccount'),
+                                    sku_no: selectedRecord.get('sku_no'),
                                     qty: 1,
                                     disc: 0,
                                     total: selectedRecord.get('cost')*1,
@@ -328,8 +329,8 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseRequisition', {
                     dataIndex: 'assetaccount'
                 },
                 {
-                    header: 'Kode Barang',
-                    dataIndex: 'invno',
+                    header: 'No SKU',
+                    dataIndex: 'sku_no',
 //                    id: 'invno',
                     width: 100
                 },

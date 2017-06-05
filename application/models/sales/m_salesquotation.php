@@ -31,7 +31,7 @@ class m_salesquotation extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join payment b ON a.idpayment = b.idpayment
+                    left join payment b ON a.idpayment = b.idpayment
                     left join currency c ON a.idcurrency = c.idcurrency
                     left join employee d ON a.idemployee = d.idemployee
                     left join (select idsales,count(*) as totalitem

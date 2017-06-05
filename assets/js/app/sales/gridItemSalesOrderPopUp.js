@@ -183,6 +183,7 @@ Ext.define('GridItemSalesPopupOrder', {
                                 price: selectedRecord.get('sellingprice'),
                                 idunit:idunit,
                                 assetaccount:selectedRecord.get('assetaccount'),
+                                sku_no: selectedRecord.get('sku_no'),
                                 qty: 1,
                                 size: 1,
                                 disc: 0,

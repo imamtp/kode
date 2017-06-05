@@ -119,6 +119,7 @@ Ext.define('GridSalesQuoteList', {
                                     price: obj.price*1,
                                     // idunit:obj.idsalesitem,
                                     // assetaccount:obj.idsalesitem,
+                                    sku_no: obj.sku_no,
                                     qty: obj.qty*1,
                                     size:1,
                                     size_measurement: obj.short_desc,
