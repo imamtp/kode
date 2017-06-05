@@ -90,7 +90,7 @@ class m_salesorder extends CI_Model {
             $wer = null;
         }
 
-        $q = $this->db->query("select a.idsalesitem,a.idinventory,a.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size
+        $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size
                                 ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,qty_kirim,sum(qty-qty_kirim) as qtysisakirim
                                 from salesitem a
                                 join inventory b ON a.idinventory = b.idinventory
@@ -98,7 +98,7 @@ class m_salesorder extends CI_Model {
                                 left join warehouse d ON d.warehouse_id = a.warehouse_id
                                 left join productmeasurement e ON a.measurement_id_size = e.measurement_id
                                 where idsales = $idsales $wer
-                                group by a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement");
+                                group by a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement");
 
         return $q->result_array();
     }

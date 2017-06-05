@@ -78,7 +78,6 @@ class sales extends MY_Controller {
                 'idinventory' => $value->idinventory,
                 'measurement_id' => $measure,
                 // 'invno' => $value->invno,
-                'sku_no'=> $value->sku_no,
                 'qty' => $value->qty,
                 'disc' => $value->disc,
                 'price' => $value->price,
