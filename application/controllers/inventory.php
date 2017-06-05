@@ -217,6 +217,7 @@ class inventory extends MY_Controller {
                     {
 
                     } else {
+                        $idunit = $idunit == '' ? $u : $idunit;
                         $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
                     }
                 }
@@ -251,8 +252,8 @@ class inventory extends MY_Controller {
             echo "{success:false, message:'Tentukan supplier terlebih dahulu'}";
             return false;
         }
-
-        if(is_array($idsupplier)>0){
+// print_r($idsupplier);
+        if($idsupplier[0]!=null){
              $this->db->delete('inventory_supplier',array('idinventory'=>$idinventory));
             foreach ($idsupplier as $u) {
                     // $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
