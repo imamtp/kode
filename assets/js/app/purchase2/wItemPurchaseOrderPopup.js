@@ -129,8 +129,8 @@ Ext.define(dir_sys + 'purchase2.GridItemPurchaseOrderPopup', {
             dataIndex: 'satuan_kedua',
             minWidth: 100
         },
-        { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
-        { header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130, xtype: 'numbercolumn', align: 'right' }
+        // { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        // { header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130, xtype: 'numbercolumn', align: 'right' }
     ],
     dockedItems: [
         // {

@@ -45,7 +45,7 @@ var storeGridItemSelectPurchaseRequisition = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/inventoryall/inventory',
+        url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -149,21 +149,20 @@ Ext.define('GridItemSelectPurchaseRequisition', {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
             minWidth: 100
+        }, {
+            header: 'Stock #2',
+            dataIndex: 'stock_kedua',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
         },
-        // {
-        //     header: 'Stock #2',
-        //     dataIndex: 'stock_kedua',
-        //     minWidth: 70,
-        //     xtype: 'numbercolumn',
-        //     align: 'right'
-        // },
-        // {
-        //     header: 'Satuan #2',
-        //     dataIndex: 'satuan_kedua',
-        //     minWidth: 100
-        // },
-        { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
-        { header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        {
+            header: 'Satuan #2',
+            dataIndex: 'satuan_kedua',
+            minWidth: 100
+        },
+        // { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        // { header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
     ],
     dockedItems: [{
         xtype: 'toolbar',
