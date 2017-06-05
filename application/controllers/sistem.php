@@ -491,6 +491,22 @@ class sistem extends MY_Controller {
         $this->db->where('idunit',$idunit);
         $this->db->delete('spendmoney');
 
+        $q = $this->db->get_where('sales',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('idsalesitem',$r->idsalesitem);
+            $this->db->delete('salesitem');          
+        }
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('sales');
+
+        $q = $this->db->get_where('sales_return',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('idsalesitem',$r->idsalesitem);
+            $this->db->delete('sales_return_item');          
+        }
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('sales_return');
+
         if ($this->db->trans_status() === FALSE)
         {
                 $this->db->trans_rollback();
