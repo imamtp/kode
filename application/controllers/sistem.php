@@ -410,6 +410,9 @@ class sistem extends MY_Controller {
         }
          $this->db->where('idunit',$idunit);
         $this->db->delete('employee');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('employeetype');
         //
 
         //
@@ -491,21 +494,100 @@ class sistem extends MY_Controller {
         $this->db->where('idunit',$idunit);
         $this->db->delete('spendmoney');
 
+        $q = $this->db->get_where('job_order',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('job_order_id',$r->job_order_id);
+            $this->db->delete('job_item'); 
+
+            $this->db->where('job_order_id',$r->job_order_id);
+            $this->db->delete('job_order_cost');  
+
+            $this->db->where('job_order_id',$r->job_order_id);
+            $this->db->delete('prod_material');               
+        }
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('job_order');
+
+        ///
+        // $q = $this->db->get_where('delivery_order',array('idunit'=>$idunit));
+        // foreach ($q->result() as $r) {
+        //     $this->db->where('idsales',$r->idsales);
+        //     $this->db->delete('salesitem');          
+        // }
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('delivery_order');
+        ///
+
         $q = $this->db->get_where('sales',array('idunit'=>$idunit));
         foreach ($q->result() as $r) {
-            $this->db->where('idsalesitem',$r->idsalesitem);
-            $this->db->delete('salesitem');          
+            $this->db->where('idsales',$r->idsales);
+            $this->db->delete('salesitem');         
+
+            $this->db->where('idsales',$r->idsales);
+            $this->db->delete('sales_payment');    
         }
+        
         $this->db->where('idunit',$idunit);
         $this->db->delete('sales');
 
         $q = $this->db->get_where('sales_return',array('idunit'=>$idunit));
         foreach ($q->result() as $r) {
-            $this->db->where('idsalesitem',$r->idsalesitem);
+            $this->db->where('sales_return_id',$r->sales_return_id);
             $this->db->delete('sales_return_item');          
         }
         $this->db->where('idunit',$idunit);
         $this->db->delete('sales_return');
+
+        ///
+        $q = $this->db->get_where('purchase',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('idpurchase',$r->idpurchase);
+            $this->db->delete('purchaseitem');         
+
+            $this->db->where('idpurchase',$r->idpurchase);
+            $this->db->delete('purchase_payment');    
+        }
+        
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('purchase');
+        ////
+
+        ///
+        $q = $this->db->get_where('inventory_count',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('inventory_count_id',$r->inventory_count_id);
+            $this->db->delete('inventory_count_items');    
+        }        
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('inventory_count');
+
+        $q = $this->db->get_where('inventory_transfer',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('transfer_stock_id',$r->transfer_stock_id);
+            $this->db->delete('inventory_transfer_item');    
+        }        
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('inventory_transfer');
+
+        $q = $this->db->get_where('inventoryadjusment',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('idinvadjusment',$r->idinvadjusment);
+            $this->db->delete('inventoryadjitem');    
+        }        
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('inventoryadjusment');
+
+        $q = $this->db->get_where('inventoryunit',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('idinventory',$r->idinventory);
+            $this->db->delete('inventory_supplier');  
+
+            $this->db->where('idinventory',$r->idinventory);
+            $this->db->delete('inventory');  
+        }        
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('inventoryunit');
+        ////
 
         if ($this->db->trans_status() === FALSE)
         {
