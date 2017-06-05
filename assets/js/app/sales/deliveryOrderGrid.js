@@ -31,11 +31,12 @@ var storeGriddeliveryOrderGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
-//storeGridInventoryAll.on('beforeload',function(store, operation,eOpts){
-//        operation.params={
-//                    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitAnggota').getValue()
-//                  };
-//              });
+storeGriddeliveryOrderGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        //    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitAnggota').getValue()
+        'option': 'delivery_order'
+    };
+});
 
 Ext.define('MY.searchGriddeliveryOrderGrid', {
     extend: 'Ext.ux.form.SearchField',

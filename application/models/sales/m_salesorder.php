@@ -55,7 +55,11 @@ class m_salesorder extends CI_Model {
     }
 
     function whereQuery() {
-        return " a.type = 2 and a.display is null";
+        $wer = null;
+        if($this->input->post('option')=='delivery_order'){
+            $wer = ' and a.status > 2';
+        }
+        return " a.type = 2 and a.display is null $wer";
     }
 
     function orderBy() {
