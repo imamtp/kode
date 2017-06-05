@@ -389,7 +389,7 @@ function loadDataFormInvoice(idsales) {
 }
 
 //end loadDataFormInvoice function
-
+var wCoaSalesPaymentPopup = Ext.create(dir_sys + 'sales.wCoaSalesPaymentPopup');
 var windowPopupWindowSalesPayment = Ext.create('widget.window', {
     id: 'windowPopupWindowSalesPayment',
     title: 'Receive Payment',
@@ -500,6 +500,31 @@ var windowPopupWindowSalesPayment = Ext.create('widget.window', {
                     allowBlank: false,
                     name: 'date_payment',
                     fieldLabel: 'Date Payment',
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Akun Kas/Bank',
+                    allowBlank: false,
+                    name: 'accnametujuan',
+                    id: 'accname_coa_paymentsales',
+                    listeners: {
+                        render: function(component) {
+                            component.getEl().on('click', function(event, el) {
+                                wCoaSalesPaymentPopup.show();
+                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                    operation.params = {
+                                        'idunit': idunit,
+                                        'idaccounttype': '1,19'
+                                    };
+                                });
+                                storeGridAccount.load();
+                            });
+                        }
+                    }
+                }, {
+                    xtype: 'hiddenfield',
+                    name: 'idaccount',
+                    id: 'idaccount_coa_paymentsales',
                 }, {
                     xtype: 'textarea',
                     fieldLabel: 'Notes',

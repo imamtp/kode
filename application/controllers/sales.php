@@ -482,6 +482,7 @@ class sales extends MY_Controller {
         $balance_sales = str_replace('.', '', $this->input->post('balance_sales'));
         $amount = str_replace('.', '', $this->input->post('amount'));
         $selisih = intval($balance_sales-$amount);
+        $idaccount_coa_kas = $this->input->post('idaccount_coa_paymentsales');
 
         $idunit = $this->session->userdata('idunit');
 
