@@ -33,7 +33,7 @@ var storeGriddeliveryOrderGrid = Ext.create('Ext.data.Store', {
 
 storeGriddeliveryOrderGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        //    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitAnggota').getValue()
+        //    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitDeliveryOrder').getValue()
         'option': 'delivery_order'
     };
 });
@@ -257,12 +257,12 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                 {
                     xtype: 'comboxunit',
                     valueField: 'idunit',
-                    id: 'cbUnitAnggota',
+                    id: 'cbUnitDeliveryOrder',
                     listeners: {
                         'change': function(field, newValue, oldValue) {
                             storeGriddeliveryOrderGrid.load({
                                 params: {
-                                    'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitAnggota').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
+                                    'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitDeliveryOrder').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
 
                                 }
                             });
@@ -456,6 +456,45 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                             }
                         }
                     }
+                }, {
+                    text: 'Set Status',
+                    iconCls: 'edit-icon',
+                    menu: [{
+                        text: 'Closed',
+                        handler: function() {
+                            // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                            var grid = Ext.getCmp('deliveryOrderGrid');
+                            var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                            var data = grid.getSelectionModel().getSelection();
+                            if (data.length == 0) {
+                                Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                            } else {
+                                if (selectedRecord.data.idsales * 1 == 4) {
+                                    Ext.Msg.alert('Failure', 'Sales data already closed');
+                                } else {
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'sales/set_status',
+                                        method: 'POST',
+                                        params: {
+                                            status: 4,
+                                            idunit: Ext.getCmp('cbUnitDeliveryOrder').getValue(),
+                                            idsales: selectedRecord.data.idsales
+                                        },
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            Ext.Msg.alert('Informasi', d.message);
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                        }
+                                    });
+                                }
+
+                            }
+                        }
+                    }],
+
+
                 }, {
                     itemId: 'editdeliveryOrderGrid',
                     text: 'Ubah',

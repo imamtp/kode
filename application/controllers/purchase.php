@@ -616,6 +616,11 @@ class purchase extends MY_Controller {
             $idpurchasestatus = 4; //Received
         }
 
+        //start update hpp per unit
+        $this->load->model('inventory/m_stock');
+        $this->m_stock->update_hpp($idunit,3,$idpurchase));
+        //end update hpp per unit
+
         $this->db->where(array('idunit'=>$idunit,'idpurchase'=>$idpurchase));
         $this->db->update('purchase',array('idpurchasestatus'=>$idpurchasestatus));
 

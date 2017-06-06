@@ -83,5 +83,215 @@ class m_stock extends CI_Model {
 		
 
 	}
+
+	function update_hpp($idunit,$tipe,$idpurchase=null,$idsales=null){
+        /*
+            hitung hpp per unit inventory
+
+            tipe:
+            1. LIFO
+            2. FIFO
+            3. Average
+        */
+
+        // update inisial nominal persediaan
+        // $qinv = $this->db->query('select a.idinventory,cost,totalstock,a.hpp_per_unit
+        //                             from inventory a
+        //                             left join inventoryunit b ON a.idinventory = b.idinventory
+        //                             left join (select idinventory,sum(stock) as totalstock
+        //                                 from warehouse_stock
+        //                                 group by idinventory) c ON a.idinventory = c.idinventory');
+        // foreach($qinv->result() as $r){
+        //     if($r->cost == null){
+        //         if($r->hpp_per_unit == null){
+        //             $cost = 0;
+        //         } else {
+        //             $cost = $r->hpp_per_unit;
+        //         }
+        //     } else {
+        //         $cost = $r->cost;
+        //     }
+
+        //     $this->db->where('idinventory',$r->idinventory);
+        //     $this->db->update('inventory',array(
+        //         'nominal_persediaan'=>$cost*$r->totalstock
+        //     ));
+        // }
+        // end update inisial nominal persediaan
+
+		$data = array();
+
+        //    echo $idpurchase.' ';
+            // foreach($qinv->result() as $r){
+                $wer = null;
+                if($idpurchase!=null){
+
+					$qcek = $this->db->get_where('inventory_hpp_history',array(
+						'idpurchase'=>$idpurchase,
+						'idunit'=>$idunit
+					));
+
+					if($qcek->num_rows()>0){
+						$qhpp = $this->db->query("SELECT sum(hpp_unit) as totalhpp FROM inventory_hpp_history WHERE idpurchase = $idpurchase AND idunit = $idunit")->row();
+						$total_hpp = $qhpp->totalhpp == null ? 0 : $qhpp->totalhpp;
+					} else {
+
+						$wer = " AND a.idpurchase = $idpurchase ";
+
+						$qpurchase = $this->db->query("select idpurchase
+												from purchase a
+												where status >= 3 and idunit = $idunit $wer");
+						foreach($qpurchase->result() as $rpurchase){
+
+							$total_hpp = 0;
+
+							$item = $this->db->query("select idpurchaseitem,qty,price,total,idinventory
+														from purchaseitem b
+														where b.idpurchase = ".$rpurchase->idpurchase." ");
+								foreach($item->result() as $ritem){
+
+									$qinv = $this->db->query("select a.idinventory,coalesce(cost,0),coalesce(totalstock, 0) as totalstock,coalesce(a.nominal_persediaan, 0) as nominal_persediaan
+																from inventory a
+																left join inventoryunit b ON a.idinventory = b.idinventory
+																left join (select idinventory,sum(stock) as totalstock
+																	from warehouse_stock
+																	group by idinventory) c ON a.idinventory = c.idinventory
+																where a.idinventory = ".$ritem->idinventory." ")->row();
+
+									if($tipe==3){
+										/*
+											perhitungan AVERAGE 
+											HPP per Unit = [Rp Saldo awal + Rp Pembelian] : [Qty saldo awal + Qty pembelian]
+											fn : http://nichonotes.blogspot.co.id/2015/02/metode-rata-rata-harga-pokok-penjualan-average-method.html
+										*/
+										$current_qty_stock = ($qinv->totalstock + $ritem->qty);
+										$hpp_unit = round(($qinv->nominal_persediaan + $ritem->total) / $current_qty_stock);
+										// echo '('.$qinv->nominal_persediaan.' + '.$ritem->total.') / ('.$qinv->totalstock.' + '.$ritem->qty.') - hpp_unit:'.round($hpp_unit).' <br>';
+									}
+
+									$end_balance = $hpp_unit*$current_qty_stock;
+
+									$this->db->where('idinventory',$ritem->idinventory);
+									$this->db->update('inventory',array(
+										'hpp_per_unit'=>$hpp_unit,
+										'cost'=>$hpp_unit,
+										'nominal_persediaan'=>$end_balance
+									));
+
+									//simpan history perubahan
+									
+
+									$data = array(
+										"idinventory" => $ritem->idinventory,
+										"idunit" => $idunit,
+										"datein" => date('Y-m-d H:m:s'),
+										"opening_balance" =>$qinv->nominal_persediaan,
+										"opening_qty" =>$qinv->totalstock,
+										"qty_trx" => $ritem->qty,
+										"hpp_unit" => $hpp_unit,
+										"ending_balance" => $end_balance,
+										"ending_qty" =>$current_qty_stock,
+										"idpurchase" => $rpurchase->idpurchase
+									);
+
+									$this->db->insert('inventory_hpp_history',$data);
+
+									
+									$total_hpp+=$hpp_unit;
+								}
+						}
+
+					} //end else
+
+                    
+                } else { //end if($idpurchase!=null){
+					//sales
+					$qcek = $this->db->get_where('inventory_hpp_history',array(
+						'idsales'=>$idsales,
+						'idunit'=>$idunit
+					));
+
+					if($qcek->num_rows()>0){
+						$qhpp = $this->db->query("SELECT sum(hpp_unit) as totalhpp FROM inventory_hpp_history WHERE idsales = $idsales AND idunit = $idunit")->row();
+						$total_hpp = $qhpp->totalhpp == null ? 0 : $qhpp->totalhpp;
+					} else {
+
+						$wer = " AND a.idsales = $idsales ";
+
+						$qsales = $this->db->query("select idsales
+												from sales a
+												where idunit = $idunit $wer");
+						foreach($qsales->result() as $rsales){
+
+							$total_hpp = 0;
+
+							$item = $this->db->query("select idsalesitem,qty,price,total,idinventory
+														from salesitem b
+														where b.idsales = ".$rsales->idsales." ");
+								foreach($item->result() as $ritem){
+
+									$qinv = $this->db->query("select a.idinventory,coalesce(cost,0),coalesce(totalstock, 0) as totalstock,coalesce(a.nominal_persediaan, 0) as nominal_persediaan
+																from inventory a
+																left join inventoryunit b ON a.idinventory = b.idinventory
+																left join (select idinventory,sum(stock) as totalstock
+																	from warehouse_stock
+																	group by idinventory) c ON a.idinventory = c.idinventory
+																where a.idinventory = ".$ritem->idinventory." ")->row();
+
+									if($tipe==3){
+										/*
+											perhitungan AVERAGE 
+											HPP per Unit = [Rp Saldo awal + Rp Pembelian] : [Qty saldo awal + Qty pembelian]
+											fn : http://nichonotes.blogspot.co.id/2015/02/metode-rata-rata-harga-pokok-penjualan-average-method.html
+										*/
+										$current_qty_stock = ($qinv->totalstock + $ritem->qty);
+										if($current_qty_stock<=0){
+											$hpp_unit = round(($qinv->nominal_persediaan + $ritem->total) / $ritem->qty);
+										} else {
+											$hpp_unit = round(($qinv->nominal_persediaan + $ritem->total) / $current_qty_stock);
+										}
+										
+										// echo '('.$qinv->nominal_persediaan.' + '.$ritem->total.') / ('.$qinv->totalstock.' + '.$ritem->qty.') - hpp_unit:'.round($hpp_unit).' <br>';
+									}
+
+									$end_balance = $hpp_unit*$current_qty_stock;
+
+									$this->db->where('idinventory',$ritem->idinventory);
+									$this->db->update('inventory',array(
+										'hpp_per_unit'=>$hpp_unit,
+										'cost'=>$hpp_unit,
+										'nominal_persediaan'=>$end_balance
+									));
+
+									//simpan history perubahan
+									
+
+									$data = array(
+										"idinventory" => $ritem->idinventory,
+										"idunit" => $idunit,
+										"datein" => date('Y-m-d H:m:s'),
+										"opening_balance" =>$qinv->nominal_persediaan,
+										"opening_qty" =>$qinv->totalstock,
+										"qty_trx" => $ritem->qty,
+										"hpp_unit" => $hpp_unit,
+										"ending_balance" => $end_balance,
+										"ending_qty" =>$current_qty_stock,
+										"idsales" => $rsales->idsales
+									);
+
+									$this->db->insert('inventory_hpp_history',$data);
+
+									$total_hpp+=$hpp_unit;
+									
+								}
+						}
+
+					} //end else
+				}
+
+                
+
+          return array('total_hpp'=>$total_hpp);
+    }
 }
 ?>

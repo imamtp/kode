@@ -247,9 +247,57 @@ class sales extends MY_Controller {
         echo json_encode(array('data'=>$r));
     }
 
+    function set_status(){
+        $this->db->trans_begin();
+
+        $this->load->model('inventory/m_stock');
+        $this->load->model('journal/m_jsales');
+
+        $idsales = $this->input->post('idsales');
+        $status = $this->input->post('status');
+        $idunit = $this->input->post('idunit');
+
+        $qsales = $this->db->query("select no_sales_order,idaccount_hppenjualan,idaccount_persediaan from sales
+                                    where idsales = $idsales and idunit = $idunit")->row();
+
+        if($qsales->idaccount_hppenjualan==null){
+             $json = array('success'=>false,'message'=>'Akun perkiraan HPP belum ditentukan');
+             echo json_encode($json);
+             return false;
+        }
+
+        if($qsales->idaccount_persediaan==null){
+             $json = array('success'=>false,'message'=>'Akun perkiraan persediaan belum ditentukan');
+             echo json_encode($json);
+             return false;
+        }
+
+        if($status==4){
+            //closed
+            $this->db->where('idsales', $idsales);
+            $this->db->update('sales', array(
+                'status'=>$status
+            ));
+           
+            $total_hpp = $this->m_stock->update_hpp($idunit,3,null,$idsales)['total_hpp'];
+
+            //create journal
+            $this->m_jsales->sales_do(date('Y-m-d'),$total_hpp,$idunit,$qsales->idaccount_hppenjualan,$qsales->idaccount_persediaan,'Sales Delivery - HPP : '.$qsales->no_sales_order);
+        }
+
+         if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'Status has been submitted succsessfully');
+        }
+        echo json_encode($json);
+    }
 
     function saveDeliveryOrder(){
         $this->load->model('inventory/m_stock');
+        $this->load->model('journal/m_jsales');
 
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
@@ -259,6 +307,11 @@ class sales extends MY_Controller {
         $delivery_order_id = $this->m_data->getPrimaryID($this->input->post('delivery_order_id'),'delivery_order', 'delivery_order_id', $this->input->post('unit'));
         $idunit = $this->input->post('unit');
         $no_do = $this->input->post('no_do');
+        $idaccount_hppenjualan = $this->input->post('idaccount_hppenjualan');
+        $idaccount_persediaan = $this->input->post('idaccount_persediaan');
+        $biaya_angkut = $this->input->post('biaya_angkut') =='' ? 0 : str_replace('.','',$this->input->post('biaya_angkut'));
+        $subtotal = str_replace('.','',$this->input->post('subtotal'));
+        $amount = $subtotal + $biaya_angkut;
 
         $header = array(
             'no_do'=>$no_do,
@@ -333,7 +386,11 @@ class sales extends MY_Controller {
         $this->db->where('idsales',$idsales);
         $this->db->where('idunit',$idunit);
         // $this->db->update('delivery_order',array('status'=>$status_delivery));
-        $this->db->update('sales',array('status'=>$status_delivery));
+        $this->db->update('sales',array(
+                'status'=>$status_delivery,
+                'idaccount_hppenjualan'=>$idaccount_hppenjualan,
+                'idaccount_persediaan'=>$idaccount_persediaan
+            ));
         //end check
 
         /*
