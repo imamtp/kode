@@ -589,6 +589,9 @@ class sistem extends MY_Controller {
         $this->db->delete('inventoryunit');
         ////
 
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('inventory_hpp_history');
+
         if ($this->db->trans_status() === FALSE)
         {
                 $this->db->trans_rollback();
