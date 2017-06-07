@@ -525,7 +525,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                             id: 'supplierPurchaseRequisition',
                         },
                         {
-                            xtype: 'comboxpurchasestatus',
+                            xtype: 'comboxPurchaseReqStatus',
                             labelWidth: 120,
                             name: 'pr_status',
                             // hidden:true,
