@@ -116,13 +116,13 @@ Ext.define('GridItemSelectPurchaseRequisition', {
                     idinventory: selectedRecord.get('idinventory'),
                     invno: selectedRecord.get('invno'),
                     nameinventory: selectedRecord.get('nameinventory'),
-                    price: selectedRecord.get('cost')*1,
-                    idunit:idunit,
-                    assetaccount:selectedRecord.get('assetaccount'),
+                    price: selectedRecord.get('cost') * 1,
+                    idunit: idunit,
+                    assetaccount: selectedRecord.get('assetaccount'),
                     sku_no: selectedRecord.get('sku_no'),
                     qty: 1,
                     disc: 0,
-                    total: selectedRecord.get('cost')*1,
+                    total: selectedRecord.get('cost') * 1,
                     short_desc: selectedRecord.get('short_desc'),
                     ratetax: Ext.getCmp('cb_tax_id_pr').getValue()
                         //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
@@ -163,12 +163,13 @@ Ext.define('GridItemSelectPurchaseRequisition', {
             header: 'Satuan #2',
             dataIndex: 'satuan_kedua',
             minWidth: 100
-        }],
+        }
+    ],
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
         items: [
-            
+
             '->',
             'Pencarian: ', ' ',
             {
@@ -294,7 +295,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                 {
                     header: 'No SKU',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 100
                 },
                 {
@@ -435,7 +436,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                             id: 'tanggalPurchaseRequisition',
                             format: 'd/m/Y',
                             fieldLabel: 'Requisition Date',
-                            maxValue: new Date(),
+                            minValue: new Date(),
 
                         },
                         {
@@ -1065,11 +1066,9 @@ function validasiPurchaseRequisition() {
         Ext.Msg.alert('Failed', 'Masukkan NO PR');
     } else if (Ext.getCmp('memoPurchaseRequisition').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan Memo PR');
-    } else if (Ext.getCmp('totalItemPurchaseRequisition').getValue() == null || Ext.getCmp('EntryPurchaseRequisition').getStore().getRange().length == 0)
-    {
+    } else if (Ext.getCmp('totalItemPurchaseRequisition').getValue() == null || Ext.getCmp('EntryPurchaseRequisition').getStore().getRange().length == 0) {
         Ext.Msg.alert('Failed', 'Masukkan barang');
-    } else if (Ext.getCmp('requestby_pr').getValue() == '')
-    {
+    } else if (Ext.getCmp('requestby_pr').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan Requested By');
 
     }
