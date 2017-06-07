@@ -218,18 +218,21 @@ Ext.define('GridPurchaseOrderList', {
     }, {
         header: 'Total Tax',
         dataIndex: 'tax',
+        hidden: true,
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
     }, {
         header: 'Total Discount',
         dataIndex: 'disc',
+        hidden: true,
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
     }, {
         header: 'Total Amount',
         dataIndex: 'totalamount',
+        hidden: true,
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'

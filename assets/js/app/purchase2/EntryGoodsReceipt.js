@@ -192,6 +192,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                 },
                 {
                     header: 'Kode Barang',
+                    hidden: true,
                     dataIndex: 'invno',
                     //                    id: 'invno',
                     width: 100
@@ -263,6 +264,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     xtype: 'numbercolumn',
                     header: 'Disc (%)',
                     minWidth: 90,
+                    hidden: true,
                     dataIndex: 'disc',
                     align: 'right',
                     // editor: {
@@ -274,6 +276,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     xtype: 'numbercolumn',
                     header: 'Total',
                     dataIndex: 'total',
+                    hidden: true,
                     width: 150,
                     align: 'right'
                 },
