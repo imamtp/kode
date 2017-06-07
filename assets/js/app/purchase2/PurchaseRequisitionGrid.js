@@ -116,7 +116,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
         minWidth: 150
     }, {
         header: 'Status',
-        dataIndex: 'idpurchasestatus',
+        dataIndex: 'status',
         minWidth: 100,
         renderer: function(value) {
             return customColumnStatus(ArrPurchaseRequestStatus, value);

@@ -75,7 +75,7 @@ function showPurchaseRequestData(record) {
 
     var cbPurchaseRequisition = Ext.getCmp('cbPurchaseRequisition');
     cbPurchaseRequisition.getStore().load();
-    Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus * 1);
+    Ext.getCmp('cbPurchaseRequisition').setValue(record.data.status * 1);
 
     if (record.data.idpurchase_req === null) {
         Ext.getCmp('recordPurchaseRequisitionBtnSave').enable();
