@@ -170,17 +170,20 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
             header: 'Total Tax',
             dataIndex: 'tax',
             minWidth: 150,
+            hidden: true,
             xtype: 'numbercolumn',
             align: 'right'
         }, {
             header: 'Total Discount',
             dataIndex: 'disc',
             minWidth: 150,
+            hidden: true,
             xtype: 'numbercolumn',
             align: 'right'
         }, {
             header: 'Total Amount',
             dataIndex: 'totalamount',
+            hidden: true,
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
