@@ -32,7 +32,6 @@ class m_purchaserequisition extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
-                    join purchasestatus b ON a.idpurchasestatus = b.idpurchasestatus
 					left join tax c ON a.idtax = c.idtax
 					left join payment d ON a.idpayment = d.idpayment
 					join supplier e ON a.idsupplier = e.idsupplier
@@ -48,9 +47,9 @@ class m_purchaserequisition extends CI_Model {
         $wer = null;
         if($this->input->post('option')=='not_yet_po'){
             //pr belum menjadi po
-            $wer = " AND a.idpurchase not in (select idpurchase_req from purchase where idpurchasetype = 2 and deleted = 0)";
+            $wer = " AND a.idpurchase not in (select idpurchase_req from purchase where idpurchasetype = 2 and deleted = 0 and idpurchase_req is not null)";
         }
-    	return " idpurchasetype = 1 and a.status = 2 $wer";
+    	return " idpurchasetype = 1 $wer";
     }
 
     function orderBy() {

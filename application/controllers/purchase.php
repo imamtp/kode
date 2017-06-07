@@ -187,7 +187,7 @@ class purchase extends MY_Controller {
             'nopurchase' => $this->input->post('nojurnalPurchaseRequisition'),
             // 'id_payment_term' =>,
             'idsupplier' => $this->input->post('supplierPurchaseRequisition'),
-            'status' => 1
+            'status' => $this->input->post('pr_status'),
             // 'netddays' => ,
             // 'neteomddays' => ,
             // 'discount' =>,

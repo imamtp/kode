@@ -7,7 +7,7 @@ var wGridPurchaseRequestListPopup = Ext.create(dir_sys + 'purchase2.wGridPurchas
 
 Ext.define('GridItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'size', 'warehouse_code', 'size_measurement'],
     idProperty: 'id'
 });
 

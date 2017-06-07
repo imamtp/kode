@@ -227,9 +227,11 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
                 iconCls: 'add-icon',
                 handler: function() {
                     wPurchaseRequisitionGrid.show();
+                    clearFormPR();
 
                     supplierStore.load();
                     storeUnit.load();
+                    Ext.getCmp('cbPurchaseRequisition').setValue(1);
                     Ext.getCmp('cbUnitEntryPurchaseRequisition').setValue(idunit);
                     Ext.getCmp('statusformPurchaseRequisitionGrid').setValue('input');
 
@@ -242,7 +244,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
                     // cbPurchaseRequisition.setReadOnly(true);
 
                     // Ext.getCmp('cb_tax_id_sq').setValue('1');
-                    clearFormPR();
+
                 }
             }, {
                 text: 'Print',
