@@ -75,14 +75,15 @@ function showPurchaseRequestData(record) {
 
     var cbPurchaseRequisition = Ext.getCmp('cbPurchaseRequisition');
     cbPurchaseRequisition.getStore().load();
+    Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus * 1);
 
     if (record.data.idpurchase_req === null) {
         Ext.getCmp('recordPurchaseRequisitionBtnSave').enable();
-        Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus);
+        // Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus * 1);
         cbPurchaseRequisition.setReadOnly(false);
 
     } else {
-        Ext.getCmp('cbPurchaseRequisition').setValue('3');
+        // Ext.getCmp('cbPurchaseRequisition').setValue(record.data.idpurchasestatus * 1);
         Ext.getCmp('recordPurchaseRequisitionBtnSave').disable();
         cbPurchaseRequisition.setReadOnly(true);
     }
