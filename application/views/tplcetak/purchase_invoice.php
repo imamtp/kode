@@ -103,9 +103,9 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                               <td width="30"><?=$i?></td>
                               <td><?=$value['invno']?></td>
                               <td><?=$value['nameinventory']?></td>  
-                              <td align="right"><?=number_format($value['price'])?></td>
                               <td align="right"><?=$value['qty']?></td>
                               <td><?=$value['short_desc']?></td>
+                              <td align="right"><?=number_format($value['price'])?></td>
                               <td align="right"><?=$value['size']?></td>
                               <td><?=$value['size_measurement']?></td>
                               <td align="right"><?=number_format($value['disc'])?></td>
