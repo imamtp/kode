@@ -128,6 +128,8 @@ var ArrSalesStatus = [
     [7, 'Delivering'],
     [8, 'Invoiced']
 ];
+
+
 Ext.define('comboxSalesStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxSalesStatus',
@@ -141,6 +143,29 @@ Ext.define('comboxSalesStatus', {
     store: new Ext.data.ArrayStore({
         fields: ['value', 'text'],
         data: ArrSalesStatus,
+    })
+});
+
+
+var ArrPurchaseRequestStatus = [
+    [1, 'Open'],
+    [2, 'Confirmed'],
+    [3, 'Canceled']
+];
+
+Ext.define('comboxPurchaseReqStatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxPurchaseReqStatus',
+    fieldLabel: 'Status',
+    displayField: 'text',
+    valueField: 'value',
+    name: 'value',
+    editable: false,
+    triggerAction: 'all',
+    // store: storeProductGrade
+    store: new Ext.data.ArrayStore({
+        fields: ['value', 'text'],
+        data: ArrPurchaseRequestStatus,
     })
 });
 
