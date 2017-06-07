@@ -140,7 +140,6 @@ Ext.define('GridItemSelectPurchaseRequisition', {
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
             header: 'Total Stock',
@@ -501,11 +500,29 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                             id: 'cbUnitEntryPurchaseRequisition'
                                 //                            ,multiSelect:true
                         },
+                        // {
+                        //     xtype: 'comboxidsupplier',
+                        //     fieldLabel: 'Recom. Supplier',
+                        //     id: 'supplierPurchaseRequisition',
+                        //     labelWidth: 120
+                        // },
                         {
-                            xtype: 'comboxidsupplier',
+                            xtype: 'textfield',
+                            id: 'supplierNamePurchaseRequisition',
                             fieldLabel: 'Recom. Supplier',
+                            labelWidth: 120,
+                            listeners: {
+                                render: function(component) {
+                                    component.getEl().on('click', function(event, el) {
+                                        ChooserListSupplier.target = Ext.getCmp('EntryPurchaseRequisition');
+                                        ChooserListSupplier.show();
+                                    });
+                                }
+                            },
+                        },
+                        {
+                            xtype: 'hiddenfield',
                             id: 'supplierPurchaseRequisition',
-                            labelWidth: 120
                         },
                         {
                             xtype: 'comboxpurchasestatus',
@@ -855,6 +872,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
 
         this.on('afteredit', this.onAfterEdit, this);
 
+        this.on('selectSupplier', this.onSelectSupplier, this);
+
         this.on({
             scope: this,
             edit: function() {
@@ -998,6 +1017,10 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
         //            row: 0,
         //            column: 0
         //        });
+    },
+    onSelectSupplier: function(data) {
+        Ext.getCmp('supplierPurchaseRequisition').setValue(data.idsupplier);
+        Ext.getCmp('supplierNamePurchaseRequisition').setValue(data.namesupplier);
     },
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);

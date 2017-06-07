@@ -20,9 +20,9 @@ function showPurchaseRequestData(record) {
     var purchase_req_date = Ext.getCmp('tanggalPurchaseRequisition');
     purchase_req_date.setValue(record.data.date);
 
-    var supplierPurchaseOrder = Ext.getCmp('supplierPurchaseRequisition');
-    supplierPurchaseOrder.setValue(record.data.idsupplier);
-    supplierPurchaseOrder.setReadOnly(true);
+    Ext.getCmp('supplierPurchaseRequisition').setValue('record.data.idsupplier');
+    Ext.getCmp('supplierNamePurchaseRequisition').setValue(record.data.namesupplier);
+    Ext.getCmp('supplierPurchaseRequisition').setReadOnly(true);
 
     var memoPurchaseRequisition = Ext.getCmp('memoPurchaseRequisition');
     memoPurchaseRequisition.setValue(record.data.memo);
@@ -119,6 +119,7 @@ function showPurchaseOrderData(record) {
 
 
     Ext.getCmp('nojurnalPurchaseOrder').setValue(record.data.nopurchase);
+    Ext.getCmp('supplierNamePurchaseOrder').setValue(record.data.namesupplier);
     Ext.getCmp('supplierPurchaseOrder').setValue(record.data.idsupplier);
     Ext.getCmp('po_date_PurchaseOrder').setValue(record.data.date);
     Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
