@@ -207,6 +207,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                 {
                     xtype: 'numbercolumn',
                     header: 'Harga',
+                    hidden: true,
                     dataIndex: 'price',
                     width: 150,
                     align: 'right'
@@ -402,11 +403,15 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     items: [
 
                         {
-                            xtype: 'comboxidsupplier',
+                            xtype: 'textfield',
                             fieldLabel: 'Recom. Supplier',
                             readOnly: true,
-                            id: 'supplier_poreceipt',
+                            id: 'suppliername_poreceipt',
                             labelWidth: 120
+                        },
+                        {
+                            xtype: 'hiddenfield',
+                            id: 'supplier_poreceipt',
                         },
                         {
                             xtype: 'textfield',
