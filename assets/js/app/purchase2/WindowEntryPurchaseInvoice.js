@@ -1,4 +1,4 @@
-var wCoaPurchaseInvoiceBeliPopup = Ext.create(dir_sys + 'purchase2.wCoaPurchaseInvoiceBeliPopup');
+var wCoaPurchaseInvoicePersediaanPopup = Ext.create(dir_sys + 'purchase2.wCoaPurchaseInvoicePersediaanPopup');
 var wCoaPurchaseInvoiceHutangPopup = Ext.create(dir_sys + 'purchase2.wCoaPurchaseInvoiceHutangPopup');
 var wCoaPurchaseInvoicePajakMasukPopup = Ext.create(dir_sys + 'purchase2.wCoaPurchaseInvoicePajakMasukPopup');
 
@@ -627,7 +627,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     dock: 'bottom',
                     items: [{
                             xtype: 'fieldcontainer',
-                            fieldLabel: 'Akun Pembelian',
+                            fieldLabel: 'Akun Persediaan',
                             combineErrors: true,
                             msgTarget: 'side',
                             layout: 'hbox',
@@ -640,18 +640,18 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                 xtype: 'textfield',
                                 allowBlank: false,
                                 name: 'accnametujuan',
-                                id: 'accname_coa_beli_pi',
+                                id: 'accname_coa_persediaan_pi',
                                 listeners: {
                                     render: function(component) {
                                         component.getEl().on('click', function(event, el) {
                                             if (Ext.getCmp('cbUnit_poinvoice').getValue() == null) {
                                                 Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
                                             } else {
-                                                wCoaPurchaseInvoiceBeliPopup.show();
+                                                wCoaPurchaseInvoicePersediaanPopup.show();
                                                 storeGridAccount.on('beforeload', function(store, operation, eOpts) {
                                                     operation.params = {
                                                         'idunit': idunit,
-                                                        'idaccounttype': '14,15'
+                                                        'idaccounttype': '3,4,5,20'
                                                     };
                                                 });
                                                 storeGridAccount.load();
@@ -661,11 +661,11 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                 }
                             }, {
                                 xtype: 'displayfield',
-                                id: 'accnumber_coa_beli_pi',
+                                id: 'accnumber_coa_persediaan_pi',
                             }, {
                                 xtype: 'hiddenfield',
                                 name: 'idaccount',
-                                id: 'idaccount_coa_beli_pi',
+                                id: 'idaccount_coa_persediaan_pi',
                             }]
                         },
                         {
@@ -766,7 +766,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                 params: {
                     idpurchase: Ext.getCmp('idpurchase_poinvoice').getValue(),
                     idaccount_coa_hutang: Ext.getCmp('idaccount_coa_hutang_pi').getValue(),
-                    idaccount_coa_beli: Ext.getCmp('idaccount_coa_beli_pi').getValue(),
+                    idaccount_coa_persediaan: Ext.getCmp('idaccount_coa_persediaan_pi').getValue(),
                     idaccount_coa_pajakmasuk: Ext.getCmp('idaccount_coa_pajakmasuk_pi').getValue(),
                     nopo: Ext.getCmp('nopo_poinvoice').getValue(),
                     noinvoice: Ext.getCmp('nojurnal_poinvoice').getValue(),
@@ -966,8 +966,8 @@ function validasiPurchaseInvoice() {
         Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih');
     } else if (Ext.getCmp('nojurnal_poinvoice').getValue() === '') {
         Ext.Msg.alert('Failed', 'No Invoice belum diisi');
-    } else if (Ext.getCmp('idaccount_coa_beli_pi').getValue() === '') {
-        Ext.Msg.alert('Failed', 'Tentukan Akun Pembelian');
+    } else if (Ext.getCmp('idaccount_coa_persediaan_pi').getValue() === '') {
+        Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
     } else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') {
         Ext.Msg.alert('Failed', 'Tentukan Akun Hutang Pembelian');
     } else if (Ext.getCmp('idaccount_coa_pajakmasuk_pi').getValue() === '') {

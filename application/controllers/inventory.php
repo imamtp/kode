@@ -1065,6 +1065,48 @@ class inventory extends MY_Controller {
         echo json_encode($json);   
     }
 
+    function update_hpp($idunit,$tipe,$idpurchase=null){
+        /*
+            hitung hpp per unit inventory
+
+            tipe:
+            1. LIFO
+            2. FIFO
+            3. Average
+        */
+
+        // update inisial nominal persediaan
+        // $qinv = $this->db->query('select a.idinventory,cost,totalstock,a.hpp_per_unit
+        //                             from inventory a
+        //                             left join inventoryunit b ON a.idinventory = b.idinventory
+        //                             left join (select idinventory,sum(stock) as totalstock
+        //                                 from warehouse_stock
+        //                                 group by idinventory) c ON a.idinventory = c.idinventory');
+        // foreach($qinv->result() as $r){
+        //     if($r->cost == null){
+        //         if($r->hpp_per_unit == null){
+        //             $cost = 0;
+        //         } else {
+        //             $cost = $r->hpp_per_unit;
+        //         }
+        //     } else {
+        //         $cost = $r->cost;
+        //     }
+
+        //     $this->db->where('idinventory',$r->idinventory);
+        //     $this->db->update('inventory',array(
+        //         'nominal_persediaan'=>$cost*$r->totalstock
+        //     ));
+        // }
+        // end update inisial nominal persediaan
+
+        $this->load->model('inventory/m_stock');
+        $q = $this->db->get('purchase');
+        foreach($q->result() as $r){
+            print_r($this->m_stock->update_hpp($idunit,$tipe,$r->idpurchase));
+        }
+    }
+
     // function hapusInventory()
     // {
     //     //delete:inventorydeprec,inventorydeprecitem 

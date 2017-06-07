@@ -616,6 +616,11 @@ class purchase extends MY_Controller {
             $idpurchasestatus = 4; //Received
         }
 
+        //start update hpp per unit
+        $this->load->model('inventory/m_stock');
+        $this->m_stock->update_hpp($idunit,3,$idpurchase));
+        //end update hpp per unit
+
         $this->db->where(array('idunit'=>$idunit,'idpurchase'=>$idpurchase));
         $this->db->update('purchase',array('idpurchasestatus'=>$idpurchasestatus));
 
@@ -638,7 +643,7 @@ class purchase extends MY_Controller {
         $nopo = $this->input->post('nopo');
         $total_amount = $this->input->post('total_amount');
         $idaccount_coa_hutang = $this->input->post('idaccount_coa_hutang');
-        $idaccount_coa_beli = $this->input->post('idaccount_coa_beli');
+        $idaccount_coa_persediaan = $this->input->post('idaccount_coa_persediaan');
         $idaccount_coa_pajakmasuk = $this->input->post('idaccount_coa_pajakmasuk');
         // if(intval($saldo)>0) {
         //     // $invoice_status = 4; //Partially Paid
@@ -657,7 +662,7 @@ class purchase extends MY_Controller {
                 'paidtoday'=> 0, //masih jadi hutang
                 'balance'=>$total_amount,
                 'idaccount_coa_hutang'=>$idaccount_coa_hutang,
-                'idaccount_coa_beli'=>$idaccount_coa_beli,
+                'idaccount_coa_persediaan'=>$idaccount_coa_persediaan,
                 'idaccount_coa_pajakmasuk'=>$idaccount_coa_pajakmasuk,
                 'idpayment' => $idpayment,
                 // 'tax' => $total_pajak, //ga perlu lagi karena udah diinput saat PO
@@ -675,7 +680,7 @@ class purchase extends MY_Controller {
 
         //buat jurnal hutang
         $this->load->model('journal/m_jpurchase','jmodel');
-        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_beli,$idaccount_coa_pajakmasuk,$total_pajak);
+        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_persediaan,$idaccount_coa_pajakmasuk,$total_pajak);
         // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
           if($this->db->trans_status() === false){

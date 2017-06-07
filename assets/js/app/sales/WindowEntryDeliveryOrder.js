@@ -1,6 +1,10 @@
+var wCoaDOPersediaanPopup = Ext.create(dir_sys + 'sales.wCoaDOPersediaanPopup');
+var wCoaDOHpPenjualanPopup = Ext.create(dir_sys + 'sales.wCoaDOHpPenjualanPopup');
+
+
 Ext.define('GridItemDeliveryOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idsalesitem','idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','brand_name','sku_no','price','qty','total','ratetax','disc','short_desc','warehouse_code','qty_kirim','qtysisakirim'],
+    fields: ['idsalesitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'warehouse_code', 'qty_kirim', 'qtysisakirim'],
     idProperty: 'id'
 });
 
@@ -20,9 +24,9 @@ var storeGridItemDeliveryOrder = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
@@ -31,7 +35,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
     alias: 'widget.EntryDeliveryOrder',
     xtype: 'cell-editing',
     // title: 'Input Sales Order',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -44,17 +48,16 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
             // forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemDeliveryOrder,
-            columns: [
-                {
+            columns: [{
                     header: 'idsalesitem',
                     hidden: true,
                     dataIndex: 'idsalesitem',
-//                    id: 'idinventory'
-                },{
+                    //                    id: 'idinventory'
+                }, {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -69,17 +72,17 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     minWidth: 100
                 },
                 {
                     header: 'Nama Barang',
-                    flex:1,
+                    flex: 1,
                     dataIndex: 'nameinventory',
                     minWidth: 250,
-//                    id: 'nameinventory'
-                },                
-                 
+                    //                    id: 'nameinventory'
+                },
+
                 {
                     xtype: 'numbercolumn',
                     header: 'Harga',
@@ -135,7 +138,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                     dataIndex: 'warehouse_code',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
@@ -165,11 +168,11 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         return '<div style="background-color:yellow; font-color:black">&nbsp;' + value + '</div>';
                     }
 
-                }, 
+                },
                 {
                     header: 'Pajak',
-                    hidden:true,
-//                    width:50,
+                    hidden: true,
+                    //                    width:50,
                     dataIndex: 'ratetax',
                     editor: {
                         xtype: 'comboxtax',
@@ -194,33 +197,30 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
             selModel: {
                 selType: 'cellmodel'
             },
-            dockedItems: [ 
-                {
+            dockedItems: [{
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [  
-                        {
-                            xtype:'hiddenfield',
-                            id:'id_sales_order_do',
-                            name:'idsales_order'
+                    items: [{
+                            xtype: 'hiddenfield',
+                            id: 'id_sales_order_do',
+                            name: 'idsales_order'
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'delivery_order_id',
-                            name:'delivery_order_id'
+                            xtype: 'hiddenfield',
+                            id: 'delivery_order_id',
+                            name: 'delivery_order_id'
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'statusformSalesOrderGrid_do',
-                            name:'statusFormSalesOrder'
+                            xtype: 'hiddenfield',
+                            id: 'statusformSalesOrderGrid_do',
+                            name: 'statusFormSalesOrder'
                         }
                     ]
                 },
-                 {
+                {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
                             id: 'nojurnalDO_do',
@@ -228,13 +228,13 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             readOnly: true,
                             listeners: {
                                 render: function(component) {
-                                    component.getEl().on('click', function(event, el) {                                        
-                                         insertNoID(4, Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(),'idsales','sales','nojurnalDO_do','DO');
+                                    component.getEl().on('click', function(event, el) {
+                                        insertNoID(4, Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(), 'idsales', 'sales', 'nojurnalDO_do', 'DO');
                                         // insertNoRef(4, Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(), 'nojurnalDO_do','DO');
                                     });
                                 }
                             }
-                        }, 
+                        },
                         {
                             xtype: 'textfield',
                             labelWidth: 120,
@@ -247,17 +247,17 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             //         });
                             //     }
                             // }
-                        }, 
+                        },
                         {
                             xtype: 'datefield',
                             labelWidth: 120,
                             id: 'tanggalSalesOrder_do',
                             format: 'd/m/Y',
                             fieldLabel: 'Order Date'
-                        }, 
+                        },
                         {
                             xtype: 'datefield',
-                            hidden:true,
+                            hidden: true,
                             id: 'tglPelunasanSalesOrder_do',
                             format: 'd/m/Y',
                             fieldLabel: 'Tgl Pelunasan'
@@ -268,20 +268,20 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             labelWidth: 100,
                             valueField: 'idunit',
                             id: 'cbUnitEntryDeliveryOrder'
-//                            ,multiSelect:true
+                                //                            ,multiSelect:true
                         },
                         {
-                            xtype:'comboxDeliveryOrderStatus',
-                            hidden:true,
-                            id:'cb_sales_order_status_do'
+                            xtype: 'comboxDeliveryOrderStatus',
+                            hidden: true,
+                            id: 'cb_sales_order_status_do'
                         }
                     ]
-                }, 
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [
-                        
+
                         {
                             xtype: 'comboxCustomer',
                             id: 'customerSalesOrder_do',
@@ -290,27 +290,24 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         {
                             xtype: 'comboxpayment',
                             labelWidth: 120,
-                            hidden:true,
+                            hidden: true,
                             id: 'paymentSalesOrder_do',
                             valueField: 'idpayment',
                             listeners: {
                                 select: {
                                     fn: function(combo, value) {
-                                        if (combo.getValue() == 3)
-                                        {
+                                        if (combo.getValue() == 3) {
                                             //kredit
                                             Ext.getCmp('tglPelunasanSalesOrder').setDisabled(false);
                                             Ext.getCmp('pembayaranSalesOrder').setValue(0);
-//                                                Ext.getCmp('pembayaranSalesOrder').setReadOnly(true);
-                                        } else if (combo.getValue() == 4)
-                                        {
+                                            //                                                Ext.getCmp('pembayaranSalesOrder').setReadOnly(true);
+                                        } else if (combo.getValue() == 4) {
                                             //cod
                                             Ext.getCmp('tglPelunasanSalesOrder').setDisabled(true);
                                             Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
                                             Ext.getCmp('pembayaranSalesOrder').setValue(0);
                                             Ext.getCmp('pembayaranSalesOrder').setReadOnly(false);
-                                        } else if (combo.getValue() == 1)
-                                        {
+                                        } else if (combo.getValue() == 1) {
                                             //tunai
                                             Ext.getCmp('tglPelunasanSalesOrder').setDisabled(true);
                                             Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
@@ -325,36 +322,35 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             xtype: 'textfield',
                             width: 620,
                             labelWidth: 120,
-                            value:'Sales Order',
+                            value: 'Sales Order',
                             id: 'memoSalesOrder_do',
                             fieldLabel: 'Memo'
                         }
                     ]
-                }
-                ,
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-                         '->',{
+                        '->', {
                             itemId: 'recordPayment',
                             text: 'Record Delivery Order',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordDeliveryOrder, this, 'noprint', true)
-                        },{
+                        }, {
                             text: 'Print and Record Sales Order',
-                            hidden:true,
+                            hidden: true,
                             iconCls: 'drive_disk-icon',
                             handler: Ext.bind(this.recordDeliveryOrder, this, 'print', true)
                         },
-                         
-                         {
+
+                        {
                             xtype: 'textfield',
                             id: 'sisaBayarSalesOrder_do',
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
-                            hidden:true,
+                            hidden: true,
                             fieldLabel: 'Saldo Terhutang ',
                             fieldStyle: 'text-align: right;'
                         }
@@ -363,22 +359,21 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
-                            name:'notes',
-                            id:'notes_do',
-                            width: 500,
+                            name: 'notes',
+                            id: 'notes_do',
+                            width: 600,
                             fieldLabel: 'Catatan'
                         },
                         '->',
-                         {
+                        {
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             id: 'pembayaranSalesOrder_do',
                             align: 'right',
-//                            readOnly: true,
+                            //                            readOnly: true,
                             labelWidth: 120,
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
@@ -390,20 +385,19 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                                 }
                             }
                         }
-                          
-                       
+
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
-                            name:'ship_address',
+                            name: 'ship_address',
                             id: 'shipaddressSalesOrder_do',
                             labelWidth: 120,
-                            width: 500,
+                            width: 600,
                             fieldLabel: 'Alamat Pengiriman',
                             listeners: {
                                 render: function(component) {
@@ -440,7 +434,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             xtype: 'textfield',
                             id: 'angkutSalesOrder_do',
                             align: 'right',
-//                            readOnly: true,
+                            //                            readOnly: true,
                             labelWidth: 120,
                             fieldLabel: 'Biaya Angkut',
                             fieldStyle: 'text-align: right;',
@@ -448,7 +442,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                                 'render': function(c) {
                                     c.getEl().on('keyup', function() {
                                         // updateGridSalesOrder('general');
-                                         this.setRawValue(renderNomor(this.getValue()));
+                                        this.setRawValue(renderNomor(this.getValue()));
                                     }, c);
                                 }
                             }
@@ -458,17 +452,22 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                       {
+                    items: [{
                             xtype: 'datefield',
                             labelWidth: 120,
                             id: 'tanggalDeliveryOrder_do',
                             format: 'd/m/Y',
                             fieldLabel: 'Tgl Pengiriman'
-                        }
-                        ,
+                        },
+                        {
+                            xtype: 'textfield',
+                            labelWidth: 180,
+                            name: 'vehicle_number',
+                            id: 'vehicle_number_do',
+                            fieldLabel: 'No Mobil',
+                        },
                         '->',
-                       {
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -476,34 +475,71 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             id: 'totalSalesOrder_do',
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
-                        } 
+                        }
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxshipping',
-                            hidden:true,
-                            fieldLabel:'Metode Pengiriman',
+                            hidden: true,
+                            fieldLabel: 'Metode Pengiriman',
                             labelWidth: 120,
-                            name:'idshipping',
+                            name: 'idshipping',
                             id: 'shippingSalesOrder_do'
-                        }, 
+                        },
                         {
-                            xtype:'textfield',
+                            xtype: 'textfield',
                             labelWidth: 120,
-                            name:'driver_name',
-                            id:'driver_name_do',
-                            fieldLabel:'Nama Supir',
-                        },{
-                            xtype:'textfield',
-                            labelWidth: 120,
-                            name:'vehicle_number',
-                            id:'vehicle_number_do',
-                            fieldLabel:'No Mobil',
-                        },'->',
+                            name: 'driver_name',
+                            id: 'driver_name_do',
+                            fieldLabel: 'Nama Supir',
+                        },
+                        {
+                            xtype: 'fieldcontainer',
+                            fieldLabel: 'Akun Harga Pokok Penjualan',
+                            combineErrors: true,
+                            msgTarget: 'side',
+                            layout: 'hbox',
+                            labelWidth: 180,
+                            defaults: {
+                                flex: 1,
+                                hideLabel: true
+                            },
+                            items: [{
+                                xtype: 'textfield',
+                                allowBlank: false,
+                                name: 'accnametujuan',
+                                id: 'accname_coa_hppenjualan_do',
+                                listeners: {
+                                    render: function(component) {
+                                        component.getEl().on('click', function(event, el) {
+                                            if (Ext.getCmp('cbUnitEntryDeliveryOrder').getValue() == null) {
+                                                Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
+                                            } else {
+                                                wCoaDOHpPenjualanPopup.show();
+                                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                                    operation.params = {
+                                                        'idunit': idunit,
+                                                        'idaccounttype': '13'
+                                                    };
+                                                });
+                                                storeGridAccount.load();
+                                            }
+                                        });
+                                    }
+                                }
+                            }, {
+                                xtype: 'displayfield',
+                                id: 'accnumber_coa_hppenjualan_do',
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'idaccount',
+                                id: 'idaccount_coa_hppenjualan_do',
+                            }]
+                        },
+                        '->',
                         {
                             xtype: 'textfield',
                             align: 'right',
@@ -529,7 +565,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         //         render: function(component) {
                         //             component.getEl().on('click', function(event, el) {
                         //                     wSalesmanSOPopupPopup.show();
-                                            
+
                         //                     storeGridSalesmanSOPopup.on('beforeload',function(store, operation,eOpts){
                         //                         operation.params={
                         //                                     'extraparams': 'a.status:'+1
@@ -556,7 +592,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         //         render: function(component) {
                         //             component.getEl().on('click', function(event, el) {
                         //                     wSalesmanSOPopupPopup.show();
-                                            
+
                         //                     storeGridSalesmanSOPopup.on('beforeload',function(store, operation,eOpts){
                         //                         operation.params={
                         //                                     'extraparams': 'a.status:'+1
@@ -574,27 +610,70 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         //     id: 'aprovedby_id_do',
                         // },
                         {
-                            xtype:'comboxtaxtype',
+                            xtype: 'comboxtaxtype',
                             // name:'idtax',
-                            readOnly:true,
+                            readOnly: true,
                             labelWidth: 120,
                             // valueField:'idtax',
-                            id:'cb_tax_id_do',                            
-                              listeners: {
+                            id: 'cb_tax_id_do',
+                            listeners: {
                                 select: function(combo, record, index) {
-                                  // alert(combo.getValue()); // Return Unitad States and no USA
-                                  // updateGridSalesOrder();
+                                    // alert(combo.getValue()); // Return Unitad States and no USA
+                                    // updateGridSalesOrder();
                                 }
                             }
                         },
                         {
+                            xtype: 'fieldcontainer',
+                            fieldLabel: 'Akun Persediaan',
+                            combineErrors: true,
+                            msgTarget: 'side',
+                            layout: 'hbox',
+                            labelWidth: 180,
+                            defaults: {
+                                flex: 1,
+                                hideLabel: true
+                            },
+                            items: [{
+                                xtype: 'textfield',
+                                allowBlank: false,
+                                name: 'accnametujuan',
+                                id: 'accname_coa_persediaan_do',
+                                listeners: {
+                                    render: function(component) {
+                                        component.getEl().on('click', function(event, el) {
+                                            if (Ext.getCmp('cbUnitEntryDeliveryOrder').getValue() == null) {
+                                                Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
+                                            } else {
+                                                wCoaDOPersediaanPopup.show();
+                                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                                    operation.params = {
+                                                        'idunit': idunit,
+                                                        'idaccounttype': '3,4,5,20'
+                                                    };
+                                                });
+                                                storeGridAccount.load();
+                                            }
+                                        });
+                                    }
+                                }
+                            }, {
+                                xtype: 'displayfield',
+                                id: 'accnumber_coa_persediaan_do',
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'idaccount',
+                                id: 'idaccount_coa_persediaan_do',
+                            }]
+                        },
+                        {
                             xtype: 'comboxcurrency',
-                            hidden:true,
+                            hidden: true,
                             id: 'comboxcurrencySalesOrder_do',
                             labelWidth: 120
                         },
-                         '->',
-                       {
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -607,8 +686,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -638,111 +716,111 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
         // handle after edit
         console.log('after edit');
     },
-    recordDeliveryOrder: function(button, event, mode)
-    {
-        if(validasiQtyKirim()){
+    recordDeliveryOrder: function(button, event, mode) {
+        if (validasiQtyKirim()) {
 
-            if(validasiStockKirim()){
+            if (validasiStockKirim()) {
 
-                    if(validasiFormDO()){
-                        var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
+                if (validasiFormDO()) {
+                    var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
 
-                        Ext.Ajax.request({
-                            url: SITE_URL + 'sales/saveDeliveryOrder',
-                            method: 'POST',
-                            params: {
-                                no_do: Ext.getCmp('nojurnalDO_do').getValue(),
-                                delivery_order_id: Ext.getCmp('delivery_order_id').getValue(),
-                                statusform: Ext.getCmp('statusformSalesOrderGrid_do').getValue(),
-                                idsales: Ext.getCmp('id_sales_order_do').getValue(),
-                                // shipaddress: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
-                                idshipping: Ext.getCmp('shippingSalesOrder_do').getValue(),
-                                driver_name: Ext.getCmp('driver_name_do').getValue(),
-                                vehicle_number: Ext.getCmp('vehicle_number_do').getValue(),
-                                ship_address: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
-                                memo: Ext.getCmp('memoSalesOrder_do').getValue(),
-                                notes: Ext.getCmp('notes_do').getValue(),
-                                tanggal: Ext.getCmp('tanggalDeliveryOrder_do').getSubmitValue(),
-                                unit: Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(),
-                                biaya_angkut: Ext.getCmp('angkutSalesOrder_do').getValue(),
-                                status: Ext.getCmp('cb_sales_order_status_do').getValue(),
-                                ratetax: Ext.getCmp('cb_tax_id_do').getValue(),
-                                datagrid: json
-                            },
-                            success: function(form, action) {
+                    Ext.Ajax.request({
+                        url: SITE_URL + 'sales/saveDeliveryOrder',
+                        method: 'POST',
+                        params: {
+                            no_do: Ext.getCmp('nojurnalDO_do').getValue(),
+                            delivery_order_id: Ext.getCmp('delivery_order_id').getValue(),
+                            statusform: Ext.getCmp('statusformSalesOrderGrid_do').getValue(),
+                            idsales: Ext.getCmp('id_sales_order_do').getValue(),
+                            // shipaddress: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
+                            idshipping: Ext.getCmp('shippingSalesOrder_do').getValue(),
+                            driver_name: Ext.getCmp('driver_name_do').getValue(),
+                            vehicle_number: Ext.getCmp('vehicle_number_do').getValue(),
+                            ship_address: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
+                            memo: Ext.getCmp('memoSalesOrder_do').getValue(),
+                            notes: Ext.getCmp('notes_do').getValue(),
+                            tanggal: Ext.getCmp('tanggalDeliveryOrder_do').getSubmitValue(),
+                            unit: Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(),
+                            biaya_angkut: Ext.getCmp('angkutSalesOrder_do').getValue(),
+                            subtotal: Ext.getCmp('subtotalSalesOrder_do').getValue(),
+                            status: Ext.getCmp('cb_sales_order_status_do').getValue(),
+                            ratetax: Ext.getCmp('cb_tax_id_do').getValue(),
+                            idaccount_hppenjualan: Ext.getCmp('idaccount_coa_hppenjualan_do').getValue(),
+                            idaccount_persediaan: Ext.getCmp('idaccount_coa_persediaan_do').getValue(),
+                            datagrid: json
+                        },
+                        success: function(form, action) {
 
-                                var d = Ext.decode(form.responseText);
-                                if (!d.success)
-                                {
-                                    Ext.Msg.alert('Peringatan', d.message);
-                                } else {
-                                    Ext.Msg.alert('Success', d.message);
+                            var d = Ext.decode(form.responseText);
+                            if (!d.success) {
+                                Ext.Msg.alert('Peringatan', d.message);
+                            } else {
+                                Ext.Msg.alert('Success', d.message);
 
-                                    // Ext.getCmp('customerSalesOrder').setValue(null);
+                                // Ext.getCmp('customerSalesOrder').setValue(null);
 
-                                    // storeGridItemDeliveryOrder.removeAll();
-                                    // storeGridItemDeliveryOrder.sync();
-                                    // updateGridSalesOrder('general');
+                                // storeGridItemDeliveryOrder.removeAll();
+                                // storeGridItemDeliveryOrder.sync();
+                                // updateGridSalesOrder('general');
 
-                                    Ext.getCmp('WindowEntryDeliveryOrder').hide();
-                                    // Ext.getCmp('WindowSaleOrderList').hide();
+                                Ext.getCmp('WindowEntryDeliveryOrder').hide();
+                                // Ext.getCmp('WindowSaleOrderList').hide();
 
-                                    Ext.getCmp('deliveryOrderGrid').getStore.load();
-                                }
-
-                            },
-                            failure: function(form, action) {
-                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                Ext.getCmp('deliveryOrderGrid').getStore.load();
                             }
-                        });
-                    }
-                    
+
+                        },
+                        failure: function(form, action) {
+                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                        }
+                    });
+                }
+
             }
-            
+
         }
         // console.log(Ext.getCmp('idaccountSalesOrder').getValue())
         // if (validasiSalesOrder())
         // {
-            // var dp = Ext.getCmp('angkutSalesOrder').getValue();
-            // if(dp!='')
-            // {
-            //     //cek link dp
-            //     Ext.Ajax.request({
-            //         url: SITE_URL + 'account/cekAccLink',
-            //         method: 'POST',
-            //         params: {
-            //             idacclink: 17,
-            //             idunit:Ext.getCmp('cbUnitEntryDeliveryOrder').getValue()
-            //         },
-            //         success: function(form, action) {
+        // var dp = Ext.getCmp('angkutSalesOrder').getValue();
+        // if(dp!='')
+        // {
+        //     //cek link dp
+        //     Ext.Ajax.request({
+        //         url: SITE_URL + 'account/cekAccLink',
+        //         method: 'POST',
+        //         params: {
+        //             idacclink: 17,
+        //             idunit:Ext.getCmp('cbUnitEntryDeliveryOrder').getValue()
+        //         },
+        //         success: function(form, action) {
 
-            //             var d = Ext.decode(form.responseText);
-            //             if (!d.success)
-            //             {
-            //                 Ext.Msg.alert('Peringatan', d.message);
-            //             } else {
-            //                 // Ext.getCmp('wEntryPayment').hide();
-            //                 // PaymentGridStore.load();
-            //             }
+        //             var d = Ext.decode(form.responseText);
+        //             if (!d.success)
+        //             {
+        //                 Ext.Msg.alert('Peringatan', d.message);
+        //             } else {
+        //                 // Ext.getCmp('wEntryPayment').hide();
+        //                 // PaymentGridStore.load();
+        //             }
 
-            //         },
-            //         failure: function(form, action) {
-            //             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            //         }
-            //     });
-            // } 
-            
-            // var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntryDeliveryOrder').getValue());
+        //         },
+        //         failure: function(form, action) {
+        //             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+        //         }
+        //     });
+        // } 
 
-            
+        // var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
+        //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntryDeliveryOrder').getValue());
+
+
         // }
 
 
     },
     saveRecurr: function() {
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -750,40 +828,40 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('customerSalesOrder').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
-            wItemSalesPopupOrderPopup.show();
-            storeGridItemSalesPopupOrder.load();
+        //        console.log(Ext.getCmp('customerSalesOrder').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        wItemSalesPopupOrderPopup.show();
+        storeGridItemSalesPopupOrder.load();
 
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
+        //        var rec = new JournalStore({
+        //            idaccount: null,
+        //            accname: null,
+        //            accnumber: null,
+        //            debit: null,
+        //            credit: null
+        //        });
+        //
+        //        this.getStore().insert(0, rec);
+        //        this.cellEditing.startEditByPosition({
+        //            row: 0,
+        //            column: 0
+        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);
@@ -795,40 +873,37 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
 });
 
 
-Ext.define(dir_sys+'sales.WindowEntryDeliveryOrder', {
+Ext.define(dir_sys + 'sales.WindowEntryDeliveryOrder', {
     extend: 'Ext.window.Window',
     alias: 'widget.WindowEntryDeliveryOrder',
-    id:'WindowEntryDeliveryOrder',
+    id: 'WindowEntryDeliveryOrder',
     title: 'Entry Delivery Order',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
-    autoDestroy:false,
-    modal:true,
+    autoDestroy: false,
+    modal: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: panelW,
     height: sizeH,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'EntryDeliveryOrder'
+        xtype: 'EntryDeliveryOrder'
     }]
 });
 
-function updateGridSalesOrder(tipe)
-{
+function updateGridSalesOrder(tipe) {
     console.log('update run');
-    if (tipe == 'general')
-    {
+    if (tipe == 'general') {
         //jurnal umu store storeJ        
-//        var storeJ = storeJ;    
+        //        var storeJ = storeJ;    
         var addprefix = '';
-    } else if (tipe == 'recurring')
-    {
-//        storeJ = storeJrec;
+    } else if (tipe == 'recurring') {
+        //        storeJ = storeJrec;
         var addprefix = 'RecSalesOrder';
     }
 
@@ -850,11 +925,11 @@ function updateGridSalesOrder(tipe)
         obj.set('total', net);
     });
 
-//     console.log(subtotalSalesOrder);
+    //     console.log(subtotalSalesOrder);
     totalSalesOrder = subtotalSalesOrder + angkutSalesOrder * 1;
-//     console.log(totalSalesOrder+' '+totalPajak);
+    //     console.log(totalSalesOrder+' '+totalPajak);
     totalSalesOrder = totalSalesOrder + totalPajak;
-//     console.log(totalSalesOrder);
+    //     console.log(totalSalesOrder);
     sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
 
     // Ext.getCmp('subtotalSalesOrder' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
@@ -866,18 +941,18 @@ function updateGridSalesOrder(tipe)
 
 }
 
-function validasiQtyKirim(){
+function validasiQtyKirim() {
     var qsent = true;
     Ext.each(storeGridItemDeliveryOrder.data.items, function(obj, i) {
-        console.log('obj.data.qtysisakirim:'+obj.data.qtysisakirim);
+        console.log('obj.data.qtysisakirim:' + obj.data.qtysisakirim);
 
-        if(obj.data.qtysisakirim*1!==0){
-            if( obj.data.qty_kirim > obj.data.qtysisakirim) {
-                Ext.Msg.alert('Failed', 'kuantitas kirim untuk produk <b>'+ obj.data.nameinventory+'</b> melebihi kuantitas sisa kirim' );
+        if (obj.data.qtysisakirim * 1 !== 0) {
+            if (obj.data.qty_kirim > obj.data.qtysisakirim) {
+                Ext.Msg.alert('Failed', 'kuantitas kirim untuk produk <b>' + obj.data.nameinventory + '</b> melebihi kuantitas sisa kirim');
                 qsent = false;
             }
-        } else if( obj.data.qty_kirim > obj.data.qty) {
-            Ext.Msg.alert('Failed', 'kuantitas kirim untuk produk <b>'+ obj.data.nameinventory+'</b> melebihi kuantitas order' );
+        } else if (obj.data.qty_kirim > obj.data.qty) {
+            Ext.Msg.alert('Failed', 'kuantitas kirim untuk produk <b>' + obj.data.nameinventory + '</b> melebihi kuantitas order');
             qsent = false;
         }
     });
@@ -885,74 +960,66 @@ function validasiQtyKirim(){
     return qsent;
 }
 
-function validasiStockKirim(){
+function validasiStockKirim() {
     var qsent = true;
     var idunit = Ext.getCmp('cbUnitEntryDeliveryOrder').getValue();
 
     Ext.each(storeGridItemDeliveryOrder.data.items, function(obj, i) {
 
-            if(obj.data.warehouse_code==null){
-                Ext.Msg.alert('Failed', 'Warehouse untuk kode produk <b>'+ obj.data.invno+'</b> belum ditentukan' );
-                qsent = false;
-            } else {
-                Ext.Ajax.request({
-                    url: SITE_URL + 'sales/check_stock_kirim',
-                    async:false,
-                    method: 'GET',
-                    params: {
-                        idunit:idunit,
-                        idinventory: obj.data.idinventory,
-                        invno: obj.data.invno,
-                        nameinventory: obj.data.nameinventory,
-                        idsalesitem: obj.data.idsalesitem,
-                        qty_kirim: obj.data.qty_kirim,
-                        warehouse_code: obj.data.warehouse_code
-                    },
-                    success: function(form, action) {
+        if (obj.data.warehouse_code == null) {
+            Ext.Msg.alert('Failed', 'Warehouse untuk kode produk <b>' + obj.data.invno + '</b> belum ditentukan');
+            qsent = false;
+        } else {
+            Ext.Ajax.request({
+                url: SITE_URL + 'sales/check_stock_kirim',
+                async: false,
+                method: 'GET',
+                params: {
+                    idunit: idunit,
+                    idinventory: obj.data.idinventory,
+                    invno: obj.data.invno,
+                    nameinventory: obj.data.nameinventory,
+                    idsalesitem: obj.data.idsalesitem,
+                    qty_kirim: obj.data.qty_kirim,
+                    warehouse_code: obj.data.warehouse_code
+                },
+                success: function(form, action) {
 
-                        var d = Ext.decode(form.responseText);
-                        if (!d.success)
-                        {
-                            Ext.Msg.alert('Peringatan', d.message);
-                            qsent = false;
-                        } else {
-                            // Ext.getCmp('wEntryPayment').hide();
-                            // PaymentGridStore.load();
-                        }
-
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    var d = Ext.decode(form.responseText);
+                    if (!d.success) {
+                        Ext.Msg.alert('Peringatan', d.message);
+                        qsent = false;
+                    } else {
+                        // Ext.getCmp('wEntryPayment').hide();
+                        // PaymentGridStore.load();
                     }
-                });
-            }
-                
+
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
+        }
+
     });
 
     return qsent;
 }
 
-function validasiFormDO()
-{
-//    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
+function validasiFormDO() {
+    //    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
 
-    if (Ext.getCmp('nojurnalDO_do').getValue() == null)
-    {
+    if (Ext.getCmp('nojurnalDO_do').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan nomor DO');
-
-    } 
-    // else if (Ext.getCmp('shippingSalesOrder_do').getValue() == null)
-    // {
-    //     Ext.Msg.alert('Failed', 'Tentukan metode pengiriman');
-    // } 
-    else if (Ext.getCmp('tanggalDeliveryOrder_do').getValue() == null)
-    {
+    } else if (Ext.getCmp('idaccount_coa_persediaan_do').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Tentukan akun persediaan');
+    } else if (Ext.getCmp('idaccount_coa_hppenjualan_do').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Tentukan akun harga pokok penjualan');
+    } else if (Ext.getCmp('tanggalDeliveryOrder_do').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal pengiriman');
-    } else if (Ext.getCmp('shipaddressSalesOrder_do').getValue() == null)
-    {
+    } else if (Ext.getCmp('shipaddressSalesOrder_do').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan alamat pengiriman');
-    } 
-    else {
+    } else {
         return true;
     }
 }
