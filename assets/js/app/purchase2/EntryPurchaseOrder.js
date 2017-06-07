@@ -375,8 +375,11 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        ChooserListSupplier.target = Ext.getCmp('EntryPurchaseOrder');
-                                        ChooserListSupplier.show();
+                                        var id = Ext.getCmp('cb_purchase_order_status').getValue();
+                                        if (id * 1 === 1) {
+                                            ChooserListSupplier.target = Ext.getCmp('EntryPurchaseOrder');
+                                            ChooserListSupplier.show();
+                                        }
                                     });
                                 }
                             },
