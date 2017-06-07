@@ -199,14 +199,15 @@ function showGoodsReceiptData(record) {
     var cb_status_poreceipt = Ext.getCmp('cb_status_poreceipt');
     cb_status_poreceipt.getStore().load();
 
-    Ext.getCmp('supplier_poreceipt').getStore().load();
     Ext.getCmp('cb_tax_id_poreceipt').getStore().load();
     Ext.getCmp('idpurchase_poreceipt').setValue(record.data.idpurchase);
     Ext.getCmp('nojurnal_poreceipt').setValue(record.data.nopurchase);
     Ext.getCmp('po_date_poreceipt').setValue(record.data.date);
+    Ext.getCmp('received_date_poreceipt').setMinValue(new Date(record.data.date));
     Ext.getCmp('cbUnit_poreceipt').setValue(record.data.idunit);
     Ext.getCmp('cb_tax_id_poreceipt').setValue(record.data.idtax);
     Ext.getCmp('supplier_poreceipt').setValue(record.data.idsupplier);
+    Ext.getCmp('suppliername_poreceipt').setValue(record.data.namesupplier);
     Ext.getCmp('received_poreceipt').setValue(record.data.lastname);
     Ext.getCmp('receivedid_poreceipt').setValue(record.data.receivedby_id);
     Ext.getCmp('memo_poreceipt').setValue(record.data.memo);
