@@ -40,7 +40,8 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseOrder', {
     alias: 'widget.EntryPurchaseOrder',
     xtype: 'cell-editing',
     // title: 'Input Sales Order',
-//    frame: true,    
+//    frame: true,
+
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -373,12 +374,23 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseOrder', {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [
-                        
                         {
-                            xtype: 'comboxidsupplier',
-                            fieldLabel:'Supplier',
+                            xtype: 'textfield',
+                            fieldLabel: 'Supplier',
+                            id: 'supplierNamePurchaseOrder',
+                            labelWidth: 120,
+                            listeners: {
+                                render: function(component) {
+                                    component.getEl().on('click', function(event, el) { 
+                                        ChooserListSupplier.target = Ext.getCmp('EntryPurchaseOrder');
+                                        ChooserListSupplier.show();
+                                    });
+                                }
+                            },
+                        },
+                        {
+                            xtype: 'hiddenfield',
                             id: 'supplierPurchaseOrder',
-                            labelWidth: 120
                         },
                         // {
                         //     xtype: 'textfield',
@@ -735,12 +747,20 @@ Ext.define(dir_sys+'purchase2.EntryPurchaseOrder', {
 
         this.on('afteredit', this.onAfterEdit, this);
 
+        this.on('selectSupplier', this.selectSupplier, this);
+
         this.on({
             scope: this,
             edit: function() {
                 updateGridPurchaseOrder('general');
             }
         });
+    },
+    selectSupplier(data){
+        Ext.getCmp('supplierPurchaseOrder').setValue(data.idsupplier);
+        Ext.getCmp('supplierNamePurchaseOrder').setValue(data.namesupplier);
+
+        console.log(data);
     },
     onAfterEdit: function(o) {
         // handle after edit

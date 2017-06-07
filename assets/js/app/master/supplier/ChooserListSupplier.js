@@ -37,24 +37,23 @@ var GridSupplierList = Ext.create('Ext.grid.Panel', {
     width: 800,
     height: 350,
     selModel: smChooserListSupplier,
-    autoScroll:true,
+    autoScroll: true,
     columns: [
-        {header:'idsupplier', dataIndex:'idsupplier', hidden:true},
-        {header:'No', xtype:'rownumberer', sortable:false, width: 30},
-        {header:'Supp. Code', dataIndex:'code', minWidth: 150},
-        {header:'Name', dataIndex:'namesupplier', minWidth: 150},
-        {header:'Type', dataIndex:'typename', minWidth: 150},
-        {header:'City', dataIndex:'city', minWidth: 150},
-        {header:'State', dataIndex:'state', minWidth: 150},
-        {header:'Post Code', dataIndex:'postcode', minWidth: 90},
-        {header:'Country', dataIndex:'country', minWidth: 150}
+        { header: 'idsupplier', dataIndex: 'idsupplier', hidden: true },
+        { header: 'No', xtype: 'rownumberer', sortable: false, width: 30 },
+        { header: 'Supp. Code', dataIndex: 'code', minWidth: 150 },
+        { header: 'Name', dataIndex: 'namesupplier', minWidth: 150 },
+        { header: 'Type', dataIndex: 'typename', minWidth: 150 },
+        { header: 'City', dataIndex: 'city', minWidth: 150 },
+        { header: 'State', dataIndex: 'state', minWidth: 150 },
+        { header: 'Post Code', dataIndex: 'postcode', minWidth: 90 },
+        { header: 'Country', dataIndex: 'country', minWidth: 150 }
     ],
-    dockedItems:[
-        {
+    dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',
-            items:[
-                'Type :',
+            items: [
+                /*'Type :',
                 {
                     boxLabel: 'All',
                     xtype: 'checkboxfield',
@@ -83,7 +82,7 @@ var GridSupplierList = Ext.create('Ext.grid.Panel', {
                             storeChooserListSupplier.filter(function(item){return item.get('idsuppliertype') == record[0].data.idsuppliertype})
                         }
                     },
-                },
+                },*/
                 '->',
                 'Pencarian',
                 ' ',
@@ -99,19 +98,19 @@ var GridSupplierList = Ext.create('Ext.grid.Panel', {
             defaults: {
                 width: 90,
             },
-            items:[
+            items: [
                 '->',
                 {
                     text: 'OK',
                     itemId: 'btnOk',
                     disabled: true,
-                    handler: function(){
+                    handler: function() {
                         GridSupplierList.fireEvent('selectItem', ChooserListSupplier.target);
                     }
                 },
                 {
                     text: 'Cancel',
-                    handler: function(){
+                    handler: function() {
                         ChooserListSupplier.hide();
                     }
                 }
@@ -131,9 +130,8 @@ var GridSupplierList = Ext.create('Ext.grid.Panel', {
                 storeChooserListSupplier.load();
             }
         },
-        itemdblclick: function() {
-        },
-        selectItem: function(form){
+        itemdblclick: function() {},
+        selectItem: function(form) {
             var selectedRecord = GridSupplierList.getSelectionModel().getSelection()[0];
             form.fireEvent('selectSupplier', selectedRecord.data);
             ChooserListSupplier.hide();
