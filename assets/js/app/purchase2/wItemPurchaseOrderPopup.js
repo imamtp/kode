@@ -106,7 +106,6 @@ Ext.define(dir_sys + 'purchase2.GridItemPurchaseOrderPopup', {
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
             header: 'Total Stock',

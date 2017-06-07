@@ -41,7 +41,7 @@ var storeGridItemSalesPopupOrder = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/',
+        url: SITE_URL + 'backend/ext_get_all/InventoryAllBySku/inventory/',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -135,7 +135,6 @@ Ext.define('GridItemSalesPopupOrder', {
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
             header: 'Total Stock',
@@ -192,8 +191,7 @@ Ext.define('GridItemSalesPopupOrder', {
             xtype: 'toolbar',
             hidden: true,
             dock: 'top',
-            items: [
-                {
+            items: [{
                     itemId: 'chooseItemSalesPopupOrder',
                     text: 'Pilih Barang',
                     iconCls: 'add-icon',
@@ -201,85 +199,84 @@ Ext.define('GridItemSalesPopupOrder', {
                         var grid = Ext.ComponentQuery.query('GridItemSalesPopupOrder')[0];
                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
+                        if (data.length == 0) {
                             Ext.Msg.alert('Failure', 'Pilih Barang terlebih dahulu!');
                         } else {
-//                            Ext.getCmp('accnamejurnal').setValue(selectedRecord.get('text'));
-//                            Ext.getCmp('idaccountjurnal').setValue(selectedRecord.get('id'));
-//                            Ext.getCmp('accnumberjurnal').setValue(selectedRecord.get('accnumber'));
-                             var recPO = new GridItemSalesOrderModel({
+                            //                            Ext.getCmp('accnamejurnal').setValue(selectedRecord.get('text'));
+                            //                            Ext.getCmp('idaccountjurnal').setValue(selectedRecord.get('id'));
+                            //                            Ext.getCmp('accnumberjurnal').setValue(selectedRecord.get('accnumber'));
+                            var recPO = new GridItemSalesOrderModel({
                                 idinventory: selectedRecord.get('idinventory'),
                                 invno: selectedRecord.get('invno'),
                                 nameinventory: selectedRecord.get('nameinventory'),
                                 short_desc: selectedRecord.get('satuan_pertama'),
                                 price: selectedRecord.get('sellingprice'),
-                                idunit:idunit,
-                                assetaccount:selectedRecord.get('assetaccount'),
+                                idunit: idunit,
+                                assetaccount: selectedRecord.get('assetaccount'),
                                 sku_no: selectedRecord.get('sku_no'),
                                 qty: 1,
                                 size: 1,
                                 disc: 0,
                                 total: selectedRecord.get('sellingprice'),
                                 ratetax: 0
-        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                                    //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
                             });
 
                             var gridPO = Ext.getCmp('EntrySalesOrder');
                             gridPO.getStore().insert(0, recPO);
                             updateGridSalesOrder('general');
-                    
-                           Ext.getCmp('wItemSalesPopupOrderPopup').hide();
+
+                            Ext.getCmp('wItemSalesPopupOrderPopup').hide();
                             //cek dulu apakah assetaccount sudah terdefisinis di inventoryunit
-                    //         var idunit = Ext.getCmp('cbUnitEntryPurchase').getValue();
-                    //          Ext.Ajax.request({
-                    //             url: SITE_URL + 'purchase/cekAssetAccount',
-                    //             method: 'POST',
-                    //             params: {
-                    //                 idinventory: selectedRecord.get('idinventory'),
-                    //                 idunit: idunit
-                    //             },
-                    //             success: function(form, action) {
+                            //         var idunit = Ext.getCmp('cbUnitEntryPurchase').getValue();
+                            //          Ext.Ajax.request({
+                            //             url: SITE_URL + 'purchase/cekAssetAccount',
+                            //             method: 'POST',
+                            //             params: {
+                            //                 idinventory: selectedRecord.get('idinventory'),
+                            //                 idunit: idunit
+                            //             },
+                            //             success: function(form, action) {
 
-                    //                 var d = Ext.decode(form.responseText);
-                    //                 if (!d.success)
-                    //                 {
-                    //                     wFormSelectAssetPurchase.show();
-                    //                     Ext.getCmp('wFormSelectAssetPurchase').setTitle('Pilih Akun Asset (harta) Untuk Barang '+selectedRecord.get('nameinventory'));
-                    //                 } else {
-                    //                    var recPO = new mPurchaseGridStore({
-                    //                         idinventory: selectedRecord.get('idinventory'),
-                    //                         invno: selectedRecord.get('invno'),
-                    //                         nameinventory: selectedRecord.get('nameinventory'),
-                    //                         price: selectedRecord.get('cost'),
-                    //                         idunit:idunit,
-                    //                         assetaccount:selectedRecord.get('assetaccount'),
-                    //                         qty: 1,
-                    //                         disc: 0,
-                    //                         total: selectedRecord.get('cost'),
-                    //                         ratetax: 0
-                    // //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
-                    //                     });
+                            //                 var d = Ext.decode(form.responseText);
+                            //                 if (!d.success)
+                            //                 {
+                            //                     wFormSelectAssetPurchase.show();
+                            //                     Ext.getCmp('wFormSelectAssetPurchase').setTitle('Pilih Akun Asset (harta) Untuk Barang '+selectedRecord.get('nameinventory'));
+                            //                 } else {
+                            //                    var recPO = new mPurchaseGridStore({
+                            //                         idinventory: selectedRecord.get('idinventory'),
+                            //                         invno: selectedRecord.get('invno'),
+                            //                         nameinventory: selectedRecord.get('nameinventory'),
+                            //                         price: selectedRecord.get('cost'),
+                            //                         idunit:idunit,
+                            //                         assetaccount:selectedRecord.get('assetaccount'),
+                            //                         qty: 1,
+                            //                         disc: 0,
+                            //                         total: selectedRecord.get('cost'),
+                            //                         ratetax: 0
+                            // //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                            //                     });
 
-                    //                     var gridPO = Ext.getCmp('EntryPurchase');
-                    //                     gridPO.getStore().insert(0, recPO);
-                    //                     updateGridPurchase('general');
-                                
-                    //                    Ext.getCmp('wItemSalesPopupOrderPopup').hide();
-                    //                 }
+                            //                     var gridPO = Ext.getCmp('EntryPurchase');
+                            //                     gridPO.getStore().insert(0, recPO);
+                            //                     updateGridPurchase('general');
 
-                    //             },
-                    //             failure: function(form, action) {
-                    //                 Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                    //             }
-                    //         });
+                            //                    Ext.getCmp('wItemSalesPopupOrderPopup').hide();
+                            //                 }
 
-                            
+                            //             },
+                            //             failure: function(form, action) {
+                            //                 Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                            //             }
+                            //         });
+
+
                         }
 
 
                     }
-                },'-',
+                }, '-',
                 '->',
                 'Pencarian: ', ' ',
                 {

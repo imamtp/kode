@@ -45,7 +45,7 @@ var storeGridItemSelectSalesQuotation = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/inventoryall/inventory',
+        url: SITE_URL + 'backend/ext_get_all/inventoryallbysku/inventory',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -141,7 +141,6 @@ Ext.define('GridItemSelectSalesQuotation', {
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         // { header: 'Merk', dataIndex: 'brand_name', minWidth: 150 },
         {
