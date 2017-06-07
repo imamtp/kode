@@ -2,8 +2,8 @@
 
 Ext.define('GridBatchItemPOListModel', {
     extend: 'Ext.data.Model',
-     fields: [
-      'purchase_batch_id', 'idpurchaseitem','idinventory','sku_no','invno','nameinventory','qty','price','disc','total','ratetax','tax','size','short_desc','size_measurement','warehouse_code','notes'
+    fields: [
+        'purchase_batch_id', 'idpurchaseitem', 'idinventory', 'sku_no', 'invno', 'nameinventory', 'qty', 'price', 'disc', 'total', 'ratetax', 'tax', 'size', 'short_desc', 'size_measurement', 'warehouse_code', 'notes'
     ],
     idProperty: 'id'
 });
@@ -16,7 +16,7 @@ var storeGridBatchItemPOList = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-         url: SITE_URL + 'purchase/check_batch_item',
+        url: SITE_URL + 'purchase/check_batch_item',
         actionMethods: 'GET',
         method: 'GET',
         reader: {
@@ -63,13 +63,13 @@ Ext.define('MY.searchGridBatchItemPOList', {
 //     }
 // });
 
-Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
+Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
     extend: 'Ext.grid.Panel',
     id: 'GridBatchGoodsReceipt',
     alias: 'widget.GridBatchGoodsReceipt',
     xtype: 'cell-editing',
     // title: 'Input Sales Order',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -82,30 +82,29 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
             // forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridBatchItemPOList,
-            columns: [
-                {
+            columns: [{
                     header: 'purchase_batch_id',
                     hidden: true,
                     dataIndex: 'purchase_batch_id',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
-              {
+                {
                     header: 'idpurchaseitem',
                     hidden: true,
                     dataIndex: 'idpurchaseitem',
-                //                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-                //                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idpurchase',
                     hidden: true,
                     dataIndex: 'idpurchase',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -115,21 +114,21 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                 {
                     header: 'SKU No',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 150
                 },
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 150
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
-                    flex:1,
+                    flex: 1,
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
@@ -153,10 +152,10 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                     //     displayField: 'short_desc',
                     //     labelWidth: 100
                     // }
-                }, 
+                },
                 {
                     xtype: 'numbercolumn',
-                    hidden:true,
+                    hidden: true,
                     header: 'Qty #2',
                     width: 70,
                     dataIndex: 'stock_kedua',
@@ -169,7 +168,7 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                 },
                 {
                     header: 'Satuan #2',
-                     hidden:true,
+                    hidden: true,
                     dataIndex: 'satuan_kedua',
                     // editor: {
                     //     xtype: 'comboxmeasurement',
@@ -178,26 +177,26 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                     //     displayField: 'short_desc',
                     //     labelWidth: 100
                     // }
-                },   
+                },
                 {
                     header: 'Warehouse',
                     minWidth: 150,
                     dataIndex: 'warehouse_code',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
                     }
                 },
                 {
-                    header: 'Catatan',
+                    header: 'Kd brg supplier',
                     minWidth: 150,
                     dataIndex: 'notes',
                     editor: {
                         xtype: 'textfield',
-                        hideLabel:true,
+                        hideLabel: true,
                         labelWidth: 100
                     }
                 }
@@ -205,58 +204,56 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
             selModel: {
                 selType: 'cellmodel'
             },
-            dockedItems: [ 
-                {
-                    xtype:'hiddenfield',
-                    id:'idpurchase_batchitemporeceipt',
-                    name:'idpurchase'
-                },  
-                {
-                    xtype:'hiddenfield',
-                    id:'idpurchaseitem_batchitemporeceipt',
-                    name:'idpurchaseitem'
-                }, 
-                {
-                    xtype:'hiddenfield',
-                    id:'idinventory_batchitemporeceipt',
-                    name:'idinventory'
-                }, 
-                {
-                    xtype:'hiddenfield',
-                    id:'idunit_batchitemporeceipt',
-                    name:'idunit'
-                },      
-                {
-                    xtype:'hiddenfield',
-                    id:'qty_batchitemporeceipt',
-                    name:'qty'
-                }, 
-                {
-                    xtype:'hiddenfield',
-                    id:'short_desc_batchitemporeceipt'
+            dockedItems: [{
+                    xtype: 'hiddenfield',
+                    id: 'idpurchase_batchitemporeceipt',
+                    name: 'idpurchase'
                 },
-                  {
-                    xtype:'hiddenfield',
-                    id:'warehouse_code_batchitemporeceipt'
-                }, 
                 {
-                    xtype:'hiddenfield',
-                    id:'nameinventory_batchitemporeceipt'
-                },       
-                         
+                    xtype: 'hiddenfield',
+                    id: 'idpurchaseitem_batchitemporeceipt',
+                    name: 'idpurchaseitem'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'idinventory_batchitemporeceipt',
+                    name: 'idinventory'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'idunit_batchitemporeceipt',
+                    name: 'idunit'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'qty_batchitemporeceipt',
+                    name: 'qty'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'short_desc_batchitemporeceipt'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'warehouse_code_batchitemporeceipt'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'nameinventory_batchitemporeceipt'
+                },
+
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
-                         xtype:'numericfield',
-                         width:190,
-                         id:'numbatch_itempo',
-                         fieldLabel:'Jumlah Batch'   
+                    items: [{
+                            xtype: 'numericfield',
+                            width: 190,
+                            id: 'numbatch_itempo',
+                            fieldLabel: 'Jumlah Batch'
                         },
                         {
                             text: 'Buat Batch',
-                            id:'buatbatchbtn_itempo',
+                            id: 'buatbatchbtn_itempo',
                             handler: function() {
 
                                 // var GridBatchGoodsReceipt = Ext.getCmp('GridBatchGoodsReceipt').getStore();
@@ -276,7 +273,7 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                                         satuan: Ext.getCmp('short_desc_batchitemporeceipt').getValue(),
                                         warehouse_code: Ext.getCmp('warehouse_code_batchitemporeceipt').getValue(),
                                         nameinventory: Ext.getCmp('nameinventory_batchitemporeceipt').getValue(),
-                                        is_temp:1
+                                        is_temp: 1
                                     },
                                     success: function(form, action) {
                                         var d = Ext.decode(form.responseText);
@@ -292,13 +289,13 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                                         //              };
                                         //          });
                                         storeGridBatchItemPOList.load({
-                                           params:{
-                                            idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
-                                                        idpurchaseitem: Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue(),
-                                                        idinventory: Ext.getCmp('idinventory_batchitemporeceipt').getValue(),
-                                                        idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
-                                                        is_tmp:1
-                                             }
+                                            params: {
+                                                idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
+                                                idpurchaseitem: Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue(),
+                                                idinventory: Ext.getCmp('idinventory_batchitemporeceipt').getValue(),
+                                                idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
+                                                is_tmp: 1
+                                            }
                                         });
 
                                         // Ext.each(d.data, function(obj, i) {
@@ -320,7 +317,7 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                                         //         warehouse_code: obj.warehouse_code
                                         // });
                                         // storeGridBatchItemPOList.insert(0, recDO);
-                                                        // });
+                                        // });
 
                                         // var bersihinStoreGRPO = Ext.getCmp('GridBatchGoodsReceipt').getStore();
                                         // bersihinStoreGRPO.removeAll();
@@ -406,8 +403,7 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -429,22 +425,22 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
         this.on({
             scope: this,
             edit: function() {
-               if(Ext.getCmp('statusform_poreceipt').getValue()==='input'){
+                if (Ext.getCmp('statusform_poreceipt').getValue() === 'input') {
                     updateGRBatch()
-               }
-               
-               if(Ext.getCmp('statusform_poreceipt').getValue()==='edit'){
-                    if(Ext.getCmp('numbatch_itempo').getValue()*1===0){
+                }
+
+                if (Ext.getCmp('statusform_poreceipt').getValue() === 'edit') {
+                    if (Ext.getCmp('numbatch_itempo').getValue() * 1 === 0) {
                         //kalo batchnya masih kosong boleh edit
-                         updateGRBatch()
+                        updateGRBatch()
                     }
-                   
-                   if(Ext.getCmp('cb_status_poreceipt').getValue()*1===1){
+
+                    if (Ext.getCmp('cb_status_poreceipt').getValue() * 1 === 1) {
                         //kalo statusnya masih open boleh edit
                         updateGRBatch()
-                   }
-               }
-               
+                    }
+                }
+
             }
         });
     },
@@ -452,23 +448,18 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
         // handle after edit
         console.log('after edit');
     },
-    recordPurchaseOrder: function(button, event, mode)
-    {
+    recordPurchaseOrder: function(button, event, mode) {
 
     },
     saveRecurr: function() {
-        if (validasiPurchaseOrder())
-        {
+        if (validasiPurchaseOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
     },
-    loadStore: function() {
-    },
-    onStoreLoad: function() {
-    },
-    onAddClick: function() {
-    },
+    loadStore: function() {},
+    onStoreLoad: function() {},
+    onAddClick: function() {},
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);
         // updateGridPurchaseOrder('general')
@@ -480,35 +471,35 @@ Ext.define(dir_sys+'purchase2.GridBatchGoodsReceipt', {
 
 
 
-Ext.define(dir_sys+'purchase2.WindowBatchItemList', {
+Ext.define(dir_sys + 'purchase2.WindowBatchItemList', {
     extend: 'Ext.window.Window',
     alias: 'widget.WindowBatchItemList',
-    id:'WindowBatchItemList',
+    id: 'WindowBatchItemList',
     title: 'Batch Item',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
-    autoDestroy:false,
-    modal:true,
+    autoDestroy: false,
+    modal: true,
     closeAction: 'hide',
-//    autoWidth: true,
-    width: panelW-200,
-    height: sizeH-200,
+    //    autoWidth: true,
+    width: panelW - 200,
+    height: sizeH - 200,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridBatchGoodsReceipt'
+        xtype: 'GridBatchGoodsReceipt'
     }],
     listeners: {
-            show: function() {
-                // this.el.setStyle('top', '');
-            }
+        show: function() {
+            // this.el.setStyle('top', '');
         }
+    }
 });
 
-function updateGRBatch(){
+function updateGRBatch() {
     console.log('updateGRBatch');
     var json = Ext.encode(Ext.pluck(storeGridBatchItemPOList.data.items, 'data'));
 
