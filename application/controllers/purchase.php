@@ -263,7 +263,7 @@ class purchase extends MY_Controller {
             $wer = null;
         }
 
-        $q = $this->db->query("select a.*,b.invno,b.nameinventory,c.short_desc,d.warehouse_code
+        $q = $this->db->query("select a.*,b.invno,b.nameinventory,b.sku_no,c.short_desc,d.warehouse_code
                                 from purchaseitem a
                                 join inventory b ON a.idinventory = b.idinventory
                                 join productmeasurement c ON c.measurement_id = a.measurement_id
