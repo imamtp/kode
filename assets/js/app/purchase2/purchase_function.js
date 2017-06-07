@@ -20,7 +20,7 @@ function showPurchaseRequestData(record) {
     var purchase_req_date = Ext.getCmp('tanggalPurchaseRequisition');
     purchase_req_date.setValue(record.data.date);
 
-    Ext.getCmp('supplierPurchaseRequisition').setValue('record.data.idsupplier');
+    Ext.getCmp('supplierPurchaseRequisition').setValue(record.data.idsupplier);
     Ext.getCmp('supplierNamePurchaseRequisition').setValue(record.data.namesupplier);
     Ext.getCmp('supplierPurchaseRequisition').setReadOnly(true);
 
