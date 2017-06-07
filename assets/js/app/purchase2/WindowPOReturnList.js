@@ -4,7 +4,7 @@ var WindowEntryPOReturn = Ext.create(dir_sys + 'purchase2.WindowEntryPOReturn');
 Ext.define('GridReturnPurchaseOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'delivereddate'
     ],
     idProperty: 'id'
 });
@@ -90,6 +90,7 @@ Ext.define('GridReturnPurchaseOrderList', {
             Ext.getCmp('idpurchase_poreturn').setValue(selectedRecord.get('idpurchase'));
             Ext.getCmp('nopo_poreturn').setValue(selectedRecord.get('nopurchase'));
             Ext.getCmp('po_date_poreturn').setValue(selectedRecord.get('date'));
+            Ext.getCmp('return_date_poreturn').setMinValue(selectedRecord.get('delivereddate'));
             Ext.getCmp('cbUnit_poreturn').setValue(selectedRecord.get('idunit'));
             Ext.getCmp('cb_tax_id_poreturn').setValue(selectedRecord.get('idtax'));
             Ext.getCmp('supplier_poreturn').setValue(selectedRecord.get('idsupplier'));
