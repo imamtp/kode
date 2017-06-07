@@ -81,7 +81,6 @@ Ext.define('GridPurchaseOrderList', {
 
             WindowEntryGoodsReceipt.show();
 
-            Ext.getCmp('supplier_poreceipt').getStore().load();
             Ext.getCmp('cb_tax_id_poreceipt').getStore().load();
 
             Ext.getCmp('WindowPOList').hide();
@@ -89,8 +88,10 @@ Ext.define('GridPurchaseOrderList', {
             Ext.getCmp('idpurchase_poreceipt').setValue(selectedRecord.get('idpurchase'));
             Ext.getCmp('nojurnal_poreceipt').setValue(selectedRecord.get('nopurchase'));
             Ext.getCmp('po_date_poreceipt').setValue(selectedRecord.get('date'));
+            Ext.getCmp('received_date_poreceipt').setMinValue(new Date(selectedRecord.get('date')));
             Ext.getCmp('cbUnit_poreceipt').setValue(selectedRecord.get('idunit'));
             Ext.getCmp('cb_tax_id_poreceipt').setValue(selectedRecord.get('idtax'));
+            Ext.getCmp('suppliername_poreceipt').setValue(selectedRecord.get('namesupplier'));
             Ext.getCmp('supplier_poreceipt').setValue(selectedRecord.get('idsupplier'));
 
             var cb_status_poreceipt = Ext.getCmp('cb_status_poreceipt');
