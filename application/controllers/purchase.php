@@ -907,7 +907,7 @@ class purchase extends MY_Controller {
                 $i++;
         }
 
-        echo json_encode(array('data'=>$data));
+        echo json_encode(array('data'=>$data,'qtytotal'=>$totalqty));
     }
 
     function check_batch_item(){
@@ -926,7 +926,7 @@ class purchase extends MY_Controller {
         } else {
             $is_tmp = $this->input->get('is_tmp');
         }
-
+        
         $q = $this->db->get_where('purchaseitem_batch',array(
                 'is_tmp'=> $is_tmp,
                 'idpurchaseitem' => $idpurchaseitem,
@@ -934,10 +934,16 @@ class purchase extends MY_Controller {
                 'idunit'=>$idunit
             ));
 
+        $dataArr = $q->result_array();
+        $totalqtyterima = 0;
+        foreach ($dataArr as $key => $value) {
+           $totalqtyterima+=$value['qty'];
+        }
+
         if($postget=='post'){
-              echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . '}';
+              echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($dataArr) . ',totalqtyterima:'.$totalqtyterima .'}';
         } else {
-             echo json_encode(array('data'=>$q->result_array(),'numbatch'=>$q->num_rows()));
+             echo json_encode(array('data'=>$q->result_array(),'totalqtyterima'=>$totalqtyterima,'numbatch'=>$q->num_rows()));
         }
        
     }
@@ -1383,6 +1389,61 @@ class purchase extends MY_Controller {
             $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
         }
         echo json_encode($json);
+    }
+
+    function check_batch(){
+        //cek batch item dari goods receipt duplikat apa engga untuk kode barangnya
+        $idunit = $this->input->post('idunit');
+        $totalqty = $this->input->post('totalqty');
+        $items = json_decode($this->input->post('datagrid'));
+        $success = true;
+        $message = null;
+        $totalqtyterima = 0;
+        foreach ($items as $value) {
+            $q = $this->db->query("select idinventory from inventory where invno = '".$value->invno."' and sku_no = '".$value->sku_no."' ");
+            if($q->num_rows()>0){
+                $message = "Kode barang <b>".$value->invno."</b> dengan No SKU <b>".$value->sku_no."</b> sudah ada di dalam database";
+                $success = false;
+                break;
+            } else {
+                $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
+            
+                $notes = isset($value->notes) ? $value->notes : null;
+
+                $data = array(
+                        'warehouse_id'=>$idwarehouse,
+                        'warehouse_code'=>$value->warehouse_code,
+                        'notes'=> $notes,
+                        'invno'=>$value->invno,
+                        'sku_no'=>$value->sku_no,
+                        'qty'=>$value->qty
+                );
+
+                $this->db->where(array(
+                        'purchase_batch_id'=>$value->purchase_batch_id,
+                        'idpurchase'=>$this->input->post('idpurchase'),
+                        'idpurchaseitem'=>$value->idpurchaseitem
+                ));
+                $this->db->update('purchaseitem_batch',$data);
+                $totalqtyterima+=$value->qty;
+            }
+        }
+
+        $qtysisa = $totalqty-$totalqtyterima;
+        if($totalqtyterima>$totalqty){
+            $message = 'Total qty batch melebihi qty barang';
+            $success = false;
+        } else if($totalqtyterima<$totalqty){
+            $message = 'Total qty batch kurang dari qty barang';
+            $success = false;
+        }
+
+        echo json_encode(
+            array(
+                'success'=>$success,
+                'message'=>$message,
+                'totalqtyterima'=>$totalqtyterima
+                ));
     }
 
     function update_detail_batch_item_gr(){
