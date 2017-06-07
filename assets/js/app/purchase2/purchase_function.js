@@ -47,6 +47,7 @@ function showPurchaseRequestData(record) {
                     idpurchaseitem: obj.idpurchaseitem,
                     idinventory: obj.idinventory,
                     invno: obj.invno,
+                    sku_no: obj.sku_no,
                     nameinventory: obj.nameinventory,
                     price: obj.cost,
                     idunit: obj.idunit,
@@ -172,7 +173,6 @@ function showPurchaseOrderData(record) {
                     size_measurement: obj.size_measurement,
                     warehouse_code: obj.warehouse_code
                 });
-
 
                 gridInsertBaruGRPO.getStore().insert(0, recDO);
             });
