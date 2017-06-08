@@ -322,7 +322,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                         },
                         '->',
                         {
-                            text: 'Kembali Ke Penerimaan Barang',
+                            text: 'Simpan',
                             handler: function() {
 
                                 var json = Ext.encode(Ext.pluck(storeGridBatchItemPOList.data.items, 'data'));

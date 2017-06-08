@@ -3,7 +3,7 @@ var WindowEntryGoodsReceipt = Ext.create(dir_sys + 'purchase2.WindowEntryGoodsRe
 Ext.define('GridPurchaseOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa'
     ],
     idProperty: 'id'
 });
@@ -187,12 +187,12 @@ Ext.define('GridPurchaseOrderList', {
         dataIndex: 'nopurchase',
         minWidth: 150
     }, {
-        header: 'Supplier Name',
+        header: 'Nama Supplier',
         flex: 1,
         dataIndex: 'namesupplier',
         minWidth: 150
     }, {
-        header: 'Date Requisition',
+        header: 'Tgl Permintaan',
         dataIndex: 'date',
         minWidth: 150
     }, {
@@ -234,6 +234,24 @@ Ext.define('GridPurchaseOrderList', {
         header: 'Total Amount',
         dataIndex: 'totalamount',
         hidden: true,
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
+        header: 'Total Qty Order',
+        dataIndex: 'totalorder',
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
+        header: 'Total Qty Diterima',
+        dataIndex: 'totalreceived',
+        minWidth: 150,
+        xtype: 'numbercolumn',
+        align: 'right'
+    }, {
+        header: 'Total Qty Sisa',
+        dataIndex: 'sisa',
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
