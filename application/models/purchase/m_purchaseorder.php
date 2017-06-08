@@ -16,7 +16,7 @@ class m_purchaseorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,c.nametax,c.rate,e.namesupplier,a.discount as disc,a.notes_receipt,a.receivedby_id,a.delivereddate,f.firstname,f.lastname,a.balance,a.invoice_status,a.noinvoice,a.paidtoday,totalorder,totalreceived,sisa,b.name as idpurchasestatusname,idpurchase_req, h.nopurchase as nopurchase_req, h.date as date_req";
+        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,c.nametax,c.rate,e.namesupplier,a.discount as disc,a.notes_receipt,a.receivedby_id,a.delivereddate,f.firstname,f.lastname,a.balance,a.invoice_status,a.noinvoice,a.paidtoday,totalorder,totalreceived,sisa,b.name as idpurchasestatusname,idpurchase_req, h.nopurchase as nopurchase_req, h.date as date_req,a.include_tax";
     }
     
     function fieldCek()
