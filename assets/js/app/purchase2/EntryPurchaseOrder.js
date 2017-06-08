@@ -361,6 +361,18 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                                     updateGridPurchaseOrder();
                                 }
                             }
+                        },
+                        {
+                            xtype: 'checkbox',
+                            boxLabel: 'Include Tax',
+                            name: 'include_tax',
+                            id: 'include_tax_po',
+                            inputValue: 1,
+                            listeners: {
+                                change: function(field, newValue, oldValue, eOpts) {
+                                    updateGridPurchaseOrder();
+                                }
+                            }
                         }
                     ]
                 },
@@ -784,6 +796,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                     unit: Ext.getCmp('cbUnitEntryPurchaseOrder').getValue(),
                     idsupplier: Ext.getCmp('supplierPurchaseOrder').getValue(),
                     idtax: Ext.getCmp('cb_tax_id_po').getValue(),
+                    include_tax: Ext.getCmp('include_tax_po').getValue(),
                     po_status: Ext.getCmp('cb_purchase_order_status').getValue(),
                     datagrid: json
                 },
@@ -901,6 +914,7 @@ function updateGridPurchaseOrder(tipe) {
     var pembayaranPurchaseOrder = Ext.getCmp('pembayaranPurchaseOrder').getValue();
     var sisaBayarPurchaseOrder = 0 * 1;
     var taxrate = Ext.getCmp('cb_tax_id_po').getValue();
+    var include_tax = Ext.getCmp('include_tax_po').getValue();
 
     Ext.each(storeGridItemPurchaseOrder.data.items, function(obj, i) {
         var total = obj.data.qty * (obj.data.price * obj.data.size);
@@ -918,7 +932,13 @@ function updateGridPurchaseOrder(tipe) {
     //     console.log(subtotalPurchaseOrder);
     totalPurchaseOrder = subtotalPurchaseOrder + angkutPurchaseOrder * 1;
     //     console.log(totalPurchaseOrder+' '+totalPajak);
-    totalPurchaseOrder = totalPurchaseOrder + totalPajak;
+    if (include_tax * 1 == 1) {
+        //include tax
+        totalPurchaseOrder = totalPurchaseOrder;
+    } else {
+        totalPurchaseOrder = totalPurchaseOrder + totalPajak;
+    }
+
     //     console.log(totalPurchaseOrder);
     sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;
     // alert(totalPajak);

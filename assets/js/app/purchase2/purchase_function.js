@@ -125,6 +125,10 @@ function showPurchaseOrderData(record) {
     Ext.getCmp('supplierPurchaseOrder').setValue(record.data.idsupplier);
     Ext.getCmp('po_date_PurchaseOrder').setValue(record.data.date);
     Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
+
+    var checktax = record.data.include_tax * 1 == 1 ? true : false;
+    Ext.getCmp('include_tax_po').setValue(checktax);
+
     Ext.getCmp('memoPurchaseOrder').setValue(record.data.memo);
     Ext.getCmp('subtotalPurchaseOrder').setValue(renderNomor(record.data.subtotal));
     Ext.getCmp('totalPajakPurchaseOrder').setValue(renderNomor(record.data.tax));

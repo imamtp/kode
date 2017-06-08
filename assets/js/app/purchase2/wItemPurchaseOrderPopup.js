@@ -96,7 +96,8 @@ Ext.define(dir_sys + 'purchase2.GridItemPurchaseOrderPopup', {
 
                 var gridPO = Ext.getCmp('EntryPurchaseOrder');
                 gridPO.getStore().insert(0, recPO);
-                // updateGridPurchaseOrder();
+
+                updateGridPurchaseOrder();
 
                 Ext.getCmp('wItemPurchaseOrderPopup').hide();
 
@@ -235,3 +236,44 @@ Ext.define(dir_sys + 'purchase2.wItemPurchaseOrderPopup', {
         xtype: 'GridItemPurchaseOrderPopup'
     }]
 });
+
+function updateGridPurchaseOrder(tipe) {
+    var addprefix = 'PurchaseOrder';
+
+    var subtotalPurchaseOrder = 0 * 1;
+    var totalPurchaseOrder = 0 * 1;
+    var totalPajak = 0 * 1;
+    var angkutPurchaseOrder = 0;
+    var pembayaranPurchaseOrder = Ext.getCmp('pembayaranPurchaseOrder').getValue();
+    var sisaBayarPurchaseOrder = 0 * 1;
+    var taxrate = Ext.getCmp('cb_tax_id_po').getValue();
+    var include_tax = Ext.getCmp('include_tax_po').getValue();
+
+    var storeGridItemPurchaseOrder = Ext.getCmp('EntryPurchaseOrder').getStore();
+
+    Ext.each(storeGridItemPurchaseOrder.data.items, function(obj, i) {
+        var total = obj.data.qty * (obj.data.price * obj.data.size);
+        var diskon = (total / 100) * obj.data.disc;
+
+        var net = total - diskon;
+        console.log(total + ' - ' + diskon);
+
+        subtotalPurchaseOrder += net;
+        totalPajak += (net / 100) * (taxrate * 1);
+        obj.set('ratetax', taxrate);
+        obj.set('total', net);
+    });
+
+    totalPurchaseOrder = subtotalPurchaseOrder + angkutPurchaseOrder * 1;
+    if (include_tax * 1 == 1) {
+        //include tax
+        totalPurchaseOrder = totalPurchaseOrder;
+    } else {
+        totalPurchaseOrder = totalPurchaseOrder + totalPajak;
+    }
+    sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
+
+}
