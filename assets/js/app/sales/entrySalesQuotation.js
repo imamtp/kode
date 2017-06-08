@@ -178,7 +178,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             id: 'statusformSalesQuotationGrid'
                         },
                         {
-                            xtype: 'textfield',
+                            xtype: 'hiddenfield',
                             name: 'idsales',
                             id: 'idsales_quotation'
                         }

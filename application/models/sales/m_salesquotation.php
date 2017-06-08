@@ -47,7 +47,8 @@ class m_salesquotation extends CI_Model {
     function whereQuery() {
         $wer = null;
         if($this->input->post('option')=='not_in_salesorder'){
-            $wer = " and a.idsales not in (select idsales_quote from sales where type = 2) ";
+            // $wer = " and a.status = 2 and a.idsales not in (select idsales_quote from sales where type = 2) ";
+            $wer = " and a.status = 2 ";
         }
         return " a.type = 1 and a.display is null $wer
          group by a.idsales,h.idsales_quote,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments";

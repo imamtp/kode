@@ -146,13 +146,19 @@ Ext.define('comboxSalesStatus', {
     })
 });
 
+// var ArrSalesQuotationStatus = [
+//     [1, 'Open'],
+//     [2, 'Ordered'],
+//     [3, 'Picked'],
+//     [4, 'Partially Delivered'],
+//     [5, 'Delivered'],
+//     [6, 'Finished'],
+// ];
 var ArrSalesQuotationStatus = [
     [1, 'Open'],
-    [2, 'Ordered'],
-    [3, 'Picked'],
-    [4, 'Partially Delivered'],
-    [5, 'Delivered'],
-    [6, 'Finished'],
+    [2, 'Confirmed'],
+    [3, 'Ordered'],
+    [4, 'Canceled']
 ];
 
 

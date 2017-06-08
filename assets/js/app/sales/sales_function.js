@@ -214,12 +214,15 @@ function showSalesQuotationData(record) {
     var cbSalesQuotation = Ext.getCmp('cbSalesQuotation');
     // cbSalesQuotation.getStore().load();
     cbSalesQuotation.setValue(record.data.status * 1);
-    cbSalesQuotation.setReadOnly(true);
+
 
     if (record.data.status * 1 === 1) {
+        //masih open
         Ext.getCmp('btnRecordSalesQuote').enable();
+        cbSalesQuotation.setReadOnly(false);
     } else {
         Ext.getCmp('btnRecordSalesQuote').disable();
+        cbSalesQuotation.setReadOnly(true);
     }
 
     if (record.data.idsales_quote !== null) {
