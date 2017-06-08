@@ -32,7 +32,11 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         <div class="col-xs-6 text-right">
           <h2><?=$title?></h2>
           <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>
-              Tanggal Invoice: <?=$data['invoice_date']?><br>
+              <?php 
+                if($isInvoice){
+                  echo "Tanggal Invoice: ". $data['invoice_date'] ."<br>";
+                }
+              ?>
               NO: #<?=$data['no']?></small><br>
           </h3>
         </div>

@@ -655,12 +655,25 @@ class sales extends MY_Controller {
         echo json_encode($data);
     }
 
+    function print_so($idsales,$print=null){
+        $this->load->model('sales/m_salesorder','model');
+        $d['data'] = $this->model->cetak_so($idsales);
+        // print_r($d); die;
+        $d['title'] = 'Sales Order';
+        $d['print'] = $print;
+        $d['isInvoice'] = false;
+        $d['invoice_date'] = null;
+        $this->load->view('tplcetak/sales_print',$d);
+    }
+
     function print_invoice($id=null,$print=false){
         $this->load->model('sales/m_salesinvoice','model');
         $d['data'] = $this->model->cetak($id);
         // print_r($d);
         $d['title'] = 'Sales Invoice';
         $d['print'] = $print;
+        $d['isInvoice'] = true;
+        
         $this->load->view('tplcetak/sales_print',$d);
     }
 

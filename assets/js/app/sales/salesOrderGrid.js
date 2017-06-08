@@ -369,6 +369,36 @@ Ext.define('GridSalesOrderGrid', {
                     Ext.getCmp('btnRecordSalesOrder').enable();
                 }
             }, {
+                text: 'Print',
+                iconCls: 'print-icon',
+                handler: function() {
+                    var grid = Ext.getCmp('GridSalesOrderGridID');
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                    } else {
+
+                        Ext.create('Ext.window.Window', {
+                            title: 'Preview Sales Order',
+                            modal: true,
+                            width: panelW - 100,
+                            height: panelH - 200,
+                            items: [{
+                                xtype: 'component',
+                                html: '<iframe src="' + SITE_URL + 'sales/print_so/' + selectedRecord.data.idsales + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                            }],
+                            buttons: [{
+                                text: 'Print',
+                                iconCls: 'print-icon',
+                                handler: function() {
+                                    window.open(SITE_URL + 'sales/print_so/' + selectedRecord.data.idpurchase + '/print', '_blank');
+                                }
+                            }]
+                        }).show();
+                    }
+                }
+            }, {
                 text: 'Set Status',
                 iconCls: 'edit-icon',
                 menu: [{
