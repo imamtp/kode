@@ -13,6 +13,14 @@
 <!-- {*<link href="{$assets_url}ext/resources/css/ext-all-gray.css" rel="stylesheet">*} -->
 
     <style type="text/css">
+    .logo_centered {
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+    }
+
     .mainPageGroupPanel .x-panel-header {
         color:#15428b;
         border-color:#99bbe8;
@@ -20,6 +28,8 @@
     }
     </style>
     
+    <center><img src="{$assets_url}/images/Logo redsfin.png" width="200" class="logo_centered"/></center>
+
     <script type="text/javascript">
     var SITE_URL = '{$site_url}';
     var appname = '{$appname}';
