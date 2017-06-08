@@ -1,4 +1,4 @@
-Ext.require([ 
+Ext.require([
     dir_sys + 'sales.GridSalesmanSOPopup'
 ]);
 
@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
     alias: 'widget.EntrySalesOrder',
     xtype: 'cell-editing',
     // title: 'Input Sales Order',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -21,12 +21,11 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
             forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemSalesOrder,
-            columns: [
-                {
+            columns: [{
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -41,27 +40,27 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     header: 'No SKU',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 100
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     header: 'Warehouse',
-                    hidden:true,
+                    hidden: true,
                     dataIndex: 'warehouse_code',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
                     }
-                }, 
+                },
                 {
                     xtype: 'numbercolumn',
                     header: 'Harga',
@@ -91,12 +90,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     dataIndex: 'short_desc',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
                     }
-                },                
+                },
                 {
                     xtype: 'numbercolumn',
                     header: 'Ukuran',
@@ -114,7 +113,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     dataIndex: 'size_measurement',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -140,12 +139,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 },
                 {
                     header: 'Pajak',
-                    hidden:true,
-//                    width:50,
+                    hidden: true,
+                    //                    width:50,
                     dataIndex: 'ratetax',
                     editor: {
                         xtype: 'comboxtax',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'rate',
                         labelWidth: 40
                     }
@@ -157,68 +156,64 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     sortable: false,
                     menuDisabled: true,
                     items: [{
-                            icon: BASE_URL + 'assets/icons/fam/cross.gif',
-                            tooltip: 'Hapus',
-                            scope: this,
-                            handler: this.onRemoveClick
-                        }]
+                        icon: BASE_URL + 'assets/icons/fam/cross.gif',
+                        tooltip: 'Hapus',
+                        scope: this,
+                        handler: this.onRemoveClick
+                    }]
                 }
             ],
             selModel: {
                 selType: 'cellmodel'
             },
-            dockedItems: [ 
+            dockedItems: [
 
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
-                            text: 'Tambah Barang',
-                            iconCls: 'add-icon',
-                            id:'btnAddItemSalesOrder',
-                            scope: this,
-                            handler: this.onAddClick
-                        }, '->', {
-                            xtype: 'textfield',
-                            hidden:true,
-                            fieldLabel: 'No Invoice',
-                            name: 'noinvoice',
-                            id: 'noinvoiceSalesOrder'
-                        }
-                    ]
+                    items: [{
+                        text: 'Tambah Barang',
+                        iconCls: 'add-icon',
+                        id: 'btnAddItemSalesOrder',
+                        scope: this,
+                        handler: this.onAddClick
+                    }, '->', {
+                        xtype: 'textfield',
+                        hidden: true,
+                        fieldLabel: 'No Invoice',
+                        name: 'noinvoice',
+                        id: 'noinvoiceSalesOrder'
+                    }]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'radiogroup',
-                            id:'is_from_sq_soform',
-                            labelWidth:180,
+                            id: 'is_from_sq_soform',
+                            labelWidth: 180,
                             fieldLabel: 'Load from Sales Quotation?',
                             columns: 2,
                             vertical: true,
                             items: [
-                                {boxLabel: 'Yes', name: 'is_from_sq', inputValue: 1,  width:50},
-                                {boxLabel: 'No', name: 'is_from_sq', inputValue: 2, checked: true, width:50}
+                                { boxLabel: 'Yes', name: 'is_from_sq', inputValue: 1, width: 50 },
+                                { boxLabel: 'No', name: 'is_from_sq', inputValue: 2, checked: true, width: 50 }
                             ],
                             listeners: {
-                              change: function(radiogroup, radio) {
-                                if(radio.is_from_sq==2)
-                                {
-                                    Ext.getCmp('no_sales_quote').hide();
-                                    Ext.getCmp('sales_quotation_date').hide();
-                                } else {
-                                    Ext.getCmp('no_sales_quote').show();
-                                    Ext.getCmp('sales_quotation_date').show();
+                                change: function(radiogroup, radio) {
+                                    if (radio.is_from_sq == 2) {
+                                        Ext.getCmp('no_sales_quote').hide();
+                                        Ext.getCmp('sales_quotation_date').hide();
+                                    } else {
+                                        Ext.getCmp('no_sales_quote').show();
+                                        Ext.getCmp('sales_quotation_date').show();
+                                    }
                                 }
-                              }
                             }
                         },
                         {
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             margin: '0 0 0 185',
                             fieldLabel: 'Sales Quotation',
                             labelWidth: 120,
@@ -227,49 +222,48 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                            wGridSalesQuoteListPopup.show();
-                                            
-                                            // storeGridSalesQuoteList.on('beforeload',function(store, operation,eOpts){
-                                            //     operation.params={
-                                            //                 'idunit': Ext.getCmp('idunitRequisition').getValue(),
-                                            //                 'status': '1'
-                                            //     };
-                                            // });
-                                            storeGridSalesQuoteList.load();
+                                        wGridSalesQuoteListPopup.show();
+
+                                        // storeGridSalesQuoteList.on('beforeload',function(store, operation,eOpts){
+                                        //     operation.params={
+                                        //                 'idunit': Ext.getCmp('idunitRequisition').getValue(),
+                                        //                 'status': '1'
+                                        //     };
+                                        // });
+                                        storeGridSalesQuoteList.load();
 
                                     });
                                 }
                             }
                         },
                         {
-                            xtype:'displayfield',
-                            hidden:true,
+                            xtype: 'displayfield',
+                            hidden: true,
                             margin: '0 0 0 7',
-                            fieldLabel:'Quotation Date',
-                            id:'sales_quotation_date'
+                            fieldLabel: 'Quotation Date',
+                            id: 'sales_quotation_date'
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'id_sales_quote_SalesOrder',
-                            name:'idsales_quote'
+                            xtype: 'hiddenfield',
+                            id: 'id_sales_quote_SalesOrder',
+                            name: 'idsales_quote'
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'idsales_order',
-                            name:'idsales'
+                            xtype: 'hiddenfield',
+                            id: 'idsales_order',
+                            name: 'idsales'
                         },
                         {
-                            xtype:'hiddenfield',
-                            id:'statusformSalesOrderGrid',
-                            name:'statusFormSalesOrder'
+                            xtype: 'hiddenfield',
+                            id: 'statusformSalesOrderGrid',
+                            name: 'statusFormSalesOrder'
                         }
                     ]
                 },
-                 {
+                {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
                             id: 'nojurnalSalesOrder',
@@ -278,22 +272,22 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                         insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(),'idsales','sales','nojurnalSalesOrder','SO');
+                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesOrder', 'SO');
                                         // insertNoRef(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'nojurnalSalesOrder','SO');
                                     });
                                 }
                             }
-                        }, 
+                        },
                         {
                             xtype: 'datefield',
                             labelWidth: 120,
                             id: 'delivery_date_SalesOrder',
                             format: 'd/m/Y',
                             fieldLabel: 'Delivery Date'
-                        }, 
+                        },
                         {
                             xtype: 'datefield',
-                            hidden:true,
+                            hidden: true,
                             id: 'tglPelunasanSalesOrder',
                             format: 'd/m/Y',
                             fieldLabel: 'Tgl Pelunasan'
@@ -304,29 +298,41 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             labelWidth: 100,
                             valueField: 'idunit',
                             id: 'cbUnitEntrySalesOrder'
-//                            ,multiSelect:true
-                        },                        
+                                //                            ,multiSelect:true
+                        },
                         {
-                            xtype:'comboxtaxtype',
+                            xtype: 'comboxtaxtype',
                             labelWidth: 100,
                             displayField: 'nametax',
                             valueField: 'rate',
                             name: 'idtax',
-                            id:'cb_tax_id_so',                            
-                              listeners: {
+                            id: 'cb_tax_id_so',
+                            listeners: {
                                 select: function(combo, record, index) {
-                                  // alert(combo.getValue()); // Return Unitad States and no USA
-                                  updateGridSalesOrder();
+                                    // alert(combo.getValue()); // Return Unitad States and no USA
+                                    updateGridSalesOrder();
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'checkbox',
+                            boxLabel: 'Include Tax',
+                            name: 'include_tax',
+                            id: 'include_tax_so',
+                            inputValue: 1,
+                            listeners: {
+                                change: function(field, newValue, oldValue, eOpts) {
+                                    updateGridSalesOrder();
                                 }
                             }
                         }
                     ]
-                }, 
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [
-                        
+
                         {
                             xtype: 'comboxCustomer',
                             id: 'customerSalesOrder',
@@ -342,7 +348,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         //             component.getEl().on('click', function(event, el) {
 
                         //                     wGridSupplierListPopup.show();
-                                            
+
                         //                     storeGridSupplierList.on('beforeload',function(store, operation,eOpts){
                         //                         operation.params={
                         //                                     'idunit': Ext.getCmp('idunitRequisition').getValue(),
@@ -356,28 +362,25 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         // },
                         {
                             xtype: 'comboxpayment',
-                            hidden:true,
+                            hidden: true,
                             labelWidth: 120,
                             id: 'paymentSalesOrder',
                             valueField: 'idpayment',
                             listeners: {
                                 select: {
                                     fn: function(combo, value) {
-                                        if (combo.getValue() == 3)
-                                        {
+                                        if (combo.getValue() == 3) {
                                             //kredit
                                             Ext.getCmp('tglPelunasanSalesOrder').setDisabled(false);
                                             Ext.getCmp('pembayaranSalesOrder').setValue(0);
-//                                                Ext.getCmp('pembayaranSalesOrder').setReadOnly(true);
-                                        } else if (combo.getValue() == 4)
-                                        {
+                                            //                                                Ext.getCmp('pembayaranSalesOrder').setReadOnly(true);
+                                        } else if (combo.getValue() == 4) {
                                             //cod
                                             Ext.getCmp('tglPelunasanSalesOrder').setDisabled(true);
                                             Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
                                             Ext.getCmp('pembayaranSalesOrder').setValue(0);
                                             Ext.getCmp('pembayaranSalesOrder').setReadOnly(false);
-                                        } else if (combo.getValue() == 1)
-                                        {
+                                        } else if (combo.getValue() == 1) {
                                             //tunai
                                             Ext.getCmp('tglPelunasanSalesOrder').setDisabled(true);
                                             Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
@@ -387,7 +390,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                                     }
                                 }
                             }
-                        },                        
+                        },
                         {
                             xtype: 'textfield',
                             fieldLabel: 'Sales Person',
@@ -397,27 +400,27 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                            wSalesmanSOPopupPopup.show();
-                                            
-                                            storeGridSalesmanSOPopup.on('beforeload',function(store, operation,eOpts){
-                                                operation.params={
-                                                            'extraparams': 'a.status:'+1
-                                                };
-                                            });
-                                            storeGridSalesmanSOPopup.load();
+                                        wSalesmanSOPopupPopup.show();
+
+                                        storeGridSalesmanSOPopup.on('beforeload', function(store, operation, eOpts) {
+                                            operation.params = {
+                                                'extraparams': 'a.status:' + 1
+                                            };
+                                        });
+                                        storeGridSalesmanSOPopup.load();
 
                                     });
                                 }
                             }
                         },
                         {
-                            xtype:'hiddenfield',
+                            xtype: 'hiddenfield',
                             name: 'salesman_id',
                             id: 'salesman_id_so',
                         },
                         {
-                            xtype:'comboxSalesStatus',
-                            id:'cb_sales_order_status'
+                            xtype: 'comboxSalesStatus',
+                            id: 'cb_sales_order_status'
                         }
                     ]
                 },
@@ -425,19 +428,19 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-                         '->', {
+                        '->', {
                             itemId: 'recordPayment',
-                            id:'btnRecordSalesOrder',
+                            id: 'btnRecordSalesOrder',
                             text: 'Record Sales Order',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordSalesOrder, this, 'noprint', true)
-                        },{
+                        }, {
                             text: 'Print and Record Sales Order',
-                            hidden:true,
+                            hidden: true,
                             iconCls: 'drive_disk-icon',
                             handler: Ext.bind(this.recordSalesOrder, this, 'print', true)
                         },
-                         // '->',
+                        // '->',
                         //  {
                         //     xtype: 'textfield',
                         //     hidden:true,
@@ -453,8 +456,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'hiddenfield',
                             id: 'idaccountSalesOrder',
                             name: 'idaccount',
@@ -496,11 +498,10 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                       {
+                    items: [{
                             xtype: 'textfield',
                             id: 'shipaddressSalesOrder',
-                            hidden:true,
+                            hidden: true,
                             labelWidth: 120,
                             width: 500,
                             fieldLabel: 'Alamat Pengiriman',
@@ -508,11 +509,10 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
 
-                                        if (group_id == 99)
-                                        {
+                                        if (group_id == 99) {
                                             var extraparams = null;
                                         } else {
-                                            var extraparams = 'a.idunit:'+Ext.getCmp('cbUnitEntrySalesOrder').getValue();
+                                            var extraparams = 'a.idunit:' + Ext.getCmp('cbUnitEntrySalesOrder').getValue();
                                         }
 
                                         var FormChooseAddress = Ext.getCmp('FormChooseAddress');
@@ -534,10 +534,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                                     });
                                 }
                             }
-                        },
-                        ,
+                        }, ,
                         '->',
-                          {
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -546,67 +545,65 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
                         }
-                        
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxshipping',
-                            hidden:true,
+                            hidden: true,
                             labelWidth: 120,
                             id: 'shippingSalesOrder'
                         }, '->',
-                      {
+                        {
                             xtype: 'textfield',
                             align: 'right',
-                            name:'totalPajak',
+                            name: 'totalPajak',
                             readOnly: true,
                             labelWidth: 120,
                             id: 'totalPajakSalesOrder',
                             fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
                         }
-//                         {
-//                             xtype: 'textfield',
-//                             id: 'angkutSalesOrder',
-//                             align: 'right',
-// //                            readOnly: true,
-//                             labelWidth: 120,
-//                             fieldLabel: 'Biaya Angkut',
-//                             fieldStyle: 'text-align: right;',
-//                             listeners: {
-//                                 'render': function(c) {
-//                                     c.getEl().on('keyup', function() {
-//                                         updateGridSalesOrder('general');
-//                                     }, c);
-//                                 }
-//                             }
-//                         }
+                        //                         {
+                        //                             xtype: 'textfield',
+                        //                             id: 'angkutSalesOrder',
+                        //                             align: 'right',
+                        // //                            readOnly: true,
+                        //                             labelWidth: 120,
+                        //                             fieldLabel: 'Biaya Angkut',
+                        //                             fieldStyle: 'text-align: right;',
+                        //                             listeners: {
+                        //                                 'render': function(c) {
+                        //                                     c.getEl().on('keyup', function() {
+                        //                                         updateGridSalesOrder('general');
+                        //                                     }, c);
+                        //                                 }
+                        //                             }
+                        //                         }
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             width: 620,
                             labelWidth: 100,
-                            value:'Sales Order',
+                            value: 'Sales Order',
                             id: 'memoSalesOrder',
                             fieldLabel: 'Memo'
                         },
                         {
                             xtype: 'comboxcurrency',
-                            hidden:true,
+                            hidden: true,
                             id: 'comboxcurrencySalesOrder',
                             labelWidth: 120
                         },
-                         '->',
-                       {
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -621,21 +618,21 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-//                        {
-//                            itemId: 'useRecuringSalesOrder',
-//                            text: 'Gunakan Sales Order Tersimpan',
-//                            iconCls: 'add-icon',
-//                            handler: function() {
-//                                wGridRecurringPopup.show();
-//                                storeGridRecurringPopup.load();
-//                            }
-//                        }, {
-//                            itemId: 'recordandsaveSalesOrder',
-//                            text: 'Simpan Sebagai Sales Order Berulang',
-//                            iconCls: 'add-icon',
-//                            handler: this.saveRecurr
-//                        },
-                       
+                        //                        {
+                        //                            itemId: 'useRecuringSalesOrder',
+                        //                            text: 'Gunakan Sales Order Tersimpan',
+                        //                            iconCls: 'add-icon',
+                        //                            handler: function() {
+                        //                                wGridRecurringPopup.show();
+                        //                                storeGridRecurringPopup.load();
+                        //                            }
+                        //                        }, {
+                        //                            itemId: 'recordandsaveSalesOrder',
+                        //                            text: 'Simpan Sebagai Sales Order Berulang',
+                        //                            iconCls: 'add-icon',
+                        //                            handler: this.saveRecurr
+                        //                        },
+
                         // {
                         //     itemId: 'recordSalesOrder',
                         //     text: 'Rekam Sales Order',
@@ -643,12 +640,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         //     handler: this.recordSalesOrder
                         // }
                         , '->',
-                         {
+                        {
                             xtype: 'textfield',
                             id: 'pembayaranSalesOrder',
                             align: 'right',
-                            hidden:true,
-//                            readOnly: true,
+                            hidden: true,
+                            //                            readOnly: true,
                             labelWidth: 120,
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
@@ -660,14 +657,13 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                                 }
                             }
                         }
-                          
-                       
+
+
                     ]
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -697,11 +693,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesOrder: function(button, event, mode)
-    {
+    recordSalesOrder: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountSalesOrder').getValue())
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             // var dp = Ext.getCmp('angkutSalesOrder').getValue();
             // if(dp!='')
             // {
@@ -730,9 +724,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
             //         }
             //     });
             // } 
-            
+
             var json = Ext.encode(Ext.pluck(storeGridItemSalesOrder.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
+            //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
 
             Ext.Ajax.request({
                 url: SITE_URL + 'sales/saveSalesOrder',
@@ -760,16 +754,16 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     idaccountSalesOrder: Ext.getCmp('idaccountSalesOrder').getValue(),
                     noinvoice: Ext.getCmp('noinvoiceSalesOrder').getValue(),
                     unit: Ext.getCmp('cbUnitEntrySalesOrder').getValue(),
-                    customerSalesOrder : Ext.getCmp('customerSalesOrder').getValue(),
-                    ratetax : Ext.getCmp('cb_tax_id_so').getValue(),
-                    sales_order_status : Ext.getCmp('cb_sales_order_status').getValue(),
+                    customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
+                    ratetax: Ext.getCmp('cb_tax_id_so').getValue(),
+                    include_tax: Ext.getCmp('include_tax_so').getValue(),
+                    sales_order_status: Ext.getCmp('cb_sales_order_status').getValue(),
                     datagrid: json
                 },
                 success: function(form, action) {
 
                     var d = Ext.decode(form.responseText);
-                    if (!d.success)
-                    {
+                    if (!d.success) {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
@@ -813,8 +807,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
 
     },
     saveRecurr: function() {
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -822,40 +815,40 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('customerSalesOrder').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
-            wItemSalesPopupOrderPopup.show();
-            storeGridItemSalesPopupOrder.load();
+        //        console.log(Ext.getCmp('customerSalesOrder').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        wItemSalesPopupOrderPopup.show();
+        storeGridItemSalesPopupOrder.load();
 
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
+        //        var rec = new JournalStore({
+        //            idaccount: null,
+        //            accname: null,
+        //            accnumber: null,
+        //            debit: null,
+        //            credit: null
+        //        });
+        //
+        //        this.getStore().insert(0, rec);
+        //        this.cellEditing.startEditByPosition({
+        //            row: 0,
+        //            column: 0
+        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);
@@ -866,8 +859,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
     }
 });
 
-function updateGridSalesOrder(tipe)
-{
+function updateGridSalesOrder(tipe) {
     console.log('update run');
     var addprefix = 'SalesOrder';
 
@@ -875,17 +867,18 @@ function updateGridSalesOrder(tipe)
     var totalSalesOrder = 0 * 1;
     var totalPajak = 0 * 1;
     // var angkutSalesOrder = Ext.getCmp('angkutSalesOrder').getValue();
-     var angkutSalesOrder = 0;
+    var angkutSalesOrder = 0;
     var pembayaranSalesOrder = Ext.getCmp('pembayaranSalesOrder').getValue();
     var sisaBayarSalesOrder = 0 * 1;
     var taxrate = Ext.getCmp('cb_tax_id_so').getValue();
+    var include_tax = Ext.getCmp('include_tax_so').getValue();
 
     Ext.each(storeGridItemSalesOrder.data.items, function(obj, i) {
         var total = obj.data.qty * (obj.data.price * obj.data.size);
         var diskon = (total / 100) * obj.data.disc;
 
         var net = total - diskon;
-        console.log(total+' - '+diskon);
+        console.log(total + ' - ' + diskon);
 
         subtotalSalesOrder += net;
         totalPajak += (net / 100) * (taxrate * 1);
@@ -893,46 +886,44 @@ function updateGridSalesOrder(tipe)
         obj.set('total', net);
     });
 
-//     console.log(subtotalSalesOrder);
+    //     console.log(subtotalSalesOrder);
     totalSalesOrder = subtotalSalesOrder + angkutSalesOrder * 1;
-//     console.log(totalSalesOrder+' '+totalPajak);
-    totalSalesOrder = totalSalesOrder + totalPajak;
-//     console.log(totalSalesOrder);
+    //     console.log(totalSalesOrder+' '+totalPajak);
+    if (include_tax * 1 == 1) {
+        //include tax
+        totalSalesOrder = totalSalesOrder;
+    } else {
+        totalSalesOrder = totalSalesOrder + totalPajak;
+    }
+    //     console.log(totalSalesOrder);
     sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
     // alert(totalPajak);
-    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', {minimumFractionDigits: 2}));
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
     // Ext.getCmp('angkutSalesOrder').setValue(angkutSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('pembayaran').setValue(pembayaranSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarSalesOrder').setValue(sisaBayarSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 
 }
 
-function validasiSalesOrder()
-{
-//    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
+function validasiSalesOrder() {
+    //    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
 
-    if (Ext.getCmp('nojurnalSalesOrder').getValue() == null)
-    {
+    if (Ext.getCmp('nojurnalSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan No SO #');
 
-    } else if (Ext.getCmp('delivery_date_SalesOrder').getValue() == null)
-    {
+    } else if (Ext.getCmp('delivery_date_SalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Delivery Date');
-    }  else if (Ext.getCmp('cb_tax_id_so').getValue() == null)
-    {
+    } else if (Ext.getCmp('cb_tax_id_so').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
-    }  else if (Ext.getCmp('customerSalesOrder').getValue() == null)
-    {
+    } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan konsumen');
-    }  else if (Ext.getCmp('salesman_name_so').getValue() == null)
-    {
+    } else if (Ext.getCmp('salesman_name_so').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Sales Person');
-    }  else if (Ext.getCmp('memoSalesOrder').getValue() == null)
-    {
+    } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
-    }  else {
+    } else {
         return true;
     }
 }
