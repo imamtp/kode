@@ -1,5 +1,3 @@
-
-
 function str_replace(search, replace, subject, count) {
     //  discuss at: http://phpjs.org/functions/str_replace/
     // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -24,16 +22,16 @@ function str_replace(search, replace, subject, count) {
     //   returns 2: 'hemmo, mars'
 
     var i = 0,
-            j = 0,
-            temp = '',
-            repl = '',
-            sl = 0,
-            fl = 0,
-            f = [].concat(search),
-            r = [].concat(replace),
-            s = subject,
-            ra = Object.prototype.toString.call(r) === '[object Array]',
-            sa = Object.prototype.toString.call(s) === '[object Array]';
+        j = 0,
+        temp = '',
+        repl = '',
+        sl = 0,
+        fl = 0,
+        f = [].concat(search),
+        r = [].concat(replace),
+        s = subject,
+        ra = Object.prototype.toString.call(r) === '[object Array]',
+        sa = Object.prototype.toString.call(s) === '[object Array]';
     s = [].concat(s);
     if (count) {
         this.window[count] = 0;
@@ -47,8 +45,8 @@ function str_replace(search, replace, subject, count) {
             temp = s[i] + '';
             repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0];
             s[i] = (temp)
-                    .split(f[j])
-                    .join(repl);
+                .split(f[j])
+                .join(repl);
             if (count && s[i] !== temp) {
                 this.window[count] += (temp.length - s[i].length) / f[j].length;
             }
@@ -68,7 +66,7 @@ function explode(delimiter, string, limit) {
     if (delimiter === '' || delimiter === false || delimiter === null)
         return false;
     if (typeof delimiter === 'function' || typeof delimiter === 'object' || typeof string === 'function' || typeof string ===
-            'object') {
+        'object') {
         return {
             0: ''
         };
@@ -94,9 +92,9 @@ function explode(delimiter, string, limit) {
         if (limit >= s.length)
             return s;
         return s.slice(0, limit - 1)
-                .concat([s.slice(limit - 1)
-                            .join(delimiter)
-                ]);
+            .concat([s.slice(limit - 1)
+                .join(delimiter)
+            ]);
     }
 
     // Negative limit
@@ -131,8 +129,7 @@ function updateTime() {
 }
 
 
-Ext.util.Format.Currency = function(v)
-{
+Ext.util.Format.Currency = function(v) {
     // v = (Math.round((v-0)*100))/100;
     // v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
     // return (v).replace(/\./, ',');
@@ -140,52 +137,53 @@ Ext.util.Format.Currency = function(v)
 };
 
 function number_format(number, decimals, dec_point, thousands_sep) {
-// Formats a number with grouped thousands
-//
-// version: 906.1806
-// discuss at: http://phpjs.org/functions/number_format
-// +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
-// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-// +     bugfix by: Michael White (http://getsprink.com)
-// +     bugfix by: Benjamin Lupton
-// +     bugfix by: Allan Jensen (http://www.winternet.no)
-// +    revised by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
-// +     bugfix by: Howard Yeend
-// +    revised by: Luke Smith (http://lucassmith.name)
-// +     bugfix by: Diogo Resende
-// +     bugfix by: Rival
-// +     input by: Kheang Hok Chin (http://www.distantia.ca/)
-// +     improved by: davook
-// +     improved by: Brett Zamir (http://brett-zamir.me)
-// +     input by: Jay Klehr
-// +     improved by: Brett Zamir (http://brett-zamir.me)
-// +     input by: Amir Habibi (http://www.residence-mixte.com/)
-// +     bugfix by: Brett Zamir (http://brett-zamir.me)
-// *     example 1: number_format(1234.56);
-// *     returns 1: '1,235'
-// *     example 2: number_format(1234.56, 2, ',', ' ');
-// *     returns 2: '1 234,56'
-// *     example 3: number_format(1234.5678, 2, '.', '');
-// *     returns 3: '1234.57'
-// *     example 4: number_format(67, 2, ',', '.');
-// *     returns 4: '67,00'
-// *     example 5: number_format(1000);
-// *     returns 5: '1,000'
-// *     example 6: number_format(67.311, 2);
-// *     returns 6: '67.31'
-// *     example 7: number_format(1000.55, 1);
-// *     returns 7: '1,000.6'
-// *     example 8: number_format(67000, 5, ',', '.');
-// *     returns 8: '67.000,00000'
-// *     example 9: number_format(0.9, 0);
-// *     returns 9: '1'
-// *     example 10: number_format('1.20', 2);
-// *     returns 10: '1.20'
-// *     example 11: number_format('1.20', 4);
-// *     returns 11: '1.2000'
-// *     example 12: number_format('1.2000', 3);
-// *     returns 12: '1.200'
-    var n = number, prec = decimals;
+    // Formats a number with grouped thousands
+    //
+    // version: 906.1806
+    // discuss at: http://phpjs.org/functions/number_format
+    // +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +     bugfix by: Michael White (http://getsprink.com)
+    // +     bugfix by: Benjamin Lupton
+    // +     bugfix by: Allan Jensen (http://www.winternet.no)
+    // +    revised by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+    // +     bugfix by: Howard Yeend
+    // +    revised by: Luke Smith (http://lucassmith.name)
+    // +     bugfix by: Diogo Resende
+    // +     bugfix by: Rival
+    // +     input by: Kheang Hok Chin (http://www.distantia.ca/)
+    // +     improved by: davook
+    // +     improved by: Brett Zamir (http://brett-zamir.me)
+    // +     input by: Jay Klehr
+    // +     improved by: Brett Zamir (http://brett-zamir.me)
+    // +     input by: Amir Habibi (http://www.residence-mixte.com/)
+    // +     bugfix by: Brett Zamir (http://brett-zamir.me)
+    // *     example 1: number_format(1234.56);
+    // *     returns 1: '1,235'
+    // *     example 2: number_format(1234.56, 2, ',', ' ');
+    // *     returns 2: '1 234,56'
+    // *     example 3: number_format(1234.5678, 2, '.', '');
+    // *     returns 3: '1234.57'
+    // *     example 4: number_format(67, 2, ',', '.');
+    // *     returns 4: '67,00'
+    // *     example 5: number_format(1000);
+    // *     returns 5: '1,000'
+    // *     example 6: number_format(67.311, 2);
+    // *     returns 6: '67.31'
+    // *     example 7: number_format(1000.55, 1);
+    // *     returns 7: '1,000.6'
+    // *     example 8: number_format(67000, 5, ',', '.');
+    // *     returns 8: '67.000,00000'
+    // *     example 9: number_format(0.9, 0);
+    // *     returns 9: '1'
+    // *     example 10: number_format('1.20', 2);
+    // *     returns 10: '1.20'
+    // *     example 11: number_format('1.20', 4);
+    // *     returns 11: '1.2000'
+    // *     example 12: number_format('1.2000', 3);
+    // *     returns 12: '1.200'
+    var n = number,
+        prec = decimals;
 
     var toFixedFix = function(n, prec) {
         var k = Math.pow(10, prec);
@@ -207,7 +205,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
         i = _[0].length % 3 || 3;
 
         _[0] = s.slice(0, i + (n < 0)) +
-                _[0].slice(i).replace(/(\d{3})/g, sep + '$1');
+            _[0].slice(i).replace(/(\d{3})/g, sep + '$1');
         s = _.join(dec);
     } else {
         s = s.replace('.', dec);
@@ -216,19 +214,17 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     var decPos = s.indexOf(dec);
     if (prec >= 1 && decPos !== -1 && (s.length - decPos - 1) < prec) {
         s += new Array(prec - (s.length - decPos - 1)).join(0) + '0';
-    }
-    else if (prec >= 1 && decPos === -1) {
+    } else if (prec >= 1 && decPos === -1) {
         s += dec + new Array(prec).join(0) + '0';
     }
     return s;
 }
 
-function renderNomor(value, id, r)
-{
-    var value = str_replace(".","",value);
+function renderNomor(value, id, r) {
+    var value = str_replace(".", "", value);
     // console.log(value);
-    Ext.util.Format.thousandSeparator  = ".";
-    Ext.util.Format.decimalSeparator  = ".";
+    Ext.util.Format.thousandSeparator = ",";
+    Ext.util.Format.decimalSeparator = ".";
     var formatNomor = "0,000";
     // console.log(value)
     return Ext.util.Format.number(value, formatNomor);
@@ -239,42 +235,40 @@ function renderNomorNegative(number) {
     //Seperates the components of the number
     var components = (Math.floor(number * 100) / 100).toString().split(".");
     //Comma-fies the first part
-    components [0] = components [0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    components[0] = components[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     //Combines the two sections
     return components.join(".");
 }
 
-function cetak(title,mode,id)
-{
-        var src = SITE_URL+"backend/cetak/"+mode+"/" + id;
+function cetak(title, mode, id) {
+    var src = SITE_URL + "backend/cetak/" + mode + "/" + id;
 
-        var myWin = Ext.create("Ext.window.Window", {
-            title: title,
-            modal: true,
-            html: '<iframe src="'+src+'" width="100%" height="100%" ></iframe>',
-            width: 700,
-            height: 500
-        });
-        myWin.show();
+    var myWin = Ext.create("Ext.window.Window", {
+        title: title,
+        modal: true,
+        html: '<iframe src="' + src + '" width="100%" height="100%" ></iframe>',
+        width: 700,
+        height: 500
+    });
+    myWin.show();
 }
 
-function convertDate(tgl)
-{
+function convertDate(tgl) {
     //convert ddmmyyy -> yymmdd
     var tanggal = explode('-', tgl);
-    return tanggal[2]+'-'+tanggal[1]+'-'+tanggal[0];
+    return tanggal[2] + '-' + tanggal[1] + '-' + tanggal[0];
 }
 
-function convertDate2(tgl)
-{ console.log(tgl)
-    //convert yymmdd -> dd/mm/yy
-    if(tgl!==''){
-       
-        var tanggal = explode('-', tgl);           
-        return tanggal[2]+'/'+tanggal[1]+'/'+tanggal[0];
-         
+function convertDate2(tgl) {
+    console.log(tgl)
+        //convert yymmdd -> dd/mm/yy
+    if (tgl !== '') {
+
+        var tanggal = explode('-', tgl);
+        return tanggal[2] + '/' + tanggal[1] + '/' + tanggal[0];
+
     } else {
         return null;
     }
-   
+
 }

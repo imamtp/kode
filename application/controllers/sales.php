@@ -35,6 +35,7 @@ class sales extends MY_Controller {
             'idtax'=>$idtax,
             'idcustomer' => $this->input->post('customerSalesQuotation'),
             'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
+            'expireddate' => inputDate($this->input->post('expiredDate')),
             'no_sales_quote' => $this->input->post('nojurnalSalesQuotation'),
             // 'shipto'=> $this->input->post('shipaddressSalesQuotation'),
             'subtotal' => clearnumberic($this->input->post('subtotalSalesQuotation')),
@@ -59,7 +60,7 @@ class sales extends MY_Controller {
              'idcurrency'  => $this->session->userdata('userid'),
              'idunit'  => $this->input->post('unit')
         );
-        
+
         if($statusform == 'input'){
             $this->db->insert('sales', $header);
         }

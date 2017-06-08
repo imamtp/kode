@@ -16,7 +16,7 @@ class m_salesquotation extends CI_Model {
     }
 
     function selectField() {
-        return "a.idsales,h.idsales_quote,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments";
+        return "a.idsales,h.idsales_quote,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments,a.expireddate";
     }
     
     function fieldCek()
@@ -66,7 +66,8 @@ class m_salesquotation extends CI_Model {
             'description' => $this->input->post('description'),
             'rate' => $this->input->post('rate'),
             'acccollectedtax' => $this->input->post('idacccollected'),
-            'acctaxpaid' => $this->input->post('idaccpaid')
+            'acctaxpaid' => $this->input->post('idaccpaid'),
+            'expireddate' => $this->input->post('expireddate'),
         );
         return $data;
     }

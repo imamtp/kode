@@ -45,7 +45,7 @@ class m_purchasetype extends CI_Model {
     function updateField() { 
         $data = array(
             'idpurchasetype' => $this->input->post('idpurchasetype') == '' ? $this->m_data->getSeqVal('seq_purchasetype') : $this->input->post('idpurchasetype'),
-            'namepurchase'=>$this->input->post('namepurchase')
+            'namepurchase'=>$this->input->post('namepurchase'),
             'status'=>$this->input->post('status'),
             'deleted'=>$this->input->post('deleted'),
         );
