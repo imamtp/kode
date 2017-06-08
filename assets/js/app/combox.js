@@ -146,6 +146,31 @@ Ext.define('comboxSalesStatus', {
     })
 });
 
+var ArrSalesQuotationStatus = [
+    [1, 'Open'],
+    [2, 'Ordered'],
+    [3, 'Picked'],
+    [4, 'Partially Delivered'],
+    [5, 'Delivered'],
+    [6, 'Finished'],
+];
+
+
+Ext.define('comboxSalesQuotationStatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxSalesQuotationStatus',
+    fieldLabel: 'Status',
+    displayField: 'text',
+    valueField: 'value',
+    name: 'value',
+    editable: false,
+    triggerAction: 'all',
+    // store: storeProductGrade
+    store: new Ext.data.ArrayStore({
+        fields: ['value', 'text'],
+        data: ArrSalesQuotationStatus,
+    })
+});
 
 var ArrPurchaseRequestStatus = [
     [1, 'Open'],
