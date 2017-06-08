@@ -19,7 +19,8 @@ function treestore(id) {
 }
 
 if (curnipeg == '') {
-    var DashboardPage = Ext.create('mydashboard');
+    // var DashboardPage = Ext.create('mydashboard');
+    var DashboardPage = {}
 
     // var DashboardPage = Ext.create('Ext.Component', {
     //     border: false,
