@@ -559,6 +559,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             readOnly: true,
                             labelWidth: 120,
                             id: 'total_poreceipt',
+                            hidden: true,
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
                         }
@@ -589,6 +590,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             readOnly: true,
                             labelWidth: 120,
                             id: 'totalPajak_poreceipt',
+                            hidden: true,
                             fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
                         }
@@ -631,7 +633,17 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                         {
                             xtype: 'textfield',
                             align: 'right',
+                            fieldStyle: 'text-align: right;',
                             readOnly: true,
+                            id: 'totalitem_poreceipt',
+                            labelWidth: 120,
+                            fieldLabel: 'Total Item',
+                        },
+                        {
+                            xtype: 'textfield',
+                            align: 'right',
+                            readOnly: true,
+                            hidden: true,
                             labelWidth: 120,
                             id: 'subtotal_poreceipt',
                             fieldLabel: 'Subtotal',
