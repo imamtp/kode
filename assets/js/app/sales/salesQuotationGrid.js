@@ -1,7 +1,7 @@
 Ext.define('GridSalesQuotationGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_quote', 'no_sales_quote', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'idtax', 'rate', 'comments', 'idsales_quote'
+        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_quote', 'no_sales_quote', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'idtax', 'rate', 'comments', 'idsales_quote', 'expireddate'
     ],
     idProperty: 'id'
 });
@@ -404,6 +404,13 @@ Ext.define('GridSalesQuotationGrid', {
         dataIndex: 'no_sales_quote',
         minWidth: 150
     }, {
+        header: 'Status',
+        dataIndex: 'status',
+        minWidth: 150,
+        renderer: function(value) {
+            return customColumnStatus(ArrSalesQuotationStatus, value);
+        },
+    }, {
         header: 'Customer Name',
         flex: 1,
         dataIndex: 'namecustomer',
@@ -411,6 +418,10 @@ Ext.define('GridSalesQuotationGrid', {
     }, {
         header: 'Date Quotation',
         dataIndex: 'date_quote',
+        minWidth: 150
+    }, {
+        header: 'Expired Date',
+        dataIndex: 'expireddate',
         minWidth: 150
     }, {
         header: 'Total Item',
