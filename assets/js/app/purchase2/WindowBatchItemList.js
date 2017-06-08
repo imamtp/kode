@@ -120,7 +120,10 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
-                    //                    id: 'invno',
+                    editor: {
+                        xtype: 'textfield',
+                        allowBlank: false
+                    },
                     width: 150
                 },
                 {
@@ -136,11 +139,11 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                     width: 70,
                     dataIndex: 'qty',
                     align: 'right',
-                    // editor: {
-                    //     xtype: 'numberfield',
-                    //     allowBlank: false,
-                    //     minValue: 1
-                    // }
+                    editor: {
+                        xtype: 'numberfield',
+                        allowBlank: false,
+                        minValue: 1
+                    }
                 },
                 {
                     header: 'Satuan',
@@ -224,11 +227,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                     id: 'idunit_batchitemporeceipt',
                     name: 'idunit'
                 },
-                {
-                    xtype: 'hiddenfield',
-                    id: 'qty_batchitemporeceipt',
-                    name: 'qty'
-                },
+
                 {
                     xtype: 'hiddenfield',
                     id: 'short_desc_batchitemporeceipt'
@@ -246,6 +245,22 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [{
+                            xtype: 'textfield',
+                            readOnly: true,
+                            labelWidth: 130,
+                            width: 200,
+                            fieldLabel: 'Jumlah Qty',
+                            id: 'qty_batchitemporeceipt',
+                            name: 'qty'
+                        }, {
+                            xtype: 'textfield',
+                            readOnly: true,
+                            labelWidth: 130,
+                            width: 200,
+                            fieldLabel: 'Total Qty Terima',
+                            id: 'qtytotal_batchitemporeceipt',
+                            name: 'qtytotal'
+                        }, '-', {
                             xtype: 'numericfield',
                             width: 190,
                             id: 'numbatch_itempo',
@@ -279,6 +294,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                         var d = Ext.decode(form.responseText);
                                         console.log(d);
 
+                                        Ext.getCmp('qtytotal_batchitemporeceipt').setValue(d.qtytotal);
                                         // storeGridBatchItemPOList.on('beforeload',function(store, operation,eOpts){
                                         //    operation.params={
                                         //                 idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
@@ -297,107 +313,44 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                                 is_tmp: 1
                                             }
                                         });
-
-                                        // Ext.each(d.data, function(obj, i) {
-                                        //  var recDO = new GridBatchItemPOListModel({
-                                        //         idpurchaseitem: obj.idpurchaseitem,
-                                        //         idinventory: obj.idinventory,
-                                        //         sku_no: obj.sku_no,
-                                        //         invno: obj.invno,
-                                        //         nameinventory: obj.nameinventory,
-                                        //         qty: obj.qty,
-                                        //         price: obj.price,
-                                        //         disc: obj.disc,
-                                        //         total: obj.total,
-                                        //         ratetax: obj.ratetax,
-                                        //         tax: obj.tax,
-                                        //         size: obj.size,
-                                        //         short_desc: obj.short_desc,
-                                        //         size_measurement: obj.size_measurement,
-                                        //         warehouse_code: obj.warehouse_code
-                                        // });
-                                        // storeGridBatchItemPOList.insert(0, recDO);
-                                        // });
-
-                                        // var bersihinStoreGRPO = Ext.getCmp('GridBatchGoodsReceipt').getStore();
-                                        // bersihinStoreGRPO.removeAll();
-                                        // bersihinStoreGRPO.sync();
-
-                                        // Ext.Ajax.request({
-                                        //     url: SITE_URL + 'purchase/check_batch_item',
-                                        //         method: 'GET',
-                                        //         params: {
-                                        //             idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
-                                        //             idpurchaseitem: Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue(),
-                                        //             idinventory: Ext.getCmp('idinventory_batchitemporeceipt').getValue(),
-                                        //             idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
-                                        //             is_tmp:1
-                                        //         },
-                                        //         success: function(form, action) {
-                                        //             var d = Ext.decode(form.responseText);
-                                        //             // console.log(d);
-                                        //             Ext.getCmp('numbatch_itempo').setValue(d.numbatch);
-
-                                        //             // var insertItemBatchStoreGRPO = Ext.getCmp('GridBatchGoodsReceipt').getStore();
-
-                                        //                 Ext.each(d.data, function(obj, i) {
-                                        //                      var recDO = new GridBatchItemPOListModel({
-                                        //                             idpurchaseitem: obj.idpurchaseitem,
-                                        //                             idinventory: obj.idinventory,
-                                        //                             sku_no: obj.sku_no,
-                                        //                             invno: obj.invno,
-                                        //                             nameinventory: obj.nameinventory,
-                                        //                             qty: obj.qty,
-                                        //                             price: obj.price,
-                                        //                             disc: obj.disc,
-                                        //                             total: obj.total,
-                                        //                             ratetax: obj.ratetax,
-                                        //                             tax: obj.tax,
-                                        //                             size: obj.size,
-                                        //                             short_desc: obj.short_desc,
-                                        //                             size_measurement: obj.size_measurement,
-                                        //                             warehouse_code: obj.warehouse_code
-                                        //                     });
-                                        //                     storeGridBatchItemPOList.insert(0, recDO);
-                                        //                 });
-                                        //         },
-                                        //         failure: function(form, action) {
-                                        //             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                        //         }
-                                        //     });
-
-                                        // var gridinsert = Ext.getCmp('GridBatchGoodsReceipt');
-
-                                        // Ext.each(d.data, function(obj, i) {
-                                        //      var recDO = new GridBatchItemPOListModel({
-                                        //             idpurchaseitem: obj.idpurchaseitem,
-                                        //             idinventory: obj.idinventory,
-                                        //             sku_no: obj.sku_no,
-                                        //             invno: obj.invno,
-                                        //             nameinventory: obj.nameinventory,
-                                        //             qty: obj.qty,
-                                        //             price: obj.price,
-                                        //             disc: obj.disc,
-                                        //             total: obj.total,
-                                        //             ratetax: obj.ratetax,
-                                        //             tax: obj.tax,
-                                        //             size: obj.size,
-                                        //             short_desc: obj.short_desc,
-                                        //             size_measurement: obj.size_measurement,
-                                        //             warehouse_code: obj.warehouse_code,
-                                        //             stock_kedua:obj.stock_kedua,
-                                        //             satuan_kedua:obj.satuan_kedua
-                                        //     });
-                                        //     storeGridBatchItemPOList.insert(0, recDO);
-                                        // });
-
-                                        // storeGridBatchItemPOList.load();
                                     },
                                     failure: function(form, action) {
                                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                                     }
                                 });
                             }
+                        },
+                        '->',
+                        {
+                            text: 'Kembali Ke Penerimaan Barang',
+                            handler: function() {
+
+                                var json = Ext.encode(Ext.pluck(storeGridBatchItemPOList.data.items, 'data'));
+
+                                Ext.Ajax.request({
+                                    url: SITE_URL + 'purchase/check_batch',
+                                    method: 'POST',
+                                    params: {
+                                        idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
+                                        idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
+                                        totalqty: Ext.getCmp('qty_batchitemporeceipt').getValue(),
+                                        datagrid: json
+                                    },
+                                    success: function(form, action) {
+                                        var d = Ext.decode(form.responseText);
+                                        if (d.success) {
+                                            Ext.getCmp('WindowBatchItemList').hide();
+                                        } else {
+                                            Ext.getCmp('qtytotal_batchitemporeceipt').setValue(d.totalqtyterima);
+                                            Ext.Msg.alert('Failed', d.message);
+                                        }
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    }
+                                });
+                            }
+
                         }
                     ]
                 }
@@ -426,18 +379,18 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
             scope: this,
             edit: function() {
                 if (Ext.getCmp('statusform_poreceipt').getValue() === 'input') {
-                    updateGRBatch()
+                    // updateGRBatch()
                 }
 
                 if (Ext.getCmp('statusform_poreceipt').getValue() === 'edit') {
                     if (Ext.getCmp('numbatch_itempo').getValue() * 1 === 0) {
                         //kalo batchnya masih kosong boleh edit
-                        updateGRBatch()
+                        // updateGRBatch()
                     }
 
                     if (Ext.getCmp('cb_status_poreceipt').getValue() * 1 === 1) {
                         //kalo statusnya masih open boleh edit
-                        updateGRBatch()
+                        // updateGRBatch()
                     }
                 }
 
@@ -480,7 +433,7 @@ Ext.define(dir_sys + 'purchase2.WindowBatchItemList', {
         titlePosition: 2,
         titleAlign: 'center'
     },
-    closable: true,
+    closable: false,
     autoDestroy: false,
     modal: true,
     closeAction: 'hide',
@@ -495,6 +448,12 @@ Ext.define(dir_sys + 'purchase2.WindowBatchItemList', {
     listeners: {
         show: function() {
             // this.el.setStyle('top', '');
+        },
+        'close': function(win) {
+            console.info('bye');
+        },
+        'hide': function(win) {
+            console.info('just hidden');
         }
     }
 });
