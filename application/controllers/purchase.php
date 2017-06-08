@@ -1430,14 +1430,17 @@ class purchase extends MY_Controller {
             }
         }
 
-        $qtysisa = $totalqty-$totalqtyterima;
-        if($totalqtyterima>$totalqty){
-            $message = 'Total qty batch melebihi qty barang';
-            $success = false;
-        } else if($totalqtyterima<$totalqty){
-            $message = 'Total qty batch kurang dari qty barang';
-            $success = false;
+        if($success){
+             $qtysisa = $totalqty-$totalqtyterima;
+            if($totalqtyterima>$totalqty){
+                $message = 'Total qty batch melebihi qty barang';
+                $success = false;
+            } else if($totalqtyterima<$totalqty){
+                $message = 'Total qty batch kurang dari qty barang';
+                $success = false;
+            }
         }
+       
 
         echo json_encode(
             array(
