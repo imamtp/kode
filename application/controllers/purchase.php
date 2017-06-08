@@ -925,7 +925,7 @@ class purchase extends MY_Controller {
             //pas di form edit statusnya masih open. buka dgn status batch item yang statusnya temporary
             $is_tmp = 1;
         } else {
-            $is_tmp = $this->input->get('is_tmp');
+            $is_tmp = $this->input->get('is_tmp') == '' ? $this->input->post('is_tmp') : $this->input->get('is_tmp');
         }
         
         $q = $this->db->get_where('purchaseitem_batch',array(
