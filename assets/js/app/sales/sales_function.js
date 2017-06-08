@@ -76,6 +76,8 @@ function showSalesOrderData(record) {
     Ext.getCmp('memoSalesOrder').setValue(record.data.comments);
     Ext.getCmp('cb_tax_id_so').setValue(record.data.rate);
 
+    var checktax = record.data.include_tax * 1 == 1 ? true : false;
+    Ext.getCmp('include_tax_so').setValue(checktax);
 
     var cb_sales_order_status = Ext.getCmp('cb_sales_order_status');
     // cb_sales_order_status.getStore().load();
