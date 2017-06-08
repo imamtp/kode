@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
     alias: 'widget.EntrySalesQuotation',
     xtype: 'cell-editing',
     // title: 'Input Sales Quotation',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -15,20 +15,19 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
             width: panelW,
             height: sizeH,
             forceFit: true,
-            autoScroll:true,
+            autoScroll: true,
             plugins: [this.cellEditing],
             store: storeGridItemSalesQuotation,
-            columns: [
-                {
-                    header:'idsalesitem',
-                    hidden:true,
-                    dataIndex:'idsalesitem'
+            columns: [{
+                    header: 'idsalesitem',
+                    hidden: true,
+                    dataIndex: 'idsalesitem'
                 },
                 {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -43,14 +42,14 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                 {
                     header: 'No SKU',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 100
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
@@ -81,7 +80,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     dataIndex: 'short_desc',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -104,7 +103,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     dataIndex: 'size_measurement',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -130,8 +129,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                 },
                 {
                     header: 'Pajak',
-                    hidden:true,
-//                    width:50,
+                    hidden: true,
+                    //                    width:50,
                     dataIndex: 'ratetax',
                     editor: {
                         xtype: 'comboxtax',
@@ -146,51 +145,49 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     sortable: false,
                     menuDisabled: true,
                     items: [{
-                            icon: BASE_URL + 'assets/icons/fam/cross.gif',
-                            tooltip: 'Hapus',
-                            scope: this,
-                            handler: this.onRemoveClick
-                        }]
+                        icon: BASE_URL + 'assets/icons/fam/cross.gif',
+                        tooltip: 'Hapus',
+                        scope: this,
+                        handler: this.onRemoveClick
+                    }]
                 }
             ],
             selModel: {
                 selType: 'cellmodel'
             },
-            dockedItems: [ 
+            dockedItems: [
 
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             text: 'Tambah Barang',
                             iconCls: 'add-icon',
                             scope: this,
                             handler: this.onAddClick
                         }, '->', {
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             fieldLabel: 'No Invoice',
                             name: 'noinvoice',
                             id: 'noinvoiceSalesQuotation'
                         },
                         {
-                            xtype:'hiddenfield',
-                            name:'statusform',
-                            id:'statusformSalesQuotationGrid'
+                            xtype: 'hiddenfield',
+                            name: 'statusform',
+                            id: 'statusformSalesQuotationGrid'
                         },
                         {
-                            xtype:'textfield',
-                            name:'idsales',
-                            id:'idsales_quotation'
+                            xtype: 'textfield',
+                            name: 'idsales',
+                            id: 'idsales_quotation'
                         }
                     ]
                 },
-                 {
+                {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'textfield',
                             labelWidth: 120,
                             id: 'nojurnalSalesQuotation',
@@ -199,7 +196,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesQuotation').getValue(),'idsales','sales','nojurnalSalesQuotation','SQ');
+                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesQuotation').getValue(), 'idsales', 'sales', 'nojurnalSalesQuotation', 'SQ');
                                     });
                                 }
                             }
@@ -210,46 +207,53 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             id: 'tanggalSalesQuotation',
                             format: 'd/m/Y',
                             fieldLabel: 'Quotation Date'
-                        }, 
+                        },
                         {
-                            xtype:'comboxtaxtype',
+                            xtype: 'comboxtaxtype',
                             labelWidth: 120,
                             displayField: 'nametax',
                             valueField: 'rate',
                             name: 'idtax',
-                            id:'cb_tax_id_sq',                            
-                              listeners: {
+                            id: 'cb_tax_id_sq',
+                            listeners: {
                                 select: function(combo, record, index) {
-                                  // alert(combo.getValue()); // Return Unitad States and no USA
-                                  updateGridSalesQuotation();
+                                    // alert(combo.getValue()); // Return Unitad States and no USA
+                                    updateGridSalesQuotation();
                                 }
                             }
                         },
                         {
                             xtype: 'datefield',
-                            hidden:true,
+                            hidden: true,
                             id: 'tglPelunasanSalesQuotation',
                             format: 'd/m/Y',
                             fieldLabel: 'Tgl Pelunasan'
                         },
                         {
-                            xtype:'comboxSalesStatus',
-                            name:'sales_quotation_status',
-                            id:'cbSalesQuotation'
+                            xtype: 'comboxSalesQuotationStatus',
+                            name: 'sales_quotation_status',
+                            id: 'cbSalesQuotation'
                         }
                     ]
-                }, 
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxunit',
                             valueField: 'idunit',
                             labelWidth: 120,
                             valueField: 'idunit',
-                            id: 'cbUnitEntrySalesQuotation'
-//                            ,multiSelect:true
+                            id: 'cbUnitEntrySalesQuotation',
+                            //                            ,multiSelect:true
+                        },
+                        {
+                            xtype: 'datefield',
+                            labelWidth: 120,
+                            id: 'tglExpiredDateSalesQuotation',
+                            format: 'd/m/Y',
+                            minValue: new Date(),
+                            fieldLabel: 'Expired Date',
                         },
                         {
                             xtype: 'comboxCustomer',
@@ -266,7 +270,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                         //             component.getEl().on('click', function(event, el) {
 
                         //                     wGridSupplierListPopup.show();
-                                            
+
                         //                     storeGridSupplierList.on('beforeload',function(store, operation,eOpts){
                         //                         operation.params={
                         //                                     'idunit': Ext.getCmp('idunitRequisition').getValue(),
@@ -280,28 +284,25 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                         // },
                         {
                             xtype: 'comboxpayment',
-                            hidden:true,
+                            hidden: true,
                             labelWidth: 120,
                             id: 'paymentSalesQuotation',
                             valueField: 'idpayment',
                             listeners: {
                                 select: {
                                     fn: function(combo, value) {
-                                        if (combo.getValue() == 3)
-                                        {
+                                        if (combo.getValue() == 3) {
                                             //kredit
                                             Ext.getCmp('tglPelunasanSalesQuotation').setDisabled(false);
                                             Ext.getCmp('pembayaranSalesQuotation').setValue(0);
-//                                                Ext.getCmp('pembayaranSalesQuotation').setReadOnly(true);
-                                        } else if (combo.getValue() == 4)
-                                        {
+                                            //                                                Ext.getCmp('pembayaranSalesQuotation').setReadOnly(true);
+                                        } else if (combo.getValue() == 4) {
                                             //cod
                                             Ext.getCmp('tglPelunasanSalesQuotation').setDisabled(true);
                                             Ext.getCmp('tglPelunasanSalesQuotation').setValue(null);
                                             Ext.getCmp('pembayaranSalesQuotation').setValue(0);
                                             Ext.getCmp('pembayaranSalesQuotation').setReadOnly(false);
-                                        } else if (combo.getValue() == 1)
-                                        {
+                                        } else if (combo.getValue() == 1) {
                                             //tunai
                                             Ext.getCmp('tglPelunasanSalesQuotation').setDisabled(true);
                                             Ext.getCmp('tglPelunasanSalesQuotation').setValue(null);
@@ -314,57 +315,54 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                         }
                     ]
                 },
-                 {
+                {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
-                            xtype: 'textfield',
-                            width: 620,
-                            labelWidth: 120,
-                            value:'Sales Quotation',
-                            id: 'memoSalesQuotation',
-                            fieldLabel: 'Memo'
-                        }, '->'
-                    ]
+                    items: [{
+                        xtype: 'textfield',
+                        width: 620,
+                        labelWidth: 120,
+                        value: 'Sales Quotation',
+                        id: 'memoSalesQuotation',
+                        fieldLabel: 'Memo'
+                    }, '->']
                 },
-              
+
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: ['->',
-                         {
+                        {
                             itemId: 'recordPayment',
-                            id:'btnRecordSalesQuote',
+                            id: 'btnRecordSalesQuote',
                             text: 'Record Sales Quotation',
                             iconCls: 'disk',
                             handler: Ext.bind(this.recordSalesQuotation, this, 'noprint', true)
-                        },{
+                        }, {
                             text: 'Print and Record Sales Quotation',
                             iconCls: 'drive_disk-icon',
-                            hidden:true,
+                            hidden: true,
                             handler: Ext.bind(this.recordSalesQuotation, this, 'print', true)
                         },
-                         
-                         
+
+
                         {
                             xtype: 'textfield',
                             id: 'sisaBayarSalesQuotation',
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
-                            hidden:true,
+                            hidden: true,
                             fieldLabel: 'Saldo Terhutang ',
                             fieldStyle: 'text-align: right;'
                         }
-                        
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'hiddenfield',
                             id: 'idaccountSalesQuotation',
                             name: 'idaccount',
@@ -403,10 +401,10 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                         }, '->',
                         {
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             id: 'angkutSalesQuotation',
                             align: 'right',
-//                            readOnly: true,
+                            //                            readOnly: true,
                             labelWidth: 120,
                             fieldLabel: 'Biaya Angkut',
                             fieldStyle: 'text-align: right;',
@@ -423,10 +421,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                       {
+                    items: [{
                             xtype: 'textfield',
-                            hidden:true,
+                            hidden: true,
                             id: 'shipaddressSalesQuotation',
                             labelWidth: 120,
                             width: 500,
@@ -435,11 +432,10 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
 
-                                        if (group_id == 99)
-                                        {
+                                        if (group_id == 99) {
                                             var extraparams = null;
                                         } else {
-                                            var extraparams = 'a.idunit:'+Ext.getCmp('cbUnitEntrySalesQuotation').getValue();
+                                            var extraparams = 'a.idunit:' + Ext.getCmp('cbUnitEntrySalesQuotation').getValue();
                                         }
 
                                         var FormChooseAddress = Ext.getCmp('FormChooseAddress');
@@ -461,10 +457,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                                     });
                                 }
                             }
-                        },
-                        ,
+                        }, ,
                         '->',
-                                               {
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -473,20 +468,19 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
                         }
-                        
+
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxshipping',
                             labelWidth: 120,
-                            hidden:true,
+                            hidden: true,
                             id: 'shippingSalesQuotation'
                         }, '->',
-                         {
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -500,15 +494,14 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        {
+                    items: [{
                             xtype: 'comboxcurrency',
-                            hidden:true,
+                            hidden: true,
                             id: 'comboxcurrencySalesQuotation',
                             labelWidth: 120
                         },
-                         '->',
-                         {
+                        '->',
+                        {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
@@ -523,21 +516,21 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-//                        {
-//                            itemId: 'useRecuringSalesQuotation',
-//                            text: 'Gunakan Sales Quotation Tersimpan',
-//                            iconCls: 'add-icon',
-//                            handler: function() {
-//                                wGridRecurringPopup.show();
-//                                storeGridRecurringPopup.load();
-//                            }
-//                        }, {
-//                            itemId: 'recordandsaveSalesQuotation',
-//                            text: 'Simpan Sebagai Sales Quotation Berulang',
-//                            iconCls: 'add-icon',
-//                            handler: this.saveRecurr
-//                        },
-                       
+                        //                        {
+                        //                            itemId: 'useRecuringSalesQuotation',
+                        //                            text: 'Gunakan Sales Quotation Tersimpan',
+                        //                            iconCls: 'add-icon',
+                        //                            handler: function() {
+                        //                                wGridRecurringPopup.show();
+                        //                                storeGridRecurringPopup.load();
+                        //                            }
+                        //                        }, {
+                        //                            itemId: 'recordandsaveSalesQuotation',
+                        //                            text: 'Simpan Sebagai Sales Quotation Berulang',
+                        //                            iconCls: 'add-icon',
+                        //                            handler: this.saveRecurr
+                        //                        },
+
                         // {
                         //     itemId: 'recordSalesQuotation',
                         //     text: 'Rekam Sales Quotation',
@@ -545,12 +538,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                         //     handler: this.recordSalesQuotation
                         // }
                         , '->',
-                         {
+                        {
                             xtype: 'textfield',
                             id: 'pembayaranSalesQuotation',
                             align: 'right',
-//                            readOnly: true,
-                            hidden:true,
+                            //                            readOnly: true,
+                            hidden: true,
                             labelWidth: 120,
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
@@ -562,13 +555,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                                 }
                             }
                         }
-                       
+
                     ]
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -598,14 +590,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesQuotation: function(button, event, mode)
-    {
+    recordSalesQuotation: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountSalesQuotation').getValue())
-        if (validasiSalesQuotation())
-        {
-            
+        if (validasiSalesQuotation()) {
+
             var json = Ext.encode(Ext.pluck(storeGridItemSalesQuotation.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesQuotation').getValue());
+            //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesQuotation').getValue());
 
             Ext.Ajax.request({
                 url: SITE_URL + 'sales/saveQuotation',
@@ -630,17 +620,17 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     idaccountSalesQuotation: Ext.getCmp('idaccountSalesQuotation').getValue(),
                     noinvoice: Ext.getCmp('noinvoiceSalesQuotation').getValue(),
                     unit: Ext.getCmp('cbUnitEntrySalesQuotation').getValue(),
-                    customerSalesQuotation : Ext.getCmp('customerSalesQuotation').getValue(),
-                    statusform : Ext.getCmp('statusformSalesQuotationGrid').getValue(),
+                    customerSalesQuotation: Ext.getCmp('customerSalesQuotation').getValue(),
+                    statusform: Ext.getCmp('statusformSalesQuotationGrid').getValue(),
                     ratetax: Ext.getCmp('cb_tax_id_sq').getValue(),
-                    sales_quotation_status : Ext.getCmp('cbSalesQuotation').getValue(),
+                    sales_quotation_status: Ext.getCmp('cbSalesQuotation').getValue(),
+                    expiredDate: Ext.getCmp('tglExpiredDateSalesQuotation').getValue(),
                     datagrid: json
                 },
                 success: function(form, action) {
 
                     var d = Ext.decode(form.responseText);
-                    if (!d.success)
-                    {
+                    if (!d.success) {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
@@ -685,8 +675,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
 
     },
     saveRecurr: function() {
-        if (validasiSalesQuotation())
-        {
+        if (validasiSalesQuotation()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -694,45 +683,45 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('customerSalesQuotation').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        //        console.log(Ext.getCmp('customerSalesQuotation').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
         // if (Ext.getCmp('customerSalesQuotation').getValue() == null)
         // {
         //     Ext.Msg.alert('Peringatan', 'Supplier belum dipilih!');
         // } else {
-            wItemSelectSalesQuotationPopup.show();
-            storeGridItemSelectSalesQuotation.load();
+        wItemSelectSalesQuotationPopup.show();
+        storeGridItemSelectSalesQuotation.load();
         // }
 
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
+        //        var rec = new JournalStore({
+        //            idaccount: null,
+        //            accname: null,
+        //            accnumber: null,
+        //            debit: null,
+        //            credit: null
+        //        });
+        //
+        //        this.getStore().insert(0, rec);
+        //        this.cellEditing.startEditByPosition({
+        //            row: 0,
+        //            column: 0
+        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);
@@ -743,10 +732,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
     }
 });
 
-function updateGridSalesQuotation()
-{
+function updateGridSalesQuotation() {
     console.log('update run');
-   var addprefix = 'SalesQuotation';
+    var addprefix = 'SalesQuotation';
 
     var subtotalSalesQuotation = 0 * 1;
     var totalSalesQuotation = 0 * 1;
@@ -767,46 +755,40 @@ function updateGridSalesQuotation()
         obj.set('total', net);
     });
 
-//     console.log(subtotalSalesQuotation);
+    //     console.log(subtotalSalesQuotation);
     totalSalesQuotation = subtotalSalesQuotation + angkutSalesQuotation * 1;
-//     console.log(totalSalesQuotation+' '+totalPajak);
+    //     console.log(totalSalesQuotation+' '+totalPajak);
     totalSalesQuotation = totalSalesQuotation + totalPajak;
-//     console.log(totalSalesQuotation);
+    //     console.log(totalSalesQuotation);
     sisaBayarSalesQuotation = totalSalesQuotation - pembayaranSalesQuotation;
 
-    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('total' + addprefix).setValue(totalSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('angkut' + addprefix).setValue(angkutSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesQuotation.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalSalesQuotation.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('angkut' + addprefix).setValue(angkutSalesQuotation.toLocaleString('null', { minimumFractionDigits: 2 }));
     // Ext.getCmp('pembayaranSalesQuotation').setValue(pembayaranSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarSalesQuotation').setValue(sisaBayarSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
 
 }
 
-function validasiSalesQuotation()
-{
-//    alert(Ext.getCmp('comboxcurrencySalesQuotation').getValue());   
+function validasiSalesQuotation() {
+    //    alert(Ext.getCmp('comboxcurrencySalesQuotation').getValue());   
 
-    if (Ext.getCmp('customerSalesQuotation').getValue() == null)
-    {
+    if (Ext.getCmp('customerSalesQuotation').getValue() == null) {
         Ext.Msg.alert('Failed', 'Customer belum dipilih');
 
-    } else if (Ext.getCmp('tanggalSalesQuotation').getValue() == null)
-    {
+    } else if (Ext.getCmp('tanggalSalesQuotation').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Sales Quotation');
-    } 
+    }
     // else if (Ext.getCmp('shipaddressSalesQuotation').getValue() == '')
     // {
     //     Ext.Msg.alert('Failed', 'Masukkan alamat pengiriman');
     // }
-     else if (Ext.getCmp('nojurnalSalesQuotation').getValue() == '')
-    {
+    else if (Ext.getCmp('nojurnalSalesQuotation').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan NO SQ');
-    } else if (Ext.getCmp('memoSalesQuotation').getValue() == '')
-    {
+    } else if (Ext.getCmp('memoSalesQuotation').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan Memo SQ');
-    } else if (Ext.getCmp('totalSalesQuotation').getValue() == '')
-    {
+    } else if (Ext.getCmp('totalSalesQuotation').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan barang');
     }
     // else if (Ext.getCmp('paymentSalesQuotation').getValue() == 3 && Ext.getCmp('tglPelunasanSalesQuotation').getValue() == null)
