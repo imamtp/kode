@@ -128,6 +128,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                                 var d = Ext.decode(form.responseText);
                                 // console.log(d);
                                 Ext.getCmp('numbatch_itempo').setValue(d.numbatch);
+                                Ext.getCmp('qtytotal_batchitemporeceipt').setValue(d.totalqtyterima);
 
                                 if (d.numbatch === 0) {
                                     //kalo masih kosong enable tombol create batch. (edit form)
