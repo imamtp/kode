@@ -36,10 +36,11 @@ class m_purchaseorder extends CI_Model {
 					left join payment d ON a.idpayment = d.idpayment
 					left join supplier e ON a.idsupplier = e.idsupplier
                     left join employee f ON a.receivedby_id = f.idemployee
-                    join (select idpurchase,sum(qty) as totalorder,sum(qty_received) as totalreceived,
-                            (sum(qty_received)-sum(qty)) as sisa
-                            from purchaseitem
-                            group by idpurchase) g ON a.idpurchase = g.idpurchase
+                    join (select idpurchase,totalorder,totalreceived,sum(totalorder-totalreceived) as sisa
+                        from (select idpurchase,sum(qty) as totalorder,COALESCE(sum(qty_received),0) as totalreceived
+                                from purchaseitem
+                                group by idpurchase) a
+                                group by idpurchase,totalorder,totalreceived) g ON a.idpurchase = g.idpurchase
                     left join (select nopurchase,idpurchase,date
                                 from purchase ) h ON a.idpurchase_req = h.idpurchase";
 
