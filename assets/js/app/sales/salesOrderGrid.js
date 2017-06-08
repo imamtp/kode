@@ -369,6 +369,46 @@ Ext.define('GridSalesOrderGrid', {
                     Ext.getCmp('btnRecordSalesOrder').enable();
                 }
             }, {
+                text: 'Set Status',
+                iconCls: 'edit-icon',
+                menu: [{
+                    text: 'Confirm',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                        var grid = Ext.getCmp('GridSalesOrderGridID');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            if (selectedRecord.data.idsales * 1 == 3) {
+                                Ext.Msg.alert('Failure', 'Sales data already confirm');
+                            } else {
+                                Ext.Ajax.request({
+                                    url: SITE_URL + 'sales/set_status',
+                                    method: 'POST',
+                                    params: {
+                                        status: 3,
+                                        idunit: idunit,
+                                        idsales: selectedRecord.data.idsales
+                                    },
+                                    success: function(form, action) {
+                                        var d = Ext.decode(form.responseText);
+                                        Ext.Msg.alert('Informasi', d.message);
+                                        storeGridSalesOrderGrid.load();
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    }
+                                });
+                            }
+
+                        }
+                    }
+                }],
+
+
+            }, {
                 itemId: 'editSalesOrderGrid',
                 hidden: true,
                 text: 'Edit',

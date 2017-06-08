@@ -259,23 +259,32 @@ class sales extends MY_Controller {
         $status = $this->input->post('status');
         $idunit = $this->input->post('idunit');
 
-        $qsales = $this->db->query("select no_sales_order,idaccount_hppenjualan,idaccount_persediaan from sales
-                                    where idsales = $idsales and idunit = $idunit")->row();
+        if($status==3){
+            //confirm
+            $this->db->where('idsales', $idsales);
+            $this->db->update('sales', array(
+                'status'=>$status
+            ));
+        } else if($status==4){
+             //closed
 
-        if($qsales->idaccount_hppenjualan==null){
-             $json = array('success'=>false,'message'=>'Akun perkiraan HPP belum ditentukan');
-             echo json_encode($json);
-             return false;
-        }
+            $qsales = $this->db->query("select no_sales_order,idaccount_hppenjualan,idaccount_persediaan from sales
+                                        where idsales = $idsales and idunit = $idunit")->row();
 
-        if($qsales->idaccount_persediaan==null){
-             $json = array('success'=>false,'message'=>'Akun perkiraan persediaan belum ditentukan');
-             echo json_encode($json);
-             return false;
-        }
+            if($qsales->idaccount_hppenjualan==null){
+                $json = array('success'=>false,'message'=>'Akun perkiraan HPP belum ditentukan');
+                echo json_encode($json);
+                return false;
+            }
 
-        if($status==4){
-            //closed
+            if($qsales->idaccount_persediaan==null){
+                $json = array('success'=>false,'message'=>'Akun perkiraan persediaan belum ditentukan');
+                echo json_encode($json);
+                return false;
+            }
+
+        
+           
             $this->db->where('idsales', $idsales);
             $this->db->update('sales', array(
                 'status'=>$status

@@ -323,11 +323,17 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         },
                         {
                             xtype: 'textfield',
-                            width: 620,
+                            width: 570,
                             labelWidth: 120,
                             value: 'Sales Order',
                             id: 'memoSalesOrder_do',
                             fieldLabel: 'Memo'
+                        },
+                        {
+                            xtype: 'textfield',
+                            labelWidth: 120,
+                            id: 'no_faktur_do',
+                            fieldLabel: 'No Faktur'
                         }
                     ]
                 },

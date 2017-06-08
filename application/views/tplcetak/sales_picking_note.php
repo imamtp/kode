@@ -94,7 +94,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                           <!-- <th>Tax %</th> -->
                            <th>Total</th>
                             <th>Warehouse</th>
-                           <th>Qty Kirim</th>
+                           <th>Qty Ambil</th>
                         </tr>
                         <?php
                         // print_r($data['detail']);
