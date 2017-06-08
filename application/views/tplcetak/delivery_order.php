@@ -33,7 +33,8 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
           <h2><?=$title?></h2>
           <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>
               Tanggal Pengiriman: <?=$data['header']['delivery_date']?><br>
-              NO: #<?=$data['no']?></small><br>
+              NO SO: #<?=$data['no']?><br>
+              NO Faktur: #<?=$data['header']['no_faktur']?></small><br>
           </h3>
         </div>
       </div>

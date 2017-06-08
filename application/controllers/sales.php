@@ -313,9 +313,9 @@ class sales extends MY_Controller {
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
 
+        $no_faktur = $this->input->post('no_faktur');
         $statusform = $this->input->post('statusform');
-        $idsales = $this->input->post('idsales');
-        $delivery_order_id = $this->m_data->getPrimaryID($this->input->post('delivery_order_id'),'delivery_order', 'delivery_order_id', $this->input->post('unit'));
+        $idsales = $this->input->post('idsales');        
         $idunit = $this->input->post('unit');
         $no_do = $this->input->post('no_do');
         $idaccount_hppenjualan = $this->input->post('idaccount_hppenjualan');
@@ -323,6 +323,23 @@ class sales extends MY_Controller {
         $biaya_angkut = $this->input->post('biaya_angkut') =='' ? 0 : str_replace('.','',$this->input->post('biaya_angkut'));
         $subtotal = str_replace('.','',$this->input->post('subtotal'));
         $amount = $subtotal + $biaya_angkut;
+
+        //cek nomor faktur
+        if($this->input->post('delivery_order_id')===''){
+            //insert
+            $qfak = $this->db->query("select no_faktur from sales where no_faktur = '".$no_faktur."' and idunit = ".$idunit." ");
+        } else {
+            //edit
+            $qfak = $this->db->query("select no_faktur from sales where no_faktur = '".$no_faktur."' and idunit = ".$idunit." and idsales != ".$idsales."");
+        }
+        if($qfak->num_rows()>0){
+            $json = array('success'=>false,'message'=>'No Faktur sudah ada di dalam database');
+            echo json_encode($json);
+            return false;
+        } 
+        //end cek nomor faktur
+
+        $delivery_order_id = $this->m_data->getPrimaryID($this->input->post('delivery_order_id'),'delivery_order', 'delivery_order_id', $this->input->post('unit'));
 
         $header = array(
             'no_do'=>$no_do,

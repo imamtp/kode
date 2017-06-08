@@ -16,7 +16,7 @@ class m_deliveryordergrid extends CI_Model {
     }
 
     function selectField() {
-        return "a.delivery_order_id,a.delivery_date,a.idunit,a.date_created,a.idsales,a.remarks,a.userin,a.status,b.totalamount,b.tax,b.disc,b.freight,b.paidtoday,b.balance,b.date_sales,b.no_sales_order,c.namecustomer,b.noinvoice,qtyorder,qtykirim, c.address as address_customer, c.telephone as telephone_customer, c.handphone as handphone_customer,nocustomer";
+        return "a.delivery_order_id,a.delivery_date,a.idunit,a.date_created,a.idsales,a.remarks,a.userin,a.status,b.totalamount,b.tax,b.disc,b.freight,b.paidtoday,b.balance,b.date_sales,b.no_sales_order,c.namecustomer,b.noinvoice,qtyorder,qtykirim, c.address as address_customer, c.telephone as telephone_customer, c.handphone as handphone_customer,nocustomer,b.no_faktur";
     }
     
     function fieldCek()
