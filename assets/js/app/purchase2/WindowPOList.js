@@ -122,9 +122,7 @@ Ext.define('GridPurchaseOrderList', {
                 },
                 success: function(form, action) {
                     var d = Ext.decode(form.responseText);
-
-
-
+                    Ext.getCmp('totalitem_poreceipt').setValue(d.data.length);
                     Ext.each(d.data, function(obj, i) {
                         // console.log(obj);
 

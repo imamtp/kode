@@ -217,6 +217,7 @@ function showGoodsReceiptData(record) {
     Ext.getCmp('memo_poreceipt').setValue(record.data.memo);
     Ext.getCmp('notes_poreceipt').setValue(record.data.notes_receipt);
 
+
     var received_date_poreceipt = Ext.getCmp('received_date_poreceipt');
     received_date_poreceipt.setValue(record.data.delivereddate);
 
@@ -256,9 +257,7 @@ function showGoodsReceiptData(record) {
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
-
-
-
+            Ext.getCmp('totalitem_poreceipt').setValue(d.data.length);
             Ext.each(d.data, function(obj, i) {
                 // console.log(obj);
 
