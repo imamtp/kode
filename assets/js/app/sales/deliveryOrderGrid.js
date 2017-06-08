@@ -174,12 +174,14 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             header: 'Subtotal',
             dataIndex: 'subtotal',
             minWidth: 150,
+            hidden: true,
             xtype: 'numbercolumn',
             align: 'right'
         },
         {
             header: 'Total Tax',
             dataIndex: 'tax',
+            hidden: true,
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
@@ -187,6 +189,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         {
             header: 'Total Discount',
             dataIndex: 'disc',
+            hidden: true,
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
@@ -194,6 +197,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         {
             header: 'Shipping Cost',
             dataIndex: 'freight',
+            hidden: true,
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
@@ -201,6 +205,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         {
             header: 'Total Paid',
             dataIndex: 'paidtoday',
+            hidden: true,
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
@@ -208,6 +213,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         {
             header: 'Total Amount',
             dataIndex: 'totalamount',
+            hidden: true,
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
