@@ -322,6 +322,12 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                         },
                         '->',
                         {
+                            text: 'Tutup',
+                            handler: function() {
+                                Ext.getCmp('WindowBatchItemList').hide();
+                            }
+                        },
+                        {
                             text: 'Simpan',
                             handler: function() {
 

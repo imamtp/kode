@@ -1,4 +1,4 @@
-var EntryGoodsReceipt = Ext.create(dir_sys+'purchase2.EntryGoodsReceipt');
+var EntryGoodsReceipt = Ext.create(dir_sys + 'purchase2.EntryGoodsReceipt');
 
 Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
     extend: 'Ext.window.Window',
@@ -15,49 +15,48 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
     closeAction: 'hide',
     //    autoWidth: true,
     width: panelW - 50,
-    autoHeight:true,
-    // height: sizeH,
+    // autoHeight:true,
+    height: sizeH,
     layout: 'fit',
     border: false,
     items: [EntryGoodsReceipt],
-    buttons: [
-    {
+    buttons: [{
         text: 'Cancel',
         handler: function() {
             // this.up('form').getForm().reset();
             Ext.getCmp('WindowEntryGoodsReceipt').hide();
         }
-    },{
+    }, {
         text: 'Record Goods Receipt',
-        id:'btnRecordGR',
+        id: 'btnRecordGR',
         handler: function() {
             var storeEntryGoodsReceipt = Ext.getCmp('EntryGoodsReceipt').getStore();
             var ItemGRjson = Ext.encode(Ext.pluck(storeEntryGoodsReceipt.data.items, 'data'));
 
-              Ext.Ajax.request({
-                    url: SITE_URL + 'purchase/save_goodsreceipt',
-                    method: 'POST',
-                    params: {
-                        itemgrid:ItemGRjson,      
-                        statusform: Ext.getCmp('statusform_poreceipt').getValue(),                  
-                        nopo:Ext.getCmp('nojurnal_poreceipt').getValue(),
-                        idunit:Ext.getCmp('cbUnit_poreceipt').getValue(),
-                        notes:Ext.getCmp('notes_poreceipt').getValue(),
-                        idpurchase: Ext.getCmp('idpurchase_poreceipt').getValue(),
-                        receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
-                        received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue()
-                    },
-                    success: function(form, action) {
-                        var d = Ext.decode(form.responseText);
-                        Ext.Msg.alert('Info', d.message);
+            Ext.Ajax.request({
+                url: SITE_URL + 'purchase/save_goodsreceipt',
+                method: 'POST',
+                params: {
+                    itemgrid: ItemGRjson,
+                    statusform: Ext.getCmp('statusform_poreceipt').getValue(),
+                    nopo: Ext.getCmp('nojurnal_poreceipt').getValue(),
+                    idunit: Ext.getCmp('cbUnit_poreceipt').getValue(),
+                    notes: Ext.getCmp('notes_poreceipt').getValue(),
+                    idpurchase: Ext.getCmp('idpurchase_poreceipt').getValue(),
+                    receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
+                    received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue()
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
+                    Ext.Msg.alert('Info', d.message);
 
-                        Ext.getCmp('WindowEntryGoodsReceipt').hide();
-                        Ext.getCmp('GoodsReceiptGridID').getStore().load();
-                    },
-                    failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                    }
-                });
+                    Ext.getCmp('WindowEntryGoodsReceipt').hide();
+                    Ext.getCmp('GoodsReceiptGridID').getStore().load();
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
         }
     }, ]
 });
