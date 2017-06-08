@@ -131,7 +131,7 @@ class m_purchase extends CI_Model {
     }
 
     function query_itempurchase($idpurchase){
-         $q = $this->db->query("select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
+         $q = $this->db->query("select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
                 a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no
                 from purchaseitem a
                 join inventory b ON a.idinventory = b.idinventory

@@ -85,34 +85,32 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                           <th width="30">No</th>  
                           <th>SKU Num</th>        
                           <th>Item Code</th>                       
-                          <th>Item Name</th>                     
-                          <th>Price</th>
-                          <th>Qty</th>
-                          <th>Measurement</th>
-                          <!-- <th>Size/Length</th> -->
-                          <!-- <th>Measurement</th> -->
-                          <th>Discount(%)</th>
-                          <!-- <th>Tax %</th> -->
-                           <th>Total</th>
+                          <th>Item Name</th>    
+                          <th>Qty Order</th>
+                          <th>Qty Received</th>
+                          <th>Balance</th>
                         </tr>
                         <?php
                         // print_r($data['detail']);
                         $i=1;
+                        $totalorder = 0;
+                        $totalreceiv = 0;
+                        $totalbalance = 0;
                         foreach ($data['detail'] as $key => $value) {
+                          $balance = $value['qty']-$value['qty_received'];
+
+                          $totalorder+=$value['qty'];
+                          $totalreceiv+=$value['qty_received'];
+                          $totalbalance+=$balance;
                            ?>
                              <tr>
                               <td width="30"><?=$i?></td>
                               <td><?=$value['sku_no']?></td>
                               <td><?=$value['invno']?></td>
                               <td><?=$value['nameinventory']?></td>  
-                              <td align="right"><?=number_format($value['price'])?></td>
                               <td align="right"><?=$value['qty']?></td>
-                              <td><?=$value['short_desc']?></td>
-                              <!-- <td align="right"><?=$value['size']?></td> -->
-                              <!-- <td><?=$value['size_measurement']?></td> -->
-                              <td align="right"><?=number_format($value['disc'])?></td>
-                              <?php //if($data['totaltax']!=0) { echo "<td>".$value['ratetax']."</td>"; } ?>
-                              <td align="right"><?=number_format($value['total'])?></td>
+                              <td align="right"><?=$value['qty_received']?></td>
+                              <td align="right"><?=$balance?></td>
                             </tr>
                            <?php
                          
@@ -124,59 +122,28 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
               <?php
               }
               ?>
-
-              <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
+              
+              <table class="table borderless" style="width:99%; margin-top:10px; margin-left:1px; margin-right:2px;">
                   <tr>
                       <td></td>
                        <td> </td>
-                      <td align="right"><b>Subtotal</b></td>
-                      <td align="right" width="200"><?=$data['detailtotal']?></td>
+                      <td align="right"><b>Total Order</b></td>
+                      <td align="right" width="200"><?=number_format($totalorder)?></td>
                     </tr>
                      <tr>
                         <td></td>
                          <td> </td>
-                        <td align="right"><b>Biaya Angkut (+)</b></td>
-                        <td align="right"><?=number_format($data['freigthcost'])?></td>
+                        <td align="right"><b>Total Received</b></td>
+                        <td align="right"><?=number_format($totalreceiv)?></td>
                       </tr>
                        <tr>
                         <td></td>
                          <td> </td>
-                        <td align="right"><b>Pajak (+)</b></td>
-                        <td align="right"><?=number_format($data['totaltax'])?></td>
+                        <td align="right"><b>Total Balance</b></td>
+                        <td align="right"><?=number_format($totalbalance)?></td>
                       </tr>
-                
-                     <tr>
-                      <td></td>
-                       <td> </td>
-                      <td align="right"><b>Total Setelah Pajak</b></td>
-                      <td align="right" width="200"><?=number_format($data['total'])?></td>
-                    </tr>
 
-                    <?php 
-
-                    if($data['dp']!=0)
-                    {
-                      ?>
-                      <tr>
-                        <td></td>
-                         <td> </td>
-                        <td align="right"><b>Uang Muka/Terbayar (-)</b></td>
-                        <td align="right"><?=number_format($data['dp'])?></td>
-                      </tr>
-                    <?php
-                    }
-                    if($data['totalowed']!=0)
-                    {
-                      ?>
-                      <tr>
-                        <td></td>
-                         <td> </td>
-                        <td align="right"><b>Saldo Terhutang</b></td>
-                        <td align="right"><?=number_format($data['totalowed'])?></td>
-                      </tr>
-                    <?php
-                    }
-                    ?>
+                    
               </table>
                <!-- <div style="float:right;"><b>Amount in Words: </b><?=$data['terbilang']?></div> -->
         </table>
