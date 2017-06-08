@@ -331,8 +331,9 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         },
                         {
                             xtype: 'textfield',
-                            labelWidth: 120,
+                            labelWidth: 100,
                             id: 'no_faktur_do',
+                            name: 'no_faktur',
                             fieldLabel: 'No Faktur'
                         }
                     ]
@@ -738,6 +739,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         method: 'POST',
                         params: {
                             no_do: Ext.getCmp('nojurnalDO_do').getValue(),
+                            no_faktur: Ext.getCmp('no_faktur_do').getValue(),
                             delivery_order_id: Ext.getCmp('delivery_order_id').getValue(),
                             statusform: Ext.getCmp('statusformSalesOrderGrid_do').getValue(),
                             idsales: Ext.getCmp('id_sales_order_do').getValue(),
