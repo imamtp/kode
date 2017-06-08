@@ -87,6 +87,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                     xtype: 'numbercolumn',
                     header: 'Harga',
                     dataIndex: 'price',
+                    hidden: true,
                     minWidth: 150,
                     align: 'right'
                 },
@@ -116,6 +117,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                 },
                 {
                     xtype: 'numbercolumn',
+                    hidden: true,
                     header: 'Disc (%)',
                     minWidth: 70,
                     dataIndex: 'disc',
@@ -127,6 +129,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                     // }
                 }, {
                     xtype: 'numbercolumn',
+                    hidden: true,
                     header: 'Total',
                     dataIndex: 'total',
                     minWidth: 150,
@@ -431,7 +434,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                             }
                         }, '->',
                         {
-                            xtype: 'textfield',
+                            xtype: 'hiddenfield',
                             id: 'angkutSalesOrder_do',
                             align: 'right',
                             //                            readOnly: true,
@@ -468,7 +471,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         },
                         '->',
                         {
-                            xtype: 'textfield',
+                            xtype: 'hiddenfield',
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
@@ -541,7 +544,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         },
                         '->',
                         {
-                            xtype: 'textfield',
+                            xtype: 'hiddenfield',
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
@@ -674,7 +677,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                         },
                         '->',
                         {
-                            xtype: 'textfield',
+                            xtype: 'hiddenfield',
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
