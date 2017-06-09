@@ -34,7 +34,7 @@ var storeGridItemPurchaseRequisition = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemSelectPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan'],
+    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan', 'unitmeasure', 'satuan_beli'],
     idProperty: 'id'
 });
 
@@ -120,10 +120,11 @@ Ext.define('GridItemSelectPurchaseRequisition', {
                     idunit: idunit,
                     assetaccount: selectedRecord.get('assetaccount'),
                     sku_no: selectedRecord.get('sku_no'),
+                    short_desc: selectedRecord.get('satuan_beli'),
                     qty: 1,
                     disc: 0,
                     total: selectedRecord.get('cost') * 1,
-                    short_desc: selectedRecord.get('short_desc'),
+                    // short_desc: selectedRecord.get('short_desc'),
                     ratetax: Ext.getCmp('cb_tax_id_pr').getValue()
                         //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
                 });
@@ -149,7 +150,7 @@ Ext.define('GridItemSelectPurchaseRequisition', {
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            dataIndex: 'satuan_beli',
             minWidth: 100
         }, {
             header: 'Stock #2',

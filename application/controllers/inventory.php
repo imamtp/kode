@@ -1074,7 +1074,7 @@ class inventory extends MY_Controller {
             $wer .= " OR (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".strtolower($query)."%')"; //by inventory name
         }
 
-        $sql = "select a.idinventory,sku_no,a.idinventory_batch,nameinventory,a.cost,a.hpp_per_unit,  a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
+        $sql = "select a.idinventory,sku_no,a.idinventory_batch,nameinventory,a.cost,a.hpp_per_unit,a.unitmeasure, e.short_desc as satuan_beli, a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
                         c.short_desc AS satuan_kedua, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id,totalitem,a.bahan_coil_id
                     from inventory a
                     LEFT JOIN productmeasurement b 
@@ -1085,8 +1085,10 @@ class inventory extends MY_Controller {
                                             from inventory
                                             GROUP BY idinventory_batch
                                         ) d ON a.idinventory = d.idinventory_batch
+                    LEFT JOIN productmeasurement e 
+                                            ON a.unitmeasure = e.measurement_id 
                     where a.display is null and a.idinventory_batch is null $wer
-                    GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_batch,a.nameinventory,a.cost,a.hpp_per_unit,  a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id";
+                    GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_batch,a.nameinventory,a.cost,a.hpp_per_unit,  a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc";
         $q = $this->db->query($sql);
 
         $dataArr = $q->result_array();
