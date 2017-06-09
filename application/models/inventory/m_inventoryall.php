@@ -43,7 +43,8 @@ class m_inventoryAll extends CI_Model {
             c.short_desc as satuan_pertama,
             d.totalstock,
             e.short_desc as satuan_kedua,
-            a.inventory_type";
+            a.inventory_type,
+            a.idinventory_batch";
     }
     
     function fieldCek()
