@@ -11,7 +11,7 @@ var storeGridItemPurchaseOrderPopup = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/InventoryAllBySku/inventory/',
+        url: SITE_URL + 'inventory/get_by_sku',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
