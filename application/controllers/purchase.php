@@ -674,7 +674,8 @@ class purchase extends MY_Controller {
                 'daydisc' => $this->input->post('daydisc')=='' ? null : $this->input->post('daydisc'),
                 'notes_invoice' => $this->input->post('notes_pi'),
                 'invoice_status'=>$invoice_status,
-                'noinvoice'=> $this->input->post('noinvoice')
+                'noinvoice'=> $this->input->post('noinvoice'),
+                'nofpsup'=>$this->input->post('nofpsup'),
             );
         $this->db->where('idpurchase',$this->input->post('idpurchase'));
         $this->db->update('purchase',$data);
@@ -766,7 +767,6 @@ class purchase extends MY_Controller {
                 'idpurchase'=> $this->input->post('idpurchase'),
                 'idjournal'=> $journal,
                 'idunit'=> $idunit,
-                'nofpsup' => $this->input->post('nofpsup'),
                 'amount'=> $amount,
                 'date_payment'=>backdate($this->input->post('date_payment')),
                 'notes'=> $this->input->post('notes'),

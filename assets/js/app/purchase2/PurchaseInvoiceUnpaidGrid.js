@@ -1,7 +1,7 @@
 Ext.define('PurchaseInvoiceUnpaidGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'invoice_status', 'balance', 'noinvoice', 'paidtoday', 'idpurchase_req', 'nopurchase_req', 'date_req'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'invoice_status', 'balance', 'noinvoice', 'paidtoday', 'idpurchase_req', 'nopurchase_req', 'date_req', 'nofpsup'
     ],
     idProperty: 'id'
 });
@@ -149,6 +149,11 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceUnpaidGrid', {
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
+        },
+        {
+            header: 'No FP Supplier',
+            dataIndex: 'nofpsup',
+            minWidth: 150,
         },
 
     ],

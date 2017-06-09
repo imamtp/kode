@@ -171,7 +171,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         valueField: 'rate',
                         labelWidth: 40
                     }
-                }
+                },
             ],
             selModel: {
                 selType: 'cellmodel'
@@ -270,6 +270,12 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [{
+                            xtype: 'textfield',
+                            name: 'nofpsup',
+                            id: 'nofpsup_poinvoice',
+                            labelWidth: 120,
+                            fieldLabel: 'No FP (Supp)'
+                        }, {
                             xtype: 'comboxpaymentterm',
                             id: 'comboxpaymentterm_pi',
                             // cls:'my-mandatory-field',
@@ -781,8 +787,9 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     sisa_bayar: Ext.getCmp('sisaBayar_poinvoice').getValue(),
                     total_amount: aftertax + biayaangkut,
                     idunit: Ext.getCmp('cbUnit_poinvoice').getValue(),
-                    biayaangkut: biayaangkut
-                        // datagrid: json
+                    biayaangkut: biayaangkut,
+                    nofpsup: Ext.getCmp('nofpsup_poinvoice').getValue(),
+                    // datagrid: json
                 },
                 success: function(form, action) {
 

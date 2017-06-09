@@ -147,6 +147,11 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoicePaidGrid', {
             xtype: 'numbercolumn',
             align: 'right'
         },
+        {
+            header: 'No FP Supplier',
+            dataIndex: 'nofpsup',
+            minWidth: 150,
+        },
 
     ],
     dockedItems: [{

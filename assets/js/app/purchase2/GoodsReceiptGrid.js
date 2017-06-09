@@ -211,7 +211,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
-    }, ],
+    }],
     dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',

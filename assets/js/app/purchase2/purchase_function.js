@@ -415,6 +415,7 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
                 {
                     xtype: 'textfield',
                     name: 'nofpsup',
+                    readOnly: true,
                     id: 'nofpsup_paymentPurchase',
                     fieldLabel: 'No FP (Supp)'
                 },
@@ -577,6 +578,7 @@ function windowPurchasePayment(data) {
     Ext.getCmp('date_purchase_paymentPurchase').setValue(data.date);
     Ext.getCmp('paidtoday_paymentPurchase').setValue(renderNomor(data.paidtoday));
     Ext.getCmp('balance_Purchase_paymentPurchase').setValue(renderNomor(data.balance));
+    Ext.getCmp('nofpsup_Purchase_paymentPurchase').setValue(renderNomor(data.nofpsup));
 }
 
 function updateSelisihPurchasePayment() {
