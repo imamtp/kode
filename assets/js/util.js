@@ -223,7 +223,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 function renderNomor(value, id, r) {
     var value = str_replace(".", "", value);
     // console.log(value);
-    Ext.util.Format.thousandSeparator = ",";
+    Ext.util.Format.thousandSeparator = ".";
     Ext.util.Format.decimalSeparator = ".";
     var formatNomor = "0,000";
     // console.log(value)

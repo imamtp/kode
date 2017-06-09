@@ -113,7 +113,9 @@ Ext.define('GridItemSalesPopupOrder', {
                     short_desc: selectedRecord.get('satuan_pertama'),
                     price: selectedRecord.get('sellingprice'),
                     idunit: idunit,
+                    sku_no: selectedRecord.get('sku_no'),
                     assetaccount: selectedRecord.get('assetaccount'),
+
                     qty: 1,
                     size: 1,
                     size_measurement: selectedRecord.get('satuan_kedua'),
