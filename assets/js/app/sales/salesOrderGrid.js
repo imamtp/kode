@@ -1,7 +1,7 @@
 Ext.define('GridSalesOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'delivery_date', 'invoice_status', 'no_sales_order_quote', 'idsales_quote', 'date_sales_quote', 'firstname', 'lastname', 'salesman_id', 'idtax', 'rate', 'no_sales_order_quote', 'date_sales_quote', 'idsales_quote', 'include_tax'
+        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'delivery_date', 'invoice_status', 'no_sales_order_quote', 'idsales_quote', 'date_sales_quote', 'firstname', 'lastname', 'salesman_id', 'idtax', 'rate', 'no_sales_order_quote', 'date_sales_quote', 'include_tax'
     ],
     idProperty: 'id'
 });
@@ -420,7 +420,8 @@ Ext.define('GridSalesOrderGrid', {
                                     params: {
                                         status: 3,
                                         idunit: idunit,
-                                        idsales: selectedRecord.data.idsales
+                                        idsales: selectedRecord.data.idsales,
+                                        idsales_quote: selectedRecord.data.idsales_quote
                                     },
                                     success: function(form, action) {
                                         var d = Ext.decode(form.responseText);

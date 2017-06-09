@@ -466,7 +466,7 @@ Ext.define('GridSalesQuotationGrid', {
                         // fieldLabel: 'Date Quotation',
                 },
                 {
-                    xtype: 'comboxSalesStatus'
+                    xtype: 'comboxSalesQuotationStatus'
                 }
             ]
         },

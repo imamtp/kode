@@ -258,6 +258,7 @@ class sales extends MY_Controller {
         $idsales = $this->input->post('idsales');
         $status = $this->input->post('status');
         $idunit = $this->input->post('idunit');
+        $idsales_quote = $this->input->post('idsales_quote');
 
         if($status==3){
             //confirm
@@ -265,6 +266,13 @@ class sales extends MY_Controller {
             $this->db->update('sales', array(
                 'status'=>$status
             ));
+
+            if($idsales_quote!='' || $idsales_quote!=null){
+                $this->db->where('idsales', $idsales_quote);
+                $this->db->update('sales', array(
+                    'status'=>3 //kalo so dari sales quotation set ke 3 (ordered)
+                ));
+            }
         } else if($status==4){
              //closed
 
