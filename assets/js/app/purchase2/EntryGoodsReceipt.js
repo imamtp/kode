@@ -81,17 +81,26 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                         Ext.getCmp('warehouse_code_batchitemporeceipt').setValue(selectedRecord.data.warehouse_code);
                         Ext.getCmp('nameinventory_batchitemporeceipt').setValue(selectedRecord.data.nameinventory);
 
+                        var idpurchasestatus = Ext.getCmp('cb_status_poreceipt').getValue() * 1;
+
                         //cek udah bikin batch apa belum, kalo udah, tampilkan
 
                         // gridinsertReceiveBatchPOStore.removeAll();
                         // gridinsertReceiveBatchPOStore.sync();
+                        var btnSimpanGRBatchWindow = Ext.getCmp('btnSimpanGRBatchWindow'); //tombol simpan di window penerimaan batch GR
+                        if (idpurchasestatus != 4) {
+                            //bukan received masih bisa update
+                            btnSimpanGRBatchWindow.enable();
+                        } else {
+                            btnSimpanGRBatchWindow.disable();
+                        }
 
                         if (Ext.getCmp('statusform_poreceipt').getValue() === 'input') {
                             var is_temp = 1;
                             Ext.getCmp('numbatch_itempo').setReadOnly(false);
                             Ext.getCmp('buatbatchbtn_itempo').show();
                         } else {
-                            if (Ext.getCmp('cb_status_poreceipt').getValue() * 1 === 1) {
+                            if (idpurchasestatus === 1) {
                                 //kalo statusnya masih open. aktifkan tombol buat batch
                                 var is_temp = 1;
                                 Ext.getCmp('numbatch_itempo').setReadOnly(false);
@@ -100,6 +109,8 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                                 var is_temp = 0;
                                 Ext.getCmp('numbatch_itempo').setReadOnly(true);
                                 Ext.getCmp('buatbatchbtn_itempo').hide();
+
+                                btnSimpanGRBatchWindow.disable(); //disable karna bukan open
                             }
 
                         }
