@@ -244,7 +244,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
                     // cbPurchaseRequisition.setReadOnly(true);
 
                     // Ext.getCmp('cb_tax_id_sq').setValue('1');
-
+                    Ext.getCmp('recordPurchaseRequisitionBtnSave').enable();
                 }
             }, {
                 text: 'Print',

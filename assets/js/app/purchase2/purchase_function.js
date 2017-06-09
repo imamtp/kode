@@ -88,6 +88,10 @@ function showPurchaseRequestData(record) {
         cbPurchaseRequisition.setReadOnly(true);
     }
 
+    if (record.data.status * 1 == 2) {
+        //status sudah confirm, tidak bisa edit lagi
+        Ext.getCmp('recordPurchaseRequisitionBtnSave').disable();
+    }
     cbPurchaseRequisition.show();
 }
 
