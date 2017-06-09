@@ -2,7 +2,7 @@ var WorkOrderMaterialTab = Ext.create(dir_sys + 'production.WorkOrderMaterialTab
 
 Ext.define('GridItemJobWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['job_item_id','job_order_id','idinventory','idunit','measurement_id','cost','qty','subtotal','total','remarks','userin','datein','idunit','size','measurement_id_size','qty_accept','whs_accept_id','qty_reject','whs_reject_id','qty_sisa','whs_sisa_id','notes','token_tmp','nameinventory','invno','sku_no','short_desc','size_measurement','warehouse_code_accept','warehouse_code_reject','warehouse_code_sisa'],
+    fields: ['job_item_id', 'job_order_id', 'idinventory', 'idunit', 'measurement_id', 'cost', 'qty', 'subtotal', 'total', 'remarks', 'userin', 'datein', 'idunit', 'size', 'measurement_id_size', 'qty_accept', 'whs_accept_id', 'qty_reject', 'whs_reject_id', 'qty_sisa', 'whs_sisa_id', 'notes', 'token_tmp', 'nameinventory', 'invno', 'sku_no', 'short_desc', 'size_measurement', 'warehouse_code_accept', 'warehouse_code_reject', 'warehouse_code_sisa'],
     idProperty: 'id'
 });
 
@@ -22,9 +22,9 @@ var storeGridItemJobWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 //end store head
@@ -32,7 +32,7 @@ var storeGridItemJobWO = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemJobWOPopupModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','sku_no','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','totalstock','stock_kedua','satuan_pertama','satuan_kedua','inventory_type','idinventorycat','measurement_id_one'],
+    fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'inventory_type', 'idinventorycat', 'measurement_id_one'],
     idProperty: 'id'
 });
 
@@ -43,7 +43,7 @@ var storeGridItemJobWOPopup = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/InventoryAllBySku/inventory/',
+        url: SITE_URL + 'inventory/get_by_sku',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -52,17 +52,17 @@ var storeGridItemJobWOPopup = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
-storeGridItemJobWOPopup.on('beforeload',function(store, operation,eOpts){
-        operation.params={
-                    'extraparams': 'a.inventory_type:'+1
-                  };
-              });
-              
+storeGridItemJobWOPopup.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'a.inventory_type:' + 1
+    };
+});
+
 Ext.define('MY.searchGridItemJobWOPopup', {
     extend: 'Ext.ux.form.SearchField',
     alias: 'widget.searchGridItemJobWOPopup',
@@ -95,12 +95,12 @@ Ext.define('GridItemJobWOPopup', {
     store: storeGridItemJobWOPopup,
     loadMask: true,
     columns: [
-        {header: 'idinventory', dataIndex: 'idinventory', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'assetaccount', dataIndex: 'assetaccount', hidden: true},
-        {header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150},
+        { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
         // {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},        
-        {header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex:1},
+        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
             header: 'Total Stock',
             dataIndex: 'totalstock',
@@ -111,7 +111,7 @@ Ext.define('GridItemJobWOPopup', {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
             minWidth: 100
-        },{
+        }, {
             header: 'Stock #2',
             dataIndex: 'stock_kedua',
             minWidth: 70,
@@ -123,8 +123,8 @@ Ext.define('GridItemJobWOPopup', {
             dataIndex: 'satuan_kedua',
             minWidth: 100
         },
-    ]
-    , dockedItems: [
+    ],
+    dockedItems: [
         // {
         //     xtype: 'toolbar',
         //     dock: 'top',
@@ -154,8 +154,7 @@ Ext.define('GridItemJobWOPopup', {
         {
             xtype: 'toolbar',
             dock: 'top',
-            items: [
-                {
+            items: [{
                     itemId: 'chooseItemJobWOPopup',
                     text: 'Pilih Barang',
                     iconCls: 'add-icon',
@@ -164,41 +163,40 @@ Ext.define('GridItemJobWOPopup', {
                         var grid = Ext.getCmp('GridItemJobWOPopup');
                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
+                        if (data.length == 0) {
                             Ext.Msg.alert('Failure', 'Pilih Barang terlebih dahulu!');
                         } else {
                             var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
-                                Ext.Ajax.request({
-                                    url: SITE_URL + 'production/save_fg',
-                                    method: 'POST',
-                                    params: {
-                                        job_order_id: job_order_id,
-                                        token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
-                                        idinventory: selectedRecord.get('idinventory'),
-                                        invno: selectedRecord.get('invno'),
-                                        nameinventory: selectedRecord.get('nameinventory'),
-                                        price: selectedRecord.get('cost'),
-                                        idunit:Ext.getCmp('cbUnitWorkOrderGrid').getValue()*1,
-                                        qty: 1,
-                                        size: 1,
-                                        total: selectedRecord.get('cost')
-                                    },
-                                    success: function(form, action) {
-                                        var d = Ext.decode(form.responseText);
+                            Ext.Ajax.request({
+                                url: SITE_URL + 'production/save_fg',
+                                method: 'POST',
+                                params: {
+                                    job_order_id: job_order_id,
+                                    token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
+                                    idinventory: selectedRecord.get('idinventory'),
+                                    invno: selectedRecord.get('invno'),
+                                    nameinventory: selectedRecord.get('nameinventory'),
+                                    price: selectedRecord.get('cost'),
+                                    idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
+                                    qty: 1,
+                                    size: 1,
+                                    total: selectedRecord.get('cost')
+                                },
+                                success: function(form, action) {
+                                    var d = Ext.decode(form.responseText);
 
-                                        storeGridItemJobWO.on('beforeload',function(store, operation,eOpts){
-                                               operation.params={
-                                                           'extraparams': 'a.job_order_id:'+job_order_id
-                                                         };
-                                                     });
+                                    storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
+                                        operation.params = {
+                                            'extraparams': 'a.job_order_id:' + job_order_id
+                                        };
+                                    });
 
-                                        storeGridItemJobWO.load();
-                                    },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                    }
-                                });
+                                    storeGridItemJobWO.load();
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                }
+                            });
 
                             //  var recWO = new GridItemJobWOModel({
                             //     idinventory: selectedRecord.get('idinventory'),
@@ -213,15 +211,15 @@ Ext.define('GridItemJobWOPopup', {
 
                             // var gridWO = Ext.getCmp('WorkOrderJobTab');
                             // gridWO.getStore().insert(0, recWO);
-                            updateGridJobWO();                    
+                            updateGridJobWO();
                             Ext.getCmp('wItemJobWOPopupPopup').hide();
 
-                            
+
                         }
 
 
                     }
-                },'-',
+                }, '-',
                 '->',
                 'Pencarian: ', ' ',
                 {
@@ -235,38 +233,39 @@ Ext.define('GridItemJobWOPopup', {
             store: storeGridItemJobWOPopup, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
-                    // pageSize:20
+                // pageSize:20
         }
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
-//                storeGridItemJobWOPopup.load();
+                //                storeGridItemJobWOPopup.load();
 
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
 
             // var formAgama = Ext.create('formAgama');
-//            var formItemJobWOPopup = Ext.getCmp('formItemJobWOPopup');
-//            wItemJobWOPopup.show();
-//
-//            formItemJobWOPopup.getForm().load({
-//                url: SITE_URL + 'backend/loadFormData/ItemJobWOPopup/1/setup',
-//                params: {
-//                    extraparams: 'a.idtax:' + record.data.idtax
-//                },
-//                success: function(form, action) {
-//                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                },
-//                failure: function(form, action) {
-//                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                }
-//            })
-//
-////            
-////            Ext.getCmp('kddaerahS').setReadOnly(true);
-//            Ext.getCmp('statusformItemJobWOPopup').setValue('edit');
+            //            var formItemJobWOPopup = Ext.getCmp('formItemJobWOPopup');
+            //            wItemJobWOPopup.show();
+            //
+            //            formItemJobWOPopup.getForm().load({
+            //                url: SITE_URL + 'backend/loadFormData/ItemJobWOPopup/1/setup',
+            //                params: {
+            //                    extraparams: 'a.idtax:' + record.data.idtax
+            //                },
+            //                success: function(form, action) {
+            //                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //                },
+            //                failure: function(form, action) {
+            //                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //                }
+            //            })
+            //
+            ////            
+            ////            Ext.getCmp('kddaerahS').setReadOnly(true);
+            //            Ext.getCmp('statusformItemJobWOPopup').setValue('edit');
         }
     }
 });
@@ -280,27 +279,27 @@ var wItemJobWOPopupPopup = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: 830,
-    modal:true,
+    modal: true,
     height: 450,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridItemJobWOPopup'
+        xtype: 'GridItemJobWOPopup'
     }]
 });
 
 ///////////////////////////
 var WorkOrderMaterialTabStore = Ext.getCmp('WorkOrderMaterialTab').getStore();
 
-Ext.define(dir_sys+'production.WorkOrderJobTab', {
+Ext.define(dir_sys + 'production.WorkOrderJobTab', {
     extend: 'Ext.grid.Panel',
     id: 'WorkOrderJobTab',
     alias: 'widget.WorkOrderJobTab',
     xtype: 'cell-editing',
     // title: 'Finished Goods',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -314,20 +313,19 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
             forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemJobWO,
-            viewConfig:{
-                markDirty:false
+            viewConfig: {
+                markDirty: false
             },
-            columns: [
-                {
+            columns: [{
                     header: 'job_item_id',
                     hidden: true,
                     dataIndex: 'job_item_id',
-//                    id: 'idinventory'
-                },{
+                    //                    id: 'idinventory'
+                }, {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -342,14 +340,14 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
                 {
                     header: 'No SKU',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 100
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
@@ -368,7 +366,7 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
                     dataIndex: 'short_desc',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -391,7 +389,7 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
                     dataIndex: 'size_measurement',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -411,31 +409,31 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
                     sortable: false,
                     menuDisabled: true,
                     items: [{
-                            icon: BASE_URL + 'assets/icons/fam/cross.gif',
-                            tooltip: 'Hapus',
-                            scope: this,
-                            handler: this.onRemoveClick
-                        }]
+                        icon: BASE_URL + 'assets/icons/fam/cross.gif',
+                        tooltip: 'Hapus',
+                        scope: this,
+                        handler: this.onRemoveClick
+                    }]
                 }
             ],
             selModel: {
                 selType: 'cellmodel'
             },
-             listeners: {
+            listeners: {
                 cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
                     console.log(dataRecord.data.job_item_id)
                     var job_item_id = dataRecord.data.job_item_id;
                     Ext.getCmp('job_item_id_tmpwo').setValue(job_item_id); //job_item_id key flag
 
-                    Ext.getCmp('WorkOrderMaterialTab').setTitle('Raw Material :'+ dataRecord.data.nameinventory);
+                    Ext.getCmp('WorkOrderMaterialTab').setTitle('Raw Material :' + dataRecord.data.nameinventory);
 
                     // WorkOrderMaterialTabStore
-                      WorkOrderMaterialTabStore.on('beforeload',function(store, operation,eOpts){
-                               operation.params={
-                                          'extraparams': 'a.job_order_id:'+dataRecord.data.job_order_id+','+'a.job_item_id:'+job_item_id
-                                         };
-                                     });
-                      WorkOrderMaterialTabStore.load();
+                    WorkOrderMaterialTabStore.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + dataRecord.data.job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                        };
+                    });
+                    WorkOrderMaterialTabStore.load();
                     // .load({
                     //     params:{
                     //         'extraparams': 'a.job_order_id:'+dataRecord.data.job_order_id+','+'a.job_item_id:'+job_item_id
@@ -444,7 +442,7 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
 
                     Ext.getCmp('addRawMaterialBtnWo').enable();
 
-                    
+
                 },
                 render: {
                     scope: this,
@@ -453,21 +451,17 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
                     }
                 }
             },
-            dockedItems: [ 
-                {
-                    xtype: 'toolbar',
-                    dock: 'top',
-                    items: [
-                        {
-                            text: 'Add Finished Goods',
-                            id:'addItemJobWoBtn',
-                            iconCls: 'add-icon',
-                            scope: this,
-                            handler: this.onAddClick
-                        }
-                    ]
-                }
-            ]
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                    text: 'Add Finished Goods',
+                    id: 'addItemJobWoBtn',
+                    iconCls: 'add-icon',
+                    scope: this,
+                    handler: this.onAddClick
+                }]
+            }]
         });
 
         this.callParent();
@@ -490,12 +484,9 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesOrder: function(button, event, mode)
-    {
-    },
+    recordSalesOrder: function(button, event, mode) {},
     saveRecurr: function() {
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -503,40 +494,40 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('customerSalesOrder').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
-            wItemJobWOPopupPopup.show();
-            storeGridItemJobWOPopup.load();
+        //        console.log(Ext.getCmp('customerSalesOrder').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        wItemJobWOPopupPopup.show();
+        storeGridItemJobWOPopup.load();
 
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
+        //        var rec = new JournalStore({
+        //            idaccount: null,
+        //            accname: null,
+        //            accnumber: null,
+        //            debit: null,
+        //            credit: null
+        //        });
+        //
+        //        this.getStore().insert(0, rec);
+        //        this.cellEditing.startEditByPosition({
+        //            row: 0,
+        //            column: 0
+        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         var job_item_id = this.getStore().getAt(rowIndex);
@@ -549,7 +540,7 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
             method: 'POST',
             params: {
                 job_order_id: job_order_id,
-                job_item_id:job_item_id.data.job_item_id
+                job_item_id: job_item_id.data.job_item_id
             },
             success: function(form, action) {
                 // var d = Ext.decode(form.responseText);
@@ -576,43 +567,42 @@ Ext.define(dir_sys+'production.WorkOrderJobTab', {
 });
 
 
-function updateGridJobWO()
-{
-     Ext.each(storeGridItemJobWO.data.items, function(obj, i) {
-        var total = obj.data.qty*obj.data.size;
+function updateGridJobWO() {
+    Ext.each(storeGridItemJobWO.data.items, function(obj, i) {
+        var total = obj.data.qty * obj.data.size;
         obj.set('total', total);
 
         var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
-            Ext.Ajax.request({
-                url: SITE_URL + 'production/save_fg',
-                async: false, 
-                method: 'POST',
-                params: {
-                    job_order_id: job_order_id,
-                    job_item_id:obj.data.job_item_id,
-                    idunit:Ext.getCmp('cbUnitWorkOrderGrid').getValue()*1,
-                    short_desc: obj.data.short_desc,
-                    size_measurement: obj.data.size_measurement,
-                    qty: obj.data.qty,
-                    size: obj.data.size,
-                    total: total,
-                    update:'true'
-                },
-                success: function(form, action) {
-                    var d = Ext.decode(form.responseText);
+        Ext.Ajax.request({
+            url: SITE_URL + 'production/save_fg',
+            async: false,
+            method: 'POST',
+            params: {
+                job_order_id: job_order_id,
+                job_item_id: obj.data.job_item_id,
+                idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
+                short_desc: obj.data.short_desc,
+                size_measurement: obj.data.size_measurement,
+                qty: obj.data.qty,
+                size: obj.data.size,
+                total: total,
+                update: 'true'
+            },
+            success: function(form, action) {
+                var d = Ext.decode(form.responseText);
 
-                    storeGridItemJobWO.on('beforeload',function(store, operation,eOpts){
-                           operation.params={
-                                       'extraparams': 'a.job_order_id:'+job_order_id
-                                     };
-                                 });
+                storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
+                    operation.params = {
+                        'extraparams': 'a.job_order_id:' + job_order_id
+                    };
+                });
 
-                    storeGridItemJobWO.load();
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                }
-            });
+                storeGridItemJobWO.load();
+            },
+            failure: function(form, action) {
+                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            }
+        });
     });
 }
 
@@ -624,18 +614,18 @@ Ext.define('containerFinishedGoods', {
     title: 'Finished Goods',
     layout: {
         type: 'vbox',
-        align : 'stretch',
-        pack  : 'start',
+        align: 'stretch',
+        pack: 'start',
     },
     items: [
         // {html:'panel 2', height:150},
         {
-            xtype:'WorkOrderJobTab',
-            minHeight:250
+            xtype: 'WorkOrderJobTab',
+            minHeight: 250
         },
         WorkOrderMaterialTab
     ]
-   
+
     // style: { borderColor: 'Red', borderStyle: 'solid', borderWidth: '1px' },
     // width: '50%',
     // padding: '5 5 5 5',

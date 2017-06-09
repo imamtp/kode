@@ -46,7 +46,7 @@ var storeGridItemSelectPurchaseRequisition = Ext.create('Ext.data.Store', {
     proxy: {
         type: 'ajax',
 
-        url: SITE_URL + 'backend/ext_get_all/inventoryallbysku/inventory',
+        url: SITE_URL + 'inventory/get_by_sku',
 
         actionMethods: 'POST',
         reader: {
