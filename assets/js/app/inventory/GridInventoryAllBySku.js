@@ -6,6 +6,9 @@ var FormSell = Ext.ComponentQuery.query('FormSell')[0];
 var FormInventoried = Ext.ComponentQuery.query('FormInventoried')[0];
 var tabInventory = Ext.getCmp('TabItemInventory');
 
+var windowGridDetailInventory = Ext.create(dir_sys + 'inventory.windowGridDetailInventory');
+
+
 var formInventoryAllBySku = Ext.create('Ext.form.Panel', {
     id: 'formInventoryAllBySku',
     width: 450,
@@ -422,7 +425,9 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                         }
                         Ext.getCmp('statusformInventory2').setValue('edit');
                         Ext.getCmp('TabItemInventory').items.getAt(3).setDisabled(false);
-                        Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(false);
+
+                        Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(true); //disable tab stok. karena stok diperlihakan pada tab subitem
+                        // Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(false);
 
                         brandStore.load();
                         // Ext.getCmp("fotokaryawanthumb").el.dom.src = 'http://192.168.56.101/aktivaabg/assets/libs/php-barcode-master/barcode.php?code=123456789123';
@@ -519,6 +524,20 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
+
+            windowGridDetailInventory.show();
+
+            var GridItemGridDetailInventoryID = Ext.getCmp('GridItemGridDetailInventory').getStore();
+
+            GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
+                operation.params = {
+                    'extraparams': 'a.idinventory_batch:' + record.data.idinventory
+                };
+            });
+
+            GridItemGridDetailInventoryID.load();
+
+
 
             // var formAgama = Ext.create('formAgama');
             //            var formInventoryAllBySku = Ext.getCmp('formInventoryAllBySku');

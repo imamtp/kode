@@ -329,6 +329,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                         },
                         {
                             text: 'Simpan',
+                            id: 'btnSimpanGRBatchWindow',
                             handler: function() {
 
                                 var json = Ext.encode(Ext.pluck(storeGridBatchItemPOList.data.items, 'data'));
