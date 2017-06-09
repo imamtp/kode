@@ -410,6 +410,12 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
                 },
                 {
                     xtype: 'textfield',
+                    name: 'nofpsup',
+                    id: 'nofpsup_paymentPurchase',
+                    fieldLabel: 'No FP (Supp)'
+                },
+                {
+                    xtype: 'textfield',
                     readOnly: true,
                     id: 'no_purchase_order_paymentPurchase',
                     fieldLabel: 'No Purchase Order'

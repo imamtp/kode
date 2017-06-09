@@ -736,9 +736,8 @@ class purchase extends MY_Controller {
         $amount = str_replace('.', '', $this->input->post('amount'));
         $selisih = intval($balance_purchase-$amount);
         $idaccount = $this->input->post('idaccount'); //coa kas/bank
-
         $idunit = $this->session->userdata('idunit');
-
+        
         if($selisih==0)
         {
             $invoice_status = 2; //paid
@@ -767,12 +766,14 @@ class purchase extends MY_Controller {
                 'idpurchase'=> $this->input->post('idpurchase'),
                 'idjournal'=> $journal,
                 'idunit'=> $idunit,
+                'nofpsup' => $this->input->post('nofpsup'),
                 'amount'=> $amount,
                 'date_payment'=>backdate($this->input->post('date_payment')),
                 'notes'=> $this->input->post('notes'),
                 'userin' => $this->session->userdata('userid'),
-                'datein' => date('Y-m-d H:m:s')
+                'datein' => date('Y-m-d H:m:s'),
             );
+            
         $this->db->insert('purchase_payment',$data);
 
         $balance = $balance_purchase-$amount;
