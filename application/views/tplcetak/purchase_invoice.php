@@ -31,8 +31,9 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         </div>
         <div class="col-xs-6 text-right">
           <h2><?=$title?></h2>
-          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?></small></h3>
+          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?><br/>NO FP Supplier: <?= $data['nofpsup'] != null ? $data['nofpsup']: "&nbsp; - &nbsp;" ?></small></h3>
         </div>
+        
       </div>
       
       <div class="row">
@@ -88,8 +89,8 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                           <th>Qty</th>
                           <th>Satuan</th>
                           <th>Harga</th>
-                          <th>Ukuran</th>
-                          <th>Satuan Ukuran</th>
+                          <!--<th>Ukuran</th>
+                          <th>Satuan Ukuran</th>-->
                           <th>Diskon(%)</th>
                           <!-- <th>Tax %</th> -->
                            <th>Total</th>
@@ -106,8 +107,8 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                               <td align="right"><?=$value['qty']?></td>
                               <td><?=$value['short_desc']?></td>
                               <td align="right"><?=number_format($value['price'])?></td>
-                              <td align="right"><?=$value['size']?></td>
-                              <td><?=$value['size_measurement']?></td>
+                              <!--<td align="right"><?=$value['size']?></td>
+                              <td><?=$value['size_measurement']?></td>-->
                               <td align="right"><?=number_format($value['disc'])?></td>
                               <?php //if($data['totaltax']!=0) { echo "<td>".$value['ratetax']."</td>"; } ?>
                               <td align="right"><?=number_format($value['total'])?></td>

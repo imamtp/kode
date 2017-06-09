@@ -16,7 +16,7 @@ class m_purchase extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchase,a.idcreditterm,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idfrequency,a.idjournal,a.idtax,a.nopurchase,a.name,a.payee,a.shipaddress,a.date,a.includetax,a.requestdate,a.freigthcost,a.tax,a.amountdue,a.totalamount,a.paidtoday,a.totalowed,a.balance,a.memo,a.isrecuring,a.startdate,a.recuntildate,a.recnumtimes,a.alertto,a.notifto,a.display,a.year,a.month,a.userin,a.usermod,a.datein,a.datemod,a.idpayment,a.notes,a.duedate,a.paiddate,a.idunit,a.idcurrency,a.noinvoice,a.idsupplier,a.subtotal,a.totalpaid,a.status,a.deleted,a.netddays,a.neteomddays,a.discount,a.netdmax,a.delivereddate,a.approver,a.idproject,b.nameshipping,c.namepurchase,d.name as purchasestatus,e.nojournal,f.nametax,g.namaunit,h.namecurr,i.namesupplier,i.companyaddress,i.telephone,i.fax,j.username,k.projectname,a.notes_receipt,l.firstname as receivedby";
+        return "a.idpurchase,a.idcreditterm,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idfrequency,a.idjournal,a.idtax,a.nopurchase,a.name,a.payee,a.shipaddress,a.date,a.includetax,a.requestdate,a.freigthcost,a.tax,a.amountdue,a.totalamount,a.paidtoday,a.totalowed,a.balance,a.memo,a.isrecuring,a.startdate,a.recuntildate,a.recnumtimes,a.alertto,a.notifto,a.display,a.year,a.month,a.userin,a.usermod,a.datein,a.datemod,a.idpayment,a.notes,a.duedate,a.paiddate,a.idunit,a.idcurrency,a.noinvoice,a.idsupplier,a.subtotal,a.totalpaid,a.status,a.deleted,a.netddays,a.neteomddays,a.discount,a.netdmax,a.delivereddate,a.approver,a.idproject,b.nameshipping,c.namepurchase,d.name as purchasestatus,e.nojournal,f.nametax,g.namaunit,h.namecurr,i.namesupplier,i.companyaddress,i.telephone,i.fax,j.username,k.projectname,a.notes_receipt,l.firstname as receivedby,a.nofpsup";
     }
     
     function fieldCek()
@@ -191,7 +191,7 @@ class m_purchase extends CI_Model {
             $dtcetak['detailtotal'] = number_format($r->subtotal);
 
             $dtcetak['no'] = $r->nopurchase;
-
+            $dtcetak['nofpsup'] = $r->nofpsup;
 
             // //get receivefrom,total,memo,tax
             $dtcetak['dp'] = $r->paidtoday;
