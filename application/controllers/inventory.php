@@ -1065,6 +1065,69 @@ class inventory extends MY_Controller {
         echo json_encode($json);   
     }
 
+    function get_by_sku(){
+        $sql = "select a.idinventory,sku_no,a.idinventory_batch,nameinventory,a.cost,a.hpp_per_unit,  a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
+                        c.short_desc AS satuan_kedua, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id,totalitem,a.bahan_coil_id
+                    from inventory a
+                    LEFT JOIN productmeasurement b 
+                                            ON a.measurement_id_one = b.measurement_id 
+                    LEFT JOIN productmeasurement c 
+                                ON a.measurement_id_two = c.measurement_id 
+                    left join (select idinventory_batch,count(*) as totalitem
+                                            from inventory
+                                            GROUP BY idinventory_batch
+                                        ) d ON a.idinventory = d.idinventory_batch
+                    where a.display is null and a.idinventory_batch is null
+                    GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_batch,a.nameinventory,a.cost,a.hpp_per_unit,  a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id";
+        $q = $this->db->query($sql);
+
+        $dataArr = $q->result_array();
+        // print_r($dataArr);
+        $i=0;
+        foreach ($dataArr as $key => $value) {
+
+            //menghitung total stok dari seluruh gudang
+           $qstok = $this->db->query("select sum(totalstock) as totalstock
+                                        from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
+                                                    from warehouse_stock a
+                                                    join inventory b ON a.idinventory = b.idinventory
+                                                    where a.idinventory IN (select idinventory from inventory where idinventory_batch = ".$value['idinventory'].")				
+                                                    group by a.idinventory,idinventory_batch) a");
+            if($qstok->num_rows()>0){
+                $rstok = $qstok->row();
+                $dataArr[$i]['totalstock'] = $rstok->totalstock;
+            } else {
+                $dataArr[$i]['totalstock'] = 0;
+            }    
+
+             //start konversi stok #2
+            //  echo $value['bahan_coil_id'].' ';
+            if(intval($value['bahan_coil_id'])!=0){
+                //ambil ke tabel konversi
+                $qcn = $this->db->query("select berat from bahan_coil where bahan_coil_id = ".$value['bahan_coil_id']."");
+                if($qcn->num_rows()>0){
+                    $rqcn = $qcn->row();
+                    if($dataArr[$i]['totalstock']!=0){
+                        $dataArr[$i]['stock_kedua'] = $dataArr[$i]['totalstock'] / $rqcn->berat;
+                    } else {
+                       $dataArr[$i]['stock_kedua'] = 0;
+                    }
+                    
+                } else {
+                    $dataArr[$i]['stock_kedua'] = 0;
+                }
+                
+            } else {
+                $dataArr[$i]['stock_kedua'] = 0;
+            }
+            //end konversi stok #2
+
+            $i++;                                             
+        }
+
+        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($dataArr) . ' }';
+    }
+
     function update_hpp($idunit,$tipe,$idpurchase=null){
         /*
             hitung hpp per unit inventory

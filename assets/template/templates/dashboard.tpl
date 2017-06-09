@@ -574,10 +574,10 @@
         <script src='{$assets_url}/js/app/inventory/GridDepresiasiInventoryTab.js'></script>
         <script src='{$assets_url}/js/app/inventory/inventoryWindow.js'></script>
         <script src='{$assets_url}/js/app/inventory/func.js'></script>
-        <script src='{$assets_url}/js/app/inventory/inventoryAllGrid.js'></script>
-        <script src='{$assets_url}/js/app/inventory/inventoryInvGrid.js'></script>
+        {*<script src='{$assets_url}/js/app/inventory/inventoryAllGrid.js'></script>*}
+        {*<script src='{$assets_url}/js/app/inventory/inventoryInvGrid.js'></script>
         <script src='{$assets_url}/js/app/inventory/inventoryBuyGrid.js'></script>
-        <script src='{$assets_url}/js/app/inventory/inventorySellGrid.js'></script>
+        <script src='{$assets_url}/js/app/inventory/inventorySellGrid.js'></script>*}
         <script src='{$assets_url}/js/app/inventory/inventoryTab.js'></script>        
         <script src='{$assets_url}/js/app/inventory/treeAddRowAdj.js'></script>
         <script src='{$assets_url}/js/app/inventory/gridAddRowAdj.js'></script>

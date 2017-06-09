@@ -12,16 +12,16 @@ Ext.define('TabInventory', {
     items: [{
             xtype: 'GridInventoryAll'
         },
-        {
-            xtype: 'GridInventoryInvGrid',
-            hidden: true,
-        },
-        {
-            xtype: 'GridInventoryBuyGrid'
-        },
-        {
-            xtype: 'GridInventorySellGrid'
-        }
+        // {
+        //     xtype: 'GridInventoryInvGrid',
+        //     hidden: true,
+        // },
+        // {
+        //     xtype: 'GridInventoryBuyGrid'
+        // },
+        // {
+        //     xtype: 'GridInventorySellGrid'
+        // }
     ],
     listeners: {
         render: {
