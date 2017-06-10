@@ -144,7 +144,7 @@ class m_purchaserequisition extends CI_Model {
 
             $dtcetak['no'] = $r->nopurchase;
 
-            $dtcetak['requestby'] = $r->username;
+            $dtcetak['requestby'] = $r->requestby_name;
 
             // //get receivefrom,total,memo,tax
             $dtcetak['dp'] = null;
