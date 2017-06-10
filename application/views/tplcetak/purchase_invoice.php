@@ -84,7 +84,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                       <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
                         <tr>
                           <th width="30">No</th>  
-                          <th>Kode Barang</th>                       
+                          <th>No SKU</th>                       
                           <th>Nama Barang</th>                                               
                           <th>Qty</th>
                           <th>Satuan</th>
@@ -102,7 +102,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                            ?>
                              <tr>
                               <td width="30"><?=$i?></td>
-                              <td><?=$value['invno']?></td>
+                              <td><?=$value['sku_no']?></td>
                               <td><?=$value['nameinventory']?></td>  
                               <td align="right"><?=$value['qty']?></td>
                               <td><?=$value['short_desc']?></td>
