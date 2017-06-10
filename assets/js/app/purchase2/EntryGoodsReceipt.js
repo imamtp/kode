@@ -463,6 +463,12 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             fieldLabel: 'Received Date'
                         },
                         {
+                            xtype: 'textfield',
+                            id: 'no_rujukan_sup_poreceipt',
+                            name: 'no_rujukan_sup',
+                            fieldLabel: 'No Rujukan Sup',
+                        },
+                        {
                             xtype: 'comboxpurchasestatus',
                             hidden: true,
                             // readOnly:true,

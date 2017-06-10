@@ -44,7 +44,8 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
                     notes: Ext.getCmp('notes_poreceipt').getValue(),
                     idpurchase: Ext.getCmp('idpurchase_poreceipt').getValue(),
                     receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
-                    received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue()
+                    received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue(),
+                    no_rujukan_sup: Ext.getCmp('no_rujukan_sup_poreceipt').getValue()
                 },
                 success: function(form, action) {
                     var d = Ext.decode(form.responseText);

@@ -8,7 +8,7 @@ var WindowEntryPurchaseInvoice = Ext.create(dir_sys + 'purchase2.WindowEntryPurc
 Ext.define('GoodsReceiptGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'notes_receipt', 'receivedby_id', 'delivereddate', 'firstname', 'lastname', 'noinvoice', 'totalorder', 'totalreceived', 'sisa', 'idpurchasestatusname'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'notes_receipt', 'receivedby_id', 'delivereddate', 'firstname', 'lastname', 'noinvoice', 'totalorder', 'totalreceived', 'sisa', 'idpurchasestatusname', 'no_rujukan_sup'
     ],
     idProperty: 'id'
 });
@@ -133,6 +133,10 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
     }, {
         header: 'No Invoice',
         dataIndex: 'noinvoice',
+        minWidth: 150
+    }, {
+        header: 'No Rujukan Sup',
+        dataIndex: 'no_rujukan_sup',
         minWidth: 150
     }, {
         header: 'Supplier Name',

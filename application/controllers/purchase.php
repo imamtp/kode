@@ -508,7 +508,8 @@ class purchase extends MY_Controller {
         $data = array(
                 'delivereddate' => backdate($this->input->post('received_date')),
                 'receivedby_id' => $this->input->post('receivedid'),
-                'notes_receipt' => $this->input->post('notes')
+                'notes_receipt' => $this->input->post('notes'),
+                'no_rujukan_sup' => $this->input->post('no_rujukan_sup'),
             );
         
         $wer = array(
