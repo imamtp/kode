@@ -1,7 +1,7 @@
 Ext.define('GridPurchaseRequestListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'total_item'
     ],
     idProperty: 'id'
 });
@@ -202,20 +202,28 @@ Ext.define('GridPurchaseRequestList', {
     }, {
         header: 'Total Tax',
         dataIndex: 'tax',
+        hidden: true,
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
     }, {
         header: 'Total Discount',
         dataIndex: 'disc',
+        hidden: true,
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
     }, {
         header: 'Total Amount',
         dataIndex: 'totalamount',
+        hidden: true,
         minWidth: 150,
         xtype: 'numbercolumn',
+        align: 'right'
+    }, {
+        header: 'Total Item',
+        dataIndex: 'total_item',
+        minWidth: 150,
         align: 'right'
     }],
     dockedItems: [{

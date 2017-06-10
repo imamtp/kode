@@ -17,7 +17,7 @@ class m_purchaserequisition extends CI_Model {
 
     function selectField() {
         return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,a.status,c.nametax,c.rate,e.namesupplier,e.companyaddress,e.telephone,e.fax,a.discount as disc,f.username,g.idpurchase_req
-                ,a.requestbyid,concat(h.firstname,' ',h.lastname) as requestby_name";
+                ,a.requestbyid,concat(h.firstname,' ',h.lastname) as requestby_name, i.total_item";
     }
     
     function fieldCek()
@@ -39,7 +39,8 @@ class m_purchaserequisition extends CI_Model {
                     left join (select idpurchase_req
                                 from purchase
                                 where idpurchasetype = 2) g ON a.idpurchase = g.idpurchase_req
-                    left join employee h ON a.requestbyid = h.idemployee";
+                    left join employee h ON a.requestbyid = h.idemployee
+                    left join (select idpurchase, count(idpurchaseitem) as total_item from purchaseitem group by idpurchase) i on i.idpurchase = a.idpurchase";
         return $query;
     }
 
