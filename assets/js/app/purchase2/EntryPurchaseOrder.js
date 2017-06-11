@@ -818,7 +818,6 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                     total_tax: Ext.getCmp('totalPajakPurchaseOrder').getValue(),
                     total_diskon: Ext.getCmp('diskonPurchaseOrder').getValue(),
                     total_dpp: Ext.getCmp('dppPurchaseOrder').getValue(),
-                    total_tax: Ext.getCmp('totalPajakPurchaseOrder').getValue(),
                     // shippingPurchaseOrder: Ext.getCmp('shippingPurchaseOrder').getValue(),
                     // angkutPurchaseOrder: Ext.getCmp('angkutPurchaseOrder').getValue(),
                     // pembayaranPurchaseOrder: Ext.getCmp('pembayaranPurchaseOrder').getValue(),
