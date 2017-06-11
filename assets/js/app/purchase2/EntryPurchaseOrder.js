@@ -603,7 +603,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             id: 'totalPurchaseOrder',
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
@@ -625,7 +625,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             align: 'right',
                             name: 'totalPajak',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             id: 'totalPajakPurchaseOrder',
                             fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
@@ -651,6 +651,37 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
+                    items: [
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            align: 'right',
+                            readOnly: true,
+                            labelWidth: 150,
+                            id: 'dppPurchaseOrder',
+                            fieldLabel: 'Dasar Pengenaan Pajak',
+                            fieldStyle: 'text-align: right;'
+                        }
+                    ]
+                }, {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    items: [
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            align: 'right',
+                            readOnly: true,
+                            labelWidth: 150,
+                            id: 'diskonPurchaseOrder',
+                            fieldLabel: 'Diskon',
+                            fieldStyle: 'text-align: right;'
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
                     items: [{
                             xtype: 'textfield',
                             width: 620,
@@ -670,13 +701,14 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             id: 'subtotalPurchaseOrder',
                             fieldLabel: 'Subtotal',
                             fieldStyle: 'text-align: right;'
                         }
                     ]
                 },
+
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
@@ -709,7 +741,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             align: 'right',
                             hidden: true,
                             //                            readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
                             listeners: {
@@ -783,6 +815,9 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                     memo: Ext.getCmp('memoPurchaseOrder').getValue(),
                     subtotal: Ext.getCmp('subtotalPurchaseOrder').getValue(),
                     total_amount: Ext.getCmp('totalPurchaseOrder').getValue(),
+                    total_tax: Ext.getCmp('totalPajakPurchaseOrder').getValue(),
+                    total_diskon: Ext.getCmp('diskonPurchaseOrder').getValue(),
+                    total_dpp: Ext.getCmp('dppPurchaseOrder').getValue(),
                     total_tax: Ext.getCmp('totalPajakPurchaseOrder').getValue(),
                     // shippingPurchaseOrder: Ext.getCmp('shippingPurchaseOrder').getValue(),
                     // angkutPurchaseOrder: Ext.getCmp('angkutPurchaseOrder').getValue(),
@@ -915,11 +950,12 @@ function updateGridPurchaseOrder(tipe) {
     var sisaBayarPurchaseOrder = 0 * 1;
     var taxrate = Ext.getCmp('cb_tax_id_po').getValue();
     var include_tax = Ext.getCmp('include_tax_po').getValue();
+    var totaldiskon = 0;
 
     Ext.each(storeGridItemPurchaseOrder.data.items, function(obj, i) {
         var total = obj.data.qty * (obj.data.price * obj.data.size);
         var diskon = (total / 100) * obj.data.disc;
-
+        totaldiskon += diskon;
         var net = total - diskon;
         console.log(total + ' - ' + diskon);
 
@@ -929,14 +965,15 @@ function updateGridPurchaseOrder(tipe) {
         obj.set('total', net);
     });
 
+    var dppPurchaseOrder = subtotalPurchaseOrder + totaldiskon;
     //     console.log(subtotalPurchaseOrder);
     totalPurchaseOrder = subtotalPurchaseOrder + angkutPurchaseOrder * 1;
     //     console.log(totalPurchaseOrder+' '+totalPajak);
     if (include_tax * 1 == 1) {
         //include tax
-        totalPurchaseOrder = totalPurchaseOrder;
+        totalPurchaseOrder = dppPurchaseOrder;
     } else {
-        totalPurchaseOrder = totalPurchaseOrder + totalPajak;
+        totalPurchaseOrder = dppPurchaseOrder + totalPajak;
     }
 
     //     console.log(totalPurchaseOrder);
@@ -945,7 +982,8 @@ function updateGridPurchaseOrder(tipe) {
     Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('total' + addprefix).setValue(totalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
-    // Ext.getCmp('angkutPurchaseOrder').setValue(angkutPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
+    Ext.getCmp('diskonPurchaseOrder').setValue(totaldiskon.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('dppPurchaseOrder').setValue(dppPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
     // Ext.getCmp('pembayaran').setValue(pembayaranPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarPurchaseOrder').setValue(sisaBayarPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 

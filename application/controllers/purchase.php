@@ -301,6 +301,8 @@ class purchase extends MY_Controller {
             // 'requestdate' =>,
             // 'freigthcost' =>,
             'tax' => clearnumberic($this->input->post('total_tax')),
+            'total_diskon' => clearnumberic($this->input->post('total_diskon')),
+            'total_dpp' => clearnumberic($this->input->post('total_dpp')),
             'include_tax'=> $this->input->post('include_tax') == 'true' ? 1 : 0,
             // 'amountdue' =>,
             'totalamount' => clearnumberic($this->input->post('total_amount')),
