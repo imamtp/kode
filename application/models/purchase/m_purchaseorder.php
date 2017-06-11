@@ -16,7 +16,7 @@ class m_purchaseorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,c.nametax,c.rate,e.namesupplier,a.discount as disc,a.notes_receipt,a.receivedby_id,a.delivereddate,f.firstname,f.lastname,a.balance,a.invoice_status,a.noinvoice,a.paidtoday,totalorder,totalreceived,sisa,b.name as idpurchasestatusname,idpurchase_req, h.nopurchase as nopurchase_req, h.date as date_req,a.include_tax,a.nofpsup,a.no_rujukan_sup";
+        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,c.nametax,c.rate,e.namesupplier,a.discount as disc,a.notes_receipt,a.receivedby_id,a.delivereddate,f.firstname,f.lastname,a.balance,a.invoice_status,a.noinvoice,a.paidtoday,totalorder,totalreceived,total_qty_batch,sisa,sum(totalorder-total_qty_batch) as sisabatch,idpurchase_req, h.nopurchase as nopurchase_req, h.date as date_req,a.include_tax,a.nofpsup,a.no_rujukan_sup";
     }
     
     function fieldCek()
@@ -31,18 +31,58 @@ class m_purchaseorder extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
-                    left join purchasestatus b ON a.idpurchasestatus = b.idpurchasestatus
-					left join tax c ON a.idtax = c.idtax
-					left join payment d ON a.idpayment = d.idpayment
-					left join supplier e ON a.idsupplier = e.idsupplier
-                    left join employee f ON a.receivedby_id = f.idemployee
-                    join (select idpurchase,totalorder,totalreceived,sum(totalorder-totalreceived) as sisa
-                        from (select idpurchase,sum(qty) as totalorder,COALESCE(sum(qty_received),0) as totalreceived
-                                from purchaseitem
-                                group by idpurchase) a
-                                group by idpurchase,totalorder,totalreceived) g ON a.idpurchase = g.idpurchase
-                    left join (select nopurchase,idpurchase,date
-                                from purchase ) h ON a.idpurchase_req = h.idpurchase";
+                    left join tax c ON a .idtax = c .idtax
+                    left join payment d ON a .idpayment = d.idpayment
+                    left join supplier e ON a .idsupplier = e.idsupplier
+                    left join employee f ON a .receivedby_id = f.idemployee
+                    join(
+                        select
+                            idpurchase,
+                            totalorder,
+                            totalreceived,
+                            sum(totalorder - totalreceived) as sisa
+                        from
+                            (
+                                select
+                                    idpurchase,
+                                    sum(qty) as totalorder,
+                                    COALESCE(sum(qty_received), 0) as totalreceived
+                                from
+                                    purchaseitem
+                                group by
+                                    idpurchase
+                            ) a
+                        group by
+                            idpurchase,
+                            totalorder,
+                            totalreceived
+                    ) g ON a .idpurchase = g .idpurchase
+                    join(
+                        select idpurchase,sum(a.total_qty_batch) as total_qty_batch
+                        from (select a.idpurchase,a.idpurchaseitem,
+                                COALESCE(total_qty_batch, 0) as total_qty_batch	
+                                from
+                                    purchaseitem a
+                                left join(
+                                    select
+                                        idpurchaseitem,
+                                        COALESCE(sum(qty), 0) as total_qty_batch
+                                    from
+                                        purchaseitem_batch
+                                    group by
+                                        idpurchaseitem
+                                ) f ON a .idpurchaseitem = f.idpurchaseitem
+                            group by a.idpurchase,a.idpurchaseitem,total_qty_batch ) a
+                        group by a.idpurchase
+                    ) i ON a .idpurchase = i .idpurchase
+                    left join(
+                        select
+                            nopurchase,
+                            idpurchase,
+                            date
+                        from
+                            purchase
+                    ) h ON a .idpurchase_req = h.idpurchase";
 
         return $query;
     }
@@ -59,7 +99,47 @@ class m_purchaseorder extends CI_Model {
         } 
 
     	// return " idpurchasetype = 2 and a.status = 1 and a.deleted = 0 $wer";
-        return " idpurchasetype = 2 and a.deleted = 0 $wer";
+
+        $group_by = "group by a .idpurchase,
+                a .idshipping,
+                a .idpurchasetype,
+                a .idtax,
+                a .idpayment,
+                a . date,
+                a .requestdate,
+                a .tax,
+                a .totalamount,
+                a .memo,
+                a .datein,
+                a .idunit,
+                a .idcurrency,
+                a .subtotal,
+                a .nopurchase,
+                a .idsupplier,
+                c .nametax,
+                c .rate,
+                e.namesupplier,
+                a .discount,
+                a .notes_receipt,
+                a .receivedby_id,
+                a .delivereddate,
+                f.firstname,
+                f.lastname,
+                a .balance,
+                a .invoice_status,
+                a .noinvoice,
+                a .paidtoday,
+                totalorder,
+                totalreceived,
+                total_qty_batch,
+                sisa,
+                h.nopurchase,
+                h. date,
+                a .include_tax,
+                a .nofpsup,
+                a .no_rujukan_sup";
+
+        return " idpurchasetype = 2 and a.deleted = 0 $wer $group_by";
     }
 
     function orderBy() {

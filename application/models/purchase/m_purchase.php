@@ -132,12 +132,15 @@ class m_purchase extends CI_Model {
 
     function query_itempurchase($idpurchase){
          $q = $this->db->query("select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
-                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no
+                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,COALESCE(total_qty_batch, 0) as total_qty_batch	
                 from purchaseitem a
                 join inventory b ON a.idinventory = b.idinventory
                 left join productmeasurement c ON c.measurement_id = a.measurement_id
                 left join warehouse d ON d.warehouse_id = a.warehouse_id
                 left join productmeasurement e ON e.measurement_id = a.measurement_id_size
+                left join (select idpurchaseitem,COALESCE(sum(qty), 0) as total_qty_batch
+                            from purchaseitem_batch
+                            group by idpurchaseitem) f ON a.idpurchaseitem = f.idpurchaseitem
                 where idpurchase = $idpurchase");
 
         // $r = $q->result_array();

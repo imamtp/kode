@@ -435,7 +435,7 @@ Ext.define(dir_sys + 'purchase2.WindowBatchItemList', {
     extend: 'Ext.window.Window',
     alias: 'widget.WindowBatchItemList',
     id: 'WindowBatchItemList',
-    title: 'Batch Item',
+    title: 'Penerimaan Barang',
     header: {
         titlePosition: 2,
         titleAlign: 'center'

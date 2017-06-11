@@ -3,7 +3,7 @@ var WindowEntryGoodsReceipt = Ext.create(dir_sys + 'purchase2.WindowEntryGoodsRe
 Ext.define('GridPurchaseOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa', 'total_qty_batch', 'sisabatch'
     ],
     idProperty: 'id'
 });
@@ -141,7 +141,8 @@ Ext.define('GridPurchaseOrderList', {
                             size: obj.size,
                             short_desc: obj.short_desc,
                             size_measurement: obj.size_measurement,
-                            warehouse_code: obj.warehouse_code
+                            warehouse_code: obj.warehouse_code,
+                            total_qty_batch: obj.total_qty_batch
                         });
 
 
@@ -243,13 +244,13 @@ Ext.define('GridPurchaseOrderList', {
         align: 'right'
     }, {
         header: 'Total Qty Diterima',
-        dataIndex: 'totalreceived',
+        dataIndex: 'total_qty_batch',
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
     }, {
         header: 'Total Qty Sisa',
-        dataIndex: 'sisa',
+        dataIndex: 'sisabatch',
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
