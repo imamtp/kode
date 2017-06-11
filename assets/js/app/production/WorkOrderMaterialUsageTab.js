@@ -1,6 +1,6 @@
 Ext.define('GridItemMaterialUsageWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['prod_material_id','job_order_id','idinventory','bom_id','measurement_id','qty','slice','idunit','material_type','qty_real','qty_sisa','whs_sisa_id','warehouse_code_sisa','notes','nameinventory','invno','sku_no','measurement_name','catatan'],
+    fields: ['prod_material_id', 'job_order_id', 'idinventory', 'bom_id', 'measurement_id', 'qty', 'slice', 'idunit', 'material_type', 'qty_real', 'qty_sisa', 'whs_sisa_id', 'warehouse_code_sisa', 'notes', 'nameinventory', 'invno', 'sku_no', 'measurement_name', 'catatan'],
     idProperty: 'id'
 });
 
@@ -20,22 +20,22 @@ var storeGridItemMaterialUsageWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 //end store head
 
 ///////////////////////////
 
-Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
+Ext.define(dir_sys + 'production.WorkOrderMaterialUsageTab', {
     extend: 'Ext.grid.Panel',
     id: 'WorkOrderMaterialUsageTab',
     alias: 'widget.WorkOrderMaterialUsageTab',
     xtype: 'cell-editing',
     title: 'Raw Material',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -48,26 +48,25 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
             // forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemMaterialUsageWO,
-            viewConfig:{
-                markDirty:false
+            viewConfig: {
+                markDirty: false
             },
-            columns: [
-                {
+            columns: [{
                     header: 'prod_material_id',
                     hidden: true,
                     dataIndex: 'prod_material_id',
-//                    id: 'idinventory'
-                },{
+                    //                    id: 'idinventory'
+                }, {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'bom_id',
                     hidden: true,
                     dataIndex: 'bom_id',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -77,21 +76,21 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
                 {
                     header: 'Kode Material',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     minWidth: 120
                 },
                 {
                     header: 'Nama Material',
                     dataIndex: 'nameinventory',
-                    flex:1,
+                    flex: 1,
                     minWidth: 250,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     header: 'Deskripsi',
-                    hidden:true,
+                    hidden: true,
                     dataIndex: 'description',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     minWidth: 200
                 },
                 {
@@ -99,13 +98,13 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
                     dataIndex: 'material_type',
                     minWidth: 110,
                     renderer: function(value) {
-                       if(value*1===1){
-                        return 'Raw Material';
-                       } else {
-                        return 'BoM Material';
-                       }
-                    }
-//                    id: 'nameinventory'
+                            if (value * 1 === 1) {
+                                return 'Raw Material';
+                            } else {
+                                return 'BoM Material';
+                            }
+                        }
+                        //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
@@ -142,7 +141,7 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
                     //     labelWidth: 100
                     // }
                 },
-                 {
+                {
                     xtype: 'numbercolumn',
                     header: 'Qty Realisasi',
                     minWidth: 100,
@@ -153,7 +152,7 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
                         allowBlank: false,
                         minValue: 0
                     }
-                },{
+                }, {
                     xtype: 'numbercolumn',
                     header: 'Qty Selisih',
                     minWidth: 100,
@@ -190,9 +189,8 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
             selModel: {
                 selType: 'cellmodel'
             },
-             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+            listeners: {
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -200,34 +198,32 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
                     }
                 }
             },
-            dockedItems: [ 
-                {
-                    xtype: 'toolbar',
-                    dock: 'top',
-                    items: [
-                        // {
-                        //     text: 'Add Raw Material',
-                        //     id:'addRawMaterialBtnWo',
-                        //     iconCls: 'add-icon',
-                        //     scope: this,
-                        //     handler: this.onAddRawClick
-                        // },
-                        // {
-                        //     text: 'Add Bill of Material',
-                        //     hidden:true,
-                        //     id:'addBOMBtnWo',
-                        //     iconCls: 'add-icon',
-                        //     scope: this,
-                        //     handler: this.onAddBoMClick
-                        // },
-                        {
-                            xtype:'hiddenfield',
-                            name:'job_item_id_tmpmaterialwo',
-                            id:'job_item_id_tmpmaterialwo'
-                        }
-                    ]
-                }
-            ]
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [
+                    // {
+                    //     text: 'Add Raw Material',
+                    //     id:'addRawMaterialBtnWo',
+                    //     iconCls: 'add-icon',
+                    //     scope: this,
+                    //     handler: this.onAddRawClick
+                    // },
+                    // {
+                    //     text: 'Add Bill of Material',
+                    //     hidden:true,
+                    //     id:'addBOMBtnWo',
+                    //     iconCls: 'add-icon',
+                    //     scope: this,
+                    //     handler: this.onAddBoMClick
+                    // },
+                    {
+                        xtype: 'hiddenfield',
+                        name: 'job_item_id_tmpmaterialwo',
+                        id: 'job_item_id_tmpmaterialwo'
+                    }
+                ]
+            }]
         });
 
         this.callParent();
@@ -250,13 +246,11 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesOrder: function(button, event, mode)
-    {
-       
+    recordSalesOrder: function(button, event, mode) {
+
     },
     saveRecurr: function() {
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -264,26 +258,25 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
-    onAddRawClick: function() {
-    },
-    onAddBoMClick: function(){
-      
+    onAddRawClick: function() {},
+    onAddBoMClick: function() {
+
     },
     onRemoveClick: function(grid, rowIndex) {
-       
+
     },
     onEdit: function(editor, e) {
         e.record.commit();
@@ -291,42 +284,37 @@ Ext.define(dir_sys+'production.WorkOrderMaterialUsageTab', {
 });
 
 
-function updateGridMaterialUsageWO()
-{
-     Ext.each(storeGridItemMaterialUsageWO.data.items, function(obj, i) {
-        var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
-        var job_item_id = Ext.getCmp('job_item_id_tmpmaterialwo').getValue()*1;
+function updateGridMaterialUsageWO() {
+    Ext.each(storeGridItemMaterialUsageWO.data.items, function(obj, i) {
+        var job_order_id = Ext.getCmp('job_order_id_materialwoform').getValue();
+        var job_item_id = Ext.getCmp('job_item_id_tmpmaterialwo').getValue() * 1;
 
-        obj.set('qty_sisa', obj.data.qty_real-obj.data.qty);
+        obj.set('qty_sisa', obj.data.qty_real - obj.data.qty);
 
-        // Ext.Ajax.request({
-        //     url: SITE_URL + 'production/save_rm',
-        //     method: 'POST',
-        //     params: {
-        //         idunit:Ext.getCmp('cbUnitWorkOrderGrid').getValue()*1,
-        //         job_order_id: job_order_id,
-        //         job_item_id:job_item_id,
-        //         prod_material_id:obj.data.prod_material_id,
-        //         measurement_name: obj.data.measurement_name,
-        //         slice:obj.data.slice,
-        //         qty: obj.data.qty,
-        //         update:'true'
-        //     },
-        //     success: function(form, action) {
-        //         var d = Ext.decode(form.responseText);
+        var WorkOrderMaterialUsageTabStore = Ext.getCmp('WorkOrderMaterialUsageTab').getStore();
+        var ItemWOMaterialjson = Ext.encode(Ext.pluck(WorkOrderMaterialUsageTabStore.data.items, 'data'));
 
-        //         storeGridItemMaterialUsageWO.on('beforeload',function(store, operation,eOpts){
-        //                operation.params={
-        //                            'extraparams': 'a.job_order_id:'+job_order_id+','+'a.job_item_id:'+job_item_id
-        //                          };
-        //                      });
+        Ext.Ajax.request({
+            url: SITE_URL + 'production/update_materialusage',
+            method: 'POST',
+            params: {
+                data: ItemWOMaterialjson
+            },
+            success: function(form, action) {
+                var d = Ext.decode(form.responseText);
 
-        //         storeGridItemMaterialUsageWO.load();
-        //     },
-        //     failure: function(form, action) {
-        //         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-        //     }
-        // });
+                // storeGridItemMaterialUsageWO.on('beforeload', function(store, operation, eOpts) {
+                //     operation.params = {
+                //         'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                //     };
+                // });
+
+                // storeGridItemMaterialUsageWO.load();
+            },
+            failure: function(form, action) {
+                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            }
+        });
         // obj.set('total', obj.data.qty*obj.data.size);
 
     });

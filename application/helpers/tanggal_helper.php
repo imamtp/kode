@@ -60,6 +60,13 @@ function backdate2($d)
     return $tgl[2].'-'.$tgl[1].'-'.$tgl[0];
 }
 
+function backdate2_reverse($d)
+{
+    //30-05-2015
+    $tgl = explode("-", $d);
+    return $tgl[2].'-'.$tgl[1].'-'.$tgl[0];
+}
+
 function lastday($month,$year)
 {
     return cal_days_in_month(CAL_GREGORIAN, $month, $year);
