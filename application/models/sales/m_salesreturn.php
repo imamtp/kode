@@ -46,6 +46,11 @@ class m_salesreturn extends CI_Model {
         if($this->input->post('option')=='delivery_order'){
             $wer = ' and (a.status >= 4)';
         }
+        $sd = substr($this->input->post('startdate'),0,10);
+        $nd = substr($this->input->post('enddate'),0,10);
+        if($sd != null && $nd != null)
+            $wer .= " AND a.return_date BETWEEN '$sd' AND '$nd'";
+
         return " a.deleted = 0 $wer";
     }
 

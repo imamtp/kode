@@ -30,11 +30,13 @@ var storeGridSalesReturnGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
-//storeGridInventoryAll.on('beforeload',function(store, operation,eOpts){
-//        operation.params={
-//                    'extraparams': 'a.idunit:'+Ext.getCmp('cbSalesReturnGrid').getValue()
-//                  };
-//              });
+storeGridSalesReturnGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdsr').getValue(),
+        'startdate': Ext.getCmp('startdate_grdsr').getValue(),
+        'enddate': Ext.getCmp('enddate_grdsr').getValue(),
+    };
+});
 
 Ext.define('MY.searchGridSalesReturnGrid', {
     extend: 'Ext.ux.form.SearchField',
@@ -161,6 +163,7 @@ Ext.define(dir_sys + 'sales.SalesReturnGrid', {
         dock: 'top',
         items: [{
                 xtype: 'datefield',
+                id: 'startdate_grdsr',
                 format: 'd/m/Y',
                 // value: datenow(),
                 fieldLabel: 'Sales Return',
@@ -168,6 +171,7 @@ Ext.define(dir_sys + 'sales.SalesReturnGrid', {
             ' to ',
             {
                 xtype: 'datefield',
+                id: 'enddate_grdsr',
                 format: 'd/m/Y',
                 // value: datenow(),
                 hideLabel: true
@@ -176,25 +180,21 @@ Ext.define(dir_sys + 'sales.SalesReturnGrid', {
             {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
-                id: 'cbSalesReturnGrid',
-                listeners: {
-                    'change': function(field, newValue, oldValue) {
-                        storeGridSalesReturnGrid.load({
-                            params: {
-                                'extraparams': 'a.idunit:' + Ext.getCmp('cbSalesReturnGrid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
-
-                            }
-                        });
-                    }
-                }
+                id: 'idunit_grdsr',
             },
             {
                 text: 'Search',
-                handler: function() {}
+                handler: function() {
+                    storeGridSalesReturnGrid.load();
+                }
             },
             {
                 text: 'Clear Filter',
-                handler: function() {}
+                handler: function() {
+                    Ext.getCmp('startdate_grdsr').setValue();
+                    Ext.getCmp('enddate_grdsr').setValue();
+                    storeGridSalesReturnGrid.load();
+                }
             }
         ]
     }, {
