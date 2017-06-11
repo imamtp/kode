@@ -4,7 +4,7 @@
 Ext.define('WorkOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'namecustomer', 'no_sales_order'
     ],
     idProperty: 'id'
 });
@@ -122,6 +122,16 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
             header: 'Total BoM Usage',
             dataIndex: 'totalbom',
             minWidth: 150
+        },
+        {
+            header: 'No SO',
+            dataIndex: 'no_sales_order',
+            minWidth: 150,
+        },
+        {
+            header: 'Customer',
+            dataIndex: 'namecustomer',
+            minWidth: 150,
         },
         {
             header: 'Status',
