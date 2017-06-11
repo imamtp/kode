@@ -486,7 +486,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                         method: 'POST',
                                         params: {
                                             status: 4,
-                                            idunit: Ext.getCmp('cbUnitDeliveryOrder').getValue(),
+                                            idunit: Ext.getCmp('idunit_grddo').getValue(),
                                             idsales: selectedRecord.data.idsales
                                         },
                                         success: function(form, action) {
