@@ -66,6 +66,17 @@ var wPurchaseOrderGrid = Ext.create('widget.window', {
     }
 });
 
+storePurchaseOrderGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        extraparams: ' a.idpurchasestatus:' + Ext.getCmp('idpurchasestatus_grdpo').getValue() + ', ' +
+            'a.idunit: ' + Ext.getCmp('idunit_grdpo').getValue() + ', ' +
+            'a.idsupplier: ' + Ext.getCmp('idsupplier_grdpo').getValue() + ', ' +
+            'a.idpayment: ' + Ext.getCmp('idpayment_grdpo').getValue(),
+        startdate: Ext.getCmp('startdate_grdpo').getValue(),
+        enddate: Ext.getCmp('enddate_grdpo').getValue(),
+    }
+
+})
 
 Ext.define('MY.searchPurchaseOrderGrid', {
     extend: 'Ext.ux.form.SearchField',
@@ -174,21 +185,34 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
+                    id: 'startdate_grdpo',
                     xtype: 'datefield',
                     format: 'd/m/Y',
                     // value: datenow(),
                     fieldLabel: 'Date Order',
+                    listeners: {
+                        'change': function(dp, newVal) {
+                            Ext.getCmp('enddate_grdpo').setMinValue(newVal);
+                        }
+                    }
                 },
                 ' to ',
                 {
+                    id: 'enddate_grdpo',
                     xtype: 'datefield',
                     format: 'd/m/Y',
                     // value: datenow(),
-                    hideLabel: true
-                        // fieldLabel: 'Date Order',
+                    hideLabel: true,
+                    listeners: {
+                        'change': function(dp, newVal) {
+                            Ext.getCmp('startdate_grdpo').setMaxValue(newVal);
+                        }
+                    }
+                    // fieldLabel: 'Date Order',
                 },
                 {
-                    xtype: 'comboxSalesStatus'
+                    xtype: 'comboxpurchasestatus',
+                    id: 'idpurchasestatus_grdpo',
                 }
             ]
         },
@@ -196,21 +220,32 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxunit'
+                    xtype: 'comboxunit',
+                    id: 'idunit_grdpo',
                 },
                 {
-                    xtype: 'comboxCustomer'
+                    xtype: 'comboxidsupplier',
+                    id: 'idsupplier_grdpo',
                 },
                 {
-                    xtype: 'comboxpayment'
+                    xtype: 'comboxpayment',
+                    id: 'idpayment_grdpo',
                 },
                 {
                     text: 'Search',
-                    handler: function() {}
+                    handler: function() {
+                        storePurchaseOrderGrid.load();
+                    }
                 },
                 {
                     text: 'Clear Filter',
-                    handler: function() {}
+                    handler: function() {
+                        Ext.getCmp('startdate_grdpo').setValue();
+                        Ext.getCmp('enddate_grdpo').setValue();
+                        Ext.getCmp('idpurchasestatus_grdpo').setValue();
+                        Ext.getCmp('idpayment_grdpo').setValue();
+                        Ext.getCmp('idsupplier_grdpo').setValue();
+                    }
                 }
             ]
         },

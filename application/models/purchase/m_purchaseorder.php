@@ -57,6 +57,11 @@ class m_purchaseorder extends CI_Model {
         } if($this->input->post('option')=='delivered_po'){
             $wer = " and a.delivereddate is not null";
         } 
+        
+        $sd = substr($this->input->post('startdate'),0,10);
+        $nd = substr($this->input->post('enddate'),0,10);
+        if($sd != null && $nd != null)
+            $wer .= " AND a.date BETWEEN '$sd' AND '$nd'";
 
     	// return " idpurchasetype = 2 and a.status = 1 and a.deleted = 0 $wer";
         return " idpurchasetype = 2 and a.deleted = 0 $wer";
