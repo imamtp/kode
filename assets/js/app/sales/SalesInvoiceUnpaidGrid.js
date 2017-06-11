@@ -28,8 +28,10 @@ var storeGridSalesInvoiceUnpaidGrid = Ext.create('Ext.data.Store', {
 
 storeGridSalesInvoiceUnpaidGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        // 'extraparams': 'a.invoice_status:'+4
-        'invoice_status': '1,4' //unpaid and partialy paid
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdsi_unpaid').getValue(),
+        'invoice_status': '1,4', //unpaid and partialy paid
+        'startdate': Ext.getCmp('startdate_grdsi_unpaid').getValue(),
+        'enddate': Ext.getCmp('enddate_grdsi_unpaid').getValue()
     };
 });
 
@@ -156,6 +158,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
         dock: 'top',
         items: [{
                 xtype: 'datefield',
+                id: 'startdate_grdsi_unpaid',
                 format: 'd/m/Y',
                 // value: datenow(),
                 fieldLabel: 'Invoice Period',
@@ -163,6 +166,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             ' to ',
             {
                 xtype: 'datefield',
+                id: 'enddate_grdsi_unpaid',
                 format: 'd/m/Y',
                 // value: datenow(),
                 hideLabel: true
@@ -171,17 +175,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
-                id: 'cbSalesInvoiceUnpaid',
-                listeners: {
-                    'change': function(field, newValue, oldValue) {
-                        storeGridSalesInvoicePaidGrid.load({
-                            params: {
-                                'extraparams': 'a.idunit:' + Ext.getCmp('cbSalesInvoiceUnpaid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
-
-                            }
-                        });
-                    }
-                }
+                id: 'idunit_grdsi_unpaid',
             }
         ]
     }, {
@@ -235,6 +229,18 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                         }]
                     }).show();
                 }
+            }
+        }, {
+            text: 'Search',
+            handler: function() {
+                storeGridSalesInvoiceUnpaidGrid.load();
+            }
+        }, {
+            text: 'Clear Filter',
+            handler: function() {
+                Ext.getCmp('startdate_grdsi_unpaid').setValue();
+                Ext.getCmp('enddate_grdsi_unpaid').setValue();
+                storeGridSalesInvoiceUnpaidGrid.load();
             }
         }, {
             itemId: 'editSalesInvoiceUnpaidGrid',

@@ -44,6 +44,12 @@ class m_salesinvoice extends CI_Model {
         } else {
             $wer = null;
         }
+
+        $sd = substr($this->input->post('startdate'),0,10);
+        $nd = substr($this->input->post('enddate'),0,10);
+        if($sd != null && $nd != null)
+            $wer .= " AND a.invoice_date BETWEEN '$sd' AND '$nd'";
+
         return " a.display is null and noinvoice is not null $wer";
     }
 
