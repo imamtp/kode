@@ -28,7 +28,11 @@ var storeGridPurchaseInvoiceOverdueGrid = Ext.create('Ext.data.Store', {
 
 storeGridPurchaseInvoiceOverdueGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.invoice_status:' + 3
+        'extraparams': 'a.invoice_status:' + 3 + ', ' +
+            'a.idunit:' + Ext.getCmp('idunit_grdpi_od').getValue(),
+        'startdate': Ext.getCmp('startdate_grdpi_od').getValue(),
+        'enddate': Ext.getCmp('enddate_grdpi_od').getValue()
+
     };
 });
 
@@ -158,6 +162,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceOverdueGrid', {
         dock: 'top',
         items: [{
                 xtype: 'datefield',
+                id: 'startdate_grdpi_od',
                 format: 'd/m/Y',
                 // value: datenow(),
                 fieldLabel: 'Invoice Period',
@@ -165,6 +170,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceOverdueGrid', {
             ' to ',
             {
                 xtype: 'datefield',
+                id: 'enddate_grdpi_od',
                 format: 'd/m/Y',
                 // value: datenow(),
                 hideLabel: true
@@ -173,16 +179,20 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceOverdueGrid', {
             {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
-                id: 'cbPurchaseInvoiceOverdue',
-                listeners: {
-                    'change': function(field, newValue, oldValue) {
-                        storeGridPurchaseInvoiceOverdueGrid.load({
-                            params: {
-                                'extraparams': 'a.idunit:' + Ext.getCmp('cbPurchaseInvoiceOverdue').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
-
-                            }
-                        });
-                    }
+                id: 'idunit_grdpi_od',
+            },
+            {
+                text: 'Search',
+                handler: function() {
+                    storeGridPurchaseInvoiceOverdueGrid.load();
+                }
+            },
+            {
+                text: 'Clear Filter',
+                handler: function() {
+                    Ext.getCmp('startdate_grdpo').setValue();
+                    Ext.getCmp('enddate_grdpo').setValue();
+                    storeGridPurchaseInvoiceOverdueGrid.load();
                 }
             }
         ]
