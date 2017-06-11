@@ -26,6 +26,16 @@ var storeGridSalesQuotationGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
+storeGridSalesQuotationGrid.on('beforeload', function(store, operation) {
+    operation.params = {
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdsq').getValue() + ', ' +
+            'a.status:' + Ext.getCmp('statusquotation_grdsq').getValue() + ', ' +
+            'a.idcustomer:' + Ext.getCmp('idcustomer_grdsq').getValue() + ', ' +
+            'b.namepayment:' + Ext.getCmp('namepayment_grdsq').getValue(),
+        'startdate': Ext.getCmp('startdate_grdsq').getValue(),
+        'enddate': Ext.getCmp('enddate_grdsq').getValue(),
+    }
+})
 var formSalesQuotationGrid = Ext.create('Ext.form.Panel', {
     id: 'formSalesQuotationGrid',
     width: 740,
@@ -453,6 +463,7 @@ Ext.define('GridSalesQuotationGrid', {
             dock: 'top',
             items: [{
                     xtype: 'datefield',
+                    id: 'startdate_grdsq',
                     format: 'd/m/Y',
                     // value: datenow(),
                     fieldLabel: 'Date Quotation',
@@ -460,13 +471,15 @@ Ext.define('GridSalesQuotationGrid', {
                 ' to ',
                 {
                     xtype: 'datefield',
+                    id: 'enddate_grdsq',
                     format: 'd/m/Y',
                     // value: datenow(),
                     hideLabel: true
                         // fieldLabel: 'Date Quotation',
                 },
                 {
-                    xtype: 'comboxSalesQuotationStatus'
+                    xtype: 'comboxSalesQuotationStatus',
+                    id: 'statusquotation_grdsq',
                 }
             ]
         },
@@ -474,21 +487,33 @@ Ext.define('GridSalesQuotationGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxunit'
+                    xtype: 'comboxunit',
+                    id: 'idunit_grdsq',
                 },
                 {
-                    xtype: 'comboxCustomer'
+                    xtype: 'comboxCustomer',
+                    id: 'idcustomer_grdsq',
                 },
                 {
-                    xtype: 'comboxpayment'
+                    xtype: 'comboxpayment',
+                    id: 'namepayment_grdsq',
                 },
                 {
                     text: 'Search',
-                    handler: function() {}
+                    handler: function() {
+                        storeGridSalesQuotationGrid.load();
+                    }
                 },
                 {
                     text: 'Clear Filter',
-                    handler: function() {}
+                    handler: function() {
+                        Ext.getCmp('startdate_grdsq').setValue();
+                        Ext.getCmp('enddate_grdsq').setValue();
+                        Ext.getCmp('idcustomer_grdsq').setValue();
+                        Ext.getCmp('namepayment_grdsq').setValue();
+                        Ext.getCmp('statusquotation_grdsq').setValue();
+                        storeGridSalesQuotationGrid.load()
+                    }
                 }
             ]
         },
