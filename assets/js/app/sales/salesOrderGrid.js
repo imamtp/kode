@@ -26,6 +26,16 @@ var storeGridSalesOrderGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
+storeGridSalesOrderGrid.on('beforeload', function(store, operation) {
+    operation.params = {
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdso').getValue() + ', ' +
+            'a.status:' + Ext.getCmp('status_grdso').getValue() + ', ' +
+            'a.idcustomer:' + Ext.getCmp('idcustomer_grdso').getValue() + ', ' +
+            'b.namepayment:' + Ext.getCmp('namepayment_grdso').getValue(),
+        'startdate': Ext.getCmp('startdate_grdso').getValue(),
+        'enddate': Ext.getCmp('enddate_grdso').getValue(),
+    }
+})
 var formSalesOrderGrid = Ext.create('Ext.form.Panel', {
     id: 'formSalesOrderGrid',
     width: 740,
@@ -235,6 +245,15 @@ Ext.define('GridSalesOrderGrid', {
             dataIndex: 'no_sales_order',
             minWidth: 150
         }, {
+            header: 'Status',
+            dataIndex: 'status',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right',
+            renderer: function(value) {
+                return customColumnStatus(ArrSalesStatus, value);
+            }
+        }, {
             header: 'Customer Name',
             flex: 1,
             dataIndex: 'namecustomer',
@@ -279,16 +298,6 @@ Ext.define('GridSalesOrderGrid', {
             align: 'right'
         },
         {
-            header: 'Status',
-            dataIndex: 'status',
-            minWidth: 150,
-            xtype: 'numbercolumn',
-            align: 'right',
-            renderer: function(value) {
-                return customColumnStatus(ArrSalesStatus, value);
-            }
-        },
-        {
             header: 'Invoice Status',
             dataIndex: 'invoice_status',
             minWidth: 150,
@@ -304,6 +313,7 @@ Ext.define('GridSalesOrderGrid', {
             dock: 'top',
             items: [{
                     xtype: 'datefield',
+                    id: 'startdate_grdso',
                     format: 'd/m/Y',
                     // value: datenow(),
                     fieldLabel: 'Date Order',
@@ -311,13 +321,15 @@ Ext.define('GridSalesOrderGrid', {
                 ' to ',
                 {
                     xtype: 'datefield',
+                    id: 'enddate_grdso',
                     format: 'd/m/Y',
                     // value: datenow(),
                     hideLabel: true
                         // fieldLabel: 'Date Order',
                 },
                 {
-                    xtype: 'comboxSalesStatus'
+                    xtype: 'comboxSalesStatus',
+                    id: 'status_grdso',
                 }
             ]
         },
@@ -325,21 +337,34 @@ Ext.define('GridSalesOrderGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxunit'
+                    xtype: 'comboxunit',
+                    id: 'idunit_grdso',
                 },
                 {
-                    xtype: 'comboxCustomer'
+                    xtype: 'comboxCustomer',
+                    id: 'idcustomer_grdso',
                 },
                 {
-                    xtype: 'comboxpayment'
+                    xtype: 'comboxpayment',
+                    id: 'namepayment_grdso',
                 },
                 {
                     text: 'Search',
-                    handler: function() {}
+                    handler: function() {
+                        storeGridSalesOrderGrid.load();
+                    }
                 },
                 {
                     text: 'Clear Filter',
-                    handler: function() {}
+                    handler: function() {
+                        Ext.getCmp('startdate_grdso').setValue();
+                        Ext.getCmp('enddate_grdso').setValue();
+                        Ext.getCmp('idunit_grdso').setValue();
+                        Ext.getCmp('idcustomer_grdso').setValue();
+                        Ext.getCmp('namepayment_grdso').setValue();
+                        Ext.getCmp('status_grdso').setValue();
+                        storeGridSalesOrderGrid.load();
+                    }
                 }
             ]
         },

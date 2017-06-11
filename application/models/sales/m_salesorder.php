@@ -59,6 +59,12 @@ class m_salesorder extends CI_Model {
         if($this->input->post('option')=='delivery_order'){
             $wer = ' and a.status > 2';
         }
+
+        $sd = substr($this->input->post('startdate'),0,10);
+        $nd = substr($this->input->post('enddate'),0,10);
+        if($sd != null && $nd != null)
+            $wer .= " AND a.date_sales BETWEEN '$sd' AND '$nd'";
+
         return " a.type = 2 and a.display is null $wer";
     }
 
