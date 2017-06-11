@@ -26,6 +26,14 @@ var storeGridPurchaseInvoiceUnpaidGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
+storeGridPurchaseInvoiceUnpaidGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        // extraparams: 'a.idunit: ' + Ext.getCmp('idunit_grdpi').getValue() + ', ',
+        // startdate: Ext.getCmp('startdate_grdpi').getValue(),
+        // enddate: Ext.getCmp('enddate_grdpi').getValue(),
+    }
+})
+
 // storeGridPurchaseInvoiceUnpaidGrid.on('beforeload',function(store, operation,eOpts){
 //        operation.params={
 //                    // 'extraparams': 'a.invoice_status:'+4
@@ -162,6 +170,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceUnpaidGrid', {
         dock: 'top',
         items: [{
                 xtype: 'datefield',
+                id: 'startdate_grdpi',
                 format: 'd/m/Y',
                 // value: datenow(),
                 fieldLabel: 'Invoice Period',
@@ -169,6 +178,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceUnpaidGrid', {
             ' to ',
             {
                 xtype: 'datefield',
+                id: 'enddate_grdpi',
                 format: 'd/m/Y',
                 // value: datenow(),
                 hideLabel: true
@@ -177,16 +187,19 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceUnpaidGrid', {
             {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
-                id: 'cbPurchaseInvoiceUnpaid',
-                listeners: {
-                    'change': function(field, newValue, oldValue) {
-                        storeGridPurchaseInvoicePaidGrid.load({
-                            params: {
-                                'extraparams': 'a.idunit:' + Ext.getCmp('cbPurchaseInvoiceUnpaid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
-
-                            }
-                        });
-                    }
+                id: 'idunit_grdpi',
+            },
+            {
+                text: 'Search',
+                handler: function() {
+                    storeGridPurchaseInvoiceUnpaidGrid.load();
+                }
+            },
+            {
+                text: 'Clear Filter',
+                handler: function() {
+                    Ext.getCmp('startdate_grdpi').setValue();
+                    Ext.getCmp('enddate_grdpi').setValue();
                 }
             }
         ]

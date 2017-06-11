@@ -35,9 +35,12 @@ var storeGoodsReceiptGrid = Ext.create('Ext.data.Store', {
 
 storeGoodsReceiptGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        // 'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitWOScheduleGrid').getValue()
-        'option': 'delivered_po'
-            // 'wherenotinschedule':'true'
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdgr').getValue() + ', ' +
+            'a.idpurchasestatus:' + Ext.getCmp('idpurchasestatus_grdgr').getValue(),
+        'option': 'delivered_po',
+        // 'wherenotinschedule':'true'
+        'startdate': Ext.getCmp('startdate_grdgr').getValue(),
+        'enddate': Ext.getCmp('enddate_grdgr').getValue(),
     };
 });
 
@@ -221,6 +224,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
             dock: 'top',
             items: [{
                     xtype: 'datefield',
+                    id: 'startdate_grdgr',
                     format: 'd/m/Y',
                     // value: datenow(),
                     fieldLabel: 'Date Order',
@@ -228,13 +232,15 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
                 ' to ',
                 {
                     xtype: 'datefield',
+                    id: 'enddate_grdgr',
                     format: 'd/m/Y',
                     // value: datenow(),
                     hideLabel: true
                         // fieldLabel: 'Date Order',
                 },
                 {
-                    xtype: 'comboxpurchasestatus'
+                    xtype: 'comboxpurchasestatus',
+                    id: 'idpurchasestatus_grdgr',
                 }
             ]
         },
@@ -242,7 +248,8 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxunit'
+                    xtype: 'comboxunit',
+                    id: 'idunit_grdgr',
                 },
                 // {
                 //     xtype:'comboxCustomer'
@@ -252,11 +259,19 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
                 // },
                 {
                     text: 'Search',
-                    handler: function() {}
+                    handler: function() {
+                        storeGoodsReceiptGrid.load();
+                    }
                 },
                 {
                     text: 'Clear Filter',
-                    handler: function() {}
+                    handler: function() {
+                        Ext.getCmp('startdate_grdgr').setValue();
+                        Ext.getCmp('enddate_grdgr').setValue();
+                        Ext.getCmp('idunit_grdgr').setValue();
+                        Ext.getCmp('idpurchasestatus_grdgr').setValue();
+                        storeGoodsReceiptGrid.load();
+                    }
                 }
             ]
         },
