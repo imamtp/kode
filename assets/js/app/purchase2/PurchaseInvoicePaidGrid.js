@@ -28,7 +28,10 @@ var storeGridPurchaseInvoicePaidGrid = Ext.create('Ext.data.Store', {
 
 storeGridPurchaseInvoicePaidGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.invoice_status:' + 2
+        'extraparams': 'a.invoice_status:' + 2 + ', ' +
+            'a.idunit:' + Ext.getCmp('idunit_grdpi_paid').getValue(),
+        'startdate': Ext.getCmp('startdate_grdpi_paid').getValue(),
+        'enddate': Ext.getCmp('enddate_grdpi_paid').getValue(),
     };
 });
 
@@ -43,7 +46,7 @@ var smGridPurchaseInvoicePaidGrid = Ext.create('Ext.selection.CheckboxModel', {
     mode: 'SINGLE',
     listeners: {
         deselect: function(model, record, index) {
-            var selectedLen = smGridPurchaseInvoicePaidGrid.getSelection().length;
+            var selectedLen = smGridPurchaseInvoicePaidGrid.getSelection().lengcth;
             if (selectedLen == 0) {
                 console.log(selectedLen);
                 Ext.getCmp('btnDeletePurchaseInvoicePaidGrid').disable();
@@ -159,6 +162,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoicePaidGrid', {
         dock: 'top',
         items: [{
                 xtype: 'datefield',
+                id: 'startdate_grdpi_paid',
                 format: 'd/m/Y',
                 // value: datenow(),
                 fieldLabel: 'Invoice Period',
@@ -166,6 +170,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoicePaidGrid', {
             ' to ',
             {
                 xtype: 'datefield',
+                id: 'enddate_grdpi_paid',
                 format: 'd/m/Y',
                 // value: datenow(),
                 hideLabel: true
@@ -173,17 +178,21 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoicePaidGrid', {
             }, '-',
             {
                 xtype: 'comboxunit',
+                id: 'idunit_grdpi_paid',
                 valueField: 'idunit',
-                id: 'cbPurchaseInvoicePaid',
-                listeners: {
-                    'change': function(field, newValue, oldValue) {
-                        storeGridPurchaseInvoicePaidGrid.load({
-                            params: {
-                                'extraparams': 'a.idunit:' + Ext.getCmp('cbPurchaseInvoicePaid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
-
-                            }
-                        });
-                    }
+            },
+            {
+                text: 'Search',
+                handler: function() {
+                    storeGridPurchaseInvoicePaidGrid.load();
+                }
+            },
+            {
+                text: 'Clear Filter',
+                handler: function() {
+                    Ext.getCmp('startdate_grdpi_paid').setValue();
+                    Ext.getCmp('enddate_grdpi_paid').setValue();
+                    storeGridPurchaseInvoicePaidGrid.load();
                 }
             }
         ]
