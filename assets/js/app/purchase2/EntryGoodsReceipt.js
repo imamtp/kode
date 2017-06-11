@@ -7,7 +7,7 @@ var WindowBatchItemList = Ext.create(dir_sys + 'purchase2.WindowBatchItemList');
 
 Ext.define('GridReceiptItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch'],
     idProperty: 'id'
 });
 
@@ -200,7 +200,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     header: 'SKU No',
                     dataIndex: 'sku_no',
                     //                    id: 'invno',
-                    width: 100
+                    width: 200
                 },
                 {
                     header: 'Kode Barang',
@@ -226,8 +226,8 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    header: 'Qty',
-                    width: 70,
+                    header: 'Qty Order',
+                    width: 120,
                     dataIndex: 'qty',
                     align: 'right',
                     // editor: {
@@ -235,6 +235,18 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     //     allowBlank: false,
                     //     minValue: 1
                     // }
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Received',
+                    width: 120,
+                    dataIndex: 'total_qty_batch',
+                    align: 'right'
+                        // editor: {
+                        //     xtype: 'numberfield',
+                        //     allowBlank: false,
+                        //     minValue: 1
+                        // }
                 },
                 {
                     header: 'Satuan',

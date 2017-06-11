@@ -680,6 +680,24 @@ class production extends MY_Controller {
         $this->db->delete('prod_material');
     }
 
+    function update_materialusage(){
+        $data = json_decode($this->input->post('data'));
+
+        foreach ($data as $value) {
+
+            $data_material = array(
+                    'qty_real' =>$value->qty_real,
+                    'qty_sisa' =>$value->qty_sisa
+                );
+
+            $this->db->where(array(
+                    'prod_material_id' => $value->prod_material_id,
+                    'job_order_id' => $value->job_order_id,
+                ));
+            $this->db->update('prod_material', $data_material);            
+        }
+    }
+
     function save_wo_materialusage(){
         $this->db->trans_begin();
 

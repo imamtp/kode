@@ -16,7 +16,7 @@ class m_purchaserequisition extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,a.status,c.nametax,c.rate,e.namesupplier,e.companyaddress,e.telephone,e.fax,a.discount as disc,f.username,g.idpurchase_req
+        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.status,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,a.status,c.nametax,c.rate,e.namesupplier,e.companyaddress,e.telephone,e.fax,a.discount as disc,f.username,g.idpurchase_req
                 ,a.requestbyid,concat(h.firstname,' ',h.lastname) as requestby_name, i.total_item";
     }
     
@@ -49,6 +49,13 @@ class m_purchaserequisition extends CI_Model {
         if($this->input->post('option')=='not_yet_po'){
             //pr belum menjadi po
             $wer = " AND a.idpurchase not in (select idpurchase_req from purchase where idpurchasetype = 2 and deleted = 0 and idpurchase_req is not null)";
+        }
+
+        if($this->input->post('startdate')!=null && $this->input->post('enddate')!=null)
+        {
+            $startdate = backdate2_reverse($this->input->post('startdate'));
+            $enddate = backdate2_reverse($this->input->post('enddate'));
+            $wer.=" AND a.date BETWEEN '$startdate' AND '$enddate'";
         }
     	return " idpurchasetype = 1 $wer";
     }

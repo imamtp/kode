@@ -27,6 +27,16 @@ var storePurchaseRequisitionGrid = Ext.create('Ext.data.Store', {
         direction: 'DESC'
     }]
 });
+
+storePurchaseRequisitionGrid.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'a.idsupplier:' + Ext.getCmp('CbGridPRSupplier').getValue() + ',' + 'a.status:' + Ext.getCmp('CbGridPRstatus').getValue() + ',' + 'a.idunit:' + Ext.getCmp('CbGridPRUnit').getValue(),
+        'startdate': Ext.getCmp('startdate_gridpr').getSubmitValue(),
+        'enddate': Ext.getCmp('enddate_gridpr').getSubmitValue()
+    };
+});
+
+
 var wPurchaseRequisitionGrid = Ext.create('widget.window', {
     id: 'windowPopupPurchaseRequisitionGrid',
     title: 'Purchase Requisition Form',
@@ -182,20 +192,23 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
             dock: 'top',
             items: [{
                     xtype: 'datefield',
-                    format: 'd/m/Y',
+                    format: 'd-m-Y',
+                    id: 'startdate_gridpr',
                     // value: datenow(),
                     fieldLabel: 'Date Requisition',
                 },
                 ' to ',
                 {
                     xtype: 'datefield',
-                    format: 'd/m/Y',
+                    format: 'd-m-Y',
+                    id: 'enddate_gridpr',
                     // value: datenow(),
                     hideLabel: true
                         // fieldLabel: 'Date Requisition',
                 },
                 {
-                    xtype: 'comboxPurchaseReqStatus'
+                    xtype: 'comboxPurchaseReqStatus',
+                    id: 'CbGridPRstatus'
                 }
             ]
         },
@@ -203,18 +216,28 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxunit'
+                    xtype: 'comboxunit',
+                    id: 'CbGridPRUnit'
                 },
                 {
-                    xtype: 'comboxidsupplier'
+                    xtype: 'comboxidsupplier',
+                    id: 'CbGridPRSupplier'
                 },
                 {
                     text: 'Search',
-                    handler: function() {}
+                    handler: function() {
+                        storePurchaseRequisitionGrid.load();
+                    }
                 },
                 {
                     text: 'Clear Filter',
-                    handler: function() {}
+                    handler: function() {
+                        Ext.getCmp('CbGridPRstatus').setValue(null);
+                        Ext.getCmp('CbGridPRSupplier').setValue(null);
+                        Ext.getCmp('startdate_gridpr').setValue(null);
+                        Ext.getCmp('enddate_gridpr').setValue(null);
+                        storePurchaseRequisitionGrid.load();
+                    }
                 }
             ]
         },
