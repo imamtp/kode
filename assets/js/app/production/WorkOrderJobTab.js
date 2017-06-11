@@ -2,7 +2,7 @@ var WorkOrderMaterialTab = Ext.create(dir_sys + 'production.WorkOrderMaterialTab
 
 Ext.define('GridItemJobWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['job_item_id', 'job_order_id', 'idinventory', 'idunit', 'measurement_id', 'cost', 'qty', 'subtotal', 'total', 'remarks', 'userin', 'datein', 'idunit', 'size', 'measurement_id_size', 'qty_accept', 'whs_accept_id', 'qty_reject', 'whs_reject_id', 'qty_sisa', 'whs_sisa_id', 'notes', 'token_tmp', 'nameinventory', 'invno', 'sku_no', 'short_desc', 'size_measurement', 'warehouse_code_accept', 'warehouse_code_reject', 'warehouse_code_sisa'],
+    fields: ['job_item_id', 'job_order_id', 'idinventory', 'idunit', 'measurement_id', 'cost', 'qty', 'subtotal', 'total', 'remarks', 'userin', 'datein', 'idunit', 'size', 'measurement_id_size', 'qty_accept', 'whs_accept_id', 'qty_reject', 'whs_reject_id', 'qty_sisa', 'whs_sisa_id', 'notes', 'token_tmp', 'nameinventory', 'invno', 'sku_no', 'short_desc', 'size_measurement', 'warehouse_code_accept', 'warehouse_code_reject', 'warehouse_code_sisa', 'total_qty'],
     idProperty: 'id'
 });
 
@@ -398,7 +398,7 @@ Ext.define(dir_sys + 'production.WorkOrderJobTab', {
                 {
                     xtype: 'numbercolumn',
                     header: 'Total',
-                    dataIndex: 'total',
+                    dataIndex: 'total_qty',
                     width: 150,
                     align: 'right'
                 },
