@@ -33,8 +33,11 @@ var storeGriddeliveryOrderGrid = Ext.create('Ext.data.Store', {
 
 storeGriddeliveryOrderGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        //    'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitDeliveryOrder').getValue()
-        'option': 'delivery_order'
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grddo').getValue() + ', ' +
+            'a.status:' + Ext.getCmp('status_grddo').getValue(),
+        'option': 'delivery_order',
+        'startdate': Ext.getCmp('startdate_grddo').getValue(),
+        'enddate': Ext.getCmp('enddate_grddo').getValue(),
     };
 });
 
@@ -248,6 +251,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             dock: 'top',
             items: [{
                     xtype: 'datefield',
+                    id: 'startdate_grddo',
                     format: 'd/m/Y',
                     // value: datenow(),
                     fieldLabel: 'Date',
@@ -255,6 +259,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                 ' to ',
                 {
                     xtype: 'datefield',
+                    id: 'enddate_grddo',
                     format: 'd/m/Y',
                     // value: datenow(),
                     hideLabel: true
@@ -263,17 +268,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                 {
                     xtype: 'comboxunit',
                     valueField: 'idunit',
-                    id: 'cbUnitDeliveryOrder',
-                    listeners: {
-                        'change': function(field, newValue, oldValue) {
-                            storeGriddeliveryOrderGrid.load({
-                                params: {
-                                    'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitDeliveryOrder').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
-
-                                }
-                            });
-                        }
-                    }
+                    id: 'idunit_grddo',
                 }
             ]
         },
@@ -281,15 +276,23 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxSalesStatus'
+                    xtype: 'comboxSalesStatus',
+                    id: 'status_grddo',
                 },
                 {
                     text: 'Search',
-                    handler: function() {}
+                    handler: function() {
+                        storeGriddeliveryOrderGrid.load();
+                    }
                 },
                 {
                     text: 'Clear Filter',
-                    handler: function() {}
+                    handler: function() {
+                        Ext.getCmp('startdate_grddo').setValue();
+                        Ext.getCmp('enddate_grddo').setValue();
+                        Ext.getCmp('status_grddo').setValue();
+                        storeGriddeliveryOrderGrid.load();
+                    }
                 }
             ]
         }, {
