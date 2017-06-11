@@ -29,8 +29,8 @@ var storeGridPurchaseInvoiceUnpaidGrid = Ext.create('Ext.data.Store', {
 storeGridPurchaseInvoiceUnpaidGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
         // extraparams: 'a.idunit: ' + Ext.getCmp('idunit_grdpi').getValue() + ', ',
-        // startdate: Ext.getCmp('startdate_grdpi').getValue(),
-        // enddate: Ext.getCmp('enddate_grdpi').getValue(),
+        'startdate': Ext.getCmp('startdate_grdpi').getValue(),
+        'enddate': Ext.getCmp('enddate_grdpi').getValue(),
     }
 })
 
@@ -200,6 +200,8 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceUnpaidGrid', {
                 handler: function() {
                     Ext.getCmp('startdate_grdpi').setValue();
                     Ext.getCmp('enddate_grdpi').setValue();
+                    storeGridPurchaseInvoiceUnpaidGrid.load();
+
                 }
             }
         ]

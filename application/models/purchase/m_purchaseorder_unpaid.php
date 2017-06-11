@@ -47,8 +47,14 @@ class m_purchaseorder_unpaid extends CI_Model {
     }
 
     function whereQuery() {
+        $wer = null;
+        $sd = substr($this->input->post('startdate'),0,10);
+        $nd = substr($this->input->post('enddate'),0,10);
+        if($sd != null && $nd != null)
+            $wer .= " AND a.date BETWEEN '$sd' AND '$nd'";
+
     	// return " idpurchasetype = 2 and a.status = 1 and a.deleted = 0 and (a.invoice_status = 1 OR a.invoice_status = 4)";
-        return " idpurchasetype = 2 and a.deleted = 0 and (a.invoice_status = 1 OR a.invoice_status = 4)";
+        return " idpurchasetype = 2 and a.deleted = 0 and (a.invoice_status = 1 OR a.invoice_status = 4) $wer";
     }
 
     function orderBy() {
