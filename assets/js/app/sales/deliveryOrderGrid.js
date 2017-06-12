@@ -478,8 +478,12 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                             if (data.length == 0) {
                                 Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                             } else {
-                                if (selectedRecord.data.idsales * 1 == 4) {
-                                    Ext.Msg.alert('Failure', 'Sales data already closed');
+                                if (selectedRecord.data.status * 1 == 4) {
+                                    Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
+                                } else if (selectedRecord.data.noinvoice === null || selectedRecord.data.noinvoice === '') {
+                                    Ext.Msg.alert('Failure', 'Mohon buat invoice terlebih dahulu');
+                                } else if (selectedRecord.data.status * 1 == 8) {
+                                    Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
                                 } else {
                                     Ext.Ajax.request({
                                         url: SITE_URL + 'sales/set_status',

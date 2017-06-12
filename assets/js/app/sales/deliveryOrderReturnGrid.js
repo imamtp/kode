@@ -55,7 +55,7 @@ var smGriddeliveryOrderReturnGrid = Ext.create('Ext.selection.CheckboxModel', {
             }
         },
         select: function(model, record, index) {
-            if (record.data.status * 1 == 4) {
+            if (record.data.status * 1 == 4 || record.data.status * 1 == 5) {
                 //pickup up
                 Ext.getCmp('createDOReturnformGrid').enable();
             } else {

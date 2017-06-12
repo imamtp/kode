@@ -44,7 +44,7 @@ class m_salesreturn extends CI_Model {
     function whereQuery() {
         $wer = null;
         if($this->input->post('option')=='delivery_order'){
-            $wer = ' and (a.status >= 4)';
+            $wer = ' and (a.status >= 3)';
         }
         $sd = substr($this->input->post('startdate'),0,10);
         $nd = substr($this->input->post('enddate'),0,10);

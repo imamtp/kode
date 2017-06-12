@@ -747,6 +747,7 @@ function load_tmp_sales_return() {
                 var rec = new ItemSalesReturnModel({
                     idsalesitem: obj.idsalesitem,
                     idinventory: obj.idinventory,
+                    sku_no: obj.sku_no,
                     invno: obj.invno,
                     nameinventory: obj.nameinventory,
                     // warehouse_code:obj.warehouse_code,

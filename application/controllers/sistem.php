@@ -623,6 +623,19 @@ class sistem extends MY_Controller {
         }
         
     }
+
+    function insert_link_acc($idunit){
+        $q = $this->db->get('linkedacc');
+        foreach($q->result() as $r){
+            $qcek = $this->db->get_where('linkedaccunit',array('idunit'=>$idunit,'idlinked'=>$r->idlinked));
+            if($qcek->num_rows()>0){
+
+            } else {
+                $this->db->insert('linkedaccunit',array('idunit'=>$idunit,'idlinked'=>$r->idlinked));
+            }
+        }
+        
+    }
 	
 }
 ?>

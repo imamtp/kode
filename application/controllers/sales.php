@@ -396,9 +396,17 @@ class sales extends MY_Controller {
 
             $sisakirim = $value->qtysisakirim==null ? 0 : $value->qtysisakirim;
 
-            $this->db->where('idsalesitem',$value->idsalesitem);
-            $this->db->where('idsales',$idsales);
-            $this->db->update('salesitem',array('qty_kirim'=>$sisakirim+$value->qty_kirim,'warehouse_id'=>$warehouse_id));
+            $arrWer = array(
+                'idsalesitem'=>$value->idsalesitem,
+                'idsales'=>$idsales
+            );
+
+            $qkirim = $this->db->get_where('salesitem',$arrWer)->row();
+            $current_qty = $qkirim->qty_kirim == null ? 0 : $qkirim->qty_kirim; 
+            // $this->db->where('idsalesitem',$value->idsalesitem);
+            // $this->db->where('idsales',$idsales);
+            $this->db->where($arrWer);
+            $this->db->update('salesitem',array('qty_kirim'=>$current_qty+$value->qty_kirim,'warehouse_id'=>$warehouse_id));
 
             //update stock history
             $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do);
@@ -788,6 +796,11 @@ class sales extends MY_Controller {
             'status'=>$status
         ));
 
+        if($status==6){
+            ///jika barang sudah dikirim semua buat jurnal
+             $this->m_jsales->sales_delivery_retur_perpetual(date('Y-m-d'),'Delivery Return Penjualan: '.$noreturn,$idunit,$sales_return_id);
+        }
+
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');
@@ -880,10 +893,14 @@ class sales extends MY_Controller {
             // }
         }
 
-        //create journal Retur Penjualan Tunai
+        //create journal Retur Penjualan
         if($status==3){
-            $this->m_jsales->sales_retur_tunai(date('Y-m-d'),$totalprice_retur,'Return Penjualan: '.$noreturn,$this->input->post('idunit'),$this->input->post('idaccount_return'));
+            $journal = $this->m_jsales->sales_retur_perpetual(date('Y-m-d'),$totalprice_retur,'Return Penjualan: '.$noreturn,$this->input->post('idunit'),$this->input->post('idaccount_return'));
+            
+            $this->db->where('sales_return_id',$sales_return_id);
+            $this->db->update('sales_return',array('idjournal'=>$journal['idjournal']));
         }
+
 
         //hapus data temporary
         $this->db->where(array('token' =>$this->input->post('token')));

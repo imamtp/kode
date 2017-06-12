@@ -777,7 +777,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
                                 Ext.getCmp('WindowEntryDeliveryOrder').hide();
                                 // Ext.getCmp('WindowSaleOrderList').hide();
 
-                                Ext.getCmp('deliveryOrderGrid').getStore.load();
+                                // Ext.getCmp('deliveryOrderGrid').getStore.load();
                             }
 
                         },
