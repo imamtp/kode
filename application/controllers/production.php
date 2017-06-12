@@ -344,7 +344,8 @@ class production extends MY_Controller {
             'status' => $status,
             'approvedby_id' => $this->input->post('approvedby_id'),
             'usermod' => $this->session->userdata('userid'),
-            'datemod' => date('Y-m-d H:m:s')
+            'datemod' => date('Y-m-d H:m:s'),
+            'receiptdate' => $this->input->post('receiptdate'),
         );
 
         $this->db->where('job_order_id', $job_order_id);

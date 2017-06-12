@@ -116,7 +116,7 @@ class m_salesinvoice extends CI_Model {
             $dtcetak['detail'] = $detail;
             $dtcetak['detailtotal'] = number_format($r->subtotal);
 
-            $dtcetak['no'] = $r->no_sales_order;
+            $dtcetak['no'] = $r->noinvoice;
 
 
             // //get receivefrom,total,memo,tax

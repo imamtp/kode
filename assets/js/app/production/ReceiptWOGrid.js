@@ -5,7 +5,7 @@ var WindowReceiptWOList = Ext.create(dir_sys + 'production.WindowReceiptWOList')
 Ext.define('ReceiptWOGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'finished_date', 'status', 'pic_id', 'approvedby_id', 'no_sales_order', 'date_sales', 'pic_name', 'approveby_name', 'totaljob', 'totalcostitem', 'totalmaterialitem'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'finished_date', 'status', 'pic_id', 'approvedby_id', 'no_sales_order', 'date_sales', 'pic_name', 'approveby_name', 'totaljob', 'totalcostitem', 'totalmaterialitem', 'receiptdate'
     ],
     idProperty: 'id'
 });
@@ -136,6 +136,11 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
         {
             header: 'Finished Date',
             dataIndex: 'finished_date',
+            minWidth: 150
+        },
+        {
+            header: 'Receipt Date',
+            dataIndex: 'receipt',
             minWidth: 150
         },
         {
