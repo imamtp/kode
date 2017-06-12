@@ -6,7 +6,7 @@ var EntryPurchaseOrder = Ext.create(dir_sys + 'purchase2.EntryPurchaseOrder');
 Ext.define('PurchaseOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'idpurchase_req', 'nopurchase_req', 'date_req', 'idpurchasestatusname', 'include_tax'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'status', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'idpurchase_req', 'nopurchase_req', 'date_req', 'idpurchasestatusname', 'include_tax'
     ],
     idProperty: 'id'
 });
@@ -129,9 +129,11 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
         minWidth: 150
     }, {
         header: 'Status',
-        flex: 1,
-        dataIndex: 'idpurchasestatusname',
-        minWidth: 150
+        dataIndex: 'status',
+        minWidth: 150,
+        renderer: function(value) {
+            return customColumnStatus(ArrPurchaseOrderStatus, value);
+        }
     }, {
         header: 'Supplier Name',
         flex: 1,
@@ -257,15 +259,15 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                 text: 'Add New Order',
                 iconCls: 'add-icon',
                 handler: function() {
+                    wPurchaseOrderGrid.show();
                     clearFormPO();
 
-                    wPurchaseOrderGrid.show();
                     // storeCustomer.load();
                     // storeUnit.load();
                     productMeasurementStore.load();
                     StorePayment.load();
                     comboxWarehouseStore.load();
-
+                    supplierStore.load();
                     // clearFormSO();
 
                     // Ext.getCmp('cbUnitEntryPurchaseOrder').setValue(idunit);
@@ -275,7 +277,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                     cb_purchase_order_status.setValue('1');
                     cb_purchase_order_status.setReadOnly(true);
 
-                    supplierStore.load();
+
                 }
             }, {
                 text: 'Print',

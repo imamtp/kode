@@ -1782,6 +1782,15 @@ Ext.define('comboxunit', {
     }),
 });
 
+var ArrPurchaseOrderStatus = [
+    [1, 'Open'],
+    [2, 'Confirmed'],
+    [4, 'Canceled'],
+    [5, 'Partial Received'],
+    [6, 'Received']
+];
+
+
 Ext.define('comboxpurchasestatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpurchasestatus',

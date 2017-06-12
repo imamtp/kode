@@ -11,12 +11,12 @@ class m_itempurchaseorder extends CI_Model {
     }
 
     function searchField() {
-        $field = "nametax";
+        $field = "sku_no";
         return explode(",", $field);
     }
 
     function selectField() {
-        return "a.idpurchaseitem,a.idpurchase,a.idinventory,a.idtax,a.qty,a.backorder,a.price,a.disc,a.total,a.invno,a.ratetax,b.nametax,c.nameinventory";
+        return "a.idpurchaseitem,a.idpurchase,c.sku_no,a.idinventory,a.idtax,a.qty,a.backorder,a.price,a.disc,a.total,a.invno,a.ratetax,b.nametax,c.nameinventory,d.short_desc";
     }
 
     function fieldCek() {
@@ -31,7 +31,8 @@ class m_itempurchaseorder extends CI_Model {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName() . " a "
                 . "left join tax b ON a.idtax = b.idtax
-                    join inventory c ON a.idinventory = c.idinventory ";
+                    join inventory c ON a.idinventory = c.idinventory
+                    left join productmeasurement d ON d.measurement_id = a.measurement_id ";
 
         return $query;
     }

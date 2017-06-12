@@ -48,7 +48,7 @@ class m_purchaserequisition extends CI_Model {
         $wer = null;
         if($this->input->post('option')=='not_yet_po'){
             //pr belum menjadi po
-            $wer = " AND a.idpurchase not in (select idpurchase_req from purchase where idpurchasetype = 2 and deleted = 0 and idpurchase_req is not null)";
+            $wer = " AND a.status = 2 AND a.idpurchase not in (select idpurchase_req from purchase where idpurchasetype = 2 and deleted = 0 and idpurchase_req is not null)";
         }
 
         if($this->input->post('startdate')!=null && $this->input->post('enddate')!=null)

@@ -282,10 +282,11 @@ class purchase extends MY_Controller {
         $ratetax = $this->input->post('ratetax');
         $idtax = $this->m_data->getIdTax($ratetax);
         $items = json_decode($this->input->post('datagrid'));
+        $idpurchase_req=$this->input->post('idpurchase_req')=='' ? null : $this->input->post('idpurchase_req');
 
         $data = array(
             'idpurchase' => $idpurchase,
-            'idpurchase_req'=> $this->input->post('idpurchase_req')=='' ? null : $this->input->post('idpurchase_req'),
+            'idpurchase_req'=> $idpurchase_req,
             // 'idcreditterm' =>,
             // 'idshipping' =>,
             'idpurchasetype' =>2, //PO
@@ -335,7 +336,7 @@ class purchase extends MY_Controller {
             'nopurchase' => $this->input->post('no_po'),
             // 'id_payment_term' =>,
             'idsupplier' => $this->input->post('idsupplier'),
-            'status' => 3 //ordered
+            'status' => $this->input->post('po_status') 
             // 'netddays' => ,
             // 'neteomddays' => ,
             // 'discount' =>,
@@ -400,7 +401,7 @@ class purchase extends MY_Controller {
                 'warehouse_id' => $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$this->input->post('unit')),
                 // 'invno' => $value->invno,
                 'qty' => $value->qty,
-                'size' => $value->size,
+                'size' => $value->size=='' ? null : $value->size,
                 'measurement_id_size' => $this->m_data->getMeasurement($value->size_measurement,$this->input->post('unit')),
                 'disc' => $value->disc,
                 'price' => $value->price,
@@ -626,7 +627,7 @@ class purchase extends MY_Controller {
         //end update hpp per unit
 
         $this->db->where(array('idunit'=>$idunit,'idpurchase'=>$idpurchase));
-        $this->db->update('purchase',array('idpurchasestatus'=>$idpurchasestatus));
+        $this->db->update('purchase',array('idpurchasestatus'=>$idpurchasestatus,'status'=>$idpurchasestatus));
 
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -1421,7 +1422,8 @@ class purchase extends MY_Controller {
                         'notes'=> $notes,
                         'invno'=>$value->invno,
                         'sku_no'=>$value->sku_no,
-                        'qty'=>$value->qty
+                        'qty'=>$value->qty,
+                        'is_tmp'=>1
                 );
 
                 $this->db->where(array(

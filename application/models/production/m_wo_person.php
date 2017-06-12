@@ -37,7 +37,7 @@ class m_wo_person extends CI_Model {
     }
 
     function whereQuery() {
-        return "  a.deleted = 0 and (b.group_id = 3 OR b.group_id = 6  OR b.group_id = 66)";
+        return "  a.deleted = 0 and (b.group_id = 3 OR b.group_id = 6  OR b.group_id = 61  OR b.group_id = 66)";
     }
 
     function orderBy() {

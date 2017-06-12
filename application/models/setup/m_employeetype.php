@@ -65,7 +65,7 @@ class m_employeetype extends MY_Model {
         }
         $data = array(
             'idemployeetype' => $this->input->post('idemployeetype') == '' ? $this->m_data->getSeqVal('seq_employeetype') : $this->input->post('idemployeetype'),
-            'idunit' => $idunit,
+            'idunit' => $this->session->userdata('idunit'),
             'idaccountpayroll' => $this->input->post('idaccountpayroll'),
             'idaccount' => $this->input->post('idaccount'),
             'nametype' => $this->input->post('nametype'),

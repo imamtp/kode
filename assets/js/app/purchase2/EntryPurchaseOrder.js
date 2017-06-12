@@ -18,7 +18,7 @@ var storeGridItemPurchaseOrder = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/ItemPurchaseOrder/sales',
+        url: SITE_URL + 'backend/ext_get_all/ItemPurchaseOrder/purchase',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -952,7 +952,8 @@ function updateGridPurchaseOrder(tipe) {
     var totaldiskon = 0;
 
     Ext.each(storeGridItemPurchaseOrder.data.items, function(obj, i) {
-        var total = obj.data.qty * (obj.data.price * obj.data.size);
+        // var total = obj.data.qty * (obj.data.price * obj.data.size);
+        var total = obj.data.qty * (obj.data.price);
         var diskon = (total / 100) * obj.data.disc;
         totaldiskon += diskon;
         var net = total - diskon;

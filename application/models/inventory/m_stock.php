@@ -118,7 +118,7 @@ class m_stock extends CI_Model {
         //     ));
         // }
         // end update inisial nominal persediaan
-
+		$total_hpp = 0;
 		$data = array();
 
         //    echo $idpurchase.' ';
@@ -140,7 +140,7 @@ class m_stock extends CI_Model {
 
 						$qpurchase = $this->db->query("select idpurchase
 												from purchase a
-												where status >= 3 and idunit = $idunit $wer");
+												where idunit = $idunit $wer");
 						foreach($qpurchase->result() as $rpurchase){
 
 							$total_hpp = 0;
@@ -148,6 +148,7 @@ class m_stock extends CI_Model {
 							$item = $this->db->query("select idpurchaseitem,qty,price,total,idinventory
 														from purchaseitem b
 														where b.idpurchase = ".$rpurchase->idpurchase." ");
+														// echo $this->db->last_query().'    ';
 								foreach($item->result() as $ritem){
 
 									$qinv = $this->db->query("select a.idinventory,coalesce(cost,0),coalesce(totalstock, 0) as totalstock,coalesce(a.nominal_persediaan, 0) as nominal_persediaan
@@ -158,6 +159,8 @@ class m_stock extends CI_Model {
 																	group by idinventory) c ON a.idinventory = c.idinventory
 																where a.idinventory = ".$ritem->idinventory." ")->row();
 
+																	// echo $this->db->last_query().'    ';
+
 									if($tipe==3){
 										/*
 											perhitungan AVERAGE 
@@ -166,7 +169,7 @@ class m_stock extends CI_Model {
 										*/
 										$current_qty_stock = ($qinv->totalstock + $ritem->qty);
 										$hpp_unit = round(($qinv->nominal_persediaan + $ritem->total) / $current_qty_stock);
-										// echo '('.$qinv->nominal_persediaan.' + '.$ritem->total.') / ('.$qinv->totalstock.' + '.$ritem->qty.') - hpp_unit:'.round($hpp_unit).' <br>';
+										echo '('.$qinv->nominal_persediaan.' + '.$ritem->total.') / ('.$qinv->totalstock.' + '.$ritem->qty.') - hpp_unit:'.round($hpp_unit).' <br>';
 									}
 
 									$end_balance = $hpp_unit*$current_qty_stock;
