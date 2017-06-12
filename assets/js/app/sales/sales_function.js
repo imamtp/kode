@@ -1,3 +1,7 @@
+function clearFormSQ() {
+
+}
+
 function loadReturnSOData(record) {
     console.log(record);
 
@@ -258,10 +262,10 @@ function showSalesQuotationData(record) {
     // Ext.getCmp('shipaddressSalesOrder').setValue(record.data.shipto);
     // Ext.getCmp('comboxcurrencySalesOrder').setValue(record.data.idcurrency);
 
-    Ext.getCmp('subtotalSalesQuotation').setValue(renderNomor(record.data.subtotal));
-    // Ext.getCmp('angkutSalesOrder').setValue(record.data.freight);
-    Ext.getCmp('totalPajakSalesQuotation').setValue(renderNomor(record.data.tax));
-    Ext.getCmp('totalSalesQuotation').setValue(renderNomor(record.data.totalamount));
+    // Ext.getCmp('subtotalSalesQuotation').setValue(renderNomor(record.data.subtotal));
+    // // Ext.getCmp('angkutSalesOrder').setValue(record.data.freight);
+    // Ext.getCmp('totalPajakSalesQuotation').setValue(renderNomor(record.data.tax));
+    // Ext.getCmp('totalSalesQuotation').setValue(renderNomor(record.data.totalamount));
 
     var EntrySalesQuotationRM = Ext.getCmp('EntrySalesQuotation').getStore();
     EntrySalesQuotationRM.removeAll();
@@ -303,7 +307,7 @@ function showSalesQuotationData(record) {
                 gridSO.getStore().insert(0, recSO);
             });
 
-
+            updateGridSalesQuotation();
 
         },
         failure: function(form, action) {

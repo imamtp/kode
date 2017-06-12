@@ -526,6 +526,9 @@ Ext.define('GridSalesQuotationGrid', {
                 iconCls: 'add-icon',
                 handler: function() {
                     wSalesQuotationGrid.show();
+
+                    clearFormSQ();
+
                     storeCustomer.load();
                     storeUnit.load();
                     Ext.getCmp('cbUnitEntrySalesQuotation').setValue(idunit);
