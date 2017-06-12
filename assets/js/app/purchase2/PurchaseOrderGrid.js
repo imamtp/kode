@@ -273,8 +273,8 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                     // Ext.getCmp('cbUnitEntryPurchaseOrder').setValue(idunit);
                     Ext.getCmp('statusformPurchaseOrderGrid').setValue('input');
                     var cb_purchase_order_status = Ext.getCmp('cb_purchase_order_status');
-                    cb_purchase_order_status.getStore().load();
-                    cb_purchase_order_status.setValue('1');
+                    // cb_purchase_order_status.getStore().load();
+                    cb_purchase_order_status.setValue(1);
                     cb_purchase_order_status.setReadOnly(true);
 
 
@@ -407,26 +407,6 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
         },
         itemdblclick: function(dv, record, item, index, e) {
             showPurchaseOrderData(record);
-            // var formAgama = Ext.create('formAgama');
-            // var formPurchaseOrderGrid = Ext.getCmp('formPurchaseOrderGrid');
-            // wPurchaseOrderGrid.show();
-            // formPurchaseOrderGrid.getForm().load({
-            //     url: SITE_URL + 'backend/loadFormData/PurchaseOrderGrid/1',
-            //     params: {
-            //         extraparams: 'a.idsupplier:' + record.data.idsupplier
-            //     },
-            //     success: function(form, action) {
-            //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
-            //     },
-            //     failure: function(form, action) {
-            //         Ext.Msg.alert("Load failed", action.result.errorMessage);
-            //     }
-            // })
-            // //            
-            // //            Ext.getCmp('kddaerahS').setReadOnly(true);
-            // Ext.getCmp('statusformPurchaseOrderGrid').setValue('edit');
-
-            // Ext.getCmp('TabSupplier').setActiveTab(0);
         }
     }
 });

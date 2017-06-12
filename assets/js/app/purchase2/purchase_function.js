@@ -110,10 +110,11 @@ function showPurchaseOrderData(record) {
     Ext.getCmp('idpurchase_order').setValue(record.data.idpurchase);
     Ext.getCmp('idpurchase_req_PurchaseOrder').setValue(record.data.idpurchase_req);
 
+    console.log(record.data)
 
     var cb_purchase_order_status = Ext.getCmp('cb_purchase_order_status');
     cb_purchase_order_status.getStore().load();
-    cb_purchase_order_status.setValue(record.data.idpurchasestatus);
+    cb_purchase_order_status.setValue(record.data.status * 1);
     if (record.data.idpurchasestatus * 1 !== 1) {
         //selain dari open disable tombol record
         cb_purchase_order_status.setReadOnly(true);
@@ -127,7 +128,7 @@ function showPurchaseOrderData(record) {
     Ext.getCmp('nojurnalPurchaseOrder').setValue(record.data.nopurchase);
     Ext.getCmp('supplierNamePurchaseOrder').setValue(record.data.namesupplier);
     Ext.getCmp('supplierPurchaseOrder').setValue(record.data.idsupplier);
-    Ext.getCmp('po_date_PurchaseOrder').setValue(record.data.date);
+
     Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
 
     var checktax = record.data.include_tax * 1 == 1 ? true : false;
@@ -146,11 +147,6 @@ function showPurchaseOrderData(record) {
         Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 2 });
     }
 
-    // EntryGoodsReceiptRM.load({
-    //     params: {
-    //         'extraparams:a.idpurchase:x0x0'
-    //     }
-    // });
 
     var EntryGoodsReceiptRM = Ext.getCmp('EntryPurchaseOrder').getStore();
     EntryGoodsReceiptRM.on('beforeload', function(store, operation, eOpts) {
@@ -207,6 +203,8 @@ function showPurchaseOrderData(record) {
     // });
 
     // 'idpurchase_req','nopurchase_req','date_req'
+
+    Ext.getCmp('po_date_PurchaseOrder').setValue(convertDate2(record.data.date));
 }
 
 function showGoodsReceiptData(record) {
@@ -635,6 +633,15 @@ function clearFormPO() {
     Ext.getCmp('totalPurchaseOrder').setValue(null);
     Ext.getCmp('purchase_req_date').setValue(null);
     Ext.getCmp('no_purchase_req').setValue(null);
+
+    //clear grid
+    var EntryGoodsReceiptRM = Ext.getCmp('EntryPurchaseOrder').getStore();
+    EntryGoodsReceiptRM.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idpurchase:0'
+        };
+    });
+    EntryGoodsReceiptRM.load();
 
     // Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 2 });
 

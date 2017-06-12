@@ -1785,35 +1785,26 @@ Ext.define('comboxunit', {
 var ArrPurchaseOrderStatus = [
     [1, 'Open'],
     [2, 'Confirmed'],
-    [4, 'Canceled'],
+    [3, 'Ordered'],
+    [4, 'Received'],
     [5, 'Partial Received'],
-    [6, 'Received']
+    [6, 'Canceled']
 ];
-
 
 Ext.define('comboxpurchasestatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpurchasestatus',
     fieldLabel: 'Status',
-    displayField: 'name',
-    valueField: 'idpurchasestatus',
+    displayField: 'value',
+    valueField: 'id',
     name: 'idpurchasestatus',
     editable: false,
     emptyText: 'Choose Status...',
     triggerAction: 'all',
-    store: Ext.create('Ext.data.Store', {
-        fields: ['idpurchasestatus', 'name'],
-        proxy: {
-            type: 'ajax',
-            url: SITE_URL + 'backend/combox/purchasestatus',
-            reader: {
-                type: 'json',
-                root: 'dat'
-            }
-        },
-        queryMode: 'remote',
-        autoLoad: false
-    }),
+    store: new Ext.data.ArrayStore({
+        fields: ['id', 'value'],
+        data: ArrPurchaseOrderStatus
+    })
 });
 
 Ext.define('comboxpurchasetype', {

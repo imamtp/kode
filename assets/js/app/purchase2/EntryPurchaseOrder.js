@@ -282,11 +282,11 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             id: 'purchase_req_date',
                             listeners: {
                                 change: function(grid, newVal, oldVal, eOpts) {
-                                    var picker = Ext.getCmp('po_date_PurchaseOrder');
-                                    if (new Date(new Date(picker.getValue()), new Date(newVal)))
-                                        picker.setValue(newVal);
+                                    // var picker = Ext.getCmp('po_date_PurchaseOrder');
+                                    // if (new Date(new Date(picker.getValue()), new Date(newVal)))
+                                    //     picker.setValue(newVal);
 
-                                    picker.setMinValue(new Date(newVal));
+                                    // picker.setMinValue(new Date(newVal));
                                 }
                             }
                         },
@@ -332,7 +332,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                             id: 'po_date_PurchaseOrder',
                             format: 'd/m/Y',
                             fieldLabel: 'PO Date',
-                            maxValue: new Date(),
+                            // maxValue: new Date(),
                         },
                         {
                             xtype: 'datefield',
