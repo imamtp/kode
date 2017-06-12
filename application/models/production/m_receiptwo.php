@@ -16,7 +16,7 @@ class m_receiptwo extends CI_Model {
     }
 
     function selectField() {
-        return "a.job_order_id,a.idsales,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.finished_date,a.status,a.pic_id,a.approvedby_id,b.no_sales_order,b.date_sales,c.firstname as pic_name,d.firstname as approveby_name,totaljob,totalcostitem,totalmaterialitem,a.req_ship_date,namecustomer,nocustomer,h.address as address_customer, h.telephone as telephone_customer, h.handphone as handphone_customer";
+        return "a.job_order_id,a.idsales,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.finished_date,a.status,a.pic_id,a.approvedby_id,b.no_sales_order,b.date_sales,c.firstname as pic_name,d.firstname as approveby_name,totaljob,totalcostitem,totalmaterialitem,a.req_ship_date,namecustomer,nocustomer,h.address as address_customer, h.telephone as telephone_customer, h.handphone as handphone_customer, a.receiptdate";
     }
     
     function fieldCek()
