@@ -331,13 +331,25 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-
-                        {
-                            xtype: 'comboxCustomer',
+                    items: [{
+                            xtype: 'hiddenfield',
                             id: 'customerSalesOrder',
-                            labelWidth: 120
                         },
+                        {
+                            xtype: 'textfield',
+                            id: 'namecustomerSalesOrder',
+                            labelWidth: 120,
+                            fieldLabel: 'Customer',
+                            listeners: {
+                                render: function(component) {
+                                    component.getEl().on('click', function(event, el) {
+                                        ChooserListCustomer.target = Ext.getCmp('EntrySalesOrder');
+                                        ChooserListCustomer.show();
+                                    });
+                                }
+                            }
+                        },
+
                         // {
                         //     xtype: 'textfield',
                         //     fieldLabel: 'Customer',
@@ -688,10 +700,16 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 updateGridSalesOrder('general');
             }
         });
+
+        this.on('selectCustomer', this.onSelectCustomer, this);
     },
     onAfterEdit: function(o) {
         // handle after edit
         console.log('after edit');
+    },
+    onSelectCustomer: function(data) {
+        Ext.getCmp('namecustomerSalesOrder').setValue(data.namecustomer);
+        Ext.getCmp('customerSalesOrder').setValue(data.idcustomer);
     },
     recordSalesOrder: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountSalesOrder').getValue())
@@ -769,6 +787,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         Ext.Msg.alert('Success', d.message);
 
                         Ext.getCmp('customerSalesOrder').setValue(null);
+                        Ext.getCmp('namecustomerSalesOrder').setValue(null);
                         Ext.getCmp('delivery_date_SalesOrder').setValue(null);
                         Ext.getCmp('shipaddressSalesOrder').setValue(null);
                         Ext.getCmp('nojurnalSalesOrder').setValue(null);
