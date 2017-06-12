@@ -769,7 +769,7 @@ Ext.define(dir_sys + 'sales.EntrySalesReturn', {
 
         store.on('beforeload', function(store, operation, eOpts) {
             operation.params = {
-                'extraparams': 'a.invoice_status:' + 2
+                'extraparams': 'a.status:' + 4
                     // 'item_selector_sr': true
             };
         });
