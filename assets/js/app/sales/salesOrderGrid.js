@@ -418,7 +418,7 @@ Ext.define('GridSalesOrderGrid', {
                                 text: 'Print',
                                 iconCls: 'print-icon',
                                 handler: function() {
-                                    window.open(SITE_URL + 'sales/print_so/' + selectedRecord.data.idpurchase + '/print', '_blank');
+                                    window.open(SITE_URL + 'sales/print_so/' + selectedRecord.data.idsales + '/print', '_blank');
                                 }
                             }]
                         }).show();
