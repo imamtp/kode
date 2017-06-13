@@ -254,7 +254,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             name: 'idsales'
                         },
                         {
-                            xtype: 'textfield',
+                            xtype: 'hiddenfield',
                             id: 'statusformSalesOrderGrid',
                             name: 'statusFormSalesOrder'
                         }
