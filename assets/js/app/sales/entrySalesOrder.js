@@ -254,7 +254,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             name: 'idsales'
                         },
                         {
-                            xtype: 'hiddenfield',
+                            xtype: 'textfield',
                             id: 'statusformSalesOrderGrid',
                             name: 'statusFormSalesOrder'
                         }
@@ -440,113 +440,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-                        '->', {
-                            itemId: 'recordPayment',
-                            id: 'btnRecordSalesOrder',
-                            text: 'Record Sales Order',
-                            iconCls: 'disk',
-                            handler: Ext.bind(this.recordSalesOrder, this, 'noprint', true)
-                        }, {
-                            text: 'Print and Record Sales Order',
-                            hidden: true,
-                            iconCls: 'drive_disk-icon',
-                            handler: Ext.bind(this.recordSalesOrder, this, 'print', true)
-                        },
-                        // '->',
-                        //  {
-                        //     xtype: 'textfield',
-                        //     hidden:true,
-                        //     id: 'sisaBayarSalesOrder',
-                        //     align: 'right',
-                        //     readOnly: true,
-                        //     labelWidth: 120,
-                        //     fieldLabel: 'Saldo Terhutang ',
-                        //     fieldStyle: 'text-align: right;'
-                        // }
-                    ]
-                },
-                {
-                    xtype: 'toolbar',
-                    dock: 'bottom',
-                    items: [{
-                            xtype: 'hiddenfield',
-                            id: 'idaccountSalesOrder',
-                            name: 'idaccount',
-                            readOnly: true
-                        }
-                        // , {
-                        //     xtype: 'textfield',
-                        //     fieldLabel: 'Akun Persediaan',
-                        //     labelWidth: 120,
-                        //     name: 'accname',
-                        //     id: 'accnameSalesOrder',
-                        //     listeners: {
-                        //         render: function(component) {
-                        //             component.getEl().on('click', function(event, el) {
-                        //                 if (Ext.getCmp('cbUnitEntrySalesOrder').getValue() == null)
-                        //                 {
-                        //                     Ext.Msg.alert('Akun Persediaan', 'Harap pilih unit terlebih dahulu');
-                        //                 } else {
-                        //                     windowPopupAccListSalesOrder.show();
-                        //                     storeAccountAktive.load({
-                        //                         params: {
-                        //                             'idunit': Ext.getCmp('cbUnitEntrySalesOrder').getValue()
-                        //                         }
-                        //                     });
-                        //                 }
-
-                        //             });
-                        //         }
-                        //     }
-                        // }
-                        , {
-                            xtype: 'displayfield',
-                            name: 'accnumber',
-                            id: 'accnumberSalesOrder',
-                            readOnly: true
-                        }, '->'
-                    ]
-                },
-                {
-                    xtype: 'toolbar',
-                    dock: 'bottom',
-                    items: [{
-                            xtype: 'textfield',
-                            id: 'shipaddressSalesOrder',
-                            hidden: true,
-                            labelWidth: 120,
-                            width: 500,
-                            fieldLabel: 'Alamat Pengiriman',
-                            listeners: {
-                                render: function(component) {
-                                    component.getEl().on('click', function(event, el) {
-
-                                        if (group_id == 99) {
-                                            var extraparams = null;
-                                        } else {
-                                            var extraparams = 'a.idunit:' + Ext.getCmp('cbUnitEntrySalesOrder').getValue();
-                                        }
-
-                                        var FormChooseAddress = Ext.getCmp('FormChooseAddress');
-                                        FormChooseAddress.getForm().load({
-                                            url: SITE_URL + 'backend/loadFormData/unitcompany/1/setup',
-                                            params: {
-                                                extraparams: extraparams
-                                            },
-                                            success: function(form, action) {
-                                                var d = Ext.decode(form.responseText);
-                                                console.log(d.alamat)
-                                            },
-                                            failure: function(form, action) {
-                                                Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                            }
-                                        });
-                                        wAddSalesOrderPopup.show();
-
-                                    });
-                                }
-                            }
-                        }, ,
+                        '->',
                         '->',
                         {
                             xtype: 'textfield',
@@ -556,51 +450,53 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             id: 'totalSalesOrder',
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
-                        }
-
-                    ]
-                },
-                {
-                    xtype: 'toolbar',
-                    dock: 'bottom',
-                    items: [{
-                            xtype: 'comboxshipping',
-                            hidden: true,
-                            labelWidth: 120,
-                            id: 'shippingSalesOrder'
-                        }, '->',
-                        {
-                            xtype: 'textfield',
-                            align: 'right',
-                            name: 'totalPajak',
-                            readOnly: true,
-                            labelWidth: 150,
-                            id: 'totalPajakSalesOrder',
-                            fieldLabel: 'Pajak',
-                            fieldStyle: 'text-align: right;'
-                        }
-                        //                         {
-                        //                             xtype: 'textfield',
-                        //                             id: 'angkutSalesOrder',
-                        //                             align: 'right',
-                        // //                            readOnly: true,
-                        //                             labelWidth: 120,
-                        //                             fieldLabel: 'Biaya Angkut',
-                        //                             fieldStyle: 'text-align: right;',
-                        //                             listeners: {
-                        //                                 'render': function(c) {
-                        //                                     c.getEl().on('keyup', function() {
-                        //                                         updateGridSalesOrder('general');
-                        //                                     }, c);
-                        //                                 }
-                        //                             }
-                        //                         }
+                        },
                     ]
                 },
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
+                        '->',
+                        '->',
+                        {
+                            itemId: 'recordPayment',
+                            id: 'btnRecordSalesOrder',
+                            text: 'Record Sales Order',
+                            iconCls: 'disk',
+                            handler: Ext.bind(this.recordSalesOrder, this, 'noprint', true)
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    items: [
+                        '->',
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            align: 'right',
+                            labelWidth: 150,
+                            id: 'freightSalesOrder',
+                            fieldLabel: 'Biaya Angkut',
+                            fieldStyle: 'text-align: right;',
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        this.setRawValue(renderNomor2(this.getValue()));
+                                        updateGridSalesOrder();
+                                    }, c);
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    items: [
+                        '->',
                         '->',
                         {
                             xtype: 'textfield',
@@ -612,10 +508,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             fieldStyle: 'text-align: right;'
                         }
                     ]
-                }, {
+                },
+                {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
+                        '->',
                         '->',
                         {
                             xtype: 'textfield',
@@ -627,7 +525,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             fieldStyle: 'text-align: right;'
                         }
                     ]
-                }, {
+                },
+                {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [{
@@ -637,12 +536,6 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             value: 'Sales Order',
                             id: 'memoSalesOrder',
                             fieldLabel: 'Memo'
-                        },
-                        {
-                            xtype: 'comboxcurrency',
-                            hidden: true,
-                            id: 'comboxcurrencySalesOrder',
-                            labelWidth: 120
                         },
                         '->',
                         {
@@ -656,54 +549,26 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         }
                     ]
                 },
-
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
-                        //                        {
-                        //                            itemId: 'useRecuringSalesOrder',
-                        //                            text: 'Gunakan Sales Order Tersimpan',
-                        //                            iconCls: 'add-icon',
-                        //                            handler: function() {
-                        //                                wGridRecurringPopup.show();
-                        //                                storeGridRecurringPopup.load();
-                        //                            }
-                        //                        }, {
-                        //                            itemId: 'recordandsaveSalesOrder',
-                        //                            text: 'Simpan Sebagai Sales Order Berulang',
-                        //                            iconCls: 'add-icon',
-                        //                            handler: this.saveRecurr
-                        //                        },
-
-                        // {
-                        //     itemId: 'recordSalesOrder',
-                        //     text: 'Rekam Sales Order',
-                        //     iconCls: 'disk',
-                        //     handler: this.recordSalesOrder
-                        // }
-                        , '->',
+                        '->',
+                        '->',
                         {
                             xtype: 'textfield',
-                            id: 'pembayaranSalesOrder',
                             align: 'right',
-                            hidden: true,
-                            //                            readOnly: true,
-                            labelWidth: 120,
-                            fieldLabel: 'Pembayaran/DP',
-                            fieldStyle: 'text-align: right;',
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        updateGridSalesOrder('general');
-                                    }, c);
-                                }
-                            }
+                            name: 'totalPajak',
+                            readOnly: true,
+                            labelWidth: 150,
+                            id: 'totalPajakSalesOrder',
+                            fieldLabel: 'Pajak',
+                            fieldStyle: 'text-align: right;'
                         }
-
-
                     ]
-                }
+                },
+
+
             ],
             listeners: {
                 cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
@@ -743,7 +608,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
         Ext.getCmp('customerSalesOrder').setValue(data.idcustomer);
     },
     recordSalesOrder: function(button, event, mode) {
-        console.log(Ext.getCmp('idaccountSalesOrder').getValue())
+        // console.log(Ext.getCmp('idaccountSalesOrder').getValue())
         if (validasiSalesOrder()) {
             // var dp = Ext.getCmp('angkutSalesOrder').getValue();
             // if(dp!='')
@@ -787,26 +652,27 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     salesman_id: Ext.getCmp('salesman_id_so').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
                     delivery_date: Ext.getCmp('delivery_date_SalesOrder').getValue(),
-                    shipaddressSalesOrder: Ext.getCmp('shipaddressSalesOrder').getValue(),
+                    // shipaddressSalesOrder: Ext.getCmp('shipaddressSalesOrder').getValue(),
                     nojurnalSalesOrder: Ext.getCmp('nojurnalSalesOrder').getValue(),
                     memoSalesOrder: Ext.getCmp('memoSalesOrder').getValue(),
                     subtotalSalesOrder: Ext.getCmp('subtotalSalesOrder').getValue(),
                     totalSalesOrder: Ext.getCmp('totalSalesOrder').getValue(),
                     totalPajak: Ext.getCmp('totalPajakSalesOrder').getValue(),
-                    shippingSalesOrder: Ext.getCmp('shippingSalesOrder').getValue(),
+                    // shippingSalesOrder: Ext.getCmp('shippingSalesOrder').getValue(),
                     // angkutSalesOrder: Ext.getCmp('angkutSalesOrder').getValue(),
-                    pembayaranSalesOrder: Ext.getCmp('pembayaranSalesOrder').getValue(),
+                    // pembayaranSalesOrder: Ext.getCmp('pembayaranSalesOrder').getValue(),
                     // sisaBayarSalesOrder: Ext.getCmp('sisaBayarSalesOrder').getValue(),
-                    paymentSalesOrder: Ext.getCmp('paymentSalesOrder').getValue(),
-                    tglPelunasanSalesOrder: Ext.getCmp('tglPelunasanSalesOrder').getValue(),
-                    idcurrency: Ext.getCmp('comboxcurrencySalesOrder').getValue(),
-                    idaccountSalesOrder: Ext.getCmp('idaccountSalesOrder').getValue(),
-                    noinvoice: Ext.getCmp('noinvoiceSalesOrder').getValue(),
+                    // paymentSalesOrder: Ext.getCmp('paymentSalesOrder').getValue(),
+                    // tglPelunasanSalesOrder: Ext.getCmp('tglPelunasanSalesOrder').getValue(),
+                    // idcurrency: Ext.getCmp('comboxcurrencySalesOrder').getValue(),
+                    // idaccountSalesOrder: Ext.getCmp('idaccountSalesOrder').getValue(),
+                    // noinvoice: Ext.getCmp('noinvoiceSalesOrder').getValue(),
                     unit: Ext.getCmp('cbUnitEntrySalesOrder').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
                     ratetax: Ext.getCmp('cb_tax_id_so').getValue(),
                     include_tax: Ext.getCmp('include_tax_so').getValue(),
                     sales_order_status: Ext.getCmp('cb_sales_order_status').getValue(),
+                    freight: Ext.getCmp('freightSalesOrder').getValue(),
                     datagrid: json
                 },
                 success: function(form, action) {
@@ -820,19 +686,20 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         Ext.getCmp('customerSalesOrder').setValue(null);
                         Ext.getCmp('namecustomerSalesOrder').setValue(null);
                         Ext.getCmp('delivery_date_SalesOrder').setValue(null);
-                        Ext.getCmp('shipaddressSalesOrder').setValue(null);
+                        // Ext.getCmp('shipaddressSalesOrder').setValue(null);
                         Ext.getCmp('nojurnalSalesOrder').setValue(null);
                         Ext.getCmp('memoSalesOrder').setValue(null);
                         Ext.getCmp('subtotalSalesOrder').setValue(null);
                         Ext.getCmp('totalSalesOrder').setValue(null);
                         Ext.getCmp('totalPajakSalesOrder').setValue(null);
-                        Ext.getCmp('shippingSalesOrder').setValue(null);
+                        // Ext.getCmp('shippingSalesOrder').setValue(null);
                         Ext.getCmp('cb_tax_id_so').setValue(null);
                         // Ext.getCmp('pembayaranSalesOrder').setValue(null);
                         // Ext.getCmp('sisaBayarSalesOrder').setValue(null);
                         // Ext.getCmp('paymentSalesOrder').setValue(null);
                         // Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
-                        Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
+                        // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
+                        Ext.getCmp('freightSalesOrder').setValue();
 
                         storeGridItemSalesOrder.removeAll();
                         storeGridItemSalesOrder.sync();
@@ -917,8 +784,8 @@ function updateGridSalesOrder(tipe) {
     var totalSalesOrder = 0 * 1;
     var totalPajak = 0 * 1;
     // var angkutSalesOrder = Ext.getCmp('angkutSalesOrder').getValue();
-    var angkutSalesOrder = 0;
-    var pembayaranSalesOrder = Ext.getCmp('pembayaranSalesOrder').getValue();
+    var angkutSalesOrder = str_replace(",", "", Ext.getCmp('freightSalesOrder').getValue());
+    // var pembayaranSalesOrder = Ext.getCmp('pembayaranSalesOrder').getValue();
     var sisaBayarSalesOrder = 0 * 1;
     var taxrate = Ext.getCmp('cb_tax_id_so').getValue();
     var include_tax = Ext.getCmp('include_tax_so').getValue();
@@ -941,22 +808,28 @@ function updateGridSalesOrder(tipe) {
     var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
     totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
     //     console.log(subtotalSalesOrder);
-    totalSalesOrder = subtotalSalesOrder + angkutSalesOrder * 1;
+    totalSalesOrder = subtotalSalesOrder;
     //     console.log(totalSalesOrder+' '+totalPajak);
-    if (include_tax * 1 == 1) {
+    if (include_tax * 1 != 1) {
         //include tax
         totalSalesOrder = dppPurchaseOrder;
     } else {
         totalSalesOrder = dppPurchaseOrder + totalPajak;
     }
+    console.log(angkutSalesOrder);
+    console.log(totalSalesOrder);
+
+    totalSalesOrder = totalSalesOrder + angkutSalesOrder * 1;
+    console.log(totalSalesOrder);
+
     //     console.log(totalSalesOrder);
-    sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
+    // sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
     // alert(totalPajak);
-    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('diskonSalesOrder').setValue(total_diskon.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('dppSalesOrder').setValue(dppPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('diskonSalesOrder').setValue(total_diskon.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('dppSalesOrder').setValue(dppPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
     // Ext.getCmp('pembayaran').setValue(pembayaranSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarSalesOrder').setValue(sisaBayarSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 

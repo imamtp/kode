@@ -155,6 +155,7 @@ class sales extends MY_Controller {
             'idshipping' => $this->input->post('shippingSalesOrder') == '' ? null : $this->input->post('shippingSalesOrder'),
             'paidtoday' => clearnumberic($this->input->post('pembayaranSalesOrder')),
             'balance'=> clearnumberic($this->input->post('sisaBayarSalesOrder')),
+            'freight'=> clearnumberic($this->input->post('freight')),
             // 'isrecuring' => $this->input->post('paymentSalesQuotation'),
             // 'startdate' date,
             // 'recuntildate' date,

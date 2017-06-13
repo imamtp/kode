@@ -189,6 +189,7 @@ var wSalesOrderGrid = Ext.create('widget.window', {
     listeners: {
         'show': function() {
             storeGridSalesOrderGrid.load();
+            Ext.getCmp('freightSalesOrder').setValue(0);
         }
     }
 });

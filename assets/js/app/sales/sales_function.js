@@ -841,18 +841,18 @@ function clearFormSO() {
     Ext.getCmp('idsales_order').setValue(null);
     Ext.getCmp('nojurnalSalesOrder').setValue(null);
     Ext.getCmp('delivery_date_SalesOrder').setValue(null);
-    Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
+    // Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
     Ext.getCmp('customerSalesOrder').setValue(null);
-    Ext.getCmp('paymentSalesOrder').setValue(null);
+    // Ext.getCmp('paymentSalesOrder').setValue(null);
     Ext.getCmp('salesman_name_so').setValue(null);
     Ext.getCmp('memoSalesOrder').setValue(null);
-    Ext.getCmp('shipaddressSalesOrder').setValue(null);
+    // Ext.getCmp('shipaddressSalesOrder').setValue(null);
     Ext.getCmp('totalSalesOrder').setValue(null);
-    Ext.getCmp('shippingSalesOrder').setValue(null);
+    // Ext.getCmp('shippingSalesOrder').setValue(null);
     Ext.getCmp('totalPajakSalesOrder').setValue(null);
-    Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
+    // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
     Ext.getCmp('subtotalSalesOrder').setValue(null);
-    Ext.getCmp('pembayaranSalesOrder').setValue(null);
+    // Ext.getCmp('pembayaranSalesOrder').setValue(null);
     Ext.getCmp('cb_tax_id_so').setValue(null);
 
 }
