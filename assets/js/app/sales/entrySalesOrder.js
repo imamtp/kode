@@ -552,7 +552,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             id: 'totalSalesOrder',
                             fieldLabel: 'Setelah Pajak',
                             fieldStyle: 'text-align: right;'
@@ -574,7 +574,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             align: 'right',
                             name: 'totalPajak',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             id: 'totalPajakSalesOrder',
                             fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
@@ -600,6 +600,36 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
+                    items: [
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            align: 'right',
+                            readOnly: true,
+                            labelWidth: 150,
+                            id: 'dppSalesOrder',
+                            fieldLabel: 'Dasar Pengenaan Pajak',
+                            fieldStyle: 'text-align: right;'
+                        }
+                    ]
+                }, {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    items: [
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            align: 'right',
+                            readOnly: true,
+                            labelWidth: 150,
+                            id: 'diskonSalesOrder',
+                            fieldLabel: 'Diskon',
+                            fieldStyle: 'text-align: right;'
+                        }
+                    ]
+                }, {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
                     items: [{
                             xtype: 'textfield',
                             width: 620,
@@ -619,13 +649,14 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             xtype: 'textfield',
                             align: 'right',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 150,
                             id: 'subtotalSalesOrder',
                             fieldLabel: 'Subtotal',
                             fieldStyle: 'text-align: right;'
                         }
                     ]
                 },
+
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
@@ -891,28 +922,32 @@ function updateGridSalesOrder(tipe) {
     var sisaBayarSalesOrder = 0 * 1;
     var taxrate = Ext.getCmp('cb_tax_id_so').getValue();
     var include_tax = Ext.getCmp('include_tax_so').getValue();
+    var total_diskon = 0;
 
     Ext.each(storeGridItemSalesOrder.data.items, function(obj, i) {
         var total = obj.data.qty * (obj.data.price * obj.data.size);
         var diskon = (total / 100) * obj.data.disc;
+        total_diskon += diskon;
 
         var net = total - diskon;
         console.log(total + ' - ' + diskon);
 
         subtotalSalesOrder += net;
-        totalPajak += (net / 100) * (taxrate * 1);
+        // totalPajak += (net / 100) * (taxrate * 1);
         obj.set('ratetax', taxrate);
         obj.set('total', net);
     });
 
+    var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
+    totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
     //     console.log(subtotalSalesOrder);
     totalSalesOrder = subtotalSalesOrder + angkutSalesOrder * 1;
     //     console.log(totalSalesOrder+' '+totalPajak);
     if (include_tax * 1 == 1) {
         //include tax
-        totalSalesOrder = totalSalesOrder;
+        totalSalesOrder = dppPurchaseOrder;
     } else {
-        totalSalesOrder = totalSalesOrder + totalPajak;
+        totalSalesOrder = dppPurchaseOrder + totalPajak;
     }
     //     console.log(totalSalesOrder);
     sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
@@ -920,7 +955,8 @@ function updateGridSalesOrder(tipe) {
     Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
-    // Ext.getCmp('angkutSalesOrder').setValue(angkutSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
+    Ext.getCmp('diskonSalesOrder').setValue(total_diskon.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('dppSalesOrder').setValue(dppPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
     // Ext.getCmp('pembayaran').setValue(pembayaranSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarSalesOrder').setValue(sisaBayarSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 

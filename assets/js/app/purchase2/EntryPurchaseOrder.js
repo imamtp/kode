@@ -960,12 +960,13 @@ function updateGridPurchaseOrder(tipe) {
         console.log(total + ' - ' + diskon);
 
         subtotalPurchaseOrder += net;
-        totalPajak += (net / 100) * (taxrate * 1);
+        // totalPajak += (net / 100) * (taxrate * 1);
         obj.set('ratetax', taxrate);
         obj.set('total', net);
     });
 
-    var dppPurchaseOrder = subtotalPurchaseOrder + totaldiskon;
+    var dppPurchaseOrder = (subtotalPurchaseOrder + totaldiskon) / 1.1;
+    totalPajak += dppPurchaseOrder * (taxrate * 1 / 100);
     //     console.log(subtotalPurchaseOrder);
     totalPurchaseOrder = subtotalPurchaseOrder + angkutPurchaseOrder * 1;
     //     console.log(totalPurchaseOrder+' '+totalPajak);
