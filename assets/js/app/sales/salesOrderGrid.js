@@ -242,6 +242,10 @@ Ext.define('GridSalesOrderGrid', {
             hidden: true,
             header: 'comments'
         }, {
+            header: 'No Sales',
+            dataIndex: 'no_sales_order',
+            minWidth: 150
+        }, {
             header: 'Status',
             dataIndex: 'status',
             minWidth: 150,
@@ -250,10 +254,6 @@ Ext.define('GridSalesOrderGrid', {
             renderer: function(value) {
                 return customColumnStatus(ArrSalesStatus, value);
             }
-        }, {
-            header: 'No Sales',
-            dataIndex: 'no_sales_order',
-            minWidth: 150
         }, {
             header: 'Customer Name',
             flex: 1,
