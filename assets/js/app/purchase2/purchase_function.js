@@ -114,7 +114,7 @@ function showPurchaseOrderData(record) {
 
     var cb_purchase_order_status = Ext.getCmp('cb_purchase_order_status');
     cb_purchase_order_status.getStore().load();
-    cb_purchase_order_status.setValue(record.data.status * 1);
+    cb_purchase_order_status.setValue(record.data.idpurchasestatus * 1);
     if (record.data.idpurchasestatus * 1 !== 1) {
         //selain dari open disable tombol record
         cb_purchase_order_status.setReadOnly(true);
