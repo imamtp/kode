@@ -129,7 +129,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
         minWidth: 150
     }, {
         header: 'Status',
-        dataIndex: 'status',
+        dataIndex: 'idpurchasestatus',
         minWidth: 150,
         renderer: function(value) {
             return customColumnStatus(ArrPurchaseOrderStatus, value);
@@ -277,6 +277,8 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                     cb_purchase_order_status.setValue(1);
                     cb_purchase_order_status.setReadOnly(true);
 
+                    //enabling btn record
+                    Ext.getCmp('btnRecordPurchaseOrder').enable(true);
 
                 }
             }, {
