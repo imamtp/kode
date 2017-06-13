@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'imm';
-$db['default']['password'] = 'imm';
-$db['default']['database'] = 'redsfin_dev_14517';
+$db['default']['username'] = 'postgres';
+$db['default']['password'] = 'postgres';
+$db['default']['database'] = 'redsfin';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

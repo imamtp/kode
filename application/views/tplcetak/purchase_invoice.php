@@ -33,7 +33,6 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
           <h2><?=$title?></h2>
           <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?><br/>NO FP Supplier: <?= $data['nofpsup'] != null ? $data['nofpsup']: "&nbsp; - &nbsp;" ?></small></h3>
         </div>
-        
       </div>
       
       <div class="row">
@@ -66,7 +65,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- row -->
 
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
@@ -177,12 +176,8 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                     }
                     ?>
               </table>
-         <tr>
-           <td width="22%"><b> Notes:</b></td>
-           <td width="50%"><?=$data['memo']?></td>
-         </tr>
         </table>
-      </div>
+      </div> <!-- row -->
       
       <div class="row">
         <div class="col-xs-6">
@@ -191,18 +186,49 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         <div class="col-xs-6 text-right">
           <!-- <b>Operator<br><?=$data['receivedby']?></b> -->
         </div>
-      </div>
+      </div> <!-- row -->
 
-
-
-
+      <div class="row">
+        <div class="col-xs-4 ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Created By</h4>
+            </div>
+            <div class="panel-body">
+             <p>
+                By: <?= $data['fname_author'] ." ". $data['lname_author']?><br>
+                Created Date: <br>
+              </p>
+            </div>
           </div>
-  </div> <!-- panel -->
-  
+        </div>
 
-    </div><!-- container -->
+        <div class="col-xs-4 ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Confirmed By</h4>
+            </div>
+            <div class="panel-body">
+             <p>
+                By: <br>
+                Delivered Date: <br>
+              </p>
+            </div>
+          </div>
+        </div>
 
-
-      
+        <div class="col-xs-4 ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Notes</h4>
+            </div>
+            <div class="panel-body">
+             <p>
+                <?=$data['memo']?>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div><!-- row -->
   </body>
 </html>

@@ -16,7 +16,7 @@ class m_purchase extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchase,a.idcreditterm,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idfrequency,a.idjournal,a.idtax,a.nopurchase,a.name,a.payee,a.shipaddress,a.date,a.includetax,a.requestdate,a.freigthcost,a.tax,a.amountdue,a.totalamount,a.paidtoday,a.totalowed,a.balance,a.memo,a.isrecuring,a.startdate,a.recuntildate,a.recnumtimes,a.alertto,a.notifto,a.display,a.year,a.month,a.userin,a.usermod,a.datein,a.datemod,a.idpayment,a.notes,a.duedate,a.paiddate,a.idunit,a.idcurrency,a.noinvoice,a.idsupplier,a.subtotal,a.totalpaid,a.status,a.deleted,a.netddays,a.neteomddays,a.discount,a.netdmax,a.delivereddate,a.approver,a.idproject,b.nameshipping,c.namepurchase,d.name as purchasestatus,e.nojournal,f.nametax,g.namaunit,h.namecurr,i.namesupplier,i.companyaddress,i.telephone,i.fax,j.username,k.projectname,a.notes_receipt,l.firstname as receivedby,a.nofpsup";
+        return "a.idpurchase,a.idcreditterm,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.idfrequency,a.idjournal,a.idtax,a.nopurchase,a.name,a.payee,a.shipaddress,a.date,a.includetax,a.requestdate,a.freigthcost,a.tax,a.amountdue,a.totalamount,a.paidtoday,a.totalowed,a.balance,a.memo,a.isrecuring,a.startdate,a.recuntildate,a.recnumtimes,a.alertto,a.notifto,a.display,a.year,a.month,a.userin,a.usermod,a.datein,a.datemod,a.idpayment,a.notes,a.duedate,a.paiddate,a.idunit,a.idcurrency,a.noinvoice,a.idsupplier,a.subtotal,a.totalpaid,a.status,a.deleted,a.netddays,a.neteomddays,a.discount,a.netdmax,a.delivereddate,a.approver,a.idproject,b.nameshipping,c.namepurchase,d.name as purchasestatus,e.nojournal,f.nametax,g.namaunit,h.namecurr,i.namesupplier,i.companyaddress,i.telephone,i.fax,j.username,k.projectname,a.notes_receipt,l.firstname as receivedby,a.nofpsup,m.firstname as fname_author, m.lastname as lname_author";
     }
     
     function fieldCek()
@@ -41,7 +41,8 @@ class m_purchase extends CI_Model {
                     left join supplier i on i.idsupplier = a.idsupplier
                     left join sys_user j on j.user_id = a.approver
                     left join project k on k.idproject = a.idproject
-                    left join employee l on a .receivedby_id = l.idemployee";
+                    left join employee l on a.receivedby_id = l.idemployee
+                    left join employee m on a.userin = m.user_id";
 
         return $query;
     }
@@ -215,6 +216,9 @@ class m_purchase extends CI_Model {
             $dtcetak['alamat'] = $runit['alamat'];
             $dtcetak['telp'] = $runit['telp'];
             $dtcetak['fax'] = $runit['fax'];
+
+            $dtcetak['fname_author'] = $r->fname_author;
+            $dtcetak['lname_author'] = $r->lname_author;
         }
         return $dtcetak;
     }
