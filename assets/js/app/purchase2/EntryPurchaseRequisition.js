@@ -322,7 +322,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                         xtype: 'numberfield',
                         allowBlank: false,
                         minValue: 1
-                    }
+                    },
                 },
                 {
                     header: 'Measurement',
@@ -1057,7 +1057,7 @@ function updateGridPurchaseRequisition() {
         obj.set('total', net);
 
         totalitem++;
-        totalqty += obj.data.qty;
+        totalqty += str_replace(".", "", obj.data.qty) * 1;
     });
 
     //     console.log(subtotalPurchaseRequisition);

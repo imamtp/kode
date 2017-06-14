@@ -60,7 +60,7 @@ function showPurchaseRequestData(record) {
                 gridSQ.getStore().insert(0, recSQ);
 
                 totalitem++;
-                totalqty += obj.qty;
+                totalqty += str_replace(".", "", obj.qty) * 1;
 
             });
 
