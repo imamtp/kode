@@ -1065,6 +1065,91 @@ class inventory extends MY_Controller {
         echo json_encode($json);   
     }
 
+     function save_adjustment(){
+        $this->load->model('inventory/m_stock');
+
+        $this->db->trans_begin();
+
+        $statusform = $this->input->post('statusform_InventoryAdjustment');
+        $idunit = $this->session->userdata('idunit');
+        $status = $this->input->post('status');
+        $inventory_adjust_id = $this->m_data->getPrimaryID($this->input->post('inventory_adjust_id'),'inventory_adjust', 'inventory_adjust_id', $idunit);
+
+        $data = array(
+                'inventory_adjust_id' => $inventory_adjust_id,
+                'idunit' =>$idunit,        
+                'status' => $status,
+                'idaccount_adjs' =>$this->input->post('idaccount_adjs'),
+                'notes' =>$this->input->post('notes'),
+                'date_adjustment' =>backdate($this->input->post('date_adjustment')),
+                'userin' =>$this->session->userdata('userid'),
+                'datein' => date('Y-m-d H:m:s')
+        );
+
+        if($statusform=='input'){
+            $this->db->insert('inventory_adjust',$data);
+        } else {
+            $this->db->where('inventory_adjust_id',$inventory_adjust_id);
+            $this->db->update('inventory_adjust',$data);
+        }
+
+        $items = json_decode($this->input->post('ItemGrid'));
+
+        foreach ($items as $value) {
+            $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
+
+            $ditem = array(
+                    // 'inventory_transfer_item_id'=>$inventory_transfer_item_id,
+                    'inventory_adjust_id'=> $inventory_adjust_id,
+                    'idunit'=> $idunit,
+                    'idinventory'=> $value->idinventory,
+                    'warehouse_id'=> $warehouse_id,
+                    'qty_stock'=>$value->qty_stock,
+                    'qty_adjustment'=>$value->qty_adjustment,
+                    'variance'=>$value->variance,
+                    'item_value'=>$value->item_value,
+                    'total_value'=>$value->total_value,
+                    'cost'=> $value->cost,
+                    'sellingprice'=> $value->sellingprice,
+                    'datein'=> date('Y-m-d H:m:s')
+            );
+
+             if($statusform == 'input'){
+                $q_seq = $this->db->query("select nextval('seq_inventory')");
+                $ditem['inventory_adjust_item_id'] = $q_seq->result_array()[0]['nextval'];
+                $this->db->insert('inventory_adjust_items', $ditem);
+            }
+            else if($statusform == 'edit'){
+                $ditem['inventory_adjust_item_id'] = $value->inventory_adjust_item_id;
+                $this->db->where('inventory_adjust_item_id', $ditem['inventory_adjust_item_id']);
+                $this->db->update('inventory_adjust_items', $ditem);
+            }
+
+            if($status==2){
+                //confirmed - buat jurnal, update stok inventory, hitung ulang hpp dan saldo akun persediaan
+                $this->update_stok($idinventory,$idunit,$warehouse_id,$value->qty_adjustment);
+            }
+        }
+
+         if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);   
+    }
+
+    function update_stok($idinventory,$idunit,$warehouse_id,$stock){
+        $tis->db->where(array(
+            'idinventory'=>$idinventory,
+            'warehouse_id'=>$warehouse_id,
+            'idunit'=>$idunit
+        ));
+        $this->db->update('warehouse_stock',array('stock'=>$stock));
+    }
+
     function get_by_sku(){
         $wer = null;
 
