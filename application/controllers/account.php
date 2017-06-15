@@ -323,7 +323,7 @@ class account extends MY_Controller {
         $d = array(
             'idaccounttype' => $this->m_data->getID('accounttype', 'acctypename', 'idaccounttype', $this->input->post('acctypename')),
 //                'idaccount' bigint NOT NULL DEFAULT nextval('seq_account'::regclass),
-            'idclassificationcf' => $this->input->post('idclassificationcf'),
+            'idclassificationcf' => $this->input->post('idclassificationcf') == '' ? null : $this->input->post('idclassificationcf'),
 //                'idlinked' =>$this->input->post('description')
             'idparent' => $idparent,
             'idpos' => $idpos,
