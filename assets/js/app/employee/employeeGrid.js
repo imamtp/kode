@@ -3,176 +3,178 @@ var employeeAccessTab = Ext.create(dir_sys + 'employee.employeeAccessTab');
 var keaktifan = Ext.create('Ext.data.Store', {
     fields: ['abbr', 'keaktifan'],
     data: [
-        {"keaktifan": "Aktif"},
-        {"keaktifan": "Non Aktif"},
+        { "keaktifan": "Aktif" },
+        { "keaktifan": "Non Aktif" },
         //...
     ]
 });
 
 var formemployeeGrid = Ext.create('Ext.form.Panel', {
     id: 'formemployeeGrid',
-    title:'Data Pribadi',
+    title: 'Data Pribadi',
     url: SITE_URL + 'backend/saveform/employeeGrid',
-    baseParams: {idmenu:25},
+    baseParams: { idmenu: 25 },
     bodyStyle: 'padding:5px',
-    autoWidth:true,
-    autoHeight:true,
+    autoWidth: true,
+    autoHeight: true,
     autoScroll: true,
     fieldDefaults: {
         msgTarget: 'side',
         blankText: 'Tidak Boleh Kosong',
-//        padding: '5 40 5 5',
-    labelWidth: 160,
+        //        padding: '5 40 5 5',
+        labelWidth: 160,
         width: 400
     },
     layout: 'hbox',
-    defaults:{
+    defaults: {
         padding: '5 10 5 5'
     },
+    items: [{
         items: [{
-            items: [{
-            xtype: 'hiddenfield',
-            name: 'idemployee',
-            id: 'idemployee'
-        },{
-            xtype: 'hiddenfield',
-            name: 'statusformemployeeGrid',
-            id: 'statusformemployeeGrid'
-        },{
-                xtype:'textfield',
+                xtype: 'hiddenfield',
+                name: 'idemployee',
+                id: 'idemployee'
+            }, {
+                xtype: 'hiddenfield',
+                name: 'statusformemployeeGrid',
+                id: 'statusformemployeeGrid'
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Kode Pegawai',
-                allowBlank:false,
+                allowBlank: false,
                 name: 'code'
             },
             {
-              xtype:'comboxunit',
-              name:'idunit',
-              id:'unitformpegawai'  
-            },{
-                xtype:'textfield',
+                xtype: 'comboxunit',
+                name: 'idunit',
+                id: 'unitformpegawai'
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Nama Panggilan',
-                allowBlank:false,
+                allowBlank: false,
                 name: 'firstname'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Nama Lengkap',
-                allowBlank:false,
+                allowBlank: false,
                 name: 'lastname'
-         },{
-                xtype:'comboxemployee',
-                allowBlank:false,
-                fieldLabel:'Jabatan',
+            }, {
+                xtype: 'comboxemployee',
+                allowBlank: false,
+                fieldLabel: 'Jabatan',
                 name: 'nametype'
-            },{
-                xtype:'textarea',
+            }, {
+                xtype: 'textarea',
                 fieldLabel: 'Alamat',
-                allowBlank:false,
+                allowBlank: false,
                 name: 'address'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'No Telpon',
-                allowBlank:false,
+                allowBlank: false,
                 name: 'telephone'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'No Handphone',
                 name: 'handphone'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'No Fax',
                 name: 'fax'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Email',
                 name: 'email'
-            }]
-        }, {
-            items: [{
-                xtype:'textfield',
+            }
+        ]
+    }, {
+        items: [{
+                xtype: 'textfield',
                 fieldLabel: 'Website',
                 name: 'website'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Kota',
                 name: 'city'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Provinsi',
                 name: 'state'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Kode POS',
                 name: 'postcode'
-            },{
-                xtype:'textfield',
+            }, {
+                xtype: 'textfield',
                 fieldLabel: 'Negara',
                 name: 'country'
-            },{
-                xtype:'textarea',
+            }, {
+                xtype: 'textarea',
                 fieldLabel: 'Catatan',
                 name: 'notes'
-            },{
-                xtype:'comboxjenisptkp',
+            }, {
+                xtype: 'comboxjenisptkp',
                 allowBlank: false
-            },Ext.create('Ext.form.field.ComboBox', {
-                                fieldLabel: 'Status Keaktifan',
-                                displayField: 'keaktifan',
-                                queryMode: 'local',
-                                id: 'keaktifan',
-                                name: 'keaktifan',
-                                editable:false,
-                                triggerAction: 'all',
-                                valueField: 'keaktifan',
-                                allowBlank: false,
-                                store: keaktifan
-                            }),
+            }, Ext.create('Ext.form.field.ComboBox', {
+                fieldLabel: 'Status Keaktifan',
+                displayField: 'keaktifan',
+                queryMode: 'local',
+                id: 'keaktifan',
+                name: 'keaktifan',
+                editable: false,
+                triggerAction: 'all',
+                valueField: 'keaktifan',
+                allowBlank: false,
+                store: keaktifan
+            }),
             {
-                xtype:'datefield',
+                xtype: 'datefield',
                 format: "Y-m-d",
                 fieldLabel: 'Tanggal Masuk',
-                allowBlank:false,
+                allowBlank: false,
                 name: 'pegawaitglmasuk'
             },
             {
-                xtype:'datefield',
+                xtype: 'datefield',
                 format: "Y-m-d",
                 fieldLabel: 'Tanggal Resign',
                 name: 'tglresign'
-            }]
-        }],
+            }
+        ]
+    }],
     buttons: [{
-            text: 'Batal',
-            handler: function() {
-                var win = Ext.getCmp('windowPopupemployeeGrid');
-                Ext.getCmp('formemployeeGrid').getForm().reset();
-                win.hide();
-            }
-        }, {
-            id: 'BtnemployeeGridSimpan',
-            text: 'Simpan',
-            handler: function() {
-                var form = this.up('form').getForm();
-                if (form.isValid()) {
-                    form.submit({
-                        success: function(form, action) {
-                            
-                            Ext.Msg.alert('Success', action.result.message);
+        text: 'Batal',
+        handler: function() {
+            var win = Ext.getCmp('windowPopupemployeeGrid');
+            Ext.getCmp('formemployeeGrid').getForm().reset();
+            win.hide();
+        }
+    }, {
+        id: 'BtnemployeeGridSimpan',
+        text: 'Simpan',
+        handler: function() {
+            var form = this.up('form').getForm();
+            if (form.isValid()) {
+                form.submit({
+                    success: function(form, action) {
 
-                            Ext.getCmp('formemployeeGrid').getForm().reset();
-                            Ext.getCmp('windowPopupemployeeGrid').hide();
+                        Ext.Msg.alert('Success', action.result.message);
 
-                            storeGridemployeeGrid.load();
-                        },
-                        failure: function(form, action) {
-                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-//                            storeGridemployeeGrid.load();
-                        }
-                    });
-                } else {
-                    Ext.Msg.alert("Error!", "Your form is invalid!");
-                }
+                        Ext.getCmp('formemployeeGrid').getForm().reset();
+                        Ext.getCmp('windowPopupemployeeGrid').hide();
+
+                        storeGridemployeeGrid.load();
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                        //                            storeGridemployeeGrid.load();
+                    }
+                });
+            } else {
+                Ext.Msg.alert("Error!", "Your form is invalid!");
             }
-        }]
+        }
+    }]
 });
 
 
@@ -189,65 +191,60 @@ Ext.define('TabPegawai', {
     listeners: {
         render: function() {
             // alert('a');
-            this.items.each(function(i){               
-                i.tab.on('click', function(){
+            this.items.each(function(i) {
+                i.tab.on('click', function() {
                     // alert('as');
                     var grid = Ext.ComponentQuery.query('GridemployeeGrid')[0];
                     var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    if(i.title=='Tambahan Gaji')
-                    {
-                       storeGridTambahanGajiGrid.on('beforeload', function (store, operation, eOpts) {
+                    if (i.title == 'Tambahan Gaji') {
+                        storeGridTambahanGajiGrid.on('beforeload', function(store, operation, eOpts) {
                             operation.params = {
                                 'extraparams': 'a.idemployee:' + selectedRecord.data.idemployee
                             };
                         });
-                       storeGridTambahanGajiGrid.load();
-                    } else if(i.title=='Tunjangan')
-                    {
-                        storeGridTunjanganGrid.on('beforeload', function (store, operation, eOpts) {
+                        storeGridTambahanGajiGrid.load();
+                    } else if (i.title == 'Tunjangan') {
+                        storeGridTunjanganGrid.on('beforeload', function(store, operation, eOpts) {
                             operation.params = {
-                                'extraparams': 'a.idemployee:' +selectedRecord.data.idemployee
+                                'extraparams': 'a.idemployee:' + selectedRecord.data.idemployee
                             };
                         });
 
                         storeGridTunjanganGrid.load();
-                    } else if(i.title=='Potongan')
-                    {
-                       storeGridPotonganGrid.on('beforeload', function (store, operation, eOpts) {
+                    } else if (i.title == 'Potongan') {
+                        storeGridPotonganGrid.on('beforeload', function(store, operation, eOpts) {
                             operation.params = {
-                                'extraparams': 'a.idemployee:' +selectedRecord.data.idemployee
+                                'extraparams': 'a.idemployee:' + selectedRecord.data.idemployee
                             };
                         });
                         storeGridPotonganGrid.load();
-                    } else if(i.title=='Asuransi')
-                    {
-                        storeAsuransiEmpGrid.on('beforeload', function (store, operation, eOpts) {
+                    } else if (i.title == 'Asuransi') {
+                        storeAsuransiEmpGrid.on('beforeload', function(store, operation, eOpts) {
                             operation.params = {
                                 'extraparams': 'a.idemployee:' + selectedRecord.data.idemployee
                             };
                         });
                         storeAsuransiEmpGrid.load();
-                    } else if(i.title=='Akses Aplikasi')
-                        {
-                            Ext.Ajax.request({
-                                url: SITE_URL + 'pegawai/get_user_akses',
-                                method: 'GET',
-                                params: {
-                                    idemployee: Ext.getCmp('idemployee').getValue()
-                                },
-                                success: function(form, action) {
-                                    var d = Ext.decode(form.responseText);
-                                    Ext.getCmp('is_login_empAccess').setValue({is_login: d.is_login});
-                                    Ext.getCmp('group_id_empAccess').setValue(d.group_id);
-                                    Ext.getCmp('user_id_empAccess').setValue(d.user_id);
-                                    Ext.getCmp('username_empAccess').setValue(d.username);
-                                    Ext.getCmp('password_empAccess').setValue(d.password);
-                                },
-                                failure: function(form, action) {
-                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                }
-                            });
-                        }
+                    } else if (i.title == 'Akses Aplikasi') {
+                        Ext.Ajax.request({
+                            url: SITE_URL + 'pegawai/get_user_akses',
+                            method: 'GET',
+                            params: {
+                                idemployee: Ext.getCmp('idemployee').getValue()
+                            },
+                            success: function(form, action) {
+                                var d = Ext.decode(form.responseText);
+                                Ext.getCmp('is_login_empAccess').setValue({ is_login: d.is_login });
+                                Ext.getCmp('group_id_empAccess').setValue(d.group_id);
+                                Ext.getCmp('user_id_empAccess').setValue(d.user_id);
+                                Ext.getCmp('username_empAccess').setValue(d.username);
+                                Ext.getCmp('password_empAccess').setValue(d.password);
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                            }
+                        });
+                    }
                 });
             });
         }
@@ -255,16 +252,16 @@ Ext.define('TabPegawai', {
     items: [
         formemployeeGrid,
         {
-            xtype:'GridTambahanGajiGrid',
-             id:'GridTambahanGajiGrid'
+            xtype: 'GridTambahanGajiGrid',
+            id: 'GridTambahanGajiGrid'
         },
         {
-          xtype:'GridTunjanganGrid',
-          id:'GridTunjanganGrid'  
+            xtype: 'GridTunjanganGrid',
+            id: 'GridTunjanganGrid'
         },
         {
-          xtype:'GridPotonganGrid',
-          id:'GridPotonganGrid'  
+            xtype: 'GridPotonganGrid',
+            id: 'GridPotonganGrid'
         },
         // {
         //     xtype:'GridSutriGrid'
@@ -273,8 +270,8 @@ Ext.define('TabPegawai', {
         //     xtype:'GridAnakGrid'
         // },
         {
-            xtype:'AsuransiEmpGrid',
-            id:'AsuransiEmpGrid'
+            xtype: 'AsuransiEmpGrid',
+            id: 'AsuransiEmpGrid'
         },
         employeeAccessTab
     ]
@@ -289,22 +286,22 @@ var wemployeeGrid = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-    modal:true,
-//    autoWidth: true,
-    width:870,  
-//    autoHeight: true,
-    height:490,
+    modal: true,
+    //    autoWidth: true,
+    width: 870,
+    //    autoHeight: true,
+    height: 490,
     layout: 'fit',
     border: false,
-//    items: [formemployeeGrid]
-    items:[
-        { xtype:'TabPegawai' }
+    //    items: [formemployeeGrid]
+    items: [
+        { xtype: 'TabPegawai' }
     ]
 });
 
 Ext.define('GridemployeeGridModel', {
     extend: 'Ext.data.Model',
-    fields: ['idemployee','code','firstname','pegawaitglmasuk','lastname','address','telephone','handphone','fax','email','website','city','state','postcode','country','notes','nametype'],
+    fields: ['idemployee', 'code', 'firstname', 'pegawaitglmasuk', 'lastname', 'address', 'telephone', 'handphone', 'fax', 'email', 'website', 'city', 'state', 'postcode', 'country', 'notes', 'nametype'],
     idProperty: 'id'
 });
 
@@ -324,12 +321,12 @@ var storeGridemployeeGrid = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
-                        
+
 
 
 Ext.define('MY.searchGridemployeeGrid', {
@@ -358,9 +355,9 @@ var smGridemployeeGrid = Ext.create('Ext.selection.CheckboxModel', {
 
 Ext.define('GridemployeeGrid', {
     // renderTo:'mytabpanel',
-//    multiSelect: true,
-//    selModel: smGridemployeeGrid,
-//    title: 'Daftar Pegawai',
+    //    multiSelect: true,
+    //    selModel: smGridemployeeGrid,
+    //    title: 'Daftar Pegawai',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GridemployeeGridID',
     id: 'GridemployeeGridID',
@@ -369,165 +366,162 @@ Ext.define('GridemployeeGrid', {
     store: storeGridemployeeGrid,
     loadMask: true,
     columns: [
-        {header: 'idemployee', dataIndex: 'idemployee', hidden: true},
-        {header: 'Kode Pegawai', dataIndex: 'code', minWidth: 150},        
-        {header: 'Nama Panggilan', dataIndex: 'firstname', minWidth: 150},
-        {header: 'Nama Lengkap', dataIndex: 'lastname', minWidth: 150},
-        {header: 'Tipe Pegawai', dataIndex: 'nametype', minWidth: 150},
-        {header: 'address', dataIndex: 'address', minWidth: 150},
-        {header: 'telephone', dataIndex: 'telephone', minWidth: 150},
-        {header: 'handphone', dataIndex: 'handphone', minWidth: 150},
-        {header: 'fax', dataIndex: 'fax', minWidth: 150},
-        {header: 'email', dataIndex: 'email', minWidth: 150},
-        {header: 'website', dataIndex: 'website', minWidth: 150},
-        {header: 'city', dataIndex: 'city', minWidth: 150},
-        {header: 'state', dataIndex: 'state', minWidth: 150},
-        {header: 'post code', dataIndex: 'postcode', minWidth: 150},
-        {header: 'country', dataIndex: 'country', minWidth: 150},
-        {header: 'Tgl Masuk', dataIndex: 'pegawaitglmasuk', minWidth: 150},
-        {header: 'notes', dataIndex: 'notes', minWidth: 150}
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    itemId: 'addemployeeGrid',
-                    text: 'Tambah',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                         wemployeeGrid.show();
-                         Ext.getCmp('formemployeeGrid').getForm().reset();
-                         Ext.getCmp('statusformemployeeGrid').setValue('input');
-                         disabledTabEmployee(true);
-                         jenisptkpStore.load();
-                         comboxemployeeStore.load();
-                         sys_groupStore.load();
+        { header: 'idemployee', dataIndex: 'idemployee', hidden: true },
+        { header: 'Kode Pegawai', dataIndex: 'code', minWidth: 150 },
+        { header: 'Nama Panggilan', dataIndex: 'firstname', minWidth: 150 },
+        { header: 'Nama Lengkap', dataIndex: 'lastname', minWidth: 150 },
+        { header: 'Tipe Pegawai', dataIndex: 'nametype', minWidth: 150 },
+        { header: 'address', dataIndex: 'address', minWidth: 150 },
+        { header: 'telephone', dataIndex: 'telephone', minWidth: 150 },
+        { header: 'handphone', dataIndex: 'handphone', minWidth: 150 },
+        { header: 'fax', dataIndex: 'fax', minWidth: 150 },
+        { header: 'email', dataIndex: 'email', minWidth: 150 },
+        { header: 'website', dataIndex: 'website', minWidth: 150 },
+        { header: 'city', dataIndex: 'city', minWidth: 150 },
+        { header: 'state', dataIndex: 'state', minWidth: 150 },
+        { header: 'post code', dataIndex: 'postcode', minWidth: 150 },
+        { header: 'country', dataIndex: 'country', minWidth: 150 },
+        { header: 'Tgl Masuk', dataIndex: 'pegawaitglmasuk', minWidth: 150 },
+        { header: 'notes', dataIndex: 'notes', minWidth: 150 }
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                itemId: 'addemployeeGrid',
+                text: 'Tambah',
+                iconCls: 'add-icon',
+                handler: function() {
+                    wemployeeGrid.show();
+                    Ext.getCmp('formemployeeGrid').getForm().reset();
+                    Ext.getCmp('statusformemployeeGrid').setValue('input');
+                    disabledTabEmployee(true);
+                    jenisptkpStore.load();
+                    comboxemployeeStore.load();
+                    sys_groupStore.load();
 
-                         Ext.getCmp('TabPegawai').setActiveTab(0);
-                         
-                    }
-                },
-                {
-                    itemId: 'editemployeeGrid',
-                    text: 'Detail',
-                    iconCls: 'edit-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridemployeeGrid')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                        } else {
-                            //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-                            var formemployeeGrid = Ext.getCmp('formemployeeGrid');
+                    Ext.getCmp('TabPegawai').setActiveTab(0);
 
-                            formemployeeGrid.getForm().load({
-                                url: SITE_URL + 'backend/loadFormData/employeeGrid/1',
-                                params: {
-                                    extraparams: 'a.idemployee:' + selectedRecord.data.idemployee
-                                },
-                                success: function(form, action) {
-                                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                },
-                                failure: function(form, action) {
-                                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                }
-                            })
-
-                            wemployeeGrid.show();
-                            Ext.getCmp('statusformemployeeGrid').setValue('edit');
-                            
-                            dataGaji(selectedRecord.data.idemployee)
-
-                            disabledTabEmployee(false);
-
-                            Ext.getCmp('TabPegawai').setActiveTab(0);
-
-                            sys_groupStore.load();
-                        }
-
-                    }
-                }, {
-                    id: 'btnDeleteemployeeGrid',
-                    text: 'Hapus',
-                    iconCls: 'delete-icon',
-                    handler: function() {
-                        Ext.Msg.show({
-                            title: 'Confirm',
-                            msg: 'Delete Selected ?',
-                            buttons: Ext.Msg.YESNO,
-                            fn: function(btn) {
-                                if (btn == 'yes') {
-                                    var grid = Ext.ComponentQuery.query('GridemployeeGrid')[0];
-                                    var sm = grid.getSelectionModel();
-                                    selected = [];
-                                    Ext.each(sm.getSelection(), function(item) {
-                                        selected.push(item.data[Object.keys(item.data)[0]]);
-                                    });
-                                    Ext.Ajax.request({
-                                        url: SITE_URL + 'backend/ext_delete/employeeGrid',
-                                        method: 'POST',
-                                        params: {
-                                            postdata: Ext.encode(selected),
-                                            idmenu:25
-                                        },
-                                        success: function(form, action) {
-                                            var d = Ext.decode(form.responseText);
-                                            if (!d.success) {
-                                                Ext.Msg.alert('Informasi', d.message);
-                                            } else {
-                                                 storeGridemployeeGrid.load();
-                                            }
-                                        },
-                                        failure: function(form, action) {
-                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    },
-//                    disabled: true
-                }, '->',
-                {
-                    text: 'Import Pegawai',
-                    iconCls: 'page_excel',
-                    handler: function() {
-                        winImportPegawai.show();
-                    }
-                },
-                {
-                    text: 'Import Tunjangan',
-                    iconCls: 'page_excel',
-                    handler: function() {
-                        winImportTunjangan.show();
-                    }
-                },
-                {
-                    text: 'Import Potongan',
-                    iconCls: 'page_excel',
-                    handler: function() {
-                        winImportPotongan.show();
-                    }
-                },
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridemployeeGrid',
-                    text: 'Left Button'
                 }
+            },
+            {
+                itemId: 'editemployeeGrid',
+                text: 'Detail',
+                iconCls: 'edit-icon',
+                handler: function() {
+                    var grid = Ext.ComponentQuery.query('GridemployeeGrid')[0];
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                    } else {
+                        //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
+                        var formemployeeGrid = Ext.getCmp('formemployeeGrid');
 
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridemployeeGrid, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ], listeners: {
+                        formemployeeGrid.getForm().load({
+                            url: SITE_URL + 'backend/loadFormData/employeeGrid/1',
+                            params: {
+                                extraparams: 'a.idemployee:' + selectedRecord.data.idemployee
+                            },
+                            success: function(form, action) {
+                                // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert("Load failed", action.result.errorMessage);
+                            }
+                        })
+
+                        wemployeeGrid.show();
+                        Ext.getCmp('statusformemployeeGrid').setValue('edit');
+
+                        dataGaji(selectedRecord.data.idemployee)
+
+                        disabledTabEmployee(false);
+
+                        Ext.getCmp('TabPegawai').setActiveTab(0);
+
+                        sys_groupStore.load();
+                    }
+
+                }
+            }, {
+                id: 'btnDeleteemployeeGrid',
+                text: 'Hapus',
+                iconCls: 'delete-icon',
+                handler: function() {
+                    Ext.Msg.show({
+                        title: 'Confirm',
+                        msg: 'Delete Selected ?',
+                        buttons: Ext.Msg.YESNO,
+                        fn: function(btn) {
+                            if (btn == 'yes') {
+                                var grid = Ext.ComponentQuery.query('GridemployeeGrid')[0];
+                                var sm = grid.getSelectionModel();
+                                selected = [];
+                                Ext.each(sm.getSelection(), function(item) {
+                                    selected.push(item.data[Object.keys(item.data)[0]]);
+                                });
+                                Ext.Ajax.request({
+                                    url: SITE_URL + 'backend/ext_delete/employeeGrid',
+                                    method: 'POST',
+                                    params: {
+                                        postdata: Ext.encode(selected),
+                                        idmenu: 25
+                                    },
+                                    success: function(form, action) {
+                                        var d = Ext.decode(form.responseText);
+                                        if (!d.success) {
+                                            Ext.Msg.alert('Informasi', d.message);
+                                        } else {
+                                            storeGridemployeeGrid.load();
+                                        }
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+                //                    disabled: true
+            }, '->',
+            {
+                text: 'Import Pegawai',
+                iconCls: 'page_excel',
+                handler: function() {
+                    winImportPegawai.show();
+                }
+            },
+            {
+                text: 'Import Tunjangan',
+                iconCls: 'page_excel',
+                handler: function() {
+                    winImportTunjangan.show();
+                }
+            },
+            {
+                text: 'Import Potongan',
+                iconCls: 'page_excel',
+                handler: function() {
+                    winImportPotongan.show();
+                }
+            },
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridemployeeGrid',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridemployeeGrid, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
@@ -536,21 +530,21 @@ Ext.define('GridemployeeGrid', {
             }
         },
         itemclick: function(dv, record, item, index, e) {
-//            console.log(record.data.idsiswa)
+            //            console.log(record.data.idsiswa)
 
-            storePayrollHistoryGrid.on('beforeload', function (store, operation, eOpts) {
+            storePayrollHistoryGrid.on('beforeload', function(store, operation, eOpts) {
                 operation.params = {
                     'bulantahunpenggajian': Ext.getCmp('PayrollHistoryPeriod').getValue(),
                     'extraparams': 'a.idemployee:' + record.data.idemployee
                 }
             });
             storePayrollHistoryGrid.load();
-//            storePayrollHistoryGrid.load({
-//                            params: {
-//                                'bulantahunpenggajian': Ext.getCmp('PayrollHistoryPeriod').getValue(),
-//                                'extraparams': 'a.idemployee:' + record.data.idemployee
-//                            }
-//                        });
+            //            storePayrollHistoryGrid.load({
+            //                            params: {
+            //                                'bulantahunpenggajian': Ext.getCmp('PayrollHistoryPeriod').getValue(),
+            //                                'extraparams': 'a.idemployee:' + record.data.idemployee
+            //                            }
+            //                        });
         },
         itemdblclick: function(dv, record, item, index, e) {
 
@@ -572,7 +566,7 @@ Ext.define('GridemployeeGrid', {
             })
 
             dataGaji(record.data.idemployee)
-//            Ext.getCmp('kddaerahS').setReadOnly(true);
+                //            Ext.getCmp('kddaerahS').setReadOnly(true);
             Ext.getCmp('statusformemployeeGrid').setValue('edit');
 
             disabledTabEmployee(false);
@@ -580,8 +574,7 @@ Ext.define('GridemployeeGrid', {
     }
 });
 
-function dataGaji(idemployee)
-{
+function dataGaji(idemployee) {
     //tab gaji
     Ext.getCmp('formGridSalary').getForm().load({
         url: SITE_URL + 'backend/loadFormData/gridsalary/1/employee',
@@ -592,7 +585,7 @@ function dataGaji(idemployee)
             // Ext.Msg.alert("Load failed", action.result.errorMessage);
         },
         failure: function(form, action) {
-//            Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //            Ext.Msg.alert("Load failed", action.result.errorMessage);
         }
     })
 }
@@ -604,11 +597,9 @@ Ext.define('TabPortDetailPegawai', {
     alias: 'widget.TabPortDetailPegawai',
     activeTab: 0,
     autoWidth: '100%',
-    items: [
-        {
-            xtype: 'PayrollHistoryGrid'
-        }
-    ],
+    items: [{
+        xtype: 'PayrollHistoryGrid'
+    }],
     listeners: {
         render: {
             scope: this,
@@ -632,11 +623,11 @@ Ext.define('PortPegawai', {
     items: [{
         region: 'south',
         flex: 1,
-//        minHeight: heightPort,
-        xtype:'TabPortDetailPegawai'
-//        html: 'Footer content'
+        //        minHeight: heightPort,
+        xtype: 'TabPortDetailPegawai'
+            //        html: 'Footer content'
     }, {
-        id:'panelDaftarPegawai',
+        id: 'panelDaftarPegawai',
         title: 'Daftar Pegawai',
         // flex: 2,
         listeners: {
@@ -651,21 +642,21 @@ Ext.define('PortPegawai', {
         collapsible: true,
         region: 'center',
         items: [{
-            height: tinggiPort-180,
+            // height: tinggiPort - 120,
+            height: (sizeH - 30) / 2,
             xtype: 'GridemployeeGrid'
         }]
     }]
 });
 
-function disabledTabEmployee(mode)
-{
+function disabledTabEmployee(mode) {
     // if(mode)
     // {
-        Ext.getCmp('GridTambahanGajiGrid').setDisabled(mode);
-        Ext.getCmp('GridTunjanganGrid').setDisabled(mode);
-        Ext.getCmp('GridPotonganGrid').setDisabled(mode);
-        Ext.getCmp('AsuransiEmpGrid').setDisabled(mode);
-        Ext.getCmp('employeeAccessTab').setDisabled(mode);
+    Ext.getCmp('GridTambahanGajiGrid').setDisabled(mode);
+    Ext.getCmp('GridTunjanganGrid').setDisabled(mode);
+    Ext.getCmp('GridPotonganGrid').setDisabled(mode);
+    Ext.getCmp('AsuransiEmpGrid').setDisabled(mode);
+    Ext.getCmp('employeeAccessTab').setDisabled(mode);
     // } else {
 
     // }
