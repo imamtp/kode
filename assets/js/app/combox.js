@@ -252,7 +252,8 @@ var arrInventoryType = [
     ['1', 'Finished Goods'],
     ['2', 'Raw Material'],
     ['3', 'Processed Goods'],
-    ['4', 'Package Goods']
+    ['4', 'Package Goods'],
+    ['5', 'Reject'],
 ];
 
 Ext.define('comboxInventoryType', {
