@@ -243,7 +243,7 @@ var storeAccountAktive = new Ext.data.TreeStore({
     model: 'KitchenSink.model.tree.Task',
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'account/tesJsonTree/1/aktive'
+        url: SITE_URL + 'account/tesJsonTree/0'
     },
     root: {
         text: ' ',
