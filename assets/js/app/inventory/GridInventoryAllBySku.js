@@ -426,7 +426,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                         Ext.getCmp('statusformInventory2').setValue('edit');
                         Ext.getCmp('TabItemInventory').items.getAt(3).setDisabled(false);
 
-                        Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(true); //disable tab stok. karena stok diperlihakan pada tab subitem
+                        // Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(true); //disable tab stok. karena stok diperlihakan pada tab subitem
                         // Ext.getCmp('TabItemInventory').items.getAt(4).setDisabled(false);
 
                         brandStore.load();
