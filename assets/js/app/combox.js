@@ -503,6 +503,26 @@ Ext.define('comboxrequisitionstatus', {
     name: 'status'
 });
 
+
+
+var Adjustmentarr = [
+    [1, 'Open'],
+    [2, 'Confirm']
+];
+
+Ext.define('comboInventoryAdjustmentStatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboInventoryAdjustmentStatus',
+    fieldLabel: 'Status Adjustment',
+    editable: false,
+    displayField: 'text',
+    valueField: 'value',
+    store: new Ext.data.ArrayStore({
+        fields: ['value', 'text'],
+        data: Adjustmentarr
+    }),
+});
+
 var paymenttermarr = [
     ['1', 'Cash in Advance'],
     ['2', 'Cash in Delivery'],

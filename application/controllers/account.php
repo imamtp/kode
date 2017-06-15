@@ -20,7 +20,7 @@ class account extends MY_Controller {
             $sql = "SELECT a.idpos,a.idpos,g.namepos,a.idunit,a.idaccount,a.idclassificationcf,a.idparent,a.accnumber,a.tax,a.active,a.accname,a.balance,a.description,b.acctypename,c.classname,f.accname as accnameinduk
                         from account a
                         left join accounttype b ON a.idaccounttype = b.idaccounttype
-                        join classificationcf c ON a.idclassificationcf = c.idclassificationcf
+                        left join classificationcf c ON a.idclassificationcf = c.idclassificationcf
                         left join account f On a.idparent = f.idaccount
                         left join accountpos g ON a.idpos = g.idpos
                         where a.display is null and a.idaccount = '$id'";
@@ -323,7 +323,7 @@ class account extends MY_Controller {
         $d = array(
             'idaccounttype' => $this->m_data->getID('accounttype', 'acctypename', 'idaccounttype', $this->input->post('acctypename')),
 //                'idaccount' bigint NOT NULL DEFAULT nextval('seq_account'::regclass),
-            'idclassificationcf' => $this->input->post('idclassificationcf'),
+            'idclassificationcf' => $this->input->post('idclassificationcf') == '' ? null : $this->input->post('idclassificationcf'),
 //                'idlinked' =>$this->input->post('description')
             'idparent' => $idparent,
             'idpos' => $idpos,
