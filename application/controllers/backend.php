@@ -349,12 +349,16 @@ class Backend extends MY_Controller {
                             $qdeleted = $this->db->query("SELECT column_name 
                                                             FROM information_schema.columns 
                                                             WHERE table_name='".$this->datamodel->tableName()."' and column_name='deleted'")->row();
-                            if($qdeleted->column_name=='deleted')
-                            {
-                                $deleted = true;
-                            } else {
-                                 $deleted = false;
-                            }
+                            if(isset($qdeleted->column_name)){
+                                if($qdeleted->column_name=='deleted')
+                                    {
+                                        $deleted = true;
+                                    } else {
+                                         $deleted = false;
+                                    }
+                                } else {
+                                     $deleted = false;
+                                }
 
                             //cek tabel tersebut pakai idunit atau tidak
                             $qidunit = $this->db->query("SELECT column_name 
