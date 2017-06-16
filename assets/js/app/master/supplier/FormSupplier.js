@@ -1,8 +1,8 @@
 var formSupplier = Ext.create('Ext.form.Panel', {
-    autoWidth:true,
-    autoHeight:true,
+    autoWidth: true,
+    autoHeight: true,
     url: SITE_URL + 'backend/saveform/Supplier/master',
-    baseParams: {idmenu:24},
+    baseParams: { idmenu: 24 },
     bodyStyle: 'padding:5px',
     labelAlign: 'top',
     autoScroll: true,
@@ -14,34 +14,33 @@ var formSupplier = Ext.create('Ext.form.Panel', {
         msgTarget: 'side',
         blankText: 'is required',
         labelWidth: 160,
-        anchor:'100%',
+        anchor: '100%',
         width: 380
     },
-    items: [
-        {
+    items: [{
             items: [
-                {xtype: 'hiddenfield', name: 'idsupplier', allowBlank: false},
-                {xtype: 'hiddenfield', name: 'statusformSupplier', allowBlank: false},
-                {xtype: 'textfield', name: 'code', fieldLabel:'Supplier Code', allowBlank: false},
-                {xtype: 'textfield', name: 'namesupplier', fieldLabel:'Name', allowBlank: false},
-                {xtype: 'comboxsuppliertype', name: 'idsuppliertype', fieldLabel: 'Type', emptyText: 'Choose Type...'},
-                {xtype: 'textarea', name: 'companyaddress', fieldLabel:'Address', allowBlank: false},
-                {xtype: 'textarea', name: 'shipadddress', fieldLabel:'Shipping Address'},
-                {xtype: 'textfield', name: 'telephone', fieldLabel:'Telp', allowBlank: false},
-                {xtype: 'textfield', name: 'handphone', fieldLabel:'HP', allowBlank: false},
-                {xtype: 'comboxswitch', name: 'status', fieldLabel:'Status', allowBlank: false},
+                { xtype: 'hiddenfield', name: 'idsupplier', allowBlank: false },
+                { xtype: 'hiddenfield', name: 'statusformSupplier', allowBlank: false },
+                { xtype: 'textfield', name: 'code', fieldLabel: 'Supplier Code', allowBlank: false },
+                { xtype: 'textfield', name: 'namesupplier', fieldLabel: 'Name', allowBlank: false },
+                { xtype: 'comboxsuppliertype', name: 'idsuppliertype', fieldLabel: 'Type', emptyText: 'Choose Type...' },
+                { xtype: 'textarea', name: 'companyaddress', fieldLabel: 'Address', allowBlank: false },
+                { xtype: 'textarea', name: 'shipadddress', fieldLabel: 'Shipping Address' },
+                { xtype: 'textfield', name: 'telephone', fieldLabel: 'Telp', allowBlank: false },
+                { xtype: 'textfield', name: 'handphone', fieldLabel: 'HP', allowBlank: false },
+                { xtype: 'comboxswitch', name: 'status', fieldLabel: 'Status', allowBlank: false },
             ],
         },
         {
-            items:[
-                {xtype: 'textfield', name: 'fax', fieldLabel:'Fax'},
-                {xtype: 'textfield', name: 'email', fieldLabel:'Email', allowBlank: false},
-                {xtype: 'textfield', name: 'website', fieldLabel:'Website'},
-                {xtype: 'textfield', name: 'city', fieldLabel:'City', allowBlank: false},
-                {xtype: 'textfield', name: 'state', fieldLabel:'State', allowBlank: false},
-                {xtype: 'textfield', name: 'postcode', fieldLabel:'Post Code', allowBlank: false},
-                {xtype: 'textfield', name: 'country', fieldLabel:'Country', allowBlank: false},
-                {xtype: 'textarea', name: 'notes', fieldLabel:'Notes'},
+            items: [
+                { xtype: 'textfield', name: 'fax', fieldLabel: 'Fax' },
+                { xtype: 'textfield', name: 'email', fieldLabel: 'Email', allowBlank: false },
+                { xtype: 'textfield', name: 'website', fieldLabel: 'Website' },
+                { xtype: 'textfield', name: 'city', fieldLabel: 'City', allowBlank: false },
+                { xtype: 'textfield', name: 'state', fieldLabel: 'State', allowBlank: false },
+                { xtype: 'textfield', name: 'postcode', fieldLabel: 'Post Code', allowBlank: false },
+                { xtype: 'textfield', name: 'country', fieldLabel: 'Country', allowBlank: false },
+                { xtype: 'textarea', name: 'notes', fieldLabel: 'Notes' },
             ],
         }
     ],
@@ -85,11 +84,12 @@ var FormSupplier = Ext.create('widget.window', {
     layout: 'fit',
     border: false,
     items: [formSupplier],
-    listeners:{
-        'show': function(FormSupplier){
+    listeners: {
+        'show': function(FormSupplier) {
+            Ext.getCmp('comboxsuppliertype').store.load();
             formSupplier.getForm().findField('statusformSupplier').setValue(FormSupplier.statusform);
         },
-        'hide': function(){
+        'hide': function() {
             formSupplier.getForm().reset();
         }
 
