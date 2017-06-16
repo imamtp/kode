@@ -38,9 +38,9 @@ class m_usermanagement extends CI_Model {
 
     function whereQuery() {
         if ($this->session->userdata('group_id') != 99) {
-            return " idcompany=".$this->session->userdata('idcompany');
+            return " a.deleted = 0 and idcompany=".$this->session->userdata('idcompany');
         } else {
-            return null;
+            return " a.deleted = 0";
         }
         
     }
