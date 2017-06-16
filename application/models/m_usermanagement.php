@@ -58,7 +58,16 @@ class m_usermanagement extends CI_Model {
             $this->db->delete('userunit');
 
             foreach ($namaunit as $idunit) {
-                $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$idunit));
+
+                if(is_int($idunit))
+                {
+                    $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$idunit));
+                } else {
+                    //kalo string cari dulu id unitnya
+                    //ini pas edit
+                    $qunit = $this->db->get_where('unit',array('namaunit'=>$idunit))->row();
+                    $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$qunit->idunit));
+                }
                 // $this->db->insert('userunit',array('user_id'=>$user_id,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
             }
         } else {
