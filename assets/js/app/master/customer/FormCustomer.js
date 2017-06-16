@@ -1,8 +1,8 @@
 var formCustomer = Ext.create('Ext.form.Panel', {
-    autoWidth:true,
-    autoHeight:true,
+    autoWidth: true,
+    autoHeight: true,
     url: SITE_URL + 'backend/saveform/Customer/master',
-    baseParams: {idmenu:24},
+    baseParams: { idmenu: 24 },
     bodyStyle: 'padding:5px',
     labelAlign: 'top',
     autoScroll: true,
@@ -14,35 +14,34 @@ var formCustomer = Ext.create('Ext.form.Panel', {
         msgTarget: 'side',
         blankText: 'is required',
         labelWidth: 160,
-        anchor:'100%',
+        anchor: '100%',
         width: 380
     },
-    items: [
-        {
+    items: [{
             items: [
-                {xtype: 'hiddenfield', name: 'idcustomer', allowBlank: false},
-                {xtype: 'hiddenfield', name: 'statusformCustomer', allowBlank: false},
-                {xtype: 'textfield', name: 'nocustomer', fieldLabel:'No Customer', allowBlank: false},
-                {xtype: 'textfield', name: 'namecustomer', fieldLabel:'Name', allowBlank: false},
-                {xtype: 'comboxcustomertype', name: 'idcustomertype', fieldLabel: 'Type', allowBlank: false, emptyText: 'Choose Type...'},
-                {xtype: 'textarea', name: 'address', fieldLabel:'Address', allowBlank: false},
-                {xtype: 'textarea', name: 'shipadddress', fieldLabel:'Shipping Address'},
-                {xtype: 'textarea', name: 'billadddress', fieldLabel:'Bill Address'},
-                {xtype: 'comboxswitch', name: 'status', fieldLabel:'Status', allowBlank: false},
+                { xtype: 'hiddenfield', name: 'idcustomer', allowBlank: false },
+                { xtype: 'hiddenfield', name: 'statusformCustomer', allowBlank: false },
+                { xtype: 'textfield', name: 'nocustomer', fieldLabel: 'No Customer', allowBlank: false },
+                { xtype: 'textfield', name: 'namecustomer', fieldLabel: 'Name', allowBlank: false },
+                { xtype: 'comboxcustomertype', name: 'idcustomertype', fieldLabel: 'Type', allowBlank: false, emptyText: 'Choose Type...' },
+                { xtype: 'textarea', name: 'address', fieldLabel: 'Address', allowBlank: false },
+                { xtype: 'textarea', name: 'shipadddress', fieldLabel: 'Shipping Address' },
+                { xtype: 'textarea', name: 'billadddress', fieldLabel: 'Bill Address' },
+                { xtype: 'comboxswitch', name: 'status', fieldLabel: 'Status', allowBlank: false },
             ],
         },
         {
-            items:[
-                {xtype: 'textfield', name: 'telephone', fieldLabel:'Telp', allowBlank: false},
-                {xtype: 'textfield', name: 'handphone', fieldLabel:'HP', allowBlank: false},
-                {xtype: 'textfield', name: 'fax', fieldLabel:'Fax',},
-                {xtype: 'textfield', name: 'email', fieldLabel:'Email', allowBlank: false},
-                {xtype: 'textfield', name: 'website', fieldLabel:'Website'},
-                {xtype: 'textfield', name: 'city', fieldLabel:'City', allowBlank: false},
-                {xtype: 'textfield', name: 'state', fieldLabel:'State', allowBlank: false},
-                {xtype: 'textfield', name: 'postcode', fieldLabel:'Post Code', allowBlank: false},
-                {xtype: 'textfield', name: 'country', fieldLabel:'Country', allowBlank: false},
-                {xtype: 'textarea', name: 'notes', fieldLabel:'Notes'},
+            items: [
+                { xtype: 'textfield', name: 'telephone', fieldLabel: 'Telp', allowBlank: false },
+                { xtype: 'textfield', name: 'handphone', fieldLabel: 'HP', allowBlank: false },
+                { xtype: 'textfield', name: 'fax', fieldLabel: 'Fax', },
+                { xtype: 'textfield', name: 'email', fieldLabel: 'Email', allowBlank: false },
+                { xtype: 'textfield', name: 'website', fieldLabel: 'Website' },
+                { xtype: 'textfield', name: 'city', fieldLabel: 'City', allowBlank: false },
+                { xtype: 'textfield', name: 'state', fieldLabel: 'State', allowBlank: false },
+                { xtype: 'textfield', name: 'postcode', fieldLabel: 'Post Code', allowBlank: false },
+                { xtype: 'textfield', name: 'country', fieldLabel: 'Country', allowBlank: false },
+                { xtype: 'textarea', name: 'notes', fieldLabel: 'Notes' },
             ],
         }
     ],
@@ -57,7 +56,7 @@ var formCustomer = Ext.create('Ext.form.Panel', {
             if (formCustomer.isValid()) {
                 formCustomer.submit({
                     success: function(form, action) {
-                        Ext.Msg.alert('Success', action.result.message);
+                        Ext.Msg.alert('Success', 'Customer berhasil ditambahkan');
                         FormCustomer.hide();
                         storeGridCustomer.load();
                     },
@@ -86,11 +85,11 @@ var FormCustomer = Ext.create('widget.window', {
     layout: 'fit',
     border: false,
     items: [formCustomer],
-    listeners:{
-        'show': function(FormCustomer){
+    listeners: {
+        'show': function(FormCustomer) {
             formCustomer.getForm().findField('statusformCustomer').setValue(FormCustomer.statusform);
         },
-        'hide': function(){
+        'hide': function() {
             formCustomer.getForm().reset();
         }
 
