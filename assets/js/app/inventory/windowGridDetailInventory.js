@@ -115,10 +115,12 @@ Ext.define('GridItemGridDetailInventory', {
         {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
+            hidden: true,
             minWidth: 100
         }, {
             header: 'Stock #2',
             dataIndex: 'stock_kedua',
+            hidden: true,
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
