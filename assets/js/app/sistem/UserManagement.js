@@ -1,10 +1,9 @@
-
 var formUserManagement = Ext.create('Ext.form.Panel', {
     id: 'formUserManagement',
     width: 450,
     height: 300,
     url: SITE_URL + 'backend/saveform/UserManagement',
-    baseParams: {idmenu:54},
+    baseParams: { idmenu: 54 },
     bodyStyle: 'padding:5px',
     labelAlign: 'top',
     autoScroll: true,
@@ -15,76 +14,77 @@ var formUserManagement = Ext.create('Ext.form.Panel', {
         width: 400
     },
     items: [{
-            xtype: 'hiddenfield',
-            name: 'statusformUserManagement',
-            id: 'statusformUserManagement'
-        }, {
-            xtype: 'hiddenfield',
-            fieldLabel: 'user_id',
-            name: 'user_id'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'username',
-            allowBlank: false,
-            name: 'username'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'password',
-            inputType: 'password',
-            allowBlank: false,
-            name: 'password'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: 'email',
-            allowBlank: false,
-            name: 'email'
-        },{
-            xtype: 'textfield',
-            fieldLabel: 'realname',
-            name: 'realname'
-        },{
-            xtype: 'comboxunit',
-            multiSelect:true,
-            id:'idUnitUser',
-            allowBlank: false,
-            name: 'namaunit[]'
-        },{
-            xtype:'comboxsys_group',
-            allowBlank: false,
-            name:'group_name'
-            
-        }],
-    buttons: [{
-            text: 'Batal',
-            handler: function() {
-                var win = Ext.getCmp('windowPopupUserManagement');
-                Ext.getCmp('formUserManagement').getForm().reset();
-                win.hide();
-            }
-        }, {
-            id: 'BtnUserManagementSimpan',
-            text: 'Simpan',
-            handler: function() {
-                var form = this.up('form').getForm();
-                if (form.isValid()) {
-                    form.submit({
-                        success: function(form, action) {
+        xtype: 'hiddenfield',
+        name: 'statusformUserManagement',
+        id: 'statusformUserManagement'
+    }, {
+        xtype: 'hiddenfield',
+        fieldLabel: 'user_id',
+        name: 'user_id'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'username',
+        allowBlank: false,
+        name: 'username'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'password',
+        inputType: 'password',
+        allowBlank: false,
+        name: 'password'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'email',
+        allowBlank: false,
+        name: 'email'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'realname',
+        name: 'realname'
+    }, {
+        xtype: 'comboxunit',
+        // multiSelect: true,
+        id: 'idUnitUser',
+        valueField: 'idunit',
+        allowBlank: false,
+        // name: 'namaunit[]'
+    }, {
+        xtype: 'comboxsys_group',
+        allowBlank: false,
+        name: 'group_name'
 
-                            Ext.Msg.alert('Success', action.result.message);
-                            Ext.getCmp('formUserManagement').getForm().reset();
-                            Ext.getCmp('windowPopupUserManagement').hide();
-                            storeGridUserManagement.load();
-                        },
-                        failure: function(form, action) {
-                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-//                            storeGridUserManagement.load();
-                        }
-                    });
-                } else {
-                    Ext.Msg.alert("Error!", "Your form is invalid!");
-                }
+    }],
+    buttons: [{
+        text: 'Batal',
+        handler: function() {
+            var win = Ext.getCmp('windowPopupUserManagement');
+            Ext.getCmp('formUserManagement').getForm().reset();
+            win.hide();
+        }
+    }, {
+        id: 'BtnUserManagementSimpan',
+        text: 'Simpan',
+        handler: function() {
+            var form = this.up('form').getForm();
+            if (form.isValid()) {
+                form.submit({
+                    success: function(form, action) {
+
+                        Ext.Msg.alert('Success', action.result.message);
+                        Ext.getCmp('formUserManagement').getForm().reset();
+                        Ext.getCmp('windowPopupUserManagement').hide();
+                        storeGridUserManagement.load();
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                        //                            storeGridUserManagement.load();
+                    }
+                });
+            } else {
+                Ext.Msg.alert("Error!", "Your form is invalid!");
             }
-        }]
+        }
+    }]
 });
 var wUserManagement = Ext.create('widget.window', {
     id: 'windowPopupUserManagement',
@@ -104,7 +104,7 @@ var wUserManagement = Ext.create('widget.window', {
 
 Ext.define('GridUserManagementModel', {
     extend: 'Ext.data.Model',
-    fields: ['user_id','username','email','laslogin','realname','group_name','namaunit'],
+    fields: ['user_id', 'username', 'email', 'laslogin', 'realname', 'group_name', 'namaunit'],
     idProperty: 'id'
 });
 
@@ -124,9 +124,9 @@ var storeGridUserManagement = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 Ext.define('MY.searchGridUserManagement', {
     extend: 'Ext.ux.form.SearchField',
@@ -152,8 +152,8 @@ var smGridUserManagement = Ext.create('Ext.selection.CheckboxModel', {
 });
 Ext.define('GridUserManagement', {
     // renderTo:'mytabpanel',
-//    multiSelect: true,
-//    selModel: smGridUserManagement,
+    //    multiSelect: true,
+    //    selModel: smGridUserManagement,
     title: 'Daftar User',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GridUserManagementID',
@@ -163,141 +163,138 @@ Ext.define('GridUserManagement', {
     store: storeGridUserManagement,
     loadMask: true,
     columns: [
-        {header: 'user_id', dataIndex: 'user_id', hidden: true},
-        {header: 'username', dataIndex: 'username', minWidth: 150},
-        {header: 'email', dataIndex: 'email', minWidth: 150},
-        {header: 'real name', dataIndex: 'realname', minWidth: 150},
-        {header: 'unit', dataIndex: 'namaunit', minWidth: 150},
-        {header: 'kelompok user', dataIndex: 'group_name', minWidth: 150},
-        {header: 'laslogin', dataIndex: 'laslogin', minWidth: 150}
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    itemId: 'addUserManagement',
-                    text: 'Tambah',
-                    iconCls: 'add-icon',
-                    handler: function() {
+        { header: 'user_id', dataIndex: 'user_id', hidden: true },
+        { header: 'username', dataIndex: 'username', minWidth: 150 },
+        { header: 'email', dataIndex: 'email', minWidth: 150 },
+        { header: 'real name', dataIndex: 'realname', minWidth: 150 },
+        { header: 'unit', dataIndex: 'namaunit', minWidth: 150 },
+        { header: 'kelompok user', dataIndex: 'group_name', minWidth: 150 },
+        { header: 'laslogin', dataIndex: 'laslogin', minWidth: 150 }
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                itemId: 'addUserManagement',
+                text: 'Tambah',
+                iconCls: 'add-icon',
+                handler: function() {
+                    wUserManagement.show();
+                    Ext.getCmp('statusformUserManagement').setValue('input');
+                    storeUnit.load();
+                    sys_groupStore.load();
+                }
+            },
+            {
+                itemId: 'editUserManagement',
+                text: 'Ubah',
+                iconCls: 'edit-icon',
+                handler: function() {
+                    var grid = Ext.ComponentQuery.query('GridUserManagement')[0];
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih data pajak terlebih dahulu!');
+                    } else {
+                        //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
+                        var formUserManagement = Ext.getCmp('formUserManagement');
+                        formUserManagement.getForm().load({
+                            url: SITE_URL + 'backend/loadFormData/UserManagement',
+                            params: {
+                                extraparams: 'a.user_id:' + selectedRecord.data.user_id
+                            },
+                            success: function(form, action) {
+                                // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert("Load failed", action.result.errorMessage);
+                            }
+                        })
+
                         wUserManagement.show();
-                        Ext.getCmp('statusformUserManagement').setValue('input');
-                        storeUnit.load();
-                        sys_groupStore.load();
-                    }
-                },
-                {
-                    itemId: 'editUserManagement',
-                    text: 'Ubah',
-                    iconCls: 'edit-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridUserManagement')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih data pajak terlebih dahulu!');
-                        } else {
-                            //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-                            var formUserManagement = Ext.getCmp('formUserManagement');
-                            formUserManagement.getForm().load({
-                                url: SITE_URL + 'backend/loadFormData/UserManagement',
-                                params: {
-                                    extraparams: 'a.user_id:' + selectedRecord.data.user_id
-                                },
-                                success: function(form, action) {
-                                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                },
-                                failure: function(form, action) {
-                                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                }
-                            })
+                        Ext.getCmp('statusformUserManagement').setValue('edit');
 
-                            wUserManagement.show();
-                            Ext.getCmp('statusformUserManagement').setValue('edit');
+                        Ext.Ajax.request({
+                            url: SITE_URL + 'setup/getUnitUser',
+                            method: 'POST',
+                            params: { user_id: selectedRecord.data.user_id },
+                            success: function(form, action) {
+                                // console.log(form.responseText)
+                                var str = form.responseText;
+                                var valUnit = str.split(',');
+                                // console.log(Ext.getCmp('namaunitFormInvX'));
 
-                            Ext.Ajax.request({
-                                url: SITE_URL+'setup/getUnitUser',
-                                method: 'POST',
-                                params: { user_id: selectedRecord.data.user_id },
-                                success: function(form, action) {
-                                    // console.log(form.responseText)
-                                    var str = form.responseText;
-                                    var valUnit = str.split(',');
-                                    // console.log(Ext.getCmp('namaunitFormInvX'));
+                                // var valUnit = ['Unit 1','SMIP'];
 
-                                    // var valUnit = ['Unit 1','SMIP'];
-
-                                    Ext.getCmp('idUnitUser').setValue(valUnit);
-                                     // FormProfileID.getForm().findField('namaunitFormInvX').setValue(valUnit);
-                                },
-                                failure: function(form, action) {
-                                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                }
-                            });
-                        }
-                        
-                    }
-                }, {
-                    id: 'btnDeleteUserManagement',
-                    text: 'Hapus',
-                    iconCls: 'delete-icon',
-                    handler: function() {
-                        Ext.Msg.show({
-                            title: 'Confirm',
-                            msg: 'Delete Selected ?',
-                            buttons: Ext.Msg.YESNO,
-                            fn: function(btn) {
-                                if (btn == 'yes') {
-                                    var grid = Ext.ComponentQuery.query('GridUserManagement')[0];
-                                    var sm = grid.getSelectionModel();
-                                    selected = [];
-                                    Ext.each(sm.getSelection(), function(item) {
-                                        selected.push(item.data[Object.keys(item.data)[0]]);
-                                    });
-                                    Ext.Ajax.request({
-                                        url: SITE_URL + 'backend/ext_delete/UserManagement',
-                                        method: 'POST',
-                                        params: {
-                                            postdata: Ext.encode(selected),
-                                            idmenu:54
-                                        },
-                                        success: function(form, action) {
-                                            var d = Ext.decode(form.responseText);
-                                            if (!d.success) {
-                                                Ext.Msg.alert('Informasi', d.message);
-                                            } else {
-                                                 storeGridUserManagement.load();
-                                            }
-                                        },
-                                        failure: function(form, action) {
-                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                        }
-                                    });
-                                    // storeGridUserManagement.remove(sm.getSelection());
-                                    // sm.select(0);
-                                }
+                                Ext.getCmp('idUnitUser').setValue(valUnit);
+                                // FormProfileID.getForm().findField('namaunitFormInvX').setValue(valUnit);
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert("Load failed", action.result.errorMessage);
                             }
                         });
-                    },
-//                    disabled: true
-                }, '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridUserManagement',
-                    text: 'Left Button'
-                }
+                    }
 
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridUserManagement, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ], listeners: {
+                }
+            }, {
+                id: 'btnDeleteUserManagement',
+                text: 'Hapus',
+                iconCls: 'delete-icon',
+                handler: function() {
+                    Ext.Msg.show({
+                        title: 'Confirm',
+                        msg: 'Delete Selected ?',
+                        buttons: Ext.Msg.YESNO,
+                        fn: function(btn) {
+                            if (btn == 'yes') {
+                                var grid = Ext.ComponentQuery.query('GridUserManagement')[0];
+                                var sm = grid.getSelectionModel();
+                                selected = [];
+                                Ext.each(sm.getSelection(), function(item) {
+                                    selected.push(item.data[Object.keys(item.data)[0]]);
+                                });
+                                Ext.Ajax.request({
+                                    url: SITE_URL + 'backend/ext_delete/UserManagement',
+                                    method: 'POST',
+                                    params: {
+                                        postdata: Ext.encode(selected),
+                                        idmenu: 54
+                                    },
+                                    success: function(form, action) {
+                                        var d = Ext.decode(form.responseText);
+                                        if (!d.success) {
+                                            Ext.Msg.alert('Informasi', d.message);
+                                        } else {
+                                            storeGridUserManagement.load();
+                                        }
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    }
+                                });
+                                // storeGridUserManagement.remove(sm.getSelection());
+                                // sm.select(0);
+                            }
+                        }
+                    });
+                },
+                //                    disabled: true
+            }, '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridUserManagement',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridUserManagement, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
@@ -322,29 +319,29 @@ Ext.define('GridUserManagement', {
                 }
             })
 
-//            
-//            Ext.getCmp('kddaerahS').setReadOnly(true);
+            //            
+            //            Ext.getCmp('kddaerahS').setReadOnly(true);
             Ext.getCmp('statusformUserManagement').setValue('edit');
 
             Ext.Ajax.request({
-            url: SITE_URL+'setup/getUnitUser',
-            method: 'POST',
-            params: { user_id: record.data.user_id },
-            success: function(form, action) {
-                // console.log(form.responseText)
-                var str = form.responseText;
-                var valUnit = str.split(',');
-                // console.log(Ext.getCmp('namaunitFormInvX'));
+                url: SITE_URL + 'setup/getUnitUser',
+                method: 'POST',
+                params: { user_id: record.data.user_id },
+                success: function(form, action) {
+                    // console.log(form.responseText)
+                    var str = form.responseText;
+                    var valUnit = str.split(',');
+                    // console.log(Ext.getCmp('namaunitFormInvX'));
 
-                // var valUnit = ['Unit 1','SMIP'];
+                    // var valUnit = ['Unit 1','SMIP'];
 
-                Ext.getCmp('idUnitUser').setValue(valUnit);
-                 // FormProfileID.getForm().findField('namaunitFormInvX').setValue(valUnit);
-            },
-            failure: function(form, action) {
-                Ext.Msg.alert("Load failed", action.result.errorMessage);
-            }
-        });
+                    Ext.getCmp('idUnitUser').setValue(valUnit);
+                    // FormProfileID.getForm().findField('namaunitFormInvX').setValue(valUnit);
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+                }
+            });
         }
     }
 });
