@@ -247,6 +247,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
         {
             header: 'Total Coil',
             dataIndex: 'totalitem',
+            hidden: true,
             minWidth: 120,
             xtype: 'numbercolumn',
             align: 'right',
@@ -260,7 +261,8 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
         },
         {
             header: 'Stock',
-            dataIndex: 'totalstock',
+            // dataIndex: 'totalstock',
+            dataIndex: 'totalitem',
             minWidth: 120,
             xtype: 'numbercolumn',
             align: 'right',
@@ -278,7 +280,8 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             minWidth: 100
         }, {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
+            // dataIndex: 'stock_kedua',
+            dataIndex: 'totalstock',
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
