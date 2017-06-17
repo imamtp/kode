@@ -104,7 +104,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
     alias: 'widget.GoodsReceiptGrid',
     // Ext.define('GoodsReceiptGrid', {
     title: 'Purchase Order',
-    selModel: smGoodsReceiptGrid,
+    // selModel: smGoodsReceiptGrid,
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GoodsReceiptGridID',
     id: 'GoodsReceiptGridID',
