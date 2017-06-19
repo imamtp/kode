@@ -264,15 +264,19 @@ function showGoodsReceiptData(record) {
     received_date_poreceipt.setValue(record.data.delivereddate);
 
     cb_status_poreceipt.show();
-    cb_status_poreceipt.setValue(record.data.idpurchasestatus);
+    cb_status_poreceipt.setValue(record.data.idpurchasestatus * 1);
 
     // console.log(record.data.idpurchasestatus);
     if (record.data.idpurchasestatus * 1 === 1) {
+        var is_tmp = 1; //status masih open
+
         Ext.getCmp('btnRecordGR').enable();
         received_date_poreceipt.setReadOnly(false);
 
         cb_status_poreceipt.setReadOnly(false);
     } else {
+        var is_tmp = 0;
+
         Ext.getCmp('btnRecordGR').disable();
         received_date_poreceipt.setReadOnly(true);
 
@@ -295,7 +299,8 @@ function showGoodsReceiptData(record) {
         url: SITE_URL + 'purchase/get_po_items',
         method: 'GET',
         params: {
-            idpurchase: record.data.idpurchase
+            idpurchase: record.data.idpurchase,
+            is_tmp: is_tmp
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
@@ -318,6 +323,7 @@ function showGoodsReceiptData(record) {
                     size: obj.size,
                     short_desc: obj.short_desc,
                     size_measurement: obj.size_measurement,
+                    qty_received: obj.qty_received,
                     warehouse_code: obj.warehouse_code
                 });
 
