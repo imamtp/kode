@@ -71,10 +71,7 @@ class m_usermanagement extends CI_Model {
                 // $this->db->insert('userunit',array('user_id'=>$user_id,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
             }
         } else {
-            foreach ($namaunit as $idunit) {
-                $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$idunit));
-                // $this->db->insert('userunit',array('user_id'=>$user_id,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
-            }
+            $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$this->input->post('idunit')));
         }
 
         $data = array(
