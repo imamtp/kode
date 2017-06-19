@@ -123,7 +123,7 @@ class m_purchase extends CI_Model {
     }
 
     function getLastRecord($idunit){
-        $q = $this->db->query('select norecord from '.$this->tableName(). ' where idunit = '.$idunit.' and norecord is not null order by norecord desc limit 1');
+        $q = $this->db->query('select norecord from '.$this->tableName(). ' where idunit = '.$idunit.' and norecord is not null and deleted = 0 order by norecord desc limit 1');
         if($q->num_rows() == 0){
             return 1;
         }else{
