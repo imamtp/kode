@@ -7,7 +7,7 @@ var WindowBatchItemList = Ext.create(dir_sys + 'purchase2.WindowBatchItemList');
 
 Ext.define('GridReceiptItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received'],
     idProperty: 'id'
 });
 
@@ -240,7 +240,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     xtype: 'numbercolumn',
                     header: 'Qty Received',
                     width: 120,
-                    dataIndex: 'total_qty_batch',
+                    dataIndex: 'qty_received',
                     align: 'right'
                         // editor: {
                         //     xtype: 'numberfield',
@@ -474,12 +474,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             format: 'd/m/Y',
                             fieldLabel: 'Received Date'
                         },
-                        {
-                            xtype: 'textfield',
-                            id: 'no_rujukan_sup_poreceipt',
-                            name: 'no_rujukan_sup',
-                            fieldLabel: 'No Rujukan Sup',
-                        },
+
                         {
                             xtype: 'comboxpurchasestatus',
                             hidden: true,
@@ -651,6 +646,12 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             labelWidth: 100,
                             id: 'memo_poreceipt',
                             fieldLabel: 'Memo'
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'no_rujukan_sup_poreceipt',
+                            name: 'no_rujukan_sup',
+                            fieldLabel: 'No Rujukan Sup',
                         },
                         {
                             xtype: 'comboxcurrency',
@@ -833,17 +834,4 @@ function updateGridPurchaseOrder(tipe) {
     // Ext.getCmp('pembayaran').setValue(pembayaranPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarPurchaseOrder').setValue(sisaBayarPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 
-}
-
-function validasiPurchaseOrder() {
-    //    alert(Ext.getCmp('comboxcurrencyPurchaseOrder').getValue());   
-
-    if (Ext.getCmp('receivedid_poreceipt').getValue() == '') {
-        Ext.Msg.alert('Failed', 'Personil penerima belum ditentukan');
-
-    } else if (Ext.getCmp('received_date_poreceipt').getValue() == '') {
-        Ext.Msg.alert('Failed', 'Masukkan tanggal penerimaan barang');
-    } else {
-        return true;
-    }
 }

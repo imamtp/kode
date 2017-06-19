@@ -103,6 +103,8 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                         <?php
                         // print_r($data['detail']);
                         $i=1;
+                        $totalqty = 0;
+                        $totalkirim = 0;
                         foreach ($data['detail'] as $key => $value) {
                            ?>
                              <tr>
@@ -122,7 +124,9 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                             </tr>
                            <?php
                          
-                           $i++;
+                            $i++;
+                            $totalqty+=$value['qty'];
+                            $totalkirim =$value['qty_kirim'];
                           }
                         ?>
                        
@@ -136,13 +140,13 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                       <td></td>
                        <td> </td>
                       <td align="right"><b>Total Qty Order</b></td>
-                      <td align="right" width="200"><?=$data['detailtotal']?></td>
+                      <td align="right" width="200"><?=$totalqty?></td>
                     </tr>
                     <tr>
                       <td></td>
                        <td> </td>
                       <td align="right"><b>Total Qty Kirim</b></td>
-                      <td align="right" width="200"><?=$data['detailtotal']?></td>
+                      <td align="right" width="200"><?=$totalkirim?></td>
                     </tr>
                     <!--<tr>
                       <td></td>

@@ -132,8 +132,11 @@ class m_purchase extends CI_Model {
     }
 
     function query_itempurchase($idpurchase){
+        $is_tmp = $this->input->get('is_tmp');
+        $is_tmp = $is_tmp == '' ? 0 : 1 ;
+
          $q = $this->db->query("select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
-                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,COALESCE(total_qty_batch, 0) as total_qty_batch	
+                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,COALESCE(total_qty_batch, 0) as total_qty_batch,a.idunit	
                 from purchaseitem a
                 join inventory b ON a.idinventory = b.idinventory
                 left join productmeasurement c ON c.measurement_id = a.measurement_id
@@ -141,6 +144,7 @@ class m_purchase extends CI_Model {
                 left join productmeasurement e ON e.measurement_id = a.measurement_id_size
                 left join (select idpurchaseitem,COALESCE(sum(qty), 0) as total_qty_batch
                             from purchaseitem_batch
+                            where is_tmp = $is_tmp
                             group by idpurchaseitem) f ON a.idpurchaseitem = f.idpurchaseitem
                 where idpurchase = $idpurchase");
 
@@ -155,6 +159,21 @@ class m_purchase extends CI_Model {
             if($qcek->num_rows()>0)
             {
                 $data[$i]['batch'] = true;
+
+                //hitung qty batch
+                // $q = $this->db->get_where('purchaseitem_batch',array(
+                //         'idpurchaseitem' => $r['idpurchaseitem'],
+                //         'idpurchase' => $r['idpurchase'],
+                //         'idunit'=>$idunit
+                //     ));
+
+                // $dataArr = $q->result_array();
+                // $totalqtyterima = 0;
+                // foreach ($dataArr as $key => $value) {
+                //     $totalqtyterima+=$value['qty'];
+                // }
+                $data[$i]['qty_received'] = $r['total_qty_batch'];
+
             } else {
                 $data[$i]['batch'] = false;
             }

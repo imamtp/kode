@@ -1,7 +1,10 @@
 // Ext.require([ 
 //     dir_sys+'purchase2.EntryPurchaseOrder',
 // ]);
-var EntryPurchaseOrder = Ext.create(dir_sys + 'purchase2.EntryPurchaseOrder');
+// var EntryPurchaseOrder = Ext.create(dir_sys + 'purchase2.EntryPurchaseOrder');
+if (!Ext.isDefined(Ext.getCmp('EntryPurchaseOrder'))) {
+    Ext.create(dir_sys + 'purchase2.EntryPurchaseOrder');
+}
 
 Ext.define('PurchaseOrderGridModel', {
     extend: 'Ext.data.Model',
@@ -39,32 +42,6 @@ var storePurchaseOrderGrid = Ext.create('Ext.data.Store', {
 //              };
 //          });
 
-var wPurchaseOrderGrid = Ext.create('widget.window', {
-    id: 'windowPopupPurchaseOrderGrid',
-    title: 'Purchase Order Form',
-    header: {
-        titlePosition: 2,
-        titleAlign: 'center'
-    },
-    closable: true,
-    closeAction: 'hide',
-    autoWidth: true,
-    autoHeight: true,
-    layout: 'fit',
-    border: false,
-    items: [
-        EntryPurchaseOrder
-        // {
-        //     xtype:'EntryPurchaseOrder'
-        // }
-    ],
-    modal: true,
-    listeners: {
-        'show': function() {
-            // storePurchaseOrderGrid.load();
-        }
-    }
-});
 
 storePurchaseOrderGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
@@ -259,7 +236,8 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                 text: 'Add New Order',
                 iconCls: 'add-icon',
                 handler: function() {
-                    wPurchaseOrderGrid.show();
+                    // wPurchaseOrderGrid.show();
+                    Ext.getCmp('windowPopupPurchaseOrderGrid').show();
                     clearFormPO();
 
                     // storeCustomer.load();
