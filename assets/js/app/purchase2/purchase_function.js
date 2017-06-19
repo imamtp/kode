@@ -95,6 +95,61 @@ function showPurchaseRequestData(record) {
     cbPurchaseRequisition.show();
 }
 
+function updateGridPurchaseOrder(tipe) {
+    console.log('update run');
+    var addprefix = 'PurchaseOrder';
+
+    var subtotalPurchaseOrder = 0 * 1;
+    var totalPurchaseOrder = 0 * 1;
+    var totalPajak = 0 * 1;
+    // var angkutPurchaseOrder = Ext.getCmp('angkutPurchaseOrder').getValue();
+    var angkutPurchaseOrder = 0;
+    var pembayaranPurchaseOrder = Ext.getCmp('pembayaranPurchaseOrder').getValue();
+    var sisaBayarPurchaseOrder = 0 * 1;
+    var taxrate = Ext.getCmp('cb_tax_id_po').getValue();
+    var include_tax = Ext.getCmp('include_tax_po').getValue();
+    var totaldiskon = 0;
+
+    console.log(Ext.getCmp('EntryPurchaseOrder').getStore().getRange());
+    Ext.each(Ext.getCmp('EntryPurchaseOrder').getStore().getRange(), function(obj, i) {
+        // var total = obj.data.qty * (obj.data.price * obj.data.size);
+        var total = obj.data.qty * (obj.data.price);
+        var diskon = (total / 100) * obj.data.disc;
+        totaldiskon += diskon;
+        var net = total - diskon;
+        console.log(total + ' - ' + diskon);
+
+        subtotalPurchaseOrder += net;
+        // totalPajak += (net / 100) * (taxrate * 1);
+        obj.set('ratetax', taxrate);
+        obj.set('total', net);
+    });
+
+    var dppPurchaseOrder = (subtotalPurchaseOrder + totaldiskon) / 1.1;
+    totalPajak += dppPurchaseOrder * (taxrate * 1 / 100);
+    //     console.log(subtotalPurchaseOrder);
+    totalPurchaseOrder = subtotalPurchaseOrder + angkutPurchaseOrder * 1;
+    //     console.log(totalPurchaseOrder+' '+totalPajak);
+    if (include_tax * 1 == 1) {
+        //include tax
+        totalPurchaseOrder = dppPurchaseOrder;
+    } else {
+        totalPurchaseOrder = dppPurchaseOrder + totalPajak;
+    }
+
+    //     console.log(totalPurchaseOrder);
+    sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;
+    // alert(totalPajak);
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('diskonPurchaseOrder').setValue(totaldiskon.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('dppPurchaseOrder').setValue(dppPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    // Ext.getCmp('pembayaran').setValue(pembayaranPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
+    // Ext.getCmp('sisaBayarPurchaseOrder').setValue(sisaBayarPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
+
+}
+
 function showPurchaseOrderData(record) {
     wPurchaseOrderGrid.show();
 
@@ -154,7 +209,17 @@ function showPurchaseOrderData(record) {
             'extraparams': 'a.idpurchase:' + record.data.idpurchase
         };
     });
-    EntryGoodsReceiptRM.load();
+
+    // EntryGoodsReceiptRM.on('afterload', function() {
+    //     updateGridPurchaseOrder()
+    // });
+
+
+    EntryGoodsReceiptRM.load({
+        callback: function() {
+            updateGridPurchaseOrder();
+        }
+    });
     // EntryGoodsReceiptRM.removeAll();
     // EntryGoodsReceiptRM.sync();
 
