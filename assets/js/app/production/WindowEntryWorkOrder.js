@@ -120,7 +120,7 @@ Ext.define('workOrderHeaderForm', {
                                     //                 'status': '1'
                                     //     };
                                     // });
-                                    storeGridSalesOrderWOList.load();
+                                    Ext.getCmp('GridSalesOrderWOList').getStore().load();
 
                                 });
                             }

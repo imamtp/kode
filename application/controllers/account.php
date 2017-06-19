@@ -1245,6 +1245,22 @@ class account extends MY_Controller {
        echo "<b>". number_format($this->sumBalanceByParent($idparent))."</b>";
     }
 
+    function set_parent(){
+        $q = $this->db->get_where('account',array('idunit'=>12));
+        foreach($q->result() as $r){
+            $q2 = $this->db->get_where('account',array('accnumber'=>$r->accnumber_parent,'idunit'=>12));
+            if($q2->num_rows()>0){
+                $r2 = $q2->row();
+               $idparent = $r2->idaccount;
+            } else {
+                $idparent = 0;
+            }
+
+            $this->db->where('idaccount',$r->idaccount);
+            $this->db->update('account',array('idparent'=>$idparent));
+        }
+    }
+
 }
 
 ?>
