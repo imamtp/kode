@@ -561,6 +561,7 @@ Ext.define('GridSalesOrderGrid', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
+
             showSalesOrderData(record);
             // showSalesOrderData(record);
             // var formAgama = Ext.create('formAgama');

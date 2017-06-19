@@ -109,8 +109,8 @@ function showSalesOrderData(record) {
     Ext.getCmp('delivery_date_SalesOrder').setValue(record.data.delivery_date);
 
     var customerSalesOrder = Ext.getCmp('customerSalesOrder');
-    customerSalesOrder.getStore().load();
     customerSalesOrder.setValue(record.data.idcustomer);
+    Ext.getCmp('namecustomerSalesOrder').setValue(record.data.namecustomer);
 
     Ext.getCmp('salesman_name_so').setValue(record.data.firstname);
     Ext.getCmp('salesman_id_so').setValue(record.data.salesman_id);
