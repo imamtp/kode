@@ -887,7 +887,7 @@ Ext.define('comboxAccountType', {
                 root: 'dat'
             }
         },
-        autoLoad: false
+        autoLoad: true
     })
 })
 
@@ -1389,7 +1389,7 @@ var headerAkunStore = Ext.create('Ext.data.Store', {
             root: 'dat'
         }
     },
-    autoLoad: false
+    autoLoad: true
 });
 
 Ext.define('comboxheaderAkun', {

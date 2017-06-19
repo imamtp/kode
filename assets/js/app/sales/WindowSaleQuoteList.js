@@ -93,8 +93,8 @@ Ext.define('GridSalesQuoteList', {
 
             Ext.getCmp('cb_tax_id_so').setValue(selectedRecord.get('rate'));
 
-            Ext.getCmp('shipaddressSalesOrder').setValue(selectedRecord.get('shipto'));
-            Ext.getCmp('comboxcurrencySalesOrder').setValue(selectedRecord.get('idcurrency'));
+            // Ext.getCmp('shipaddressSalesOrder').setValue(selectedRecord.get('shipto'));
+            // Ext.getCmp('comboxcurrencySalesOrder').setValue(selectedRecord.get('idcurrency'));
 
             Ext.getCmp('subtotalSalesOrder').setValue(selectedRecord.get('subtotal'));
             // Ext.getCmp('angkutSalesOrder').setValue(selectedRecord.get('freight'));
