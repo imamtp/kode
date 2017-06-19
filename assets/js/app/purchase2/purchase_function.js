@@ -95,6 +95,34 @@ function showPurchaseRequestData(record) {
     cbPurchaseRequisition.show();
 }
 
+if (!Ext.isDefined(Ext.getCmp('EntryPurchaseOrder'))) {
+    Ext.create(dir_sys + 'purchase2.EntryPurchaseOrder');
+}
+
+var wPurchaseOrderGrid = Ext.create('widget.window', {
+    id: 'windowPopupPurchaseOrderGrid',
+    title: 'Purchase Order Form',
+    header: {
+        titlePosition: 2,
+        titleAlign: 'center'
+    },
+    closable: true,
+    closeAction: 'hide',
+    autoWidth: true,
+    autoHeight: true,
+    layout: 'fit',
+    border: false,
+    items: [{
+        xtype: 'EntryPurchaseOrder'
+    }],
+    modal: true,
+    listeners: {
+        'show': function() {
+            // storePurchaseOrderGrid.load();
+        }
+    }
+});
+
 function showPurchaseOrderData(record) {
     wPurchaseOrderGrid.show();
 
