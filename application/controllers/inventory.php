@@ -1181,16 +1181,34 @@ class inventory extends MY_Controller {
         $i=0;
         foreach ($dataArr as $key => $value) {
 
-            //menghitung total stok dari seluruh gudang
-           $qstok = $this->db->query("select sum(totalstock) as totalstock
+            $qcek = $this->db->query("select idinventory from inventory 
+	                where idinventory_batch = ".$value['idinventory']." ")->row();
+            if(!isset($qcek->idinventory)){
+                 $qstok = $this->db->query("select sum(totalstock) as totalstock from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
+                                            from warehouse_stock a join inventory b ON a.idinventory = b.idinventory 
+                                            where a.idinventory = ".$value['idinventory']." 
+group by a.idinventory,idinventory_batch) a");
+                // $dataArr[$i]['totalitem'] = 1;
+                    
+            } else {
+                 //menghitung total stok dari seluruh gudang
+                    $qstok = $this->db->query("select sum(totalstock) as totalstock
                                         from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
                                                     from warehouse_stock a
                                                     join inventory b ON a.idinventory = b.idinventory
                                                     where a.idinventory IN (select idinventory from inventory where idinventory_batch = ".$value['idinventory'].")				
                                                     group by a.idinventory,idinventory_batch) a");
+            }
+
+           
             if($qstok->num_rows()>0){
                 $rstok = $qstok->row();
                 $dataArr[$i]['totalstock'] = $rstok->totalstock;
+                if($dataArr[$i]['totalstock'] == 0)
+                    $dataArr[$i]['totalitem'] = 0;
+                else
+                    $dataArr[$i]['totalitem'] = 1;
+                
             } else {
                 $dataArr[$i]['totalstock'] = 0;
             }    
