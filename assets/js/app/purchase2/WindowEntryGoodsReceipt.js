@@ -30,34 +30,53 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
         text: 'Record Goods Receipt',
         id: 'btnRecordGR',
         handler: function() {
-            var storeEntryGoodsReceipt = Ext.getCmp('EntryGoodsReceipt').getStore();
-            var ItemGRjson = Ext.encode(Ext.pluck(storeEntryGoodsReceipt.data.items, 'data'));
 
-            Ext.Ajax.request({
-                url: SITE_URL + 'purchase/save_goodsreceipt',
-                method: 'POST',
-                params: {
-                    itemgrid: ItemGRjson,
-                    statusform: Ext.getCmp('statusform_poreceipt').getValue(),
-                    nopo: Ext.getCmp('nojurnal_poreceipt').getValue(),
-                    idunit: Ext.getCmp('cbUnit_poreceipt').getValue(),
-                    notes: Ext.getCmp('notes_poreceipt').getValue(),
-                    idpurchase: Ext.getCmp('idpurchase_poreceipt').getValue(),
-                    receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
-                    received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue(),
-                    no_rujukan_sup: Ext.getCmp('no_rujukan_sup_poreceipt').getValue()
-                },
-                success: function(form, action) {
-                    var d = Ext.decode(form.responseText);
-                    Ext.Msg.alert('Info', d.message);
+            if (validasiPurchaseOrder()) {
+                var storeEntryGoodsReceipt = Ext.getCmp('EntryGoodsReceipt').getStore();
+                var ItemGRjson = Ext.encode(Ext.pluck(storeEntryGoodsReceipt.data.items, 'data'));
 
-                    Ext.getCmp('WindowEntryGoodsReceipt').hide();
-                    Ext.getCmp('GoodsReceiptGridID').getStore().load();
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                }
-            });
+                Ext.Ajax.request({
+                    url: SITE_URL + 'purchase/save_goodsreceipt',
+                    method: 'POST',
+                    params: {
+                        itemgrid: ItemGRjson,
+                        statusform: Ext.getCmp('statusform_poreceipt').getValue(),
+                        nopo: Ext.getCmp('nojurnal_poreceipt').getValue(),
+                        idunit: Ext.getCmp('cbUnit_poreceipt').getValue(),
+                        notes: Ext.getCmp('notes_poreceipt').getValue(),
+                        idpurchase: Ext.getCmp('idpurchase_poreceipt').getValue(),
+                        receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
+                        received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue(),
+                        no_rujukan_sup: Ext.getCmp('no_rujukan_sup_poreceipt').getValue()
+                    },
+                    success: function(form, action) {
+                        var d = Ext.decode(form.responseText);
+                        Ext.Msg.alert('Info', d.message);
+
+                        Ext.getCmp('WindowEntryGoodsReceipt').hide();
+                        Ext.getCmp('GoodsReceiptGridID').getStore().load();
+
+                        Ext.getCmp('WindowReceiptPOList').hide();
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    }
+                });
+            }
+
         }
     }, ]
 });
+
+function validasiPurchaseOrder() {
+    //    alert(Ext.getCmp('comboxcurrencyPurchaseOrder').getValue());   
+
+    if (Ext.getCmp('receivedid_poreceipt').getValue() == '') {
+        Ext.Msg.alert('Failed', 'Personil penerima belum ditentukan');
+
+    } else if (Ext.getCmp('received_date_poreceipt').getSubmitValue() == '' || Ext.getCmp('received_date_poreceipt').getSubmitValue() == null) {
+        Ext.Msg.alert('Failed', 'Masukkan tanggal penerimaan barang');
+    } else {
+        return true;
+    }
+}

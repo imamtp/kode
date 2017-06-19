@@ -169,7 +169,7 @@ class m_stock extends CI_Model {
 										*/
 										$current_qty_stock = ($qinv->totalstock + $ritem->qty);
 										$hpp_unit = round(($qinv->nominal_persediaan + $ritem->total) / $current_qty_stock);
-										echo '('.$qinv->nominal_persediaan.' + '.$ritem->total.') / ('.$qinv->totalstock.' + '.$ritem->qty.') - hpp_unit:'.round($hpp_unit).' <br>';
+										// echo '('.$qinv->nominal_persediaan.' + '.$ritem->total.') / ('.$qinv->totalstock.' + '.$ritem->qty.') - hpp_unit:'.round($hpp_unit).' <br>';
 									}
 
 									$end_balance = $hpp_unit*$current_qty_stock;

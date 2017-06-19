@@ -834,16 +834,3 @@ function updateGridPurchaseOrder(tipe) {
     // Ext.getCmp('sisaBayarPurchaseOrder').setValue(sisaBayarPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 
 }
-
-function validasiPurchaseOrder() {
-    //    alert(Ext.getCmp('comboxcurrencyPurchaseOrder').getValue());   
-
-    if (Ext.getCmp('receivedid_poreceipt').getValue() == '') {
-        Ext.Msg.alert('Failed', 'Personil penerima belum ditentukan');
-
-    } else if (Ext.getCmp('received_date_poreceipt').getValue() == '') {
-        Ext.Msg.alert('Failed', 'Masukkan tanggal penerimaan barang');
-    } else {
-        return true;
-    }
-}
