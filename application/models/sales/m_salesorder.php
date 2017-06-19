@@ -49,7 +49,7 @@ class m_salesorder extends CI_Model {
                                 group by idsales) h ON a .idsales = h.idsales
                     left join (select no_sales_quote,idsales,date_quote
                                 from sales ) i ON a.idsales_quote = i.idsales
-                    left join job_order k ON a.idsales = k.idsales";
+                    LEFT JOIN job_order k ON k.idsales = a.idsales";
 
         return $query;
     }
@@ -57,7 +57,9 @@ class m_salesorder extends CI_Model {
     function whereQuery() {
         $wer = null;
         if($this->input->post('option')=='delivery_order'){
-            $wer = ' and a.status > 2';
+            $wer .= ' and a.status > 2';
+        } else if($this->input->post('option')=='entry_wo'){
+            $wer .= ' and k.idsales IS NULL';
         }
 
         $sd = substr($this->input->post('startdate'),0,10);
