@@ -5,6 +5,13 @@ var storeChooserListCustomer = Ext.create('Ext.data.Store', {
         property: 'namecustomer',
         direction: 'ASC'
     }],
+    listeners: {
+        'beforeload': function(store, operation, eOpts) {
+            operation.params = {
+                extraparams: 'a.deleted: 0, a.idunit:' + idunit,
+            }
+        }
+    },
 });
 
 var smChooserListCustomer = Ext.create('Ext.selection.CheckboxModel', {
@@ -37,35 +44,34 @@ var GridCustomerList = Ext.create('Ext.grid.Panel', {
     width: 800,
     height: 350,
     selModel: smChooserListCustomer,
-    autoScroll:true,
+    autoScroll: true,
     columns: [
-        {header:'idcustomer', dataIndex:'idcustomer', hidden:true},
-        {header:'No', xtype:'rownumberer', sortable:false, width: 30},
-        {header:'No Customer', dataIndex:'nocustomer', minWidth: 150},
-        {header:'Name', dataIndex:'namecustomer', minWidth: 150},
-        {header:'Address', dataIndex:'address', minWidth: 120},
-        {header:'Type', dataIndex:'namecustype', minWidth: 100},
-        {header:'Notes', dataIndex:'note', minWidth: 200},
+        { header: 'idcustomer', dataIndex: 'idcustomer', hidden: true },
+        { header: 'No', xtype: 'rownumberer', sortable: false, width: 30 },
+        { header: 'No Customer', dataIndex: 'nocustomer', minWidth: 150 },
+        { header: 'Name', dataIndex: 'namecustomer', minWidth: 150 },
+        { header: 'Address', dataIndex: 'address', minWidth: 120 },
+        { header: 'Type', dataIndex: 'namecustype', minWidth: 100 },
+        { header: 'Notes', dataIndex: 'note', minWidth: 200 },
     ],
-    dockedItems:[
-        {
+    dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',
-            items:[
+            items: [
                 'Category :',
                 {
                     boxLabel: 'All',
                     xtype: 'checkboxfield',
-                    handler: function(checkbox, checked){
+                    handler: function(checkbox, checked) {
                         var cb1 = GridCustomerList.queryById('idcustomertype');
-                        if(checked){
+                        if (checked) {
                             cb1.setDisabled(true);
                             storeChooserListCustomer.clearFilter(true);
                             storeChooserListCustomer.load();
-                        }else{
+                        } else {
                             cb1.setDisabled(false);
-                            if(cb1.getValue() !== false)
-                                storeChooserListCustomer.filter(function(item){return item.get('idcustomertype') == cb1.getValue()})
+                            if (cb1.getValue() !== false)
+                                storeChooserListCustomer.filter(function(item) { return item.get('idcustomertype') == cb1.getValue() })
                         }
                     }
                 },
@@ -76,9 +82,9 @@ var GridCustomerList = Ext.create('Ext.grid.Panel', {
                     fieldLabel: null,
                     labelWidth: 10,
                     listeners: {
-                        'select': function(combo,record,eOpts){
+                        'select': function(combo, record, eOpts) {
                             storeChooserListCustomer.clearFilter(true);
-                            storeChooserListCustomer.filter(function(item){return item.get('idcustomertype') == record[0].data.idcustomertype})
+                            storeChooserListCustomer.filter(function(item) { return item.get('idcustomertype') == record[0].data.idcustomertype })
                         }
                     },
                 },
@@ -97,19 +103,19 @@ var GridCustomerList = Ext.create('Ext.grid.Panel', {
             defaults: {
                 width: 90,
             },
-            items:[
+            items: [
                 '->',
                 {
                     text: 'OK',
                     itemId: 'btnOk',
                     disabled: true,
-                    handler: function(){
+                    handler: function() {
                         GridCustomerList.fireEvent('selectItem', ChooserListCustomer.target);
                     }
                 },
                 {
                     text: 'Cancel',
-                    handler: function(){
+                    handler: function() {
                         ChooserListCustomer.hide();
                     }
                 }
@@ -129,9 +135,8 @@ var GridCustomerList = Ext.create('Ext.grid.Panel', {
                 storeChooserListCustomer.load();
             }
         },
-        itemdblclick: function() {
-        },
-        selectItem: function(form){
+        itemdblclick: function() {},
+        selectItem: function(form) {
             var selectedRecord = GridCustomerList.getSelectionModel().getSelection()[0];
             form.fireEvent('selectCustomer', selectedRecord.data);
             ChooserListCustomer.hide();
