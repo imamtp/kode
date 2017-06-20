@@ -50,7 +50,7 @@ class m_receiptwo extends CI_Model {
 
     function whereQuery() {
 
-        return " a.deleted = 0 and (a.status BETWEEN 2 and 5)";
+        return " a.deleted = 0 and (a.status BETWEEN 4 and 6)";
     }
 
     function orderBy() {

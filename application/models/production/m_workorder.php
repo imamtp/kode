@@ -60,7 +60,8 @@ class m_workorder extends CI_Model {
              $wer = " AND a.startdate_job is not null";
         } else if($this->input->post('option')=='not_yet_received'){
             //wo yang belum diterima wo-nya
-             $wer = " AND a.job_order_id not in (select job_order_id from job_order where (status BETWEEN 2 and 5))";
+            $wer = " AND (a.status BETWEEN 2 and 3)";
+            //  $wer = " AND a.job_order_id not in (select job_order_id from job_order where (status BETWEEN 2 and 5))";
         }
 
         return " a.deleted = 0 $wer";
