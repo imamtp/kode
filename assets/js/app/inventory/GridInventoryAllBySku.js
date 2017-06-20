@@ -245,7 +245,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             minWidth: 200
         },
         {
-            header: 'Total Coil',
+            header: 'Total Item',
             dataIndex: 'totalitem',
             minWidth: 120,
             xtype: 'numbercolumn',
