@@ -80,6 +80,7 @@ Ext.define('workOrderHeaderForm', {
                     fieldLabel: 'No. Work Order #',
                     labelWidth: 140,
                     name: 'job_no',
+                    readOnly: true,
                     id: 'job_no_wo_form',
                     listeners: {
                         render: function(component) {
@@ -265,6 +266,11 @@ Ext.define(dir_sys + 'production.WindowEntryWorkOrder', {
     items: [{
         xtype: 'workOrderHeaderForm'
     }],
+    listeners: {
+        'hide': function() {
+            Ext.getCmp('WorkOrderJobTab').getStore().removeAll();
+        }
+    },
     buttons: [{
         text: 'Cancel',
         handler: function() {
