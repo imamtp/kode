@@ -229,12 +229,14 @@ class purchase extends MY_Controller {
                 // 'remarks' => $value->remarks,
                 'ratetax' => $ratetax=='' ? null : $ratetax
             );
-            if($statusform == 'input'){
+            // if($statusform == 'input'){
+            if($value->idpurchaseitem == null){
                 $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
                 $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
                 $this->db->insert('purchaseitem', $item);
             }
-            else if($statusform == 'edit'){
+            else{
+            // else if($statusform == 'edit'){
                 $item['idpurchaseitem'] = $value->idpurchaseitem;
                 $this->db->where('idpurchaseitem', $item['idpurchaseitem']);
                 $this->db->update('purchaseitem', $item);
