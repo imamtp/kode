@@ -736,7 +736,18 @@ class Setup extends MY_Controller {
     function getTotalHutang()
     {
         $idunit = $this->input->post('idunit');
-        $q = $this->db->query("select sum(sisahutang) as total from registrasihutang where idunit=$idunit");
+        $sql = "select
+                        sum(a .sisahutang)  as total
+                    from
+                        registrasihutang a
+                    join unit b ON a .idunit = b.idunit
+                    join account c ON a .idacchutang = c .idaccount and a .idunit = c .idunit
+                    left join account d ON a .idacckenahutang = d.idaccount and a .idunit = d.idunit
+                    left join supplier e ON a .idsupplier = e.idsupplier
+                    WHERE
+                        TRUE and a.idunit = $idunit ";
+        $q = $this->db->query($sql);
+        // $q = $this->db->query("select sum(sisahutang) as total from registrasihutang where idunit=$idunit");
         if($q->num_rows()>0)
         {
             $r = $q->row();
