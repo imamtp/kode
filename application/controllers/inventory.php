@@ -1175,20 +1175,33 @@ class inventory extends MY_Controller {
                     where a.display is null and a.idinventory_batch is null $wer
                     GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_batch,a.nameinventory,a.cost,a.hpp_per_unit,  a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc";
         $q = $this->db->query($sql);
-
+// echo $sql;
         $dataArr = $q->result_array();
         // print_r($dataArr);
         $i=0;
         foreach ($dataArr as $key => $value) {
 
             $qcek = $this->db->query("select idinventory from inventory 
-	                where idinventory_batch = ".$value['idinventory']." ")->row();
-            if(!isset($qcek->idinventory)){
+	                where idinventory_batch = ".$value['idinventory']." ");
+                  
+
+            if($qcek->num_rows()<=0){
                  $qstok = $this->db->query("select sum(totalstock) as totalstock from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
                                             from warehouse_stock a join inventory b ON a.idinventory = b.idinventory 
-                                            where a.idinventory = ".$value['idinventory']." 
-group by a.idinventory,idinventory_batch) a");
-                // $dataArr[$i]['totalitem'] = 1;
+                                            where a.idinventory = ".$value['idinventory']." group by a.idinventory,idinventory_batch) a");
+             
+
+                if($qstok->num_rows()>0){
+                    $rstok = $qstok->row();
+                        $dataArr[$i]['totalstock'] = $rstok->totalstock;
+                        if($dataArr[$i]['totalstock'] == 0)
+                            $dataArr[$i]['totalitem'] = 0;
+                        else
+                            $dataArr[$i]['totalitem'] = 1;
+                    
+                } else {
+                    $dataArr[$i]['totalstock'] = 0;
+                }    
                     
             } else {
                  //menghitung total stok dari seluruh gudang
@@ -1198,16 +1211,28 @@ group by a.idinventory,idinventory_batch) a");
                                                     join inventory b ON a.idinventory = b.idinventory
                                                     where a.idinventory IN (select idinventory from inventory where idinventory_batch = ".$value['idinventory'].")				
                                                     group by a.idinventory,idinventory_batch) a");
+                                                    // echo $this->db->last_query();
+                if($qstok->num_rows()>0){
+                    $rstok = $qstok->row();
+                        $dataArr[$i]['totalstock'] = $rstok->totalstock;
+                        // if($dataArr[$i]['totalstock'] == 0)
+                        //     $dataArr[$i]['totalitem'] = 0;
+                        // else
+                        //     $dataArr[$i]['totalitem'] = 1;
+                    
+                } else {
+                    $dataArr[$i]['totalstock'] = 0;
+                }    
             }
 
            
             if($qstok->num_rows()>0){
                 $rstok = $qstok->row();
                 $dataArr[$i]['totalstock'] = $rstok->totalstock;
-                if($dataArr[$i]['totalstock'] == 0)
-                    $dataArr[$i]['totalitem'] = 0;
-                else
-                    $dataArr[$i]['totalitem'] = 1;
+                // if($dataArr[$i]['totalstock'] == 0)
+                //     $dataArr[$i]['totalitem'] = 0;
+                // else
+                //     $dataArr[$i]['totalitem'] = 1;
                 
             } else {
                 $dataArr[$i]['totalstock'] = 0;
