@@ -62,6 +62,7 @@ var wPurchaseRequisitionGrid = Ext.create('widget.window', {
             Ext.getCmp('supplierPurchaseRequisition').setValue();
             Ext.getCmp('requestby_pr').setValue();
             Ext.getCmp('supplierPurchaseRequisition').setReadOnly(false);
+            clearFormPR();
         }
     }
 });
@@ -250,7 +251,6 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
                 iconCls: 'add-icon',
                 handler: function() {
                     wPurchaseRequisitionGrid.show();
-                    clearFormPR();
 
                     supplierStore.load();
                     storeUnit.load();

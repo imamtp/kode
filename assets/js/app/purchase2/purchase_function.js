@@ -3,8 +3,6 @@ function showPurchaseRequestData(record) {
     // wPurchaseRequisitionGrid.show();
     Ext.getCmp('windowPopupPurchaseRequisitionGrid').show();
 
-    clearFormPR();
-
     supplierStore.load();
     storeUnit.load();
     productMeasurementStore.load();
@@ -750,10 +748,10 @@ function clearFormPO() {
 }
 
 function clearFormPR() {
-    var EntryPurchaseRequisition = Ext.getCmp('EntryPurchaseRequisition').getStore();
-    EntryPurchaseRequisition.removeAll();
-    EntryPurchaseRequisition.sync();
-
+    // var EntryPurchaseRequisition = Ext.getCmp('EntryPurchaseRequisition').getStore();
+    // EntryPurchaseRequisition.removeAll();
+    // EntryPurchaseRequisition.sync();
+    Ext.getCmp('EntryPurchaseRequisition').getStore().removeAll();
     Ext.getCmp('idpurchase_pr').setValue(null);
     Ext.getCmp('nojurnalPurchaseRequisition').setValue(null);
     Ext.getCmp('tanggalPurchaseRequisition').setValue(null);
