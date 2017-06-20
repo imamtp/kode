@@ -254,7 +254,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                 if (value === null) {
                     return 0;
                 } else {
-                    return renderNomor(value);
+                    return value;
                 }
             }
         },
@@ -268,7 +268,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                 if (value === null) {
                     return 0;
                 } else {
-                    return renderNomor(value);
+                    return value;
                 }
             }
         },

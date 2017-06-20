@@ -1189,7 +1189,7 @@ class inventory extends MY_Controller {
                  $qstok = $this->db->query("select sum(totalstock) as totalstock from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
                                             from warehouse_stock a join inventory b ON a.idinventory = b.idinventory 
                                             where a.idinventory = ".$value['idinventory']." group by a.idinventory,idinventory_batch) a");
-             
+                   // echo $this->db->last_query();
 
                 if($qstok->num_rows()>0){
                     $rstok = $qstok->row();
