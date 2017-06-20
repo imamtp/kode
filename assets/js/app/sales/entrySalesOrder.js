@@ -851,6 +851,8 @@ function validasiSalesOrder() {
         Ext.Msg.alert('Failed', 'Tentukan Sales Person');
     } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
+    } else if (Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {
+        Ext.Msg.alert('Failed', 'Msukkan barang terlebih dahulu');
     } else {
         return true;
     }
