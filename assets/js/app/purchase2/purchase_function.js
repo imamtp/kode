@@ -723,6 +723,7 @@ function clearFormPO() {
 
     Ext.getCmp('nojurnalPurchaseOrder').setValue(null);
     Ext.getCmp('supplierPurchaseOrder').setValue(null);
+    Ext.getCmp('supplierNamePurchaseOrder').setValue(data.namesupplier);
     Ext.getCmp('po_date_PurchaseOrder').setValue(null);
     Ext.getCmp('cb_tax_id_po').setValue(null);
     Ext.getCmp('memoPurchaseOrder').setValue(null);
@@ -760,6 +761,7 @@ function clearFormPR() {
     Ext.getCmp('tglPelunasanPurchaseRequisition').setValue(null);
     Ext.getCmp('cbPurchaseRequisition').setValue(null);
     Ext.getCmp('supplierPurchaseRequisition').setValue(null);
+    Ext.getCmp('supplierNamePurchaseRequisition').setValue(null);
     // Ext.getCmp('paymentPurchaseRequisition').setValue(null);
     Ext.getCmp('memoPurchaseRequisition').setValue('Purchase Requisition');
     Ext.getCmp('sisaBayarPurchaseRequisition').setValue(null);
