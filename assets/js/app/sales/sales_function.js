@@ -830,6 +830,26 @@ function load_tmp_sales_return() {
     //         });
 }
 
+function clearFormSQ() {
+    Ext.getCmp('EntrySalesQuotation').getStore().removeAll();
+    Ext.getCmp('noinvoiceSalesQuotation').setValue();
+    Ext.getCmp('statusformSalesQuotationGrid').setValue();
+    Ext.getCmp('idsales_quotation').setValue();
+    Ext.getCmp('nojurnalSalesQuotation').setValue();
+    Ext.getCmp('tanggalSalesQuotation').setValue();
+    Ext.getCmp('cb_tax_id_sq').setValue();
+    Ext.getCmp('tglPelunasanSalesQuotation').setValue();
+    Ext.getCmp('cbSalesQuotation').setValue();
+    Ext.getCmp('cbUnitEntrySalesQuotation').setValue();
+    Ext.getCmp('tglExpiredDateSalesQuotation').setValue();
+    Ext.getCmp('customerSalesQuotation').setValue();
+    Ext.getCmp('paymentSalesQuotation').setValue();
+    Ext.getCmp('memoSalesQuotation').setValue();
+    Ext.getCmp('totalSalesQuotation').setValue();
+    Ext.getCmp('totalPajakSalesQuotation').setValue();
+    Ext.getCmp('subtotalSalesQuotation').setValue();
+}
+
 function clearFormSO() {
     var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
     EntrySalesOrder.removeAll();

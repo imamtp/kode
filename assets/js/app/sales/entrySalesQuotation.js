@@ -4,7 +4,12 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
     alias: 'widget.EntrySalesQuotation',
     xtype: 'cell-editing',
     // title: 'Input Sales Quotation',
-    //    frame: true,    
+    //    frame: true,
+    listeners: {
+        'hide': function() {
+            clearFormSQ();
+        }
+    },
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
