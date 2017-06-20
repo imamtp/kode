@@ -52,24 +52,31 @@ class m_usermanagement extends CI_Model {
     function updateField() {
         $user_id = $this->input->post('user_id')== '' ? $this->m_data->getSeqVal('seq_user_id') : $this->input->post('user_id');
         $namaunit = $this->input->post('namaunit');
+        $idunit = $this->input->post('idunit');
 
          if ($this->input->post('user_id') != '') {
             $this->db->where('user_id', $user_id);
             $this->db->delete('userunit');
 
-            foreach ($namaunit as $idunit) {
+            if($namaunit!=''){
+                foreach ($namaunit as $idunit) {
 
-                if(is_int($idunit))
-                {
-                    $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$idunit));
-                } else {
-                    //kalo string cari dulu id unitnya
-                    //ini pas edit
-                    $qunit = $this->db->get_where('unit',array('namaunit'=>$idunit))->row();
-                    $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$qunit->idunit));
+                    if(is_int($idunit))
+                    {
+                        $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$idunit));
+                    } else {
+                            //kalo string cari dulu id unitnya
+                            //ini pas edit
+                            $qunit = $this->db->get_where('unit',array('namaunit'=>$idunit))->row();
+                            $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$qunit->idunit));
+                        }
+                    // $this->db->insert('userunit',array('user_id'=>$user_id,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
                 }
-                // $this->db->insert('userunit',array('user_id'=>$user_id,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
+            } else {
+                 $qunit = $this->db->get_where('unit',array('namaunit'=>$idunit))->row();
+                $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$qunit->idunit));
             }
+            
         } else {
             $this->db->insert('userunit', array('user_id'=>$user_id,'idunit'=>$this->input->post('idunit')));
         }
