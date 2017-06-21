@@ -191,10 +191,11 @@ Ext.define('GridItemSalesPopupOrder', {
         // },
         {
             xtype: 'toolbar',
-            hidden: true,
+            // hidden: true,
             dock: 'top',
             items: [{
                     itemId: 'chooseItemSalesPopupOrder',
+                    hidden: true,
                     text: 'Pilih Barang',
                     iconCls: 'add-icon',
                     handler: function() {
