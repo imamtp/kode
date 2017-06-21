@@ -201,7 +201,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesQuotation').getValue(), 'idsales', 'sales', 'nojurnalSalesQuotation', 'SQ');
+                                        setNoArticle(idunit, 'idsales', 'no_sales_quote', 'sales', 'nojurnalSalesQuotation', 'SQ');
+                                        // insertNoID(4, Ext.getCmp('cbUnitEntrySalesQuotation').getValue(), 'idsales', 'sales', 'nojurnalSalesQuotation', 'SQ');
                                     });
                                 }
                             }

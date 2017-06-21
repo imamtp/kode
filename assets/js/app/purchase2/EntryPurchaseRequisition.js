@@ -424,8 +424,10 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
+                                        setNoArticle(idunit, 'idpurchase', 'nopurchase', 'purchase', 'nojurnalPurchaseRequisition', 'PR', 'and idpurchasetype=1');
+
                                         // insertNoRef(4, Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(), 'nojurnalPurchaseRequisition','PR');
-                                        insertNoID(4, Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(), 'idpurchase', 'purchase', 'nojurnalPurchaseRequisition', 'PR');
+                                        // insertNoID(4, Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue(), 'idpurchase', 'purchase', 'nojurnalPurchaseRequisition', 'PR');
                                     });
                                 }
                             }
