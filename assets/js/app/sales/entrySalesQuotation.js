@@ -99,8 +99,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
                     align: 'right',
                     editor: {
                         xtype: 'numberfield',
-                        allowBlank: false,
-                        minValue: 1
+                        allowBlank: false
                     }
                 },
                 {
