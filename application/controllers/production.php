@@ -354,13 +354,18 @@ class production extends MY_Controller {
         //grid job
         foreach ($gridjob as $value) {
             $notes = isset($value->catatan) ? $value->catatan : null;
+
+            $warehouse_id_accept = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_accept,'warehouse_id','warehouse',$idunit);
+            $warehouse_id_reject = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_reject,'warehouse_id','warehouse',$idunit);
+            $warehouse_id_sisa = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_sisa,'warehouse_id','warehouse',$idunit);
+
             $data_job_item = array(
                     'qty_accept' => $value->qty_accept,
-                    'whs_accept_id' => $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_accept,'warehouse_id','warehouse',$idunit),
+                    'whs_accept_id' => $warehouse_id_accept,
                     'qty_reject' => $value->qty_reject,
-                    'whs_reject_id' => $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_reject,'warehouse_id','warehouse',$idunit),
+                    'whs_reject_id' => $warehouse_id_reject,
                     'qty_sisa' => $value->qty_sisa,
-                    'whs_sisa_id' => $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_sisa,'warehouse_id','warehouse',$idunit),
+                    'whs_sisa_id' => $warehouse_id_reject,
                     'notes' => $notes
                 );
 
@@ -371,6 +376,16 @@ class production extends MY_Controller {
                     )
                 );
             $this->db->update('job_item', $data_job_item);
+
+            if($status==5){
+                //status ready to deliver - update stok 
+                
+                 $this->load->model('inventory/m_stock');
+
+                 $this->m_stock->update_history(12,$value->qty_accept,$value->idinventory,$idunit,$warehouse_id_accept,date('Y-m-d'),'Update stock accept from Work Order: '.$this->input->post('job_no'));
+                 $this->m_stock->update_history(12,$value->qty_reject,$value->idinventory,$idunit,$warehouse_id_reject,date('Y-m-d'),'Update stock reject from Work Order: '.$this->input->post('job_no'));
+                 $this->m_stock->update_history(12,$value->qty_sisa,$value->idinventory,$idunit,$warehouse_id_reject,date('Y-m-d'),'Update stock sisa from Work Order: '.$this->input->post('job_no'));
+            }
         }
         //end grib job
 

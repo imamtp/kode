@@ -104,8 +104,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     align: 'right',
                     editor: {
                         xtype: 'numberfield',
-                        allowBlank: false,
-                        minValue: 1
+                        allowBlank: false
                     }
                 },
                 {

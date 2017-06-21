@@ -96,9 +96,9 @@ class inventory extends MY_Controller {
             // 'idinventorycat' => $this->m_data->getID('inventorycat', 'namecat', 'idinventorycat', $this->input->post('namecat')),
             'idinventorycat'=>$this->input->post('idinventorycat'),
             // 'idsupplier' => $this->input->post('idsupplier'),
-            'measurement_id_one' => $this->input->post('measurement_id_one'),
-            'measurement_id_two' => $this->input->post('measurement_id_two'),
-            'measurement_id_tre' => $this->input->post('measurement_id_tre'),
+            'measurement_id_one' => $this->input->post('measurement_id_one') !=null ? $this->input->post('measurement_id_one') : null,
+            'measurement_id_two' => $this->input->post('measurement_id_two') !=null ? $this->input->post('measurement_id_two') : null,
+            'measurement_id_tre' => $this->input->post('measurement_id_tre') !=null ? $this->input->post('measurement_id_tre') : null,
             'brand_id' => $this->input->post('brand_id') !=null ? $this->input->post('brand_id') : null,
             'sku_no' => $this->input->post('sku_no'),
             'bahan_coil_id' => $this->input->post('bahan_coil_id'),
@@ -1189,7 +1189,7 @@ class inventory extends MY_Controller {
                  $qstok = $this->db->query("select sum(totalstock) as totalstock from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
                                             from warehouse_stock a join inventory b ON a.idinventory = b.idinventory 
                                             where a.idinventory = ".$value['idinventory']." group by a.idinventory,idinventory_batch) a");
-             
+                   // echo $this->db->last_query();
 
                 if($qstok->num_rows()>0){
                     $rstok = $qstok->row();

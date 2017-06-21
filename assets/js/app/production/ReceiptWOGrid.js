@@ -259,6 +259,7 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
                 {
                     id: 'btnSetToReadyForDeliver',
                     disabled: true,
+                    hidden:true,
                     text: 'Set To Ready For Deliver',
                     iconCls: 'tick-icon',
                     handler: function() {

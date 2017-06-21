@@ -89,7 +89,7 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                                     }, {
                                         xtype: 'textfield',
                                         fieldLabel: 'No Barang',
-                                        allowBlank: false,
+                                        // allowBlank: false,
                                         name: 'invno'
                                     }, {
                                         xtype: 'comboxunit',
@@ -135,13 +135,13 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                                     }, {
                                         xtype: 'comboxmeasurement',
                                         fieldLabel: 'Second UoM',
-                                        allowBlank: false,
+                                        // allowBlank: false,
                                         id: 'measurement_id_two',
                                         name: 'measurement_id_two'
                                     }, {
                                         xtype: 'comboxmeasurement',
                                         fieldLabel: 'Third UoM',
-                                        allowBlank: false,
+                                        // allowBlank: false,
                                         id: 'measurement_id_tre',
                                         name: 'measurement_id_tre'
                                     }, {
