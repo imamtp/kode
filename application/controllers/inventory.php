@@ -1153,6 +1153,13 @@ class inventory extends MY_Controller {
     function get_by_sku(){
         $wer = null;
 
+        $extraparams = $this->input->post('extraparams');
+        foreach(explode(",", $extraparams) as $param){
+            $tmp = explode(":", $param);
+            if($tmp[1] != 'null')
+                $wer .= ' and a.'.$tmp[0].' = '.$tmp[1];
+        }
+
         $query = $this->input->post('query');
         if($query!=''){
             $wer = " and (a.sku_no like '%".strtoupper($query)."%' OR a.sku_no like '%".strtolower($query)."%')"; //by sku

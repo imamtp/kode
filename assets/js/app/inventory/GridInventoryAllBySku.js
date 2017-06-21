@@ -176,11 +176,14 @@ var storeGridInventoryAllBySku = Ext.create('Ext.data.Store', {
     }]
 });
 
-//storeGridInventoryAllBySku.on('beforeload',function(store, operation,eOpts){
-//        operation.params={
-//                    'extraparams': 'a.idunit:'+idunit
-//                  };
-//              });
+storeGridInventoryAllBySku.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'inventorytype:' + Ext.getCmp('inventorytypeDaftarPersediaan').getValue() + ',' +
+            'idinventorycat:' + Ext.getCmp('inventorycatDaftarPersediaan').getValue() + ',' +
+            'idunit:' + Ext.getCmp('idunitDaftarPersediaan').getValue() + ',' +
+            'brand_id:' + Ext.getCmp('brandDaftarPersediaan').getValue(),
+    };
+});
 
 Ext.define('MY.searchGridInventoryAllBySku', {
     extend: 'Ext.ux.form.SearchField',
@@ -324,27 +327,33 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                    xtype: 'comboxInventoryType'
+                    xtype: 'comboxInventoryType',
+                    id: 'inventorytypeDaftarPersediaan'
                 },
                 {
-                    xtype: 'comboxinventorycat'
+                    xtype: 'comboxinventorycat',
+                    valueField: 'idinventorycat',
+                    id: 'inventorycatDaftarPersediaan'
                 },
                 {
                     xtype: 'comboxunit',
                     valueField: 'idunit',
-                    id: 'cbUnitInvAll',
-                    listeners: {
-                        'change': function(field, newValue, oldValue) {
-                            storeGridInventoryAllBySku.load({
-                                params: {
-                                    'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitInvAll').getValue()
-                                }
-                            });
-                        }
-                    }
+                    labelWidth: 50,
+                    id: 'idunitDaftarPersediaan',
+                    // id: 'cbUnitInvAll',
+                    // listeners: {
+                    //     'change': function(field, newValue, oldValue) {
+                    //         storeGridInventoryAllBySku.load({
+                    //             params: {
+                    //                 'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitInvAll').getValue()
+                    //             }
+                    //         });
+                    //     }
+                    // }
                 },
                 {
-                    xtype: 'comboxbrand'
+                    xtype: 'comboxbrand',
+                    id: 'brandDaftarPersediaan',
                 }
             ]
         },
@@ -485,6 +494,20 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                             });
                         }
                         //                    disabled: true
+                }, {
+                    text: 'Search',
+                    handler: function() {
+                        storeGridInventoryAllBySku.load();
+                    }
+                }, {
+                    text: 'Clear Filter',
+                    handler: function() {
+                        Ext.getCmp('inventorytypeDaftarPersediaan').setValue();
+                        Ext.getCmp('inventorycatDaftarPersediaan').setValue();
+                        Ext.getCmp('idunitDaftarPersediaan').setValue();
+                        Ext.getCmp('brandDaftarPersediaan').setValue();
+                        storeGridInventoryAllBySku.load();
+                    }
                 }, '->',
                 'Pencarian: ', ' ',
                 {
