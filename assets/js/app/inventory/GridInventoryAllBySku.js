@@ -178,7 +178,7 @@ var storeGridInventoryAllBySku = Ext.create('Ext.data.Store', {
 
 storeGridInventoryAllBySku.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'inventorytype:' + Ext.getCmp('inventorytypeDaftarPersediaan').getValue() + ',' +
+        'extraparams': 'inventory_type:' + Ext.getCmp('inventorytypeDaftarPersediaan').getValue() + ',' +
             'idinventorycat:' + Ext.getCmp('inventorycatDaftarPersediaan').getValue() + ',' +
             'idunit:' + Ext.getCmp('idunitDaftarPersediaan').getValue() + ',' +
             'brand_id:' + Ext.getCmp('brandDaftarPersediaan').getValue(),
