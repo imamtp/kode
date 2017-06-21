@@ -272,7 +272,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesOrder', 'SO');
+                                        setNoArticle(idunit, 'idsales', 'no_sales_order', 'sales', 'nojurnalSalesOrder', 'SO');
+                                        // insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesOrder', 'SO');
                                         // insertNoRef(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'nojurnalSalesOrder','SO');
                                     });
                                 }
