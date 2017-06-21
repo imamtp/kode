@@ -721,7 +721,7 @@ function clearFormPO() {
 
     Ext.getCmp('nojurnalPurchaseOrder').setValue(null);
     Ext.getCmp('supplierPurchaseOrder').setValue(null);
-    Ext.getCmp('supplierNamePurchaseOrder').setValue(data.namesupplier);
+    Ext.getCmp('supplierNamePurchaseOrder').setValue(null);
     Ext.getCmp('po_date_PurchaseOrder').setValue(null);
     Ext.getCmp('cb_tax_id_po').setValue(null);
     Ext.getCmp('memoPurchaseOrder').setValue(null);
