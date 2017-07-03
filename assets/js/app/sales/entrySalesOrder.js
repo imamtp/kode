@@ -686,6 +686,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         Ext.Msg.alert('Success', d.message);
 
                         Ext.getCmp('customerSalesOrder').setValue(null);
+
                         Ext.getCmp('namecustomerSalesOrder').setValue(null);
                         Ext.getCmp('delivery_date_SalesOrder').setValue(null);
                         // Ext.getCmp('shipaddressSalesOrder').setValue(null);
@@ -703,8 +704,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
                         Ext.getCmp('freightSalesOrder').setValue();
 
+                        storeGridItemSalesOrder.clearFilter();
                         storeGridItemSalesOrder.removeAll();
-                        storeGridItemSalesOrder.sync();
+                        // storeGridItemSalesOrder.sync();
                         updateGridSalesOrder('general');
 
                         // if(mode=='print')
