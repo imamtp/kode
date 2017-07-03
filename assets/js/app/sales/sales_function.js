@@ -141,6 +141,7 @@ function showSalesOrderData(record) {
                     size: obj.size,
                     size_measurement: obj.size_measurement,
                     // assetaccount:obj.idsalesitem,
+                    deleted: obj.deleted,
                     sku_no: obj.sku_no,
                     qty: obj.qty * 1,
                     disc: obj.disc * 1,

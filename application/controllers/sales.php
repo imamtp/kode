@@ -121,6 +121,17 @@ class sales extends MY_Controller {
     }  
 
     function saveSalesOrder(){
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'SO',
+            'table' => 'sales',
+            'fieldpk' => 'idsales',
+            'fieldname' => 'no_sales_order',
+            'extraparams'=> null,
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
+
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
         $items = json_decode($this->input->post('datagrid'));
@@ -140,7 +151,7 @@ class sales extends MY_Controller {
             // 'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
             'delivery_date' => inputDate($this->input->post('delivery_date')),
             'date_sales' => date('Y-m-d'),
-            'no_sales_order' => $this->input->post('nojurnalSalesOrder'),
+            'no_sales_order' => $this->input->post('nojurnalSalesOrder') != null ? $this->input->post('nojurnalSalesOrder') : $noarticle,
             'idtax' => $idtax,
             // 'shipto'=> $this->input->post('shipaddressSalesOrder'),
             'subtotal' => clearnumberic($this->input->post('subtotalSalesOrder')),
@@ -182,8 +193,8 @@ class sales extends MY_Controller {
 
 
         foreach ($items as $value) {
-
             $item = array(
+                'idsalesitem' => $value->idsalesitem,
                 'idsales' => $idsales,
                 'idinventory' => $value->idinventory,
                 'measurement_id' => $this->m_data->getMeasurement($value->short_desc,$this->input->post('unit')),
@@ -197,25 +208,26 @@ class sales extends MY_Controller {
                 'price' => $value->price,
                 'total' => $value->total,
                 // 'remarks' => $value->remarks,
-                'ratetax' => $value->ratetax
+                'ratetax' => $value->ratetax,
+                'deleted' => $value->deleted == null ? 0 : $value->deleted,
             );
-            if($statusform == 'input'){
+            if($item['idsalesitem'] == null){
                 $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
                 $item['idsalesitem'] = $q_seq->result_array()[0]['nextval'];
                 $this->db->insert('salesitem', $item);
-            }
-            else if($statusform == 'edit'){
-                $item['idsalesitem'] = $value->idsalesitem;
+            }else{
                 $this->db->where('idsalesitem', $item['idsalesitem']);
-                $this->db->update('salesitem', $item);
+                if($item['deleted'] != "1")
+                    $this->db->update('salesitem', $item);
+                else
+                    $this->db->delete('salesitem');
             }
 
             //update harga jual di inventory
             // $this->db->where('idinventory',$value->idinventory);
             // $this->db->update('inventory',array('cost'=>$value->price));
         }
-        // $this->db->trans_rollback();
-        // exit();
+
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');

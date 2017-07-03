@@ -536,6 +536,38 @@ class Setup extends MY_Controller {
         echo json_encode(array('success'=>true,'nextval'=>$prefix.$y.$m.$nextval));
     }
 
+    function getNextNoArticle2($params){
+        $nextval = 0;
+        $digit = 4;
+        $prefix = $params['prefix'];
+        $fieldpk = $params['fieldpk'];
+        $fieldname = $params['fieldname'];
+        $table = $params['table'];
+        $extraparams = $params['extraparams'];
+        $idunit = $params['idunit'];
+        
+        $y = date('y');
+        $m = date('m');
+
+        $sql = "select $fieldname 
+                from $table where true 
+                $extraparams and $fieldname like '%$y$m%' 
+                order by $fieldpk desc
+                limit 1";
+        
+        $q = $this->db->query($sql);
+        if($q->num_rows() > 0)
+            $nextval = (int) str_replace($prefix.$y.$m, '', $q->row()->$fieldname);
+        
+        if($nextval == 999)
+            $digit = 4;
+
+        $nextval += 1;
+        $nextval = sprintf("%0".$digit."d", $nextval);
+        return $prefix.$y.$m.$nextval;
+        //echo json_encode(array('success'=>true,'nextval'=>$prefix.$y.$m.$nextval));
+    }
+
     function getseq($date=null)
     {
         // $datearr = explode("-", $date);

@@ -268,15 +268,16 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             id: 'nojurnalSalesOrder',
                             fieldLabel: 'NO SO #',
                             readOnly: true,
-                            listeners: {
-                                render: function(component) {
-                                    component.getEl().on('click', function(event, el) {
-                                        setNoArticle(idunit, 'idsales', 'no_sales_order', 'sales', 'nojurnalSalesOrder', 'SO');
-                                        // insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesOrder', 'SO');
-                                        // insertNoRef(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'nojurnalSalesOrder','SO');
-                                    });
-                                }
-                            }
+                            emptyText: 'Autogenerate',
+                            // listeners: {
+                            //     render: function(component) {
+                            //         component.getEl().on('click', function(event, el) {
+                            //             setNoArticle(idunit, 'idsales', 'no_sales_order', 'sales', 'nojurnalSalesOrder', 'SO');
+                            //             // insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesOrder', 'SO');
+                            //             // insertNoRef(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'nojurnalSalesOrder','SO');
+                            //         });
+                            //     }
+                            // }
                         },
                         {
                             xtype: 'datefield',
@@ -638,9 +639,10 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
             //         }
             //     });
             // } 
-
+            storeGridItemSalesOrder.clearFilter();
             var json = Ext.encode(Ext.pluck(storeGridItemSalesOrder.data.items, 'data'));
             //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
+            storeGridItemSalesOrder.filter([function(item) { return item.get('deleted') != "1" }]);
 
             Ext.Ajax.request({
                 url: SITE_URL + 'sales/saveSalesOrder',
@@ -768,7 +770,10 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
         //        });
     },
     onRemoveClick: function(grid, rowIndex) {
-        this.getStore().removeAt(rowIndex);
+        this.getStore().getRange()[rowIndex].data['deleted'] = 1;
+        this.getStore().clearFilter();
+        this.getStore().filter([function(item) { return item.get('deleted') != "1" }]);
+        // this.getStore().removeAt(rowIndex);
         updateGridSalesOrder('general')
     },
     onEdit: function(editor, e) {
@@ -838,17 +843,17 @@ function updateGridSalesOrder(tipe) {
 function validasiSalesOrder() {
     //    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
 
-    if (Ext.getCmp('nojurnalSalesOrder').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Tentukan No SO #');
-
-    } else if (Ext.getCmp('delivery_date_SalesOrder').getValue() == null) {
+    // if (Ext.getCmp('nojurnalSalesOrder').getValue() == null) {
+    //     Ext.Msg.alert('Failed', 'Tentukan No SO #');
+    // } else 
+    if (Ext.getCmp('delivery_date_SalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Delivery Date');
     } else if (Ext.getCmp('cb_tax_id_so').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
     } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan konsumen');
-    } else if (Ext.getCmp('salesman_name_so').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Tentukan Sales Person');
+        // } else if (Ext.getCmp('salesman_name_so').getValue() == null) {
+        //     Ext.Msg.alert('Failed', 'Tentukan Sales Person');
     } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
     } else if (Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {
