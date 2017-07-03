@@ -507,7 +507,7 @@ class Setup extends MY_Controller {
 
     function getNextNoArticle(){
         $nextval = 0;
-        $digit = 3;
+        $digit = 4;
         $prefix = $this->input->get('prefix');
         $fieldpk = $this->input->get('fieldpk');
         $fieldname = $this->input->get('fieldname');
