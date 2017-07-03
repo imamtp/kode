@@ -1,6 +1,6 @@
 Ext.define('GridItemJobReceiptWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['job_item_id','job_order_id','idinventory','idunit','measurement_id','cost','qty','subtotal','total','remarks','userin','datein','idunit','size','measurement_id_size','qty_accept','whs_accept_id','qty_reject','whs_reject_id','qty_sisa','whs_sisa_id','notes','token_tmp','nameinventory','invno','sku_no','short_desc','size_measurement','warehouse_code_accept','warehouse_code_reject','warehouse_code_sisa'],
+    fields: ['job_item_id', 'job_order_id', 'idinventory', 'idunit', 'measurement_id', 'cost', 'qty', 'subtotal', 'total', 'remarks', 'userin', 'datein', 'idunit', 'size', 'measurement_id_size', 'qty_accept', 'whs_accept_id', 'qty_reject', 'whs_reject_id', 'qty_sisa', 'whs_sisa_id', 'notes', 'token_tmp', 'nameinventory', 'invno', 'sku_no', 'short_desc', 'size_measurement', 'warehouse_code_accept', 'warehouse_code_reject', 'warehouse_code_sisa'],
     idProperty: 'id'
 });
 
@@ -20,9 +20,9 @@ var storeGridItemJobReceiptWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 //end store head
@@ -31,13 +31,13 @@ var storeGridItemJobReceiptWO = Ext.create('Ext.data.Store', {
 
 ///////////////////////////
 
-Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
+Ext.define(dir_sys + 'production.ReceiptWorkOrderJobTab', {
     extend: 'Ext.grid.Panel',
     id: 'ReceiptWorkOrderJobTab',
     alias: 'widget.ReceiptWorkOrderJobTab',
     xtype: 'cell-editing',
     // title: 'Finished Goods',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -50,21 +50,20 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
             // forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemJobReceiptWO,
-            viewConfig:{
-                markDirty:false
+            viewConfig: {
+                markDirty: false
             },
-            columns: [
-                {
+            columns: [{
                     header: 'job_order_id',
                     hidden: true,
                     dataIndex: 'job_order_id',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'job_item_id',
                     hidden: true,
                     dataIndex: 'job_item_id',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -75,19 +74,19 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     minWidth: 100
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
                     minWidth: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
 
                 {
@@ -127,7 +126,7 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                 },
                 {
                     header: 'Satuan Ukuran',
-                    minWidth:140,
+                    minWidth: 140,
                     dataIndex: 'size_measurement',
                     // editor: {
                     //     xtype: 'comboxmeasurement',
@@ -139,12 +138,12 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    hidden:true,
+                    hidden: true,
                     header: 'Total',
                     dataIndex: 'total',
                     minWidth: 100,
                     align: 'right'
-                },                
+                },
                 {
                     xtype: 'numbercolumn',
                     header: 'Qty Accept',
@@ -156,24 +155,24 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                         allowBlank: false,
                         minValue: 0
                     }
-                },                                    
+                },
                 {
                     header: 'Warehouse Accept',
                     minWidth: 150,
                     dataIndex: 'warehouse_code_accept',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
                     }
-                },            
+                },
                 {
                     xtype: 'numbercolumn',
                     header: 'Qty Reject',
                     minWidth: 100,
-                    minValue:0.00,
+                    minValue: 0.00,
                     dataIndex: 'qty_reject',
                     align: 'right',
                     editor: {
@@ -181,24 +180,24 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                         allowBlank: false,
                         minValue: 0
                     }
-                },                                  
+                },
                 {
                     header: 'Warehouse Reject',
                     minWidth: 150,
                     dataIndex: 'warehouse_code_reject',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
                     }
-                },            
+                },
                 {
                     xtype: 'numbercolumn',
-                    header: 'Qty Sisa',
+                    header: 'Qty Lebih',
                     minWidth: 100,
-                    defaultValue:0.00,
+                    defaultValue: 0.00,
                     dataIndex: 'qty_sisa',
                     align: 'right',
                     // editor: {
@@ -206,7 +205,19 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                     //     allowBlank: false,
                     //     minValue: 1
                     // }
-                },                                  
+                },
+                {
+                    header: 'Warehouse Lebih',
+                    minWidth: 150,
+                    dataIndex: 'warehouse_code_sisa',
+                    editor: {
+                        xtype: 'comboxWarehouse',
+                        hideLabel: true,
+                        valueField: 'warehouse_code',
+                        displayField: 'warehouse_code',
+                        labelWidth: 100
+                    }
+                },
                 // {
                 //     header: 'Warehouse Sisa',
                 //     minWidth: 150,
@@ -232,22 +243,22 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
             selModel: {
                 selType: 'cellmodel'
             },
-             listeners: {
+            listeners: {
                 cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                     console.log(dataRecord.data.job_item_id)
+                    console.log(dataRecord.data.job_item_id)
                     var job_item_id = dataRecord.data.job_item_id;
                     // Ext.getCmp('job_item_id_tmpwo').setValue(job_item_id); //job_item_id key flag
 
-                    Ext.getCmp('ReceiptWorkOrderMaterialTab').setTitle('Raw Material :'+ dataRecord.data.nameinventory);
+                    Ext.getCmp('ReceiptWorkOrderMaterialTab').setTitle('Raw Material :' + dataRecord.data.nameinventory);
 
                     // WorkOrderMaterialTabStore
-                      var ReceiptWorkOrderMaterialTabStore = Ext.getCmp('ReceiptWorkOrderMaterialTab').getStore();
-                      ReceiptWorkOrderMaterialTabStore.on('beforeload',function(store, operation,eOpts){
-                               operation.params={
-                                          'extraparams': 'a.job_order_id:'+dataRecord.data.job_order_id+','+'a.job_item_id:'+job_item_id
-                                         };
-                                     });
-                      ReceiptWorkOrderMaterialTabStore.load();
+                    var ReceiptWorkOrderMaterialTabStore = Ext.getCmp('ReceiptWorkOrderMaterialTab').getStore();
+                    ReceiptWorkOrderMaterialTabStore.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + dataRecord.data.job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                        };
+                    });
+                    ReceiptWorkOrderMaterialTabStore.load();
                     // .load({
                     //     params:{
                     //         'extraparams': 'a.job_order_id:'+dataRecord.data.job_order_id+','+'a.job_item_id:'+job_item_id
@@ -263,7 +274,7 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                     }
                 }
             },
-            dockedItems: [ 
+            dockedItems: [
                 // {
                 //     xtype: 'toolbar',
                 //     dock: 'top',
@@ -300,11 +311,9 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesOrder: function(button, event, mode)
-    {
+    recordSalesOrder: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountSalesOrder').getValue())
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             // var dp = Ext.getCmp('angkutSalesOrder').getValue();
             // if(dp!='')
             // {
@@ -333,9 +342,9 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
             //         }
             //     });
             // } 
-            
+
             var json = Ext.encode(Ext.pluck(storeGridItemSalesOrder.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
+            //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
 
             Ext.Ajax.request({
                 url: SITE_URL + 'sales/saveSalesOrder',
@@ -348,8 +357,7 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
                 success: function(form, action) {
 
                     var d = Ext.decode(form.responseText);
-                    if (!d.success)
-                    {
+                    if (!d.success) {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
@@ -376,8 +384,7 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
 
     },
     saveRecurr: function() {
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -385,40 +392,40 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddClick: function() {
-//        console.log(Ext.getCmp('customerSalesOrder').getValue())
-//        Ext.getCmp('idaccount').setValue('sad');
-//        // Create a model instance
-//        Ext.getCmp('formAddRowJurnal').getForm().reset();
-            // wItemJobReceiptWOPopupPopup.show();
-            // storeGridItemJobReceiptWOPopup.load();
+        //        console.log(Ext.getCmp('customerSalesOrder').getValue())
+        //        Ext.getCmp('idaccount').setValue('sad');
+        //        // Create a model instance
+        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
+        // wItemJobReceiptWOPopupPopup.show();
+        // storeGridItemJobReceiptWOPopup.load();
 
-//        var rec = new JournalStore({
-//            idaccount: null,
-//            accname: null,
-//            accnumber: null,
-//            debit: null,
-//            credit: null
-//        });
-//
-//        this.getStore().insert(0, rec);
-//        this.cellEditing.startEditByPosition({
-//            row: 0,
-//            column: 0
-//        });
+        //        var rec = new JournalStore({
+        //            idaccount: null,
+        //            accname: null,
+        //            accnumber: null,
+        //            debit: null,
+        //            credit: null
+        //        });
+        //
+        //        this.getStore().insert(0, rec);
+        //        this.cellEditing.startEditByPosition({
+        //            row: 0,
+        //            column: 0
+        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         // this.getStore().removeAt(rowIndex);
@@ -430,9 +437,8 @@ Ext.define(dir_sys+'production.ReceiptWorkOrderJobTab', {
 });
 
 
-function updateGridReceiptJobWO()
-{
-     Ext.each(storeGridItemJobReceiptWO.data.items, function(obj, i) {
+function updateGridReceiptJobWO() {
+    Ext.each(storeGridItemJobReceiptWO.data.items, function(obj, i) {
         // var total = obj.data.qty * obj.data.price;
         // var diskon = (total / 100) * obj.data.disc;
 
@@ -440,6 +446,6 @@ function updateGridReceiptJobWO()
         // subtotalSalesQuotation += net;
         // totalPajak += (net / 100) * obj.data.ratetax * 1;
         // obj.set('qty_sisa', obj.data.subtotal-(obj.data.qty_accept+obj.data.qty_reject));
-        obj.set('qty_sisa', obj.data.qty-(obj.data.qty_accept+obj.data.qty_reject));
+        obj.set('qty_sisa', obj.data.qty - (obj.data.qty_accept + obj.data.qty_reject));
     });
 }

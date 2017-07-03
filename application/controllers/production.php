@@ -365,7 +365,7 @@ class production extends MY_Controller {
                     'qty_reject' => $value->qty_reject,
                     'whs_reject_id' => $warehouse_id_reject,
                     'qty_sisa' => $value->qty_sisa,
-                    'whs_sisa_id' => $warehouse_id_reject,
+                    'whs_sisa_id' => $warehouse_id_sisa,
                     'notes' => $notes
                 );
 
