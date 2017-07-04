@@ -44,7 +44,8 @@ class m_inventoryAll extends CI_Model {
             d.totalstock,
             e.short_desc as satuan_kedua,
             a.inventory_type,
-            a.idinventory_batch";
+            a.idinventory_batch,
+            (totalstock / f.berat) as stock_kedua";
     }
     
     function fieldCek()
@@ -64,7 +65,8 @@ class m_inventoryAll extends CI_Model {
                     left join (select idinventory,sum(stock) as totalstock 
                                 from warehouse_stock
                                 group by idinventory) d ON a.idinventory = d.idinventory
-                    left join productmeasurement e ON a.measurement_id_two = e.measurement_id";
+                    left join productmeasurement e ON a.measurement_id_two = e.measurement_id
+                    left join bahan_coil f on f.bahan_coil_id = a.bahan_coil_id";
 
         return $query;
     }

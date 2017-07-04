@@ -108,19 +108,19 @@ Ext.define('GridItemGridDetailInventory', {
                 if (value === null) {
                     return 0;
                 } else {
-                    return renderNomor(value);
+                    return value; //renderNomor(value);
                 }
             }
         },
         {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
-            hidden: true,
+            // hidden: true,
             minWidth: 100
         }, {
             header: 'Stock #2',
             dataIndex: 'stock_kedua',
-            hidden: true,
+            // hidden: true,
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
