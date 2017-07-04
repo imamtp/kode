@@ -42,6 +42,14 @@ function loadWoData(job_order_id) {
                 Ext.getCmp('btnSaveWo').disable(); // kalau sudah diijadwalkan tidak boleh edit
             }
 
+            if (obj.data.idsales !== '') {
+                var val = { is_from_so: 1 };
+                Ext.getCmp('rg_is_from_so_wo_form').setValue(val);
+            } else {
+                var val = { is_from_so: 2 };
+                Ext.getCmp('rg_is_from_so_wo_form').setValue(val);
+            }
+
         },
         failure: function(form, action) {
             Ext.Msg.alert("Load failed", action.result.errorMessage);
