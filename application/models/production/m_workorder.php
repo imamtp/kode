@@ -32,10 +32,10 @@ class m_workorder extends CI_Model {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
                     left join sales b ON a.idsales = b.idsales
-                    join (select job_order_id,count(*) as totaljob
+                    left join (select job_order_id,count(*) as totaljob
                         from job_item
                         group by job_order_id) c ON a.job_order_id = c.job_order_id 
-                    join (select job_order_id,count(*) as totalraw
+                    left join (select job_order_id,count(*) as totalraw
                         from prod_material
                         where material_type = 1
                         group by job_order_id) d ON a.job_order_id = d.job_order_id
