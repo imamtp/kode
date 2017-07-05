@@ -3,7 +3,7 @@ var WindowEntryReceiptWO = Ext.create(dir_sys + 'production.WindowEntryReceiptWO
 Ext.define('GridReceiptWorkOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'firstname'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'firstname', 'namecustomer'
     ],
     idProperty: 'id'
 });
@@ -102,14 +102,17 @@ Ext.define('GridReceiptWorkOrderList', {
                 //     GridReceiptWorkOrderCostTab.sync();
 
 
-
                 Ext.getCmp('idsales_receiptwoform').setValue(selectedRecord.get('idsales'));
                 Ext.getCmp('job_order_id_receiptwoform').setValue(selectedRecord.get('job_order_id'));
-
+                console.log('no sales order: ' + selectedRecord.get('no_sales_order'));
                 if (selectedRecord.get('no_sales_order') === null) {
                     Ext.getCmp('no_sales_order_receiptwoform').hide();
+                    Ext.getCmp('customer_receiptwoform').hide();
                 } else {
+                    Ext.getCmp('no_sales_order_receiptwoform').show();
+                    Ext.getCmp('customer_receiptwoform').show();
                     Ext.getCmp('no_sales_order_receiptwoform').setValue(selectedRecord.get('no_sales_order'));
+                    Ext.getCmp('customer_receiptwoform').setValue(selectedRecord.get('namecustomer'));
                 }
 
                 Ext.getCmp('job_no_receiptwoform').setValue(selectedRecord.get('job_no'));

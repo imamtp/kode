@@ -72,7 +72,7 @@ Ext.define('GridSalesOrderWOList', {
         align: 'center',
         icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
         handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-
+            Ext.getCmp('customer_woform').setValue(selectedRecord.get('namecustomer'));
             Ext.getCmp('idsales_woform').setValue(selectedRecord.get('idsales'));
             Ext.getCmp('no_sales_order_woform').setValue(selectedRecord.get('no_sales_order'));
 

@@ -73,8 +73,10 @@ Ext.define('MaterialWorkOrderHeaderForm', {
                         change: function(radiogroup, radio) {
                             if (radio.is_from_so == 2) {
                                 Ext.getCmp('no_sales_order_materialwoform').hide();
+                                Ext.getCmp('customer_materialwoform').hide();
                             } else {
                                 Ext.getCmp('no_sales_order_materialwoform').show();
+                                Ext.getCmp('customer_materialwoform').show();
                             }
                         }
                     }
@@ -116,6 +118,12 @@ Ext.define('MaterialWorkOrderHeaderForm', {
                         readOnly: true,
                         fieldLabel: 'Remarks',
                         name: 'remarks'
+                    },
+                    {
+                        xtype: 'textfield',
+                        readOnly: true,
+                        fieldLabel: 'Customer',
+                        id: 'customer_materialwoform',
                     }
                 ]
             }, {

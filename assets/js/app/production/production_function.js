@@ -25,6 +25,7 @@ function loadWoData(job_order_id) {
         },
         success: function(form, action) {
             var obj = Ext.decode(action.response.responseText);
+            Ext.getCmp('customer_woform').setValue(obj.data.namecustomer);
             workOrderHeaderForm.findField("status").setValue(obj.data.status * 1);
             workOrderHeaderForm.findField("status").setReadOnly(false);
 
