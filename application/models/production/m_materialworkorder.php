@@ -16,7 +16,7 @@ class m_materialworkorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.job_order_id,a.idsales,a.material_datein,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.req_ship_date,a.status,a.remarks,b.date as datesales,b.no_sales_order,b.date_sales,c.totaljob,d.totalraw,e.totalbom,f.firstname,a.pic_id,startdate_job,enddate_job,approvedby_id";
+        return "a.job_order_id,a.idsales,a.material_datein,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.req_ship_date,a.status,a.remarks,b.date as datesales,b.no_sales_order,b.date_sales,c.totaljob,d.totalraw,e.totalbom,f.firstname,a.pic_id,startdate_job,enddate_job,approvedby_id,g.namecustomer";
     }
     
     function fieldCek()
@@ -43,7 +43,8 @@ class m_materialworkorder extends CI_Model {
                         from prod_material
                         where material_type = 2
                         group by job_order_id) e ON a.job_order_id = e.job_order_id
-                    left join employee f ON a.pic_id = f.idemployee";
+                    left join employee f ON a.pic_id = f.idemployee
+                    left join customer g ON g.idcustomer = b.idcustomer"";
 
         return $query;
     }

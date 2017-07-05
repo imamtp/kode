@@ -5,7 +5,7 @@ var WindowReceiptWOList = Ext.create(dir_sys + 'production.WindowReceiptWOList')
 Ext.define('ReceiptWOGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'finished_date', 'status', 'pic_id', 'approvedby_id', 'no_sales_order', 'date_sales', 'pic_name', 'approveby_name', 'totaljob', 'totalcostitem', 'totalmaterialitem', 'receiptdate'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'finished_date', 'status', 'pic_id', 'approvedby_id', 'no_sales_order', 'date_sales', 'pic_name', 'approveby_name', 'totaljob', 'totalcostitem', 'totalmaterialitem', 'receiptdate', 'namecustomer'
     ],
     idProperty: 'id'
 });
@@ -104,7 +104,13 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
             header: 'Pic Name',
             dataIndex: 'pic_name',
             minWidth: 150
-        }, {
+        },
+        {
+            header: 'Cutomer',
+            dataIndex: 'namecustomer',
+            minWidth: 150
+        },
+        {
             header: 'Approved By',
             dataIndex: 'approveby_name',
             minWidth: 150
@@ -259,7 +265,7 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
                 {
                     id: 'btnSetToReadyForDeliver',
                     disabled: true,
-                    hidden:true,
+                    hidden: true,
                     text: 'Set To Ready For Deliver',
                     iconCls: 'tick-icon',
                     handler: function() {
