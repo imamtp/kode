@@ -133,7 +133,7 @@ class m_purchase extends CI_Model {
 
     function query_itempurchase($idpurchase){
         $is_tmp = $this->input->get('is_tmp');
-        $is_tmp = $is_tmp == '' ? 0 : 1 ;
+        // $is_tmp = $is_tmp == '' ? 0 : 1 ;
 
          $q = $this->db->query("select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
                 a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,COALESCE(total_qty_batch, 0) as total_qty_batch,a.idunit	
