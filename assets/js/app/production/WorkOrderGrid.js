@@ -221,7 +221,7 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
                     Ext.getCmp('workOrderHeaderForm').getForm().reset();
                     //end hapus form
 
-                    Ext.getCmp('containerScheduleWo').hide();
+                    // Ext.getCmp('containerScheduleWo').hide();
 
                     storeUnit.load();
                     Ext.getCmp('cbUnitWOForm').setValue(idunit);
@@ -257,9 +257,13 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
 
                     Ext.getCmp('btnSaveWo').enable();
 
-                    var children = Ext.get('containerScheduleWo');
-                    // hide them all
-                    Ext.each(children, function(child) { child.hide(); });
+                    // var children = Ext.get('containerScheduleWo');
+                    // // hide them all
+                    // Ext.each(children, function(child) { child.hide(); });
+
+                    Ext.get('start_date_schedulewoform').hide();
+                    Ext.get('end_date_schedulewoform').hide();
+                    Ext.get('pic_name_schedulewoform').hide();
 
                     Ext.getCmp('WindowEntryWorkOrder').setTitle('Entry Work Order');
 
@@ -346,9 +350,13 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
         itemdblclick: function(dv, record, item, index, e) {
             loadWoData(record.data.job_order_id)
             console.log(record.data.job_order_id);
-            var children = Ext.get('containerScheduleWo');
-            // hide them all
-            Ext.each(children, function(child) { child.hide(); });
+            // var children = Ext.get('containerScheduleWo');
+            // // hide them all
+            // Ext.each(children, function(child) { child.hide(); });
+
+            Ext.get('start_date_schedulewoform').hide();
+            Ext.get('end_date_schedulewoform').hide();
+            Ext.get('pic_name_schedulewoform').hide();
         }
     }
 });

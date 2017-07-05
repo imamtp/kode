@@ -1441,8 +1441,8 @@ class purchase extends MY_Controller {
         if($success){
              $qtysisa = $totalqty-$totalqtyterima;
             if($totalqtyterima>$totalqty){
-                $message = 'Total qty batch melebihi qty barang';
-                $success = false;
+                // $message = 'Total qty batch melebihi qty barang';
+                // $success = false;
             } else if($totalqtyterima<$totalqty){
                 $message = 'Total qty batch kurang dari qty barang';
                 $success = false;
