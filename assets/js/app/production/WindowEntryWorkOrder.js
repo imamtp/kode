@@ -59,6 +59,7 @@ Ext.define('workOrderHeaderForm', {
                 items: [{
                     xtype: 'radiogroup',
                     labelWidth: 140,
+                    id: 'rg_is_from_so_wo_form',
                     // labelWidth:220,
                     fieldLabel: 'Load from SO?',
                     // columns: 2,
