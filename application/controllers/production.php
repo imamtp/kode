@@ -393,8 +393,10 @@ class production extends MY_Controller {
                  $this->load->model('inventory/m_stock');
 
                  $this->m_stock->update_history(12,$value->qty_accept,$value->idinventory,$idunit,$warehouse_id_accept,date('Y-m-d'),'Update stock accept from Work Order: '.$this->input->post('job_no'));
-                 $this->m_stock->update_history(12,$value->qty_reject,$value->idinventory,$idunit,$warehouse_id_reject,date('Y-m-d'),'Update stock reject from Work Order: '.$this->input->post('job_no'));
-                 $this->m_stock->update_history(12,$value->qty_sisa,$value->idinventory,$idunit,$warehouse_id_reject,date('Y-m-d'),'Update stock sisa from Work Order: '.$this->input->post('job_no'));
+                 if($value->qty_reject != 0)
+                    $this->m_stock->update_history(12,$value->qty_reject,$value->idinventory,$idunit,$warehouse_id_reject,date('Y-m-d'),'Update stock reject from Work Order: '.$this->input->post('job_no'));
+                 if($value->qty_sisa != 0)
+                    $this->m_stock->update_history(12,$value->qty_sisa,$value->idinventory,$idunit,$warehouse_id_reject,date('Y-m-d'),'Update stock sisa from Work Order: '.$this->input->post('job_no'));
             }
         }
         //end grib job
