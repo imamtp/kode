@@ -350,14 +350,15 @@ Ext.define(dir_sys + 'production.WindowEntryReceiptWO', {
 
 
 function validasiReceiptWO() {
-    //    alert(Ext.getCmp('comboxcurrencyPurchaseOrder').getValue());   
+    // alert(Ext.getCmp('receiptdate_receiptwoform').getValue());
+    var receiptdate = Ext.getCmp('receiptdate_receiptwoform').getValue();
 
     if (Ext.getCmp('finished_date_receiptwoform').getValue() == '') {
         Ext.Msg.alert('Failed', 'Tentukan Tangal Selesai');
 
     } else if (Ext.getCmp('approvedby_id_receiptwoform').getValue() == '') {
         Ext.Msg.alert('Failed', 'Tentukan petugas yang menyetujui');
-    } else if (Ext.getCmp('receiptdate_receiptwoform').getValue() == '') {
+    } else if (receiptdate == '' || receiptdate == null) {
         Ext.Msg.alert('Failed', 'Tentukan tanggal penerimaan');
     } else {
         var ReceiptWorkOrderJobTabStore = Ext.getCmp('ReceiptWorkOrderJobTab').getStore();
