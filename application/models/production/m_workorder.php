@@ -16,7 +16,7 @@ class m_workorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.job_order_id,a.idsales,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.req_ship_date,a.status,a.remarks,b.date as datesales,b.no_sales_order,b.date_sales,c.totaljob,d.totalraw,e.totalbom,f.firstname,a.pic_id,startdate_job,enddate_job,approvedby_id,g.namecustomer,b.no_sales_order";
+        return "a.job_order_id,a.idsales,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.req_ship_date,a.status,a.remarks,b.date as datesales,b.no_sales_order,b.date_sales,c.totaljob,d.totalraw,e.totalbom,f.firstname,a.pic_id,startdate_job,enddate_job,approvedby_id,g.namecustomer,b.no_sales_order,g.address as address_customer";
     }
     
     function fieldCek()
@@ -85,6 +85,46 @@ class m_workorder extends CI_Model {
         return $data;
     }
 
+    function cetak_wo($job_order_id){
+
+        $sql = $this->query();
+        $sql.= " WHERE a.job_order_id=$job_order_id";
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $dtcetak = $q->result_array()[0];
+            
+            $runit = $this->m_data->dataunit($dtcetak['idunit']);
+            $dtcetak['logo'] = $runit['logo'];
+            $dtcetak['namaunit'] = $runit['namaunit'];
+            $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['telp'] = $runit['telp'];
+            $dtcetak['fax'] = $runit['fax'];
+
+            //header
+            $sql = $this->query()." WHERE ".$this->whereQuery()." AND a.job_order_id=$job_order_id ";
+            $query = $this->db->query($sql);
+            $dtcetak['header'] = $query->result_array()[0];
+            
+            //detail finished goods
+            $this->load->model('production/m_itemjobwo');
+            $sql = $this->m_itemjobwo->query()." WHERE ".$this->m_itemjobwo->whereQuery()." AND a.job_order_id=$job_order_id";
+            $query = $this->db->query($sql);
+            $dtcetak['fg_list'] = $query->result_array();
+
+            //detail rm of fg
+            $this->load->model('production/m_itemmaterialwo');
+            foreach($dtcetak['fg_list'] as $key=>$fg){
+                $sql = $this->m_itemmaterialwo->query()." WHERE ".$this->m_itemmaterialwo->whereQuery()." AND a.job_order_id = $job_order_id AND a.job_item_id = ". $fg['job_item_id'];
+                $query = $this->db->query($sql);
+                $dtcetak['fg_list'][$key]['rm_list'] = $query->result_array();
+            }
+
+            return $dtcetak;
+        } else {
+            echo 'Data not found';
+        }
+    }
 }
 
 ?>
