@@ -56,6 +56,7 @@ class m_user extends CI_Model {
                 'idcompany' => $r->idcompany,
                 'clientid' => $r->clientid,
                 'username' => $r->username,
+                'realname' => $r->realname,
                 'group_id' => $r->group_id,
                 'usergroup' => $r->group_id == 99 ? 'Super User' : $qgroup->group_name,
                 'unit'=> $unit,
