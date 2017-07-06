@@ -88,7 +88,18 @@ Ext.define(dir_sys + 'production.ReceiptWorkOrderJobTab', {
                     minWidth: 150,
                     //                    id: 'nameinventory'
                 },
-
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Order',
+                    minWidth: 70,
+                    dataIndex: 'qty',
+                    align: 'right',
+                    // editor: {
+                    //     xtype: 'numberfield',
+                    //     allowBlank: false,
+                    //     minValue: 1
+                    // }
+                },
                 {
                     header: 'Satuan Qty',
                     dataIndex: 'short_desc',
@@ -102,15 +113,15 @@ Ext.define(dir_sys + 'production.ReceiptWorkOrderJobTab', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    header: 'Qty Order',
-                    minWidth: 70,
-                    dataIndex: 'qty',
+                    header: 'Qty Accept',
+                    minWidth: 100,
+                    dataIndex: 'qty_accept',
                     align: 'right',
-                    // editor: {
-                    //     xtype: 'numberfield',
-                    //     allowBlank: false,
-                    //     minValue: 1
-                    // }
+                    editor: {
+                        xtype: 'numberfield',
+                        allowBlank: false,
+                        minValue: 0
+                    }
                 },
                 {
                     xtype: 'numbercolumn',
@@ -143,18 +154,6 @@ Ext.define(dir_sys + 'production.ReceiptWorkOrderJobTab', {
                     dataIndex: 'total',
                     minWidth: 100,
                     align: 'right'
-                },
-                {
-                    xtype: 'numbercolumn',
-                    header: 'Qty Accept',
-                    minWidth: 100,
-                    dataIndex: 'qty_accept',
-                    align: 'right',
-                    editor: {
-                        xtype: 'numberfield',
-                        allowBlank: false,
-                        minValue: 0
-                    }
                 },
                 {
                     header: 'Warehouse Accept',
