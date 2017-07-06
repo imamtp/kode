@@ -88,7 +88,7 @@ function loadWoReceiptData(data) {
     //     GridReceiptWorkOrderCostTab.sync();
 
 
-
+    Ext.getCmp('customer_receiptwoform').setValue(data.namecustomer);
     Ext.getCmp('idsales_receiptwoform').setValue(data.idsales);
     Ext.getCmp('job_order_id_receiptwoform').setValue(data.job_order_id);
 
