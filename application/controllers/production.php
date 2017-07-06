@@ -382,11 +382,14 @@ class production extends MY_Controller {
             $this->db->where(
                 array(
                         'job_item_id'=>$value->job_item_id,
+                        'job_order_id'=>$job_order_id,
                         'idunit'=>$idunit
                     )
                 );
             $this->db->update('job_item', $data_job_item);
-
+            // echo $this->db->last_query();
+            // $this->db->trans_rollback();
+            // exit();
             if($status==5){
                 //status ready to deliver - update stok 
                 
