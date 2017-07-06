@@ -136,7 +136,7 @@ class m_purchase extends CI_Model {
         if(!isset($_GET['is_tmp'])){
             $is_tmp = 0;
         } else {
-            $is_tmp = $is_tmp == '' ? 0 : 1 ;
+            $is_tmp = $this->input->get('is_tmp');
         }
         // $is_tmp = $is_tmp == '' ? 0 : 1 ;
 

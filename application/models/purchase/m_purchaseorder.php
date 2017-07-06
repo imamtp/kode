@@ -144,7 +144,9 @@ class m_purchaseorder extends CI_Model {
                 h. date,
                 a .include_tax,
                 a .nofpsup,
-                a .no_rujukan_sup";
+                a .no_rujukan_sup,
+                a.idpurchasestatus,a.status,
+                a.idpurchase_req";
 
         return " idpurchasetype = 2 and a.deleted = 0 $wer $group_by";
     }
