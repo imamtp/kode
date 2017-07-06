@@ -824,6 +824,14 @@ class production extends MY_Controller {
         $this->load->view('tplcetak/production_receipt_wo',$d);
     }
 
+    function print_wo($job_order_id,$print=null){
+        $this->load->model('production/m_workorder','model');
+        $d['data'] = $this->model->cetak_wo($job_order_id);
+        $d['title'] = 'Surat Perintah Kerja';
+        $d['print'] = $print;
+        $this->load->view('tplcetak/production_wo',$d);
+    }
+
     function set_deliver_ready(){
         $this->db->trans_begin();
 
