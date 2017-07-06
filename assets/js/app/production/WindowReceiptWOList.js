@@ -250,6 +250,11 @@ Ext.define('GridReceiptWorkOrderList', {
             minWidth: 150
         },
         {
+            header: 'Customer',
+            dataIndex: 'namecustomer',
+            minWidth: 150
+        },
+        {
             header: 'Req. Ship Date',
             dataIndex: 'req_ship_date',
             minWidth: 150

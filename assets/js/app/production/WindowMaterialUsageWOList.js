@@ -1,7 +1,7 @@
 Ext.define('GridMaterialUsageWOListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'namecustomer'
     ],
     idProperty: 'id'
 });
@@ -126,6 +126,11 @@ Ext.define('GridMaterialUsageWOList', {
         }, {
             header: 'WO Number',
             dataIndex: 'job_no',
+            minWidth: 150
+        },
+        {
+            header: 'Customer',
+            dataIndex: 'namecustomer',
             minWidth: 150
         },
         {
