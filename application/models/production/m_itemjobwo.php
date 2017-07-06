@@ -19,7 +19,7 @@ class m_itemjobwo extends CI_Model {
         return "a.job_item_id,a.job_order_id,a.idinventory,a.idunit,a.measurement_id,a.cost,a.qty,a.subtotal,a.subtotal as total,a.qty as total_qty,a.remarks,a.userin,a.datein,a.idunit,a.size,
 a.measurement_id_size,a.qty_accept,a.whs_accept_id,a.qty_reject,a.whs_reject_id,a.qty_sisa,a.whs_sisa_id,a.notes,a.token_tmp,
 b.nameinventory,b.invno,b.sku_no,c.short_desc, d.short_desc  as size_measurement,e.warehouse_code as warehouse_code_accept,
-f.warehouse_code as warehouse_code_reject,g.warehouse_code as warehouse_code_sisa";
+f.warehouse_code as warehouse_code_reject,g.warehouse_code as warehouse_code_sisa, j.namecustomer";
     }
     
     function fieldCek()
@@ -39,7 +39,10 @@ f.warehouse_code as warehouse_code_reject,g.warehouse_code as warehouse_code_sis
                     left join productmeasurement d ON a.measurement_id_size = d.measurement_id
                     left join warehouse e ON a.whs_accept_id = e.warehouse_id
                     left join warehouse f ON a.whs_reject_id = f.warehouse_id
-                    left join warehouse g ON a.whs_sisa_id = g.warehouse_id";
+                    left join warehouse g ON a.whs_sisa_id = g.warehouse_id
+                    left join job_order h on h.job_order_id = a.job_order_id
+                    left join sales i on i.idsales = h.idsales
+                    left join customer j on j.idcustomer = i.idcustomer";
 
         return $query;
     }

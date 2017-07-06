@@ -206,7 +206,13 @@ Ext.define('receiptWoHeaderForm', {
                         xtype: 'hiddenfield',
                         name: 'approvedby_id',
                         id: 'approvedby_id_receiptwoform',
-                    }
+                    },
+                    {
+                        xtype: 'textfield',
+                        fieldLabel: 'Customer',
+                        id: 'customer_receiptwoform',
+                        readOnly: true
+                    },
                 ]
             }]
         }, {

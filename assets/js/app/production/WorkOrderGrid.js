@@ -80,6 +80,14 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
             minWidth: 150
         },
         {
+            header: 'Status',
+            dataIndex: 'status',
+            minWidth: 150,
+            renderer: function(value) {
+                return customColumnStatus(arrWorkOrderStatus, value);
+            }
+        },
+        {
             header: 'Req. Ship Date',
             dataIndex: 'req_ship_date',
             minWidth: 150
@@ -133,14 +141,6 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
             dataIndex: 'namecustomer',
             minWidth: 150,
         },
-        {
-            header: 'Status',
-            dataIndex: 'status',
-            minWidth: 150,
-            renderer: function(value) {
-                return customColumnStatus(arrWorkOrderStatus, value);
-            }
-        }
     ],
     dockedItems: [{
             xtype: 'toolbar',

@@ -72,8 +72,10 @@ Ext.define('workOrderHeaderForm', {
                         change: function(radiogroup, radio) {
                             if (radio.is_from_so == 2) {
                                 Ext.getCmp('no_sales_order_woform').hide();
+                                Ext.getCmp('customer_woform').hide();
                             } else {
                                 Ext.getCmp('no_sales_order_woform').show();
+                                Ext.getCmp('customer_woform').show();
                             }
                         }
                     }
@@ -148,7 +150,15 @@ Ext.define('workOrderHeaderForm', {
                 items: [{
                     xtype: 'comboxWorkOrderStatus',
                     name: 'status',
-                    id: 'comboxWorkOrderStatus_woform'
+                    id: 'comboxWorkOrderStatus_woform',
+                    labelWidth: 140,
+                }, {
+                    xtype: 'textfield',
+                    id: 'customer_woform',
+                    labelWidth: 140,
+                    fieldLabel: 'Customer',
+                    readOnly: true,
+                    hidden: true,
                 }]
             }]
         },
