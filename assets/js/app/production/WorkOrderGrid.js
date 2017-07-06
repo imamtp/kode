@@ -48,6 +48,7 @@ var smGridWorkOrderGrid = Ext.create('Ext.selection.CheckboxModel', {
         deselect: function(model, record, index) {
             var selectedLen = smGridWorkOrderGrid.getSelection().length;
             if (selectedLen == 0) {
+
                 Ext.getCmp('btnPrintWorkOrderGrid').disable();
             }
         },
@@ -86,6 +87,16 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
             renderer: function(value) {
                 return customColumnStatus(arrWorkOrderStatus, value);
             }
+        },
+        {
+            header: 'Customer',
+            dataIndex: 'namecustomer',
+            minWidth: 150,
+        },
+        {
+            header: 'No SO',
+            dataIndex: 'no_sales_order',
+            minWidth: 150,
         },
         {
             header: 'Req. Ship Date',
@@ -130,16 +141,6 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
             header: 'Total BoM Usage',
             dataIndex: 'totalbom',
             minWidth: 150
-        },
-        {
-            header: 'No SO',
-            dataIndex: 'no_sales_order',
-            minWidth: 150,
-        },
-        {
-            header: 'Customer',
-            dataIndex: 'namecustomer',
-            minWidth: 150,
         },
     ],
     dockedItems: [{
