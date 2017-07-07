@@ -219,6 +219,7 @@ class purchase extends MY_Controller {
 
             $item = array(
                 'idpurchase' => $idpurchase,
+                'idpurchaseitem' => $value->idpurchaseitem,
                 'idinventory' => $value->idinventory,
                 'measurement_id' => $measure,
                 // 'invno' => $value->invno,
@@ -227,19 +228,21 @@ class purchase extends MY_Controller {
                 'price' => $value->price,
                 'total' => $value->total,
                 // 'remarks' => $value->remarks,
+                'deleted' => $value->deleted == null ? 0 : $value->deleted,
                 'ratetax' => $ratetax=='' ? null : $ratetax
             );
-            // if($statusform == 'input'){
-            if($value->idpurchaseitem == null){
-                $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
-                $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
-                $this->db->insert('purchaseitem', $item);
-            }
-            else{
-            // else if($statusform == 'edit'){
-                $item['idpurchaseitem'] = $value->idpurchaseitem;
+            if($item['idpurchaseitem'] == null){
+                if($item['deleted'] != 1){
+                    $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
+                    $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
+                    $this->db->insert('purchaseitem', $item);
+                }
+            } else {
                 $this->db->where('idpurchaseitem', $item['idpurchaseitem']);
-                $this->db->update('purchaseitem', $item);
+                if($item['deleted'] != 1)
+                    $this->db->update('purchaseitem', $item);
+                else
+                    $this->db->delete('purchaseitem');
             }
         }
 
@@ -265,7 +268,7 @@ class purchase extends MY_Controller {
             $wer = null;
         }
 
-        $q = $this->db->query("select a.*,b.invno,b.nameinventory,b.sku_no,c.short_desc,d.warehouse_code
+        $q = $this->db->query("select a.*,b.invno,b.nameinventory,b.sku_no,c.short_desc,d.warehouse_code,a.deleted
                                 from purchaseitem a
                                 join inventory b ON a.idinventory = b.idinventory
                                 join productmeasurement c ON c.measurement_id = a.measurement_id

@@ -3,7 +3,7 @@ var WindowGridRequestByPRPopup = Ext.create(dir_sys + 'purchase2.WindowGridReque
 
 Ext.define('GridItemPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'deleted'],
     idProperty: 'id'
 });
 
@@ -34,7 +34,7 @@ var storeGridItemPurchaseRequisition = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemSelectPurchaseRequisitionModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan', 'unitmeasure', 'satuan_beli'],
+    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan', 'unitmeasure', 'satuan_beli', 'deleted'],
     idProperty: 'id'
 });
 
@@ -891,10 +891,10 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
     recordPurchaseRequisition: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountPurchaseRequisition').getValue())
         if (validasiPurchaseRequisition()) {
-
+            storeGridItemPurchaseRequisition.clearFilter();
             var json = Ext.encode(Ext.pluck(storeGridItemPurchaseRequisition.data.items, 'data'));
             //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntryPurchaseRequisition').getValue());
-
+            storeGridItemPurchaseRequisition.filter([function(item) { return item.get('deleted') != "1" }]);
             Ext.Ajax.request({
                 url: SITE_URL + 'purchase/saveRequisition',
                 method: 'POST',
@@ -949,6 +949,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
                         // Ext.getCmp('tglPelunasanPurchaseRequisition').setValue(null);
                         // Ext.getCmp('comboxcurrencyPurchaseRequisition').setValue(null);
 
+                        storeGridItemPurchaseRequisition.clearFilter();
                         // storeGridItemPurchaseRequisition.removeAll();
                         // storeGridItemPurchaseRequisition.sync();
                         // updateGridPurchaseRequisition('general');
@@ -1026,7 +1027,9 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseRequisition', {
         Ext.getCmp('supplierNamePurchaseRequisition').setValue(data.namesupplier);
     },
     onRemoveClick: function(grid, rowIndex) {
-        this.getStore().removeAt(rowIndex);
+        this.getStore().getRange()[rowIndex].data['deleted'] = 1;
+        this.getStore().clearFilter();
+        this.getStore().filter([function(item) { return item.get('deleted') != "1" }]);
         updateGridPurchaseRequisition()
     },
     onEdit: function(editor, e) {
