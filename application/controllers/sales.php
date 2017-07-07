@@ -212,9 +212,11 @@ class sales extends MY_Controller {
                 'deleted' => $value->deleted == null ? 0 : $value->deleted,
             );
             if($item['idsalesitem'] == null){
-                $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
-                $item['idsalesitem'] = $q_seq->result_array()[0]['nextval'];
-                $this->db->insert('salesitem', $item);
+                if($item['deleted'] != 1){
+                    $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
+                    $item['idsalesitem'] = $q_seq->result_array()[0]['nextval'];
+                    $this->db->insert('salesitem', $item);
+                }
             }else{
                 $this->db->where('idsalesitem', $item['idsalesitem']);
                 if($item['deleted'] != "1")
