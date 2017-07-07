@@ -32,7 +32,7 @@ var storeGridWOScheduleGrid = Ext.create('Ext.data.Store', {
 
 storeGridWOScheduleGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.status:' + 3,
+        // 'extraparams': 'a.status:' + 3,
         'option': 'scheduled'
     };
 });

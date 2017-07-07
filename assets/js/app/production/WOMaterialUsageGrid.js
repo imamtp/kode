@@ -33,7 +33,7 @@ var storeGridWOMaterialUsageGrid = Ext.create('Ext.data.Store', {
 
 storeGridWOMaterialUsageGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.status:' + 3,
+        // 'extraparams': 'a.status:' + 3,
         'option': 'scheduled'
     };
 });
