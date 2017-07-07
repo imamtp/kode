@@ -44,7 +44,7 @@ class m_materialworkorder extends CI_Model {
                         where material_type = 2
                         group by job_order_id) e ON a.job_order_id = e.job_order_id
                     left join employee f ON a.pic_id = f.idemployee
-                    left join customer g ON g.idcustomer = b.idcustomer"";
+                    left join customer g ON g.idcustomer = b.idcustomer";
 
         return $query;
     }
