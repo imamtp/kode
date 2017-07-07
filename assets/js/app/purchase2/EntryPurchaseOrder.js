@@ -7,7 +7,7 @@ var wGridPurchaseRequestListPopup = Ext.create(dir_sys + 'purchase2.wGridPurchas
 
 Ext.define('GridItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'size', 'warehouse_code', 'size_measurement'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'size', 'warehouse_code', 'size_measurement', 'deleted'],
     idProperty: 'id'
 });
 
@@ -798,8 +798,10 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
     recordPurchaseOrder: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountPurchaseOrder').getValue())
         if (validasiPurchaseOrder()) {
+            storeGridItemPurchaseOrder.clearFilter();
             var json = Ext.encode(Ext.pluck(storeGridItemPurchaseOrder.data.items, 'data'));
             //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntryPurchaseOrder').getValue());
+            storeGridItemPurchaseOrder.filter([function(item) { return item.get('deleted') != "1" }]);
 
             Ext.Ajax.request({
                 url: SITE_URL + 'purchase/savePurchaseOrder',
@@ -858,8 +860,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                         // // Ext.getCmp('paymentPurchaseOrder').setValue(null);
                         // // Ext.getCmp('tglPelunasanPurchaseOrder').setValue(null);
                         // Ext.getCmp('comboxcurrencyPurchaseOrder').setValue(null);
-
-                        // storeGridItemPurchaseOrder.removeAll();
+                        storeGridItemPurchaseOrder.clearFilter();
+                        storeGridItemPurchaseOrder.removeAll();
                         // storeGridItemPurchaseOrder.sync();
                         updateGridPurchaseOrder('general');
 
@@ -929,7 +931,10 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
         //        });
     },
     onRemoveClick: function(grid, rowIndex) {
-        this.getStore().removeAt(rowIndex);
+        this.getStore().getRange()[rowIndex].data['deleted'] = 1;
+        this.getStore().clearFilter();
+        this.getStore().filter([function(item) { return item.get('deleted') != "1" }]);
+        // this.getStore().removeAt(rowIndex);
         updateGridPurchaseOrder('general')
     },
     onEdit: function(editor, e) {

@@ -397,6 +397,7 @@ class purchase extends MY_Controller {
          foreach ($items as $value) {
 
             $item = array(
+                'idpurchaseitem' => $value->idpurchaseitem,
                 'idpurchase' => $idpurchase,
                 'idinventory' => $value->idinventory,
                 'measurement_id' => $this->m_data->getMeasurement($value->short_desc,$this->input->post('unit')),
@@ -409,17 +410,22 @@ class purchase extends MY_Controller {
                 'price' => $value->price,
                 'total' => $value->total,
                 // 'remarks' => $value->remarks,
-                'ratetax' => $value->ratetax
+                'ratetax' => $value->ratetax,
+                'deleted' => $value->deleted == null ? 0 : $value->deleted,
             );
-            if($statusform == 'input'){
-                $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
-                $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
-                $this->db->insert('purchaseitem', $item);
-            }
-            else if($statusform == 'edit'){
-                $item['idpurchaseitem'] = $value->idpurchaseitem;
+            
+            if($item['idpurchaseitem'] == null){
+                if($item['deleted'] != 1){
+                    $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
+                    $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
+                    $this->db->insert('purchaseitem', $item);
+                }
+            } else { 
                 $this->db->where('idpurchaseitem', $item['idpurchaseitem']);
-                $this->db->update('purchaseitem', $item);
+                if($item['deleted'] != "1")
+                    $this->db->update('purchaseitem', $item);
+                else
+                    $this->db->delete('purchaseitem');
             }
         }
 
