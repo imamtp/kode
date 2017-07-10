@@ -1925,15 +1925,15 @@ var storeShipAddress = new Ext.data.ArrayStore({
     fields: ['address'],
 });
 
-Ext.onReady(function() {
-    var data = tmpStoreShipAddress.data.items[0].data;
-    var addressarr = [
-        [data.alamat],
-        [data.alamat2],
-        [data.alamat3]
-    ];
-    storeShipAddress.loadData(addressarr);
-});
+// Ext.onReady(function() {
+//     var data = tmpStoreShipAddress.data.items[0].data;
+//     var addressarr = [
+//         [data.alamat],
+//         [data.alamat2],
+//         [data.alamat3]
+//     ];
+//     storeShipAddress.loadData(addressarr);
+// });
 
 Ext.define('comboxshipaddress', {
     extend: 'Ext.form.field.ComboBox',
