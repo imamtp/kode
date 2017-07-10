@@ -1037,25 +1037,23 @@ class Setup extends MY_Controller {
         $this->db->empty_table('stock_history');
     }
 
-    // function inserlinkunit()
-    // {
-    //     $qunit = $this->db->get('unit');
-    //     foreach ($qunit->result() as $runit) {
-    //         $q = $this->db->get('linkedacc');
-    //         foreach ($q->result() as $r) {
-    //             $qcek = $this->db->get_where('linkedaccunit',array('idunit'=>$runit->idunit,'idlinked'=>$r->idlinked));
-    //             if($qcek->num_rows()>0)
-    //             {
+    function inserlinkunit()
+    {
+        $qunit = $this->db->get('unit');
+        foreach ($qunit->result() as $runit) {
+            $q = $this->db->get('linkedacc');
+            foreach ($q->result() as $r) {
+                $qcek = $this->db->get_where('linkedaccunit',array('idunit'=>$runit->idunit,'idlinked'=>$r->idlinked));
+                if($qcek->num_rows()>0)
+                {
 
-    //             } else {
-    //                 $this->db->insert('linkedaccunit',array('idunit'=>$runit->idunit,'idlinked'=>$r->idlinked));
-    //             }
+                } else {
+                    $this->db->insert('linkedaccunit',array('idunit'=>$runit->idunit,'idlinked'=>$r->idlinked));
+                }
                 
-    //         }
-    //     }
-        
-
-    // }
+            }
+        }
+    }
 
 }
 
