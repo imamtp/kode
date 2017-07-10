@@ -214,7 +214,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             xtype: 'comboxunit',
                             readOnly: true,
                             valueField: 'idunit',
-                            labelWidth: 100,
+                            labelWidth: 120,
                             valueField: 'idunit',
                             id: 'cbUnitEntrySalesInvoice'
                                 //                            ,multiSelect:true
@@ -237,8 +237,13 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-
+                    items: [{
+                            xtype: 'textfield',
+                            readOnly: true,
+                            labelWidth: 120,
+                            fieldLabel: 'NO DO #',
+                            id: 'noDeliverySalesInvoice_si'
+                        },
                         {
                             xtype: 'comboxCustomer',
                             readOnly: true,
@@ -247,14 +252,26 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         },
                         {
                             xtype: 'textfield',
-                            // cls:'my-mandatory-field',
-                            // readOnly:true,
-                            width: 620,
+                            readOnly: true,
                             labelWidth: 120,
-                            id: 'memoSalesInvoice_si',
-                            fieldLabel: 'Memo'
-                        }
+                            fieldLabel: 'NO Faktur',
+                            id: 'noFakturSalesInvoice_si'
+                        },
+
                     ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    items: [{
+                        xtype: 'textfield',
+                        // cls:'my-mandatory-field',
+                        // readOnly:true,
+                        width: 620,
+                        labelWidth: 120,
+                        id: 'memoSalesInvoice_si',
+                        fieldLabel: 'Memo'
+                    }]
                 },
                 {
                     xtype: 'toolbar',

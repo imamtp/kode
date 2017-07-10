@@ -330,6 +330,9 @@ function loadDataFormInvoice(idsales) {
 
             insertNoRef(4, d.data.idunit, 'nojurnalSalesInvoice_si', 'INV');
 
+            Ext.getCmp('noDeliverySalesInvoice_si').setValue(d.data.no_do);
+            Ext.getCmp('noFakturSalesInvoice_si').setValue(d.data.no_faktur);
+            console.log(d.data);
             Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
             Ext.getCmp('idunit_si').setValue(d.data.idunit);
             Ext.getCmp('tanggalSalesInvoice_si').setValue(d.data.date_sales);

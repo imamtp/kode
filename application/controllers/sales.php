@@ -401,7 +401,10 @@ class sales extends MY_Controller {
         // }
 
         $this->db->where('idsales',$idsales);
-        $this->db->update('sales',array('freight'=>str_replace('.', '', $this->input->post('biaya_angkut'))));
+        $this->db->update('sales',array(
+            'freight'=>str_replace('.', '', $this->input->post('biaya_angkut')),
+            'no_faktur'=>$no_faktur,
+            ));
 
         //update qty kirim
         $totalkirim = 0;
@@ -472,10 +475,10 @@ class sales extends MY_Controller {
 
         $idsales = $this->input->get('idsales');
 
-        $qHeader = $this->db->query("select a.idsales,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,
+        $qHeader = $this->db->query("select a.no_faktur,a.idsales,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,
                     a.totalamount,a.paidtoday,a.balance,a.comments,a.userin,a.datein,a.status,a.idcurrency,a.idunit,a.type,a.idsales_quote,a.date_sales,a.no_sales_order,
                     b.namepayment,c.firstname as fn_sales,c.lastname as ln_sales,d.nocustomer,d.namecustomer,e.namecurr,e.symbol as symbol_currency,
-                    f.namaunit,g.delivery_order_id,g.remarks,g.delivery_date,g.vehicle_number,g.driver_name,g.idshipping,g.ship_address,g.notes as note_shipping,h.nameshipping,i.nametax
+                    f.namaunit,g.delivery_order_id,g.no_do,g.remarks,g.delivery_date,g.vehicle_number,g.driver_name,g.idshipping,g.ship_address,g.notes as note_shipping,h.nameshipping,i.nametax
                     from sales a
                     left join payment b ON a.idpayment = b.idpayment
                     left join employee c ON a.idsales = c.idemployee
