@@ -505,7 +505,7 @@ class Setup extends MY_Controller {
         echo json_encode(array('success'=>true,'norec'=>sprintf("%0".$digit."d", $lastid)));
     }
 
-    function getNextNoArticle(){
+    function getNextNoArticle(){ // << kalau request dari ajax pakai ini
         $nextval = 0;
         $digit = 4;
         $prefix = $this->input->get('prefix');
@@ -536,7 +536,7 @@ class Setup extends MY_Controller {
         echo json_encode(array('success'=>true,'nextval'=>$prefix.$y.$m.$nextval));
     }
 
-    function getNextNoArticle2($params){
+    function getNextNoArticle2($params){ // << kalau request dari php pakai ini
         $nextval = 0;
         $digit = 4;
         $prefix = $params['prefix'];

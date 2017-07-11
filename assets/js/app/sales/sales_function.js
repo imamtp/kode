@@ -328,7 +328,9 @@ function loadDataFormInvoice(idsales) {
             var d = Ext.decode(form.responseText);
             // console.log(d)
 
-            insertNoRef(4, d.data.idunit, 'nojurnalSalesInvoice_si', 'INV');
+            // insertNoRef(4, d.data.idunit, 'nojurnalSalesInvoice_si', 'INV');
+            setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
+            setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');
 
             Ext.getCmp('noDeliverySalesInvoice_si').setValue(d.data.no_do);
             Ext.getCmp('noFakturSalesInvoice_si').setValue(d.data.no_faktur);
@@ -392,8 +394,6 @@ function loadDataFormInvoice(idsales) {
 
                 grid.getStore().insert(0, rec);
             });
-
-            Ext.getCmp('memoSalesInvoice_si').setValue('Sales Invoice : ' + d.data.namecustomer + ' - ' + Ext.getCmp('nojurnalSalesInvoice_si').getValue());
         },
         failure: function(form, action) {
             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');

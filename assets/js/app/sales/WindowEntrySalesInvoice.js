@@ -193,14 +193,6 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             id: 'nojurnalSalesInvoice_si',
                             fieldLabel: 'NO Invoice #',
                             readOnly: true,
-                            listeners: {
-                                render: function(component) {
-                                    component.getEl().on('click', function(event, el) {
-                                        insertNoID(4, Ext.getCmp('cbUnitEntrySalesOrder').getValue(), 'idsales', 'sales', 'nojurnalSalesInvoice_si', 'INV');
-                                        // insertNoRef(4, Ext.getCmp('idunit_si').getValue(), 'nojurnalSalesInvoice_si', 'INV');
-                                    });
-                                }
-                            }
                         },
                         {
                             xtype: 'datefield',
