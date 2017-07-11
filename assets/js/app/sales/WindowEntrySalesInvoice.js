@@ -195,9 +195,16 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             readOnly: true,
                         },
                         {
+                            xtype: 'textfield',
+                            labelWidth: 120,
+                            id: 'noSalesSalesInvoice_si',
+                            fieldLabel: 'NO SO #',
+                            readOnly: true,
+                        },
+                        {
                             xtype: 'datefield',
                             readOnly: true,
-                            labelWidth: 120,
+                            labelWidth: 100,
                             id: 'tanggalSalesInvoice_si',
                             format: 'd/m/Y',
                             fieldLabel: 'Order Date'
@@ -206,10 +213,36 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             xtype: 'comboxunit',
                             readOnly: true,
                             valueField: 'idunit',
-                            labelWidth: 120,
+                            labelWidth: 100,
                             valueField: 'idunit',
                             id: 'cbUnitEntrySalesInvoice'
                                 //                            ,multiSelect:true
+                        },
+
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    items: [{
+                            xtype: 'textfield',
+                            readOnly: true,
+                            labelWidth: 120,
+                            fieldLabel: 'NO DO #',
+                            id: 'noDeliverySalesInvoice_si'
+                        },
+                        {
+                            xtype: 'textfield',
+                            readOnly: true,
+                            labelWidth: 120,
+                            fieldLabel: 'NO Faktur',
+                            id: 'noFakturSalesInvoice_si'
+                        },
+                        {
+                            xtype: 'comboxCustomer',
+                            readOnly: true,
+                            id: 'customerSalesInvoice_si',
+                            labelWidth: 100
                         },
                         {
                             xtype: 'comboxtaxtype',
@@ -224,32 +257,6 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                                 }
                             }
                         }
-                    ]
-                },
-                {
-                    xtype: 'toolbar',
-                    dock: 'top',
-                    items: [{
-                            xtype: 'textfield',
-                            readOnly: true,
-                            labelWidth: 120,
-                            fieldLabel: 'NO DO #',
-                            id: 'noDeliverySalesInvoice_si'
-                        },
-                        {
-                            xtype: 'comboxCustomer',
-                            readOnly: true,
-                            id: 'customerSalesInvoice_si',
-                            labelWidth: 120
-                        },
-                        {
-                            xtype: 'textfield',
-                            readOnly: true,
-                            labelWidth: 120,
-                            fieldLabel: 'NO Faktur',
-                            id: 'noFakturSalesInvoice_si'
-                        },
-
                     ]
                 },
                 {
@@ -273,6 +280,32 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
+                    items: [
+                        '->',
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            // cls:'my-mandatory-field',
+                            name: 'pembayaran_si',
+                            id: 'pembayaranSalesInvoice_si',
+                            align: 'right',
+                            //                            readOnly: true,
+                            labelWidth: 120,
+                            fieldLabel: 'Pembayaran/DP',
+                            fieldStyle: 'text-align: right;',
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        this.setRawValue(renderNomor(this.getValue()));
+                                        updateSelisih();
+                                    }, c);
+                                }
+                            }
+                        }
+                    ]
+                }, {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
                     items: [{
                             id: 'btnRecordSalesOrderInvoice',
                             text: 'Record Sales Invoice',
@@ -294,54 +327,6 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             fieldLabel: 'Saldo Terhutang ',
                             fieldStyle: 'text-align: right;'
                         }
-                    ]
-                },
-                {
-                    xtype: 'toolbar',
-                    dock: 'bottom',
-                    items: [{
-                            xtype: 'comboxshipping',
-                            readOnly: true,
-                            fieldLabel: 'Metode Pengiriman',
-                            labelWidth: 120,
-                            name: 'idshipping',
-                            id: 'shippingSalesInvoice_si'
-                        },
-                        {
-                            xtype: 'textfield',
-                            readOnly: true,
-                            labelWidth: 120,
-                            name: 'driver_name',
-                            id: 'driver_name_si',
-                            fieldLabel: 'Nama Supier',
-                        }, {
-                            xtype: 'textfield',
-                            labelWidth: 120,
-                            name: 'vehicle_number',
-                            readOnly: true,
-                            id: 'vehicle_number_si',
-                            fieldLabel: 'No Mobil',
-                        },
-                        '->',
-                        {
-                            xtype: 'textfield',
-                            readOnly: true,
-                            id: 'angkutSalesInvoice_si',
-                            align: 'right',
-                            //                            readOnly: true,
-                            labelWidth: 120,
-                            fieldLabel: 'Biaya Angkut',
-                            fieldStyle: 'text-align: right;',
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        // updateGridSalesInvoice('general');
-                                    }, c);
-                                }
-                            }
-                        }
-
-
                     ]
                 },
                 {
@@ -387,12 +372,11 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         }, '->',
                         {
                             xtype: 'textfield',
-                            readOnly: true,
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
-                            id: 'totalSalesInvoice_si',
-                            fieldLabel: 'Setelah Pajak',
+                            id: 'totalPajakSalesInvoice_si',
+                            fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
                         }
                     ]
@@ -411,13 +395,58 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
+                            readOnly: true,
+                            id: 'angkutSalesInvoice_si',
                             align: 'right',
+                            //                            readOnly: true,
+                            labelWidth: 120,
+                            fieldLabel: 'Biaya Angkut',
+                            fieldStyle: 'text-align: right;',
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        // updateGridSalesInvoice('general');
+                                    }, c);
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    items: [{
+                            xtype: 'comboxshipping',
+                            readOnly: true,
+                            fieldLabel: 'Metode Pengiriman',
+                            labelWidth: 120,
+                            name: 'idshipping',
+                            id: 'shippingSalesInvoice_si'
+                        },
+                        {
+                            xtype: 'textfield',
                             readOnly: true,
                             labelWidth: 120,
-                            id: 'totalPajakSalesInvoice_si',
-                            fieldLabel: 'Pajak',
-                            fieldStyle: 'text-align: right;'
-                        }
+                            name: 'driver_name',
+                            id: 'driver_name_si',
+                            fieldLabel: 'Nama Supier',
+                        }, {
+                            xtype: 'textfield',
+                            labelWidth: 120,
+                            name: 'vehicle_number',
+                            readOnly: true,
+                            id: 'vehicle_number_si',
+                            fieldLabel: 'No Mobil',
+                        },
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            readOnly: true,
+                            align: 'right',
+                            labelWidth: 120,
+                            id: 'dppSalesInvoice_si',
+                            fieldLabel: 'Dasar Pengenaan Pajak',
+                        },
                     ]
                 },
                 {
@@ -576,11 +605,12 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
+                            readOnly: true,
                             align: 'right',
                             readOnly: true,
                             labelWidth: 120,
-                            id: 'subtotalSalesInvoice_si',
-                            fieldLabel: 'Subtotal',
+                            id: 'discountSalesInvoice_si',
+                            fieldLabel: 'Diskon',
                             fieldStyle: 'text-align: right;'
                         }
                     ]
@@ -600,26 +630,33 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
-                            // cls:'my-mandatory-field',
-                            name: 'pembayaran_si',
-                            id: 'pembayaranSalesInvoice_si',
                             align: 'right',
-                            //                            readOnly: true,
+                            readOnly: true,
                             labelWidth: 120,
-                            fieldLabel: 'Pembayaran/DP',
-                            fieldStyle: 'text-align: right;',
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        this.setRawValue(renderNomor(this.getValue()));
-                                        updateSelisih();
-                                    }, c);
-                                }
-                            }
+                            id: 'subtotalSalesInvoice_si',
+                            fieldLabel: 'Subtotal',
+                            fieldStyle: 'text-align: right;'
                         }
-
                     ]
-                }
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    items: [
+                        '->',
+                        '->',
+                        {
+                            xtype: 'textfield',
+                            readOnly: true,
+                            align: 'right',
+                            readOnly: true,
+                            labelWidth: 120,
+                            id: 'totalSalesInvoice_si',
+                            fieldLabel: 'Setelah Pajak',
+                            fieldStyle: 'text-align: right;'
+                        }
+                    ]
+                },
             ],
             listeners: {
                 cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
@@ -810,7 +847,7 @@ Ext.define(dir_sys + 'sales.WindowEntrySalesInvoice', {
     closeAction: 'hide',
     //    autoWidth: true,
     width: panelW,
-    height: sizeH,
+    height: sizeH + 50,
     layout: 'fit',
     border: false,
     items: [{

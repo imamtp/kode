@@ -164,6 +164,8 @@ function showSalesOrderData(record) {
     var subtotal = record.data.subtotal * 1;
     var tax = record.data.tax * 1;
     var totalamount = record.data.totalamount * 1;
+    var dpp = (subtotal + record.data.disc * 1) / 1.1;
+    Ext.getCmp('dppSalesOrder').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('subtotalSalesOrder').setValue(subtotal.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('totalPajakSalesOrder').setValue(tax.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('totalSalesOrder').setValue(totalamount.toLocaleString('null', { minimumFractionDigits: 2 }));
@@ -328,10 +330,14 @@ function loadDataFormInvoice(idsales) {
             var d = Ext.decode(form.responseText);
             // console.log(d)
 
-            // insertNoRef(4, d.data.idunit, 'nojurnalSalesInvoice_si', 'INV');
+            var disc = d.data.disc != null ? d.data.disc : 0;
+            var dpp = (d.data.subtotal * 1 + disc * 1) / 1.1;
             setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
             setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');
 
+            Ext.getCmp('discountSalesInvoice_si').setValue(disc);
+            Ext.getCmp('dppSalesInvoice_si').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
+            Ext.getCmp('noSalesSalesInvoice_si').setValue(d.data.no_sales_order);
             Ext.getCmp('noDeliverySalesInvoice_si').setValue(d.data.no_do);
             Ext.getCmp('noFakturSalesInvoice_si').setValue(d.data.no_faktur);
             console.log(d.data);
