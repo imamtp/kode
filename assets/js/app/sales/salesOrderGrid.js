@@ -388,6 +388,7 @@ Ext.define('GridSalesOrderGrid', {
 
                     Ext.getCmp('cbUnitEntrySalesOrder').setValue(idunit);
                     Ext.getCmp('statusformSalesOrderGrid').setValue('input');
+                    Ext.getCmp('dppSalesOrder').setValue(0);
                     var cb_sales_order_status = Ext.getCmp('cb_sales_order_status');
                     cb_sales_order_status.setValue(1);
                     cb_sales_order_status.setReadOnly(true);
