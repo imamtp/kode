@@ -330,17 +330,22 @@ function loadDataFormInvoice(idsales) {
             var d = Ext.decode(form.responseText);
             // console.log(d)
 
-            var disc = d.data.disc != null ? d.data.disc : 0;
-            var dpp = (d.data.subtotal * 1 + disc * 1) / 1.1;
+            var disc = d.data.disc * 1;
+            var subtotal = d.data.subtotal * 1;
+            var tax = d.data.tax * 1;
+            var totalamount = d.data.totalamount * 1;
+            var dpp = (subtotal + disc) / 1.1;
+            var freightcost = d.data.freight * 1;
+
             setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
             setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');
 
-            Ext.getCmp('discountSalesInvoice_si').setValue(disc);
+            Ext.getCmp('discountSalesInvoice_si').setValue(disc.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('dppSalesInvoice_si').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('noSalesSalesInvoice_si').setValue(d.data.no_sales_order);
             Ext.getCmp('noDeliverySalesInvoice_si').setValue(d.data.no_do);
             Ext.getCmp('noFakturSalesInvoice_si').setValue(d.data.no_faktur);
-            console.log(d.data);
+
             Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
             Ext.getCmp('idunit_si').setValue(d.data.idunit);
             Ext.getCmp('tanggalSalesInvoice_si').setValue(d.data.date_sales);
@@ -348,8 +353,6 @@ function loadDataFormInvoice(idsales) {
             // Ext.getCmp('id_sales_order_si').setValue(d.data.idunit);
             Ext.getCmp('cbUnitEntrySalesInvoice').setValue(d.data.idunit);
             Ext.getCmp('customerSalesInvoice_si').setValue(d.data.namecustomer);
-
-
 
             Ext.getCmp('shippingSalesInvoice_si').setValue(d.data.nameshipping);
             Ext.getCmp('driver_name_si').setValue(d.data.driver_name);
@@ -361,21 +364,11 @@ function loadDataFormInvoice(idsales) {
             Ext.getCmp('notes_si').setValue(d.data.note_shipping);
 
             Ext.getCmp('cb_tax_id_inv').setValue(d.data.nametax);
-            // Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
-            // Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
-            // Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
-            // Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
-            // Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
-            // Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
 
-            Ext.getCmp('angkutSalesInvoice_si').setValue(renderNomor(d.data.freight));
-            Ext.getCmp('totalSalesInvoice_si').setValue(renderNomor(d.data.totalamount));
-            Ext.getCmp('totalPajakSalesInvoice_si').setValue(renderNomor(d.data.tax));
-
-            Ext.getCmp('subtotalSalesInvoice_si').setValue(renderNomor(d.data.subtotal));
-            // Ext.getCmp('angkutSalesInvoice_si').setValue(renderNomor(d.data.freight));
-            // Ext.getCmp('angkutSalesInvoice_si').setValue(renderNomor(d.data.freight));
-            // Ext.getCmp('angkutSalesInvoice_si').setValue(renderNomor(d.data.freight));
+            Ext.getCmp('subtotalSalesInvoice_si').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
+            Ext.getCmp('angkutSalesInvoice_si').setValue(freightcost.toLocaleString('null', { maximumFractionDigits: 2 }));
+            Ext.getCmp('totalSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
+            Ext.getCmp('totalPajakSalesInvoice_si').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
 
             var grid = Ext.getCmp('EntrySalesInvoice');
 
