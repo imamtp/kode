@@ -83,7 +83,7 @@ var smGoodsReceiptGrid = Ext.create('Ext.selection.CheckboxModel', {
     mode: 'SINGLE',
     listeners: {
         deselect: function(model, record, index) {
-            var selectedLen = smGriddeliveryOrderGrid.getSelection().length;
+            var selectedLen = smGoodsReceiptGrid.getSelection().length;
             if (selectedLen == 0) {
                 Ext.getCmp('createInvoicePOGrid').disable();
             }
@@ -104,7 +104,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
     alias: 'widget.GoodsReceiptGrid',
     // Ext.define('GoodsReceiptGrid', {
     title: 'Purchase Order',
-    // selModel: smGoodsReceiptGrid,
+    selModel: smGoodsReceiptGrid,
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GoodsReceiptGridID',
     id: 'GoodsReceiptGridID',
