@@ -294,12 +294,16 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
                             listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        this.setRawValue(renderNomor(this.getValue()));
+                                'blur': function() {
+                                        this.setRawValue(renderNomor2(this.getValue()));
                                         updateSelisih();
-                                    }, c);
-                                }
+                                    }
+                                    // 'render': function(c) {
+                                    //     c.getEl().on('keyup', function() {
+                                    //         this.setRawValue(renderNomor2(this.getValue()));
+                                    //         updateSelisih();
+                                    //     }, c);
+                                    // }
                             }
                         }
                     ]
@@ -417,6 +421,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     dock: 'bottom',
                     items: [{
                             xtype: 'comboxshipping',
+                            hidden: true,
                             readOnly: true,
                             fieldLabel: 'Metode Pengiriman',
                             labelWidth: 120,
@@ -912,16 +917,16 @@ function updateGridSalesInvoice(tipe) {
 }
 
 function updateSelisih() {
-    var totalPayment = str_replace('.', '', Ext.getCmp('totalSalesInvoice_si').getValue()) * 1 + str_replace('.', '', Ext.getCmp('angkutSalesInvoice_si').getValue()) * 1;
+    var totalPayment = str_replace(',', '', Ext.getCmp('totalSalesInvoice_si').getValue()) * 1 + str_replace(',', '', Ext.getCmp('angkutSalesInvoice_si').getValue()) * 1;
     // console.log('totalPayment:' + totalPayment);
 
-    var sisa = totalPayment - str_replace('.', '', Ext.getCmp('pembayaranSalesInvoice_si').getValue()) * 1;
+    var sisa = totalPayment - str_replace(',', '', Ext.getCmp('pembayaranSalesInvoice_si').getValue()) * 1;
     // console.log(sisa);
     // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(sisa.toLocaleString('null', {
     //     minimumFractionDigits: 0
     // }));
 
-    Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(sisa));
+    Ext.getCmp('sisaBayarSalesInvoice_si').setValue(sisa.toLocaleString('null', { maximumFractionDigits: 2 }));
 }
 
 function validasiSalesInvoice() {
