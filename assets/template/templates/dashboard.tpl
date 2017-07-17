@@ -747,7 +747,7 @@
         <!-- <script src='{$assets_url}/js/app/report/sales/WindowSalesOrderList.js'></script>
         <script src='{$assets_url}/js/app/report/sales/WindowDeliveryOrderList.js'></script>
         <script src='{$assets_url}/js/app/report/sales/WindowSalesInvoiceList.js'></script> -->
-        <script src='{$assets_url}/js/app/report/sales/WindowWarehouseList.js'></script>
+        {* <script src='{$assets_url}/js/app/report/sales/WindowWarehouseList.js'></script>
         <script src='{$assets_url}/js/app/report/sales/WindowSalesmanList.js'></script>
         <script src='{$assets_url}/js/app/report/sales/WindowBrandList.js'></script>
         <script src='{$assets_url}/js/app/report/sales/WindowGroupList.js'></script>
@@ -759,7 +759,7 @@
         <script src='{$assets_url}/js/app/report/sales/GridSalesByCustomer.js'></script>
         <script src='{$assets_url}/js/app/report/sales/GridSalesBySalesman.js'></script>
         <script src='{$assets_url}/js/app/report/sales/GridSalesReturnDetail.js'></script>
-        <script src='{$assets_url}/js/app/report/sales/GridSalesBook.js'></script>
+        <script src='{$assets_url}/js/app/report/sales/GridSalesBook.js'></script> *}
         <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesDeliveryActual.js'></script> -->
         {* <script src='{$assets_url}/js/app/report/ar/TabReportAR.js'></script>
         <script src='{$assets_url}/js/app/report/ar/GridARAging.js'></script>
