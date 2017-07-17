@@ -279,6 +279,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                 },
                 {
                     xtype: 'toolbar',
+                    hidden: true,
                     dock: 'bottom',
                     items: [
                         '->',
