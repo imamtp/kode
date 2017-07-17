@@ -761,7 +761,7 @@
         <script src='{$assets_url}/js/app/report/sales/GridSalesReturnDetail.js'></script>
         <script src='{$assets_url}/js/app/report/sales/GridSalesBook.js'></script>
         <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesDeliveryActual.js'></script> -->
-        <script src='{$assets_url}/js/app/report/ar/TabReportAR.js'></script>
+        {* <script src='{$assets_url}/js/app/report/ar/TabReportAR.js'></script>
         <script src='{$assets_url}/js/app/report/ar/GridARAging.js'></script>
         <script src='{$assets_url}/js/app/report/ar/GridAROutstanding.js'></script>
         <script src='{$assets_url}/js/app/report/ar/GridARConfirmation.js'></script>
@@ -782,7 +782,7 @@
         <script src='{$assets_url}/js/app/report/ap/GridAPAging.js'></script>
         <script src='{$assets_url}/js/app/report/inventory/TabReportInventory.js'></script>
         <script src='{$assets_url}/js/app/report/inventory/GridInventoryPerItem.js'></script>
-        <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script>
+        <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script> *}
                      
         <script src='{$assets_url}/js/app/sistem/editRules.js'></script> 
         <script src='{$assets_url}/js/app/sistem/sysMenuTree.js'></script>
