@@ -548,17 +548,23 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
         },
         itemdblclick: function(dv, record, item, index, e) {
 
-            windowGridDetailInventory.show();
+            if (record.data.totalitem * 1 > 1) {
+                windowGridDetailInventory.show();
 
-            var GridItemGridDetailInventoryID = Ext.getCmp('GridItemGridDetailInventory').getStore();
+                var GridItemGridDetailInventoryID = Ext.getCmp('GridItemGridDetailInventory').getStore();
 
-            GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
-                operation.params = {
-                    'extraparams': 'a.idinventory_batch:' + record.data.idinventory
-                };
-            });
+                GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
+                    operation.params = {
+                        'extraparams': 'a.idinventory_batch:' + record.data.idinventory
+                    };
+                });
 
-            GridItemGridDetailInventoryID.load();
+                GridItemGridDetailInventoryID.load();
+            } else if (record.data.totalitem * 1 != 0) {
+                //langsung tampil window detail
+                showInventoryData();
+            }
+
 
 
 
@@ -609,4 +615,32 @@ function expand() {
     //            expander.toggleRow(i, store.getAt(i));
     //        }
     //    }
+}
+
+function showInventoryData() {
+    var grid = Ext.ComponentQuery.query('GridInventoryAllBySku')[0];
+    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+    var data = grid.getSelectionModel().getSelection();
+    if (data.length == 0) {
+        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+    } else {
+        inventoryCategoryStore.load();
+        brandStore.load();
+        productMeasurementStore.load();
+
+        showEditInv(selectedRecord.data.idinventory);
+        Ext.getCmp('datebuy').show();
+        if (selectedRecord.data.qtystock == null) {
+            Ext.getCmp('TabItemInventory').items.getAt(1).setDisabled(false);
+            Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(false);
+        } else {
+            Ext.getCmp('formInventoryV2').getForm().findField('cbpersediaan').show();
+            Ext.getCmp('TabItemInventory').items.getAt(1).setDisabled(false);
+            Ext.getCmp('TabItemInventory').items.getAt(2).setDisabled(false);
+        }
+        Ext.getCmp('TabItemInventory').setActiveTab(0);
+    }
+    Ext.getCmp('statusformInventory2').setValue('edit');
+    Ext.getCmp('TabItemInventory').items.getAt(3).setDisabled(false);
+    brandStore.load();
 }
