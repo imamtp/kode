@@ -369,6 +369,7 @@ function loadDataFormInvoice(idsales) {
             Ext.getCmp('angkutSalesInvoice_si').setValue(freightcost.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('totalSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('totalPajakSalesInvoice_si').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
+            Ext.getCmp('sisaBayarSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
 
             var grid = Ext.getCmp('EntrySalesInvoice');
 
