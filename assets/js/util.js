@@ -235,7 +235,9 @@ function renderNomor2(value, id, r) {
     // console.log(value);
     Ext.util.Format.thousandSeparator = ",";
     Ext.util.Format.decimalSeparator = ".";
-    var formatNomor = "0,000";
+
+    var formatNomor = "0,000.00";
+
     // console.log(value)
     return Ext.util.Format.number(value, formatNomor);
 }
