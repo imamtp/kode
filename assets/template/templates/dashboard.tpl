@@ -741,7 +741,7 @@
         <script src='{$assets_url}/js/app/report/penerimaansiswabulanan.js'></script>
         <script src='{$assets_url}/js/app/report/penerimaantahunan.js'></script>
         <script src='{$assets_url}/js/app/report/pengeluarantahunan.js'></script>
-        {* <script src='{$assets_url}/js/app/report/sales/TabReportSales.js'></script>
+        <script src='{$assets_url}/js/app/report/sales/TabReportSales.js'></script>
         <script src='{$assets_url}/js/app/report/sales/WindowProductList.js'></script>
         <!-- <script src='{$assets_url}/js/app/report/sales/WindowCustomerList.js'></script> -->
         <!-- <script src='{$assets_url}/js/app/report/sales/WindowSalesOrderList.js'></script>
@@ -782,7 +782,7 @@
         <script src='{$assets_url}/js/app/report/ap/GridAPAging.js'></script>
         <script src='{$assets_url}/js/app/report/inventory/TabReportInventory.js'></script>
         <script src='{$assets_url}/js/app/report/inventory/GridInventoryPerItem.js'></script>
-        <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script> *}
+        <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script>
                      
         <script src='{$assets_url}/js/app/sistem/editRules.js'></script> 
         <script src='{$assets_url}/js/app/sistem/sysMenuTree.js'></script>
