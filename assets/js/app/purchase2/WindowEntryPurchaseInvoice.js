@@ -430,12 +430,23 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
-                            id: 'sisaBayar_poinvoice',
+                            // cls:'my-mandatory-field',\
+                            hidden: true,
+                            name: 'pembayaran_pi',
+                            id: 'pembayaran_poinvoice',
                             align: 'right',
-                            readOnly: true,
+                            //                            readOnly: true,
                             labelWidth: 120,
-                            fieldLabel: 'Saldo Terhutang ',
-                            fieldStyle: 'text-align: right;'
+                            fieldLabel: 'Pembayaran/DP',
+                            fieldStyle: 'text-align: right;',
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        this.setRawValue(renderNomor(this.getValue()));
+                                        updateSelisih();
+                                    }, c);
+                                }
+                            }
                         }
                     ]
                 },
@@ -462,10 +473,14 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             fieldLabel: 'Biaya Angkut',
                             fieldStyle: 'text-align: right;',
                             listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        // updateGridPurchaseInvoice('general');
-                                    }, c);
+                                // 'render': function(c) {
+                                //     c.getEl().on('keyup', function() {
+                                //         // updateGridPurchaseInvoice('general');
+                                //     }, c);
+                                // }
+                                'blur': function() {
+                                    this.setRawValue(renderNomor2(this.getValue()));
+                                    updateSelisih();
                                 }
                             }
                         }
@@ -708,22 +723,12 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
-                            // cls:'my-mandatory-field',
-                            name: 'pembayaran_pi',
-                            id: 'pembayaran_poinvoice',
+                            id: 'sisaBayar_poinvoice',
                             align: 'right',
-                            //                            readOnly: true,
+                            readOnly: true,
                             labelWidth: 120,
-                            fieldLabel: 'Pembayaran/DP',
-                            fieldStyle: 'text-align: right;',
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        this.setRawValue(renderNomor(this.getValue()));
-                                        updateSelisih();
-                                    }, c);
-                                }
-                            }
+                            fieldLabel: 'Saldo Terhutang ',
+                            fieldStyle: 'text-align: right;'
                         }
 
                     ]
@@ -952,7 +957,7 @@ function updateGridPurchaseInvoice(tipe) {
 }
 
 function updateSelisih() {
-    var totalPayment = str_replace('.', '', Ext.getCmp('total_poinvoice').getValue()) * 1 + str_replace('.', '', Ext.getCmp('angkut_poinvoice').getValue()) * 1;
+    var totalPayment = str_replace(',', '', Ext.getCmp('total_poinvoice').getValue()) * 1 + str_replace(',', '', Ext.getCmp('angkut_poinvoice').getValue()) * 1;
     // console.log('totalPayment:'+totalPayment);
 
     var sisa = totalPayment - str_replace('.', '', Ext.getCmp('pembayaran_poinvoice').getValue()) * 1;
