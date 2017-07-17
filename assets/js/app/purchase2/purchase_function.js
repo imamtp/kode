@@ -417,11 +417,15 @@ function loadDataFormPurchaseInvoice(selectedRecord) {
     Ext.getCmp('memo_poinvoice').setValue(selectedRecord.get('memo'));
     // Ext.getCmp('cb_status_poinvoice').setValue(5);
 
-    Ext.getCmp('totalPajak_poinvoice').setValue(renderNomor(selectedRecord.get('tax')));
-    Ext.getCmp('total_poinvoice').setValue(renderNomor(selectedRecord.get('totalamount')));
-    Ext.getCmp('subtotal_poinvoice').setValue(renderNomor(selectedRecord.get('subtotal')));
+    var tax = selectedRecord.get('tax') * 1;
+    var totalamount = selectedRecord.get('totalamount') * 1;
+    var subtotal = selectedRecord.get('subtotal') * 1;
 
-    Ext.getCmp('sisaBayar_poinvoice').setValue(renderNomor(selectedRecord.get('totalamount')));
+    Ext.getCmp('totalPajak_poinvoice').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('total_poinvoice').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('subtotal_poinvoice').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
+
+    Ext.getCmp('sisaBayar_poinvoice').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
 
     var EntryPurchaseInvoice = Ext.getCmp('EntryPurchaseInvoice').getStore();
     EntryPurchaseInvoice.removeAll();
