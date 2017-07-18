@@ -280,7 +280,18 @@ class purchase extends MY_Controller {
 
     function savePurchaseOrder(){
 
-         $this->db->trans_begin();
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'PO',
+            'table' => 'purchase',
+            'fieldpk' => 'idpurchase',
+            'fieldname' => 'nopurchase',
+            'extraparams'=> 'and idpurchasetype = 2',
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
+        
+        $this->db->trans_begin();
 
         $statusform = $this->input->post('statusform');
         $idpurchase = $this->m_data->getPrimaryID($this->input->post('idpurchase'),'purchase', 'idpurchase', $this->input->post('unit'));
@@ -338,7 +349,7 @@ class purchase extends MY_Controller {
             // 'totalpaid' =>,
             // 'deleted' =>,
             // 'idproject' =>,
-            'nopurchase' => $this->input->post('no_po'),
+            'nopurchase' => $this->input->post('no_po') != null ? $this->input->post('no_po') : $noarticle,
             // 'id_payment_term' =>,
             'idsupplier' => $this->input->post('idsupplier'),
             'status' => $this->input->post('po_status') 
