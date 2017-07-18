@@ -215,12 +215,17 @@ class sales extends MY_Controller {
                 if($item['deleted'] != 1){
                     $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
                     $item['idsalesitem'] = $q_seq->result_array()[0]['nextval'];
+                    $item['userin'] = $this->session->userdata('userid');
+                    $item['datein'] = date('Y-m-d H:i:s');
                     $this->db->insert('salesitem', $item);
                 }
             }else{
                 $this->db->where('idsalesitem', $item['idsalesitem']);
-                if($item['deleted'] != "1")
+                if($item['deleted'] != "1"){
+                    $item['usermod'] = $this->session->userdata('userid');
+                    $item['datemod'] = date('Y-m-d H:i:s');
                     $this->db->update('salesitem', $item);
+                }
                 else
                     $this->db->delete('salesitem');
             }
