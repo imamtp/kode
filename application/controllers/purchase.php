@@ -448,12 +448,17 @@ class purchase extends MY_Controller {
                 if($item['deleted'] != 1){
                     $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
                     $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
+                    $item['userin'] = $this->session->userdata('userid');
+                    $item['datein'] = date('Y-m-d H:i:s');
                     $this->db->insert('purchaseitem', $item);
                 }
             } else { 
                 $this->db->where('idpurchaseitem', $item['idpurchaseitem']);
-                if($item['deleted'] != "1")
+                if($item['deleted'] != "1"){
+                    $item['usermod'] = $this->session->userdata('userid');
+                    $item['datemod'] = date('Y-m-d H:i:s');
                     $this->db->update('purchaseitem', $item);
+                }
                 else
                     $this->db->delete('purchaseitem');
             }
