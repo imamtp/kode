@@ -5,6 +5,13 @@ var storeChooserListSupplier = Ext.create('Ext.data.Store', {
         property: 'namesupplier',
         direction: 'ASC'
     }],
+    listeners: {
+        'beforeload': function(store, operation, eOpts) {
+            operation.params = {
+                extraparams: 'a.deleted: 0, a.idunit:' + idunit,
+            }
+        }
+    }
 });
 
 var smChooserListSupplier = Ext.create('Ext.selection.CheckboxModel', {
