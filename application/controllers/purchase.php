@@ -129,8 +129,19 @@ class purchase extends MY_Controller {
 
     function saveRequisition(){
 
-        $this->db->trans_begin();
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'PR',
+            'table' => 'purchase',
+            'fieldpk' => 'idpurchase',
+            'fieldname' => 'nopurchase',
+            'extraparams'=> 'and idpurchasetype = 1',
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
 
+        $this->db->trans_begin();
+        $nopurchase = $this->input->post('nojurnalPurchaseRequisition') != null ? $this->input->post('nojurnalPurchaseRequisition') : $noarticle;
         $statusform = $this->input->post('statusform');
         $idpurchase = $this->m_data->getPrimaryID($this->input->post('idpurchase'),'purchase', 'idpurchase', $this->input->post('unit'));
         $ratetax = $this->input->post('ratetax');
@@ -184,7 +195,7 @@ class purchase extends MY_Controller {
             // 'totalpaid' =>,
             // 'deleted' =>,
             // 'idproject' =>,
-            'nopurchase' => $this->input->post('nojurnalPurchaseRequisition'),
+            'nopurchase' => $nopurchase,
             // 'id_payment_term' =>,
             'idsupplier' => $this->input->post('supplierPurchaseRequisition'),
             'status' => $this->input->post('pr_status'),
@@ -235,12 +246,17 @@ class purchase extends MY_Controller {
                 if($item['deleted'] != 1){
                     $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
                     $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
+                    $item['userin'] = $this->session->userdata('userid');
+                    $item['datein'] = date('Y-m-d H:i:s');
                     $this->db->insert('purchaseitem', $item);
                 }
             } else {
                 $this->db->where('idpurchaseitem', $item['idpurchaseitem']);
-                if($item['deleted'] != 1)
+                if($item['deleted'] != 1){
+                    $item['usermod'] = $this->session->userdata('userid');
+                    $item['datemod'] = date('Y-m-d H:i:s');
                     $this->db->update('purchaseitem', $item);
+                }
                 else
                     $this->db->delete('purchaseitem');
             }
