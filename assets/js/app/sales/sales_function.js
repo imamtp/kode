@@ -254,8 +254,8 @@ function showSalesQuotationData(record) {
     paymentSalesQuotation.setValue(record.data.idpayment);
     // paymentSalesOrder.setReadOnly(true);
 
-    var memoSalesOrder = Ext.getCmp('memoSalesOrder');
-    memoSalesOrder.setValue(record.data.comments);
+    var memoSalesQuotation = Ext.getCmp('memoSalesQuotation');
+    memoSalesQuotation.setValue(record.data.comments);
 
     taxStore.load();
     var cb_tax_id_sq = Ext.getCmp('cb_tax_id_sq');
@@ -298,8 +298,9 @@ function showSalesQuotationData(record) {
                     // assetaccount:obj.idsalesitem,
                     qty: obj.qty * 1,
                     sku_no: obj.sku_no,
-                    size: 1,
-                    size_measurement: obj.short_desc,
+                    size: obj.size == null ? 1 : obj.size,
+                    short_desc: obj.short_desc,
+                    size_measurement: obj.size_measurement,
                     disc: obj.disc * 1,
                     total: obj.total * 1,
                     ratetax: obj.ratetax * 1
