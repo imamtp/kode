@@ -10,15 +10,19 @@ class sales extends MY_Controller {
     }
     
     public function saveQuotation(){
-        // print_r($_POST); die;
-        // $retAkses = $this->cekAksesUser(16,'add');
-        // if(!$retAkses['success'])
-        // {
-        //     echo json_encode($retAkses);
-        //     exit;
-        // }
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'SQ',
+            'table' => 'sales',
+            'fieldpk' => 'idsales',
+            'fieldname' => 'no_sales_quote',
+            'extraparams'=> null,
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
 
         $this->db->trans_begin();
+        $noquotation = $this->input->post('nojurnalSalesQuotation') != null ? $this->input->post('nojurnalSalesQuotation') : $noarticle;
         // $items = json_decode($this->input->post('items'), true)[0];
         $items = json_decode($this->input->post('datagrid'));
 
@@ -36,7 +40,7 @@ class sales extends MY_Controller {
             'idcustomer' => $this->input->post('customerSalesQuotation'),
             'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
             'expireddate' => inputDate($this->input->post('expiredDate')),
-            'no_sales_quote' => $this->input->post('nojurnalSalesQuotation'),
+            'no_sales_quote' => $noquotation,
             // 'shipto'=> $this->input->post('shipaddressSalesQuotation'),
             'subtotal' => clearnumberic($this->input->post('subtotalSalesQuotation')),
             'freight' => clearnumberic($this->input->post('angkutSalesQuotation')),
@@ -76,6 +80,7 @@ class sales extends MY_Controller {
 
             $item = array(
                 'idsales' => $idsales,
+                'idsalesitem' => $value->idsalesitem,
                 'idinventory' => $value->idinventory,
                 'measurement_id' => $measure,
                 // 'invno' => $value->invno,
@@ -86,25 +91,27 @@ class sales extends MY_Controller {
                 'size' => $value->size,
                 'measurement_id_size' => $this->m_data->getMeasurement($value->size_measurement,$this->input->post('unit')),
                 // 'remarks' => $value->remarks,
+                'deleted' => $value->deleted == null ? 0 : $value->deleted,
                 'ratetax' => $ratetax
+
             );
-            if($statusform == 'input'){
-                $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
-                $item['idsalesitem'] = $q_seq->result_array()[0]['nextval'];
-                $this->db->insert('salesitem', $item);
-            }
-            else if($statusform == 'edit'){
-                if($value->idsalesitem==null || $value->idsalesitem==''){
-                     $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
+
+            // if($statusform == 'input'){
+            if($item['idsalesitem'] == null){
+                if($item['deleted'] != 1){
+                    $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
                     $item['idsalesitem'] = $q_seq->result_array()[0]['nextval'];
-                     $this->db->insert('salesitem', $item);
-                } else {
-                    $item['idsalesitem'] = $value->idsalesitem;
-                    $this->db->where('idsalesitem', $item['idsalesitem']);
-                    $this->db->update('salesitem', $item);
+                    $this->db->insert('salesitem', $item);
                 }
-                
-              
+            }else{
+                $this->db->where('idsalesitem', $item['idsalesitem']);
+                if($item['deleted'] != 1){
+                    $item['usermod'] = $this->session->userdata('userid');
+                    $item['datemod'] = date('Y-m-d H:i:s');
+                    $this->db->update('salesitem', $item);
+                } else {
+                    $this->db->delete('salesitem');
+                }
             }
         }
         // $this->db->trans_rollback();
@@ -211,6 +218,7 @@ class sales extends MY_Controller {
                 'ratetax' => $value->ratetax,
                 'deleted' => $value->deleted == null ? 0 : $value->deleted,
             );
+
             if($item['idsalesitem'] == null){
                 if($item['deleted'] != 1){
                     $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
@@ -229,10 +237,6 @@ class sales extends MY_Controller {
                 else
                     $this->db->delete('salesitem');
             }
-
-            //update harga jual di inventory
-            // $this->db->where('idinventory',$value->idinventory);
-            // $this->db->update('inventory',array('cost'=>$value->price));
         }
 
         if($this->db->trans_status() === false){
