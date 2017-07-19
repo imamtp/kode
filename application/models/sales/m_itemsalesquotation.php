@@ -19,7 +19,7 @@ class m_itemsalesquotation extends CI_Model {
         return "a.idunit,a.idinventory,brand_name,a.sku_no,a.invno,a.nameinventory,a.description,a.isinventory,a.issell,
             a.isbuy,a.cosaccount,a.incomeaccount,a.assetaccount,a.qtystock,a.images,a.cost,
             a.unitmeasure,a.numperunit,a.minstock,a.idprimarysupplier,a.sellingprice,a.idselingtax,
-            a.unitmeasuresell,a.numperunitsell,a.notes,a.display,a.namesupplier,yearbuy,monthbuy,datebuy,a.namecat,saldopersediaan,a.short_desc";
+            a.unitmeasuresell,a.numperunitsell,a.notes,a.display,a.namesupplier,a.deleted,yearbuy,monthbuy,datebuy,a.namecat,saldopersediaan,a.short_desc";
     }
     
     function fieldCek()
