@@ -939,14 +939,16 @@ function updateGridPurchaseOrder(tipe) {
     var addprefix = 'PurchaseOrder';
 
     var subtotalPurchaseOrder = 0 * 1;
+    var dppPurchaseOrder = 0 * 1;
     var totalPurchaseOrder = 0 * 1;
     var totalPajak = 0 * 1;
+
     // var angkutPurchaseOrder = Ext.getCmp('angkutPurchaseOrder').getValue();
     var angkutPurchaseOrder = 0;
     var pembayaranPurchaseOrder = Ext.getCmp('pembayaranPurchaseOrder').getValue();
     var sisaBayarPurchaseOrder = 0 * 1;
     var taxrate = Ext.getCmp('cb_tax_id_po').getValue();
-    var include_tax = Ext.getCmp('include_tax_po').getValue();
+    var isIncludeTax = Ext.getCmp('include_tax_po').getValue() * 1;
     var totaldiskon = 0;
 
     Ext.each(storeGridItemPurchaseOrder.data.items, function(obj, i) {
@@ -963,19 +965,10 @@ function updateGridPurchaseOrder(tipe) {
         obj.set('total', net);
     });
 
-    var dppPurchaseOrder = (subtotalPurchaseOrder + totaldiskon) / 1.1;
-    totalPajak += dppPurchaseOrder * (taxrate * 1 / 100);
-    //     console.log(subtotalPurchaseOrder);
-    totalPurchaseOrder = subtotalPurchaseOrder + angkutPurchaseOrder * 1;
-    //     console.log(totalPurchaseOrder+' '+totalPajak);
-    if (include_tax * 1 == 1) {
-        //include tax
-        totalPurchaseOrder = dppPurchaseOrder;
-    } else {
-        totalPurchaseOrder = dppPurchaseOrder + totalPajak;
-    }
+    dppPurchaseOrder = isIncludeTax ? (subtotalPurchaseOrder + totaldiskon) / 1.1 : 0;
+    totalPajak += isIncludeTax ? dppPurchaseOrder * (taxrate * 1 / 100) : subtotalPurchaseOrder * (taxrate / 100);
+    totalPurchaseOrder = isIncludeTax ? subtotalPurchaseOrder : subtotalPurchaseOrder + totalPajak;
 
-    //     console.log(totalPurchaseOrder);
     sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;
     // alert(totalPajak);
     Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
