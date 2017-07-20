@@ -945,9 +945,9 @@ function updateGridPurchaseOrder(tipe) {
 
     // var angkutPurchaseOrder = Ext.getCmp('angkutPurchaseOrder').getValue();
     var angkutPurchaseOrder = 0;
-    var pembayaranPurchaseOrder = Ext.getCmp('pembayaranPurchaseOrder').getValue();
+    var pembayaranPurchaseOrder = Ext.getCmp('pembayaranPurchaseOrder').getValue() * 1;
     var sisaBayarPurchaseOrder = 0 * 1;
-    var taxrate = Ext.getCmp('cb_tax_id_po').getValue();
+    var taxrate = Ext.getCmp('cb_tax_id_po').getValue() * 1;
     var isIncludeTax = Ext.getCmp('include_tax_po').getValue() * 1;
     var totaldiskon = 0;
 

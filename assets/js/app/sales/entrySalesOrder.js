@@ -483,11 +483,9 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             fieldLabel: 'Biaya Angkut',
                             fieldStyle: 'text-align: right;',
                             listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        this.setRawValue(renderNomor2(this.getValue()));
-                                        updateGridSalesOrder();
-                                    }, c);
+                                'blur': function() {
+                                    this.setRawValue(renderNomor2(this.getValue()));
+                                    updateGridSalesOrder();
                                 }
                             }
                         }
@@ -788,14 +786,15 @@ function updateGridSalesOrder(tipe) {
     var addprefix = 'SalesOrder';
 
     var subtotalSalesOrder = 0 * 1;
+    var dppSalesOrder = 0 * 1;
     var totalSalesOrder = 0 * 1;
     var totalPajak = 0 * 1;
     // var angkutSalesOrder = Ext.getCmp('angkutSalesOrder').getValue();
-    var angkutSalesOrder = str_replace(",", "", Ext.getCmp('freightSalesOrder').getValue());
+    var angkutSalesOrder = str_replace(",", "", Ext.getCmp('freightSalesOrder').getValue()) * 1;
     // var pembayaranSalesOrder = Ext.getCmp('pembayaranSalesOrder').getValue();
     var sisaBayarSalesOrder = 0 * 1;
-    var taxrate = Ext.getCmp('cb_tax_id_so').getValue();
-    var include_tax = Ext.getCmp('include_tax_so').getValue();
+    var taxrate = Ext.getCmp('cb_tax_id_so').getValue() * 1;
+    var isIncludeTax = Ext.getCmp('include_tax_so').getValue() * 1;
     var total_diskon = 0;
 
     Ext.each(storeGridItemSalesOrder.data.items, function(obj, i) {
@@ -812,22 +811,27 @@ function updateGridSalesOrder(tipe) {
         obj.set('total', net);
     });
 
-    var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
-    totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
-    //     console.log(subtotalSalesOrder);
-    totalSalesOrder = subtotalSalesOrder;
-    //     console.log(totalSalesOrder+' '+totalPajak);
-    if (include_tax * 1 != 1) {
-        //include tax
-        totalSalesOrder = dppPurchaseOrder;
-    } else {
-        totalSalesOrder = dppPurchaseOrder + totalPajak;
-    }
-    console.log(angkutSalesOrder);
-    console.log(totalSalesOrder);
+    dppSalesOrder = isIncludeTax ? (subtotalSalesOrder + total_diskon) / 1.1 : 0;
+    totalPajak += isIncludeTax ? dppSalesOrder * (taxrate * 1 / 100) : subtotalSalesOrder * (taxrate / 100);
+    totalSalesOrder = isIncludeTax ? subtotalSalesOrder : subtotalSalesOrder + totalPajak;
+    totalSalesOrder += angkutSalesOrder;
 
-    totalSalesOrder = totalSalesOrder + angkutSalesOrder * 1;
-    console.log(totalSalesOrder);
+    // var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
+    // totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
+    // //     console.log(subtotalSalesOrder);
+    // totalSalesOrder = subtotalSalesOrder;
+    // //     console.log(totalSalesOrder+' '+totalPajak);
+    // if (include_tax * 1 != 1) {
+    //     //include tax
+    //     totalSalesOrder = dppPurchaseOrder;
+    // } else {
+    //     totalSalesOrder = dppPurchaseOrder + totalPajak;
+    // }
+    // console.log(angkutSalesOrder);
+    // console.log(totalSalesOrder);
+
+    // totalSalesOrder = totalSalesOrder + angkutSalesOrder * 1;
+    // console.log(totalSalesOrder);
 
     //     console.log(totalSalesOrder);
     // sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
@@ -836,7 +840,7 @@ function updateGridSalesOrder(tipe) {
     Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('diskonSalesOrder').setValue(total_diskon.toLocaleString('null', { maximumFractionDigits: 2 }));
-    Ext.getCmp('dppSalesOrder').setValue(dppPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('dppSalesOrder').setValue(dppSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
     // Ext.getCmp('pembayaran').setValue(pembayaranSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarSalesOrder').setValue(sisaBayarSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 
