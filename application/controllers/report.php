@@ -620,7 +620,7 @@ class report extends MY_Controller {
         $q = $this->db->query($sql);
         $data = array();
         $i=0;
-        foreach($qinv->result_array() as $r){
+        foreach($q->result_array() as $r){
             $data[$i] = $r;
             // if($r[''])
             $i++;
