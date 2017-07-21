@@ -50,7 +50,7 @@ class m_bahancoil extends CI_Model {
         $data = array(
             'bahan_coil_id' => $this->m_data->getPrimaryID($this->input->post('bahan_coil_id'),'bahan_coil', 'bahan_coil_id', $this->session->userdata('idunit')),
             'idinventorycat' => $this->input->post('idinventorycat'),
-            'az_z' => $this->input->post('az_z'),
+            'az_z' => $this->input->post('az_z') == '-' ? null : $this->input->post('az_z'),
             'lebar' => $this->input->post('lebar'),
             'tebal'=>$this->input->post('tebal'),
             'berat'=>$this->input->post('berat'),
