@@ -165,14 +165,13 @@ class sales extends MY_Controller {
             'freight' => clearnumberic($this->input->post('angkutSalesOrder')),
             'tax' => clearnumberic($this->input->post('totalPajak')),
             'include_tax'=> $this->input->post('include_tax') == 'true' ? 1 : 0,
-            // 'disc' => $this->input->post('paymentSalesQuotation'),
+            'disc' => $this->input->post('discSalesOrder'),
             'totalamount' => clearnumberic($this->input->post('totalSalesOrder')),
             'paidtoday' => clearnumberic($this->input->post('pembayaranSalesOrder')),
             'balance' => clearnumberic($this->input->post('sisaBayarSalesOrder')),
             'comments' => $this->input->post('memoSalesOrder'),
             'idshipping' => $this->input->post('shippingSalesOrder') == '' ? null : $this->input->post('shippingSalesOrder'),
             'paidtoday' => clearnumberic($this->input->post('pembayaranSalesOrder')),
-            'balance'=> clearnumberic($this->input->post('sisaBayarSalesOrder')),
             'freight'=> clearnumberic($this->input->post('freight')),
             // 'isrecuring' => $this->input->post('paymentSalesQuotation'),
             // 'startdate' date,
@@ -182,18 +181,21 @@ class sales extends MY_Controller {
             // 'notifto' int4,
             // 'display' int4,
              'type'=>2,
-             'userin' => $this->session->userdata('userid'),
-             'datein' => date('Y-m-d H:m:s'),
+             
              'status'  => $this->input->post('sales_order_status'),
-             'idcurrency'  => $this->session->userdata('userid'),
+            //  'idcurrency'  => $this->session->userdata('userid'),
             'salesman_id'  => $this->input->post('salesman_id') == '' ? null : $this->input->post('salesman_id'),
              'idunit'  => $this->input->post('unit')
         );
         
         if($statusform == 'input'){
+            $header['userin'] = $this->session->userdata('userid');
+            $header['datein'] = date('Y-m-d H:m:s');
             $this->db->insert('sales', $header);
         }
         else if($statusform == 'edit'){
+            $header['usermod'] = $this->session->userdata('userid');
+            $header['datemod'] = date('Y-m-d H:m:s');
             $this->db->where('idsales', $idsales);
             $this->db->update('sales', $header);
         }

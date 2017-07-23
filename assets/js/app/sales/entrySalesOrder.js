@@ -656,6 +656,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     nojurnalSalesOrder: Ext.getCmp('nojurnalSalesOrder').getValue(),
                     memoSalesOrder: Ext.getCmp('memoSalesOrder').getValue(),
                     subtotalSalesOrder: Ext.getCmp('subtotalSalesOrder').getValue(),
+                    discSalesOrder: Ext.getCmp('diskonSalesOrder').getValue(),
                     totalSalesOrder: Ext.getCmp('totalSalesOrder').getValue(),
                     totalPajak: Ext.getCmp('totalPajakSalesOrder').getValue(),
                     // shippingSalesOrder: Ext.getCmp('shippingSalesOrder').getValue(),

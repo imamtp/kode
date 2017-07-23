@@ -92,7 +92,8 @@ class report extends MY_Controller {
                 a .date_sales desc";
 
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
     }
 
     function ar_outstanding(){
@@ -161,7 +162,8 @@ class report extends MY_Controller {
                     a .date_sales desc";
 
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
     }
 
     function sales(){
@@ -282,57 +284,177 @@ class report extends MY_Controller {
         echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
     }
 
-    function sales_by_item(){
+    function sales_order_detail(){
         $idunit = $this->input->get('idunit');
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
-        $customer_id = $this->input->get('customer_id');
-        $idinventory = $this->input->get('idinventory');
-        $salesman_id = $this->input->get('salesman_id');
+        $customer_id = $this->input->get('idcustomer');
 
+        $wer_period = null;
+        if($startdate!=''){
+            $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
+        }
         $wer_customer = null;
         if($customer_id!=null){
             $wer_customer = "and b.idcustomer = ".$customer_id."";
         }
 
-        $wer_inventory = null;
-        if($idinventory!=null){
-            $wer_inventory = "and a.idinventory = ".$idinventory."";
-        }
+        $sql = "select 
+                    b.no_sales_order, 
+                    b.date_sales, 
+                    c.sku_no,
+                    c.nameinventory,
+                    d.short_desc as measurement,
+                    a.qty as qty_order,
+                    (a.qty * a.price * (100 - a.disc) / 100) as value_order,
+                    a.qty_kirim,
+                    (a.qty_kirim * a.price * (100 - a.disc) / 100) as value_kirim,
+                    a.qty - a.qty_kirim as qty_sisa,
+                    ((qty-qty_kirim) * a.price * (100 - a.disc) / 100) as value_sisa
+                from salesitem a
+                left join sales b on b.idsales = a.idsales
+                left join inventory c on c.idinventory = a.idinventory
+                left join productmeasurement d on d.measurement_id = a.measurement_id
+                where true 
+                and b.idunit = $idunit
+                $wer_period
+                $wer_customer
+                and b.type = 2
+                and b.status > 2"; 
 
-        $wer_salesman = null;
-        if($salesman_id!=null){
-            $wer_salesman = "and b.salesman_id = ".$salesman_id."";
-        }
-
-        $qinv = $this->db->query("select a.idinventory,a.invno,a.nameinventory,cost,a.idinventorycat,a.idunit,a.status,a.deleted,a.sku_no,brand_id,a.inventory_type
-                                    from inventory a
-                                    where TRUE
-                                    and idinventory in(select idinventory from inventoryunit
-			                        where idunit = $idunit)
-                                    $wer_inventory");
-
-        $data = array();
-        $i=0;
-        foreach($qinv->result_array() as $r){
-            $data[$i] = $r;
-
-            $qtrans = $this->db->query("select a.qty,a.price,a.disc,a.total,a.ratetax,a.size,b.noinvoice,b.no_sales_order,c.short_desc as satuan,d.short_desc as satuan_ukuran,b.date_sales
-                                        from salesitem a
-                                        join sales b ON a.idsales = b.idsales
-                                        join productmeasurement c ON a.measurement_id = c.measurement_id
-                                        join productmeasurement d ON a.measurement_id_size = d.measurement_id
-                                        where a.idinventory = ".$r['idinventory']." $wer_customer $wer_salesman");
-            if($qtrans->num_rows()>0){
-                $data[$i]['trans'] = $qtrans->result_array();
-            } else {
-                $data[$i]['trans'] = FALSE;
-            }
-            
-            $i++;
-        }
-         echo '{success:true,totalitem:' .$qinv->num_rows() . ',rows:' . json_encode($data) . ' }';
+                $q = $this->db->query($sql);
+                return $q->result_array();
     }
+
+    function sales_by_item(){
+        $idunit = $this->input->get('idunit');
+        $startdate = $this->input->get('startdate');
+        $enddate = $this->input->get('enddate');
+        $idcustomer = $this->input->get('idcustomer');
+        $sku_no = $this->input->get('skuno');
+
+        $wer_period = null;
+        if($startdate!=''){
+            $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
+        }
+        
+        $wer_customer = null;
+        if($idcustomer!=null){
+            $wer_customer = "and c.idcustomer = ".$idcustomer."";
+        }
+
+        $wer_inventory = null;
+        if($sku_no!=null){
+            $wer_inventory = "and a.sku_no = '".$sku_no."'";
+        }
+        $sql = "select 
+                    a.sku_no,
+                    a.nameinventory,
+                    sum(b.qty) as qty,
+                    b.measurement,
+                    sum(b.price * b.qty) as sales
+                from inventory a 
+                join (
+                    select sku_no, a.*, c.short_desc as measurement from salesitem a
+                    join inventory b on a.idinventory = b.idinventory
+                    join productmeasurement c on c.measurement_id = a.measurement_id
+                ) b on a.sku_no = b.sku_no
+                join sales c on c.idsales = b.idsales
+                where true 
+                and c.idunit = $idunit
+                and c.type = 2
+                and c.status > 2
+                $wer_period
+                $wer_customer
+                $wer_inventory
+                group by a.sku_no, a.nameinventory, b.measurement";
+
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
+
+    function sales_by_customer(){
+        $idunit = $this->input->get('idunit');
+        $startdate = $this->input->get('startdate');
+        $enddate = $this->input->get('enddate');
+
+        $wer_period = null;
+        if($startdate!=''){
+            $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
+        }
+
+        $sql = "select 
+                    a.namecustomer,
+                    a.nocustomer,
+                    sum(b.subtotal) as subtotal,
+                    sum(b.tax) as tax,
+                    sum(totalamount) as total,
+                    sum(b.balance) as balance
+                from customer a
+                join sales b on b.idcustomer = a.idcustomer
+                where true
+                $wer_period
+                and a.idunit = 12
+                and a.deleted = 0
+                and b.type = 2
+                and b.status > 2
+                group by a.namecustomer, a.nocustomer
+                order by namecustomer";
+        
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
+    // function sales_by_item(){
+    //     $idunit = $this->input->get('idunit');
+    //     $startdate = $this->input->get('startdate');
+    //     $enddate = $this->input->get('enddate');
+    //     $customer_id = $this->input->get('customer_id');
+    //     $sku_no = $this->input->get('sku_no');
+    //     $salesman_id = $this->input->get('salesman_id');
+
+    //     $wer_customer = null;
+    //     if($customer_id!=null){
+    //         $wer_customer = "and b.idcustomer = ".$customer_id."";
+    //     }
+
+    //     $wer_inventory = null;
+    //     if($sku_no!=null){
+    //         $wer_inventory = "and a.sku_no = ".$sku_no."";
+    //     }
+
+    //     $wer_salesman = null;
+    //     if($salesman_id!=null){
+    //         $wer_salesman = "and b.salesman_id = ".$salesman_id."";
+    //     }
+
+    //     $qinv = $this->db->query("select a.idinventory,a.invno,a.nameinventory,cost,a.idinventorycat,a.idunit,a.status,a.deleted,a.sku_no,brand_id,a.inventory_type
+    //                                 from inventory a
+    //                                 where TRUE
+    //                                 and idinventory in(select idinventory from inventoryunit
+	// 		                        where idunit = $idunit)
+    //                                 $wer_inventory");
+
+    //     $data = array();
+    //     $i=0;
+    //     foreach($qinv->result_array() as $r){
+    //         $data[$i] = $r;
+
+    //         $qtrans = $this->db->query("select a.qty,a.price,a.disc,a.total,a.ratetax,a.size,b.noinvoice,b.no_sales_order,c.short_desc as satuan,d.short_desc as satuan_ukuran,b.date_sales
+    //                                     from salesitem a
+    //                                     join sales b ON a.idsales = b.idsales
+    //                                     join productmeasurement c ON a.measurement_id = c.measurement_id
+    //                                     join productmeasurement d ON a.measurement_id_size = d.measurement_id
+    //                                     where a.idinventory = ".$r['idinventory']." $wer_customer $wer_salesman");
+    //         if($qtrans->num_rows()>0){
+    //             $data[$i]['trans'] = $qtrans->result_array();
+    //         } else {
+    //             $data[$i]['trans'] = FALSE;
+    //         }
+            
+    //         $i++;
+    //     }
+    //      echo '{success:true,totalitem:' .$qinv->num_rows() . ',rows:' . json_encode($data) . ' }';
+    // }
 
     function sales_return(){
         $idunit = $this->input->get('idunit');

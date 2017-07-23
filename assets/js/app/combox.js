@@ -2062,3 +2062,27 @@ Ext.define('comboxproject', {
         autoLoad: false
     })
 });
+
+var ArrARAgingOptions = [
+    [1, '0 - 30 hari'],
+    [2, '30 - 60 hari'],
+    [3, '60 - 90 hari'],
+    [4, '> 90 hari'],
+];
+
+
+Ext.define('comboxARAgingOptions', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxARAgingOptions',
+    fieldLabel: 'Aging',
+    displayField: 'text',
+    valueField: 'value',
+    name: 'value',
+    editable: false,
+    triggerAction: 'all',
+    // store: storeProductGrade
+    store: new Ext.data.ArrayStore({
+        fields: ['value', 'text'],
+        data: ArrARAgingOptions,
+    })
+});

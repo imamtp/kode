@@ -3,29 +3,29 @@ Ext.define('TabReportAR', {
     id: 'TabReportAR',
     alias: 'widget.TabReportAR',
     activeTab: 0,
-    plain:true,
+    plain: true,
     autoWidth: '100%',
     autoScroll: true,
     defaults: {
         autoScroll: true
     },
-    items: [
-        {
-            xtype: 'GridARAging'
+    items: [{
+            xtype: 'reportARAging'
         },
         {
-            xtype:'GridAROutstanding'
+            xtype: 'reportAROutstanding'
         },
-        {
-            xtype:'GridARConfirmation'
-        },
-        {
-            xtype:'GridARGiroConfirmation'
-        },
-        {
-            xtype:'GridARCard'
-        }
-    ], listeners: {
+        // {
+        //     xtype: 'GridARConfirmation'
+        // },
+        // {
+        //     xtype: 'GridARGiroConfirmation'
+        // },
+        // {
+        //     xtype: 'GridARCard'
+        // }
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {

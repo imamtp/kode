@@ -3,38 +3,41 @@ Ext.define('TabReportSales', {
     id: 'TabReportSales',
     alias: 'widget.TabReportSales',
     activeTab: 0,
-    plain:true,
+    plain: true,
     autoWidth: '100%',
     autoScroll: true,
     defaults: {
         autoScroll: true
     },
-    items: [
+    items: [{
+            // xtype: 'GridSalesOrderDetail'
+            xtype: 'reportSalesOrderDetail',
+        },
+        // {
+        //     xtype: 'GridSalesOrderHistory'
+        // },
         {
-            xtype: 'GridSalesOrderDetail'
+            // xtype: 'GridSalesByItem'
+            xtype: 'reportSalesOrderByItem'
         },
         {
-            xtype:'GridSalesOrderHistory'
+            // xtype: 'GridSalesByCustomer'
+            xtype: 'reportSalesOrderByCustomer'
         },
         {
-            xtype:'GridSalesByItem'
+            xtype: 'GridSalesBySalesman'
         },
         {
-            xtype:'GridSalesByCustomer'
+            xtype: 'GridSalesReturnDetail'
         },
         {
-            xtype:'GridSalesBySalesman'
+            xtype: 'GridSalesBook'
         },
         {
-            xtype:'GridSalesReturnDetail'
-        },
-        {
-            xtype:'GridSalesBook'
-        },
-        {
-            xtype:'GridDeliveryActual'
+            xtype: 'GridDeliveryActual'
         }
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {

@@ -10,7 +10,26 @@ class laporan extends MY_Controller {
     }
 
     public function salesorderdetail(){
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Sales Order Detail',
+            'rows'=>$this->report->sales_order_detail(),
+        );
 
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '150%';
+        }
+        $this->load->view('report/sales/salesorderdetail', $data);
     }
 
     public function salesorderhistory(){
@@ -18,11 +37,49 @@ class laporan extends MY_Controller {
     }
 
     public function salesbyitem(){
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Sales Order by Item',
+            'rows'=>$this->report->sales_by_item(),
+        );
 
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '100%';
+        }
+        $this->load->view('report/sales/salesbyitem', $data);
     }
 
     public function salesbycustomer(){
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Sales Order by Customer',
+            'rows'=>$this->report->sales_by_customer(),
+        );
 
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '100%';
+        }
+        $this->load->view('report/sales/salesbycustomer', $data);
     }
 
     public function salesbysalesmen(){
@@ -2592,6 +2649,35 @@ if($option=='print')
         }
     }
     
+    function ARAging()
+    {
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan AR Aging',
+            'rows'=>$this->report->ar(),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '100%';
+        }
+        $this->load->view('report/ar/aging', $data);
+    }
+
+    function AROutstanding()
+    {
+        
+    }
+
     function PenerimaanSiswaBulan($idunit=null,$sd,$nd,$option=null)
     {
         $namaunit = $this->fetchUnit($idunit);
@@ -2600,7 +2686,29 @@ if($option=='print')
         {
             $nd=$sd;
         }
+$this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan AR Outstanding',
+            'rows'=>$this->report->ar_outstanding(),
+        );
 
+        // $row = $this->report->ar();
+        // if($results['success'])
+        //     $data['rows'] = $results['rows'];
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '100%';
+        }
+        $this->load->view('report/ar/outstanding', $data);
         $arrSd = explode("%20",$sd);
         $arrNd = explode("%20",$nd);
 

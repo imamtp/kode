@@ -1,10 +1,17 @@
 var storeChooserListInventory = Ext.create('Ext.data.Store', {
     pageSize: 100,
-    model: 'App.model.InventoryBuy',
+    model: 'App.model.InventoryBySku',
     sorters: [{
         property: 'nameinventory',
         direction: 'ASC'
     }],
+    listeners: {
+        'beforeload': function(store, operation, eOpts) {
+            operation.params = {
+                extraparams: 'deleted: 0, idunit:' + idunit,
+            }
+        }
+    },
 });
 
 var smChooserListInventory = Ext.create('Ext.selection.CheckboxModel', {
@@ -37,34 +44,32 @@ var GridInventoryList = Ext.create('Ext.grid.Panel', {
     width: 800,
     height: 350,
     selModel: smChooserListInventory,
-    autoScroll:true,
+    autoScroll: true,
     columns: [
-        {header:'idinventory', dataIndex:'idinventory', hidden:true},
-        {header:'No', xtype:'rownumberer', sortable:false, width: 30},
-        {header:'No SKU', dataIndex:'invno', minWidth: 150},
-        {header:'Name', dataIndex:'nameinventory', minWidth: 150, flex:1},
-        {header:'Price', dataIndex:'cost', minWidth: 150},
-        {header:'Tax (%)', dataIndex:'ratetax', minWidth: 150},
+        { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
+        { header: 'No', xtype: 'rownumberer', sortable: false, width: 30 },
+        { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
+        { header: 'Name', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        { header: 'Brand', dataIndex: 'nameinventory', minWidth: 150 },
     ],
-    dockedItems:[
-        {
+    dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',
-            items:[
+            items: [
                 'Category :',
                 {
                     boxLabel: 'All',
                     xtype: 'checkboxfield',
-                    handler: function(checkbox, checked){
+                    handler: function(checkbox, checked) {
                         var cb1 = GridInventoryList.queryById('idinventory');
-                        if(checked){
+                        if (checked) {
                             cb1.setDisabled(true);
                             storeChooserListInventory.clearFilter(true);
                             storeChooserListInventory.load();
-                        }else{
+                        } else {
                             cb1.setDisabled(false);
-                            if(cb1.getValue() !== false)
-                                storeChooserListInventory.filter(function(item){return item.get('idinventorycat') == cb1.getValue()})
+                            if (cb1.getValue() !== false)
+                                storeChooserListInventory.filter(function(item) { return item.get('idinventorycat') == cb1.getValue() })
                         }
                     }
                 },
@@ -75,9 +80,9 @@ var GridInventoryList = Ext.create('Ext.grid.Panel', {
                     fieldLabel: null,
                     labelWidth: 10,
                     listeners: {
-                        'select': function(combo,record,eOpts){
+                        'select': function(combo, record, eOpts) {
                             storeChooserListInventory.clearFilter(true);
-                            storeChooserListInventory.filter(function(item){return item.get('idinventorycat') == record[0].data.idinventorycat})
+                            storeChooserListInventory.filter(function(item) { return item.get('idinventorycat') == record[0].data.idinventorycat })
                         }
                     },
                 },
@@ -96,19 +101,19 @@ var GridInventoryList = Ext.create('Ext.grid.Panel', {
             defaults: {
                 width: 90,
             },
-            items:[
+            items: [
                 '->',
                 {
                     text: 'OK',
                     itemId: 'btnOk',
                     disabled: true,
-                    handler: function(){
+                    handler: function() {
                         GridInventoryList.fireEvent('selectItem', ChooserListInventory.target);
                     }
                 },
                 {
                     text: 'Cancel',
-                    handler: function(){
+                    handler: function() {
                         ChooserListInventory.hide();
                     }
                 }
@@ -122,9 +127,8 @@ var GridInventoryList = Ext.create('Ext.grid.Panel', {
         },
     ],
     listeners: {
-        itemdblclick: function() {
-        },
-        selectItem: function(form){
+        itemdblclick: function() {},
+        selectItem: function(form) {
             var selectedRecord = GridInventoryList.getSelectionModel().getSelection()[0];
             form.fireEvent('selectInventory', selectedRecord.data);
             ChooserListInventory.hide();
@@ -149,7 +153,7 @@ var ChooserListInventory = Ext.create('widget.window', {
     padding: '5',
     items: [GridInventoryList],
     listeners: {
-        show: function(){
+        show: function() {
             storeChooserListInventory.load();
         }
     }
