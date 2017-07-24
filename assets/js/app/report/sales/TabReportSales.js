@@ -10,32 +10,29 @@ Ext.define('TabReportSales', {
         autoScroll: true
     },
     items: [{
-            // xtype: 'GridSalesOrderDetail'
             xtype: 'reportSalesOrderDetail',
         },
         // {
         //     xtype: 'GridSalesOrderHistory'
         // },
         {
-            // xtype: 'GridSalesByItem'
             xtype: 'reportSalesOrderByItem'
         },
         {
-            // xtype: 'GridSalesByCustomer'
             xtype: 'reportSalesOrderByCustomer'
         },
         {
-            xtype: 'GridSalesBySalesman'
+            xtype: 'reportSalesOrderBySalesman'
         },
         {
             xtype: 'GridSalesReturnDetail'
         },
-        {
-            xtype: 'GridSalesBook'
-        },
-        {
-            xtype: 'GridDeliveryActual'
-        }
+        // {
+        //     xtype: 'GridSalesBook'
+        // },
+        // {
+        //     xtype: 'GridDeliveryActual'
+        // }
     ],
     listeners: {
         render: {

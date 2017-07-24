@@ -747,6 +747,7 @@
     <script src='{$assets_url}/js/app/report/sales/PanelSalesOrderDetail.js'></script>
     <script src='{$assets_url}/js/app/report/sales/PanelSalesOrderByItem.js'></script>
     <script src='{$assets_url}/js/app/report/sales/PanelSalesOrderByCustomer.js'></script>
+    <script src='{$assets_url}/js/app/report/sales/PanelSalesOrderBySalesman.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowProductList.js'></script>
     <!-- <script src='{$assets_url}/js/app/report/sales/WindowCustomerList.js'></script> -->
     <!-- <script src='{$assets_url}/js/app/report/sales/WindowSalesOrderList.js'></script>
@@ -762,7 +763,7 @@
     <script src='{$assets_url}/js/app/report/sales/GridSalesOrderHistory.js'></script>
     <!--<script src='{$assets_url}/js/app/report/sales/GridSalesByItem.js'></script>-->
     <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesByCustomer.js'></script> -->
-    <script src='{$assets_url}/js/app/report/sales/GridSalesBySalesman.js'></script>
+    <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesBySalesman.js'></script> -->
     <script src='{$assets_url}/js/app/report/sales/GridSalesReturnDetail.js'></script>
     <script src='{$assets_url}/js/app/report/sales/GridSalesBook.js'></script>
     <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesDeliveryActual.js'></script> -->
