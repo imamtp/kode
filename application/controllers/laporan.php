@@ -82,8 +82,27 @@ class laporan extends MY_Controller {
         $this->load->view('report/sales/salesbycustomer', $data);
     }
 
-    public function salesbysalesmen(){
+    public function salesbysalesman(){
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Sales Order by Salesman',
+            'rows'=>$this->report->sales_by_salesman(),
+        );
 
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '100%';
+        }
+        $this->load->view('report/sales/salesbysalesman', $data);
     }
 
     public function salesreturndetail(){

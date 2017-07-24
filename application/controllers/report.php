@@ -404,6 +404,70 @@ class report extends MY_Controller {
         $q = $this->db->query($sql);
         return $q->result_array();
     }
+
+    function sales_by_salesman(){
+        $idunit = $this->input->get('idunit');
+        $startdate = $this->input->get('startdate');
+        $enddate = $this->input->get('enddate');
+
+        $wer_period = null;
+        if($startdate!=''){
+            $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
+        }
+
+        $sql = "select 
+                    a.code,
+                    a.firstname || ' ' || a.lastname as name,
+                    sum(b.subtotal) as subtotal,
+                    sum(b.tax) as tax,
+                    sum(totalamount) as total,
+                    sum(b.balance) as balance
+                from employee a
+                join sales b on b.salesman_id = a.idemployee
+                where true
+                $wer_period
+                and a.idunit = $idunit
+                and a.deleted = 0
+                and b.type = 2
+                and b.status > 2
+                group by b.salesman_id, a.code, a.firstname, a.lastname
+                order by a.firstname";
+        
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
+
+    function sales_book(){
+        $idunit = $this->input->get('idunit');
+        $startdate = $this->input->get('startdate');
+        $enddate = $this->input->get('enddate');
+
+        $wer_period = null;
+        if($startdate!=''){
+            $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
+        }
+
+        $sql = "select 
+                    c.sku_no,
+                    c.nameinventory,
+                    d.short_desc,
+                    a.qty,
+                    a.qty_kirim,
+                    a.qty_return,
+                    a.price
+                from salesitem a
+                join sales b on b.idsales = a.idsales
+                join inventory c on c.idinventory = a.idinventory
+                left join productmeasurement d on d.measurement_id = a.measurement_id
+                where true
+                and b.idunit = $idunit
+                $wer_period
+                and b.type = 2
+                and b.status > 2";
+        
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
     // function sales_by_item(){
     //     $idunit = $this->input->get('idunit');
     //     $startdate = $this->input->get('startdate');
