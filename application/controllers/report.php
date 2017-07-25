@@ -304,6 +304,18 @@ class report extends MY_Controller {
                     b.no_sales_order, 
                     b.date_sales, 
                     c.sku_no,
+                    b.noinvoice,
+                    e.namecustomer,
+                    case 
+                    when b.status = 1 then 'Open'
+                    when b.status = 2 then 'Canceled'
+                    when b.status = 3 then 'Confirmed'
+                    when b.status = 4 then 'Closed'
+                    when b.status = 5 then 'Picking Up'
+                    when b.status = 6 then 'Partial Delivering'
+                    when b.status = 7 then 'Delivering'
+                    when b.status = 8 then 'Invoiced'
+                    end as sales_status,
                     c.nameinventory,
                     d.short_desc as measurement,
                     a.qty as qty_order,
@@ -316,6 +328,7 @@ class report extends MY_Controller {
                 left join sales b on b.idsales = a.idsales
                 left join inventory c on c.idinventory = a.idinventory
                 left join productmeasurement d on d.measurement_id = a.measurement_id
+                left join customer e on e.idcustomer = b.idcustomer
                 where true 
                 and b.idunit = $idunit
                 $wer_period
