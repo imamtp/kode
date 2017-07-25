@@ -41,8 +41,8 @@ if($option!='print')
         <td><?=$r['no_sales_order']?></td>
         <td><?=$r['date_sales']?></td>
         <td><?=$r['no_faktur']?></td>
-        <td><?=$r['totalamount']?></td>
-        <td><?=$r['balance']?></td>
+        <td class="number"><?=number_format($r['totalamount'],2)?></td>
+        <td class="number"><?=number_format($r['balance'],2)?></td>
         <td><?=$r['comments']?></td>
     </tr>
 <?php endforeach ?>
