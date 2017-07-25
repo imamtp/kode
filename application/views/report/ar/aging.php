@@ -37,7 +37,7 @@ if($option!='print')
 <?php $no = 1; ?>
 <?php foreach($rows as $r): ?>
     <tr>
-        <td><?=$no?></td>
+        <td><?=$no++?></td>
         <td><?=$r['no_sales_order']?></td>
         <td><?=$r['date_sales']?></td>
         <td><?=$r['no_faktur']?></td>
