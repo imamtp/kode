@@ -48,44 +48,14 @@ var GridSalesmanList = Ext.create('Ext.grid.Panel', {
     columns: [
         { header: 'idemployee', dataIndex: 'idemployee', hidden: true },
         { header: 'No', xtype: 'rownumberer', sortable: false, width: 30 },
-        // { header: 'Personal Code', dataIndex: 'code', minWidth: 150 },
-        // { header: 'Firstname', dataIndex: 'firstname', minWidth: 150 },
-        // { header: 'Lastname', dataIndex: 'lastname', minWidth: 120 },
+        { header: 'Personal Code', dataIndex: 'code', minWidth: 150 },
+        { header: 'Firstname', dataIndex: 'firstname', minWidth: 150 },
+        { header: 'Lastname', dataIndex: 'lastname', minWidth: 120 },
     ],
     dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',
             items: [
-                'Category :',
-                {
-                    boxLabel: 'All',
-                    xtype: 'checkboxfield',
-                    handler: function(checkbox, checked) {
-                        var cb1 = GridSalesmanList.queryById('idSalesmantype');
-                        if (checked) {
-                            cb1.setDisabled(true);
-                            storeChooserListSalesman.clearFilter(true);
-                            storeChooserListSalesman.load();
-                        } else {
-                            cb1.setDisabled(false);
-                            if (cb1.getValue() !== false)
-                                storeChooserListSalesman.filter(function(item) { return item.get('idSalesmantype') == cb1.getValue() })
-                        }
-                    }
-                },
-                ' ',
-                {
-                    xtype: 'comboxSalesmantype',
-                    itemId: 'idSalesmantype',
-                    fieldLabel: null,
-                    labelWidth: 10,
-                    listeners: {
-                        'select': function(combo, record, eOpts) {
-                            storeChooserListSalesman.clearFilter(true);
-                            storeChooserListSalesman.filter(function(item) { return item.get('idSalesmantype') == record[0].data.idSalesmantype })
-                        }
-                    },
-                },
                 '->',
                 'Pencarian',
                 ' ',

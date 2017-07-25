@@ -80,7 +80,7 @@ Ext.define('reportSalesOrderDetail', {
             xtype: 'datefield',
             id: 'startdateReportSalesOrderDetail',
             format: 'Y-m-d',
-            labelWidth: 40,
+            labelWidth: 100,
             fieldLabel: 'Dari'
         }, {
             xtype: 'datefield',
@@ -98,7 +98,8 @@ Ext.define('reportSalesOrderDetail', {
                     var sd = Ext.getCmp('startdateReportSalesOrderDetail').getSubmitValue();
                     var nd = Ext.getCmp('enddateReportSalesOrderDetail').getSubmitValue();
                     var idcust = Ext.getCmp('customerReportSalesOrderDetail').getValue();
-                    Ext.getCmp('reportSalesOrderDetail').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportSalesOrderDetail' src='" + SITE_URL + "laporan/SalesOrderDetail?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idcustomer=" + idcust + "'>");
+                    var idemployee = Ext.getCmp('salesmanReportSalesOrderDetail').getValue();
+                    Ext.getCmp('reportSalesOrderDetail').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportSalesOrderDetail' src='" + SITE_URL + "laporan/SalesOrderDetail?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idcustomer=" + idcust + "&idemployee=" + idemployee + "'>");
                 }
             }
         }]
