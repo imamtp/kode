@@ -59,7 +59,7 @@ class report extends MY_Controller {
                 a .comments,
                 a .noinvoice,
                 a .ddays,
-                a.no_faktur,
+                a .no_faktur,
                 a .eomddays,
                 a .percentagedisc,
                 a .daydisc,
