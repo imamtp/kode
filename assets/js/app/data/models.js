@@ -183,3 +183,18 @@ Ext.define('App.model.InventoryBySku', {
         },
     },
 });
+
+Ext.define('App.model.Salesman', {
+    extend: 'Ext.data.Model',
+    fields: ['idemployee', 'firstname', 'lastname', 'code'],
+    idProperty: 'idemployee',
+    proxy: {
+        type: 'ajax',
+        url: SITE_URL + 'backend/ext_get_all/salesman/sales',
+        actionMethods: 'POST',
+        reader: {
+            root: 'rows',
+            totalProperty: 'results'
+        },
+    },
+});
