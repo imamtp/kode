@@ -27,16 +27,26 @@ if($option!='print')
 
 <tr style="background-color: #EDF4F7; color: #000; font-size: 12px;">
      <td><strong>No</strong></td>
+     <td><strong>Tgl SO</strong></td>
      <td><strong>No SO</strong></td>
-     <td><strong>Nama Customer</strong></td>
-     <td><strong>OTSD Ammount</strong></td>
+     <td><strong>Tgl Inv.</strong></td>
+     <td><strong>No Inv.</strong></td>
+     <td><strong>Customer</strong></td>
+     <td><strong>Total</strong></td>
+     <td><strong>Terbayar</strong></td>
+     <td><strong>Sisa</strong></td>
 </tr>
 <?php $no = 1; ?>
 <?php foreach($rows as $r): ?>
     <tr>
         <td><?=$no++?></td>
+        <td><?=$r['date_sales']?></td>
         <td><?=$r['no_sales_order']?></td>
+        <td><?=$r['date_invoice']?></td>
+        <td><?=$r['noinvoice']?></td>
         <td><?=$r['namecustomer']?></td>
+        <td class="number"><?=number_format($r['totalamount'],2)?></td>
+        <td class="number"><?=number_format($r['paidtoday'],2)?></td>
         <td class="number"><?=number_format($r['balance'],2)?></td>
     </tr>
 <?php endforeach ?>
