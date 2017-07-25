@@ -290,14 +290,21 @@ class report extends MY_Controller {
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
         $customer_id = $this->input->get('idcustomer');
+        $idemployee = $this->input->get('idemployee');
 
         $wer_period = null;
         if($startdate!=''){
             $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
         }
+        
         $wer_customer = null;
         if($customer_id!=null){
             $wer_customer = "and b.idcustomer = ".$customer_id."";
+        }
+        
+        $wer_employee = null;
+        if($employee_id!=null){
+            $wer_employee = "and b.salesman_id = ".$idemployee."";
         }
 
         $sql = "select 
@@ -333,6 +340,7 @@ class report extends MY_Controller {
                 and b.idunit = $idunit
                 $wer_period
                 $wer_customer
+                $wer_employee
                 and b.type = 2
                 and b.status > 2"; 
 
