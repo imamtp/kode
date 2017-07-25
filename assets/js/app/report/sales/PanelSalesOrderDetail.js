@@ -7,6 +7,10 @@ Ext.define('reportSalesOrderDetail', {
         'selectCustomer': function(data) {
             Ext.getCmp('namecustomerReportSalesOrderDetail').setValue(data.namecustomer);
             Ext.getCmp('customerReportSalesOrderDetail').setValue(data.idcustomer);
+        },
+        'selectSalesman': function(data) {
+            Ext.getCmp('namesalesmanReportSalesOrderDetail').setValue(data.firstname + " " + data.lastname);
+            Ext.getCmp('salesmanReportSalesOrderDetail').setValue(data.idemployee);
         }
     },
     dockedItems: [{
@@ -114,6 +118,22 @@ Ext.define('reportSalesOrderDetail', {
                     component.getEl().on('click', function(event, el) {
                         ChooserListCustomer.target = Ext.getCmp('reportSalesOrderDetail');
                         ChooserListCustomer.show();
+                    });
+                }
+            }
+        }, {
+            xtype: 'hiddenfield',
+            id: 'salesmanReportSalesOrderDetail',
+        }, {
+            xtype: 'textfield',
+            id: 'namesalesmanReportSalesOrderDetail',
+            labelWidth: 100,
+            fieldLabel: 'Salesman',
+            listeners: {
+                render: function(component) {
+                    component.getEl().on('click', function(event, el) {
+                        ChooserListSalesman.target = Ext.getCmp('reportSalesOrderDetail');
+                        ChooserListSalesman.show();
                     });
                 }
             }
