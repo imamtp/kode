@@ -1,6 +1,6 @@
 Ext.define('GridItemMaterialWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['prod_material_id','job_order_id','idinventory','bom_id','measurement_id','qty','slice','idunit','material_type','qty_real','qty_sisa','whs_sisa_id','notes','nameinventory','invno','sku_no','measurement_name'],
+    fields: ['prod_material_id', 'job_order_id', 'idinventory', 'bom_id', 'measurement_id', 'qty', 'slice', 'idunit', 'material_type', 'qty_real', 'qty_sisa', 'whs_sisa_id', 'notes', 'nameinventory', 'invno', 'sku_no', 'measurement_name'],
     idProperty: 'id'
 });
 
@@ -20,9 +20,9 @@ var storeGridItemMaterialWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
 //end store head
@@ -31,7 +31,7 @@ var storeGridItemMaterialWO = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemRawMaterialWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory','invno','nameinventory','cost','sellingprice','qtystock','idunit','assetaccount','totalstock','satuan_pertama','stock_kedua','satuan_kedua'],
+    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'satuan_pertama', 'stock_kedua', 'satuan_kedua'],
     idProperty: 'id'
 });
 
@@ -51,17 +51,17 @@ var storeGridItemRawMaterialWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
-storeGridItemRawMaterialWO.on('beforeload',function(store, operation,eOpts){
-        operation.params={
-                    'extraparams': 'a.inventory_type:'+2
-                  };
-              });
-              
+storeGridItemRawMaterialWO.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        'extraparams': 'a.inventory_type:' + 2
+    };
+});
+
 Ext.define('MY.searchGridItemRawMaterialWO', {
     extend: 'Ext.ux.form.SearchField',
     alias: 'widget.searchGridItemRawMaterialWO',
@@ -93,8 +93,7 @@ Ext.define('GridItemRawMaterialWO', {
     alias: 'widget.GridItemRawMaterialWO',
     store: storeGridItemRawMaterialWO,
     loadMask: true,
-    columns: [
-        {
+    columns: [{
             text: 'Pilih',
             width: 65,
             xtype: 'actioncolumn',
@@ -105,7 +104,7 @@ Ext.define('GridItemRawMaterialWO', {
                 var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
 
                 //start get job_item_id
-                var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue()*1;
+                var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
                 //end get job_item_id
 
                 Ext.Ajax.request({
@@ -113,27 +112,27 @@ Ext.define('GridItemRawMaterialWO', {
                     method: 'POST',
                     params: {
                         job_order_id: job_order_id,
-                        job_item_id:job_item_id,
+                        job_item_id: job_item_id,
                         token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
                         idinventory: selectedRecord.get('idinventory'),
                         invno: selectedRecord.get('invno'),
                         nameinventory: selectedRecord.get('nameinventory'),
                         price: selectedRecord.get('cost'),
-                        idunit:idunit,
-                        tipe:'Raw Material',
+                        idunit: idunit,
+                        tipe: 'Raw Material',
                         measurement_name: selectedRecord.get('satuan_pertama'),
-                        slice:1,
+                        slice: 1,
                         qty: 1,
                         size: 1
                     },
                     success: function(form, action) {
                         var d = Ext.decode(form.responseText);
 
-                        storeGridItemMaterialWO.on('beforeload',function(store, operation,eOpts){
-                               operation.params={
-                                           'extraparams': 'a.job_order_id:'+job_order_id+','+'a.job_item_id:'+job_item_id
-                                         };
-                                     });
+                        storeGridItemMaterialWO.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                            };
+                        });
 
                         storeGridItemMaterialWO.load();
                     },
@@ -145,12 +144,12 @@ Ext.define('GridItemRawMaterialWO', {
                 Ext.getCmp('wItemRawMaterialWOPopup').hide();
             }
         },
-        {header: 'idinventory', dataIndex: 'idinventory', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'assetaccount', dataIndex: 'assetaccount', hidden: true},
-        {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},
-        {header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex:1},
-       {
+        { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
+        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        {
             header: 'Total Stock',
             dataIndex: 'totalstock',
             minWidth: 120,
@@ -160,7 +159,7 @@ Ext.define('GridItemRawMaterialWO', {
             header: 'Satuan',
             dataIndex: 'satuan_pertama',
             minWidth: 100
-        },{
+        }, {
             header: 'Stock #2',
             dataIndex: 'stock_kedua',
             minWidth: 70,
@@ -172,8 +171,8 @@ Ext.define('GridItemRawMaterialWO', {
             dataIndex: 'satuan_kedua',
             minWidth: 100
         },
-    ]
-    , dockedItems: [
+    ],
+    dockedItems: [
         // {
         //     xtype: 'toolbar',
         //     dock: 'top',
@@ -203,60 +202,58 @@ Ext.define('GridItemRawMaterialWO', {
         {
             xtype: 'toolbar',
             dock: 'top',
-            items: [
-                {
+            items: [{
                     id: 'chooseItemRawMaterialWO',
-                    hidden:true,
+                    hidden: true,
                     text: 'Pilih Barang',
                     iconCls: 'add-icon',
                     handler: function() {
                         var grid = Ext.ComponentQuery.query('GridItemRawMaterialWO')[0];
                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
+                        if (data.length == 0) {
                             Ext.Msg.alert('Failure', 'Pilih Barang terlebih dahulu!');
                         } else {
 
-                                var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
+                            var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
 
-                                //start get job_item_id
-                                var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue()*1;
-                                //end get job_item_id
+                            //start get job_item_id
+                            var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
+                            //end get job_item_id
 
-                                Ext.Ajax.request({
-                                    url: SITE_URL + 'production/save_rm',
-                                    method: 'POST',
-                                    params: {
-                                        job_order_id: job_order_id,
-                                        job_item_id:job_item_id,
-                                        token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
-                                        idinventory: selectedRecord.get('idinventory'),
-                                        invno: selectedRecord.get('invno'),
-                                        nameinventory: selectedRecord.get('nameinventory'),
-                                        price: selectedRecord.get('cost'),
-                                        idunit:idunit,
-                                        tipe:'Raw Material',
-                                        measurement_name: selectedRecord.get('satuan_pertama'),
-                                        slice:1,
-                                        qty: 1,
-                                        size: 1
-                                    },
-                                    success: function(form, action) {
-                                        var d = Ext.decode(form.responseText);
+                            Ext.Ajax.request({
+                                url: SITE_URL + 'production/save_rm',
+                                method: 'POST',
+                                params: {
+                                    job_order_id: job_order_id,
+                                    job_item_id: job_item_id,
+                                    token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
+                                    idinventory: selectedRecord.get('idinventory'),
+                                    invno: selectedRecord.get('invno'),
+                                    nameinventory: selectedRecord.get('nameinventory'),
+                                    price: selectedRecord.get('cost'),
+                                    idunit: idunit,
+                                    tipe: 'Raw Material',
+                                    measurement_name: selectedRecord.get('satuan_pertama'),
+                                    slice: 1,
+                                    qty: 1,
+                                    size: 1
+                                },
+                                success: function(form, action) {
+                                    var d = Ext.decode(form.responseText);
 
-                                        storeGridItemMaterialWO.on('beforeload',function(store, operation,eOpts){
-                                               operation.params={
-                                                           'extraparams': 'a.job_order_id:'+job_order_id+','+'a.job_item_id:'+job_item_id
-                                                         };
-                                                     });
+                                    storeGridItemMaterialWO.on('beforeload', function(store, operation, eOpts) {
+                                        operation.params = {
+                                            'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                                        };
+                                    });
 
-                                        storeGridItemMaterialWO.load();
-                                    },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                    }
-                                });
+                                    storeGridItemMaterialWO.load();
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                }
+                            });
 
                             //  storeGridItemMaterialWO.add({
                             //     idinventory: selectedRecord.get('idinventory'),
@@ -274,15 +271,15 @@ Ext.define('GridItemRawMaterialWO', {
                             // var gridWO = Ext.getCmp('WorkOrderMaterialTab');
                             // gridWO.getStore().insert(0, recWO);
                             // updateGridMaterialWO();
-                    
-                           Ext.getCmp('wItemRawMaterialWOPopup').hide();
 
-                            
+                            Ext.getCmp('wItemRawMaterialWOPopup').hide();
+
+
                         }
 
 
                     }
-                },'-',
+                }, '-',
                 '->',
                 'Pencarian: ', ' ',
                 {
@@ -296,18 +293,18 @@ Ext.define('GridItemRawMaterialWO', {
             store: storeGridItemRawMaterialWO, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
-                    // pageSize:20
+                // pageSize:20
         }
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
-//                storeGridItemRawMaterialWO.load();
+                //                storeGridItemRawMaterialWO.load();
 
             }
         },
-        itemdblclick: function(dv, record, item, index, e) {
-        }
+        itemdblclick: function(dv, record, item, index, e) {}
     }
 });
 
@@ -320,14 +317,14 @@ var wItemRawMaterialWOPopup = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
-    width: windowW-100,
-    modal:true,
+    //    autoWidth: true,
+    width: windowW - 100,
+    modal: true,
     height: 450,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridItemRawMaterialWO'
+        xtype: 'GridItemRawMaterialWO'
     }]
 });
 
@@ -336,7 +333,7 @@ var wItemRawMaterialWOPopup = Ext.create('widget.window', {
 ///start bom
 Ext.define('GridItemBoMMaterialWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['bom_id','bom_code','bom_name','bom_desc','qty_out','measurement_name','measurement_id','totalitem'],
+    fields: ['bom_id', 'bom_code', 'bom_name', 'bom_desc', 'qty_out', 'measurement_name', 'measurement_id', 'totalitem'],
     idProperty: 'id'
 });
 
@@ -356,17 +353,17 @@ var storeGridItemBoMMaterialWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
 });
 
-storeGridItemBoMMaterialWO.on('beforeload',function(store, operation,eOpts){
-        operation.params={
-                    // 'extraparams': 'a.inventory_type:'+1
-                  };
-              });
-              
+storeGridItemBoMMaterialWO.on('beforeload', function(store, operation, eOpts) {
+    operation.params = {
+        // 'extraparams': 'a.inventory_type:'+1
+    };
+});
+
 Ext.define('MY.searchGridItemBoMMaterialWO', {
     extend: 'Ext.ux.form.SearchField',
     alias: 'widget.searchGridItemBoMMaterialWO',
@@ -399,93 +396,89 @@ Ext.define('GridItemBoMMaterialWO', {
     store: storeGridItemBoMMaterialWO,
     loadMask: true,
     columns: [
-        {header: 'bom_id', dataIndex: 'bom_id', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'Kode BoM', dataIndex: 'bom_code', minWidth: 150},
-        {header: 'Nama BoM', dataIndex: 'bom_name', minWidth: 150, flex:1},
-        {header: 'Deskripsi', dataIndex: 'bom_desc', minWidth: 130},
-        {header: 'Qty', dataIndex: 'qty_out', minWidth: 100,xtype:'numbercolumn',align:'right'},
-        {header: 'Satuan', dataIndex: 'measurement_name', minWidth: 90},
-        {header: 'Jumlah Komposisi', dataIndex: 'totalitem', minWidth: 150,align:'right'},
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    itemId: 'chooseItemBoMMaterialWO',
-                    text: 'Pilih BoM',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridItemBoMMaterialWO')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih BoM terlebih dahulu!');
-                        } else {
-//                            Ext.getCmp('accnamejurnal').setValue(selectedRecord.get('text'));
-//                            Ext.getCmp('idaccountjurnal').setValue(selectedRecord.get('id'));
-//                            Ext.getCmp('accnumberjurnal').setValue(selectedRecord.get('accnumber'));
-                            //  var recWO = new GridItemMaterialWOModel({
-                            //     bom_id: selectedRecord.get('bom_id'),
-                            //     invno: selectedRecord.get('bom_code'),
-                            //     nameinventory: selectedRecord.get('bom_name'),
-                            //     price: selectedRecord.get('cost'),
-                            //     idunit:idunit,
-                            //     tipe:'BoM Material',
-                            //     qty: selectedRecord.get('qty_out'),
-                            //     measurement_name:selectedRecord.get('measurement_name')
-                            // });
+        { header: 'bom_id', dataIndex: 'bom_id', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'Kode BoM', dataIndex: 'bom_code', minWidth: 150 },
+        { header: 'Nama BoM', dataIndex: 'bom_name', minWidth: 150, flex: 1 },
+        { header: 'Deskripsi', dataIndex: 'bom_desc', minWidth: 130 },
+        { header: 'Qty', dataIndex: 'qty_out', minWidth: 100, xtype: 'numbercolumn', align: 'right' },
+        { header: 'Satuan', dataIndex: 'measurement_name', minWidth: 90 },
+        { header: 'Jumlah Komposisi', dataIndex: 'totalitem', minWidth: 150, align: 'right' },
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                itemId: 'chooseItemBoMMaterialWO',
+                text: 'Pilih BoM',
+                iconCls: 'add-icon',
+                handler: function() {
+                    var grid = Ext.ComponentQuery.query('GridItemBoMMaterialWO')[0];
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih BoM terlebih dahulu!');
+                    } else {
+                        //                            Ext.getCmp('accnamejurnal').setValue(selectedRecord.get('text'));
+                        //                            Ext.getCmp('idaccountjurnal').setValue(selectedRecord.get('id'));
+                        //                            Ext.getCmp('accnumberjurnal').setValue(selectedRecord.get('accnumber'));
+                        //  var recWO = new GridItemMaterialWOModel({
+                        //     bom_id: selectedRecord.get('bom_id'),
+                        //     invno: selectedRecord.get('bom_code'),
+                        //     nameinventory: selectedRecord.get('bom_name'),
+                        //     price: selectedRecord.get('cost'),
+                        //     idunit:idunit,
+                        //     tipe:'BoM Material',
+                        //     qty: selectedRecord.get('qty_out'),
+                        //     measurement_name:selectedRecord.get('measurement_name')
+                        // });
 
-                            storeGridItemMaterialWO.add({
-                                bom_id: selectedRecord.get('bom_id'),
-                                invno: selectedRecord.get('bom_code'),
-                                nameinventory: selectedRecord.get('bom_name'),
-                                price: selectedRecord.get('cost'),
-                                idunit:idunit,
-                                tipe:'BoM Material',
-                                qty: selectedRecord.get('qty_out'),
-                                measurement_name:selectedRecord.get('measurement_name')
-                            });
-                            // var gridWO = Ext.getCmp('WorkOrderMaterialTab');
-                            // gridWO.getStore().insert(0, recWO);
-                            // updateGridMaterialWO();
-                    
-                           Ext.getCmp('wItemBoMMaterialWOPopup').hide();
+                        storeGridItemMaterialWO.add({
+                            bom_id: selectedRecord.get('bom_id'),
+                            invno: selectedRecord.get('bom_code'),
+                            nameinventory: selectedRecord.get('bom_name'),
+                            price: selectedRecord.get('cost'),
+                            idunit: idunit,
+                            tipe: 'BoM Material',
+                            qty: selectedRecord.get('qty_out'),
+                            measurement_name: selectedRecord.get('measurement_name')
+                        });
+                        // var gridWO = Ext.getCmp('WorkOrderMaterialTab');
+                        // gridWO.getStore().insert(0, recWO);
+                        // updateGridMaterialWO();
 
-                            
-                        }
+                        Ext.getCmp('wItemBoMMaterialWOPopup').hide();
 
 
                     }
-                },'-',
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridItemBoMMaterialWO',
-                    text: 'Left Button'
-                }
 
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridItemBoMMaterialWO, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ], listeners: {
+
+                }
+            }, '-',
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridItemBoMMaterialWO',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridItemBoMMaterialWO, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
-//                storeGridItemBoMMaterialWO.load();
+                //                storeGridItemBoMMaterialWO.load();
 
             }
         },
-        itemdblclick: function(dv, record, item, index, e) {
-        }
+        itemdblclick: function(dv, record, item, index, e) {}
     }
 });
 
@@ -498,14 +491,14 @@ var wItemBoMMaterialWOPopup = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: 830,
-    modal:true,
+    modal: true,
     height: 450,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridItemBoMMaterialWO'
+        xtype: 'GridItemBoMMaterialWO'
     }]
 });
 
@@ -514,13 +507,13 @@ var wItemBoMMaterialWOPopup = Ext.create('widget.window', {
 
 ///////////////////////////
 
-Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
+Ext.define(dir_sys + 'production.WorkOrderMaterialTab', {
     extend: 'Ext.grid.Panel',
     id: 'WorkOrderMaterialTab',
     alias: 'widget.WorkOrderMaterialTab',
     xtype: 'cell-editing',
     title: 'Raw Material',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -533,26 +526,25 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
             forceFit: true,
             plugins: [this.cellEditing],
             store: storeGridItemMaterialWO,
-            viewConfig:{
-                markDirty:false
+            viewConfig: {
+                markDirty: false
             },
-            columns: [
-                {
+            columns: [{
                     header: 'prod_material_id',
                     hidden: true,
                     dataIndex: 'prod_material_id',
-//                    id: 'idinventory'
-                },{
+                    //                    id: 'idinventory'
+                }, {
                     header: 'idinventory',
                     hidden: true,
                     dataIndex: 'idinventory',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'bom_id',
                     hidden: true,
                     dataIndex: 'bom_id',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -562,21 +554,21 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
                 {
                     header: 'Kode Material',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 120
                 },
                 {
                     header: 'Nama Material',
                     dataIndex: 'nameinventory',
-                    flex:1,
+                    flex: 1,
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     header: 'Deskripsi',
-                    hidden:true,
+                    hidden: true,
                     dataIndex: 'description',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 200
                 },
                 {
@@ -584,13 +576,13 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
                     dataIndex: 'material_type',
                     width: 110,
                     renderer: function(value) {
-                       if(value*1===1){
-                        return 'Raw Material';
-                       } else {
-                        return 'BoM Material';
-                       }
-                    }
-//                    id: 'nameinventory'
+                            if (value * 1 === 1) {
+                                return 'Raw Material';
+                            } else {
+                                return 'BoM Material';
+                            }
+                        }
+                        //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
@@ -621,7 +613,7 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
                     dataIndex: 'measurement_name',
                     editor: {
                         xtype: 'comboxmeasurement',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'short_desc',
                         displayField: 'short_desc',
                         labelWidth: 100
@@ -664,19 +656,18 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
                     sortable: false,
                     menuDisabled: true,
                     items: [{
-                            icon: BASE_URL + 'assets/icons/fam/cross.gif',
-                            tooltip: 'Hapus',
-                            scope: this,
-                            handler: this.onRemoveClick
-                        }]
+                        icon: BASE_URL + 'assets/icons/fam/cross.gif',
+                        tooltip: 'Hapus',
+                        scope: this,
+                        handler: this.onRemoveClick
+                    }]
                 }
             ],
             selModel: {
                 selType: 'cellmodel'
             },
-             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+            listeners: {
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -684,34 +675,31 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
                     }
                 }
             },
-            dockedItems: [ 
-                {
-                    xtype: 'toolbar',
-                    dock: 'top',
-                    items: [
-                        {
-                            text: 'Add Raw Material',
-                            id:'addRawMaterialBtnWo',
-                            iconCls: 'add-icon',
-                            scope: this,
-                            handler: this.onAddRawClick
-                        },
-                        {
-                            text: 'Add Bill of Material',
-                            hidden:true,
-                            id:'addBOMBtnWo',
-                            iconCls: 'add-icon',
-                            scope: this,
-                            handler: this.onAddBoMClick
-                        },
-                        {
-                            xtype:'hiddenfield',
-                            name:'job_item_id_tmpwo',
-                            id:'job_item_id_tmpwo'
-                        }
-                    ]
-                }
-            ]
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                        text: 'Add Raw Material',
+                        id: 'addRawMaterialBtnWo',
+                        iconCls: 'add-icon',
+                        scope: this,
+                        handler: this.onAddRawClick
+                    },
+                    {
+                        text: 'Add Bill of Material',
+                        hidden: true,
+                        id: 'addBOMBtnWo',
+                        iconCls: 'add-icon',
+                        scope: this,
+                        handler: this.onAddBoMClick
+                    },
+                    {
+                        xtype: 'hiddenfield',
+                        name: 'job_item_id_tmpwo',
+                        id: 'job_item_id_tmpwo'
+                    }
+                ]
+            }]
         });
 
         this.callParent();
@@ -734,11 +722,9 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
         // handle after edit
         console.log('after edit');
     },
-    recordSalesOrder: function(button, event, mode)
-    {
+    recordSalesOrder: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountSalesOrder').getValue())
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             // var dp = Ext.getCmp('angkutSalesOrder').getValue();
             // if(dp!='')
             // {
@@ -767,9 +753,9 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
             //         }
             //     });
             // } 
-            
+
             var json = Ext.encode(Ext.pluck(storeGridItemSalesOrder.data.items, 'data'));
-//            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
+            //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
 
             Ext.Ajax.request({
                 url: SITE_URL + 'sales/saveSalesOrder',
@@ -782,8 +768,7 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
                 success: function(form, action) {
 
                     var d = Ext.decode(form.responseText);
-                    if (!d.success)
-                    {
+                    if (!d.success) {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
@@ -810,8 +795,7 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
 
     },
     saveRecurr: function() {
-        if (validasiSalesOrder())
-        {
+        if (validasiSalesOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
@@ -819,24 +803,24 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
     loadStore: function() {
 
 
-//        this.getStore().load({
-//            // store loading is asynchronous, use a load listener or callback to handle results
-//            callback: this.onStoreLoad
-//        });
+        //        this.getStore().load({
+        //            // store loading is asynchronous, use a load listener or callback to handle results
+        //            callback: this.onStoreLoad
+        //        });
     },
     onStoreLoad: function() {
-//        Ext.Msg.show({
-//            title: 'Store Load Callback',
-//            msg: 'store was loaded, data available for processing',
-//            icon: Ext.Msg.INFO,
-//            buttons: Ext.Msg.OK
-//        });
+        //        Ext.Msg.show({
+        //            title: 'Store Load Callback',
+        //            msg: 'store was loaded, data available for processing',
+        //            icon: Ext.Msg.INFO,
+        //            buttons: Ext.Msg.OK
+        //        });
     },
     onAddRawClick: function() {
-            wItemRawMaterialWOPopup.show();
-            storeGridItemRawMaterialWO.load();
+        wItemRawMaterialWOPopup.show();
+        storeGridItemRawMaterialWO.load();
     },
-    onAddBoMClick: function(){
+    onAddBoMClick: function() {
         wItemBoMMaterialWOPopup.show();
         storeGridItemBoMMaterialWO.load();
     },
@@ -848,8 +832,8 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
             url: SITE_URL + 'production/delete_rm',
             method: 'POST',
             params: {
-                job_item_id:  Ext.getCmp('job_item_id_tmpwo').getValue()*1,
-                prod_material_id:grid.data.prod_material_id
+                job_item_id: Ext.getCmp('job_item_id_tmpwo').getValue() * 1,
+                prod_material_id: grid.data.prod_material_id
             },
             success: function(form, action) {
                 // var d = Ext.decode(form.responseText);
@@ -869,37 +853,36 @@ Ext.define(dir_sys+'production.WorkOrderMaterialTab', {
 });
 
 
-function updateGridMaterialWO()
-{
-     Ext.each(storeGridItemMaterialWO.data.items, function(obj, i) {
+function updateGridMaterialWO() {
+    Ext.each(storeGridItemMaterialWO.data.items, function(obj, i) {
         var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
 
         //start get job_item_id
-        var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue()*1;
+        var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
         //end get job_item_id
 
         Ext.Ajax.request({
             url: SITE_URL + 'production/save_rm',
-            async: false, 
+            async: false,
             method: 'POST',
             params: {
-                idunit:Ext.getCmp('cbUnitWorkOrderGrid').getValue()*1,
+                idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
                 job_order_id: job_order_id,
-                job_item_id:job_item_id,
-                prod_material_id:obj.data.prod_material_id,
+                job_item_id: job_item_id,
+                prod_material_id: obj.data.prod_material_id,
                 measurement_name: obj.data.measurement_name,
-                slice:obj.data.slice,
+                slice: obj.data.slice,
                 qty: obj.data.qty,
-                update:'true'
+                update: 'true'
             },
             success: function(form, action) {
                 var d = Ext.decode(form.responseText);
 
-                storeGridItemMaterialWO.on('beforeload',function(store, operation,eOpts){
-                       operation.params={
-                                   'extraparams': 'a.job_order_id:'+job_order_id+','+'a.job_item_id:'+job_item_id
-                                 };
-                             });
+                storeGridItemMaterialWO.on('beforeload', function(store, operation, eOpts) {
+                    operation.params = {
+                        'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                    };
+                });
 
                 storeGridItemMaterialWO.load();
             },

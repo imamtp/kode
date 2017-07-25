@@ -729,7 +729,7 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
     recordDeliveryOrder: function(button, event, mode) {
         if (validasiQtyKirim()) {
 
-            if (validasiStockKirim()) {
+            if (validasiStockKirim2()) {
 
                 if (validasiFormDO()) {
                     var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
@@ -993,6 +993,49 @@ function validasiStockKirim() {
                     idsalesitem: obj.data.idsalesitem,
                     qty_kirim: obj.data.qty_kirim,
                     warehouse_code: obj.data.warehouse_code
+                },
+                success: function(form, action) {
+
+                    var d = Ext.decode(form.responseText);
+                    if (!d.success) {
+                        Ext.Msg.alert('Peringatan', d.message);
+                        qsent = false;
+                    } else {
+                        // Ext.getCmp('wEntryPayment').hide();
+                        // PaymentGridStore.load();
+                    }
+
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
+        }
+
+    });
+
+    return qsent;
+}
+
+function validasiStockKirim2() {
+    var qsent = true;
+    var idunit = Ext.getCmp('cbUnitEntryDeliveryOrder').getValue();
+    var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
+
+    Ext.each(storeGridItemDeliveryOrder.data.items, function(obj, i) {
+
+        if (obj.data.warehouse_code == null) {
+            Ext.Msg.alert('Failed', 'Warehouse untuk kode produk <b>' + obj.data.invno + '</b> belum ditentukan');
+            qsent = false;
+        } else {
+            Ext.Ajax.request({
+                url: SITE_URL + 'sales/check_stock_kirim2',
+                async: false,
+                method: 'GET',
+                params: {
+                    idunit: idunit,
+                    idsales: Ext.getCmp('id_sales_order_do').getValue(),
+                    grid_kirim: json
                 },
                 success: function(form, action) {
 
