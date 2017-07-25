@@ -481,7 +481,8 @@
     <script src='{$assets_url}js/app/account/gridAccount.js'></script>
     <!-- // <script src='{$assets_url}js/app/account/ChooserListAccount.js'></script> -->
 
-    {* <script src='{$assets_url}js/app/hutangpiutang/regPiutang.js'></script> *}
+    {*
+    <script src='{$assets_url}js/app/hutangpiutang/regPiutang.js'></script> *}
 
 
     <script src='{$assets_url}/js/app/setup/company.js'></script>
@@ -609,7 +610,8 @@
 
     <script src='{$assets_url}/js/app/hutangpiutang/popupPelangganPiutang.js'></script>
     <script src='{$assets_url}/js/app/hutangpiutang/popupSupplierHutang.js'></script>
-     {* <script src='{$assets_url}/js/app/hutangpiutang/formPembayaranHutang.js'></script>  *}
+    {*
+    <script src='{$assets_url}/js/app/hutangpiutang/formPembayaranHutang.js'></script> *}
     <script src='{$assets_url}/js/app/hutangpiutang/gridHutangLain.js'></script>
     <script src='{$assets_url}/js/app/hutangpiutang/gridHutangPurchase.js'></script>
 
@@ -650,7 +652,8 @@
     <script src='{$assets_url}/js/app/sales/entrySalesQuotation.js'></script>
     <script src='{$assets_url}/js/app/sales/salesQuotationGrid.js'></script>
 
-    {* <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script>  *}
+    {*
+    <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script> *}
     <script src='{$assets_url}/js/app/money/gridReceiveMoney.js'></script>
     <script src='{$assets_url}/js/app/money/AccListAddRowReceive.js'></script>
     <script src='{$assets_url}/js/app/money/formaddrowReceive.js'></script>
@@ -693,6 +696,7 @@
     <script src='{$assets_url}/js/app/money/TabReconcile.js'></script>
     <script src='{$assets_url}/js/app/money/TabTransferMoney.js'></script>
 
+    <script src='{$assets_url}/js/app/employee/ChooserListSalesman.js'></script>
     <script src='{$assets_url}/js/app/employee/importDataPegawai.js'></script>
     <script src='{$assets_url}/js/app/employee/importDataPotongan.js'></script>
     <script src='{$assets_url}/js/app/employee/importDataTunjangan.js'></script>

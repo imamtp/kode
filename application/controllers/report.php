@@ -59,6 +59,7 @@ class report extends MY_Controller {
                 a .comments,
                 a .noinvoice,
                 a .ddays,
+                a .no_faktur,
                 a .eomddays,
                 a .percentagedisc,
                 a .daydisc,
@@ -289,20 +290,39 @@ class report extends MY_Controller {
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
         $customer_id = $this->input->get('idcustomer');
+        $idemployee = $this->input->get('idemployee');
 
         $wer_period = null;
         if($startdate!=''){
             $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
         }
+        
         $wer_customer = null;
         if($customer_id!=null){
             $wer_customer = "and b.idcustomer = ".$customer_id."";
+        }
+        
+        $wer_employee = null;
+        if($employee_id!=null){
+            $wer_employee = "and b.salesman_id = ".$idemployee."";
         }
 
         $sql = "select 
                     b.no_sales_order, 
                     b.date_sales, 
                     c.sku_no,
+                    b.noinvoice,
+                    e.namecustomer,
+                    case 
+                    when b.status = 1 then 'Open'
+                    when b.status = 2 then 'Canceled'
+                    when b.status = 3 then 'Confirmed'
+                    when b.status = 4 then 'Closed'
+                    when b.status = 5 then 'Picking Up'
+                    when b.status = 6 then 'Partial Delivering'
+                    when b.status = 7 then 'Delivering'
+                    when b.status = 8 then 'Invoiced'
+                    end as sales_status,
                     c.nameinventory,
                     d.short_desc as measurement,
                     a.qty as qty_order,
@@ -315,10 +335,12 @@ class report extends MY_Controller {
                 left join sales b on b.idsales = a.idsales
                 left join inventory c on c.idinventory = a.idinventory
                 left join productmeasurement d on d.measurement_id = a.measurement_id
+                left join customer e on e.idcustomer = b.idcustomer
                 where true 
                 and b.idunit = $idunit
                 $wer_period
                 $wer_customer
+                $wer_employee
                 and b.type = 2
                 and b.status > 2"; 
 
@@ -563,7 +585,8 @@ class report extends MY_Controller {
             
             $i++;
         }
-         echo '{success:true,totalitem:' .$qinv->num_rows() . ',rows:' . json_encode($data) . ' }';
+        return $data;
+        //  echo '{success:true,totalitem:' .$qinv->num_rows() . ',rows:' . json_encode($data) . ' }';
     }
 
     function payable(){

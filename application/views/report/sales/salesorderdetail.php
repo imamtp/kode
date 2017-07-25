@@ -30,6 +30,9 @@ if($option!='print')
      <td><strong>Tanggal</strong></td>
      <td><strong>No SO</strong></td>
      <td><strong>NO SKU</strong></td>
+     <td><strong>NO Invoice</strong></td>
+     <td><strong>Customer</strong></td>
+     <td><strong>Status</strong></td>
      <td><strong>Nama Barang</strong></td>
      <td><strong>Satuan</strong></td>
      <td><strong>Qty (dipesan)</strong></td>
@@ -46,6 +49,9 @@ if($option!='print')
         <td><?=$r['date_sales']?></td>
         <td><?=$r['no_sales_order']?></td>
         <td><?=$r['sku_no']?></td>
+        <td><?=$r['noinvoice']?></td>
+        <td><?=$r['namecustomer']?></td>
+        <td><?=$r['staus']?></td>
         <td><?=$r['nameinventory']?></td>
         <td><?=$r['measurement']?></td>
         <td class="number"><?=number_format($r['qty_order'])?></td>
