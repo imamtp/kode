@@ -1,8 +1,9 @@
 Ext.define('GridpopupPelangganPiutangModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpelanggan','nama','namaperusahaan','pelanggantype','jabatan','npwp','telpon1','telpon2','fax','hp','email','website','alamat','kota','kodepos','pengiriman','negara','foto','catatan','namaunit'],
+    fields: ['idcustomer', 'idcustomertype', 'nocustomer', 'namecustomer', 'address', 'shipaddress', 'billaddress', 'telephone', 'handphone', 'fax', 'email', 'website', 'city', 'state', 'postcode', 'country', 'highestpayment', 'avgdaypayment', 'lastpayment', 'lastsales', 'incomeaccount', 'notes', 'display', 'userin', 'usermod', 'datein', 'datemod', 'status', 'deleted', 'idunit', 'namecustype'],
     idProperty: 'id'
 });
+
 var storeGridpopupPelangganPiutang = Ext.create('Ext.data.Store', {
     pageSize: 100,
     model: 'GridpopupPelangganPiutangModel',
@@ -10,7 +11,7 @@ var storeGridpopupPelangganPiutang = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/PelangganGrid',
+        url: SITE_URL + 'backend/ext_get_all/customer/master',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -53,52 +54,21 @@ Ext.define('GridpopupPelangganPiutang', {
     alias: 'widget.GridpopupPelangganPiutang',
     store: storeGridpopupPelangganPiutang,
     loadMask: true,
-    columns: [{
-        header: 'idpelanggan',
-        dataIndex: 'idpelanggan',
-        hidden: true
-    }, {
-        header: 'Nama',
-        dataIndex: 'nama',
-        minWidth: 150
-    }, {
-        header: 'Nama Perusahaan',
-        dataIndex: 'namaperusahaan',
-        minWidth: 150
-    }, {
-        header: 'Jenis',
-        dataIndex: 'pelanggantype',
-        minWidth: 150
-    }, {
-        header: 'Jabatan',
-        dataIndex: 'jabatan',
-        minWidth: 150
-    }, {
-        header: 'No Telp',
-        dataIndex: 'telpon1',
-        minWidth: 150
-    },{
-        header: 'Kota',
-        dataIndex: 'kota',
-        minWidth: 150
-    }, {
-        header: 'Alamat',
-        dataIndex: 'alamat',
-        minWidth: 150
-    },  {
-        header: 'Email',
-        dataIndex: 'email',
-        minWidth: 150
-    }, {
-        header: 'Website',
-        dataIndex: 'website',
-        minWidth: 150
-    }],
+    columns: [{ header: 'idcustomer', dataIndex: 'idcustomer', hidden: true },
+        { header: 'No', xtype: 'rownumberer', sortable: false, width: 50 },
+        { header: 'No Customer', minWidth: 100, dataIndex: 'nocustomer' },
+        { header: 'Name', minWidth: 150, dataIndex: 'namecustomer' },
+        { header: 'Type', minWidth: 100, dataIndex: 'namecustype' },
+        { header: 'Address', minWidth: 200, dataIndex: 'address' },
+        { header: 'Shipping Address', minWidth: 200, dataIndex: 'shipaddress' },
+        { header: 'Bill Address', minWidth: 200, dataIndex: 'billaddress' },
+        { header: 'No. Telp.', minWidth: 200, dataIndex: 'telephone' },
+        { header: 'No. HP', minWidth: 100, dataIndex: 'handphone' }
+    ],
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
-        items: [
-        {
+        items: [{
             itemId: 'pilihpopupPelangganPiutang',
             text: 'Pilih Pelanggan',
             iconCls: 'tick-icon',
@@ -109,83 +79,21 @@ Ext.define('GridpopupPelangganPiutang', {
                 if (data.length == 0) {
                     Ext.Msg.alert('Failure', 'Pilih data Pelanggan terlebih dahulu!');
                 } else {
-                    Ext.getCmp('idpelangganPiutangReg').setValue(selectedRecord.data.idpelanggan);
-                    Ext.getCmp('namapelangganPiutangReg').setValue(selectedRecord.data.nama);
+                    Ext.getCmp('idcustomerPiutangReg').setValue(selectedRecord.data.idcustomer);
+                    Ext.getCmp('namecustomerPiutangReg').setValue(selectedRecord.data.namecustomer);
                     Ext.getCmp('wpopupPelangganPiutang').hide();
                 }
             }
-        },'-',{
+        }, '-', {
             itemId: 'addpopupPelangganPiutang',
+            hidden: true,
             text: 'Tambah Pelanggan',
             iconCls: 'add-icon',
             handler: function() {
-                 wpelangganGrid.show();
+                wpelangganGrid.show();
                 Ext.getCmp('statusformpelangganGrid').setValue('input');
             }
-        }
-        // , {
-        //     itemId: 'editpopupPelangganPiutang',
-        //     text: 'Ubah',
-        //     iconCls: 'edit-icon',
-        //     handler: function() {
-        //         var grid = Ext.ComponentQuery.query('gridPelanggan')[0];
-        //         var selectedRecord = grid.getSelectionModel().getSelection()[0];
-        //         var data = grid.getSelectionModel().getSelection();
-        //         if (data.length == 0) {
-        //             Ext.Msg.alert('Failure', 'Pilih data pelanggan terlebih dahulu!');
-        //         } else {
-        //             //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-        //             var formpelangganGrid = Ext.getCmp('formpelangganGrid');
-        //             formpelangganGrid.getForm().load({
-        //                 url: SITE_URL + 'backend/loadFormData/pelangganGrid/1',
-        //                 params: {
-        //                     extraparams: 'a.idpelanggan:' + selectedRecord.data.idpelanggan
-        //                 },
-        //                 success: function(form, action) {
-        //                     // Ext.Msg.alert("Load failed", action.result.errorMessage);
-        //                 },
-        //                 failure: function(form, action) {
-        //                     Ext.Msg.alert("Load failed", action.result.errorMessage);
-        //                 }
-        //             })
-        //             wpelangganGrid.show();
-        //             Ext.getCmp('statusformpelangganGrid').setValue('edit');
-        //             Ext.getCmp('Tabpelanggan').setActiveTab(0);
-        //         }
-        //     }
-        // }, {
-        //     id: 'btnDeletepopupPelangganPiutang',
-        //     text: 'Hapus',
-        //     iconCls: 'delete-icon',
-        //     handler: function() {
-        //         Ext.Msg.show({
-        //             title: 'Confirm',
-        //             msg: 'Delete Selected ?',
-        //             buttons: Ext.Msg.YESNO,
-        //             fn: function(btn) {
-        //                 if (btn == 'yes') {
-        //                     var grid = Ext.ComponentQuery.query('gridPelanggan')[0];
-        //                      var sm = grid.getSelectionModel();
-        //                     selected = [];
-        //                     Ext.each(sm.getSelection(), function(item) {
-        //                         selected.push(item.data[Object.keys(item.data)[0]]);
-        //                     });
-        //                     Ext.Ajax.request({
-        //                         url: SITE_URL + 'backend/ext_delete/PelangganGrid',
-        //                         method: 'POST',
-        //                         params: {
-        //                             postdata: Ext.encode(selected)
-        //                         }
-        //                     });
-        //                     storeGridPelangganGrid.remove(sm.getSelection());
-        //                     sm.select(0);
-        //                 }
-        //             }
-        //         });
-        //     },
-        //     //                    disabled: true
-        // }
-        ,'->', 'Pencarian: ', ' ', {
+        }, , '->', 'Pencarian: ', ' ', {
             xtype: 'searchGridpopupPelangganPiutang',
             text: 'Left Button'
         }]
@@ -194,7 +102,7 @@ Ext.define('GridpopupPelangganPiutang', {
         store: storeGridpopupPelangganPiutang, // same store GridPanel is using
         dock: 'bottom',
         displayInfo: true
-        // pageSize:20
+            // pageSize:20
     }],
     listeners: {
         render: {
@@ -208,19 +116,19 @@ Ext.define('GridpopupPelangganPiutang', {
             var formpopupPelangganPiutang = Ext.getCmp('formpopupPelangganPiutang');
             wpopupPelangganPiutang.show();
             formpopupPelangganPiutang.getForm().load({
-                url: SITE_URL + 'backend/loadFormData/popupPelangganPiutang/1',
-                params: {
-                    extraparams: 'a.idPelanggan:' + record.data.idPelanggan
-                },
-                success: function(form, action) {
-                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                }
-            })
-            //            
-            //            Ext.getCmp('kddaerahS').setReadOnly(true);
+                    url: SITE_URL + 'backend/loadFormData/popupPelangganPiutang/1',
+                    params: {
+                        extraparams: 'a.idPelanggan:' + record.data.idPelanggan
+                    },
+                    success: function(form, action) {
+                        // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    }
+                })
+                //            
+                //            Ext.getCmp('kddaerahS').setReadOnly(true);
             Ext.getCmp('statusformpopupPelangganPiutang').setValue('edit');
 
             Ext.getCmp('TabPelanggan').setActiveTab(0);
@@ -231,6 +139,7 @@ Ext.define('GridpopupPelangganPiutang', {
 var wpopupPelangganPiutang = Ext.create('widget.window', {
     id: 'wpopupPelangganPiutang',
     title: 'Pilih Pelanggan',
+    modal: true,
     header: {
         titlePosition: 2,
         titleAlign: 'center'
@@ -239,7 +148,8 @@ var wpopupPelangganPiutang = Ext.create('widget.window', {
     closeAction: 'hide',
     //    autoWidth: true,
     width: 670,
-    minHeight:440,
+    height: sizeH,
+    // minHeight: 340,
     // autoHeight: true,
     layout: 'fit',
     border: false,

@@ -11,12 +11,12 @@ class m_regpiutang extends CI_Model {
     }
 
     function searchField() {
-        $field = "c.accname,namaunit";
+        $field = "c.accname,namecustomer";
         return explode(",", $field);
     }
 
     function selectField() {
-        return "idregistrasipiutang,autodecrease,nama,e.idpelanggan,a.idunit,a.idaccount,a.idaccountlink,a.tglpiutang,c.accname as accnamepiutang,namaunit,bulan,tahun,a.description,jumlah,sisapiutang,d.accnumber as accnumberlink,d.accname,namecustomer,nocustomer";
+        return "idregistrasipiutang,autodecrease,f.idcustomer,f.nocustomer,f.namecustomer,a.idunit,a.idaccount,a.idaccountlink,a.tglpiutang,c.accname as accnamepiutang,namaunit,bulan,tahun,a.description,jumlah,sisapiutang,d.accnumber as accnumberlink,d.accname,namecustomer,nocustomer";
     }
      function fieldCek()
     {
@@ -33,8 +33,7 @@ class m_regpiutang extends CI_Model {
                     join unit b ON a.idunit = b.idunit
                     join account c ON a.idaccount = c.idaccount and a.idunit = c.idunit
                     left join customer f ON a.idcustomer = f.idcustomer
-                join account d ON a.idaccountlink = d.idaccount  and a.idunit = d.idunit 
-                left join pelanggan e ON a.idpelanggan = e.idpelanggan ";
+                join account d ON a.idaccountlink = d.idaccount  and a.idunit = d.idunit";
 
         return $query;
     }
@@ -53,8 +52,9 @@ class m_regpiutang extends CI_Model {
             'idaccount' => $this->input->post('idaccount'),
             // 'bulan' => ambilNoBulan($this->input->post('namabulan')),
             // 'tahun' => $this->input->post('tahun'),
-            'idaccountlink' => $this->input->post('idaccountlink'),
-            'idpelanggan' => $this->m_data->getID('pelanggan', 'nama', 'idpelanggan', $this->input->post('nama')),
+            'idcustomer' => $this->input->post('idcustomer'),
+             'idaccountlink' => $this->input->post('idaccountlink'),
+            // 'idpelanggan' => $this->m_data->getID('pelanggan', 'nama', 'idpelanggan', $this->input->post('nama')),
             'tglpiutang' => $this->input->post('tglpiutang'),
             'autodecrease' => $this->input->post('autodecrease'),
             'description' => $this->input->post('description'),

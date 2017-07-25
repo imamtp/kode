@@ -1,6 +1,8 @@
+var wCoaPenerimaanPiutang = Ext.create(dir_sys + 'money.wCoaPenerimaanPiutang');
+
 Ext.define('GridregPiutangModel', {
     extend: 'Ext.data.Model',
-    fields: ['idregistrasipiutang', 'idaccount', 'accnamepiutang', 'nama', 'tglpiutang', 'accname', 'bulan', 'tahun', 'description', 'jumlah', 'sisapiutang', 'accnumberlink', 'accnamelink', 'namaunit'],
+    fields: ['idregistrasipiutang', 'idaccount', 'idcustomer', 'nocustomer', 'namecustomer', 'accnamepiutang', 'nama', 'tglpiutang', 'accname', 'bulan', 'tahun', 'description', 'jumlah', 'sisapiutang', 'accnumberlink', 'accnamelink', 'namaunit'],
     idProperty: 'id'
 });
 var storeGridregPiutang = Ext.create('Ext.data.Store', {
@@ -187,14 +189,14 @@ var formPenerimaanPiutang = Ext.create('Ext.form.Panel', {
         name: 'idregistrasipiutang'
     }, {
         xtype: 'hiddenfield',
-        name: 'idpelanggan',
-        id: 'idPelangganPenerimaanPiutang'
+        name: 'idcustomer',
+        id: 'idcustomerPenerimaanPiutang'
     }, {
         xtype: 'textfield',
         readOnly: true,
         fieldLabel: 'Pelanggan',
-        name: 'nama',
-        id: 'namapelangganPenerimaanPiutang'
+        name: 'namecustomer',
+        id: 'namecustomerPenerimaanPiutang'
     }, {
         xtype: 'textfield',
         readOnly: true,
@@ -273,12 +275,14 @@ var formPenerimaanPiutang = Ext.create('Ext.form.Panel', {
         listeners: {
             render: function(component) {
                 component.getEl().on('click', function(event, el) {
-                    windowPopupAccKasTerimaPiutang.show();
-                    storeAccountAktive.reload({
-                        params: {
-                            'idunit': Ext.getCmp('idunitPenerimaanPiutang').getValue()
-                        }
+                    wCoaPenerimaanPiutang.show();
+                    storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'idunit': idunit,
+                            'idaccounttype': '1,19,6,17'
+                        };
                     });
+                    storeGridAccount.load();
                 });
             }
         }
@@ -286,7 +290,7 @@ var formPenerimaanPiutang = Ext.create('Ext.form.Panel', {
         xtype: 'hiddenfield',
         fieldLabel: 'idaccTerimaPiutang',
         name: 'idaccountkas',
-        id: 'idaccTerimaPiutang'
+        id: 'idaccountTerimaPiutang'
     }],
     buttons: [{
         text: 'Batal',
@@ -343,153 +347,7 @@ var wPenerimaanPiutang = Ext.create('widget.window', {
     items: [formPenerimaanPiutang]
 });
 ///////////////////////////////////////////////////////////////////////////////////////
-// Ext.define('GridTreeAccRegPiutang', {
-//     // title: 'Daftar Akun',
-//     // selModel : smGridIP,   
-//     itemId: 'GridTreeAccRegPiutang',
-//     id: 'GridTreeAccRegPiutang',
-//     extend: 'Ext.tree.Panel',
-//     alias: 'widget.GridTreeAccRegPiutang',
-//     xtype: 'tree-grid',
-//     store: storeAccountAktive,
-//     loadMask: true,
-//     // height: 300,
-//     useArrows: true,
-//     rootVisible: false,
-//     multiSelect: true,
-//     singleExpand: true,
-//     expanded: true,
-//     columns: [{
-//         //we must use the templateheader component so we can use a custom tpl
-//         xtype: 'treecolumn',
-//         text: 'accnumber',
-//         minWidth: 200,
-//         sortable: true,
-//         dataIndex: 'accnumber'
-//     }, {
-//         xtype: 'treecolumn', //this is so we know which column will show the tree
-//         text: 'Nama Akun',
-//         // flex: 2,
-//         minWidth: 400,
-//         sortable: true,
-//         dataIndex: 'text'
-//     }, {
-//         //we must use the templateheader component so we can use a custom tpl
-//         xtype: 'treecolumn',
-//         text: 'description',
-//         minWidth: 200,
-//         sortable: true,
-//         dataIndex: 'description'
-//     }, {
-//         //we must use the templateheader component so we can use a custom tpl
-//         xtype: 'treecolumn',
-//         text: 'balance',
-//         sortable: true,
-//         minWidth: 200,
-//         dataIndex: 'id'
-//     }],
-//     dockedItems: [{
-//         xtype: 'toolbar',
-//         dock: 'top',
-//         items: [{
-//             text: 'Pilih Akun',
-//             iconCls: 'add-icon',
-//             handler: function() {
-//                 var grid = Ext.ComponentQuery.query('GridTreeAccRegPiutang')[0];
-//                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
-//                 var data = grid.getSelectionModel().getSelection();
-//                 if (data.length == 0) {
-//                     Ext.Msg.alert('Failure', 'Pilih Akun terlebih dahulu!');
-//                 } else {
-//                     console.log(selectedRecord);
-//                     Ext.getCmp('accnameRegPiutang').setValue(selectedRecord.get('text'));
-//                     Ext.getCmp('idaccRegPiutang').setValue(selectedRecord.get('id'));
-//                     // Ext.getCmp('linkedidaccountdisplay').setValue(selectedRecord.get('accnumber'));
-//                     Ext.getCmp('windowPopupAccRegPiutang').hide();
-//                 }
-//             }
-//         }, '->', {
-//             xtype: 'textfield',
-//             id: 'searchAccRegPiutang',
-//             blankText: 'Cari akun disini',
-//             listeners: {
-//                 specialkey: function(f, e) {
-//                     if (e.getKey() == e.ENTER) {
-//                         storeAccountAktive.load({
-//                             params: {
-//                                 'accname': Ext.getCmp('searchAccRegPiutang').getValue(),
-//                             }
-//                         });
-//                     }
-//                 }
-//             }
-//         }, {
-//             //                        itemId: 'reloadDataAcc',
-//             text: 'Cari',
-//             iconCls: 'add-icon',
-//             handler: function() {
-//                 storeAccount.load({
-//                     params: {
-//                         'accname': Ext.getCmp('searchAccRegPiutang').getValue(),
-//                     }
-//                 });
-//             }
-//         }, '-', {
-//             itemId: 'reloadDataAccRegPiutang',
-//             text: 'Refresh',
-//             iconCls: 'add-icon',
-//             handler: function() {
-//                 var grid = Ext.getCmp('GridTreeAccRegPiutang');
-//                 grid.getView().refresh();
-//                 storeAccountAktive.load();
-//                 Ext.getCmp('searchAccRegPiutang').setValue(null)
-//             }
-//         }]
-//     }],
-//     listeners: {
-//         render: {
-//             scope: this,
-//             fn: function(grid) {
-//                 // Ext.getCmp('GridTreeAccRegPiutang').expandAll();
-//             }
-//         }
-//     }
-// });
-// var windowPopupAccRegPiutang = Ext.create('widget.window', {
-//     title: 'Pilih Akun Piutang',
-//     id: 'windowPopupAccRegPiutang',
-//     header: {
-//         titlePosition: 2,
-//         titleAlign: 'center'
-//     },
-//     closable: true,
-//     closeAction: 'hide',
-//     autoWidth: true,
-//     minWidth: 750,
-//     height: 550,
-//     x: 300,
-//     y: 50,
-//     layout: 'fit',
-//     border: false,
-//     items: [
-//         Ext.create('Ext.panel.Panel', {
-//             bodyPadding: 5, // Don't want content to crunch against the borders
-//             width: 500,
-//             height: 300,
-//             layout: 'fit',
-//             items: [{
-//                 xtype: 'GridTreeAccRegPiutang'
-//             }]
-//         })
-//     ],
-//     buttons: [{
-//         text: 'Tutup',
-//         handler: function() {
-//             var windowPopupAccRegPiutang = Ext.getCmp('windowPopupAccRegPiutang');
-//             windowPopupAccRegPiutang.hide();
-//         }
-//     }]
-// });
+
 Ext.define('GridAccRegPiutang', {
     itemId: 'GridAccRegPiutang',
     id: 'GridAccRegPiutang',
@@ -497,8 +355,7 @@ Ext.define('GridAccRegPiutang', {
     alias: 'widget.GridAccRegPiutang',
     store: storeGridAccount,
     loadMask: true,
-    columns: [
-    {
+    columns: [{
             text: 'Edit',
             width: 45,
             // menuDisabled: true,
@@ -507,54 +364,50 @@ Ext.define('GridAccRegPiutang', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-               setValueAcc(selectedRecord,'wAccRegPiutang','RegPiutang');
+                setValueAcc(selectedRecord, 'wAccRegPiutang', 'RegPiutang');
             }
         },
-        {header: 'idaccount', dataIndex: 'idaccount', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'No Akun', dataIndex: 'accnumber',},
-        {header: 'Nama Akun', dataIndex: 'accname', minWidth: 150,flex:1},
-        {header: 'Saldo', dataIndex: 'balance', minWidth: 150,xtype:'numbercolumn',align:'right',hidden:true},
-        {header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170},
+        { header: 'idaccount', dataIndex: 'idaccount', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'No Akun', dataIndex: 'accnumber', },
+        { header: 'Nama Akun', dataIndex: 'accname', minWidth: 150, flex: 1 },
+        { header: 'Saldo', dataIndex: 'balance', minWidth: 150, xtype: 'numbercolumn', align: 'right', hidden: true },
+        { header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170 },
         // {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    text: 'Pilih Akun',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridAccRegPiutang')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih akun terlebih dahulu!');
-                        } else {
-                            
-                            setValueAcc(selectedRecord,'wAccRegPiutang','RegPiutang');
-                        }
-                    }
-                },
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridAcc',
-                    text: 'Left Button'
-                }
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                text: 'Pilih Akun',
+                iconCls: 'add-icon',
+                handler: function() {
+                    var grid = Ext.ComponentQuery.query('GridAccRegPiutang')[0];
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih akun terlebih dahulu!');
+                    } else {
 
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridAccount, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ]
+                        setValueAcc(selectedRecord, 'wAccRegPiutang', 'RegPiutang');
+                    }
+                }
+            },
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridAcc',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridAccount, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }]
 });
 
 var wAccRegPiutang = Ext.create('widget.window', {
@@ -566,164 +419,17 @@ var wAccRegPiutang = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: 660,
     height: panelHeight,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridAccRegPiutang'
+        xtype: 'GridAccRegPiutang'
     }]
 });
 
 //////////////GRID LIST ACC RECEIVE PIUTANG
-// Ext.define('GridTreeAccRegReceivePiutang', {
-//     // title: 'Daftar Akun',
-//     // selModel : smGridIP,   
-//     itemId: 'GridTreeAccRegReceivePiutang',
-//     id: 'GridTreeAccRegReceivePiutang',
-//     extend: 'Ext.tree.Panel',
-//     alias: 'widget.GridTreeAccRegReceivePiutang',
-//     xtype: 'tree-grid',
-//     store: storeAccountAktive,
-//     loadMask: true,
-//     // height: 300,
-//     useArrows: true,
-//     rootVisible: false,
-//     multiSelect: true,
-//     singleExpand: true,
-//     expanded: true,
-//     columns: [{
-//         //we must use the templateheader component so we can use a custom tpl
-//         xtype: 'treecolumn',
-//         text: 'accnumber',
-//         minWidth: 200,
-//         sortable: true,
-//         dataIndex: 'accnumber'
-//     }, {
-//         xtype: 'treecolumn', //this is so we know which column will show the tree
-//         text: 'Nama Akun',
-//         // flex: 2,
-//         minWidth: 400,
-//         sortable: true,
-//         dataIndex: 'text'
-//     }, {
-//         //we must use the templateheader component so we can use a custom tpl
-//         xtype: 'treecolumn',
-//         text: 'description',
-//         minWidth: 200,
-//         sortable: true,
-//         dataIndex: 'description'
-//     }, {
-//         //we must use the templateheader component so we can use a custom tpl
-//         xtype: 'treecolumn',
-//         text: 'balance',
-//         sortable: true,
-//         minWidth: 200,
-//         dataIndex: 'id'
-//     }],
-//     dockedItems: [{
-//         xtype: 'toolbar',
-//         dock: 'top',
-//         items: [{
-//             text: 'Pilih Akun',
-//             iconCls: 'add-icon',
-//             handler: function() {
-//                 var grid = Ext.ComponentQuery.query('GridTreeAccRegReceivePiutang')[0];
-//                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
-//                 var data = grid.getSelectionModel().getSelection();
-//                 if (data.length == 0) {
-//                     Ext.Msg.alert('Failure', 'Pilih Akun terlebih dahulu!');
-//                 } else {
-//                     console.log(selectedRecord);
-//                     Ext.getCmp('accnameRegReceivePiutang').setValue(selectedRecord.get('text'));
-//                     Ext.getCmp('idaccRegReceivePiutang').setValue(selectedRecord.get('id'));
-//                     // Ext.getCmp('linkedidaccountdisplay').setValue(selectedRecord.get('accnumber'));
-//                     Ext.getCmp('windowPopupAccRegReceivePiutang').hide();
-//                 }
-//             }
-//         }, '->', {
-//             xtype: 'textfield',
-//             id: 'searchAccRegReceivePiutang',
-//             blankText: 'Cari akun disini',
-//             listeners: {
-//                 specialkey: function(f, e) {
-//                     if (e.getKey() == e.ENTER) {
-//                         storeAccountAktive.load({
-//                             params: {
-//                                 'accname': Ext.getCmp('searchAccRegReceivePiutang').getValue(),
-//                             }
-//                         });
-//                     }
-//                 }
-//             }
-//         }, {
-//             //                        itemId: 'reloadDataAcc',
-//             text: 'Cari',
-//             iconCls: 'add-icon',
-//             handler: function() {
-//                 storeAccount.load({
-//                     params: {
-//                         'accname': Ext.getCmp('searchAccRegReceivePiutang').getValue(),
-//                     }
-//                 });
-//             }
-//         }, '-', {
-//             itemId: 'reloadDataAccRegReceivePiutang',
-//             text: 'Refresh',
-//             iconCls: 'add-icon',
-//             handler: function() {
-//                 var grid = Ext.getCmp('GridTreeAccRegReceivePiutang');
-//                 grid.getView().refresh();
-//                 storeAccountAktive.load();
-//                 Ext.getCmp('searchAccRegReceivePiutang').setValue(null)
-//             }
-//         }]
-//     }],
-//     listeners: {
-//         render: {
-//             scope: this,
-//             fn: function(grid) {
-//                 // Ext.getCmp('GridTreeAccRegReceivePiutang').expandAll();
-//             }
-//         }
-//     }
-// });
-// var windowPopupAccRegReceivePiutang = Ext.create('widget.window', {
-//     title: 'Pilih Akun',
-//     id: 'windowPopupAccRegReceivePiutang',
-//     header: {
-//         titlePosition: 2,
-//         titleAlign: 'center'
-//     },
-//     closable: true,
-//     closeAction: 'hide',
-//     autoWidth: true,
-//     minWidth: 750,
-//     height: 550,
-//     x: 300,
-//     y: 50,
-//     layout: 'fit',
-//     border: false,
-//     items: [
-//         Ext.create('Ext.panel.Panel', {
-//             bodyPadding: 5, // Don't want content to crunch against the borders
-//             width: 500,
-//             height: 300,
-//             layout: 'fit',
-//             items: [{
-//                 xtype: 'GridTreeAccRegReceivePiutang'
-//             }]
-//         })
-//     ],
-//     buttons: [{
-//         text: 'Tutup',
-//         handler: function() {
-//             var windowPopupAccRegReceivePiutang = Ext.getCmp('windowPopupAccRegReceivePiutang');
-//             windowPopupAccRegReceivePiutang.hide();
-//         }
-//     }]
-// });
 
 Ext.define('GridAccRegReceivePiutang', {
     itemId: 'GridAccRegReceivePiutang',
@@ -732,8 +438,7 @@ Ext.define('GridAccRegReceivePiutang', {
     alias: 'widget.GridAccRegReceivePiutang',
     store: storeGridAccount,
     loadMask: true,
-    columns: [
-    {
+    columns: [{
             text: 'Edit',
             width: 45,
             // menuDisabled: true,
@@ -742,54 +447,50 @@ Ext.define('GridAccRegReceivePiutang', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-               setValueAcc(selectedRecord,'wAccRegReceivePiutang','RegReceivePiutang');
+                setValueAcc(selectedRecord, 'wAccRegReceivePiutang', 'RegReceivePiutang');
             }
         },
-        {header: 'idaccount', dataIndex: 'idaccount', hidden: true},
-        {header: 'idunit', dataIndex: 'idunit', hidden: true},
-        {header: 'No Akun', dataIndex: 'accnumber',},
-        {header: 'Nama Akun', dataIndex: 'accname', minWidth: 150,flex:1},
-        {header: 'Saldo', dataIndex: 'balance', minWidth: 150,xtype:'numbercolumn',align:'right',hidden:true},
-        {header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170},
+        { header: 'idaccount', dataIndex: 'idaccount', hidden: true },
+        { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        { header: 'No Akun', dataIndex: 'accnumber', },
+        { header: 'Nama Akun', dataIndex: 'accname', minWidth: 150, flex: 1 },
+        { header: 'Saldo', dataIndex: 'balance', minWidth: 150, xtype: 'numbercolumn', align: 'right', hidden: true },
+        { header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170 },
         // {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
-    ]
-    , dockedItems: [
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [
-                {
-                    text: 'Pilih Akun',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridAccRegReceivePiutang')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0)
-                        {
-                            Ext.Msg.alert('Failure', 'Pilih akun terlebih dahulu!');
-                        } else {
-                            
-                            setValueAcc(selectedRecord,'wAccRegReceivePiutang','RegReceivePiutang');
-                        }
-                    }
-                },
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridAcc',
-                    text: 'Left Button'
-                }
+    ],
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                text: 'Pilih Akun',
+                iconCls: 'add-icon',
+                handler: function() {
+                    var grid = Ext.ComponentQuery.query('GridAccRegReceivePiutang')[0];
+                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                    var data = grid.getSelectionModel().getSelection();
+                    if (data.length == 0) {
+                        Ext.Msg.alert('Failure', 'Pilih akun terlebih dahulu!');
+                    } else {
 
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridAccount, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                    // pageSize:20
-        }
-    ]
+                        setValueAcc(selectedRecord, 'wAccRegReceivePiutang', 'RegReceivePiutang');
+                    }
+                }
+            },
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridAcc',
+                text: 'Left Button'
+            }
+
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridAccount, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }]
 });
 
 var wAccRegReceivePiutang = Ext.create('widget.window', {
@@ -801,175 +502,22 @@ var wAccRegReceivePiutang = Ext.create('widget.window', {
     },
     closable: true,
     closeAction: 'hide',
-//    autoWidth: true,
+    //    autoWidth: true,
     width: 660,
     height: panelHeight,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridAccRegReceivePiutang'
+        xtype: 'GridAccRegReceivePiutang'
     }]
 });
 
-//////////////////////////////////////////// END LIST ACC RECEIVE PIUTANG 
-// Ext.define('GridTreeAccLinkPenerimaan', {
-//     // title: 'Pilih Akun Penerimaan',
-//     // selModel : smGridIP,   
-//     itemId: 'GridTreeAccLinkPenerimaan',
-//     id: 'GridTreeAccLinkPenerimaan',
-//     extend: 'Ext.tree.Panel',
-//     alias: 'widget.GridTreeAccLinkPenerimaan',
-//     xtype: 'tree-grid',
-//     store: storeAccountAktive,
-//     loadMask: true,
-//     // height: 300,
-//     useArrows: true,
-//     rootVisible: false,
-//     multiSelect: true,
-//     singleExpand: true,
-//     expanded: true,
-//     columns: [{
-//             //we must use the templateheader component so we can use a custom tpl
-//             xtype: 'treecolumn',
-//             text: 'accnumber',
-//             minWidth: 200,
-//             sortable: true,
-//             dataIndex: 'accnumber'
-//         }, {
-//             xtype: 'treecolumn', //this is so we know which column will show the tree
-//             text: 'Nama Akun',
-//             // flex: 2,
-//             minWidth: 400,
-//             sortable: true,
-//             dataIndex: 'text'
-//         }, {
-//             //we must use the templateheader component so we can use a custom tpl
-//             xtype: 'treecolumn',
-//             text: 'description',
-//             minWidth: 200,
-//             sortable: true,
-//             dataIndex: 'description'
-//         }, {
-//             //we must use the templateheader component so we can use a custom tpl
-//             xtype: 'treecolumn',
-//             text: 'balance',
-//             sortable: true,
-//             minWidth: 200,
-//             dataIndex: 'id'
-//         }
-//     ]
-//     , dockedItems: [{
-//             xtype: 'toolbar',
-//             dock: 'top',
-//             items: [
-//                 {
-//                     text: 'Pilih Akun',
-//                     iconCls: 'add-icon',
-//                     handler: function() {
-//                         var grid = Ext.ComponentQuery.query('GridTreeAccLinkPenerimaan')[0];
-//                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
-//                         var data = grid.getSelectionModel().getSelection();
-//                         if (data.length == 0)
-//                         {
-//                             Ext.Msg.alert('Failure', 'Pilih Akun terlebih dahulu!');
-//                         } else {
-//                             console.log(selectedRecord);
-//                             Ext.getCmp('accnamelinkpenerimaan').setValue(selectedRecord.get('text'));
-//                             Ext.getCmp('idacclinkpenerimaan').setValue(selectedRecord.get('id'));
-//                             // Ext.getCmp('linkedidaccountdisplay').setValue(selectedRecord.get('accnumber'));
-//                             Ext.getCmp('windowPopupAccLinkPenerimaan').hide();
-//                         }
-//                     }
-//                 }, '->',
-//                 {
-//                     xtype: 'textfield',
-//                     id: 'searchAccLinkPenerimaan',
-//                     blankText: 'Cari akun disini',
-//                     listeners: {
-//                         specialkey: function(f, e) {
-//                             if (e.getKey() == e.ENTER) {
-//                                 storeAccountAktive.load({
-//                                     params: {
-//                                         'accname': Ext.getCmp('searchAccLinkPenerimaan').getValue(),
-//                                     }
-//                                 });
-//                             }
-//                         }
-//                     }
-//                 }, {
-// //                        itemId: 'reloadDataAcc',
-//                     text: 'Cari',
-//                     iconCls: 'add-icon'
-//                     , handler: function() {
-//                         storeAccountAktive.load({
-//                             params: {
-//                                 'accname': Ext.getCmp('searchAccLinkPenerimaan').getValue(),
-//                             }
-//                         });
-//                     }
-//                 }, '-', {
-//                     itemId: 'reloadDataAccLinkPenerimaan',
-//                     text: 'Refresh',
-//                     iconCls: 'add-icon',
-//                     handler: function() {
-//                         var grid = Ext.getCmp('GridTreeAccLinkPenerimaan');
-//                         grid.getView().refresh();
-//                         storeAccountAktive.load();
-//                         Ext.getCmp('searchAccLinkPenerimaan').setValue(null)
-//                     }
-//                 }]
-//         }
-//     ]
-//     , listeners: {
-//         render: {
-//             scope: this,
-//             fn: function(grid) {
-//                 Ext.getCmp('GridTreeAccLinkPenerimaan').expandAll();
-//             }
-//         }
-//     }
-// });
-// var windowPopupAccLinkPenerimaan = Ext.create('widget.window', {
-//     id: 'windowPopupAccLinkPenerimaan',
-//     title: 'Pilih Akun Penerimaan',
-//     header: {
-//         titlePosition: 2,
-//         titleAlign: 'center'
-//     },
-//     closable: true,
-//     closeAction: 'hide',
-//     autoWidth: true,
-//     minWidth: 750,
-//     height: 550,
-//     x: 300,
-//     y: 50,
-//     layout: 'fit',
-//     border: false,
-//     items: [
-//         Ext.create('Ext.panel.Panel', {
-//             bodyPadding: 5, // Don't want content to crunch against the borders
-//             width: 500,
-//             height: 300,
-//             layout: 'fit',
-//             items: [{
-//                     xtype: 'GridTreeAccLinkPenerimaan'
-//                 }]
-//         })
-//     ],
-//     buttons: [{
-//             text: 'Tutup',
-//             handler: function() {
-//                 var windowPopupAccLinkPenerimaan = Ext.getCmp('windowPopupAccLinkPenerimaan');
-//                 windowPopupAccLinkPenerimaan.hide();
-//             }
-//         }]
-// });
 var formregPiutang = Ext.create('Ext.form.Panel', {
     id: 'formregPiutang',
     width: 480,
     height: 340,
     url: SITE_URL + 'backend/saveform/regPiutang/account',
-    baseParams: {idmenu:74},
+    baseParams: { idmenu: 74 },
     bodyStyle: 'padding:5px',
     labelAlign: 'top',
     autoScroll: true,
@@ -977,7 +525,7 @@ var formregPiutang = Ext.create('Ext.form.Panel', {
         msgTarget: 'side',
         blankText: 'Tidak Boleh Kosong',
         labelWidth: 180,
-        anchor:'100%',
+        anchor: '100%',
         width: 400
     },
     items: [{
@@ -994,20 +542,20 @@ var formregPiutang = Ext.create('Ext.form.Panel', {
             id: 'idregistrasipiutang'
         }, {
             xtype: 'hiddenfield',
-            name: 'idpelanggan',
-            id:'idpelangganPiutangReg'
+            name: 'idcustomer',
+            id: 'idcustomerPiutangReg'
         }, {
             xtype: 'textfield',
             fieldLabel: 'Pelanggan',
-            name: 'nama',
-            id: 'namapelangganPiutangReg',
+            name: 'namecustomer',
+            id: 'namecustomerPiutangReg',
             allowBlank: false,
             listeners: {
                 render: function(component) {
                     component.getEl().on('click', function(event, el) {
                         wpopupPelangganPiutang.show();
 
-                         storeGridpopupPelangganPiutang.load({
+                        storeGridpopupPelangganPiutang.load({
                             params: {
                                 'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitAccPiutang').getValue()
                             }
@@ -1039,10 +587,10 @@ var formregPiutang = Ext.create('Ext.form.Panel', {
                 render: function(component) {
                     component.getEl().on('click', function(event, el) {
                         wAccRegPiutang.show();
-                        storeGridAccount.on('beforeload',function(store, operation,eOpts){
-                            operation.params={
-                                        'idunit': Ext.getCmp('cbUnitAccPiutang').getValue(),
-                                        'idaccounttype': '2'
+                        storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                'idunit': Ext.getCmp('cbUnitAccPiutang').getValue(),
+                                'idaccounttype': '2'
                             };
                         });
                         storeGridAccount.load();
@@ -1064,10 +612,10 @@ var formregPiutang = Ext.create('Ext.form.Panel', {
                 render: function(component) {
                     component.getEl().on('click', function(event, el) {
                         wAccRegReceivePiutang.show();
-                        storeGridAccount.on('beforeload',function(store, operation,eOpts){
-                            operation.params={
-                                        'idunit': Ext.getCmp('cbUnitAccPiutang').getValue(),
-                                        'idaccounttype': '12,16'
+                        storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                'idunit': Ext.getCmp('cbUnitAccPiutang').getValue(),
+                                'idaccounttype': '12,16'
                             };
                         });
                         storeGridAccount.load();
@@ -1088,12 +636,12 @@ var formregPiutang = Ext.create('Ext.form.Panel', {
             name: 'jumlah',
             listeners: {
                 blur: function(txt, The, eOpts) {
-                    this.setRawValue(renderNomor(this.getValue()));
-                }
-                // ,
-                // change: function(txt, The, eOpts){
-                //   this.setRawValue(renderNomor(this.getValue()));
-                // }
+                        this.setRawValue(renderNomor(this.getValue()));
+                    }
+                    // ,
+                    // change: function(txt, The, eOpts){
+                    //   this.setRawValue(renderNomor(this.getValue()));
+                    // }
             }
         }, {
             xtype: 'datefield',
@@ -1128,12 +676,12 @@ var formregPiutang = Ext.create('Ext.form.Panel', {
         },
         {
             xtype: 'radiogroup',
-            hidden:true,
+            hidden: true,
             fieldLabel: 'Kurangi jumlah piutang ini secara otomatis pada menu Penerimaan Kas dan Penerimaan Siswa',
-            labelWidth:350,
+            labelWidth: 350,
             // Arrange radio buttons into two columns, distributed vertically
             columns: 1,
-            width:100,
+            width: 100,
             vertical: true,
             items: [{
                 boxLabel: 'Ya',
@@ -1210,7 +758,11 @@ var smGridregPiutang = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridregPiutang', {
+
+Ext.define(dir_sys + 'money.GridregPiutang', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.GridregPiutang',
+    // Ext.define('GridregPiutang', {
     // renderTo:'mytabpanel',
     //    multiSelect: true,
     //    selModel: smGridregPiutang,
@@ -1235,8 +787,8 @@ Ext.define('GridregPiutang', {
             dataIndex: 'namaunit',
             minWidth: 150
         }, {
-            header: 'Nama Pelanggan',
-            dataIndex: 'nama',
+            header: 'namecustomer',
+            dataIndex: 'namecustomer',
             minWidth: 150
         }, {
             header: 'Akun Piutang',
@@ -1320,22 +872,7 @@ Ext.define('GridregPiutang', {
                     if (data.length == 0) {
                         Ext.Msg.alert('Failure', 'Pilih data piutang terlebih dahulu!');
                     } else {
-                        //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-                        // var formHutangPurchase = Ext.getCmp('formHutangPurchase');
-                        // formHutangPurchase.getForm().load({
-                        //     url: SITE_URL + 'backend/loadFormData/HutangPurchase/1/setup',
-                        //     params: {
-                        //         extraparams: 'a.idtax:' + selectedRecord.data.idtax
-                        //     },
-                        //     success: function(form, action) {
-                        //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                        //     },
-                        //     failure: function(form, action) {
-                        //         Ext.Msg.alert("Load failed", action.result.errorMessage);
-                        //     }
-                        // })
-                        // wHutangPurchase.show();
-                        // Ext.getCmp('statusformHutangPurchase').setValue('edit');
+
                         var formPenerimaanPiutang = Ext.getCmp('formPenerimaanPiutang');
                         wPenerimaanPiutang.show();
                         formPenerimaanPiutang.getForm().load({
@@ -1353,43 +890,6 @@ Ext.define('GridregPiutang', {
                                 Ext.Msg.alert("Load failed", action.result.errorMessage);
                             }
                         })
-                        //            Ext.Ajax.request({
-                        //                 url: SITE_URL + 'purchase/getPurchase',
-                        //                 method: 'POST',
-                        //                 params: {
-                        //                     idpurchase: selectedRecord.data.idpurchase
-                        //                 },
-                        //                 success: function(form, action) {
-                        //                     var d = Ext.decode(form.responseText);
-                        //                     if (!d.success)
-                        //                     {
-                        //                         Ext.Msg.alert('Peringatan', d.message);
-                        //                     } else {
-                        // //                        Ext.Msg.alert('Success', d.message);
-                        // //                        console.log(d.data.namepayment)
-                        //                         wEntryPayment.show();
-                        //                         Ext.getCmp('idpurchasePayment').setValue(d.data.idpurchase);
-                        //                         Ext.getCmp('shipaddressPayment').setValue(d.data.shipaddress);
-                        //                         Ext.getCmp('nojurnalPayment').setValue(d.data.nopurchase);
-                        // //                        Ext.getCmp('memoPayment').setValue(d.data.memo);
-                        //                         Ext.getCmp('totalPajakPayment').setValue(d.data.tax);
-                        //                         Ext.getCmp('angkutPayment').setValue(d.data.freigthcost);
-                        //                         Ext.getCmp('sisaBayarPayment').setValue(d.data.totalowed);
-                        //                         Ext.getCmp('paymentPayment').setValue(d.data.namepayment);
-                        //                         Ext.getCmp('tglPelunasanPayment').setValue(d.data.duedate);
-                        //                         Ext.getCmp('totalPayment').setValue(d.data.totalamount);
-                        //                         Ext.getCmp('idunitPayment').setValue(d.data.idunit);
-                        //                         Ext.getCmp('subtotalPayment').setValue(d.data.subtotal);  
-                        //                         Ext.getCmp('supplierPayment').setValue(d.data.namesupplier);  
-                        //                         Ext.getCmp('memoPayment').setValue('Pembayaran Hutang '+d.data.namesupplier)
-                        // //                        Ext.getCmp('totalPaid').setValue(d.data.paid); 
-                        //                         storeGridHutangPurchase.load();
-                        //                     }
-                        //                 },
-                        //                 failure: function(form, action) {
-                        //                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                        //                 }
-                        //             });
                     }
                 }
             }, {
@@ -1441,7 +941,7 @@ Ext.define('GridregPiutang', {
             store: storeGridregPiutang, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
-            // pageSize:20
+                // pageSize:20
         }
         // , {
         //     xtype: 'toolbar',
@@ -1470,24 +970,24 @@ Ext.define('GridregPiutang', {
             wregPiutang.show();
             storeGridSetupUnit.load();
             formregPiutang.getForm().load({
-                url: SITE_URL + 'backend/loadFormData/regPiutang/1/account',
-                params: {
-                    extraparams: 'a.idregistrasipiutang:' + record.data.idregistrasipiutang
-                },
-                success: function(form, action) {
-                    var d = Ext.decode(action.response.responseText);
-                    Ext.getCmp('jumlahregpiutang').setValue(renderNomor(d.data.jumlah));
-                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                }
-            })
-            //            
-            //            Ext.getCmp('kddaerahS').setReadOnly(true);
-            //            Ext.getCmp('kdtgktunitS').setReadOnly(true);
-            //            Ext.getCmp('kodesubunitS').setReadOnly(true);
-            //            Ext.getCmp('kodejenjangmaster').setReadOnly(true);
+                    url: SITE_URL + 'backend/loadFormData/regPiutang/1/account',
+                    params: {
+                        extraparams: 'a.idregistrasipiutang:' + record.data.idregistrasipiutang
+                    },
+                    success: function(form, action) {
+                        var d = Ext.decode(action.response.responseText);
+                        Ext.getCmp('jumlahregpiutang').setValue(renderNomor(d.data.jumlah));
+                        // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    }
+                })
+                //            
+                //            Ext.getCmp('kddaerahS').setReadOnly(true);
+                //            Ext.getCmp('kdtgktunitS').setReadOnly(true);
+                //            Ext.getCmp('kodesubunitS').setReadOnly(true);
+                //            Ext.getCmp('kodejenjangmaster').setReadOnly(true);
             Ext.getCmp('statusformregPiutang').setValue('edit');
         }
     }
