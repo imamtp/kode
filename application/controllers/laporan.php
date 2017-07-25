@@ -2694,7 +2694,26 @@ if($option=='print')
 
     function AROutstanding()
     {
-        
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan AR Outstanding',
+            'rows'=>$this->report->ar_outstanding(),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '100%';
+        }
+        $this->load->view('report/ar/outstanding', $data);   
     }
 
     function PenerimaanSiswaBulan($idunit=null,$sd,$nd,$option=null)
