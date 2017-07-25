@@ -59,6 +59,7 @@ class report extends MY_Controller {
                 a .comments,
                 a .noinvoice,
                 a .ddays,
+                a.no_faktur,
                 a .eomddays,
                 a .percentagedisc,
                 a .daydisc,
@@ -563,7 +564,8 @@ class report extends MY_Controller {
             
             $i++;
         }
-         echo '{success:true,totalitem:' .$qinv->num_rows() . ',rows:' . json_encode($data) . ' }';
+        return $data;
+        //  echo '{success:true,totalitem:' .$qinv->num_rows() . ',rows:' . json_encode($data) . ' }';
     }
 
     function payable(){
