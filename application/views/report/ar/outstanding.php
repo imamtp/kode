@@ -37,7 +37,7 @@ if($option!='print')
         <td><?=$no?></td>
         <td><?=$r['no_sales_order']?></td>
         <td><?=$r['namecustomer']?></td>
-        <td><?=$r['balance']?></td>
+        <td class="number"><?=number_format($r['balance'],2)?></td>
     </tr>
 <?php endforeach ?>
 
