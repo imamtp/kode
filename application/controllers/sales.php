@@ -165,7 +165,7 @@ class sales extends MY_Controller {
             'freight' => clearnumberic($this->input->post('angkutSalesOrder')),
             'tax' => clearnumberic($this->input->post('totalPajak')),
             'include_tax'=> $this->input->post('include_tax') == 'true' ? 1 : 0,
-            'disc' => $this->input->post('discSalesOrder'),
+            'disc' => clearnumberic($this->input->post('discSalesOrder')),
             'totalamount' => clearnumberic($this->input->post('totalSalesOrder')),
             'paidtoday' => clearnumberic($this->input->post('pembayaranSalesOrder')),
             'balance' => clearnumberic($this->input->post('sisaBayarSalesOrder')),
