@@ -1039,5 +1039,82 @@ class sales extends MY_Controller {
          $json = array('success'=>$success,'message'=>$msg.$txt);
          echo json_encode($json);
     }
+
+    function check_stock_kirim2(){
+        //cek stok di gudang sebelum dikirim
+        $items = json_decode($this->input->get('grid_kirim'));
+        $idunit = $this->input->get('idunit');
+        // var_dump($items); die;
+
+        $data = array();
+        $i=0;
+        $data[$i]['idinventory'] = null;
+        $data[$i]['nameinventory'] = null;
+        $data[$i]['qty_kirim'] = 0;
+        foreach ($items as $value) {
+            if($i==0){
+                $data[$i]['idinventory'] = $value->idinventory;
+                $data[$i]['nameinventory'] = $value->nameinventory;
+                $data[$i]['qty_kirim'] = $value->qty_kirim;
+            } else if(array_search($value->idinventory, array_column($data, 'idinventory')) !== false){
+                $data[array_search($value->idinventory, array_column($data, 'idinventory'))]['qty_kirim'] += $value->qty_kirim;
+            } else {
+                $data[$i]['idinventory'] = $value->idinventory;
+                $data[$i]['nameinventory'] = $value->nameinventory;
+                $data[$i]['qty_kirim'] = $value->qty_kirim;
+            }           
+            $i++;
+        }
+        // print_r($data);
+        // echo array_search($value->idinventory, array_column($data, 'idinventory')).' ';
+        //bandingin dengan stok yang tersedia
+        $success = true;
+        $message = '';
+        foreach($data as $v){
+            $msg = null;
+            $q = $this->db->query("select sum(stock) as totalstock
+                                    from warehouse_stock
+                                    where idinventory = ".$v['idinventory']." ");
+            if($q->num_rows()>0){
+                $r = $q->row();
+                if($r->totalstock==0 || $r->totalstock==null){
+                    $totalstock = 0;
+                } else {
+                    $totalstock = $r->totalstock;
+                }
+            } else {
+                $totalstock = 0;
+            }
+
+            if($v['qty_kirim']>$totalstock){
+                 $success = false;
+                 $msg = "Kuantitas kirim untuk barang: <b>".$v['nameinventory']. "</b> melebihi stok yang tersedia ";
+            }
+            
+             //cek status
+            $qstatus = $this->db->query("select a.idinventory,a.warehouse_id,COALESCE( NULLIF(a.stock,null) , 0 ) as stock,a.idunit,c.warehouse_code
+                                        from warehouse_stock a
+                                        left join inventory b ON a.idinventory = b.idinventory
+                                        join warehouse c ON a.warehouse_id = c.warehouse_id
+                                        where a.idinventory = ".$v['idinventory']." and a.idunit = $idunit");
+            $txt = "<br><br><b>Status Stok</b>:<br>";
+            foreach ($qstatus->result() as $r) {
+                $txt.= 'Warehouse '. $r->warehouse_code.' : '.$r->stock.'<br>';
+            }
+
+            $message.= $msg.$txt.'--------------------------------------<br>';
+        }
+
+        $json = array('success'=>$success,'message'=>$message);
+        echo json_encode($json);
+    }
+
+    function tes_array(){
+        $data[0]['idinventory'] = 123;
+        $data[1]['idinventory'] = 456;
+
+        $found_key = array_search(4562, array_column($data, 'idinventory'));
+        echo $found_key;
+    }
 }
 ?>

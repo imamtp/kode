@@ -356,7 +356,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
                             Ext.getCmp('pembayaran_poinvoice').setValue(0);
 
 
-                            loadDataFormPurchaseInvoice(selectedRecord);
+                            loadDataFormPurchaseInvoice(selectedRecord, 'invoice');
 
 
 

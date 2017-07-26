@@ -110,6 +110,9 @@ function terbilang($x)
 	return $string;
 }
 
+function post_number($val){
+	return str_replace(',','',$val);
+}
 
 
 ?>

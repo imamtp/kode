@@ -403,7 +403,7 @@ function showGoodsReceiptData(record) {
 
 }
 
-function loadDataFormPurchaseInvoice(selectedRecord) {
+function loadDataFormPurchaseInvoice(selectedRecord, option) {
     Ext.getCmp('supplier_poinvoice').getStore().load();
     Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
 
@@ -436,7 +436,8 @@ function loadDataFormPurchaseInvoice(selectedRecord) {
         url: SITE_URL + 'purchase/get_po_items',
         method: 'GET',
         params: {
-            idpurchase: selectedRecord.get('idpurchase')
+            idpurchase: selectedRecord.get('idpurchase'),
+            option: option
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);

@@ -112,6 +112,43 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                               <?php //if($data['totaltax']!=0) { echo "<td>".$value['ratetax']."</td>"; } ?>
                               <td align="right"><?=number_format($value['total'])?></td>
                             </tr>
+
+                          <?php
+                            if($value['batch']){
+                          ?>
+                            <tr>
+                              <td colspan="2" align="right" style="font-size:12px;">Detil Barang</td>
+                              <td colspan="6">
+                                <table width="100%"  class="table table-bordered" style="font-size:12px;">
+                                  <tr>
+                                    <td>Kode Barang</td>
+                                    <td>Nama Barang</td>
+                                    <td>Qty</td>
+                                    <td>Satuan</td>
+                                    <td>Gudang</td>
+                                    <td>Kd Barang Supplier</td>
+                                  </tr>
+                                  <?php
+                                  foreach ($value['item_details'] as $k => $v) {
+                                  ?>
+                                    <tr>
+                                      <td><?=$v['invno']?></td>
+                                      <td><?=$v['nameinventory']?></td>
+                                      <td align="right"><?=number_format($v['qty'])?></td>
+                                      <td><?=$v['short_desc']?></td>
+                                      <td><?=$v['warehouse_code']?></td>
+                                      <td><?=$v['notes']?></td>
+                                    </tr>
+                                    <?php
+                                  }
+                                  ?>
+                                </table>
+                              </td>  
+                            </tr>
+                          <?php
+                           }
+                          ?>
+
                            <?php
                          
                            $i++;

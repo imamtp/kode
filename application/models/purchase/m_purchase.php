@@ -131,7 +131,7 @@ class m_purchase extends CI_Model {
         }
     }
 
-    function query_itempurchase($idpurchase){
+    function query_itempurchase($idpurchase,$option=null){
         // $is_tmp = $this->input->get('is_tmp');
         if(!isset($_GET['is_tmp'])){
             $is_tmp = 0;
@@ -159,6 +159,11 @@ class m_purchase extends CI_Model {
         foreach ($q->result_array() as $r) {
             $data[$i] = $r;
 
+            if($option=='invoice'){
+                //penyesuaian untuk data di form invoice
+                $data[$i]['qty'] = $r['qty_received'];
+            }
+
             //cek apakah idinventory punya batch item
             $qcek = $this->db->query("select idinventory_batch from inventory where idinventory_batch = ".$r['idinventory']."");
             if($qcek->num_rows()>0)
@@ -179,13 +184,20 @@ class m_purchase extends CI_Model {
                 // }
                 $data[$i]['qty_received'] = $r['total_qty_batch'];
 
+                //data barang hasil batch
+                $qbatch = $this->db->query("select a.idpurchaseitem,a.qty,a.invno,a.sku_no,a.nameinventory,a.notes,b.short_desc,c.warehouse_code,a.notes
+                                                from purchaseitem_batch a
+                                                join productmeasurement b ON a.measurement_id = b.measurement_id
+                                                join warehouse c ON a.warehouse_id = c.warehouse_id
+                                                where idpurchaseitem = ".$r['idpurchaseitem']." ");
+                $data[$i]['item_details'] = $qbatch->result_array();
+
             } else {
                 $data[$i]['batch'] = false;
             }
             
             $i++;
         }
-
         return $data;
     }
 

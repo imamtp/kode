@@ -490,11 +490,13 @@
     <script src='{$assets_url}/js/app/setup/companyUnit.js'></script>
     <script src='{$assets_url}/js/app/setup/setupCompanyTab.js'></script>
 
-    <script src='{$assets_url}/js/app/setup/references/refTambahanGaji.js'></script>
-    <script src='{$assets_url}/js/app/setup/references/refTunjanganType.js'></script>
-    <script src='{$assets_url}/js/app/setup/references/refPotonganType.js'></script>
-    <!-- <script src='{$assets_url}/js/app/setup/references/refCatInventory.js'></script> -->
-    <script src='{$assets_url}/js/app/setup/references/refJenisPtkp.js'></script>
+    <!--<script src='{$assets_url}/js/app/setup/references/refTambahanGaji.js'></script>-->
+    <!--<script src='{$assets_url}/js/app/setup/references/refTunjanganType.js'></script>-->
+    <!--<script src='{$assets_url}/js/app/setup/references/refPotonganType.js'></script>-->
+    
+    <!-- <script src='{$assets_url}/js/app/setup/references/refCatInventory.js'></script> ini ga dipake -->
+
+    <!--<script src='{$assets_url}/js/app/setup/references/refJenisPtkp.js'></script>-->
 
     <script src='{$assets_url}/js/app/setup/MenuIndukListPopup.js'></script>
     <script src='{$assets_url}/js/app/setup/AccKasListPayroll.js'></script>
@@ -506,7 +508,7 @@
     <script src='{$assets_url}/js/app/setup/linkedacc2.js'></script>
     <!-- // <script src='{$assets_url}/js/app/setup/accountListCollected.js'></script> -->
     <!-- // <script src='{$assets_url}/js/app/setup/accountListPaid.js'></script> -->
-    <script src='{$assets_url}/js/app/setup/taxcode.js'></script>
+   <!-- // <script src='{$assets_url}/js/app/setup/taxcode.js'></script>
     <script src='{$assets_url}/js/app/setup/entryOpeningBalance.js'></script>
     <script src='{$assets_url}/js/app/setup/linkpiutang.js'></script>
     <script src='{$assets_url}/js/app/setup/AccListInsuranceEmpSetup.js'></script>
@@ -520,7 +522,7 @@
     <script src='{$assets_url}/js/app/setup/formRegPersediaanOpening.js'></script>
     <script src='{$assets_url}/js/app/setup/entryOpeningPersediaan.js'></script>
     <script src='{$assets_url}/js/app/setup/SetupUnitInsurance.js'></script>
-    <script src='{$assets_url}/js/app/setup/supplierInvOpeningPopup.js'></script>
+    <script src='{$assets_url}/js/app/setup/supplierInvOpeningPopup.js'></script>-->
 
     <script src='{$assets_url}/js/app/master/project/ChooserListProject.js'></script>
     <script src='{$assets_url}/js/app/master/project/FormProject.js'></script>
