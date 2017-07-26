@@ -291,6 +291,8 @@ class report extends MY_Controller {
         $enddate = $this->input->get('enddate');
         $customer_id = $this->input->get('idcustomer');
         $idemployee = $this->input->get('idemployee');
+        $skuno = $this->input->get('skuno');
+        $status = $this->input->get('status');
 
         $wer_period = null;
         if($startdate!=''){
@@ -303,10 +305,22 @@ class report extends MY_Controller {
         }
         
         $wer_employee = null;
-        if($employee_id!=null){
+        if($idemployee!=null){
             $wer_employee = "and b.salesman_id = ".$idemployee."";
         }
 
+        $wer_inventory = null;
+        if($skuno!=null){
+            $wer_inventory = "and c.sku_no = '".$skuno."'";
+        }
+
+        $wer_sales = null;
+        if($status!="null"){
+            $wer_sales = "and b.status = ".$status."";
+        }else{
+            $wer_sales = "and b.status > 2";
+        }
+        
         $sql = "select 
                     b.no_sales_order, 
                     b.date_sales, 
@@ -322,15 +336,15 @@ class report extends MY_Controller {
                     when b.status = 6 then 'Partial Delivering'
                     when b.status = 7 then 'Delivering'
                     when b.status = 8 then 'Invoiced'
-                    end as sales_status,
+                    end as status,
                     c.nameinventory,
                     d.short_desc as measurement,
                     a.qty as qty_order,
-                    (a.qty * a.price * (100 - a.disc) / 100) as value_order,
+                    (a.qty * a.price * size * (100 - a.disc) / 100) as value_order,
                     a.qty_kirim,
-                    (a.qty_kirim * a.price * (100 - a.disc) / 100) as value_kirim,
+                    (a.qty_kirim * a.price * size *(100 - a.disc) / 100) as value_kirim,
                     a.qty - a.qty_kirim as qty_sisa,
-                    ((qty-qty_kirim) * a.price * (100 - a.disc) / 100) as value_sisa
+                    ((qty-qty_kirim) * a.price * size * (100 - a.disc) / 100) as value_sisa
                 from salesitem a
                 left join sales b on b.idsales = a.idsales
                 left join inventory c on c.idinventory = a.idinventory
@@ -341,8 +355,10 @@ class report extends MY_Controller {
                 $wer_period
                 $wer_customer
                 $wer_employee
+                $wer_inventory
+                $wer_sales
                 and b.type = 2
-                and b.status > 2"; 
+                order by value_order desc"; 
 
                 $q = $this->db->query($sql);
                 return $q->result_array();
@@ -374,7 +390,7 @@ class report extends MY_Controller {
                     a.nameinventory,
                     sum(b.qty) as qty,
                     b.measurement,
-                    sum(b.price * b.qty) as sales
+                    sum(b.price * b.qty * b.size * (100 - b.disc) / 100) as sales
                 from inventory a 
                 join (
                     select sku_no, a.*, c.short_desc as measurement from salesitem a
@@ -441,6 +457,12 @@ class report extends MY_Controller {
                     a.code,
                     a.firstname || ' ' || a.lastname as name,
                     sum(b.subtotal) as subtotal,
+                    sum(
+                        case b.include_tax
+                            when 1 then (b.subtotal + b.disc) / 1.1
+                            when 0 then 0
+                        end
+                    ) as dpp, 
                     sum(b.tax) as tax,
                     sum(totalamount) as total,
                     sum(b.balance) as balance
