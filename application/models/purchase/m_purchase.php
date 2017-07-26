@@ -131,7 +131,7 @@ class m_purchase extends CI_Model {
         }
     }
 
-    function query_itempurchase($idpurchase){
+    function query_itempurchase($idpurchase,$option=null){
         // $is_tmp = $this->input->get('is_tmp');
         if(!isset($_GET['is_tmp'])){
             $is_tmp = 0;
@@ -158,6 +158,11 @@ class m_purchase extends CI_Model {
         $i=0;
         foreach ($q->result_array() as $r) {
             $data[$i] = $r;
+
+            if($option=='invoice'){
+                //penyesuaian untuk data di form invoice
+                $data[$i]['qty'] = $r['qty_received'];
+            }
 
             //cek apakah idinventory punya batch item
             $qcek = $this->db->query("select idinventory_batch from inventory where idinventory_batch = ".$r['idinventory']."");

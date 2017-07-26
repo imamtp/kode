@@ -478,8 +478,9 @@ class purchase extends MY_Controller {
         $this->load->model('purchase/m_purchase','model');
 
         $idpurchase = $this->input->get('idpurchase');
+        $option = $this->input->get('option');
 
-        $data = $this->model->query_itempurchase($idpurchase);
+        $data = $this->model->query_itempurchase($idpurchase,$option);
 
         echo json_encode(array('data'=>$data));
     }
@@ -687,7 +688,7 @@ class purchase extends MY_Controller {
 
         $saldo = str_replace('.', '', $this->input->post('sisa_bayar'));
         $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
-        $total_pajak = $this->input->post('total_pajak') == '' ? 0 : str_replace('.', '', $this->input->post('total_pajak'));
+        $total_pajak = $this->input->post('total_pajak') == '' ? 0 : post_number($this->input->post('total_pajak'));
         $nopo = $this->input->post('nopo');
         $total_amount = $this->input->post('total_amount');
         $idaccount_coa_hutang = $this->input->post('idaccount_coa_hutang');

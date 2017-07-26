@@ -406,53 +406,56 @@ class production extends MY_Controller
                 if ($value->qty_sisa != 0) {
                     $this->m_stock->update_history(12, $value->qty_sisa, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update stock sisa from Work Order: '.$this->input->post('job_no'));
                 }
+
+                $this->m_stock->update_stock_material($idunit,$value->idinventory);
+                //update stok material 
             }
         }
         //end grib job
 
         //start grid material
-        foreach ($gridmaterial as $value) {
-              $data_material = array(
-                  'qty' => $value->qty,
-                  'qty_real' => $value->qty_real,
-                  'qty_sisa' => $value->qty_sisa
-                  // 'whs_sisa_id' =>  $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_sisa,'warehouse_id','warehouse',$idunit),
-                  // 'notes' => $value->catatan
-              );
+        // foreach ($gridmaterial as $value) {
+        //       $data_material = array(
+        //           'qty' => $value->qty,
+        //           'qty_real' => $value->qty_real,
+        //           'qty_sisa' => $value->qty_sisa
+        //           // 'whs_sisa_id' =>  $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_sisa,'warehouse_id','warehouse',$idunit),
+        //           // 'notes' => $value->catatan
+        //       );
 
-            $this->db->where(
-              array(
-                      'prod_material_id'=>$value->prod_material_id,
-                      'job_order_id'=>$job_order_id,
-                      'idunit'=>$idunit
-                  )
-            );
-            $this->db->update('prod_material', $data_material);
+        //     $this->db->where(
+        //       array(
+        //               'prod_material_id'=>$value->prod_material_id,
+        //               'job_order_id'=>$job_order_id,
+        //               'idunit'=>$idunit
+        //           )
+        //     );
+        //     $this->db->update('prod_material', $data_material);
 
-            if ($status==5) {
-                //jika status sudah finished. updete barang penerimaan batch raw material
-                $qmaterial = $this->db->query("select a.prod_material_id,a.idinventory,a.sku_no,a.invno,a.nameinventory,a.warehouse_id,a.qty,a.measurement_id,a.notes,inventory_type,idinventorycat
-                                from prod_material_receipt a
-                                where a.prod_material_id = ".$value->prod_material_id."");
-                foreach ($qmaterial->result() as $rmat) {
-                    if ($rmat->idinventory==null) {
-                       //buat inventory
-                        $this->create_new_inventory($rmat, $idunit, $job_order_id);
-                    } else {
-                        //update qty ke data inventory yang sudah ada
-                        $this->update_qty_inventory($rmat, $idunit, $job_order_id);
-                    }
+        //     if ($status==5) {
+        //         //jika status sudah finished. updete barang penerimaan batch raw material
+        //         $qmaterial = $this->db->query("select a.prod_material_id,a.idinventory,a.sku_no,a.invno,a.nameinventory,a.warehouse_id,a.qty,a.measurement_id,a.notes,inventory_type,idinventorycat
+        //                         from prod_material_receipt a
+        //                         where a.prod_material_id = ".$value->prod_material_id."");
+        //         foreach ($qmaterial->result() as $rmat) {
+        //             if ($rmat->idinventory==null) {
+        //                //buat inventory
+        //                 $this->create_new_inventory($rmat, $idunit, $job_order_id);
+        //             } else {
+        //                 //update qty ke data inventory yang sudah ada
+        //                 $this->update_qty_inventory($rmat, $idunit, $job_order_id);
+        //             }
 
-                   //set is_tmp ke 0
-                     $this->db->where(
-                        array(
-                                'prod_material_id'=>$value->prod_material_id
-                            )
-                     );
-                     $this->db->update('prod_material_receipt', array('is_tmp'=>0));
-                }
-            }
-        }
+        //            //set is_tmp ke 0
+        //              $this->db->where(
+        //                 array(
+        //                         'prod_material_id'=>$value->prod_material_id
+        //                     )
+        //              );
+        //              $this->db->update('prod_material_receipt', array('is_tmp'=>0));
+        //         }
+        //     }
+        // }
         //end grid material
 
          //start grid cost

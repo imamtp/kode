@@ -18,6 +18,7 @@ class m_stock extends CI_Model {
 			12: Stock In By Received Material From Production (+)
 			13: Stock In By Received Return PO (+)
 			14: Delivery Sales Return (-)
+			15: Stock Out From Production (-)
 		*/
 		
 		$qoldstok = $this->db->get_where('warehouse_stock',array(
@@ -296,5 +297,36 @@ class m_stock extends CI_Model {
 
           return array('total_hpp'=>$total_hpp);
     }
+
+	function update_stock_material($idunit,$idinventory_fg){
+
+		$q_finished_good = $this->db->query("select idinventory,qty_real
+											from prod_material
+											where job_order_id = $idinventory_fg and idunit = $idunit");
+
+		foreach($q_finished_good->result() as $r){
+			$q_stok = $this->db->query("select warehouse_id,idinventory,stock,idunit
+										from warehouse_stock
+										where idinventory = ".$r->idinventory." and idunit = $idunit ");
+			$total_qty_used = $r->qty_real;
+			foreach($q_stok->result() as $rstok){
+				if($total_qty_used>0){
+					//kalo belum kosong masih lanjut cari stok di berbagai warehouse
+					if($rstok->stock<=$total_qty_used){
+						//kurangin stok
+						$this->update_history(15,$total_qty_used,$rstok->idinventory,$idunit,$rstok->warehouse_id,date('Y-m-d H:m:s'),'Stock Out From Production',null);
+						$total_qty_used = 0;
+					} else {
+						$qty_pengurang = $total_qty_used-$rstok->stock;
+						//stok seadanya
+						$this->update_history(15,$qty_pengurang,$rstok->idinventory,$idunit,$rstok->warehouse_id,date('Y-m-d H:m:s'),'Stock Out From Production',null);
+						$total_qty_used = $total_qty_used-$qty_pengurang;
+					}
+				}
+				
+			}
+		}
+
+	}
 }
 ?>
