@@ -65,6 +65,106 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     dataIndex: 'assetaccount'
                 },
                 {
+                    text: 'Detil Barang',
+                    width: 65,
+                    // menuDisabled: true,
+                    xtype: 'actioncolumn',
+                    tooltip: 'Detil Terima Barang',
+                    align: 'center',
+                    icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
+                    handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                        console.log(selectedRecord)
+                        if (!Ext.isDefined(Ext.getCmp('WindowBatchItemList'))) {
+                            Ext.create(dir_sys + 'purchase2.WindowBatchItemList');
+                        }
+                        Ext.getCmp('WindowBatchItemList').show();
+
+                        var idpurchase = Ext.getCmp('idpurchase_poreceipt').getValue();
+                        var idunit = Ext.getCmp('cbUnit_poreceipt').getValue();
+
+                        Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
+                        Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
+                        Ext.getCmp('idinventory_batchitemporeceipt').setValue(selectedRecord.data.idinventory);
+                        Ext.getCmp('idunit_batchitemporeceipt').setValue(idunit);
+                        Ext.getCmp('qty_batchitemporeceipt').setValue(selectedRecord.data.qty);
+                        Ext.getCmp('short_desc_batchitemporeceipt').setValue(selectedRecord.data.short_desc);
+                        Ext.getCmp('warehouse_code_batchitemporeceipt').setValue(selectedRecord.data.warehouse_code);
+                        Ext.getCmp('nameinventory_batchitemporeceipt').setValue(selectedRecord.data.nameinventory);
+
+                        var idpurchasestatus = Ext.getCmp('cb_status_poreceipt').getValue() * 1;
+
+                        //cek udah bikin batch apa belum, kalo udah, tampilkan
+
+                        // gridinsertReceiveBatchPOStore.removeAll();
+                        // gridinsertReceiveBatchPOStore.sync();
+                        var btnSimpanGRBatchWindow = Ext.getCmp('btnSimpanGRBatchWindow'); //tombol simpan di window penerimaan batch GR
+                        if (idpurchasestatus != 4) {
+                            //bukan received masih bisa update
+                            btnSimpanGRBatchWindow.enable();
+                        } else {
+                            btnSimpanGRBatchWindow.disable();
+                        }
+
+                        if (Ext.getCmp('statusform_poreceipt').getValue() === 'input') {
+                            var is_temp = 1;
+                            Ext.getCmp('numbatch_itempo').setReadOnly(false);
+                            Ext.getCmp('buatbatchbtn_itempo').show();
+                        } else {
+                            if (idpurchasestatus === 1) {
+                                //kalo statusnya masih open. aktifkan tombol buat batch
+                                var is_temp = 1;
+                                Ext.getCmp('numbatch_itempo').setReadOnly(false);
+                                Ext.getCmp('buatbatchbtn_itempo').show();
+                            } else {
+                                var is_temp = 0;
+                                Ext.getCmp('numbatch_itempo').setReadOnly(true);
+                                Ext.getCmp('buatbatchbtn_itempo').hide();
+
+                                btnSimpanGRBatchWindow.disable(); //disable karna bukan open
+                            }
+
+                        }
+
+                        Ext.getCmp('GridBatchGoodsReceipt').getStore().load({
+                            params: {
+                                idpurchase: idpurchase,
+                                idpurchaseitem: selectedRecord.data.idpurchaseitem,
+                                idinventory: selectedRecord.data.idinventory,
+                                idunit: idunit,
+                                is_tmp: is_temp
+                            }
+                        });
+
+                        Ext.Ajax.request({
+                            url: SITE_URL + 'purchase/check_batch_item',
+                            method: 'GET',
+                            params: {
+                                idpurchase: idpurchase,
+                                idpurchaseitem: selectedRecord.data.idpurchaseitem,
+                                idinventory: selectedRecord.data.idinventory,
+                                idunit: idunit,
+                                is_temp: is_temp
+                            },
+                            success: function(form, action) {
+                                var d = Ext.decode(form.responseText);
+                                // console.log(d);
+                                Ext.getCmp('numbatch_itempo').setValue(d.numbatch);
+                                Ext.getCmp('qtytotal_batchitemporeceipt').setValue(d.totalqtyterima);
+
+                                if (d.numbatch === 0) {
+                                    //kalo masih kosong enable tombol create batch. (edit form)
+                                    Ext.getCmp('numbatch_itempo').setReadOnly(false);
+                                    Ext.getCmp('buatbatchbtn_itempo').show();
+                                }
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                            }
+                        });
+                        // setValueAcc(selectedRecord,'wCoaPurchaseInvoiceBeliPopup','_coa_beli_pi');
+                    }
+                },
+                {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
                     //                    id: 'invno',

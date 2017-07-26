@@ -184,13 +184,20 @@ class m_purchase extends CI_Model {
                 // }
                 $data[$i]['qty_received'] = $r['total_qty_batch'];
 
+                //data barang hasil batch
+                $qbatch = $this->db->query("select a.idpurchaseitem,a.qty,a.invno,a.sku_no,a.nameinventory,a.notes,b.short_desc,c.warehouse_code,a.notes
+                                                from purchaseitem_batch a
+                                                join productmeasurement b ON a.measurement_id = b.measurement_id
+                                                join warehouse c ON a.warehouse_id = c.warehouse_id
+                                                where idpurchaseitem = ".$r['idpurchaseitem']." ");
+                $data[$i]['item_details'] = $qbatch->result_array();
+
             } else {
                 $data[$i]['batch'] = false;
             }
             
             $i++;
         }
-
         return $data;
     }
 
