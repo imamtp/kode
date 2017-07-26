@@ -21,11 +21,11 @@ var smChooserListSalesman = Ext.create('Ext.selection.CheckboxModel', {
         deselect: function(model, record, index) {
             var selectedLen = smChooserListSalesman.getSelection().length;
             if (selectedLen == 0) {
-                GridSalesmanList.queryById('btnOk').setDisabled(true);
+                GridSalesman2List.queryById('btnOk').setDisabled(true);
             }
         },
         select: function(model, record, index) {
-            GridSalesmanList.queryById('btnOk').setDisabled(false);
+            GridSalesman2List.queryById('btnOk').setDisabled(false);
         }
     }
 });
@@ -37,9 +37,9 @@ Ext.define('MY.searchChooserListSalesman', {
     width: 180
 });
 
-var GridSalesmanList = Ext.create('Ext.grid.Panel', {
-    itemId: 'GridSalesmanListID',
-    id: 'GridSalesmanListID',
+var GridSalesman2List = Ext.create('Ext.grid.Panel', {
+    itemId: 'GridSalesman2ListID',
+    id: 'GridSalesman2ListID',
     store: storeChooserListSalesman,
     width: 800,
     height: 350,
@@ -51,6 +51,8 @@ var GridSalesmanList = Ext.create('Ext.grid.Panel', {
         { header: 'Personal Code', dataIndex: 'code', minWidth: 150 },
         { header: 'Firstname', dataIndex: 'firstname', minWidth: 150 },
         { header: 'Lastname', dataIndex: 'lastname', minWidth: 120 },
+        { header: 'Jabatan', dataIndex: 'group_name', minWidth: 120, flex: 1 },
+
     ],
     dockedItems: [{
             xtype: 'toolbar',
@@ -78,7 +80,7 @@ var GridSalesmanList = Ext.create('Ext.grid.Panel', {
                     itemId: 'btnOk',
                     disabled: true,
                     handler: function() {
-                        GridSalesmanList.fireEvent('selectItem', ChooserListSalesman.target);
+                        GridSalesman2List.fireEvent('selectItem', ChooserListSalesman.target);
                     }
                 },
                 {
@@ -105,7 +107,7 @@ var GridSalesmanList = Ext.create('Ext.grid.Panel', {
         },
         itemdblclick: function() {},
         selectItem: function(form) {
-            var selectedRecord = GridSalesmanList.getSelectionModel().getSelection()[0];
+            var selectedRecord = GridSalesman2List.getSelectionModel().getSelection()[0];
             form.fireEvent('selectSalesman', selectedRecord.data);
             ChooserListSalesman.hide();
         }
@@ -127,5 +129,5 @@ var ChooserListSalesman = Ext.create('widget.window', {
     layout: 'fit',
     border: false,
     padding: '5',
-    items: [GridSalesmanList],
+    items: [GridSalesman2List],
 });
