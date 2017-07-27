@@ -85,7 +85,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                           <th width="30">No</th>  
                           <th>No SKU</th>                       
                           <th>Nama Barang</th>                                               
-                          <th>Qty</th>
+                          <th>Total Qty</th>
                           <th>Satuan</th>
                           <th>Harga</th>
                           <!--<th>Ukuran</th>
@@ -118,11 +118,11 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                           ?>
                             <tr>
                               <td colspan="2" align="right" style="font-size:12px;">Detil Barang</td>
-                              <td colspan="6">
+                              <td colspan="5">
                                 <table width="100%"  class="table table-bordered" style="font-size:12px;">
                                   <tr>
                                     <td>Kode Barang</td>
-                                    <td>Nama Barang</td>
+                                    <!-- <td>Nama Barang</td> -->
                                     <td>Qty</td>
                                     <td>Satuan</td>
                                     <td>Gudang</td>
@@ -133,7 +133,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
                                   ?>
                                     <tr>
                                       <td><?=$v['invno']?></td>
-                                      <td><?=$v['nameinventory']?></td>
+                                      <!-- <td><?=$v['nameinventory']?></td> -->
                                       <td align="right"><?=number_format($v['qty'])?></td>
                                       <td><?=$v['short_desc']?></td>
                                       <td><?=$v['warehouse_code']?></td>
