@@ -72,11 +72,11 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
         }, {
             header: 'No Sales',
             dataIndex: 'no_sales_order',
-            hidden: true
+            // hidden: true
         }, {
             header: 'No Invoice',
             dataIndex: 'noinvoice',
-            hidden: true
+            // hidden: true
         }, {
             header: 'Customer',
             dataIndex: 'namecustomer',
