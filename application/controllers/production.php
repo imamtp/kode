@@ -399,16 +399,31 @@ class production extends MY_Controller
                 
                  $this->load->model('inventory/m_stock');
 
-                 $this->m_stock->update_history(12, $value->qty_accept, $value->idinventory, $idunit, $warehouse_id_accept, date('Y-m-d'), 'Update stock accept from Work Order: '.$this->input->post('job_no'));
+                 $this->m_stock->update_history(12, $value->qty_accept, $value->idinventory, $idunit, $warehouse_id_accept, date('Y-m-d'), 'Update accepted stock from Work Order: '.$this->input->post('job_no'));
                 if ($value->qty_reject != 0) {
-                    $this->m_stock->update_history(12, $value->qty_reject, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update stock reject from Work Order: '.$this->input->post('job_no'));
+                    $this->m_stock->update_history(12, $value->qty_reject, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update rejected stock from Work Order: '.$this->input->post('job_no'));
                 }
                 if ($value->qty_sisa != 0) {
-                    $this->m_stock->update_history(12, $value->qty_sisa, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update stock sisa from Work Order: '.$this->input->post('job_no'));
+                    $this->m_stock->update_history(12, $value->qty_sisa, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update stock sisa dari Work Order: '.$this->input->post('job_no'));
                 }
 
-                $this->m_stock->update_stock_material($idunit,$value->idinventory);
-                //update stok material 
+
+                //start update stok material 
+                $qjobitem = $this->db->query("select job_item_id
+                                            from job_item a
+                                            where a.job_order_id = $job_order_id and a.idinventory = ".$value->idinventory."");
+                if($qjobitem->num_rows()>0){
+                    $rjobitem = $qjobitem->row();
+                    
+                    $qjobmaterial = $this->db->query("select idinventory from prod_material 
+                                                        where job_item_id = ".$rjobitem->job_item_id." and job_order_id = $job_order_id
+                                                        and idunit = $idunit");
+                    if($qjobmaterial->num_rows()>0){
+                        $rmaterial = $qjobmaterial->row();
+                        $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$this->input->post('job_no'));
+                    }
+                }                
+                //end update stok material 
             }
         }
         //end grib job

@@ -36,7 +36,7 @@ class m_stock extends CI_Model {
 
 		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12 || $type==13) {
 			$balance = $old_qty+$qty;
-		} else if($type==7 || $type==5 || $type==8 || $type==11 || $type==14) {
+		} else if($type==7 || $type==5 || $type==8 || $type==11 || $type==14 || $type==15) {
 			$balance = $old_qty-$qty;
 		}
 
@@ -298,28 +298,33 @@ class m_stock extends CI_Model {
           return array('total_hpp'=>$total_hpp);
     }
 
-	function update_stock_material($idunit,$idinventory_fg){
-
+	function update_stock_material($idunit,$idinventory_fg,$job_no){
+		// echo 'update_stock_material';
 		$q_finished_good = $this->db->query("select idinventory,qty_real
 											from prod_material
-											where job_order_id = $idinventory_fg and idunit = $idunit");
-
+											where idinventory = $idinventory_fg and idunit = $idunit");
+	
 		foreach($q_finished_good->result() as $r){
+			// var_dump($r);
+
 			$q_stok = $this->db->query("select warehouse_id,idinventory,stock,idunit
 										from warehouse_stock
 										where idinventory = ".$r->idinventory." and idunit = $idunit ");
 			$total_qty_used = $r->qty_real;
 			foreach($q_stok->result() as $rstok){
+				// var_dump($rstok);
 				if($total_qty_used>0){
 					//kalo belum kosong masih lanjut cari stok di berbagai warehouse
 					if($rstok->stock<=$total_qty_used){
 						//kurangin stok
-						$this->update_history(15,$total_qty_used,$rstok->idinventory,$idunit,$rstok->warehouse_id,date('Y-m-d H:m:s'),'Stock Out From Production',null);
+						// echo 'kurangin stok';
+						$this->update_history(15,$total_qty_used,$rstok->idinventory,$idunit,$rstok->warehouse_id,date('Y-m-d H:m:s'),'Stock Out From Production. WO:'.$job_no,null);
 						$total_qty_used = 0;
 					} else {
 						$qty_pengurang = $total_qty_used-$rstok->stock;
 						//stok seadanya
-						$this->update_history(15,$qty_pengurang,$rstok->idinventory,$idunit,$rstok->warehouse_id,date('Y-m-d H:m:s'),'Stock Out From Production',null);
+						// echo 'stok seadanya';
+						$this->update_history(15,$qty_pengurang,$rstok->idinventory,$idunit,$rstok->warehouse_id,date('Y-m-d H:m:s'),'Stock Out From Production. WO:'.$job_no,null);
 						$total_qty_used = $total_qty_used-$qty_pengurang;
 					}
 				}
