@@ -484,6 +484,7 @@ class report extends MY_Controller {
                     ) as dpp, 
                     sum(b.tax) as tax,
                     sum(totalamount) as total,
+                    sum(b.paidtoday) as totalpaid,
                     sum(b.balance) as balance
                 from employee a
                 join sales b on b.salesman_id = a.idemployee
