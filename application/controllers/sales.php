@@ -170,6 +170,8 @@ class sales extends MY_Controller {
             'comments' => $this->input->post('memoSalesOrder'),
             'idshipping' => $this->input->post('shippingSalesOrder') == '' ? null : $this->input->post('shippingSalesOrder'),
             'freight'=> clearnumberic($this->input->post('freight')),
+            'paidtoday'=> 0,
+            'balance'=> clearnumberic($this->input->post('totalSalesOrder')),
             // 'isrecuring' => $this->input->post('paymentSalesQuotation'),
             // 'startdate' date,
             // 'recuntildate' date,
