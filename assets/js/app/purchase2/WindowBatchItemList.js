@@ -346,6 +346,11 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                     success: function(form, action) {
                                         var d = Ext.decode(form.responseText);
                                         if (d.success) {
+                                            //update qty_received on grid
+                                            Ext.getCmp('EntryGoodsReceipt').getStore().filter(function(item) { return item.get('idpurchaseitem') == Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue() });
+                                            Ext.getCmp('EntryGoodsReceipt').getStore().getRange()[0].data.qty_received = d.totalqtyterima;
+                                            console.log(Ext.getCmp('EntryGoodsReceipt').getStore().getRange()[0]);
+                                            Ext.getCmp('EntryGoodsReceipt').getStore().clearFilter();
                                             Ext.getCmp('WindowBatchItemList').hide();
                                         } else {
                                             Ext.getCmp('qtytotal_batchitemporeceipt').setValue(d.totalqtyterima);
