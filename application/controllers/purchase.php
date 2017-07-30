@@ -295,7 +295,6 @@ class purchase extends MY_Controller {
     }
 
     function savePurchaseOrder(){
-
         $params = array(
             'idunit' => $this->input->post('unit'),
             'prefix' => 'PO',
@@ -352,8 +351,7 @@ class purchase extends MY_Controller {
             // 'display' =>,
             // 'year' =>,
             // 'month' =>,
-            'userin' => $this->session->userdata('userid'),
-            'datein' => date('Y-m-d H:m:s'),
+            
             // 'idpayment' => $this->input->post('paymentPurchaseRequisition'),
             // 'notes' =>,
             // 'duedate' =>,
@@ -379,9 +377,13 @@ class purchase extends MY_Controller {
         );
 
         if($statusform == 'input'){
+            $data['userin'] = $this->session->userdata('userid');
+            $data['datein'] = date('Y-m-d H:m:s');
             $this->db->insert('purchase', $data);
         }
         else if($statusform == 'edit'){
+            $data['usermod'] = $this->session->userdata('userid');
+            $data['datemod'] = date('Y-m-d H:m:s');
             $this->db->where('idpurchase', $idpurchase);
             $this->db->update('purchase', $data);
         }
@@ -684,7 +686,18 @@ class purchase extends MY_Controller {
     }
 
     function save_purchase_invoice(){
-         $this->db->trans_begin();
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'PI',
+            'table' => 'purchase',
+            'fieldpk' => 'idpurchase',
+            'fieldname' => 'noinvoice',
+            'extraparams'=> 'and idpurchasetype = 2',
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
+
+        $this->db->trans_begin();
 
         $saldo = str_replace('.', '', $this->input->post('sisa_bayar'));
         $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
@@ -722,18 +735,20 @@ class purchase extends MY_Controller {
                 'daydisc' => $this->input->post('daydisc')=='' ? null : $this->input->post('daydisc'),
                 'notes_invoice' => $this->input->post('notes_pi'),
                 'invoice_status'=>$invoice_status,
-                'noinvoice'=> $this->input->post('noinvoice'),
+                'noinvoice'=> $this->input->post('noinvoice')?: $noarticle,
                 'nofpsup'=>$this->input->post('nofpsup'),
             );
         $this->db->where('idpurchase',$this->input->post('idpurchase'));
         $this->db->update('purchase',$data);
 
         //buat jurnal hutang
-        $this->load->model('journal/m_jpurchase','jmodel');
-        $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_persediaan,$idaccount_coa_pajakmasuk,$total_pajak);
+        #$this->load->model('journal/m_jpurchase');
+        #$this->m_jpurchase->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_persediaan,$idaccount_coa_pajakmasuk,$total_pajak);
+        
+        // $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_persediaan,$idaccount_coa_pajakmasuk,$total_pajak);
         // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
-          if($this->db->trans_status() === false){
+        if($this->db->trans_status() === false){
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');
         } else{
