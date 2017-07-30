@@ -387,6 +387,10 @@ class report extends MY_Controller {
             $wer_brand = "and a.brand_id = ".$brand."";
         }
 
+        $wer_whcode = null;
+        if($whcode!="null"){
+            $wer_whcode = "and e.warehouse_code = '".$whcode."'";
+        }
         $sql = "select 
                     a.sku_no,
                     a.nameinventory,
@@ -400,6 +404,8 @@ class report extends MY_Controller {
                     join productmeasurement c on c.measurement_id = a.measurement_id
                 ) b on a.sku_no = b.sku_no
                 join sales c on c.idsales = b.idsales
+                left join warehouse_stock d on d.idinventory = a.idinventory
+                left join warehouse e on e.warehouse_id = d.warehouse_id
                 where true 
                 and c.idunit = $idunit
                 and c.type = 2
@@ -407,6 +413,7 @@ class report extends MY_Controller {
                 $wer_period
                 $wer_invtype
                 $wer_brand
+                $wer_whcode
                 group by a.sku_no, a.nameinventory, b.measurement";
 
         $q = $this->db->query($sql);

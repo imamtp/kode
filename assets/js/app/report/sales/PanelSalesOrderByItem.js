@@ -112,7 +112,7 @@ Ext.define('reportSalesOrderByItem', {
                         var invtype = Ext.getCmp('inventorytypeReportSalesOrderByItem').getValue();
                         var brand = Ext.getCmp('brandReportSalesOrderByItem').getValue();
                         var whcode = Ext.getCmp('warehouseReportSalesOrderByItem').getValue();
-                        Ext.getCmp('reportSalesOrderByItem').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportSalesByItem' src='" + SITE_URL + "laporan/SalesByItem?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&invtype=" + invtype + "&brand=" + brand + "&whcode" + whcode + "'>");
+                        Ext.getCmp('reportSalesOrderByItem').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportSalesByItem' src='" + SITE_URL + "laporan/SalesByItem?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&invtype=" + invtype + "&brand=" + brand + "&whcode=" + whcode + "'>");
                     }
                 }
             }, {
