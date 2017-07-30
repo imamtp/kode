@@ -782,7 +782,14 @@ class report extends MY_Controller {
             $wer_period = "and (a.tglpiutang between '".$startdate."' and '".$enddate."')";
         }
 
-        $sql = "select a.description,b.accname as accnamepiutang,c.accname as accname_terimapiutang,a.jumlah,a.sisapiutang,a.tglpiutang,d.namecustomer
+        $sql = "select 
+                    a.description,
+                    b.accname as accnamepiutang,
+                    c.accname as accname_terimapiutang,
+                    a.jumlah,
+                    a.sisapiutang,
+                    a.tglpiutang,
+                    d.namecustomer
                 from registrasipiutang a
                 join account b ON a.idaccount = b.idaccount
                 join account c ON a.idaccountlink = c.idaccount
@@ -791,7 +798,8 @@ class report extends MY_Controller {
                 $wer_period";
         
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
     }
 
     function receivable_sales(){
@@ -824,6 +832,7 @@ class report extends MY_Controller {
                     a .comments,
                     a .noinvoice,	
                     a .notes_si,
+                    a .total_dpp,
                     b.nocustomer,
                     b.namecustomer,
                     a .invoice_date,
@@ -876,8 +885,8 @@ class report extends MY_Controller {
             // if($r[''])
             $i++;
         }
-
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
     }
 
 }
