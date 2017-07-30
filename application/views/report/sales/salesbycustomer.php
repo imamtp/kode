@@ -29,9 +29,11 @@ if($option!='print')
      <td><strong>No</strong></td>
      <td><strong>No Customer</strong></td>
      <td><strong>Customer</strong></td>
+     <td><strong>Customer Type</strong></td>
      <td><strong>Subtotal</strong></td>
      <td><strong>Tax</strong></td>
      <td><strong>Total</strong></td>
+     <td><strong>Total Paid</strong></td>
      <td><strong>Balance</strong></td>
 </tr>
 <?php $no = 1; ?>
@@ -40,9 +42,11 @@ if($option!='print')
         <td><?=$no++?></td>
         <td><?=$r['nocustomer']?></td>
         <td><?=$r['namecustomer']?></td>
+        <td><?=$r['namecustype']?></td>
         <td class="number"><?=number_format($r['subtotal'],2)?></td>
         <td class="number"><?=number_format($r['tax'],2)?></td>
         <td class="number"><?=number_format($r['total'],2)?></td>
+        <td class="number"><?=number_format($r['totalpaid'],2)?></td>
         <td class="number"><?=number_format($r['balance'],2)?></td>
     </tr>
 <?php endforeach ?>

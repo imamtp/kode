@@ -424,28 +424,38 @@ class report extends MY_Controller {
         $idunit = $this->input->get('idunit');
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
+        $custtype = $this->input->get('custtype');
 
         $wer_period = null;
         if($startdate!=''){
             $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
         }
 
+        $wer_custtype = null;
+        if($custtype!="null"){
+            $wer_custtype = "and a.idcustomertype = ".$custtype."";
+        }
+
         $sql = "select 
-                    a.namecustomer,
                     a.nocustomer,
+                    a.namecustomer,
+                    c.namecustype,
                     sum(b.subtotal) as subtotal,
                     sum(b.tax) as tax,
                     sum(totalamount) as total,
+                    sum(b.paidtoday) as totalpaid,
                     sum(b.balance) as balance
                 from customer a
                 join sales b on b.idcustomer = a.idcustomer
+                left join customertype c on c.idcustomertype = a.idcustomertype
                 where true
                 $wer_period
                 and a.idunit = 12
                 and a.deleted = 0
                 and b.type = 2
                 and b.status > 2
-                group by a.namecustomer, a.nocustomer
+                $wer_custtype
+                group by a.namecustomer, a.nocustomer, c.namecustype
                 order by namecustomer";
         
         $q = $this->db->query($sql);

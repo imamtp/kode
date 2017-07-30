@@ -85,6 +85,15 @@ Ext.define('reportSalesOrderByCustomer', {
                 labelWidth: 40,
                 fieldLabel: 's/d'
             }, {
+                xtype: 'comboxcustomertype',
+                id: 'customerReportSalesOrderByCustomer',
+                fieldLabel: 'Customer Type',
+            }]
+        },
+        {
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [{
                 xtype: 'button',
                 text: 'Tampilkan Laporan',
                 iconCls: 'report_key',
@@ -93,45 +102,18 @@ Ext.define('reportSalesOrderByCustomer', {
                         var unit = Ext.getCmp('unitReportSalesOrderByCustomer').getValue();
                         var sd = Ext.getCmp('startdateReportSalesOrderByCustomer').getSubmitValue();
                         var nd = Ext.getCmp('enddateReportSalesOrderByCustomer').getSubmitValue();
-                        Ext.getCmp('reportSalesOrderByCustomer').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportSalesByItem' src='" + SITE_URL + "laporan/SalesByCustomer?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "'>");
-                    }
-                }
-            }]
-        },
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            hidden: true,
-            items: [{
-                xtype: 'hiddenfield',
-                id: 'customerReportSalesOrderByCustomer',
-            }, {
-                xtype: 'textfield',
-                id: 'namecustomerReportSalesOrderByCustomer',
-                labelWidth: 100,
-                fieldLabel: 'Customer',
-                listeners: {
-                    render: function(component) {
-                        component.getEl().on('click', function(event, el) {
-                            ChooserListCustomer.target = Ext.getCmp('reportSalesOrderByCustomer');
-                            ChooserListCustomer.show();
-                        });
+                        var custtype = Ext.getCmp('customerReportSalesOrderByCustomer').getValue();
+                        Ext.getCmp('reportSalesOrderByCustomer').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportSalesByItem' src='" + SITE_URL + "laporan/SalesByCustomer?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&custtype=" + custtype + "'>");
                     }
                 }
             }, {
-                xtype: 'hiddenfield',
-                id: 'skunoReportSalesOrderByCustomer',
-            }, {
-                xtype: 'textfield',
-                id: 'nameinventoryReportSalesOrderByCustomer',
-                labelWidth: 40,
-                fieldLabel: 'Item',
+                xtype: 'button',
+                text: 'Clear Filter',
                 listeners: {
-                    render: function(component) {
-                        component.getEl().on('click', function(event, el) {
-                            ChooserListInventory.target = Ext.getCmp('reportSalesOrderByCustomer');
-                            ChooserListInventory.show();
-                        });
+                    click: function(component) {
+                        Ext.getCmp('startdateReportSalesOrderByCustomer').setValue(null);
+                        Ext.getCmp('enddateReportSalesOrderByCustomer').setValue(null);
+                        Ext.getCmp('customerReportSalesOrderByCustomer').setValue(null);
                     }
                 }
             }]
