@@ -93,7 +93,7 @@ class m_purchaseorder extends CI_Model {
         if($this->input->post('option')=='notyetdelivered'){
             $wer = " and a.delivereddate is null and a.idpurchasestatus = 2";
         } else if($this->input->post('option')=='po_not_in_open_return_status'){
-            //po tidak sedang dalam retur
+            //po tidak sedang dalam retur dan belum dibuatkan invoicenya
             $wer = " and a.idpurchase not in (select idpurchase from purchase_return where (return_status = 1 OR return_status = 3 OR return_status = 4) ) and a.delivereddate is not null";
         } if($this->input->post('option')=='delivered_po'){
             $wer = " and a.delivereddate is not null";

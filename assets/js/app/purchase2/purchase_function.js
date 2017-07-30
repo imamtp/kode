@@ -786,7 +786,9 @@ function loadReturnPoData(record) {
     Ext.getCmp('supplier_viewporeturn').getStore().load();
     Ext.getCmp('cb_tax_id_viewporeturn').getStore().load();
 
-    Ext.getCmp('WindowPOReturnList').hide();
+    if (Ext.isDefined(Ext.getCmp('WindowPOReturnList'))) {
+        Ext.getCmp('WindowPOReturnList').hide();
+    }
 
     Ext.getCmp('purchase_return_id_viewporeturn').setValue(record.data.purchase_return_id);
     Ext.getCmp('noreturn_viewporeturn').setValue(record.data.noreturn);
@@ -824,4 +826,32 @@ function loadReturnPoData(record) {
 
     Ext.getCmp('ViewReturnPO').columns[12].setVisible(false); //hide qty terima
     Ext.getCmp('ViewReturnPO').columns[13].setVisible(false); //hide warehouse terima
+}
+
+function paymentTermPO_invoice(idterm) {
+    console.log('idterm:' + idterm);
+    var pembayaranSalesInvoice_si = Ext.getCmp('pembayaranSalesInvoice_si');
+    var sisaBayarSalesInvoice_si = Ext.getCmp('sisaBayarSalesInvoice_si');
+
+    var aftertax = str_replace('.', '', Ext.getCmp('totalSalesInvoice_si').getValue()) * 1;
+    var shipcost = str_replace('.', '', Ext.getCmp('angkutSalesInvoice_si').getValue()) * 1;
+
+    // var paymenttermarr = [['1', 'Cash in Advance'], ['2', 'Cash in Delivery'], ['3','NET d days'], ['4','NET EOM d days'],['5','Discount']];
+
+    if (idterm * 1 === 1) {
+        pembayaranSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
+        pembayaranSalesInvoice_si.setReadOnly(true);
+
+        sisaBayarSalesInvoice_si.setValue(0);
+    } else if (idterm * 1 === 2) {
+        pembayaranSalesInvoice_si.setValue(0);
+        pembayaranSalesInvoice_si.setReadOnly(true);
+
+        sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
+    } else {
+        pembayaranSalesInvoice_si.setValue(0);
+        pembayaranSalesInvoice_si.setReadOnly(false);
+
+        sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
+    }
 }

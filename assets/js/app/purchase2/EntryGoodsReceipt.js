@@ -4,6 +4,7 @@
 
 var WindowGridReceivedByPOPopup = Ext.create(dir_sys + 'purchase2.WindowGridReceivedByPOPopup');
 var WindowBatchItemList = Ext.create(dir_sys + 'purchase2.WindowBatchItemList');
+var wCoaInventoryGoodsReceipt = Ext.create(dir_sys + 'inventory.wCoaInventoryGoodsReceipt');
 
 Ext.define('GridReceiptItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
@@ -600,6 +601,54 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             id: 'notes_poreceipt',
                             fieldLabel: 'Catatan'
                         },
+                        {
+                            xtype: 'fieldcontainer',
+                            fieldLabel: 'Akun Persediaan',
+                            combineErrors: true,
+                            labelWidth: 110,
+                            width: 500,
+                            msgTarget: 'side',
+                            layout: 'hbox',
+                            // labelWidth: 150,
+                            defaults: {
+                                flex: 1,
+
+                                hideLabel: true
+                            },
+                            items: [{
+                                xtype: 'textfield',
+
+                                allowBlank: false,
+                                name: 'accname_coa_gr',
+                                id: 'accname_coa_gr',
+                                listeners: {
+                                    render: function(component) {
+                                        component.getEl().on('click', function(event, el) {
+                                            if (Ext.getCmp('cbUnit_poreceipt').getValue() == null) {
+                                                Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
+                                            } else {
+                                                wCoaInventoryGoodsReceipt.show();
+                                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                                                    operation.params = {
+                                                        'idunit': Ext.getCmp('cbUnit_poreceipt').getValue(),
+                                                        'idaccounttype': '20'
+                                                    };
+                                                });
+                                                storeGridAccount.load();
+                                            }
+                                        });
+                                    }
+                                }
+                            }, {
+                                xtype: 'displayfield',
+                                name: 'accnumber_coa_gr',
+                                id: 'accnumber_coa_gr',
+                            }, {
+                                xtype: 'hiddenfield',
+                                name: 'idaccount_coa_gr',
+                                id: 'idaccount_coa_gr',
+                            }]
+                        },
                         // {
                         //     xtype: 'comboxshipping',
                         //     hidden:true,
@@ -652,6 +701,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             id: 'no_rujukan_sup_poreceipt',
                             name: 'no_rujukan_sup',
                             fieldLabel: 'No Rujukan Sup',
+                            labelWidth: 110
                         },
                         {
                             xtype: 'comboxcurrency',

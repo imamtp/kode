@@ -40,6 +40,7 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
                     method: 'POST',
                     params: {
                         itemgrid: ItemGRjson,
+                        idaccount_coa_gr: Ext.getCmp('idaccount_coa_gr').getValue(),
                         statusform: Ext.getCmp('statusform_poreceipt').getValue(),
                         nopo: Ext.getCmp('nojurnal_poreceipt').getValue(),
                         idunit: Ext.getCmp('cbUnit_poreceipt').getValue(),
@@ -76,6 +77,8 @@ function validasiPurchaseOrder() {
 
     } else if (Ext.getCmp('received_date_poreceipt').getSubmitValue() == '' || Ext.getCmp('received_date_poreceipt').getSubmitValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal penerimaan barang');
+    } else if (Ext.getCmp('idaccount_coa_gr').getValue() == '' || Ext.getCmp('idaccount_coa_gr').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Masukkan akun persediaan penerimaan barang');
     } else {
         return true;
     }

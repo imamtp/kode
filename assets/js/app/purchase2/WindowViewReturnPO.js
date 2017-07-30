@@ -375,6 +375,7 @@ Ext.define(dir_sys + 'purchase2.ViewReturnPO', {
                     dock: 'bottom',
                     items: [{
                             xtype: 'fieldcontainer',
+                            hidden: true,
                             fieldLabel: 'Akun Retur Pembelian',
                             combineErrors: true,
                             msgTarget: 'side',
@@ -675,7 +676,8 @@ Ext.define(dir_sys + 'purchase2.WindowViewReturnPO', {
             text: 'Update Purchase Return',
             id: 'btnUpdateReturnPo',
             handler: function() {
-                var storeEntryReturnPO = Ext.getCmp('EntryReturnPO').getStore();
+                // var storeEntryReturnPO = Ext.getCmp('EntryReturnPO').getStore();
+                var ViewReturnPOStoreJson = Ext.encode(Ext.pluck(storeGridViewItemPurchaseOrder.data.items, 'data'));
                 // var storeGridBatchPoReturn = Ext.getCmp('GridBatchPoReturn').getStore();
                 // var ItemGRjson = Ext.encode(Ext.pluck(storeEntryReturnPO.data.items, 'data'));
                 // var itemBatchPoReturn = Ext.encode(Ext.pluck(storeGridBatchPoReturn.data.items, 'data'));
@@ -685,7 +687,7 @@ Ext.define(dir_sys + 'purchase2.WindowViewReturnPO', {
                     url: SITE_URL + 'purchase/update_return',
                     method: 'POST',
                     params: {
-                        // itemgrid:ItemGRjson,                        
+                        itemgrid: ViewReturnPOStoreJson,
                         // itembatch:itemBatchPoReturn,
                         // idunit : Ext.getCmp('cbUnit_poreturn').getValue(),
                         idaccount_return: Ext.getCmp('idaccount_coa_viewretur_po').getValue(),

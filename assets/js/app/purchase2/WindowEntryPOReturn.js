@@ -225,7 +225,7 @@ Ext.define(dir_sys + 'purchase2.WindowEntryPOReturn', {
                     itemgrid: ItemGRjson,
                     itembatch: itemBatchPoReturn,
                     idunit: Ext.getCmp('cbUnit_poreturn').getValue(),
-                    idaccount_return: Ext.getCmp('idaccount_coa_retur_po').getValue(),
+                    // idaccount_return: Ext.getCmp('idaccount_coa_retur_po').getValue(),
                     idpurchase: Ext.getCmp('idpurchase_poreturn').getValue(),
                     purchase_return_id: Ext.getCmp('purchase_return_id_poreturn').getValue(),
                     noreturn: Ext.getCmp('noreturn_poreturn').getValue(),
