@@ -79,8 +79,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         }
                         Ext.getCmp('WindowBatchItemList').show();
 
-                        var idpurchase = Ext.getCmp('idpurchase_poreceipt').getValue();
-                        var idunit = Ext.getCmp('cbUnit_poreceipt').getValue();
+                        var idpurchase = Ext.getCmp('idpurchase_poinvoice').getValue();
+                        var idunit = Ext.getCmp('cbUnit_poinvoice').getValue();
 
                         Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
                         Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
@@ -398,8 +398,6 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                     Ext.getCmp('eomddaysPurchaseInvoice').setVisible(false);
                                     Ext.getCmp('percentagediscPurchaseInvoice').setVisible(false);
                                     Ext.getCmp('daysdiscPurchaseInvoice').setVisible(false);
-
-                                    // paymentTermSO(this.getValue());
 
                                     switch (this.getValue()) {
                                         case '3':
@@ -753,6 +751,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     dock: 'bottom',
                     items: [{
                             xtype: 'fieldcontainer',
+                            hidden: true,
                             fieldLabel: 'Akun Persediaan',
                             combineErrors: true,
                             msgTarget: 'side',
@@ -1091,10 +1090,23 @@ function validasiPurchaseInvoice() {
     var sisa = str_replace('.', '', Ext.getCmp('sisaBayar_poinvoice').getValue()) * 1;
 
     if (Ext.getCmp('comboxpaymentterm_pi').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih');
+        Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih'); <<
+        <<
+        << < HEAD
     } else if (Ext.getCmp('idaccount_coa_persediaan_pi').getValue() === '') {
         Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
-    } else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') {
+    } else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') { ===
+        ===
+        =
+    } else if (Ext.getCmp('nojurnal_poinvoice').getValue() === '') {
+        Ext.Msg.alert('Failed', 'No Invoice belum diisi');
+    }
+    // else if (Ext.getCmp('idaccount_coa_persediaan_pi').getValue() === '') {
+    //     Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
+    // } 
+    else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') { >>>
+        >>>
+        > db146ce740a7ec84f743ad2ad905c118ff20b8da
         Ext.Msg.alert('Failed', 'Tentukan Akun Hutang Pembelian');
     } else if (Ext.getCmp('idaccount_coa_pajakmasuk_pi').getValue() === '') {
         Ext.Msg.alert('Failed', 'Tentukan Akun Pajak Masukkan');

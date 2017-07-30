@@ -33,7 +33,7 @@ var storeGridReturnPurchaseOrderList = Ext.create('Ext.data.Store', {
 
 storeGridReturnPurchaseOrderList.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.invoice_status:' + 2,
+        'extraparams': 'a.invoice_status:' + null,
         'option': 'po_not_in_open_return_status'
     };
 });
@@ -103,7 +103,11 @@ Ext.define('GridReturnPurchaseOrderList', {
             Ext.getCmp('cb_status_poreturn').hide();
 
             var EntryReturnPO = Ext.getCmp('EntryReturnPO').getStore();
-            EntryReturnPO.load();
+            EntryReturnPO.load({
+                params: {
+                    extraparams: 'a.idpurchaseitem:0'
+                }
+            });
             // EntryReturnPO.removeAll();
             // EntryReturnPO.sync();
 

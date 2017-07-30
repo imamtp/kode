@@ -553,12 +553,14 @@ class purchase extends MY_Controller {
         $idpurchase = $this->input->post('idpurchase');
         $idunit = $this->input->post('idunit');
         $nopo = $this->input->post('nopo');
+        $idaccount_coa_gr = $this->input->post('idaccount_coa_gr');
 
         $data = array(
                 'delivereddate' => backdate($this->input->post('received_date')),
                 'receivedby_id' => $this->input->post('receivedid'),
                 'notes_receipt' => $this->input->post('notes'),
                 'no_rujukan_sup' => $this->input->post('no_rujukan_sup'),
+                'idaccount_coa_gr'=>$idaccount_coa_gr //akun persediaan
             );
         
         $wer = array(
@@ -593,8 +595,11 @@ class purchase extends MY_Controller {
                     $qinventory = $this->db->get_where('inventory',array('idinventory'=>$value->idinventory));
                     $datainventory = $qinventory->result_array()[0];
 
+                    $total_value = 0;
                     foreach ($qbatch->result() as $rbatch) {
                         // var_dump($rbatch);
+                        $total_value += $rbatch->qty*$value->price;
+
                         $idinventory = $this->db->query("select max(idinventory) as id from inventory")->row();
                         
                         $datainventory['idinventory_batch'] = $value->idinventory;
@@ -619,6 +624,11 @@ class purchase extends MY_Controller {
                                 'is_tmp'=>0
                             ));
                     }
+
+                    //buat jurnal
+                    $this->load->model('journal/m_jpurchase','jmodel');
+                    $this->jmodel->penerimaan_barang($idpurchase,$nopo,$idaccount_coa_gr,$total_value);
+
                 // } else {
                    
                 // }
@@ -699,13 +709,13 @@ class purchase extends MY_Controller {
 
         $this->db->trans_begin();
 
-        $saldo = str_replace('.', '', $this->input->post('sisa_bayar'));
+        $saldo = post_number($this->input->post('sisa_bayar'));
         $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
         $total_pajak = $this->input->post('total_pajak') == '' ? 0 : post_number($this->input->post('total_pajak'));
         $nopo = $this->input->post('nopo');
-        $total_amount = $this->input->post('total_amount');
+        $total_amount = $saldo;
         $idaccount_coa_hutang = $this->input->post('idaccount_coa_hutang');
-        $idaccount_coa_persediaan = $this->input->post('idaccount_coa_persediaan');
+        // $idaccount_coa_persediaan = $this->input->post('idaccount_coa_persediaan');
         $idaccount_coa_pajakmasuk = $this->input->post('idaccount_coa_pajakmasuk');
         // if(intval($saldo)>0) {
         //     // $invoice_status = 4; //Partially Paid
@@ -719,12 +729,17 @@ class purchase extends MY_Controller {
 
         $idpayment = $this->input->post('idpayment');
 
+          //buat jurnal hutang
+        $this->load->model('journal/m_jpurchase','jmodel');
+        $idjournal = $this->jmodel->purchase_ap2(date('Y-m-d'),'AP Purchase Order: '.$nopo,$total_amount,$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_pajakmasuk,$total_pajak);
+        // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
+
         $data = array(
                 // 'paidtoday'=> $paidtoday,
                 'paidtoday'=> 0, //masih jadi hutang
                 'balance'=>$total_amount,
                 'idaccount_coa_hutang'=>$idaccount_coa_hutang,
-                'idaccount_coa_persediaan'=>$idaccount_coa_persediaan,
+                // 'idaccount_coa_persediaan'=>$idaccount_coa_persediaan,
                 'idaccount_coa_pajakmasuk'=>$idaccount_coa_pajakmasuk,
                 'idpayment' => $idpayment,
                 // 'tax' => $total_pajak, //ga perlu lagi karena udah diinput saat PO
@@ -737,16 +752,10 @@ class purchase extends MY_Controller {
                 'invoice_status'=>$invoice_status,
                 'noinvoice'=> $this->input->post('noinvoice')?: $noarticle,
                 'nofpsup'=>$this->input->post('nofpsup'),
+                'idjournal_invoice'=>$idjournal
             );
         $this->db->where('idpurchase',$this->input->post('idpurchase'));
         $this->db->update('purchase',$data);
-
-        //buat jurnal hutang
-        #$this->load->model('journal/m_jpurchase');
-        #$this->m_jpurchase->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_persediaan,$idaccount_coa_pajakmasuk,$total_pajak);
-        
-        // $this->jmodel->purchase_ap(date('Y-m-d'),'AP Purchase Order: '.$nopo,$this->input->post('total_amount'),$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_persediaan,$idaccount_coa_pajakmasuk,$total_pajak);
-        // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -1156,7 +1165,7 @@ class purchase extends MY_Controller {
         $purchase_return_id = $this->input->post('purchase_return_id');
         $noreturn  = $this->input->post('noreturn');
         $ret_date = backdate($this->input->post('ret_date'));
-        $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
+        // $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
         $idunit = $this->input->post('idunit');
         $status = $this->input->post('status');
 
@@ -1169,7 +1178,7 @@ class purchase extends MY_Controller {
                 'userin'=>$this->session->userdata('iduser'),
                 'datein'=>date('Y-m-d H:m:s'),
                 'return_status'=>$status,
-                'idaccount_return'=>$coaretur,
+                // 'idaccount_return'=>$coaretur,
                 'date_return'=>$ret_date
         );
         $this->db->insert('purchase_return',$dt_header);
@@ -1259,7 +1268,7 @@ class purchase extends MY_Controller {
          if($status==3){
             //confirmed
             //buat jurnal
-            $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$idpurchase,$coaretur,'Purchase Return: '.$noreturn,$idunit);
+            $idjournal = $this->jmodel->purchase_return2($idpurchase,$nilairetur,$idunit);
 
             //update id jurnal ke purchase_return
             $this->db->where(array('purchase_return_id'=>$purchase_return_id));
@@ -1283,13 +1292,14 @@ class purchase extends MY_Controller {
 
         $purchase_return_id = $this->input->post('purchase_return_id');
         $ret_date = backdate($this->input->post('ret_date'));
-        $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
+        $items = json_decode($this->input->post('itemgrid'));
+        // $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
         $status = $this->input->post('status');
 
         $dt_header = array(
                 'purchase_return_id'=>$purchase_return_id,
                 'return_status'=>$status,
-                'idaccount_return'=>$coaretur,
+                // 'idaccount_return'=>$coaretur,
                 'date_return'=>$ret_date
         );
         $this->db->where('purchase_return_id',$purchase_return_id);
@@ -1312,11 +1322,31 @@ class purchase extends MY_Controller {
          if($status==3){
             //confirmed
             //buat jurnal
-            $idjournal = $this->jmodel->purchase_return(date('Y-m-d'),$nilairetur,$qpo->idpurchase,$coaretur,'Purchase Return: '.$qpo->noreturn,$qpo->idunit);
+            $idjournal = $this->jmodel->purchase_return2($qpo->idpurchase,$nilairetur,$qpo->idunit);
 
             //update id jurnal ke purchase_return
             $this->db->where(array('purchase_return_id'=>$purchase_return_id));
             $this->db->update('purchase_return',array('idjournal'=>$idjournal));
+         }
+
+          if($status==6){
+            //status closed
+            //buat jurnal
+            foreach ($items as $value) {
+                // $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_received,'warehouse_id','warehouse',$qpo->idunit);
+                // $warehouse_id = 
+
+                //update stock
+                $this->m_stock->update_history(13,$value->qty_received,$value->idinventory,$qpo->idunit,$value->warehouse_id,date('Y-m-d'),'Receipt Return PO: '.$qpo->noreturn,null);
+            }
+          
+            /* buat jurnal
+            */
+             $idjournal = $this->jmodel->purchase_return_receive2($qpo->idpurchase,$purchase_return_id,$qpo->noreturn,$qpo->idunit);
+
+            //update id jurnal ke purchase_return
+            $this->db->where(array('purchase_return_id'=>$purchase_return_id));
+            $this->db->update('purchase_return',array('idjournal_received'=>$idjournal));
          }
 
         if($this->db->trans_status() === false){
@@ -1337,14 +1367,14 @@ class purchase extends MY_Controller {
 
         $purchase_return_id = $this->input->post('purchase_return_id');
         $ret_date = backdate($this->input->post('ret_date'));
-        $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
+        // $coaretur = $this->input->post('idaccount_return')=='' ? 763 : $this->input->post('idaccount_return');
         $status = $this->input->post('status');
         $items = json_decode($this->input->post('itemgrid'));
 
         $dt_header = array(
                 'purchase_return_id'=>$purchase_return_id,
                 'return_status'=>$status,
-                'idaccount_return'=>$coaretur,
+                // 'idaccount_return'=>$coaretur,
                 'date_return'=>$ret_date
         );
         $this->db->where('purchase_return_id',$purchase_return_id);
@@ -1383,14 +1413,12 @@ class purchase extends MY_Controller {
             }
           
             /* buat jurnal
-                retur -> debit
-                hutang -> kredit
             */
-            $qp = $this->db->query("select a.idpurchase,a.noreturn,a.idunit,a.idaccount_return,a.idjournal,b.totaldebit
-                                    from purchase_return a
-                                    join journal b ON a.idjournal = b.idjournal
-                                    where purchase_return_id = $purchase_return_id and a.idunit = ".$qpo->idunit."")->row();
-             $idjournal = $this->jmodel->purchase_return_receive(date('Y-m-d'),$qp->totaldebit,$qp->idpurchase,$qp->idaccount_return,'Received Purchase Return: '.$qp->noreturn,$qp->idunit);
+            // $qp = $this->db->query("select a.idpurchase,a.noreturn,a.idunit,a.idaccount_return,a.idjournal,b.totaldebit
+            //                         from purchase_return a
+            //                         join journal b ON a.idjournal = b.idjournal
+            //                         where purchase_return_id = $purchase_return_id and a.idunit = ".$qpo->idunit."")->row();
+             $idjournal = $this->jmodel->purchase_return_receive2($qp->idpurchase,$purchase_return_id,$qp->noreturn,$qp->idunit);
 
             //update id jurnal ke purchase_return
             $this->db->where(array('purchase_return_id'=>$purchase_return_id));
