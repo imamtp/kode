@@ -368,29 +368,31 @@ class report extends MY_Controller {
         $idunit = $this->input->get('idunit');
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
-        $idcustomer = $this->input->get('idcustomer');
-        $sku_no = $this->input->get('skuno');
+        $invtype = $this->input->get('invtype');
+        $brand = $this->input->get('brand');
+        $whcode = $this->input->get('whcode');
 
         $wer_period = null;
         if($startdate!=''){
             $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
         }
         
-        $wer_customer = null;
-        if($idcustomer!=null){
-            $wer_customer = "and c.idcustomer = ".$idcustomer."";
+        $wer_invtype = null;
+        if($invtype!="null"){
+            $wer_invtype = "and a.inventory_type = ".$invtype."";
         }
 
-        $wer_inventory = null;
-        if($sku_no!=null){
-            $wer_inventory = "and a.sku_no = '".$sku_no."'";
+        $wer_brand = null;
+        if($brand!="null"){
+            $wer_brand = "and a.brand_id = ".$brand."";
         }
+
         $sql = "select 
                     a.sku_no,
                     a.nameinventory,
                     sum(b.qty) as qty,
                     b.measurement,
-                    sum(b.price * b.qty * b.size * (100 - b.disc) / 100) as sales
+                    sum(b.total) as sales
                 from inventory a 
                 join (
                     select sku_no, a.*, c.short_desc as measurement from salesitem a
@@ -403,8 +405,8 @@ class report extends MY_Controller {
                 and c.type = 2
                 and c.status > 2
                 $wer_period
-                $wer_customer
-                $wer_inventory
+                $wer_invtype
+                $wer_brand
                 group by a.sku_no, a.nameinventory, b.measurement";
 
         $q = $this->db->query($sql);
