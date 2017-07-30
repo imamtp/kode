@@ -404,9 +404,6 @@ function showGoodsReceiptData(record) {
 }
 
 function loadDataFormPurchaseInvoice(selectedRecord, option) {
-    Ext.getCmp('supplier_poinvoice').getStore().load();
-    Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
-
 
     Ext.getCmp('idpurchase_poinvoice').setValue(selectedRecord.get('idpurchase'));
     Ext.getCmp('nopo_poinvoice').setValue(selectedRecord.get('nopurchase'));
@@ -414,7 +411,15 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
     Ext.getCmp('cbUnit_poinvoice').setValue(selectedRecord.get('idunit'));
     Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('nametax'));
     Ext.getCmp('supplier_poinvoice').setValue(selectedRecord.get('idsupplier'));
-    Ext.getCmp('memo_poinvoice').setValue(selectedRecord.get('memo'));
+
+    Ext.getCmp('supplier_poinvoice').getStore().load(function(records) {
+        var supp = records.filter(function(item) {
+            return item.get('idsupplier') == selectedRecord.get('idsupplier')
+        });
+        Ext.getCmp('memo_poinvoice').setValue(selectedRecord.get('memo') || "Purchase Invoice : " + supp[0].data.namesupplier);
+    });
+    Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
+
     // Ext.getCmp('cb_status_poinvoice').setValue(5);
 
     var tax = selectedRecord.get('tax') * 1;
