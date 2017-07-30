@@ -214,10 +214,18 @@ function showPurchaseOrderData(record) {
     var checktax = record.data.include_tax * 1 == 1 ? true : false;
     Ext.getCmp('include_tax_po').setValue(checktax);
 
+    var subtotal = record.data.subtotal * 1;
+    var disc = record.data.total_diskon * 1;
+    var dpp = record.data.total_dpp * 1;
+    var pajak = record.data.tax * 1;
+    var totalamount = record.data.totalamount * 1;
+
     Ext.getCmp('memoPurchaseOrder').setValue(record.data.memo);
-    Ext.getCmp('subtotalPurchaseOrder').setValue(renderNomor(record.data.subtotal));
-    Ext.getCmp('totalPajakPurchaseOrder').setValue(renderNomor(record.data.tax));
-    Ext.getCmp('totalPurchaseOrder').setValue(renderNomor(record.data.totalamount));
+    Ext.getCmp('subtotalPurchaseOrder').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('diskonPurchaseOrder').setValue(disc.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('dppPurchaseOrder').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('totalPajakPurchaseOrder').setValue(pajak.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('totalPurchaseOrder').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
 
     if (record.data.idpurchase_req !== null) {
         Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 1 });
@@ -235,14 +243,9 @@ function showPurchaseOrderData(record) {
         };
     });
 
-    // EntryGoodsReceiptRM.on('afterload', function() {
-    //     updateGridPurchaseOrder()
-    // });
-
-
     EntryGoodsReceiptRM.load({
         callback: function() {
-            updateGridPurchaseOrder();
+            // updateGridPurchaseOrder();
         }
     });
     // EntryGoodsReceiptRM.removeAll();
@@ -388,13 +391,8 @@ function showGoodsReceiptData(record) {
                     qty_received: obj.qty_received,
                     warehouse_code: obj.warehouse_code
                 });
-
-
                 gridInsertBaruGRPO.getStore().insert(0, recDO);
             });
-
-
-
         },
         failure: function(form, action) {
             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
@@ -422,13 +420,15 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
 
     // Ext.getCmp('cb_status_poinvoice').setValue(5);
 
+    var subtotal = selectedRecord.get('subtotal') * 1;
+    var dpp = selectedRecord.get('total_dpp') * 1;
     var tax = selectedRecord.get('tax') * 1;
     var totalamount = selectedRecord.get('totalamount') * 1;
-    var subtotal = selectedRecord.get('subtotal') * 1;
 
+    Ext.getCmp('subtotal_poinvoice').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('dpp_poinvoice').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('totalPajak_poinvoice').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('total_poinvoice').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
-    Ext.getCmp('subtotal_poinvoice').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
 
     Ext.getCmp('sisaBayar_poinvoice').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
 
