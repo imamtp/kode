@@ -553,14 +553,14 @@ class purchase extends MY_Controller {
         $idpurchase = $this->input->post('idpurchase');
         $idunit = $this->input->post('idunit');
         $nopo = $this->input->post('nopo');
-        $idaccount_coa_gr = $this->input->post('idaccount_coa_gr');
+        $idaccount_coa_persediaan = $this->input->post('idaccount_coa_gr');
 
         $data = array(
                 'delivereddate' => backdate($this->input->post('received_date')),
                 'receivedby_id' => $this->input->post('receivedid'),
                 'notes_receipt' => $this->input->post('notes'),
                 'no_rujukan_sup' => $this->input->post('no_rujukan_sup'),
-                'idaccount_coa_gr'=>$idaccount_coa_gr //akun persediaan
+                'idaccount_coa_persediaan'=>$idaccount_coa_persediaan //akun persediaan
             );
         
         $wer = array(
@@ -627,7 +627,7 @@ class purchase extends MY_Controller {
 
                     //buat jurnal
                     $this->load->model('journal/m_jpurchase','jmodel');
-                    $this->jmodel->penerimaan_barang($idpurchase,$nopo,$idaccount_coa_gr,$total_value);
+                    $this->jmodel->penerimaan_barang($idpurchase,$nopo,$idaccount_coa_persediaan,$total_value);
 
                 // } else {
                    
@@ -1612,6 +1612,80 @@ class purchase extends MY_Controller {
         $d['title'] = 'Purchase Return';
         $d['print'] = $print;
         $this->load->view('tplcetak/purchase_return',$d);
+    }
+
+    function generate_goods_receipt_journal($idunit){
+         $this->load->model('inventory/m_stock');
+         $this->load->model('journal/m_jpurchase','jmodel');
+
+        $q = $this->db->query("select idpurchase,delivereddate,idaccount_coa_persediaan,idaccount_coa_hutang,nopurchase
+                                from purchase
+                                where delivereddate is not null and idunit = $idunit");
+        foreach($q->result() as $r){
+            
+            $qitem = $this->db->get_where('purchaseitem',array('idpurchase'=>$r->idpurchase));
+            foreach($qitem->result() as $value){
+                 $subtotal_qty = 0;
+                 //cek apakah item punya batch record
+                    $qbatch = $this->db->get_where('purchaseitem_batch',array(
+                            'idunit'=>$idunit,
+                            'idpurchaseitem'=>$value->idpurchaseitem,
+                            'is_tmp'=>0
+                    ));
+
+                    if($qbatch->num_rows()>0){
+
+                            //update harga dulu
+                            $this->db->where(array('idinventory'=>$value->idinventory));
+                            $this->db->update('inventory',array('cost'=>$value->price));
+
+                            $qinventory = $this->db->get_where('inventory',array('idinventory'=>$value->idinventory));
+                            $datainventory = $qinventory->result_array()[0];
+
+                            $total_value = 0;
+                            foreach ($qbatch->result() as $rbatch) {
+                                // var_dump($rbatch);
+                                $total_value += $rbatch->qty*$value->price;
+
+                                $idinventory = $this->db->query("select max(idinventory) as id from inventory")->row();
+                                
+                                $datainventory['idinventory_batch'] = $value->idinventory;
+                                $datainventory['idinventory'] = $idinventory->id+1;
+                                $datainventory['invno'] = $rbatch->invno;
+                                $datainventory['sku_no'] = $rbatch->sku_no;
+                                
+                                $this->db->insert('inventory',$datainventory);
+
+                                $this->m_stock->update_history(2,$rbatch->qty,$idinventory->id,$idunit,$rbatch->warehouse_id,date('Y-m-d'),'Add stock from PO:'.$r->nopurchase);
+                                
+                                $subtotal_qty += $rbatch->qty;
+
+                                // set tmp ke 0 item batch kata lain udah bukan temporary
+                                $this->db->where(array(
+                                        'idpurchaseitem'=>$value->idpurchaseitem,
+                                        'invno'=>$rbatch->invno,
+                                        'sku_no'=>$rbatch->sku_no,
+                                        'idpurchase'=>$r->idpurchase                                
+                                    ));
+                                $this->db->update('purchaseitem_batch',array(
+                                        'is_tmp'=>0
+                                    ));
+                            }
+
+                            //buat jurnal
+                            // $this->load->model('journal/m_jpurchase','jmodel');
+                            $this->jmodel->penerimaan_barang($r->idpurchase,$r->nopurchase,$r->idaccount_coa_persediaan,$total_value);
+
+                        // } else {
+                        
+                        // }
+                    } else {
+                        //gak pake batch
+                        // $this->m_stock->update_history(2,$value->qty_terima,$value->idinventory,$idunit,$warehouse_received_id,date('Y-m-d'),'Add stock from PO:'.$nopo);
+                    }
+            }
+            
+        }
     }
 }
 ?>

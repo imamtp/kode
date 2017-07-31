@@ -352,7 +352,6 @@ class journal extends MY_Controller {
         }
             
         $sql .=" order by datejournal desc";
-       // echo $sql;
         $query = $this->db->query($sql);           
         
         $menu ="";
@@ -381,7 +380,7 @@ class journal extends MY_Controller {
                 $sqlitem = "select a.idjournalitem,b.accnumber,b.accname,debit,credit
                             from journalitem a
                             join account b ON a.idaccount = b.idaccount
-                            where idjournal=$r->idjournal and b.idunit = 12 order by idjournalitem";
+                            where idjournal=$r->idjournal and b.idunit = 12";
                 
                 $accname = $this->input->get('accname');
                 if($accname!='')
@@ -389,7 +388,7 @@ class journal extends MY_Controller {
                     $sqlitem .=" AND b.accname like '%$accname%'";
                 }
 //                echo $sqlitem;
-                $qitem = $this->db->query($sqlitem);
+                $qitem = $this->db->query($sqlitem.'  order by idjournalitem');
                 
                
                 
