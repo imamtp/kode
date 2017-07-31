@@ -120,12 +120,11 @@ Ext.define('reportInventory', {
                 text: 'Clear Filter',
                 listeners: {
                     click: function(component) {
-                        Ext.getCmp('unitReportInventory').getValue(null);
-                        Ext.getCmp('startdateReportInventory').getValue(null);
-                        Ext.getCmp('enddateReportInventory').getValue(null);
-                        Ext.getCmp('brandReportInventory').getValue(null);
-                        Ext.getCmp('invcatReportInventory').getValue(null);
-                        Ext.getCmp('invtypeReportInventory').getValue(null);
+                        Ext.getCmp('startdateReportInventory').setValue(null);
+                        Ext.getCmp('enddateReportInventory').setValue(null);
+                        Ext.getCmp('brandReportInventory').setValue(null);
+                        Ext.getCmp('invcatReportInventory').setValue(null);
+                        Ext.getCmp('invtypeReportInventory').setValue(null);
                     }
                 }
             }]

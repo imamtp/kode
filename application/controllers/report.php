@@ -985,5 +985,86 @@ class report extends MY_Controller {
         $q = $this->db->query($sql);
         return $q->result_array();
     }
+
+    function inventoryStockCard(){
+        $idunit = $this->input->get('idunit');
+        $startdate = $this->input->get('startdate') ?: date('Y-m-d', strtotime('2017-01-01'));
+        $enddate = $this->input->get('enddate') ?: date('Y-m-d');
+        $brand = $this->input->get('brand');
+        $invcat = $this->input->get('invcat');
+        $invtype = $this->input->get('invtype');
+        $skuno = $this->input->get('skuno');
+        
+        $wer_period = null;
+        if($startdate!=null && $enddate!=null){
+            $wer_period = "and (datein between '".$startdate."' and '".$enddate."')";
+        }
+        
+        $wer_brand = null;
+        if($brand!="null"){
+            $wer_brand = "and a.brand_id = ".$brand."";
+        }
+        
+        $wer_invcat = null;
+        if($invcat!="null"){
+            $wer_invcat = "and a.idinventorycat = ".$invcat."";
+        }
+
+        $wer_invtype = null;
+        if($invtype!="null"){
+            $wer_invtype = "and a.inventory_type = ".$invtype."";
+        }
+
+        $wer_skuno = null;
+        if($skuno!=null){
+            $wer_skuno = "and a.sku_no = '".$skuno."'";
+        }
+
+        $sql = "select 
+                    a.invno,
+                    a.sku_no,
+                    a.nameinventory,
+                    c.short_desc as satuan,
+                    b.old_qty,
+                    b.qty_transaction,
+                    b.balance,
+                    b.datein,
+                    case
+                        when type_adjustment = 1 then 'Order, (+)'
+                        when type_adjustment = 2 then 'Stock In By PO (+)'
+                        when type_adjustment = 3 then 'Stock In By Cash  (+)'
+                        when type_adjustment = 4 then 'Stock Opname Plus (+)'
+                        when type_adjustment = 5 then 'Stock Opname Minus (-)'
+                        when type_adjustment = 6 then 'Sales Return (+)'
+                        when type_adjustment = 7 then 'Purchase Return (-)'
+                        when type_adjustment = 8 then 'Sales (-)'
+                        when type_adjustment = 9 then 'Opening Balance (+)'
+                        when type_adjustment = 10 then 'Stock In By Transfer (+)'
+                        when type_adjustment = 11 then 'Stock Out By Transfer (-)'
+                        when type_adjustment = 12 then 'Stock In By Received Material From Production (+)'
+                        when type_adjustment = 13 then 'Stock In By Received Return PO (+)'
+                        when type_adjustment = 14 then 'Delivery Sales Return (-)'
+                        when type_adjustment = 15 then 'Stock Out From Production (-)'
+                    end as type_adjustment,
+                    b.notes
+                from inventory a 
+                left join (
+                    select * from stock_history 
+                    where true 
+                    $wer_period
+                )b on b.idinventory = a.idinventory
+                left join productmeasurement c on c.measurement_id = a.measurement_id_one
+                where true
+                and a.idunit = $idunit
+                $wer_brand
+                $wer_invcat
+                $wer_invtype
+                $wer_skuno
+                and a.deleted = 0
+                and a.status = 1";
+
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
 }
 ?>

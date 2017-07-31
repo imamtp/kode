@@ -801,8 +801,9 @@
     {* <script src='{$assets_url}/js/app/report/ap/GridAPAging.js'></script> *}
     <script src='{$assets_url}/js/app/report/inventory/TabReportInventory.js'></script>
     <script src='{$assets_url}/js/app/report/inventory/PanelInventory.js'></script>
+    <script src='{$assets_url}/js/app/report/inventory/PanelInventoryStockCard.js'></script>
     {* <script src='{$assets_url}/js/app/report/inventory/GridInventoryPerItem.js'></script> *}
-    <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script>
+    {* <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script> *}
 
     <script src='{$assets_url}/js/app/sistem/editRules.js'></script>
     <script src='{$assets_url}/js/app/sistem/sysMenuTree.js'></script>

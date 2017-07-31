@@ -10,12 +10,10 @@ Ext.define('TabReportInventory', {
         autoScroll: true
     },
     items: [{
-            xtype: 'reportInventory'
-        },
-        {
-            xtype: 'GridStockCardSummary'
-        }
-    ],
+        xtype: 'reportInventory'
+    }, {
+        xtype: 'reportInventoryStockCard'
+    }],
     listeners: {
         render: {
             scope: this,
