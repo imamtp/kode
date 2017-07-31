@@ -15,9 +15,9 @@ Ext.define('TabReportAP', {
         {
             xtype: 'reportAPOther'
         },
-        // {
-        //     xtype: 'GridAPAging'
-        // },
+        {
+            xtype: 'reportAPOtherOutstanding'
+        },
     ],
     listeners: {
         render: {
