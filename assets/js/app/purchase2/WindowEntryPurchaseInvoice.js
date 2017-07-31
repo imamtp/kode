@@ -1090,23 +1090,14 @@ function validasiPurchaseInvoice() {
     var sisa = str_replace('.', '', Ext.getCmp('sisaBayar_poinvoice').getValue()) * 1;
 
     if (Ext.getCmp('comboxpaymentterm_pi').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih'); <<
-        <<
-        << < HEAD
-    } else if (Ext.getCmp('idaccount_coa_persediaan_pi').getValue() === '') {
-        Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
-    } else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') { ===
-        ===
-        =
+        Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih'); 
     } else if (Ext.getCmp('nojurnal_poinvoice').getValue() === '') {
         Ext.Msg.alert('Failed', 'No Invoice belum diisi');
     }
     // else if (Ext.getCmp('idaccount_coa_persediaan_pi').getValue() === '') {
     //     Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
     // } 
-    else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') { >>>
-        >>>
-        > db146ce740a7ec84f743ad2ad905c118ff20b8da
+    else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') {
         Ext.Msg.alert('Failed', 'Tentukan Akun Hutang Pembelian');
     } else if (Ext.getCmp('idaccount_coa_pajakmasuk_pi').getValue() === '') {
         Ext.Msg.alert('Failed', 'Tentukan Akun Pajak Masukkan');
