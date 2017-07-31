@@ -13,11 +13,11 @@ Ext.define('TabReportAP', {
             xtype: 'reportAPPurchase'
         },
         {
-            xtype: 'GridAPOutstandingDetail'
+            xtype: 'reportAPOther'
         },
-        {
-            xtype: 'GridAPAging'
-        },
+        // {
+        //     xtype: 'GridAPAging'
+        // },
     ],
     listeners: {
         render: {

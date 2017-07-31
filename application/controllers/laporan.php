@@ -32,6 +32,29 @@ class laporan extends MY_Controller {
         $this->load->view('report/ap/purchase', $data);
     }
 
+    public function apother(){
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Hutang Lainnya',
+            'rows'=>$this->report->payable(),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '150%';
+        }
+        $this->load->view('report/ap/other', $data);
+    }
+
     public function salesorderdetail(){
         $this->load->library('../controllers/report');
         $data = array(

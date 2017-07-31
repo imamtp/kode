@@ -653,8 +653,18 @@ class report extends MY_Controller {
             $wer_tempo = "and (a.jatuhtempo::date<=current_date)";
         }
 
-        $q = $this->db->query("select a.idsupplier,a.jumlah,a.sisahutang,a.memo,a.mulaihutang,a.jatuhtempo,b.namesupplier,c.accname as accnamehutang,c.accnumber as accnumberhutang
-                                ,d.accname as accnamekenahutang,d.accnumber as accnumberkenahutang
+        $q = $this->db->query("select 
+                                a.idsupplier,
+                                a.jumlah,
+                                a.sisahutang,
+                                a.memo,
+                                a.mulaihutang,
+                                a.jatuhtempo,
+                                b.namesupplier,
+                                c.accname as accnamehutang,
+                                c.accnumber as accnumberhutang,
+                                d.accname as accnamekenahutang,
+                                d.accnumber as accnumberkenahutang
                                 from registrasihutang a
                                 join supplier b ON a.idsupplier = b.idsupplier
                                 join account c ON a.idacchutang = c.idaccount
@@ -662,7 +672,8 @@ class report extends MY_Controller {
                                 where a.idunit = $idunit  $wer_period
                                $wer_supplier
                                $wer_tempo");
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
     }
 
     function payable_purchase(){
