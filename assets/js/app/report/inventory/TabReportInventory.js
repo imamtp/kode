@@ -3,20 +3,20 @@ Ext.define('TabReportInventory', {
     id: 'TabReportInventory',
     alias: 'widget.TabReportInventory',
     activeTab: 0,
-    plain:true,
+    plain: true,
     autoWidth: '100%',
     autoScroll: true,
     defaults: {
         autoScroll: true
     },
-    items: [
-        {
-            xtype:'GridInventoryPerItem'
+    items: [{
+            xtype: 'reportInventory'
         },
         {
-            xtype:'GridStockCardSummary'
+            xtype: 'GridStockCardSummary'
         }
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {

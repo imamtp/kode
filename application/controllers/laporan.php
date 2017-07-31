@@ -2763,6 +2763,31 @@ if($option=='print')
         }
         $this->load->view('report/ar/other', $data);
     }
+
+    function Inventory()
+    {
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Inventory',
+            'rows'=>$this->report->inventory(),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '150%';
+        }
+        $this->load->view('report/inventory/inventory', $data);
+    }
+
     function PenerimaanSiswaBulan($idunit=null,$sd,$nd,$option=null)
     {
         $namaunit = $this->fetchUnit($idunit);

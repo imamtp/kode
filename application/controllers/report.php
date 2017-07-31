@@ -889,6 +889,85 @@ class report extends MY_Controller {
         return $q->result_array();
     }
 
-}
+    function inventory(){
+        $idunit = $this->input->get('idunit');
+        $startdate = $this->input->get('startdate') ?: date('Y-m-d', strtotime('2017-01-01'));
+        $enddate = $this->input->get('enddate') ?: date('Y-m-d');
+        $brand = $this->input->get('brand');
+        $invcat = $this->input->get('invcat');
+        $invtype = $this->input->get('invtype');
+        
+        $wer_brand = null;
+        if($brand!="null"){
+            $wer_brand = "and a.brand_id = ".$brand."";
+        }
+        
+        $wer_invcat = null;
+        if($invcat!="null"){
+            $wer_invcat = "and a.idinventorycat = ".$invcat."";
+        }
 
+        $wer_invtype = null;
+        if($invtype!="null"){
+            $wer_invtype = "and a.inventory_type = ".$invtype."";
+        }
+
+        $sql = "select 
+                a.idinventory,
+                a.invno,
+                a.sku_no,
+                a.nameinventory,
+                a.cost,
+                b.brand_name,
+                d.warehouse_code,
+                h.balance as stock,
+                e.short_desc as satuan,
+                case 
+                    when g.bahan_coil_id is not null then round((h.balance/ g.berat)::numeric, 2)
+                    when g.bahan_coil_id is null and inventory_type = 2 then 0
+                    else null
+                end as stock_kedua,
+                case 
+                    when a.inventory_type = 2 then f.short_desc 
+                    else null
+                end as satuan_kedua
+                from (
+                    (select * from inventory 
+                    where true 
+                    and deleted = 0
+                    and status = 1
+                    and idinventory_batch is not null)
+                    union all
+                    (select * from inventory
+                    where true
+                    and idinventory_batch is null
+                    and deleted = 0
+                    and status = 1
+                    and idinventory not in (
+                        select idinventory_batch 
+                        from inventory 
+                        where idinventory_batch is not null and deleted = 0 and status = 1
+                        group by idinventory_batch)
+                    )
+                ) a
+                left join brand b on b.brand_id = a.brand_id
+                left join warehouse_stock c on c.idinventory = a.idinventory
+                left join warehouse d on d.warehouse_id = c.warehouse_id
+                left join productmeasurement e on e.measurement_id = a.measurement_id_one
+                left join productmeasurement f on f.measurement_id = a.measurement_id_two
+                left join bahan_coil g on g.bahan_coil_id = a.bahan_coil_id
+                left join (
+                    select idinventory, balance, datein from stock_history 
+                    where (datein between '$startdate' and '$enddate')
+                ) h on h.idinventory = a.idinventory
+                --join supplier b on b.idsupplier = a.idsupplier
+                where true
+                $wer_brand
+                $wer_invcat
+                $wer_invtype
+                order by idinventory";
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
+}
 ?>
