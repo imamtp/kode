@@ -913,16 +913,20 @@ function paymentTermSO(idterm) {
         pembayaranSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
         pembayaranSalesInvoice_si.setReadOnly(true);
 
-        sisaBayarSalesInvoice_si.setValue(0);
+        // sisaBayarSalesInvoice_si.setValue(0);
     } else if (idterm * 1 === 2) {
         pembayaranSalesInvoice_si.setValue(0);
         pembayaranSalesInvoice_si.setReadOnly(true);
 
-        sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
+        // sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
     } else {
         pembayaranSalesInvoice_si.setValue(0);
         pembayaranSalesInvoice_si.setReadOnly(false);
 
-        sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
+        // sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
     }
+
+    /*
+        var sisaBayarSalesInvoice_si diremarks karna dengan asumsi belum ada uang yang masuk
+    */
 }

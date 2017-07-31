@@ -324,7 +324,12 @@ class sales extends MY_Controller {
             $total_hpp = $this->m_stock->update_hpp($idunit,3,null,$idsales)['total_hpp'];
 
             //create journal
-            $this->m_jsales->sales_do(date('Y-m-d'),$total_hpp,$idunit,$qsales->idaccount_hppenjualan,$qsales->idaccount_persediaan,'Sales Delivery - HPP : '.$qsales->no_sales_order);
+            $journal = $this->m_jsales->sales_do(date('Y-m-d'),$total_hpp,$idunit,$qsales->idaccount_hppenjualan,$qsales->idaccount_persediaan,'Sales Delivery - NO SO : '.$qsales->no_sales_order);
+            $this->db->where('idsales',$idsales);
+            $this->db->where('idunit',$idunit);
+            $this->db->update('sales',array(
+                    'idjournal_do'=>$journal['idjournal']
+                ));
         }
 
          if($this->db->trans_status() === false){
@@ -416,6 +421,7 @@ class sales extends MY_Controller {
 
         //update qty kirim
         $totalkirim = 0;
+        $total_amount_kirim = 0;
         $items = json_decode($this->input->post('datagrid'));
         foreach ($items as $value) {
             $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
@@ -437,8 +443,15 @@ class sales extends MY_Controller {
             //update stock history
             $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do);
             $totalkirim+=$value->qty_kirim;
+
+            $total_amount_kirim+=$value->qty_kirim*$qkirim->price;
         }
         // echo 'totalkirim:'.$totalkirim;
+
+        /*
+            Buat jurnal
+        */
+        // $idjournal = $this->m_jsales->sales_delivery_order($idsales,$total_amount_kirim,$idaccount_hppenjualan,$idaccount_persediaan,$no_do);
 
         //cek apakah total qty kirim sudah sama dengan qty order. jika belum set dengan status partialy sent (6)
         $qcek = $this->db->query("select sum(qty) as totalorder, COALESCE(sum(qty_kirim), 0 ) as totalkirim 
@@ -460,6 +473,7 @@ class sales extends MY_Controller {
                 'status'=>$status_delivery,
                 'idaccount_hppenjualan'=>$idaccount_hppenjualan,
                 'idaccount_persediaan'=>$idaccount_persediaan
+                // 'idjournal_do'=>$idjournal
             ));
         //end check
 
@@ -534,8 +548,11 @@ class sales extends MY_Controller {
     function save_sales_invoice(){
         $this->db->trans_begin();
 
-        $saldo = str_replace('.', '', $this->input->post('sisa_bayar'));
+        $saldo = post_number($this->input->post('sisa_bayar'));
         $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
+        $diskon = post_number($this->input->post('diskon'));
+        $freight = post_number($this->input->post('biayaangkut'));
+        $pajak = post_number($this->input->post('total_pajak'));
 
         // if(intval($saldo)>0) {
         //     // $invoice_status = 4; //Partially Paid
@@ -552,7 +569,7 @@ class sales extends MY_Controller {
         $data = array(
                 // 'paidtoday'=> $paidtoday,
                 'paidtoday'=> 0, //masih jadi piutang
-                'balance'=>$this->input->post('total_amount'), //piutang masih full
+                'balance'=>$saldo, //piutang masih full
                 'idpayment' => $idpayment,
                 'ddays' => $this->input->post('ddays')=='' ? null : $this->input->post('ddays'),
                 'eomddays' => $this->input->post('eomddays')=='' ? null : $this->input->post('eomddays'),
@@ -560,6 +577,8 @@ class sales extends MY_Controller {
                 'daydisc' => $this->input->post('daydisc')=='' ? null : $this->input->post('daydisc'),
                 'notes_si' => $this->input->post('notes_si'),
                 'invoice_status'=>$invoice_status,
+                'disc'=>$diskon,
+                'freight'=>$freight,
                 'noinvoice'=> $this->input->post('noinvoice'),
                 'invoice_date' => backdate($this->input->post('invoice_date')),
                 'status'=> 8 //invoiced
@@ -569,7 +588,7 @@ class sales extends MY_Controller {
 
         //buat jurnal piutang
         $this->load->model('journal/m_jsales','jmodel');
-        $this->jmodel->sales_kredit(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
+        $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo'),$diskon,$pajak);
 
           if($this->db->trans_status() === false){
             $this->db->trans_rollback();
