@@ -1137,5 +1137,74 @@ class sales extends MY_Controller {
         $found_key = array_search(4562, array_column($data, 'idinventory'));
         echo $found_key;
     }
+
+     function generate_jurnal_sales_do(){
+        $idunit = 12;
+        $this->load->model('journal/m_jsales','jmodel');
+        $this->load->model('inventory/m_stock');
+
+        $q = $this->db->query("select *
+                                from sales
+                                where noinvoice is not null and invoice_status = 2
+                                order by invoice_status");
+        foreach($q->result() as $r){
+
+            // $this->db->where('idsales', $idsales);
+            // $this->db->update('sales', array(
+            //     'status'=>$status
+            // ));
+            $qsales = $this->db->query("select no_sales_order,idaccount_hppenjualan,idaccount_persediaan from sales
+                                        where idsales = $r->idsales and idunit = $idunit")->row();
+           
+            $total_hpp = $this->m_stock->update_hpp($idunit,3,null,$r->idsales)['total_hpp'];
+
+            //create journal
+            $journal = $this->jmodel->sales_do($r->delivery_date,$total_hpp,$idunit,$qsales->idaccount_hppenjualan,$qsales->idaccount_persediaan,'Sales Delivery - NO SO : '.$qsales->no_sales_order);
+            $this->db->where('idsales',$r->idsales);
+            $this->db->where('idunit',$idunit);
+            $this->db->update('sales',array(
+                    'idjournal_do'=>$journal['idjournal']
+                ));
+
+        }        
+    }
+
+    function generate_jurnal_sales(){
+        $this->load->model('journal/m_jsales','jmodel');
+
+        $q = $this->db->query("select *
+                                from sales
+                                where noinvoice is not null and invoice_status = 1
+                                order by invoice_status");
+        foreach($q->result() as $r){
+            $j = $this->jmodel->sales_kredit($r->date_sales,$r->balance,null,12,$r->freight,'Piutang Penjualan - No SO: '.$r->no_sales_order,$r->disc,$r->tax);
+
+            $this->db->where('idsales',$r->idsales);
+            $this->db->update('sales',array('idjournal_invoice'=>$j['idjournal']));
+        }        
+    }
+
+    function generate_jurnal_sales_pelunasan(){
+        $idunit = 12;
+        $this->load->model('journal/m_jsales','jmodel');
+
+        $q = $this->db->query("select a.*,b.idaccount_coa_kas,b.date_payment,b.sales_payment_id
+                                from sales a
+                                join sales_payment b ON a.idsales = b.idsales
+                                where a.noinvoice is not null and a.invoice_status = 2
+                                order by a.invoice_status");
+        foreach($q->result() as $r){
+            $invoice_status = 2; //paid
+            $journal = $this->jmodel->sales_pelunasan_full($r->date_payment,'Pelunasan Piutang',$r->paidtoday,$idunit,null,$r->idaccount_coa_kas);
+
+            $this->db->where('idsales',$r->idsales);
+            $this->db->update('sales',array('invoice_status'=>$invoice_status));
+
+            $this->db->where('idsales',$r->idsales);
+            $this->db->update('sales_payment',array('idjournal'=>$journal['idjournal']));
+        }        
+    }
+
+   
 }
 ?>
