@@ -780,9 +780,9 @@
     <script src='{$assets_url}/js/app/report/ar/PanelAROther.js'></script>
     <!--<script src='{$assets_url}/js/app/report/ar/GridARAging.js'></script>-->
     <!---<script src='{$assets_url}/js/app/report/ar/GridAROutstanding.js'></script>-->
-    <script src='{$assets_url}/js/app/report/ar/GridARConfirmation.js'></script>
-    <script src='{$assets_url}/js/app/report/ar/GridARGiroConfirmation.js'></script>
-    <script src='{$assets_url}/js/app/report/ar/GridARCard.js'></script>
+    {* <script src='{$assets_url}/js/app/report/ar/GridARConfirmation.js'></script> *}
+    {* <script src='{$assets_url}/js/app/report/ar/GridARGiroConfirmation.js'></script> *}
+    {* <script src='{$assets_url}/js/app/report/ar/GridARCard.js'></script> *}
     <script src='{$assets_url}/js/app/report/purchase/TabReportPurchase.js'></script>
     <script src='{$assets_url}/js/app/report/purchase/GridPurchaseRequestList.js'></script>
     <script src='{$assets_url}/js/app/report/purchase/GridPurchaseOrderOutstandingDetail.js'></script>
@@ -793,12 +793,13 @@
     <!-- <script src='{$assets_url}/js/app/report/purchase/WindowSupplierList.js'></script> -->
     <script src='{$assets_url}/js/app/report/purchase/GridGoodRecieveDetail.js'></script>
     <script src='{$assets_url}/js/app/report/ap/TabReportAP.js'></script>
-    <script src='{$assets_url}/js/app/report/ap/GridAPOutstanding.js'></script>
+    <script src='{$assets_url}/js/app/report/ap/PanelAPPurchase.js'></script>
+    {* <script src='{$assets_url}/js/app/report/ap/GridAPOutstanding.js'></script> *}
     <script src='{$assets_url}/js/app/report/ap/GridAPOutstandingDetail.js'></script>
     <script src='{$assets_url}/js/app/report/ap/GridAPAging.js'></script>
     <script src='{$assets_url}/js/app/report/inventory/TabReportInventory.js'></script>
     <script src='{$assets_url}/js/app/report/inventory/PanelInventory.js'></script>
-    <script src='{$assets_url}/js/app/report/inventory/GridInventoryPerItem.js'></script>
+    {* <script src='{$assets_url}/js/app/report/inventory/GridInventoryPerItem.js'></script> *}
     <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script>
 
     <script src='{$assets_url}/js/app/sistem/editRules.js'></script>

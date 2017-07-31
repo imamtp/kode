@@ -697,6 +697,9 @@ class report extends MY_Controller {
                         a .idunit,
                         a .idcurrency,
                         a .subtotal,
+                        a .total_dpp,
+                        a .tax,
+                        a .totalamount,
                         a .nopurchase,
                         a .idsupplier,
                         c .nametax,
@@ -763,7 +766,8 @@ class report extends MY_Controller {
                         a .datein desc";
 
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
     }
 
     function receivable(){
@@ -962,6 +966,7 @@ class report extends MY_Controller {
                 ) h on h.idinventory = a.idinventory
                 --join supplier b on b.idsupplier = a.idsupplier
                 where true
+                and a.idunit = $idunit
                 $wer_brand
                 $wer_invcat
                 $wer_invtype

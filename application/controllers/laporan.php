@@ -9,6 +9,29 @@ class laporan extends MY_Controller {
         
     }
 
+    public function appurchase(){
+        $this->load->library('../controllers/report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Hutang Pembelian',
+            'rows'=>$this->report->payable_purchase(),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '150%';
+        }
+        $this->load->view('report/ap/purchase', $data);
+    }
+
     public function salesorderdetail(){
         $this->load->library('../controllers/report');
         $data = array(

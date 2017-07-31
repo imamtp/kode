@@ -3,23 +3,23 @@ Ext.define('TabReportAP', {
     id: 'TabReportAP',
     alias: 'widget.TabReportAP',
     activeTab: 0,
-    plain:true,
+    plain: true,
     autoWidth: '100%',
     autoScroll: true,
     defaults: {
         autoScroll: true
     },
-    items: [
-        {
-            xtype:'GridAPOutstanding'
+    items: [{
+            xtype: 'reportAPPurchase'
         },
         {
-            xtype:'GridAPOutstandingDetail'
+            xtype: 'GridAPOutstandingDetail'
         },
         {
-            xtype:'GridAPAging'
+            xtype: 'GridAPAging'
         },
-    ], listeners: {
+    ],
+    listeners: {
         render: {
             scope: this,
             fn: function(grid) {
