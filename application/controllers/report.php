@@ -368,29 +368,35 @@ class report extends MY_Controller {
         $idunit = $this->input->get('idunit');
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
-        $idcustomer = $this->input->get('idcustomer');
-        $sku_no = $this->input->get('skuno');
+        $invtype = $this->input->get('invtype');
+        $brand = $this->input->get('brand');
+        $whcode = $this->input->get('whcode');
 
         $wer_period = null;
         if($startdate!=''){
             $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
         }
         
-        $wer_customer = null;
-        if($idcustomer!=null){
-            $wer_customer = "and c.idcustomer = ".$idcustomer."";
+        $wer_invtype = null;
+        if($invtype!="null"){
+            $wer_invtype = "and a.inventory_type = ".$invtype."";
         }
 
-        $wer_inventory = null;
-        if($sku_no!=null){
-            $wer_inventory = "and a.sku_no = '".$sku_no."'";
+        $wer_brand = null;
+        if($brand!="null"){
+            $wer_brand = "and a.brand_id = ".$brand."";
+        }
+
+        $wer_whcode = null;
+        if($whcode!="null"){
+            $wer_whcode = "and e.warehouse_code = '".$whcode."'";
         }
         $sql = "select 
                     a.sku_no,
                     a.nameinventory,
                     sum(b.qty) as qty,
                     b.measurement,
-                    sum(b.price * b.qty * b.size * (100 - b.disc) / 100) as sales
+                    sum(b.total) as sales
                 from inventory a 
                 join (
                     select sku_no, a.*, c.short_desc as measurement from salesitem a
@@ -398,13 +404,16 @@ class report extends MY_Controller {
                     join productmeasurement c on c.measurement_id = a.measurement_id
                 ) b on a.sku_no = b.sku_no
                 join sales c on c.idsales = b.idsales
+                left join warehouse_stock d on d.idinventory = a.idinventory
+                left join warehouse e on e.warehouse_id = d.warehouse_id
                 where true 
                 and c.idunit = $idunit
                 and c.type = 2
                 and c.status > 2
                 $wer_period
-                $wer_customer
-                $wer_inventory
+                $wer_invtype
+                $wer_brand
+                $wer_whcode
                 group by a.sku_no, a.nameinventory, b.measurement";
 
         $q = $this->db->query($sql);
@@ -415,28 +424,38 @@ class report extends MY_Controller {
         $idunit = $this->input->get('idunit');
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
+        $custtype = $this->input->get('custtype');
 
         $wer_period = null;
         if($startdate!=''){
             $wer_period = "and (date_sales between '".$startdate."' and '".$enddate."')";
         }
 
+        $wer_custtype = null;
+        if($custtype!="null"){
+            $wer_custtype = "and a.idcustomertype = ".$custtype."";
+        }
+
         $sql = "select 
-                    a.namecustomer,
                     a.nocustomer,
+                    a.namecustomer,
+                    c.namecustype,
                     sum(b.subtotal) as subtotal,
                     sum(b.tax) as tax,
                     sum(totalamount) as total,
+                    sum(b.paidtoday) as totalpaid,
                     sum(b.balance) as balance
                 from customer a
                 join sales b on b.idcustomer = a.idcustomer
+                left join customertype c on c.idcustomertype = a.idcustomertype
                 where true
                 $wer_period
                 and a.idunit = 12
                 and a.deleted = 0
                 and b.type = 2
                 and b.status > 2
-                group by a.namecustomer, a.nocustomer
+                $wer_custtype
+                group by a.namecustomer, a.nocustomer, c.namecustype
                 order by namecustomer";
         
         $q = $this->db->query($sql);
@@ -465,6 +484,7 @@ class report extends MY_Controller {
                     ) as dpp, 
                     sum(b.tax) as tax,
                     sum(totalamount) as total,
+                    sum(b.paidtoday) as totalpaid,
                     sum(b.balance) as balance
                 from employee a
                 join sales b on b.salesman_id = a.idemployee
@@ -762,7 +782,14 @@ class report extends MY_Controller {
             $wer_period = "and (a.tglpiutang between '".$startdate."' and '".$enddate."')";
         }
 
-        $sql = "select a.description,b.accname as accnamepiutang,c.accname as accname_terimapiutang,a.jumlah,a.sisapiutang,a.tglpiutang,d.namecustomer
+        $sql = "select 
+                    a.description,
+                    b.accname as accnamepiutang,
+                    c.accname as accname_terimapiutang,
+                    a.jumlah,
+                    a.sisapiutang,
+                    a.tglpiutang,
+                    d.namecustomer
                 from registrasipiutang a
                 join account b ON a.idaccount = b.idaccount
                 join account c ON a.idaccountlink = c.idaccount
@@ -771,7 +798,8 @@ class report extends MY_Controller {
                 $wer_period";
         
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
     }
 
     function receivable_sales(){
@@ -804,6 +832,7 @@ class report extends MY_Controller {
                     a .comments,
                     a .noinvoice,	
                     a .notes_si,
+                    a .total_dpp,
                     b.nocustomer,
                     b.namecustomer,
                     a .invoice_date,
@@ -856,8 +885,8 @@ class report extends MY_Controller {
             // if($r[''])
             $i++;
         }
-
-        echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
+        return $q->result_array();
     }
 
 }

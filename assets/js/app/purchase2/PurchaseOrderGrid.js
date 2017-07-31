@@ -9,7 +9,7 @@ if (!Ext.isDefined(Ext.getCmp('EntryPurchaseOrder'))) {
 Ext.define('PurchaseOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'status', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'idpurchase_req', 'nopurchase_req', 'date_req', 'idpurchasestatusname', 'include_tax'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'status', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'idpurchase_req', 'nopurchase_req', 'date_req', 'idpurchasestatusname', 'include_tax', 'total_dpp', 'total_diskon'
     ],
     idProperty: 'id'
 });

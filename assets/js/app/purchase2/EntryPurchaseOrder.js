@@ -971,11 +971,11 @@ function updateGridPurchaseOrder(tipe) {
 
     sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;
     // alert(totalPajak);
-    Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('total' + addprefix).setValue(totalPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('diskonPurchaseOrder').setValue(totaldiskon.toLocaleString('null', { minimumFractionDigits: 2 }));
-    Ext.getCmp('dppPurchaseOrder').setValue(dppPurchaseOrder.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('diskon' + addprefix).setValue(totaldiskon.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('dpp' + addprefix).setValue(dppPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
     // Ext.getCmp('pembayaran').setValue(pembayaranPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarPurchaseOrder').setValue(sisaBayarPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 

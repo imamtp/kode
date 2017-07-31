@@ -27,27 +27,33 @@ if($option!='print')
 
 <tr style="background-color: #EDF4F7; color: #000; font-size: 12px;">
      <td><strong>No</strong></td>
-     <td><strong>No Customer</strong></td>
-     <td><strong>Customer</strong></td>
-     <td><strong>Customer Type</strong></td>
-     <td><strong>Subtotal</strong></td>
-     <td><strong>Tax</strong></td>
-     <td><strong>Total</strong></td>
-     <td><strong>Total Paid</strong></td>
-     <td><strong>Balance</strong></td>
+     <td><strong>No SO</strong></td>
+     <td><strong>Tanggal</strong></td>
+     <td><strong>No Invoice</strong></td>
+     <td class="numberHeader"><strong>Subtotal</strong></td>
+     <td class="numberHeader"><strong>DPP</strong></td>
+     <td class="numberHeader"><strong>Pajak</strong></td>
+     <td class="numberHeader"><strong>Total Ammount</strong></td>
+     <td class="numberHeader"><strong>Total Paid</strong></td>
+     <td class="numberHeader"><strong>OTSD Ammount</strong></td>
+     <td><strong>Payment Term</strong></td>
+     <td><strong>Remarks</strong></td>
 </tr>
 <?php $no = 1; ?>
 <?php foreach($rows as $r): ?>
     <tr>
         <td><?=$no++?></td>
-        <td><?=$r['nocustomer']?></td>
-        <td><?=$r['namecustomer']?></td>
-        <td><?=$r['namecustype']?></td>
+        <td><?=$r['no_sales_order']?></td>
+        <td><?=$r['date_sales']?></td>
+        <td><?=$r['noinvoice']?></td>
         <td class="number"><?=number_format($r['subtotal'],2)?></td>
+        <td class="number"><?=number_format($r['total_dpp'],2)?></td>
         <td class="number"><?=number_format($r['tax'],2)?></td>
-        <td class="number"><?=number_format($r['total'],2)?></td>
-        <td class="number"><?=number_format($r['totalpaid'],2)?></td>
+        <td class="number"><?=number_format($r['totalamount'],2)?></td>
+        <td class="number"><?=number_format($r['paidtoday'],2)?></td>
         <td class="number"><?=number_format($r['balance'],2)?></td>
+        <td><?=$r['payment_term']?></td>
+        <td><?=$r['comments']?></td>
     </tr>
 <?php endforeach ?>
 

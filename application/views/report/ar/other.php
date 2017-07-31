@@ -27,27 +27,25 @@ if($option!='print')
 
 <tr style="background-color: #EDF4F7; color: #000; font-size: 12px;">
      <td><strong>No</strong></td>
-     <td><strong>No Customer</strong></td>
+     <td><strong>Akun Piutang</strong></td>
+     <td><strong>Akun Terima Piutang</strong></td>
+     <td><strong>Tanggal</strong></td>
      <td><strong>Customer</strong></td>
-     <td><strong>Customer Type</strong></td>
-     <td><strong>Subtotal</strong></td>
-     <td><strong>Tax</strong></td>
-     <td><strong>Total</strong></td>
-     <td><strong>Total Paid</strong></td>
-     <td><strong>Balance</strong></td>
+     <td><strong>Jumlah</strong></td>
+     <td><strong>Sisa</strong></td>
+     <td><strong>Deskripsi</strong></td>
 </tr>
 <?php $no = 1; ?>
 <?php foreach($rows as $r): ?>
     <tr>
         <td><?=$no++?></td>
-        <td><?=$r['nocustomer']?></td>
+        <td><?=$r['accnamepiutang']?></td>
+        <td><?=$r['accname_terimapiutang']?></td>
+        <td><?=$r['tglpiutang']?></td>
         <td><?=$r['namecustomer']?></td>
-        <td><?=$r['namecustype']?></td>
-        <td class="number"><?=number_format($r['subtotal'],2)?></td>
-        <td class="number"><?=number_format($r['tax'],2)?></td>
-        <td class="number"><?=number_format($r['total'],2)?></td>
-        <td class="number"><?=number_format($r['totalpaid'],2)?></td>
-        <td class="number"><?=number_format($r['balance'],2)?></td>
+        <td class="number"><?=number_format($r['jumlah'],2)?></td>
+        <td class="number"><?=number_format($r['sisapiutang'],2)?></td>
+        <td><?=$r['description']?></td>
     </tr>
 <?php endforeach ?>
 

@@ -776,6 +776,8 @@
     <script src='{$assets_url}/js/app/report/ar/TabReportAR.js'></script>
     <script src='{$assets_url}/js/app/report/ar/PanelARAging.js'></script>
     <script src='{$assets_url}/js/app/report/ar/PanelAROutstanding.js'></script>
+    <script src='{$assets_url}/js/app/report/ar/PanelARSales.js'></script>
+    <script src='{$assets_url}/js/app/report/ar/PanelAROther.js'></script>
     <!--<script src='{$assets_url}/js/app/report/ar/GridARAging.js'></script>-->
     <!---<script src='{$assets_url}/js/app/report/ar/GridAROutstanding.js'></script>-->
     <script src='{$assets_url}/js/app/report/ar/GridARConfirmation.js'></script>

@@ -15,6 +15,12 @@ Ext.define('TabReportAR', {
         {
             xtype: 'reportAROutstanding'
         },
+        {
+            xtype: 'reportARSales'
+        },
+        {
+            xtype: 'reportAROther'
+        }
         // {
         //     xtype: 'GridARConfirmation'
         // },

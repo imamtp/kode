@@ -32,6 +32,7 @@ if($option!='print')
      <td><strong>Subtotal</strong></td>
      <td><strong>Tax</strong></td>
      <td><strong>Total</strong></td>
+     <td><strong>Total Paid</strong></td>
      <td><strong>Balance</strong></td>
 </tr>
 <?php $no = 1; ?>
@@ -43,6 +44,7 @@ if($option!='print')
         <td class="number"><?=number_format($r['subtotal'],2)?></td>
         <td class="number"><?=number_format($r['tax'],2)?></td>
         <td class="number"><?=number_format($r['total'],2)?></td>
+        <td class="number"><?=number_format($r['totalpaid'],2)?></td>
         <td class="number"><?=number_format($r['balance'],2)?></td>
     </tr>
 <?php endforeach ?>

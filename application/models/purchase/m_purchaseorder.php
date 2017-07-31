@@ -16,7 +16,7 @@ class m_purchaseorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.status,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,b.name as idpurchasestatusname, c.nametax,c.rate,e.namesupplier,a.discount as disc,a.notes_receipt,a.receivedby_id,a.delivereddate,f.firstname,f.lastname,a.balance,a.invoice_status,a.noinvoice,a.paidtoday,totalorder,totalreceived,total_qty_batch,sisa,sum(totalorder-total_qty_batch) as sisabatch,idpurchase_req, h.nopurchase as nopurchase_req, h.date as date_req,a.include_tax,a.nofpsup,a.no_rujukan_sup";
+        return "a.idpurchase,a.idshipping,a.idpurchasetype,a.idpurchasestatus,a.status,a.idtax,a.idpayment,a.date,a.requestdate,a.tax,a.totalamount,a.memo,a.datein,a.idunit,a.idcurrency,a.subtotal,a.nopurchase,a.idsupplier,b.name as idpurchasestatusname, c.nametax,c.rate,e.namesupplier,a.discount as disc,a.notes_receipt,a.receivedby_id,a.delivereddate,f.firstname,f.lastname,a.balance,a.invoice_status,a.noinvoice,a.paidtoday,totalorder,totalreceived,a.total_dpp,a.total_diskon,total_qty_batch,sisa,sum(totalorder-total_qty_batch) as sisabatch,idpurchase_req, h.nopurchase as nopurchase_req, h.date as date_req,a.include_tax,a.nofpsup,a.no_rujukan_sup";
     }
     
     function fieldCek()
