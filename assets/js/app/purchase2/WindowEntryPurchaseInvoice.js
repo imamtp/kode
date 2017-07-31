@@ -1091,10 +1091,6 @@ function validasiPurchaseInvoice() {
 
     if (Ext.getCmp('comboxpaymentterm_pi').getValue() == null) {
         Ext.Msg.alert('Failed', 'Metode Pembayaran belum dipilih');
-    } else if (Ext.getCmp('idaccount_coa_persediaan_pi').getValue() === '') {
-        Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
-    } else if (Ext.getCmp('idaccount_coa_hutang_pi').getValue() === '') {
-        Ext.Msg.alert('Failed', 'Tentukan Akun Persediaan');
     } else if (Ext.getCmp('nojurnal_poinvoice').getValue() === '') {
         Ext.Msg.alert('Failed', 'No Invoice belum diisi');
     }

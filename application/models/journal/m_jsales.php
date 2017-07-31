@@ -2,14 +2,20 @@
 
 class m_jsales extends CI_Model {
 
-	function sales_kredit($tgljournal,$totalAmount,$idcurrency,$idunit,$biayaangkut,$memo){
+	function sales_kredit($tgljournal,$totalAmount,$idcurrency,$idunit,$biayaangkut,$memo,$diskon,$pajak){
 
 		$this->db->trans_begin();
 
 		/*
-			Piutang Dagang (D)
-			Biaya Angkut (D)
-			Penjualan (K)
+			DEBIT:
+				Uang muka penjualan (kalau ada) x
+				PIUTANG USAHA
+				DISKON PENJUALAN (kalau ada)
+
+			KREDIT:
+				PENDAPATAN LAIN-LAIN (Biaya Kirim)
+				PPN KELUARAN
+				PENJUALAN
 		*/
 
 		$tgl = explode("-", $tgljournal);
@@ -40,11 +46,59 @@ class m_jsales extends CI_Model {
 
         $this->db->insert('journal', $d);
 
-         //biaya angkut
-        if($biayaangkut!=0)
+		//Debit - Piutang
+		$amount = $totalAmount-$biayaangkut;
+		$idacc = $this->m_data->getIdAccount(24, $idunit);
+
+		$curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
+		//itung saldo baru
+		$newBalance2 = $curBalance2 + $diskon;
+		//insert
+		$ditem2 = array(
+			'idjournal' => $qseq->id,
+			'idaccount' => $idacc,
+//            'idtax' integer,
+			'debit' => $amount,
+			'credit' => 0,
+//            'memo' character varying(225),
+			'lastbalance' => $curBalance2,
+			'currbalance' => $newBalance2
+		);
+		$this->db->insert('journalitem', $ditem2);
+		//update saldo baru
+		$this->m_account->saveNewBalance($idacc, $newBalance2, $idunit);
+
+		$this->m_account->saveAccountLog($idunit,$idacc,0,$amount,$tgljournal,$qseq->id);
+
+		//Debit - Diskon Penjualan
+        if($diskon!=0 && $diskon!=null && $diskon!='')
+        {
+            $idaccount= $this->m_data->getIdAccount(29, $idunit);
+            $curBalance2 = $this->m_account->getCurrBalance($idaccount, $idunit);
+            //itung saldo baru
+            $newBalance2 = $curBalance2 + $diskon;
+            //insert
+            $ditem2 = array(
+                'idjournal' => $qseq->id,
+                'idaccount' => $idaccount,
+    //            'idtax' integer,
+                'debit' => $diskon,
+                'credit' => 0,
+    //            'memo' character varying(225),
+                'lastbalance' => $curBalance2,
+                'currbalance' => $newBalance2
+            );
+            $this->db->insert('journalitem', $ditem2);
+            //update saldo baru
+            $this->m_account->saveNewBalance($idaccount, $newBalance2, $idunit);
+            $this->m_account->saveAccountLog($idunit,$idaccount,0,$diskon,$tgljournal,$qseq->id);
+        }
+
+
+         //Kredit - biaya angkut
+        if($biayaangkut!=0 && $biayaangkut!=null && $biayaangkut!='')
         {
             $idaccountangkut = $this->m_data->getIdAccount(17, $idunit);
-
             $curBalance2 = $this->m_account->getCurrBalance($idaccountangkut, $idunit);
             //itung saldo baru
             $newBalance2 = $curBalance2 + $biayaangkut;
@@ -53,8 +107,8 @@ class m_jsales extends CI_Model {
                 'idjournal' => $qseq->id,
                 'idaccount' => $idaccountangkut,
     //            'idtax' integer,
-                'debit' => $biayaangkut,
-                'credit' => 0,
+                'debit' => 0,
+                'credit' => $biayaangkut,
     //            'memo' character varying(225),
                 'lastbalance' => $curBalance2,
                 'currbalance' => $newBalance2
@@ -62,57 +116,54 @@ class m_jsales extends CI_Model {
             $this->db->insert('journalitem', $ditem2);
             //update saldo baru
             $this->m_account->saveNewBalance($idaccountangkut, $newBalance2, $idunit);
+            $this->m_account->saveAccountLog($idunit,$idaccountangkut,$biayaangkut,0,$tgljournal,$qseq->id);
+        } else {
+			$biayaangkut = 0;
+		}
 
-            $this->m_account->saveAccountLog($idunit,$idaccountangkut,0,$biayaangkut,$tgljournal,$qseq->id);
-        }
+		//Kredit - PPN Keluaran
+		$amount = $pajak;
+		$idacc = $this->m_data->getIdAccount(28, $idunit);
+		$curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
+		//itung saldo baru
+		$newBalance2 = $curBalance2 + $amount;
+		//insert
+		$ditem2 = array(
+			'idjournal' => $qseq->id,
+			'idaccount' => $idacc,
+//            'idtax' integer,
+			'debit' => 0,
+			'credit' => $amount,
+//            'memo' character varying(225),
+			'lastbalance' => $curBalance2,
+			'currbalance' => $newBalance2
+		);
+		$this->db->insert('journalitem', $ditem2);
+		//update saldo baru
+		$this->m_account->saveNewBalance($idacc, $newBalance2, $idunit);
+		$this->m_account->saveAccountLog($idunit,$idacc,$amount,0,$tgljournal,$qseq->id);
 
-   		  //piutang
-          $amount = $totalAmount-$biayaangkut;
-   		  $idacc = $this->m_data->getIdAccount(24, $idunit);
-
-            $curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
-            //itung saldo baru
-            $newBalance2 = $curBalance2 + $amount;
-            //insert
-            $ditem2 = array(
-                'idjournal' => $qseq->id,
-                'idaccount' => $idacc,
-    //            'idtax' integer,
-                'debit' => $amount,
-                'credit' => 0,
-    //            'memo' character varying(225),
-                'lastbalance' => $curBalance2,
-                'currbalance' => $newBalance2
-            );
-            $this->db->insert('journalitem', $ditem2);
-            //update saldo baru
-            $this->m_account->saveNewBalance($idacc, $newBalance2, $idunit);
-
-            $this->m_account->saveAccountLog($idunit,$idacc,0,$amount,$tgljournal,$qseq->id);
-
-          //penjualan
-          $amount = $totalAmount;
-   		  $idacc = $this->m_data->getIdAccount(6, $idunit);
-
-            $curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
-            //itung saldo baru
-            $newBalance2 = $curBalance2 + $amount;
-            //insert
-            $ditem2 = array(
-                'idjournal' => $qseq->id,
-                'idaccount' => $idacc,
-    //            'idtax' integer,
-                'debit' => 0,
-                'credit' => $amount,
-    //            'memo' character varying(225),
-                'lastbalance' => $curBalance2,
-                'currbalance' => $newBalance2
-            );
-            $this->db->insert('journalitem', $ditem2);
-            //update saldo baru
-            $this->m_account->saveNewBalance($idacc, $newBalance2, $idunit);
-
-            $this->m_account->saveAccountLog($idunit,$idacc,$amount,0,$tgljournal,$qseq->id);
+         //Kredit - penjualan
+		$amount = $totalAmount-$pajak-$biayaangkut;
+		$idacc = $this->m_data->getIdAccount(30, $idunit);
+		$curBalance2 = $this->m_account->getCurrBalance($idacc, $idunit);
+		//itung saldo baru
+		$newBalance2 = $curBalance2 + $amount;
+		//insert
+		$ditem2 = array(
+		'idjournal' => $qseq->id,
+		'idaccount' => $idacc,
+		//            'idtax' integer,
+		'debit' => 0,
+		'credit' => $amount,
+		//            'memo' character varying(225),
+		'lastbalance' => $curBalance2,
+		'currbalance' => $newBalance2
+		);
+		$this->db->insert('journalitem', $ditem2);
+		//update saldo baru
+		$this->m_account->saveNewBalance($idacc, $newBalance2, $idunit);
+		$this->m_account->saveAccountLog($idunit,$idacc,$amount,0,$tgljournal,$qseq->id);
 
        if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -719,6 +770,94 @@ class m_jsales extends CI_Model {
         }
 
         return $json;
+	}
+
+	function sales_delivery_order($idsales,$amount,$idaccount_hppenjualan,$idaccount_persediaan,$no_do){
+		/*
+			Delivery Order / Pengiriman Barang	
+			
+			Debit: HPP Penjualan	
+			Kredit: Persediaan Barang
+		*/
+
+		$tanggal = date('Y-m-d');
+        $tgl = explode("-",$tanggal);
+        $memo = 'Pengiriman Barang - No DO: '.$no_do;
+        $idunit = $this->session->userdata('idunit');
+        $totalAmount = $amount;
+
+        $qseq = $this->db->query("select nextval('seq_journal') as id")->row();
+
+        $d = array(
+            'idjournal' => $qseq->id,
+            'idjournaltype' => 3,//Penjualan
+            'nojournal' => 'DO'.$tgl[0].$tgl[1].$tgl[2].$qseq->id,
+//                    name character varying(225),
+            'datejournal' => $tanggal,
+            'memo' =>  $memo,
+            'totaldebit' => $totalAmount,
+            'totalcredit' => $totalAmount,
+//                    'totaltax' double precision,
+//                    isrecuring boolean,
+            'year' => $tgl[0],
+            'month' => $tgl[1],
+//                    display integer,
+            'userin' => $this->session->userdata('userid'),
+            'usermod' => $this->session->userdata('userid'),
+            'datein' => date('Y-m-d H:m:s'),
+            'datemod' => date('Y-m-d H:m:s'),
+            'idunit' => $idunit,
+            'idcurrency' => null
+        );
+
+        $this->db->insert('journal', $d); 
+
+         //HPP Penjualan (D)
+        $amount = $totalAmount;
+        // $idacc = $this->m_data->getIdAccount(15, $idunit);
+        $idacc = $idaccount_hppenjualan;
+        $curBalance = $this->m_account->getCurrBalance($idacc, $idunit);       
+        $newBalance = $curBalance - $amount;  //itung saldo baru
+
+        //insert
+        $ditem2 = array(
+            'idjournal' => $qseq->id,
+            'idaccount' => $idacc,
+//            'idtax' integer,
+            'debit' => $amount,
+            'credit' => 0,
+//            'memo' character varying(225),
+            'lastbalance' => $curBalance,
+            'currbalance' => $newBalance
+        );
+        $this->db->insert('journalitem', $ditem2);
+        //update saldo baru
+        $this->m_account->saveNewBalance($idacc, $newBalance, $idunit);
+        $this->m_account->saveAccountLog($idunit,$idacc,0,$amount,$tanggal,$qseq->id);   
+
+        //K: Persediaan
+        $amount = $totalAmount;
+        $idacc = $idaccount_persediaan;
+        $curBalance = $this->m_account->getCurrBalance($idacc, $idunit);       
+        $newBalance = $curBalance - $amount;  //itung saldo baru
+
+        //insert
+        $ditem2 = array(
+            'idjournal' => $qseq->id,
+            'idaccount' => $idacc,
+//            'idtax' integer,
+            'debit' => 0,
+            'credit' => $amount,
+//            'memo' character varying(225),
+            'lastbalance' => $curBalance,
+            'currbalance' => $newBalance
+        );
+        $this->db->insert('journalitem', $ditem2);
+        //update saldo baru
+        $this->m_account->saveNewBalance($idacc, $newBalance, $idunit);
+        $this->m_account->saveAccountLog($idunit,$idacc,$amount,0,$tanggal,$qseq->id);
+        // echo 'adsad'.$qseq->id;
+        return $qseq->id;  
 	}
 
 	function sales_retur_kredit(){

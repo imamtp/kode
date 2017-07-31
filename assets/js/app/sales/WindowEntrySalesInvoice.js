@@ -448,7 +448,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                         {
                             xtype: 'textfield',
                             readOnly: true,
-                            align: 'right',
+                            fieldStyle: 'text-align: right;',
                             labelWidth: 120,
                             id: 'dppSalesInvoice_si',
                             fieldLabel: 'Dasar Pengenaan Pajak',
@@ -751,9 +751,11 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                     notes_si: Ext.getCmp('notes_si').getValue(),
                     pembayaran: Ext.getCmp('pembayaranSalesInvoice_si').getValue(),
                     sisa_bayar: Ext.getCmp('sisaBayarSalesInvoice_si').getValue(),
+                    total_pajak: Ext.getCmp('totalPajakSalesInvoice_si').getValue(),
                     total_amount: aftertax + biayaangkut,
                     idunit: Ext.getCmp('cbUnitEntrySalesInvoice').getValue(),
                     invoice_date: Ext.getCmp('invoice_date_si').getSubmitValue(),
+                    diskon: Ext.getCmp('discountSalesInvoice_si').getValue(),
                     biayaangkut: biayaangkut
                         // datagrid: json
                 },
