@@ -24,9 +24,9 @@ Ext.define('TabReportSales', {
         {
             xtype: 'reportSalesOrderBySalesman'
         },
-        {
-            xtype: 'GridSalesReturnDetail'
-        },
+        // {
+        //     xtype: 'GridSalesReturnDetail'
+        // },
         // {
         //     xtype: 'GridSalesBook'
         // },
