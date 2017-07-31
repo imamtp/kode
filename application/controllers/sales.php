@@ -1145,7 +1145,7 @@ class sales extends MY_Controller {
 
         $q = $this->db->query("select *
                                 from sales
-                                where noinvoice is not null and invoice_status = 2
+                                where noinvoice is not null
                                 order by invoice_status");
         foreach($q->result() as $r){
 
@@ -1174,7 +1174,7 @@ class sales extends MY_Controller {
 
         $q = $this->db->query("select *
                                 from sales
-                                where noinvoice is not null and invoice_status = 1
+                                where noinvoice is not null
                                 order by invoice_status");
         foreach($q->result() as $r){
             $j = $this->jmodel->sales_kredit($r->date_sales,$r->balance,null,12,$r->freight,'Piutang Penjualan - No SO: '.$r->no_sales_order,$r->disc,$r->tax);
