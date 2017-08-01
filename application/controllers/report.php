@@ -1048,7 +1048,7 @@ class report extends MY_Controller {
                     end as type_adjustment,
                     b.notes
                 from inventory a 
-                left join (
+                join (
                     select * from stock_history 
                     where true 
                     $wer_period
