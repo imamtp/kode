@@ -69,21 +69,18 @@ Ext.define('reportInventory', {
             }, {
                 xtype: 'datefield',
                 id: 'startdateReportInventory',
+                hidden: true,
                 format: 'Y-m-d',
                 labelWidth: 100,
                 fieldLabel: 'Dari'
             }, {
                 xtype: 'datefield',
                 id: 'enddateReportInventory',
+                hidden: true,
                 format: 'Y-m-d',
                 labelWidth: 100,
                 fieldLabel: 's/d'
-            }, ]
-        },
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [{
+            }, {
                 xtype: 'comboxbrand',
                 id: 'brandReportInventory',
                 labelWidth: 40,
@@ -99,7 +96,12 @@ Ext.define('reportInventory', {
                 id: 'invtypeReportInventory',
                 labelWidth: 100,
                 fieldLabel: 'Product Type'
-            }, {
+            }, ]
+        },
+        {
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [{
                 xtype: 'button',
                 text: 'Tampilkan Laporan',
                 iconCls: 'report_key',

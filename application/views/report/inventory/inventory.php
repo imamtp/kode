@@ -31,7 +31,6 @@ if($option!='print')
      <td><strong>No SKU</strong></td>
      <td><strong>Nama Barang</strong></td>
      <td><strong>Harga Beli</strong></td>
-     <td><strong>Kode Gudang</strong></td>
      <td><strong>Stock</strong></td>
      <td><strong>Satuan</strong></td>
      <td><strong>Stock #2</strong></td>
@@ -45,11 +44,10 @@ if($option!='print')
         <td><?=$r['sku_no']?></td>
         <td><?=$r['nameinventory']?></td>
         <td class="number"><?=number_format($r['cost'],2)?></td>
-        <td><?=$r['warehouse_code']?></td>
         <td class="number"><?=number_format($r['stock'],2)?></td>
         <td><?=$r['satuan']?></td>
-        <td class="number"><?=number_format($r['stock_kedua'],2)?></td>
-        <td><?=$r['satuan_kedua']?></td>
+        <td class="number"><?=$r['stock_kedua'] != null ? number_format($r['stock_kedua'],2) : '-'?></td>
+        <td><?=$r['satuan_kedua']?:'-'?></td>
     </tr>
 <?php endforeach ?>
 
