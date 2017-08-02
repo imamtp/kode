@@ -95,30 +95,6 @@ class m_stock extends CI_Model {
             3. Average
         */
 
-        // update inisial nominal persediaan
-        // $qinv = $this->db->query('select a.idinventory,cost,totalstock,a.hpp_per_unit
-        //                             from inventory a
-        //                             left join inventoryunit b ON a.idinventory = b.idinventory
-        //                             left join (select idinventory,sum(stock) as totalstock
-        //                                 from warehouse_stock
-        //                                 group by idinventory) c ON a.idinventory = c.idinventory');
-        // foreach($qinv->result() as $r){
-        //     if($r->cost == null){
-        //         if($r->hpp_per_unit == null){
-        //             $cost = 0;
-        //         } else {
-        //             $cost = $r->hpp_per_unit;
-        //         }
-        //     } else {
-        //         $cost = $r->cost;
-        //     }
-
-        //     $this->db->where('idinventory',$r->idinventory);
-        //     $this->db->update('inventory',array(
-        //         'nominal_persediaan'=>$cost*$r->totalstock
-        //     ));
-        // }
-        // end update inisial nominal persediaan
 		$total_hpp = 0;
 		$data = array();
 

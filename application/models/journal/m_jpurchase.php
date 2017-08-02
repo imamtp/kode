@@ -643,7 +643,7 @@ class m_jpurchase extends CI_Model {
         return $qseq->id;  
     }
 
-    function penerimaan_barang($idpurchase,$nopo,$idaccount_coa_gr,$total_value){
+    function penerimaan_barang($idpurchase,$nopo,$idaccount_coa_gr,$total_value,$date=null){
 
         // $q = $this->db->query("select idpurchaseitem,qty,qty_received,price,total
         //                         from purchaseitem
@@ -672,7 +672,14 @@ class m_jpurchase extends CI_Model {
         */
 
         $qpurchase = $this->db->query("select idunit, balance, idaccount_coa_hutang from purchase where idpurchase = $idpurchase")->row();
-        $tanggal = date('Y-m-d');
+        
+        if($date==null){
+            $tanggal = date('Y-m-d');
+        } else {
+            $tanggal = $date;
+        }
+        
+
         $tgl = explode("-",$tanggal);
         $memo = 'Penerimaan Barang No Purchase: '.$nopo;
         $idunit = $this->session->userdata('idunit');
