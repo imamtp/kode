@@ -1674,7 +1674,7 @@ class purchase extends MY_Controller {
 
                             //buat jurnal
                             // $this->load->model('journal/m_jpurchase','jmodel');
-                            $this->jmodel->penerimaan_barang($r->idpurchase,$r->nopurchase,$r->idaccount_coa_persediaan,$total_value);
+                            $this->jmodel->penerimaan_barang($r->idpurchase,$r->nopurchase,$r->idaccount_coa_persediaan,$total_value,$r->delivereddate);
 
                         // } else {
                         
