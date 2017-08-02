@@ -2841,7 +2841,7 @@ if($option=='print')
             'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
             'unit'=>$this->fetchUnit($this->input->get('idunit')),
             'option'=>$this->input->get('option'),
-            'title'=>'Laporan Inventory',
+            'title'=>'Laporan Kartu Stock',
             'rows'=>$this->report->inventoryStockCard(),
         );
 
