@@ -1301,4 +1301,91 @@ class money extends MY_Controller {
     //    print_r($arr);
     // }
 
+    function generate_cashout_history($idunit){
+        $q = $this->db->query("select a.*,b.memo
+                                from spendmoney a
+                                join journal b ON a.idjournal = b.idjournal");
+        foreach($q->result() as $r){
+            $curBalance = $this->m_account->getCurrBalance($r->idaccount, $idunit);
+            $newBalance = $curBalance - $r->totalpaid;
+
+            $this->m_account->saveNewBalance($r->idaccount, $newBalance, $idunit);
+            $this->m_account->saveAccountLog($idunit,$r->idaccount,$r->totalpaid,0,$r->datetrans,$r->idjournal);
+
+            //akun keluaran
+            $qj = $this->db->query("select datejournal
+                                    from journal
+                                    where idjournal = ".$r->idjournal."");
+            if($qj->num_rows()>0){
+                $rqj = $qj->row();
+
+                $qjitem = $this->db->query("select idaccount,debit from
+                                            journalitem
+                                            where idjournal = ".$r->idjournal." and credit = 0");
+                if($qjitem->num_rows()>0){
+                    $rqjitem = $qjitem->row();
+
+                    $curBalance = $this->m_account->getCurrBalance($rqjitem->idaccount, $idunit);
+                    $newBalance = $curBalance + $rqjitem->debit;
+
+                    $this->m_account->saveNewBalance($rqjitem->idaccount, $newBalance, $idunit);
+                    $this->m_account->saveAccountLog($idunit,$rqjitem->idaccount,0,$rqjitem->debit,$rqj->datejournal,$r->idjournal);
+                }
+            }
+        }
+        
+    }
+
+    // function generate_cashout_history_spend_account($idunit){
+    //     $q = $this->db->query("select a.*,b.memo
+    //                             from spendmoney a
+    //                             join journal b ON a.idjournal = b.idjournal");
+    //     foreach($q->result() as $r){
+
+    //         $qj = $this->db->query("select datejournal
+    //                                 from journal
+    //                                 where idjournal = ".$r->idjournal."");
+    //         if($qj->num_rows()>0){
+    //             $rqj = $qj->row();
+
+    //             $qjitem = $this->db->query("select idaccount,debit from
+    //                                         journalitem
+    //                                         where idjournal = ".$r->idjournal." and credit = 0");
+    //             if($qjitem->num_rows()>0){
+    //                 $rqjitem = $qjitem->row();
+
+    //                 $curBalance = $this->m_account->getCurrBalance($rqjitem->idaccount, $idunit);
+    //                 $newBalance = $curBalance + $rqjitem->debit;
+
+    //                 $this->m_account->saveNewBalance($rqjitem->idaccount, $newBalance, $idunit);
+    //                 $this->m_account->saveAccountLog($idunit,$rqjitem->idaccount,0,$rqjitem->debit,$rqj->datejournal,$r->idjournal);
+    //             }
+    //         }
+
+           
+    //     }
+        
+    // }
+
+    function generate_cash_trans_history($idunit){
+        $q = $this->db->query("select idaccountsumber,idaccounttujuan,tanggal,nominal,b.idjournal,a.memo
+                            from transferkas a
+                            join journal b ON a.idjournal = b.idjournal
+                            where a.idunit = $idunit");
+        foreach($q->result() as $r){
+            //sumber
+            $curBalance = $this->m_account->getCurrBalance($r->idaccountsumber, $idunit);
+            $newBalance = $curBalance - $r->nominal;
+
+            $this->m_account->saveNewBalance($r->idaccountsumber, $newBalance, $idunit);
+            $this->m_account->saveAccountLog($idunit,$r->idaccountsumber,$r->nominal,0,$r->tanggal,$r->idjournal);
+
+            //tujuan
+            $curBalance = $this->m_account->getCurrBalance($r->idaccounttujuan, $idunit);
+            $newBalance = $curBalance + $r->nominal;
+
+            $this->m_account->saveNewBalance($r->idaccounttujuan, $newBalance, $idunit);
+            $this->m_account->saveAccountLog($idunit,$r->idaccounttujuan,0,$r->nominal,$r->tanggal,$r->idjournal);
+        }
+    }
 }
