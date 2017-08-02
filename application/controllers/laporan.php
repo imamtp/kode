@@ -2769,7 +2769,7 @@ if($option=='print')
             'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
             'unit'=>$this->fetchUnit($this->input->get('idunit')),
             'option'=>$this->input->get('option'),
-            'title'=>'Laporan AR Aging',
+            'title'=>'Laporan Piutang Penjualan',
             'rows'=>$this->report->receivable_sales(),
         );
 
@@ -2793,7 +2793,7 @@ if($option=='print')
             'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
             'unit'=>$this->fetchUnit($this->input->get('idunit')),
             'option'=>$this->input->get('option'),
-            'title'=>'Laporan AR Aging',
+            'title'=>'Laporan Piutang Lainnya',
             'rows'=>$this->report->receivable(),
         );
 
@@ -2853,7 +2853,7 @@ if($option=='print')
         } else {
             $data['fontsize'] = 12;
             $data['lineheight'] = 14;
-            $data['tablewidth'] = '150%';
+            $data['tablewidth'] = '200%';
         }
         $this->load->view('report/inventory/stockcard', $data);
     }
