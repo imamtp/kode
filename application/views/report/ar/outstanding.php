@@ -42,7 +42,7 @@ if($option!='print')
         <td><?=$no++?></td>
         <td><?=$r['date_sales']?></td>
         <td><?=$r['no_sales_order']?></td>
-        <td><?=$r['date_invoice']?></td>
+        <td><?=$r['invoice_date']?></td>
         <td><?=$r['noinvoice']?></td>
         <td><?=$r['namecustomer']?></td>
         <td class="number"><?=number_format($r['totalamount'],2)?></td>
