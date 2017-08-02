@@ -1266,6 +1266,54 @@ class account extends MY_Controller {
         }
     }
 
+    function reset_coa_balance($idunit){
+        //mereset saldo coa ke posisi saldo awal dari tabel accounthistory
+        $qcoa = $this->db->get_where('account',array('idunit'=>$idunit));
+        foreach($qcoa->result() as $rcoa){
+
+            $qbalance = $this->db->query("select balance,idaccount
+                                            from accounthistory
+                                            where idunit = $idunit and idaccount = ".$rcoa->idaccount."
+                                            order by datein asc
+                                            limit 1");
+            if($qbalance->num_rows()>0){
+                $rbalance = $qbalance->row();
+
+                $qlog = $this->db->query("select a.credit,b.memo
+                                            from accountlog a
+                                            join journal b ON a.idjournal = b.idjournal
+                                            where a.idunit = $idunit and a.idaccount =  ".$rcoa->idaccount."
+                                            order by a.datein asc
+                                            limit 1");
+                if($qlog->num_rows()>0){
+                    $rqlog = $qlog->row();
+
+                    $saldo = $rbalance->balance+$rqlog->credit;
+
+                    //update
+                    $this->db->where(array(
+                        'idunit'=>$idunit,
+                        'idaccount'=>$rcoa->idaccount
+                    ));
+                    $this->db->update('account',array(
+                        'balance'=>$saldo
+                    ));
+
+                    //delete log
+                    $this->db->query("delete
+                        from accountlog a
+                        where a.idunit = $idunit and a.idaccount =  ".$rcoa->idaccount."");
+
+                    //delete history
+                    $this->db->query("delete
+                                            from accounthistory
+                                            where idunit = $idunit and idaccount = ".$rcoa->idaccount."");
+                }
+            }
+        }
+
+    }
+
 }
 
 ?>
