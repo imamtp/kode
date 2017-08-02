@@ -1166,6 +1166,9 @@ class sales extends MY_Controller {
                     'idjournal_do'=>$journal['idjournal']
                 ));
 
+            //add history stok
+
+            //update warehouse_stock
         }        
     }
 
@@ -1195,7 +1198,7 @@ class sales extends MY_Controller {
                                 order by a.invoice_status");
         foreach($q->result() as $r){
             $invoice_status = 2; //paid
-            $journal = $this->jmodel->sales_pelunasan_full($r->date_payment,'Pelunasan Piutang',$r->paidtoday,$idunit,null,$r->idaccount_coa_kas);
+            $journal = $this->jmodel->sales_pelunasan_full($r->date_payment,'Pelunasan Piutang - No Invoice: '.$r->noinvoice,$r->paidtoday,$idunit,null,$r->idaccount_coa_kas);
 
             $this->db->where('idsales',$r->idsales);
             $this->db->update('sales',array('invoice_status'=>$invoice_status));
