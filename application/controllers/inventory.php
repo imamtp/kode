@@ -1317,6 +1317,43 @@ class inventory extends MY_Controller {
         }
     }
 
+    function reset_stok($idunit){
+        //reset stok inventory ke stok awal pada tabel history_stock
+        $w = $this->db->get('warehouse');
+        foreach($w->result() as $r){
+
+            $qinv = $this->db->get_where('inventory',array('display'=>null));
+            foreach($qinv->result() as $rinv){
+                $qstok = $this->db->query("select old_qty,no_transaction
+                    from stock_history
+                    where idunit = $idunit and idinventory = ".$rinv->idinventory." and warehouse_id = ".$r->warehouse_id."
+                    order by datein asc
+                    limit 1");
+                if($qstok->num_rows()>0){
+                    $rstok = $qstok->row();
+                    $qty = $rstok->old_qty == null ? 0 : $rstok->old_qty;
+
+                    //update stok paling awal
+                    $this->db->where(array(
+                        'idinventory'=>$rinv->idinventory,
+                        'warehouse_id'=>$r->warehouse_id
+                    ));
+                    $this->db->update('warehouse_stock',array(
+                        'stock'=>$qty
+                    ));
+
+                    //hapus history stok kecuali yg paling awal
+                    $this->db->query("delete 
+                                from stock_history
+                                where idunit = $idunit and idinventory = ".$rinv->idinventory." 
+                                and warehouse_id = ".$r->warehouse_id."");
+                }
+            }
+            
+            
+        }
+    }
+
     // function hapusInventory()
     // {
     //     //delete:inventorydeprec,inventorydeprecitem 
