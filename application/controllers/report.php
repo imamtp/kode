@@ -1026,11 +1026,18 @@ class report extends MY_Controller {
                     a.nameinventory,
                     c.short_desc as satuan,
                     b.old_qty,
-                    b.qty_transaction,
+                    case
+                        when type_adjustment in (1,2,3,4,6,9,10,12) then b.qty_transaction
+                        else null
+                    end as in,
+                    case
+                        when type_adjustment in (5,7,8,11,14,15) then b.qty_transaction
+                        else null
+                    end as out,
                     b.balance,
                     b.datein,
                     case
-                        when type_adjustment = 1 then 'Order, (+)'
+                        when type_adjustment = 1 then 'Order (+)'
                         when type_adjustment = 2 then 'Stock In By PO (+)'
                         when type_adjustment = 3 then 'Stock In By Cash  (+)'
                         when type_adjustment = 4 then 'Stock Opname Plus (+)'

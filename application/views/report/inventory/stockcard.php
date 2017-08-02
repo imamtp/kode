@@ -32,7 +32,8 @@ if($option!='print')
      <td><strong>Nama Barang</strong></td>
      <td><strong>Satuan</strong></td>
      <td><strong>Stock Awal</strong></td>
-     <td><strong>Qty Transaksi</strong></td>
+     <td><strong>In</strong></td>
+     <td><strong>Out</strong></td>
      <td><strong>Stock Akhir</strong></td>
      <td><strong>Tanggal Transaksi</strong></td>
      <td><strong>Tipe Adjusment</strong></td>
@@ -47,7 +48,8 @@ if($option!='print')
         <td><?=$r['nameinventory']?></td>
         <td><?=$r['satuan']?></td>
         <td class="number"><?=number_format($r['old_qty'],2)?></td>
-        <td class="number"><?=number_format($r['qty_transaction'],2)?></td>
+        <td class="number"><?=$r['in'] != null ? number_format($r['in'],2) : '-'?></td>
+        <td class="number"><?=$r['out'] != null ? number_format($r['out'],2) : '-'?></td>
         <td class="number"><?=number_format($r['balance'],2)?></td>
         <td><?=$r['datein']?></td>
         <td><?=$r['type_adjustment']?></td>
