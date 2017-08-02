@@ -730,8 +730,8 @@ class purchase extends MY_Controller {
         $idpayment = $this->input->post('idpayment');
 
           //buat jurnal hutang
-        $this->load->model('journal/m_jpurchase','jmodel');
-        $idjournal = $this->jmodel->purchase_ap2(date('Y-m-d'),'AP Purchase Order: '.$nopo,$total_amount,$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_pajakmasuk,$total_pajak);
+        $this->load->model('journal/m_journal');
+        $idjournal = $this->m_journal->create_invoice_purchase(date('Y-m-d'),'AP Purchase Order: '.$nopo,$total_amount,$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_pajakmasuk,$total_pajak);
         // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
         $data = array(
