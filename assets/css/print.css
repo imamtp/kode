@@ -25,6 +25,14 @@ body {
         /*display: block;*/
         font-family: Arial, "Times New Roman", serif;
         font-weight: none;
+        font-size: 10pt;
+    }
+    th,
+    td {
+        padding: 5px;
+    }
+    .text-right {
+        text-align: right;
     }
     @page {
         size: 9.5in 11in;
