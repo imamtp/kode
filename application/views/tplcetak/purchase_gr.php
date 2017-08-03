@@ -12,9 +12,9 @@
 </head>
 
 <?php
-if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
+//if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
 ?>
-
+<body>
     <div class="container">
 
       <div class="panel panel-info">
@@ -23,13 +23,13 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
 
     
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-5">
           <h1>
             <!-- <img src="<?=base_url()?>/assets/images/<?=$data['logo']?>" width="200"/> -->
             <?=$this->logo?>
           </h1>
         </div>
-        <div class="col-xs-6 text-right">
+        <div class="col-xs-5 col-xs-offset-2 text-right">
           <h2><?=$title?></h2>
           <h3><small>Tanggal Order: <?=backdate2($data['datetrans'])?> <br>NO: #<?=$data['no']?></small></h3>
         </div>
@@ -53,7 +53,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Supplier: <?//=$data['namesupplier']?></h4>
+              <h4>Supplier: </h4>
             </div>
             <div class="panel-body">
              <p>
@@ -71,8 +71,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
         <table class="table borderless" >
         
          <tr>
-           <td width="22%"><b>Item List:</b></td>
-           <td width="50%"></td>
+           <td colspan="2"><b>Item List:</b></td>
          </tr>
          <?php
          // echo $data['totaltax'];
