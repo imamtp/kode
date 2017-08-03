@@ -731,7 +731,8 @@ class sales extends MY_Controller {
         else{    
             $filename = $d['title']."-".$d['data']['no'];
             $filename = str_replace(" ", "-", $filename);
-            $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
 
             ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
             $html = $this->load->view('tplcetak/sales_print',$d, true);
