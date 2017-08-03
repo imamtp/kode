@@ -35,9 +35,9 @@ define('FOPEN_WRITE_CREATE',					'ab');
 define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
-define('DIR_APP','nusafin2');
+define('DIR_APP',''); 
 define('DOCUMENTROOT',$_SERVER['DOCUMENT_ROOT'].'/'.DIR_APP.'/');
-
+define('DIR_DOWNLOAD', '/var/www/html/redsfin/download');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
