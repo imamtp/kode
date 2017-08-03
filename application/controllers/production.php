@@ -408,25 +408,45 @@ class production extends MY_Controller
                 }
 
 
-                //start update stok material 
-                $qjobitem = $this->db->query("select job_item_id
-                                            from job_item a
-                                            where a.job_order_id = $job_order_id and a.idinventory = ".$value->idinventory."");
-                if($qjobitem->num_rows()>0){
-                    $rjobitem = $qjobitem->row();
+                
+
+
+                // if($qjobitem->num_rows()>0){
+                //     $rjobitem = $qjobitem->row();
                     
-                    $qjobmaterial = $this->db->query("select idinventory from prod_material 
-                                                        where job_item_id = ".$rjobitem->job_item_id." and job_order_id = $job_order_id
-                                                        and idunit = $idunit");
-                    if($qjobmaterial->num_rows()>0){
-                        $rmaterial = $qjobmaterial->row();
-                        $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$this->input->post('job_no'));
-                    }
-                }                
+                //     $qjobmaterial = $this->db->query("select idinventory from prod_material 
+                //                                         where job_item_id = ".$rjobitem->job_item_id." and job_order_id = $job_order_id
+                //                                         and idunit = $idunit");
+                //     if($qjobmaterial->num_rows()>0){
+                //         $rmaterial = $qjobmaterial->row();
+                //         $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$this->input->post('job_no'));
+                //     }
+                // }                
                 //end update stok material 
             }
         }
         //end grib job
+
+        if ($status==5) {
+            //status ready to deliver - update stok
+            $qjobitem = $this->db->query("select job_item_id,job_order_id,idinventory
+                                        from job_item a
+                                        where a.job_order_id = $job_order_id");
+            foreach($qjobitem->result() as $rjob){
+                // var_dump($rjob);
+                $qjobmaterial = $this->db->query("select idinventory,qty_real from 
+                                                    prod_material 
+                                                    where job_item_id = ".$rjob->job_item_id." and job_order_id = $job_order_id
+                                                    and idunit = $idunit");
+                if($qjobmaterial->num_rows()>0){
+                    $rmaterial = $qjobmaterial->row();
+                    // echo $rmaterial->idinventory.' ';
+                    if($rmaterial->qty_real!==null || $rmaterial->qty_real!=0){
+                        $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$rmaterial->qty_real,$this->input->post('job_no'));
+                    }                        
+                }
+            }
+        }
 
         //start grid material
         // foreach ($gridmaterial as $value) {
