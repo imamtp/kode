@@ -3,7 +3,7 @@
 Ext.define('GridBatchItemPOListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'purchase_batch_id', 'idpurchaseitem', 'idinventory', 'sku_no', 'invno', 'nameinventory', 'qty', 'price', 'disc', 'total', 'ratetax', 'tax', 'size', 'short_desc', 'size_measurement', 'warehouse_code', 'notes'
+        'purchase_batch_id', 'idpurchaseitem', 'idinventory', 'sku_no', 'invno', 'nameinventory', 'qty', 'price', 'disc', 'total', 'ratetax', 'tax', 'size', 'short_desc', 'size_measurement', 'warehouse_code', 'notes', 'price'
     ],
     idProperty: 'id'
 });
@@ -105,6 +105,10 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                     hidden: true,
                     dataIndex: 'idpurchase',
                     //                    id: 'idinventory'
+                }, {
+                    header: 'price',
+                    hidden: true,
+                    dataIndex: 'price',
                 },
                 {
                     header: 'idunit',
@@ -219,7 +223,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                 },
                 {
                     xtype: 'hiddenfield',
-                    id: 'idinventory_batchitemporeceipt',
+                    id: 'idinventory_parentitemporeceipt',
                     name: 'idinventory'
                 },
                 {
@@ -281,7 +285,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                     params: {
                                         idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
                                         idpurchaseitem: Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue(),
-                                        idinventory: Ext.getCmp('idinventory_batchitemporeceipt').getValue(),
+                                        idinventory: Ext.getCmp('idinventory_parentitemporeceipt').getValue(),
                                         idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
                                         numbatch: Ext.getCmp('numbatch_itempo').getValue(),
                                         totalqty: Ext.getCmp('qty_batchitemporeceipt').getValue(),
@@ -299,7 +303,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                         //    operation.params={
                                         //                 idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
                                         //                 idpurchaseitem: Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue(),
-                                        //                 idinventory: Ext.getCmp('idinventory_batchitemporeceipt').getValue(),
+                                        //                 idinventory: Ext.getCmp('idinventory_parentitemporeceipt').getValue(),
                                         //                 idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
                                         //                 is_tmp:1
                                         //              };
@@ -308,7 +312,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                             params: {
                                                 idpurchase: Ext.getCmp('idpurchase_batchitemporeceipt').getValue(),
                                                 idpurchaseitem: Ext.getCmp('idpurchaseitem_batchitemporeceipt').getValue(),
-                                                idinventory: Ext.getCmp('idinventory_batchitemporeceipt').getValue(),
+                                                idinventory: Ext.getCmp('idinventory_parentitemporeceipt').getValue(),
                                                 idunit: Ext.getCmp('idunit_batchitemporeceipt').getValue(),
                                                 is_tmp: 1
                                             }

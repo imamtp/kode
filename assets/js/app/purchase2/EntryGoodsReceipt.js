@@ -75,7 +75,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
 
                         Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
                         Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
-                        Ext.getCmp('idinventory_batchitemporeceipt').setValue(selectedRecord.data.idinventory);
+                        Ext.getCmp('idinventory_parentitemporeceipt').setValue(selectedRecord.data.idinventory);
                         Ext.getCmp('idunit_batchitemporeceipt').setValue(idunit);
                         Ext.getCmp('qty_batchitemporeceipt').setValue(selectedRecord.data.qty);
                         Ext.getCmp('short_desc_batchitemporeceipt').setValue(selectedRecord.data.short_desc);
@@ -507,7 +507,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
 
                             //     Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
                             //     Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
-                            //     Ext.getCmp('idinventory_batchitemporeceipt').setValue(selectedRecord.data.idinventory);
+                            //     Ext.getCmp('idinventory_parentitemporeceipt').setValue(selectedRecord.data.idinventory);
                             //     Ext.getCmp('idunit_batchitemporeceipt').setValue(idunit);                                    
                             //     Ext.getCmp('qty_batchitemporeceipt').setValue(selectedRecord.data.qty);   
                             //     Ext.getCmp('short_desc_batchitemporeceipt').setValue(selectedRecord.data.short_desc);

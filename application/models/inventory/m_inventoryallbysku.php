@@ -107,7 +107,7 @@ class m_inventoryAllBySku extends CI_Model {
 
     function whereQuery() {
         return "a.display is null
-                and f.idinventory_batch is null";
+                and f.idinventory_parent is null";
     }
 
     function orderBy() {

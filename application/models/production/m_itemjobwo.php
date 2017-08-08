@@ -49,7 +49,7 @@ f.warehouse_code as warehouse_code_reject,g.warehouse_code as warehouse_code_sis
 
     function whereQuery() {
         return " a.deleted = 0
-                    and b.idinventory_batch is null";
+                    and b.idinventory_parent is null";
     }
 
     function orderBy() {
