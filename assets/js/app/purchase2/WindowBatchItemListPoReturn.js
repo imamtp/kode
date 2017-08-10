@@ -265,7 +265,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchPoReturn', {
                         xtype: 'textfield',
                         readOnly: true,
                         width: 190,
-                        id: 'numbatch_itemporeturn',
+                        id: 'numbatch_batchitemporeceiptreturn',
                         fieldLabel: 'Jumlah Batch'
                     }]
                 }

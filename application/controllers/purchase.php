@@ -9,6 +9,21 @@ class purchase extends MY_Controller {
         
     }
 
+    public function itemPurchaseInvoce(){
+        $idunit = $this->input->get('idunit');
+        $idpurchase = $this->input->get('idpurchase');
+
+        $sql = "
+            select a.sku_no, a.invno, a.nameinventory, b.price, b.qty_received, a.total
+            from purchaseitem_batch a
+            left join purchaseitem b on a.idpurchaseitem = b.idpurchaseitem
+            left join purchase d on d.idpurchase = b.idpurchase
+            where true
+            and d.idunit = $idunit
+            and d.idpurchase = $idpurchase";
+        
+    }
+
     public function savePurchase(){
         $retAkses = $this->cekAksesUser(134,'add');
         if(!$retAkses['success'])
@@ -388,46 +403,7 @@ class purchase extends MY_Controller {
             $this->db->update('purchase', $data);
         }
 
-
-        // foreach ($items as $value) {
-
-        //     $qmeasurement = $this->db->query("select measurement_id from productmeasurement where short_desc = '".$value->short_desc."' and idunit = ".$this->input->post('unit')." ");
-        //     if($qmeasurement->num_rows()>0)
-        //     {
-        //         $rMeasurement = $qmeasurement->row();
-        //         $measure = $rMeasurement->measurement_id;
-        //     } else {
-        //         $measure = null;
-        //     }
-
-        //     $item = array(
-        //         'idpurchase' => $idpurchase,
-        //         'idinventory' => $value->idinventory,
-        //         'measurement_id' => $measure,
-        //         // 'invno' => $value->invno,
-        //         'qty' => $value->qty,
-        //         'disc' => $value->disc,
-        //         'price' => $value->price,
-        //         'total' => $value->total,
-        //         // 'remarks' => $value->remarks,
-        //         'ratetax' => $ratetax
-        //     );
-
-
-        //     if($statusform == 'input'){
-        //         $q_seq = $this->db->query("select nextval('seq_purchaseitem')");
-        //         $item['idpurchaseitem'] = $q_seq->result_array()[0]['nextval'];
-        //         $this->db->insert('purchaseitem', $item);
-        //     }
-        //     else if($statusform == 'edit'){
-        //         $item['idpurchaseitem'] = $value->idpurchaseitem;
-        //         $this->db->where('idpurchaseitem', $item['idpurchaseitem']);
-        //         $this->db->update('purchaseitem', $item);
-        //     }
-        // }
-
-         foreach ($items as $value) {
-
+        foreach ($items as $value) {
             $item = array(
                 'idpurchaseitem' => $value->idpurchaseitem,
                 'idpurchase' => $idpurchase,
@@ -444,6 +420,7 @@ class purchase extends MY_Controller {
                 // 'remarks' => $value->remarks,
                 'ratetax' => $value->ratetax,
                 'deleted' => $value->deleted == null ? 0 : $value->deleted,
+                'idunit'=> $this->input->post('unit'),
             );
             
             if($item['idpurchaseitem'] == null){
@@ -544,32 +521,48 @@ class purchase extends MY_Controller {
     }
 
     function save_goodsreceipt(){
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'GR',
+            'table' => 'goods_receipt',
+            'fieldpk' => 'goods_receipt_id',
+            'fieldname' => 'no_goods_receipt',
+            'extraparams'=> '',
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
+
+        echo $noarticle;
+        exit();
         $this->db->trans_begin();
         // print_r($_POST); die;
 
         $this->load->model('inventory/m_stock');
 
         $statusform = $this->input->post('statusform');
+        $goods_receipt_id = $this->m_data->getPrimaryID($this->input->post('goods_receipt_id'),'goods_receipt', 'goods_receipt_id', $this->input->post('unit'));
         $idpurchase = $this->input->post('idpurchase');
         $idunit = $this->input->post('idunit');
         $nopo = $this->input->post('nopo');
         $idaccount_coa_persediaan = $this->input->post('idaccount_coa_gr');
 
         $data = array(
-                'delivereddate' => backdate($this->input->post('received_date')),
-                'receivedby_id' => $this->input->post('receivedid'),
-                'notes_receipt' => $this->input->post('notes'),
-                'no_rujukan_sup' => $this->input->post('no_rujukan_sup'),
+                // 'goods_receipt_id'=>,
+                'no_goods_receip'=>$noarticle,
+                'received_date' => backdate($this->input->post('received_date')),
+                'received_by' => $this->input->post('receivedid'),
+                'notes' => $this->input->post('notes'),
+                'supplier_direct_no' => $this->input->post('no_rujukan_sup'),
                 'idaccount_coa_persediaan'=>$idaccount_coa_persediaan //akun persediaan
             );
         
-        $wer = array(
-            'idpurchase'=>$idpurchase,
-            'idunit'=>$idunit
-        );
+        // $wer = array(
+        //     'idpurchase'=>$idpurchase,
+        //     'idunit'=>$idunit
+        // );
 
         $this->db->where($wer);
-        $this->db->update('purchase',$data);
+        $this->db->update('goods_receipt',$data);
 
         $items = json_decode($this->input->post('itemgrid'));
 
@@ -602,7 +595,7 @@ class purchase extends MY_Controller {
 
                         $idinventory = $this->db->query("select max(idinventory) as id from inventory")->row();
                         
-                        $datainventory['idinventory_batch'] = $value->idinventory;
+                        $datainventory['idinventory_parent'] = $value->idinventory;
                         $datainventory['idinventory'] = $idinventory->id+1;
                         $datainventory['invno'] = $rbatch->invno;
                         $datainventory['sku_no'] = $rbatch->sku_no;
@@ -984,6 +977,58 @@ class purchase extends MY_Controller {
         echo json_encode(array('data'=>$data,'qtytotal'=>$totalqty));
     }
 
+    function save_batch(){
+        $idunit = $this->input->post('idunit');
+        $items = json_decode($this->input->post('datagrid'));
+        foreach($items as $item){
+            $q = $this->db->get_where('inventory', array(
+                'invno'=>$item->invno,
+                'sku_no'=>$item->sku_no,
+                'idunit'=>$idunit,
+            ));
+            // $q = $this->db->query("select idinventory from inventory where invno = '".$value->invno."' and sku_no = '".$value->sku_no."' ");
+            if($q->num_rows()>0){
+                $message = "Kode barang <b>".$item->invno."</b> dengan No SKU <b>".$item->sku_no."</b> sudah ada di dalam database";
+                $success = false;
+                break;
+            } else {
+                $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$item->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
+                $notes = isset($item->notes)?: null;
+                $data = array(
+                        'warehouse_id'=>$idwarehouse,
+                        'warehouse_code'=>$item->warehouse_code,
+                        'notes'=> $notes,
+                        'invno'=>$item->invno,
+                        'sku_no'=>$item->sku_no,
+                        'qty'=>$item->qty,
+                        // 'total'=>$value->qty * $value->price,
+                        // 'is_tmp'=>1
+                );
+
+                $this->db->where(array(
+                        'purchase_batch_id'=>$value->purchase_batch_id,
+                        'idpurchase'=>$this->input->post('idpurchase'),
+                        'idpurchaseitem'=>$value->idpurchaseitem
+                ));
+                $this->db->update('purchaseitem_batch',$data);
+                $totalqtyterima+=$value->qty;
+            }
+        }
+    }
+
+    function get_batch_items(){
+        $idpurchase = $this->input->get('idpurchase');
+        $idpurchaseitem = $this->input->get('idpurchaseitem');
+        $idunit = $this->input->get('idunit');
+        $q = $this->db->get_where('purchaseitem_batch', array(
+            'idpurchase'=> $idpurchase,
+            'idpurchaseitem'=> $idpurchaseitem,
+            'idunit'=> $idunit,
+        ));
+        echo json_encode(array('data'=>$q->result_array(),'numrows'=>$q->num_rows()));
+        
+    }
+
     function check_batch_item(){
         $postget = $this->input->get('idpurchase')=='' ? 'post' : 'get';
 
@@ -1007,7 +1052,6 @@ class purchase extends MY_Controller {
                 'idpurchase' => $idpurchase,
                 'idunit'=>$idunit
             ));
-
         $dataArr = $q->result_array();
         $totalqtyterima = 0;
         foreach ($dataArr as $key => $value) {
@@ -1510,6 +1554,7 @@ class purchase extends MY_Controller {
                         'invno'=>$value->invno,
                         'sku_no'=>$value->sku_no,
                         'qty'=>$value->qty,
+                        // 'total'=>$value->qty * $value->price,
                         'is_tmp'=>1
                 );
 
@@ -1524,14 +1569,14 @@ class purchase extends MY_Controller {
         }
 
         if($success){
-             $qtysisa = $totalqty-$totalqtyterima;
-            if($totalqtyterima>$totalqty){
-                // $message = 'Total qty batch melebihi qty barang';
-                // $success = false;
-            } else if($totalqtyterima<$totalqty){
-                $message = 'Total qty batch kurang dari qty barang';
-                $success = false;
-            }
+            $qtysisa = $totalqty-$totalqtyterima;
+            // if($totalqtyterima>$totalqty){
+            //     // $message = 'Total qty batch melebihi qty barang';
+            //     // $success = false;
+            // } else if($totalqtyterima<$totalqty){
+            //     $message = 'Total qty batch kurang dari qty barang';
+            //     $success = false;
+            // }
         }
        
 
@@ -1593,7 +1638,25 @@ class purchase extends MY_Controller {
         // print_r($d); die;
         $d['title'] = 'Purchase Order';
         $d['print'] = $print;
-        $this->load->view('tplcetak/purchase_invoice',$d);
+        if($print == null)
+            $this->load->view('tplcetak/purchase_invoice',$d);
+        else{    
+            $filename = $d['title']."-".$d['data']['no'];
+            $filename = str_replace(" ", "-", $filename);
+            // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
+
+            ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
+            $html = $this->load->view('tplcetak/purchase_invoice',$d, true);
+            // // $html = $this->load->view('pdf_report', $data, true); // render the view into HTML
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->WriteHTML($html); // write the HTML into the PDF
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+            redirect("download/reports/$filename.pdf");
+            unlink("download/reports/$filename.pdf");
+        }
     }
 
     function print_gr($idpurchase,$print=null){
@@ -1602,7 +1665,26 @@ class purchase extends MY_Controller {
         // print_r($d); die;
         $d['title'] = 'Goods Receipt';
         $d['print'] = $print;
-        $this->load->view('tplcetak/purchase_gr',$d);
+
+        if($print == null)
+            $this->load->view('tplcetak/purchase_gr',$d);
+        else{    
+            $filename = $d['title']."-".$d['data']['no'];
+            $filename = str_replace(" ", "-", $filename);
+            // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
+
+            ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
+            $html = $this->load->view('tplcetak/purchase_gr',$d, true);
+            // // $html = $this->load->view('pdf_report', $data, true); // render the view into HTML
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->WriteHTML($html); // write the HTML into the PDF
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+            redirect("download/reports/$filename.pdf");
+            unlink("download/reports/$filename.pdf");
+        }
     }
 
     function print_return($idpurchase,$print=null){
@@ -1649,7 +1731,7 @@ class purchase extends MY_Controller {
 
                                 $idinventory = $this->db->query("select max(idinventory) as id from inventory")->row();
                                 
-                                $datainventory['idinventory_batch'] = $value->idinventory;
+                                $datainventory['idinventory_parent'] = $value->idinventory;
                                 $datainventory['idinventory'] = $idinventory->id+1;
                                 $datainventory['invno'] = $rbatch->invno;
                                 $datainventory['sku_no'] = $rbatch->sku_no;
