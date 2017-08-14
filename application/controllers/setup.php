@@ -522,6 +522,7 @@ class Setup extends MY_Controller {
                 from $table where true 
                 $extraparams and $fieldname like '%$y$m%' 
                 order by $fieldpk desc
+                group by $fieldname
                 limit 1";
         
         $q = $this->db->query($sql);

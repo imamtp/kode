@@ -1830,7 +1830,9 @@ Ext.define('comboxpurchasestatus', {
 
 var ArrGoodsReceiptStatus = [
     [1, 'Open'],
-    [2, 'Confirmed'],
+    [2, 'Canceled'],
+    [3, 'Confirmed'],
+    [4, 'Invoiced'],
 ];
 
 Ext.define('comboxgoodsreceiptstatus', {

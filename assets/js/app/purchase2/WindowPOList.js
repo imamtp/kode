@@ -99,16 +99,14 @@ Ext.define('GridPurchaseOrderList', {
                 cb_status_poreceipt.setValue('3');
             });
 
-            var cb_grstatus_poreceipt = Ext.getCmp('cb_grstatus_poreceipt');
-            // cb_grstatus_poreceipt.getStore().load(function() {
-            //     cb_grstatus_poreceipt.setValue('1');
-            // });
+            Ext.getCmp('cb_grstatus_poreceipt').setValue(1);
+            Ext.getCmp('cb_grstatus_poreceipt').setReadOnly(true);
 
             Ext.getCmp('totalPajak_poreceipt').setValue(renderNomor(selectedRecord.get('tax')));
             Ext.getCmp('total_poreceipt').setValue(renderNomor(selectedRecord.get('totalamount')));
             Ext.getCmp('subtotal_poreceipt').setValue(renderNomor(selectedRecord.get('subtotal')));
 
-            Ext.getCmp('memo_poreceipt').setValue('Delivery Order ' + selectedRecord.get('nopurchase'));
+            Ext.getCmp('memo_poreceipt').setValue('Goods Receipt ' + selectedRecord.get('nopurchase'));
 
             gridInsertBaruGRPO.getStore().load({
                 params: {
@@ -138,6 +136,8 @@ Ext.define('GridPurchaseOrderList', {
                             invno: obj.invno,
                             nameinventory: obj.nameinventory,
                             qty: obj.qty,
+                            qty_received: obj.qty_received || 0,
+                            qty_receipt: 0,
                             price: obj.price,
                             disc: obj.disc,
                             total: obj.total,
@@ -151,7 +151,7 @@ Ext.define('GridPurchaseOrderList', {
                         });
 
 
-                        gridInsertBaruGRPO.getStore().insert(0, recPO);
+                        gridInsertBaruGRPO.getStore().insert(i, recPO);
 
                         //ambil data purchaseitem batch utk tiap-tiap purchase item dan ditaro di WindowEntryGoodsReceipt.itembatch
                         Ext.Ajax.request({

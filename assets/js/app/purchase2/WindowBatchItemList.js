@@ -3,7 +3,7 @@
 Ext.define('GridBatchItemPOListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'purchase_batch_id', 'idpurchaseitem', 'idinventory', 'sku_no', 'invno', 'nameinventory', 'qty', 'price', 'disc', 'total', 'ratetax', 'tax', 'size', 'short_desc', 'size_measurement', 'warehouse_code', 'notes', 'deleted'
+        'purchase_batch_id', 'idpurchaseitem', 'idinventory', 'idunit', 'sku_no', 'invno', 'nameinventory', 'qty', 'price', 'disc', 'total', 'ratetax', 'tax', 'size', 'short_desc', 'size_measurement', 'warehouse_code', 'notes', 'deleted'
     ],
     idProperty: 'id'
 });
@@ -17,7 +17,7 @@ var storeGridBatchItemPOList = Ext.create('Ext.data.Store', {
     proxy: {
         type: 'ajax',
         // url: SITE_URL + 'purchase/check_batch_item',
-        url: SITE_URL + 'purchase/get_batch_item',
+        url: SITE_URL + 'purchase/get_batch_items',
         actionMethods: 'GET',
         method: 'GET',
         reader: {
@@ -102,6 +102,11 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                     //                    id: 'idinventory'
                 },
                 {
+                    header: 'idunit',
+                    hidden: true,
+                    dataIndex: idunit,
+                },
+                {
                     header: 'idpurchase',
                     hidden: true,
                     dataIndex: 'idpurchase',
@@ -150,8 +155,9 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                         allowBlank: false,
                         minValue: 1,
                         listeners: {
-                            'blur': function() {
-                                updateGRBatch();
+                            change: function(dis, newVal, oldVal) {
+                                var total = Ext.getCmp('qtytotal_batchitemporeceipt').getValue();
+                                Ext.getCmp('qtytotal_batchitemporeceipt').setValue(total - oldVal + newVal);
                             }
                         }
                     }
@@ -311,6 +317,7 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                         'purchase_batch_id': null,
                                         'idpurchaseitem': win.selectedItem.data.idpurchaseitem,
                                         'idinventory': win.selectedItem.data.idinventory,
+                                        'idunit': win.selectedItem.data.idunit,
                                         'sku_no': win.selectedItem.data.sku_no,
                                         'invno': '-' + (i + 1),
                                         'nameinventory': win.selectedItem.data.nameinventory,
@@ -386,11 +393,25 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                             id: 'btnSimpanGRBatchWindow',
                             handler: function() {
                                 var winEntryGR = Ext.getCmp('WindowEntryGoodsReceipt');
+                                var purchaseitemstore = Ext.getCmp('EntryGoodsReceipt').getStore();
                                 var winBatch = Ext.getCmp('WindowBatchItemList');
                                 var batchstore = Ext.getCmp('GridBatchGoodsReceipt').getStore();
+                                //update winEntryGR.itembatch
+                                batchstore.clearFilter();
                                 Ext.each(batchstore.data.items, function(obj, i) {
                                     winEntryGR.itembatch[winBatch.selectedItemIndex][i] = obj.data;
                                 });
+                                batchstore.filter([function(item) { return item.get('deleted') != "1" }]);
+
+                                //update qty_receive
+                                purchaseitemstore.getRange().find(function(item) {
+                                    if (item.data.idpurchaseitem == winBatch.selectedItem.data.idpurchaseitem) {
+                                        item.data.qty_receipt = Ext.getCmp('qtytotal_batchitemporeceipt').getValue();
+                                        return false;
+                                    }
+                                });
+                                Ext.getCmp('EntryGoodsReceipt').getView().refresh();
+
                                 Ext.getCmp('WindowBatchItemList').hide();
                                 // batchstore.clearFilter();
 
@@ -526,13 +547,18 @@ Ext.define(dir_sys + 'purchase2.WindowBatchItemList', {
     }],
     listeners: {
         show: function(win) {
-            Ext.getCmp('GridBatchGoodsReceipt').getStore().clearFilter();
-            Ext.getCmp('GridBatchGoodsReceipt').getStore().removeAll();
+            //clear grid
+            storeGridBatchItemPOList.clearFilter();
+            Ext.each(storeGridBatchItemPOList.getRange(), function(obj, i) {
+                storeGridBatchItemPOList.removeAt(0);
+            });
+
             Ext.getCmp('qty_batchitemporeceipt').setValue(win.selectedItem.data.qty);
             Ext.each(win.itembatch, function(obj, i) {
                 var record = new GridBatchItemPOListModel(obj);
                 Ext.getCmp('GridBatchGoodsReceipt').getStore().insert(i, record);
             });
+            storeGridBatchItemPOList.filter([function(item) { return item.get('deleted') != "1" }]);
             updateGRBatch();
             // this.el.setStyle('top', '');
         },

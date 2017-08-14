@@ -8,7 +8,7 @@ var wCoaInventoryGoodsReceipt = Ext.create(dir_sys + 'inventory.wCoaInventoryGoo
 
 Ext.define('GridReceiptItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received', ],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'qty_received', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received', 'qty_receipt'],
     idProperty: 'id'
 });
 
@@ -28,8 +28,8 @@ var storeGridItemPurchaseOrder = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
-        direction: 'DESC'
+        property: 'sku_no',
+        direction: 'ASC'
     }]
 });
 
@@ -163,22 +163,17 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     width: 120,
                     dataIndex: 'qty_received',
                     align: 'right'
-                        // editor: {
-                        //     xtype: 'numberfield',
-                        //     allowBlank: false,
-                        //     minValue: 1
-                        // }
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Receipt',
+                    width: 120,
+                    dataIndex: 'qty_receipt',
+                    align: 'right'
                 },
                 {
                     header: 'Satuan',
                     dataIndex: 'short_desc',
-                    // editor: {
-                    //     xtype: 'comboxmeasurement',
-                    //     hideLabel:true,
-                    //     valueField: 'short_desc',
-                    //     displayField: 'short_desc',
-                    //     labelWidth: 100
-                    // }
                 },
                 {
                     xtype: 'numbercolumn',
@@ -283,13 +278,12 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
             },
             dockedItems: [{
                     xtype: 'hiddenfield',
+                    id: 'id_gr_poreceipt',
+                    name: 'id_gr'
+                }, {
+                    xtype: 'hiddenfield',
                     id: 'idpurchase_poreceipt',
                     name: 'idpurchase'
-                },
-                {
-                    xtype: 'hiddenfield',
-                    id: 'goods_receipt_id_poreceipt',
-                    name: 'goods_receipt_id'
                 },
                 {
                     xtype: 'hiddenfield',
