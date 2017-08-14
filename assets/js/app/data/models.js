@@ -171,7 +171,7 @@ Ext.define('App.model.InventoryBuy', {
 
 Ext.define('App.model.InventoryBySku', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'sku_no', 'nameinventory'],
+    fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'totalstock'],
     idProperty: 'idinventory',
     proxy: {
         type: 'ajax',

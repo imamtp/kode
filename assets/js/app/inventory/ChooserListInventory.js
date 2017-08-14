@@ -51,7 +51,7 @@ var GridInventoryList = Ext.create('Ext.grid.Panel', {
         { header: 'No SKU', dataIndex: 'sku_no', minWidth: 200 },
         { header: 'Kode Barang', dataIndex: 'invno', minWidth: 200 },
         { header: 'Name', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
-        // { header: 'Brand', dataIndex: 'nameinventory', minWidth: 150 },
+        { header: 'Total Stok', dataIndex: 'totalstock', minWidth: 150 }
     ],
     dockedItems: [{
             xtype: 'toolbar',
