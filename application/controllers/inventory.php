@@ -1174,6 +1174,7 @@ class inventory extends MY_Controller {
         if($query!=''){
             $wer = " and (a.sku_no like '%".strtoupper($query)."%' OR a.sku_no like '%".strtolower($query)."%')"; //by sku
             $wer .= " OR (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".strtolower($query)."%')"; //by inventory name
+            $wer .= " OR (a.invno like '%".strtoupper($query)."%')"; //by kode barang
         }
 
         $sql = "select a.idinventory,sku_no,a.idinventory_batch,nameinventory,a.cost,a.hpp_per_unit,a.unitmeasure, e.short_desc as satuan_beli, a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
