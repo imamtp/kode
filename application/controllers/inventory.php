@@ -1189,18 +1189,10 @@ class inventory extends MY_Controller {
                                         ) d ON a.idinventory = d.idinventory_parent
                     LEFT JOIN productmeasurement e 
                                             ON a.unitmeasure = e.measurement_id 
-<<<<<<< HEAD
-                    where a.display is null and a.idinventory_batch is null $wer
-                    GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_batch,a.nameinventory,a.cost,a.hpp_per_unit,a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc,a.unitmeasure,a.bahan_coil_id
-                    ";
-        $q = $this->db->query($sql.$limitoffset);
-        $qtotalrows = $this->db->query($sql);
-=======
                     where a.display is null and a.idinventory_parent is null $wer
                     GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_parent,a.nameinventory,a.cost,a.hpp_per_unit,a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc,a.unitmeasure,a.bahan_coil_id";
         $q = $this->db->query($sql);
->>>>>>> dev
-// echo $sql;
+        $qtotalrows = $this->db->query($sql);
         $dataArr = $q->result_array();
         // print_r($dataArr);
         $i=0;
