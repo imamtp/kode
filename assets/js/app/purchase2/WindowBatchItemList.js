@@ -403,10 +403,11 @@ Ext.define(dir_sys + 'purchase2.GridBatchGoodsReceipt', {
                                 });
                                 batchstore.filter([function(item) { return item.get('deleted') != "1" }]);
 
-                                //update qty_receive
+                                //update qty_receive and total_receipt
                                 purchaseitemstore.getRange().find(function(item) {
                                     if (item.data.idpurchaseitem == winBatch.selectedItem.data.idpurchaseitem) {
                                         item.data.qty_receipt = Ext.getCmp('qtytotal_batchitemporeceipt').getValue();
+                                        item.data.total_receipt = item.data.price * item.data.qty_receipt;
                                         return false;
                                     }
                                 });

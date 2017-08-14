@@ -56,7 +56,8 @@ class m_goodsreceipt extends CI_Model {
                 end as status_gr_name,
                 e.namesupplier,
                 f.accnumber as accnumber_coa_persediaan,
-                f.accname as accname_coa_persediaan";
+                f.accname as accname_coa_persediaan,
+                g.rate";
     }
     
     function fieldCek()
@@ -75,7 +76,8 @@ class m_goodsreceipt extends CI_Model {
                     join employee c on c.idemployee = a.received_by
                     left join purchasestatus d on d.idpurchasestatus = b.idpurchasestatus
                     left join supplier e on e.idsupplier = b.idsupplier
-                    left join account f on f.idaccount = a.idaccount_coa_persediaan";
+                    left join account f on f.idaccount = a.idaccount_coa_persediaan
+                    left join tax g on g.idtax = b.idtax";
         return $query;
     }
 

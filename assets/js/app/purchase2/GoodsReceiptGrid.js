@@ -8,7 +8,7 @@ var WindowEntryPurchaseInvoice = Ext.create(dir_sys + 'purchase2.WindowEntryPurc
 Ext.define('GoodsReceiptGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'goods_receipt_id', 'idpurchase', 'idunit', 'no_po', 'no_goods_receipt', 'no_invoice', 'po_date', 'received_date', 'invoice_date', 'name_received_by', 'received_by', 'received_date', 'status_gr', 'idpurchasestatusname', 'idsupplier', 'namesupplier', 'supplier_direct_no', 'date', 'status_gr_name', 'idtax', 'include_tax', 'idaccount_coa_persediaan', 'accnumber_coa_persediaan', 'accname_coa_persediaan', 'notes',
+        'goods_receipt_id', 'idpurchase', 'idunit', 'no_po', 'no_goods_receipt', 'no_invoice', 'po_date', 'received_date', 'invoice_date', 'name_received_by', 'received_by', 'received_date', 'status_gr', 'idpurchasestatusname', 'idsupplier', 'namesupplier', 'supplier_direct_no', 'date', 'status_gr_name', 'idtax', 'include_tax', 'idaccount_coa_persediaan', 'accnumber_coa_persediaan', 'accname_coa_persediaan', 'notes', 'rate', 'subtotal', 'dpp', 'tax', 'totalamount'
         // 'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'notes_receipt', 'receivedby_id', 'delivereddate', 'firstname', 'lastname', 'noinvoice', 'totalorder', 'totalreceived', 'sisa', 'idpurchasestatusname', 'no_rujukan_sup', 'total_dpp', 'total_diskon'
     ],
     idProperty: 'id'
@@ -120,18 +120,18 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
         dataIndex: 'idpurchase',
         hidden: true,
         header: 'idpurchase'
-    }, {
-        dataIndex: 'idunit',
-        hidden: true,
-        header: 'idunit'
-    }, {
-        dataIndex: 'idsupplier',
-        hidden: true,
-        header: 'idsupplier'
-    }, {
-        dataIndex: 'idaccount_coa_persediaan',
-        hidden: true,
-        header: 'idaccount_coa_persediaan'
+            // }, {
+            //     dataIndex: 'idunit',
+            //     hidden: true,
+            //     header: 'idunit'
+            // }, {
+            //     dataIndex: 'idsupplier',
+            //     hidden: true,
+            //     header: 'idsupplier'
+            // }, {
+            //     dataIndex: 'idaccount_coa_persediaan',
+            //     hidden: true,
+            //     header: 'idaccount_coa_persediaan'
     }, {
         header: 'No GR',
         dataIndex: 'no_goods_receipt',

@@ -532,6 +532,8 @@ class purchase extends MY_Controller {
     }
 
     function save_goodsreceipt(){
+        $idjournal = null;
+        
         $params = array(
             'idunit' => $this->input->post('unit'),
             'prefix' => 'GR',
@@ -540,6 +542,9 @@ class purchase extends MY_Controller {
             'fieldname' => 'no_goods_receipt',
             'extraparams'=> '',
         );
+        
+        $this->load->model('journal/m_jpurchase', 'jmodel');
+        
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
 
@@ -562,6 +567,10 @@ class purchase extends MY_Controller {
             'status'=> $this->input->post('status'),
             'idpurchase'=> $this->input->post('idpurchase'),
             'idunit'=> $this->input->post('idunit'),
+            'subtotal'=> $this->input->post('subtotal'),
+            'dpp'=> $this->input->post('dpp'),
+            'tax'=> $this->input->post('tax'),
+            'totalamount'=> $this->input->post('totalamount'),
         );
         if($header['goods_receipt_id'] == null){ //insert
             $header['goods_receipt_id'] = $this->m_data->getPrimaryID(null,'goods_receipt', 'goods_receipt_id', $this->input->post('idunit'));
@@ -573,6 +582,14 @@ class purchase extends MY_Controller {
             $header['usermod'] = $this->session->userdata('userid');
             $header['datemod'] = date('Y-m-d H:m:s');
             $this->db->update('goods_receipt', $header);
+        }
+
+        //create journal if status is confirmed (3)
+        if($header['status'] == 3){
+            // var_dump($this->jmodel);
+            // exit();        
+            // $this->load->model('purchase/m_purchase','jmodel');
+            $idjournal = $this->jmodel->penerimaan_barang($header['idpurchase'],$this->input->post('nopo'),$header['idaccount_coa_persediaan'],$header['totalamount']);
         }
 
         //save item received
@@ -629,6 +646,58 @@ class purchase extends MY_Controller {
                             $this->db->update('purchaseitem_batch', $detail);
                         else
                             $this->db->delete('purchaseitem_batch');
+                    }
+
+                    //if GR status is confirmed (3) insert to inventory
+                    if($header['status'] == 3 && $detail['deleted'] != 1){
+                        $inv = array(
+                            'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
+                            'idinventory_parent'=> $v->idinventory,
+                            'invno'=> $v->invno,
+                            'sku_no'=> $v->sku_no,
+                            'nameinventory'=> $v->nameinventory,
+                            'cost'=> $item->price,
+                            'notes'=> $v->notes,
+                            'idunit'=> $v->idunit,
+                            'userin'=> $this->session->userdata('userid'),
+                            'datein'=> date('Y-m-d H:i:s'),
+                        );
+
+                        $stock = array(
+                            'idinventory'=> $inv['idinventory'],
+                            'idunit'=> $v->idunit,
+                            'warehouse_id'=> $idwarehouse,
+                            'stock'=> $v->qty,
+                            'usermod'=> $this->session->userdata('userid'),
+                            'datemod'=> date('Y-m-d H:i:s'),
+                        );
+
+                        $sql = "select sum(stock)as old_qty from warehouse_stock
+                                        where idinventory in (
+                                            select idinventory from inventory 
+                                            where idinventory_parent = $v->idinventory
+                                            and idunit = $v->idunit
+                                            and deleted = 0
+                                        )";
+                        $q = $this->db->query($sql);
+                        $r = $q->row();
+
+                        $stock_history = array(
+                            'idinventory'=> $inv['idinventory_parent'],
+                            'idunit'=> $v->idunit,
+                            'type_adjustment'=> 2,
+                            'no_transaction'=> $header['no_goods_receipt'],
+                            'old_qty'=> $r->old_qty,
+                            'qty_transaction'=> $v->qty,
+                            'balance'=> $r->old_qty + $v->qty,
+                            'warehouse_id'=> $idwarehouse,
+                            'datein'=> date('Y-m-d H:i:s'),
+                            'notes'=>'Penerimaan Barang dari PO '.$this->input->post('nopo'),
+                            'idjournal'=>$idjournal,
+                        );
+                        $this->db->insert('inventory', $inv);
+                        $this->db->insert('warehouse_stock', $stock);
+                        $this->db->insert('stock_history', $stock_history);
                     }
                 // }
             } //end loop detail purchaseitem / batch

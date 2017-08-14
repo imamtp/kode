@@ -309,6 +309,15 @@ function showGoodsReceiptData(selectedRecord) {
     var gridEntryGR = Ext.getCmp('EntryGoodsReceipt');
 
     WindowEntryGoodsReceipt.itembatch = []; // <= create temporary for json array of itembatch
+    //untuk perhitungan totalamount
+    WindowEntryGoodsReceipt.perhitungan = {
+        include_tax: selectedRecord.get('include_tax'),
+        ratetax: selectedRecord.get('rate'),
+        subtotal: selectedRecord.get('subtotal'),
+        dpp: selectedRecord.get('dpp'),
+        tax: selectedRecord.get('tax'),
+        totalamount: selectedRecord.get('totalamount'),
+    };
     WindowEntryGoodsReceipt.show();
 
     Ext.getCmp('cb_tax_id_poreceipt').getStore().load();
@@ -381,6 +390,7 @@ function showGoodsReceiptData(selectedRecord) {
                     success: function(form, action) {
                         var d = Ext.decode(form.responseText);
                         WindowEntryGoodsReceipt.itembatch[i] = d.data;
+
                         Ext.each(d.data, function(item) {
                             qty_receipt += (item.qty * 1);
                         });
@@ -396,6 +406,7 @@ function showGoodsReceiptData(selectedRecord) {
                             qty: obj.qty,
                             qty_received: obj.qty_received || 0,
                             qty_receipt: qty_receipt || 0,
+                            total_receipt: (obj.price * 1) * (qty_receipt),
                             price: obj.price,
                             disc: obj.disc,
                             total: obj.total,

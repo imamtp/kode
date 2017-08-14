@@ -3,7 +3,7 @@ var WindowEntryGoodsReceipt = Ext.create(dir_sys + 'purchase2.WindowEntryGoodsRe
 Ext.define('GridPurchaseOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa', 'total_qty_batch', 'sisabatch'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa', 'total_qty_batch', 'sisabatch', 'include_tax'
     ],
     idProperty: 'id'
 });
@@ -79,6 +79,12 @@ Ext.define('GridPurchaseOrderList', {
         icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
         handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
             WindowEntryGoodsReceipt.itembatch = []; // <= create temporary for json array of itembatch
+            //untuk perhitungan totalamount
+            WindowEntryGoodsReceipt.perhitungan = {
+                include_tax: selectedRecord.get('include_tax'),
+                ratetax: selectedRecord.get('rate'),
+            };
+
             WindowEntryGoodsReceipt.show();
 
             Ext.getCmp('cb_tax_id_poreceipt').getStore().load();
@@ -149,8 +155,6 @@ Ext.define('GridPurchaseOrderList', {
                             warehouse_code: obj.warehouse_code,
                             total_qty_batch: obj.total_qty_batch
                         });
-
-
                         gridInsertBaruGRPO.getStore().insert(i, recPO);
 
                         //ambil data purchaseitem batch utk tiap-tiap purchase item dan ditaro di WindowEntryGoodsReceipt.itembatch

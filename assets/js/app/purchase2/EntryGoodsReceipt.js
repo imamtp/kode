@@ -8,7 +8,7 @@ var wCoaInventoryGoodsReceipt = Ext.create(dir_sys + 'inventory.wCoaInventoryGoo
 
 Ext.define('GridReceiptItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'qty_received', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received', 'qty_receipt'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'qty_received', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received', 'qty_receipt', 'total_receipt'],
     idProperty: 'id'
 });
 
@@ -169,6 +169,14 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     header: 'Qty Receipt',
                     width: 120,
                     dataIndex: 'qty_receipt',
+                    align: 'right'
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Total Receipt',
+                    width: 120,
+                    hidden: true,
+                    dataIndex: 'total_receipt',
                     align: 'right'
                 },
                 {

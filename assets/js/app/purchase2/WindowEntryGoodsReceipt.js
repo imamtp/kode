@@ -35,6 +35,18 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
                 var storeEntryGoodsReceipt = Ext.getCmp('EntryGoodsReceipt').getStore();
                 var ItemGRjson = Ext.encode(Ext.pluck(storeEntryGoodsReceipt.data.items, 'data'));
                 var itembatchJson = Ext.encode(Ext.getCmp('WindowEntryGoodsReceipt').itembatch);
+
+                //hitung total biaya pembelian
+                var win = Ext.getCmp('WindowEntryGoodsReceipt');
+                var subtotal = 0;
+                Ext.each(storeEntryGoodsReceipt.getRange(), function(obj, i) {
+                    subtotal += obj.data.total_receipt * 1;
+                });
+                var ratetax = win.perhitungan.ratetax * 1;
+                var dpp = win.perhitungan.include_tax == 1 ? subtotal / 1.1 : subtotal;
+                var tax = dpp * ratetax / 100;
+                var totalamount = dpp + tax;
+
                 Ext.Ajax.request({
                     url: SITE_URL + 'purchase/save_goodsreceipt',
                     method: 'POST',
@@ -52,7 +64,11 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
                         receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
                         received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue(),
                         no_rujukan_sup: Ext.getCmp('no_rujukan_sup_poreceipt').getValue(),
-                        status: Ext.getCmp('cb_grstatus_poreceipt').getValue()
+                        status: Ext.getCmp('cb_grstatus_poreceipt').getValue(),
+                        subtotal: subtotal.toFixed(2),
+                        dpp: dpp.toFixed(2),
+                        tax: tax.toFixed(2),
+                        totalamount: totalamount.toFixed(2),
                     },
                     success: function(form, action) {
                         var d = Ext.decode(form.responseText);
