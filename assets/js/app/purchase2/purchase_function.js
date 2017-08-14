@@ -300,105 +300,151 @@ function showPurchaseOrderData(record) {
     Ext.getCmp('po_date_PurchaseOrder').setValue(convertDate2(record.data.date));
 }
 
-function showGoodsReceiptData(record) {
-    var wWindowEntryGoodsReceipt = Ext.getCmp('WindowEntryGoodsReceipt');
-    wWindowEntryGoodsReceipt.show();
-    wWindowEntryGoodsReceipt.setTitle('View Goods Receipt');
+function showGoodsReceiptData(selectedRecord) {
+    console.log(selectedRecord);
+    if (!Ext.isDefined(Ext.getCmp('WindowEntryGoodsReceipt'))) {
+        Ext.create(dir_sys + 'purchase2.WindowEntryGoodsReceipt');
+    }
+    var WindowEntryGoodsReceipt = Ext.getCmp('WindowEntryGoodsReceipt');
+    var gridEntryGR = Ext.getCmp('EntryGoodsReceipt');
 
-    Ext.getCmp('statusform_poreceipt').setValue('edit');
-
-    var cb_status_poreceipt = Ext.getCmp('cb_status_poreceipt');
-    cb_status_poreceipt.getStore().load();
+    WindowEntryGoodsReceipt.itembatch = []; // <= create temporary for json array of itembatch
+    //untuk perhitungan totalamount
+    WindowEntryGoodsReceipt.perhitungan = {
+        include_tax: selectedRecord.get('include_tax'),
+        ratetax: selectedRecord.get('rate'),
+        subtotal: selectedRecord.get('subtotal'),
+        dpp: selectedRecord.get('dpp'),
+        tax: selectedRecord.get('tax'),
+        totalamount: selectedRecord.get('totalamount'),
+    };
+    WindowEntryGoodsReceipt.show();
 
     Ext.getCmp('cb_tax_id_poreceipt').getStore().load();
-    Ext.getCmp('idpurchase_poreceipt').setValue(record.data.idpurchase);
-    Ext.getCmp('nojurnal_poreceipt').setValue(record.data.nopurchase);
-    Ext.getCmp('po_date_poreceipt').setValue(record.data.date);
-    Ext.getCmp('received_date_poreceipt').setMinValue(new Date(record.data.date));
-    Ext.getCmp('cbUnit_poreceipt').setValue(record.data.idunit);
-    Ext.getCmp('cb_tax_id_poreceipt').setValue(record.data.idtax);
-    Ext.getCmp('supplier_poreceipt').setValue(record.data.idsupplier);
-    Ext.getCmp('suppliername_poreceipt').setValue(record.data.namesupplier);
-    Ext.getCmp('received_poreceipt').setValue(record.data.lastname);
-    Ext.getCmp('receivedid_poreceipt').setValue(record.data.receivedby_id);
-    Ext.getCmp('memo_poreceipt').setValue(record.data.memo);
-    Ext.getCmp('notes_poreceipt').setValue(record.data.notes_receipt);
+
+    Ext.getCmp('id_gr_poreceipt').setValue(selectedRecord.get('goods_receipt_id'));
+    Ext.getCmp('nojurnal_poreceipt').setValue(selectedRecord.get('no_goods_receipt'));
+    Ext.getCmp('idpurchase_poreceipt').setValue(selectedRecord.get('idpurchase'));
+    Ext.getCmp('nopo_poreceipt').setValue(selectedRecord.get('no_po'));
+    Ext.getCmp('po_date_poreceipt').setValue(selectedRecord.get('po_date'));
+    Ext.getCmp('received_poreceipt').setValue(selectedRecord.get('name_received_by'));
+    Ext.getCmp('receivedid_poreceipt').setValue(selectedRecord.get('received_by'))
+    Ext.getCmp('received_date_poreceipt').setValue(selectedRecord.get('received_date'));
+    Ext.getCmp('cbUnit_poreceipt').setValue(selectedRecord.get('idunit'));
+    Ext.getCmp('cb_tax_id_poreceipt').setValue(selectedRecord.get('idtax'));
+    Ext.getCmp('suppliername_poreceipt').setValue(selectedRecord.get('namesupplier'));
+    Ext.getCmp('supplier_poreceipt').setValue(selectedRecord.get('idsupplier'));
+    Ext.getCmp('idaccount_coa_gr').setValue(selectedRecord.get('idaccount_coa_persediaan'));
+    Ext.getCmp('accname_coa_gr').setValue(selectedRecord.get('accname_coa_persediaan'));
+    Ext.getCmp('accnumber_coa_gr').setValue(selectedRecord.get('accnumber_coa_persediaan'));
+    Ext.getCmp('no_rujukan_sup_poreceipt').setValue(selectedRecord.get('supplier_direct_no'));
+    Ext.getCmp('notes_poreceipt').setValue(selectedRecord.get('notes'));
+
+    var cb_status_poreceipt = Ext.getCmp('cb_status_poreceipt');
+    cb_status_poreceipt.getStore().load(function() {
+        cb_status_poreceipt.setValue('3');
+    });
+
+    var cb_statusgr_poreceipt = Ext.getCmp('cb_grstatus_poreceipt');
+    cb_statusgr_poreceipt.setValue(selectedRecord.get('status_gr') * 1);
 
 
-    var received_date_poreceipt = Ext.getCmp('received_date_poreceipt');
-    received_date_poreceipt.setValue(record.data.delivereddate);
+    Ext.getCmp('totalPajak_poreceipt').setValue(renderNomor(selectedRecord.get('tax')));
+    Ext.getCmp('total_poreceipt').setValue(renderNomor(selectedRecord.get('totalamount')));
+    Ext.getCmp('subtotal_poreceipt').setValue(renderNomor(selectedRecord.get('subtotal')));
 
-    cb_status_poreceipt.show();
-    cb_status_poreceipt.setValue(record.data.idpurchasestatus * 1);
+    Ext.getCmp('memo_poreceipt').setValue('Goods Receipt ' + selectedRecord.get('no_po'));
 
-    // console.log(record.data.idpurchasestatus);
-    if (record.data.idpurchasestatus * 1 === 1) {
-        var is_tmp = 1; //status masih open
-
-        Ext.getCmp('btnRecordGR').enable();
-        received_date_poreceipt.setReadOnly(false);
-
-        cb_status_poreceipt.setReadOnly(false);
-    } else {
-        var is_tmp = 0;
-
-        Ext.getCmp('btnRecordGR').disable();
-        received_date_poreceipt.setReadOnly(true);
-
-        cb_status_poreceipt.setReadOnly(true);
-    }
-    // Ext.getCmp('cb_status_poreceipt').setValue(record.data.idpurchasestatus);
-
-    Ext.getCmp('subtotal_poreceipt').setValue(renderNomor(record.data.subtotal));
-    Ext.getCmp('totalPajak_poreceipt').setValue(renderNomor(record.data.tax));
-    Ext.getCmp('total_poreceipt').setValue(renderNomor(record.data.totalamount));
-
-    var gridInsertBaruGRPO = Ext.getCmp('EntryGoodsReceipt');
-    var EntryGoodsReceiptRM = Ext.getCmp('EntryGoodsReceipt').getStore();
-
-    EntryGoodsReceiptRM.removeAll();
-    EntryGoodsReceiptRM.sync();
+    gridEntryGR.getStore().load({
+        params: {
+            'extraparams': 'a.status:' + 99 //asal aja. buat ngapus grid doang. karena kalo pake removeAll() bikin error
+        }
+    });
+    // EntryGoodsReceiptRM.removeAll();
+    // EntryGoodsReceiptRM.sync();
 
     //insert item to grid
     Ext.Ajax.request({
         url: SITE_URL + 'purchase/get_po_items',
         method: 'GET',
         params: {
-            idpurchase: record.data.idpurchase,
-            is_tmp: is_tmp
+            // goods_receipt_id: selectedRecord.get('goods_receipt_id'),
+            idpurchase: selectedRecord.get('idpurchase'),
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
             Ext.getCmp('totalitem_poreceipt').setValue(d.data.length);
             Ext.each(d.data, function(obj, i) {
                 // console.log(obj);
+                var qty_receipt = 0;
+                //ambil data purchaseitem batch utk tiap-tiap purchase item dan ditaro di WindowEntryGoodsReceipt.itembatch
+                Ext.Ajax.request({
+                    url: SITE_URL + 'purchase/get_batch_items',
+                    method: 'GET',
+                    params: {
+                        idpurchase: selectedRecord.get('idpurchase'),
+                        idpurchaseitem: obj.idpurchaseitem,
+                        idunit: obj.idunit,
+                        goods_receipt_id: selectedRecord.get('goods_receipt_id'),
+                    },
+                    success: function(form, action) {
+                        var d = Ext.decode(form.responseText);
+                        WindowEntryGoodsReceipt.itembatch[i] = d.data;
 
-                var recDO = new GridReceiptItemPurchaseOrderModel({
-                    idpurchaseitem: obj.idpurchaseitem,
-                    idinventory: obj.idinventory,
-                    sku_no: obj.sku_no,
-                    invno: obj.invno,
-                    nameinventory: obj.nameinventory,
-                    qty: obj.qty,
-                    price: obj.price,
-                    disc: obj.disc,
-                    total: obj.total,
-                    ratetax: obj.ratetax,
-                    tax: obj.tax,
-                    size: obj.size,
-                    short_desc: obj.short_desc,
-                    size_measurement: obj.size_measurement,
-                    qty_received: obj.qty_received,
-                    warehouse_code: obj.warehouse_code
+                        Ext.each(d.data, function(item) {
+                            qty_receipt += (item.qty * 1);
+                        });
+                        console.log(qty_receipt);
+
+                        var recPO = new GridReceiptItemPurchaseOrderModel({
+                            idpurchaseitem: obj.idpurchaseitem,
+                            idinventory: obj.idinventory,
+                            idunit: obj.idunit,
+                            sku_no: obj.sku_no,
+                            invno: obj.invno,
+                            nameinventory: obj.nameinventory,
+                            qty: obj.qty,
+                            qty_received: obj.qty_received || 0,
+                            qty_receipt: qty_receipt || 0,
+                            total_receipt: (obj.price * 1) * (qty_receipt),
+                            price: obj.price,
+                            disc: obj.disc,
+                            total: obj.total,
+                            ratetax: obj.ratetax,
+                            tax: obj.tax,
+                            size: obj.size,
+                            short_desc: obj.short_desc,
+                            size_measurement: obj.size_measurement,
+                            warehouse_code: obj.warehouse_code,
+                            total_qty_batch: obj.total_qty_batch
+                        });
+                        gridEntryGR.getStore().insert(i, recPO);
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    }
                 });
-                gridInsertBaruGRPO.getStore().insert(0, recDO);
-            });
+
+            }); //end of loop
         },
         failure: function(form, action) {
             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
         }
     });
 
+    Ext.getCmp('statusform_poreceipt').setValue('edit');
+    Ext.getCmp('cb_status_poreceipt').hide();
+
+    //if GR status is open
+    if (selectedRecord.get('status_gr') == 1) {
+        cb_statusgr_poreceipt.getStore().filter([function(item) { return item.get('id') != 4 }]); //tampilkan opsi status hanya open, confirmed, dan canceled aja
+        cb_statusgr_poreceipt.setReadOnly(false);
+        Ext.getCmp('btnRecordGR').enable();
+    } else {
+        cb_statusgr_poreceipt.setReadOnly(true);
+        cb_statusgr_poreceipt.getStore().clearFilter();
+        Ext.getCmp('btnRecordGR').setDisabled(true);
+    }
 }
 
 function loadDataFormPurchaseInvoice(selectedRecord, option) {

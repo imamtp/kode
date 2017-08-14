@@ -1176,24 +1176,30 @@ class inventory extends MY_Controller {
             $wer .= " OR (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".strtolower($query)."%')"; //by inventory name
         }
 
-        $sql = "select a.idinventory,sku_no,a.idinventory_batch,nameinventory,a.cost,a.hpp_per_unit,a.unitmeasure, e.short_desc as satuan_beli, a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
+        $sql = "select a.idinventory,sku_no,a.idinventory_parent,nameinventory,a.cost,a.hpp_per_unit,a.unitmeasure, e.short_desc as satuan_beli, a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
                         c.short_desc AS satuan_kedua, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id,totalitem,a.bahan_coil_id
                     from inventory a
                     LEFT JOIN productmeasurement b 
                                             ON a.measurement_id_one = b.measurement_id 
                     LEFT JOIN productmeasurement c 
                                 ON a.measurement_id_two = c.measurement_id 
-                    left join (select idinventory_batch,count(*) as totalitem
+                    left join (select idinventory_parent,count(*) as totalitem
                                             from inventory
-                                            GROUP BY idinventory_batch
-                                        ) d ON a.idinventory = d.idinventory_batch
+                                            GROUP BY idinventory_parent
+                                        ) d ON a.idinventory = d.idinventory_parent
                     LEFT JOIN productmeasurement e 
                                             ON a.unitmeasure = e.measurement_id 
+<<<<<<< HEAD
                     where a.display is null and a.idinventory_batch is null $wer
                     GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_batch,a.nameinventory,a.cost,a.hpp_per_unit,a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc,a.unitmeasure,a.bahan_coil_id
                     ";
         $q = $this->db->query($sql.$limitoffset);
         $qtotalrows = $this->db->query($sql);
+=======
+                    where a.display is null and a.idinventory_parent is null $wer
+                    GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_parent,a.nameinventory,a.cost,a.hpp_per_unit,a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc,a.unitmeasure,a.bahan_coil_id";
+        $q = $this->db->query($sql);
+>>>>>>> dev
 // echo $sql;
         $dataArr = $q->result_array();
         // print_r($dataArr);
@@ -1201,13 +1207,13 @@ class inventory extends MY_Controller {
         foreach ($dataArr as $key => $value) {
 
             $qcek = $this->db->query("select idinventory from inventory 
-	                where idinventory_batch = ".$value['idinventory']." ");
+	                where idinventory_parent = ".$value['idinventory']." ");
                   
 
             if($qcek->num_rows()<=0){
-                 $qstok = $this->db->query("select sum(totalstock) as totalstock from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
+                 $qstok = $this->db->query("select sum(totalstock) as totalstock from (select a.idinventory,idinventory_parent,sum(a.stock) as totalstock 
                                             from warehouse_stock a join inventory b ON a.idinventory = b.idinventory 
-                                            where a.idinventory = ".$value['idinventory']." group by a.idinventory,idinventory_batch) a");
+                                            where a.idinventory = ".$value['idinventory']." group by a.idinventory,idinventory_parent) a");
                    // echo $this->db->last_query();
 
                 if($qstok->num_rows()>0){
@@ -1225,11 +1231,11 @@ class inventory extends MY_Controller {
             } else {
                  //menghitung total stok dari seluruh gudang
                     $qstok = $this->db->query("select sum(totalstock) as totalstock
-                                        from (select a.idinventory,idinventory_batch,sum(a.stock) as totalstock 
+                                        from (select a.idinventory,idinventory_parent,sum(a.stock) as totalstock 
                                                     from warehouse_stock a
                                                     join inventory b ON a.idinventory = b.idinventory
-                                                    where a.idinventory IN (select idinventory from inventory where idinventory_batch = ".$value['idinventory'].")				
-                                                    group by a.idinventory,idinventory_batch) a");
+                                                    where a.idinventory IN (select idinventory from inventory where idinventory_parent = ".$value['idinventory'].")				
+                                                    group by a.idinventory,idinventory_parent) a");
                                                     // echo $this->db->last_query();
                 if($qstok->num_rows()>0){
                     $rstok = $qstok->row();

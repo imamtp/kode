@@ -555,7 +555,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
 
                 GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
                     operation.params = {
-                        'extraparams': 'a.idinventory_batch:' + record.data.idinventory
+                        'extraparams': 'a.idinventory_parent:' + record.data.idinventory
                     };
                 });
 

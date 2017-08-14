@@ -1828,6 +1828,29 @@ Ext.define('comboxpurchasestatus', {
     })
 });
 
+var ArrGoodsReceiptStatus = [
+    [1, 'Open'],
+    [2, 'Canceled'],
+    [3, 'Confirmed'],
+    [4, 'Invoiced'],
+];
+
+Ext.define('comboxgoodsreceiptstatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxgoodsreceiptstatus',
+    fieldLabel: 'Status',
+    displayField: 'value',
+    valueField: 'id',
+    name: 'status_gr',
+    editable: false,
+    emptyText: 'Choose Status...',
+    triggerAction: 'all',
+    store: new Ext.data.ArrayStore({
+        fields: ['id', 'value'],
+        data: ArrGoodsReceiptStatus
+    })
+});
+
 Ext.define('comboxpurchasetype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpurchasetype',

@@ -105,7 +105,7 @@ class m_purchaserequisition extends CI_Model {
     //         $data[$i] = $r;
 
     //         //cek apakah idinventory punya batch item
-    //         $qcek = $this->db->query("select idinventory_batch from inventory where idinventory_batch = ".$r['idinventory']."");
+    //         $qcek = $this->db->query("select idinventory_parent from inventory where idinventory_parent = ".$r['idinventory']."");
     //         if($qcek->num_rows()>0)
     //         {
     //             $data[$i]['batch'] = true;

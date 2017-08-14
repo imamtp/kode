@@ -524,7 +524,7 @@ Ext.define(dir_sys + 'purchase2.EntryReturnPO', {
 
                         bottombatch.setTitle('Batch Item :' + dataRecord.data.sku_no + ' - ' + dataRecord.data.invno + ' - ' + dataRecord.data.nameinventory)
 
-                        // Ext.getCmp('numbatch_itempo').setReadOnly(true);
+                        // Ext.getCmp('numbatch_batchitemporeceipt').setReadOnly(true);
                         // Ext.getCmp('buatbatchbtn_itempo').hide();
 
                         //ambil data inventory yang di-batchkan
@@ -553,7 +553,7 @@ Ext.define(dir_sys + 'purchase2.EntryReturnPO', {
                             success: function(form, action) {
                                 var d = Ext.decode(form.responseText);
 
-                                Ext.getCmp('numbatch_itemporeturn').setValue(d.num_rows);
+                                Ext.getCmp('numbatch_batchitemporeceiptreturn').setValue(d.num_rows);
 
                                 if (d.data.length) {
                                     // var grid = Ext.getCmp('GridBatchPoReturn');

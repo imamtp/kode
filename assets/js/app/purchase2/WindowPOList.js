@@ -3,7 +3,7 @@ var WindowEntryGoodsReceipt = Ext.create(dir_sys + 'purchase2.WindowEntryGoodsRe
 Ext.define('GridPurchaseOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa', 'total_qty_batch', 'sisabatch'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'totalorder', 'totalreceived', 'sisa', 'total_qty_batch', 'sisabatch', 'include_tax'
     ],
     idProperty: 'id'
 });
@@ -78,6 +78,12 @@ Ext.define('GridPurchaseOrderList', {
         align: 'center',
         icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
         handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+            WindowEntryGoodsReceipt.itembatch = []; // <= create temporary for json array of itembatch
+            //untuk perhitungan totalamount
+            WindowEntryGoodsReceipt.perhitungan = {
+                include_tax: selectedRecord.get('include_tax'),
+                ratetax: selectedRecord.get('rate'),
+            };
 
             WindowEntryGoodsReceipt.show();
 
@@ -86,7 +92,7 @@ Ext.define('GridPurchaseOrderList', {
             Ext.getCmp('WindowPOList').hide();
 
             Ext.getCmp('idpurchase_poreceipt').setValue(selectedRecord.get('idpurchase'));
-            Ext.getCmp('nojurnal_poreceipt').setValue(selectedRecord.get('nopurchase'));
+            Ext.getCmp('nopo_poreceipt').setValue(selectedRecord.get('nopurchase'));
             Ext.getCmp('po_date_poreceipt').setValue(selectedRecord.get('date'));
             Ext.getCmp('received_date_poreceipt').setMinValue(new Date(selectedRecord.get('date')));
             Ext.getCmp('cbUnit_poreceipt').setValue(selectedRecord.get('idunit'));
@@ -99,11 +105,14 @@ Ext.define('GridPurchaseOrderList', {
                 cb_status_poreceipt.setValue('3');
             });
 
+            Ext.getCmp('cb_grstatus_poreceipt').setValue(1);
+            Ext.getCmp('cb_grstatus_poreceipt').setReadOnly(true);
+
             Ext.getCmp('totalPajak_poreceipt').setValue(renderNomor(selectedRecord.get('tax')));
             Ext.getCmp('total_poreceipt').setValue(renderNomor(selectedRecord.get('totalamount')));
             Ext.getCmp('subtotal_poreceipt').setValue(renderNomor(selectedRecord.get('subtotal')));
 
-            Ext.getCmp('memo_poreceipt').setValue('Delivery Order ' + selectedRecord.get('nopurchase'));
+            Ext.getCmp('memo_poreceipt').setValue('Goods Receipt ' + selectedRecord.get('nopurchase'));
 
             gridInsertBaruGRPO.getStore().load({
                 params: {
@@ -125,14 +134,16 @@ Ext.define('GridPurchaseOrderList', {
                     Ext.getCmp('totalitem_poreceipt').setValue(d.data.length);
                     Ext.each(d.data, function(obj, i) {
                         // console.log(obj);
-
-                        var recDO = new GridReceiptItemPurchaseOrderModel({
+                        var recPO = new GridReceiptItemPurchaseOrderModel({
                             idpurchaseitem: obj.idpurchaseitem,
                             idinventory: obj.idinventory,
+                            idunit: obj.idunit,
                             sku_no: obj.sku_no,
                             invno: obj.invno,
                             nameinventory: obj.nameinventory,
                             qty: obj.qty,
+                            qty_received: obj.qty_received || 0,
+                            qty_receipt: 0,
                             price: obj.price,
                             disc: obj.disc,
                             total: obj.total,
@@ -144,13 +155,26 @@ Ext.define('GridPurchaseOrderList', {
                             warehouse_code: obj.warehouse_code,
                             total_qty_batch: obj.total_qty_batch
                         });
+                        gridInsertBaruGRPO.getStore().insert(i, recPO);
 
-
-                        gridInsertBaruGRPO.getStore().insert(0, recDO);
-                    });
-
-
-
+                        //ambil data purchaseitem batch utk tiap-tiap purchase item dan ditaro di WindowEntryGoodsReceipt.itembatch
+                        Ext.Ajax.request({
+                            url: SITE_URL + 'purchase/get_batch_items',
+                            method: 'GET',
+                            params: {
+                                idpurchase: selectedRecord.get('idpurchase'),
+                                idpurchaseitem: obj.idpurchaseitem,
+                                idunit: obj.idunit,
+                            },
+                            success: function(form, action) {
+                                var d = Ext.decode(form.responseText);
+                                WindowEntryGoodsReceipt.itembatch[i] = d.data;
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                            }
+                        });
+                    }); //end of loop
                 },
                 failure: function(form, action) {
                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
