@@ -2829,9 +2829,57 @@ if($option=='print')
         } else {
             $data['fontsize'] = 12;
             $data['lineheight'] = 14;
-            $data['tablewidth'] = '150%';
+            $data['tablewidth'] = '100%';
         }
         $this->load->view('report/inventory/inventory', $data);
+    }
+
+    function inventory_kartu_stok(){
+        $this->load->model('inventory/m_inventorystock','report');
+        $idinventory = $this->input->get('idinventory');
+
+        $qinv = $this->db->query("select invno,sku_no,nameinventory from inventory
+        where idinventory = $idinventory");
+
+        //saldo awal
+        $qawal = $this->db->query("select old_qty
+                                    from stock_history a
+                                    where a.idinventory = $idinventory
+                                    and to_char(datein,'YYYY-MM-DD') <= '".$this->input->get('startdate')."'
+                                    order by a.datein asc
+                                    limit 1")->row();
+        //saldo akhir
+        $qakhir = $this->db->query("select balance
+                                        from stock_history a
+                                        where a.idinventory = $idinventory
+                                        and to_char(datein,'YYYY-MM-DD') <= '".$this->input->get('enddate')."'
+                                        order by a.datein desc
+                                        limit 1")->row();
+
+        $data = array(
+            'startdate'=> $this->input->get('startdate'),
+            'enddate'=>$this->input->get('enddate'),
+            'saldo_awal'=> isset($qawal->old_qty) ? $qawal->old_qty : 0,
+            'saldo_akhir'=> isset($qakhir->balance) ? $qakhir->balance : 0,
+            'inv_data'=>$qinv->result_array()[0],
+            // 'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Kartu Stok',
+            'rows'=>$this->report->stock_card($idinventory,$this->input->get('startdate'),$this->input->get('enddate')),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '70%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '70%';
+        }
+        $this->load->view('report/inventory/stockcard', $data);
     }
 
     function InventoryStockCard()

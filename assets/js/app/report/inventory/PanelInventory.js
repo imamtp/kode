@@ -2,7 +2,7 @@ Ext.define('reportInventory', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.reportInventory',
     id: 'reportInventory',
-    title: 'Laporan Inventory',
+    title: 'Rekap Persediaan',
     dockedItems: [{
             xtype: 'toolbar',
             dock: 'bottom',
