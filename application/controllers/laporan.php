@@ -3217,6 +3217,52 @@ $this->load->library('../controllers/report');
         echo fetchUnit("1,2","a");
     }
 
+    public function purchase_all(){
+        $this->load->model('purchase/m_purchasereport','report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Pembelian',
+            'rows'=>$this->report->query($this->input->get('startdate'),$this->input->get('enddate'),null,$this->input->get('idunit')),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '150%';
+        }
+        $this->load->view('report/purchase/purchase_all', $data);
+    }
+
+    public function purchase_by_supplier(){
+        $this->load->model('purchase/m_purchasereport','report');
+        $data = array(
+            'periode'=> $this->input->get('startdate') ." - ". $this->input->get('enddate'),
+            'unit'=>$this->fetchUnit($this->input->get('idunit')),
+            'option'=>$this->input->get('option'),
+            'title'=>'Laporan Pembelian Per Supplier',
+            'rows'=>$this->report->query($this->input->get('startdate'),$this->input->get('enddate'),$this->input->get('idsupplier'),$this->input->get('idunit')),
+        );
+
+        if($data['option']=='print')
+        {
+            $data['fontsize'] = 9;
+            $data['lineheight'] = 12;
+            $data['tablewidth'] = '100%';
+        } else {
+            $data['fontsize'] = 12;
+            $data['lineheight'] = 14;
+            $data['tablewidth'] = '150%';
+        }
+        $this->load->view('report/purchase/purchase_by_supplier', $data);
+    }
+
 }
 
 ?>
