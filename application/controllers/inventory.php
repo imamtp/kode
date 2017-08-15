@@ -1177,7 +1177,7 @@ class inventory extends MY_Controller {
         }
 
         $sql = "select a.idinventory,sku_no,a.idinventory_parent,nameinventory,a.cost,a.hpp_per_unit,a.unitmeasure, e.short_desc as satuan_beli, a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
-                        c.short_desc AS satuan_kedua, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id,totalitem,a.bahan_coil_id
+                        c.short_desc AS satuan_kedua, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id,totalitem,a.bahan_coil_id,a.hpp_per_unit
                     from inventory a
                     LEFT JOIN productmeasurement b 
                                             ON a.measurement_id_one = b.measurement_id 
