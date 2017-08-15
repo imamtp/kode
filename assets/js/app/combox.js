@@ -1809,7 +1809,9 @@ var ArrPurchaseOrderStatus = [
     [3, 'Ordered'],
     [4, 'Received'],
     [5, 'Partial Received'],
-    [6, 'Canceled']
+    [6, 'Canceled'],
+    [7, 'Closed'],
+
 ];
 
 Ext.define('comboxpurchasestatus', {
