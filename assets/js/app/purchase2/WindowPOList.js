@@ -86,9 +86,7 @@ Ext.define('GridPurchaseOrderList', {
             };
 
             WindowEntryGoodsReceipt.show();
-
             Ext.getCmp('cb_tax_id_poreceipt').getStore().load();
-
             Ext.getCmp('WindowPOList').hide();
 
             Ext.getCmp('idpurchase_poreceipt').setValue(selectedRecord.get('idpurchase'));

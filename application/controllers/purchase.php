@@ -544,6 +544,7 @@ class purchase extends MY_Controller {
         );
         
         $this->load->model('journal/m_jpurchase', 'jmodel');
+        $this->load->model('inventory/m_stock', 'mstock');
         
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
@@ -599,7 +600,7 @@ class purchase extends MY_Controller {
             $detailItems = json_decode($this->input->post('itembatch'));
             
             //if GR status is confirmed, update qty_received of purchaseitem
-            if($header['status'] == 3){
+            if($header['status'] == 3 && $item->qty_receipt > 0){
                 $this->db->where(array(
                     'idpurchase'=> $header['idpurchase'],
                     'idpurchaseitem'=> $item->idpurchaseitem,
@@ -610,6 +611,14 @@ class purchase extends MY_Controller {
                     'usermod'=> $this->session->userdata('userid'),
                     'datemod'=> date('Y-m-d H:i:s'),
                 ));
+                
+                //hitung hpp
+                if(!$this->mstock->update_hpp($item->idinventory,$header['idunit'], 3, $item->total_receipt,$item->qty_receipt,$header['idpurchase'])){
+                    $this->db->trans_rollback();
+                    $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+                    echo json_encode($json);
+                    exit();
+                }
 
                 //create no batch if purchaseitem_batch > 1
                 $params_batch = array(
@@ -662,6 +671,9 @@ class purchase extends MY_Controller {
 
                 //if GR status is confirmed (3) insert to inventory
                 if($header['status'] == 3 && $detail['deleted'] != 1){
+                    //harus cek invno sudah diguanakan atau belum
+                    /* code */
+
                     $inv = array(
                         'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
                         'idinventory_parent'=> $v->idinventory,
@@ -723,6 +735,22 @@ class purchase extends MY_Controller {
             $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
         }
         echo json_encode($json);    
+    }
+
+    function closePurchase($idpurchase){
+        $this->db->trans_begin();
+
+        $this->db->where('idpurchase', $idpurchase);
+        $this->db->update('purchase', array('idpurchasestatus'=> 7));
+        
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'Status has been submitted succsessfully');
+        }
+        echo json_encode($json);
     }
 
     function load_goodsreceipt(){
