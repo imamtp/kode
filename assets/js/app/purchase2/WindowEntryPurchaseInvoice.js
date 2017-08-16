@@ -81,6 +81,11 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     dock: 'top',
                     items: [{
                             xtype: 'hiddenfield',
+                            id: 'goods_receipt_id_poinvoice',
+                            name: 'goods_receipt_id'
+                        },
+                        {
+                            xtype: 'hiddenfield',
                             id: 'idpurchase_poinvoice',
                             name: 'idpurchase'
                         },
@@ -131,7 +136,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             xtype: 'comboxtaxtype',
                             labelWidth: 100,
                             readOnly: true,
-                            valueField: 'rate',
+                            valueField: 'idtax',
                             id: 'cb_tax_id_poinvoice',
                             listeners: {
                                 select: function(combo, record, index) {
@@ -172,146 +177,17 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [{
-                            xtype: 'textfield',
-                            name: 'nofpsup',
-                            id: 'nofpsup_poinvoice',
-                            labelWidth: 120,
-                            fieldLabel: 'No FP (Supp)'
-                        }, {
-                            xtype: 'comboxpaymentterm',
-                            id: 'comboxpaymentterm_pi',
-                            // cls:'my-mandatory-field',
-                            name: 'idpayment',
-                            margin: {
-                                right: 10
-                            },
-                            labelWidth: 120,
-                            valueField: 'value',
-                            listeners: {
-                                select: function() {
-                                    Ext.getCmp('ddaysPurchaseInvoice').setDisabled(true);
-                                    Ext.getCmp('eomddaysPurchaseInvoice').setDisabled(true);
-                                    Ext.getCmp('percentagediscPurchaseInvoice').setDisabled(true);
-                                    Ext.getCmp('daysdiscPurchaseInvoice').setDisabled(true);
-
-                                    Ext.getCmp('ddaysPurchaseInvoice').setVisible(false);
-                                    Ext.getCmp('eomddaysPurchaseInvoice').setVisible(false);
-                                    Ext.getCmp('percentagediscPurchaseInvoice').setVisible(false);
-                                    Ext.getCmp('daysdiscPurchaseInvoice').setVisible(false);
-
-                                    switch (this.getValue()) {
-                                        case '3':
-                                            Ext.getCmp('ddaysPurchaseInvoice').setDisabled(false);
-                                            Ext.getCmp('ddaysPurchaseInvoice').setVisible(true);
-                                            break;
-                                        case '4':
-                                            Ext.getCmp('eomddaysPurchaseInvoice').setDisabled(false);
-                                            Ext.getCmp('eomddaysPurchaseInvoice').setVisible(true);
-                                            break;
-                                        case '5':
-                                            Ext.getCmp('percentagediscPurchaseInvoice').setDisabled(false);
-                                            Ext.getCmp('daysdiscPurchaseInvoice').setDisabled(false);
-                                            Ext.getCmp('percentagediscPurchaseInvoice').setVisible(true);
-                                            Ext.getCmp('daysdiscPurchaseInvoice').setVisible(true);
-
-                                            break;
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            xtype: 'textfield',
-                            id: 'ddaysPurchaseInvoice',
-                            name: 'ddays',
-                            width: 120,
-                            inputWidth: 60,
-                            afterSubTpl: ' days',
-                            maskRe: /[0-9]/,
-                            hidden: true,
-                            disabled: true,
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        if (!Number.isNaN(parseInt(this.getValue())))
-                                            this.setValue(parseInt(this.getValue()));
-                                        else
-                                            this.setValue(0);
-                                    }, c)
-
-                                }
-                            }
-                        },
-                        {
-                            xtype: 'textfield',
-                            id: 'eomddaysPurchaseInvoice',
-                            name: 'eomddays',
-                            width: 180,
-                            inputWidth: 60,
-                            beforeSubTpl: 'EOM ',
-                            afterSubTpl: ' days',
-                            maskRe: /[0-9]/,
-                            hidden: true,
-                            disabled: true,
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        if (!Number.isNaN(parseInt(this.getValue())))
-                                            this.setValue(parseInt(this.getValue()));
-                                        else
-                                            this.setValue(0);
-                                    }, c)
-
-                                }
-                            }
-                        },
-                        {
-                            xtype: 'textfield',
-                            id: 'percentagediscPurchaseInvoice',
-                            name: 'percentagedisc',
-                            width: 90,
-                            inputWidth: 60,
-                            afterSubTpl: ' % /',
-                            maskRe: /[0-9.]/,
-                            hidden: true,
-                            disabled: true,
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        if (this.getValue().substr(-1) == ".")
-                                            return true;
-
-                                        if (!Number.isNaN(parseFloat(this.getValue())))
-                                            this.setValue(parseFloat(this.getValue()));
-                                        else
-                                            this.setValue(0);
-                                    }, c)
-
-                                }
-                            }
-                        },
-                        {
-                            xtype: 'textfield',
-                            id: 'daysdiscPurchaseInvoice',
-                            name: 'daydisc',
-                            width: 120,
-                            inputWidth: 60,
-                            afterSubTpl: ' NET',
-                            maskRe: /[0-9]/,
-                            hidden: true,
-                            disabled: true,
-                            listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        if (!Number.isNaN(parseInt(this.getValue())))
-                                            this.setValue(parseInt(this.getValue()));
-                                        else
-                                            this.setValue(0);
-                                    }, c)
-
-                                }
-                            }
-                        }
-                    ]
+                        xtype: 'textfield',
+                        labelWidth: 120,
+                        id: 'nogr_poinvoice',
+                        fieldLabel: 'NO GR'
+                    }, {
+                        xtype: 'textfield',
+                        name: 'nofpsup',
+                        id: 'nofpsup_poinvoice',
+                        labelWidth: 120,
+                        fieldLabel: 'No FP (Supp)'
+                    }, ]
                 },
                 {
                     xtype: 'toolbar',
@@ -550,48 +426,138 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [{
-                            xtype: 'fieldcontainer',
-                            hidden: true,
-                            fieldLabel: 'Akun Persediaan',
-                            combineErrors: true,
-                            msgTarget: 'side',
-                            layout: 'hbox',
-                            labelWidth: 150,
-                            defaults: {
-                                flex: 1,
-                                hideLabel: true
+                            xtype: 'comboxpaymentterm',
+                            id: 'comboxpaymentterm_pi',
+                            // cls:'my-mandatory-field',
+                            name: 'idpayment',
+                            margin: {
+                                right: 10
                             },
-                            items: [{
-                                xtype: 'textfield',
-                                allowBlank: false,
-                                name: 'accnametujuan',
-                                id: 'accname_coa_persediaan_pi',
-                                listeners: {
-                                    render: function(component) {
-                                        component.getEl().on('click', function(event, el) {
-                                            if (Ext.getCmp('cbUnit_poinvoice').getValue() == null) {
-                                                Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
-                                            } else {
-                                                wCoaPurchaseInvoicePersediaanPopup.show();
-                                                storeGridAccount.on('beforeload', function(store, operation, eOpts) {
-                                                    operation.params = {
-                                                        'idunit': idunit,
-                                                        'idaccounttype': '3,4,5,20'
-                                                    };
-                                                });
-                                                storeGridAccount.load();
-                                            }
-                                        });
+                            labelWidth: 120,
+                            valueField: 'value',
+                            listeners: {
+                                select: function() {
+                                    Ext.getCmp('ddaysPurchaseInvoice').setDisabled(true);
+                                    Ext.getCmp('eomddaysPurchaseInvoice').setDisabled(true);
+                                    Ext.getCmp('percentagediscPurchaseInvoice').setDisabled(true);
+                                    Ext.getCmp('daysdiscPurchaseInvoice').setDisabled(true);
+
+                                    Ext.getCmp('ddaysPurchaseInvoice').setVisible(false);
+                                    Ext.getCmp('eomddaysPurchaseInvoice').setVisible(false);
+                                    Ext.getCmp('percentagediscPurchaseInvoice').setVisible(false);
+                                    Ext.getCmp('daysdiscPurchaseInvoice').setVisible(false);
+
+                                    switch (this.getValue()) {
+                                        case '3':
+                                            Ext.getCmp('ddaysPurchaseInvoice').setDisabled(false);
+                                            Ext.getCmp('ddaysPurchaseInvoice').setVisible(true);
+                                            break;
+                                        case '4':
+                                            Ext.getCmp('eomddaysPurchaseInvoice').setDisabled(false);
+                                            Ext.getCmp('eomddaysPurchaseInvoice').setVisible(true);
+                                            break;
+                                        case '5':
+                                            Ext.getCmp('percentagediscPurchaseInvoice').setDisabled(false);
+                                            Ext.getCmp('daysdiscPurchaseInvoice').setDisabled(false);
+                                            Ext.getCmp('percentagediscPurchaseInvoice').setVisible(true);
+                                            Ext.getCmp('daysdiscPurchaseInvoice').setVisible(true);
+
+                                            break;
                                     }
                                 }
-                            }, {
-                                xtype: 'displayfield',
-                                id: 'accnumber_coa_persediaan_pi',
-                            }, {
-                                xtype: 'hiddenfield',
-                                name: 'idaccount',
-                                id: 'idaccount_coa_persediaan_pi',
-                            }]
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'ddaysPurchaseInvoice',
+                            name: 'ddays',
+                            width: 120,
+                            inputWidth: 60,
+                            afterSubTpl: ' days',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'eomddaysPurchaseInvoice',
+                            name: 'eomddays',
+                            width: 180,
+                            inputWidth: 60,
+                            beforeSubTpl: 'EOM ',
+                            afterSubTpl: ' days',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'percentagediscPurchaseInvoice',
+                            name: 'percentagedisc',
+                            width: 90,
+                            inputWidth: 60,
+                            afterSubTpl: ' % /',
+                            maskRe: /[0-9.]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (this.getValue().substr(-1) == ".")
+                                            return true;
+
+                                        if (!Number.isNaN(parseFloat(this.getValue())))
+                                            this.setValue(parseFloat(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'daysdiscPurchaseInvoice',
+                            name: 'daydisc',
+                            width: 120,
+                            inputWidth: 60,
+                            afterSubTpl: ' NET',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
                         },
                         {
                             xtype: 'comboxcurrency',
