@@ -533,6 +533,7 @@ class purchase extends MY_Controller {
 
     function save_goodsreceipt(){
         $idjournal = null;
+        $items = json_decode($this->input->post('itemgrid'));
         
         $params = array(
             'idunit' => $this->input->post('unit'),
@@ -549,9 +550,6 @@ class purchase extends MY_Controller {
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
 
-        // echo $noarticle;
-        // exit();
-        
         $this->load->model('inventory/m_stock');
         $statusform = $this->input->post('statusform');
 
@@ -585,16 +583,25 @@ class purchase extends MY_Controller {
             $this->db->update('goods_receipt', $header);
         }
 
-        //create journal if status is confirmed (3)
+        //status is confirmed
         if($header['status'] == 3){
-            // var_dump($this->jmodel);
-            // exit();        
-            // $this->load->model('purchase/m_purchase','jmodel');
+            //create journal 
             $idjournal = $this->jmodel->penerimaan_barang($header['idpurchase'],$this->input->post('nopo'),$header['idaccount_coa_persediaan'],$header['totalamount']);
+
+            //cek jumlah kuantitas yg diterima apakah sudah sama / lebih dari kuantitas pesanan
+            $is_all_received = true;
+            foreach($items as $item)
+                if($item->qty > ($item->qty_received + $item->qty_receipt)) $is_all_received = false;
+                    
+            //jika sudah set status PO jadi received, jika belum set status jadi partiali received
+            if($is_all_received)
+                $this->setStatus($header['idpurchase'], $header['idunit'], 4); //receoved
+            else
+                $this->setStatus($header['idpurchase'], $header['idunit'], 5); //partialy received
+            
         }
 
         //save item received
-        $items = json_decode($this->input->post('itemgrid'));
         foreach($items as $key=>$item){
             $nobatch = null;
             $detailItems = json_decode($this->input->post('itembatch'));
@@ -636,7 +643,8 @@ class purchase extends MY_Controller {
             //save detail item received to purchaseitem_batch
             foreach($detailItems[$key] as $v){
                 $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$v->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
-
+                $measurement_id = $this->m_data->getIDmaster('short_desc',$v->short_desc,'measurement_id','productmeasurement',$this->input->post('idunit'));
+                
                 $detail = array(
                     'purchase_batch_id'=> $v->purchase_batch_id,
                     'goods_receipt_id'=> $header['goods_receipt_id'],
@@ -644,7 +652,7 @@ class purchase extends MY_Controller {
                     'idinventory'=> $v->idinventory,
                     'idpurchase'=> $header['idpurchase'],
                     'qty'=> $v->qty,
-                    // 'measurement_id',
+                    'measurement_id'=> $measurement_id,
                     'invno'=> $v->invno,
                     'sku_no'=> $v->sku_no,
                     'idunit'=> $v->idunit,
@@ -737,20 +745,28 @@ class purchase extends MY_Controller {
         echo json_encode($json);    
     }
 
-    function closePurchase($idpurchase){
+    function setStatusPurchase(){
+        $json = $this->setStatus($this->input->post('idpurchase'), $this->input->post('idunit'), $this->input->post('status'));
+        echo json_encode($json);
+    }
+
+    function setStatus($idpurchase, $idunit, $status){
         $this->db->trans_begin();
 
-        $this->db->where('idpurchase', $idpurchase);
-        $this->db->update('purchase', array('idpurchasestatus'=> 7));
+        $this->db->where(array(
+            'idpurchase'=> $idpurchase,
+            'idunit'=>$idunit,
+        ));
+        $this->db->update('purchase', array('idpurchasestatus'=> $status));
         
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');
         } else{
             $this->db->trans_commit();
-            $json = array('success'=>true,'message'=>'Status has been submitted succsessfully');
+            $json = array('success'=>true,'message'=>'Status purchase sudah dirubah');
         }
-        echo json_encode($json);
+        return $json;
     }
 
     function load_goodsreceipt(){
@@ -762,174 +778,6 @@ class purchase extends MY_Controller {
         //     $this->db->where("and received_date between $sd and $nd");
 
         // $q = $this->db->get('goods_receipt');
-    }
-
-    function save_goodsreceiptOld(){
-        //     $params = array(
-        //         'idunit' => $this->input->post('unit'),
-        //         'prefix' => 'GR',
-        //         'table' => 'goods_receipt',
-        //         'fieldpk' => 'goods_receipt_id',
-        //         'fieldname' => 'no_goods_receipt',
-        //         'extraparams'=> '',
-        //     );
-        //     $this->load->library('../controllers/setup');
-        //     $noarticle = $this->setup->getNextNoArticle2($params);
-
-        //     echo $noarticle;
-        //     exit();
-        //     $this->db->trans_begin();
-        //     // print_r($_POST); die;
-
-        //     $this->load->model('inventory/m_stock');
-
-        //     $statusform = $this->input->post('statusform');
-        //     $goods_receipt_id = $this->m_data->getPrimaryID($this->input->post('goods_receipt_id'),'goods_receipt', 'goods_receipt_id', $this->input->post('unit'));
-        //     $idpurchase = $this->input->post('idpurchase');
-        //     $idunit = $this->input->post('idunit');
-        //     $nopo = $this->input->post('nopo');
-        //     $idaccount_coa_persediaan = $this->input->post('idaccount_coa_gr');
-
-        //     $data = array(
-        //             // 'goods_receipt_id'=>,
-        //             'no_goods_receip'=>$noarticle,
-        //             'received_date' => backdate($this->input->post('received_date')),
-        //             'received_by' => $this->input->post('receivedid'),
-        //             'notes' => $this->input->post('notes'),
-        //             'supplier_direct_no' => $this->input->post('no_rujukan_sup'),
-        //             'idaccount_coa_persediaan'=>$idaccount_coa_persediaan //akun persediaan
-        //         );
-            
-        //     // $wer = array(
-        //     //     'idpurchase'=>$idpurchase,
-        //     //     'idunit'=>$idunit
-        //     // );
-
-        //     $this->db->where($wer);
-        //     $this->db->update('goods_receipt',$data);
-
-        //     $items = json_decode($this->input->post('itemgrid'));
-
-        //     $total_qty = 0; //total qty received
-        //     foreach ($items as $value) {
-        //         $subtotal_qty = 0;
-                
-        //         // $warehouse_received_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
-
-        //         //cek apakah item punya batch record
-        //         $qbatch = $this->db->get_where('purchaseitem_batch',array(
-        //                 'idunit'=>$idunit,
-        //                 'idpurchaseitem'=>$value->idpurchaseitem,
-        //                 'is_tmp'=>1
-        //         ));
-
-        //         if($qbatch->num_rows()>0){
-
-        //                 //update harga dulu
-        //                 $this->db->where(array('idinventory'=>$value->idinventory));
-        //                 $this->db->update('inventory',array('cost'=>$value->price));
-
-        //                 $qinventory = $this->db->get_where('inventory',array('idinventory'=>$value->idinventory));
-        //                 $datainventory = $qinventory->result_array()[0];
-
-        //                 $total_value = 0;
-        //                 foreach ($qbatch->result() as $rbatch) {
-        //                     // var_dump($rbatch);
-        //                     $total_value += $rbatch->qty*$value->price;
-
-        //                     $idinventory = $this->db->query("select max(idinventory) as id from inventory")->row();
-                            
-        //                     $datainventory['idinventory_parent'] = $value->idinventory;
-        //                     $datainventory['idinventory'] = $idinventory->id+1;
-        //                     $datainventory['invno'] = $rbatch->invno;
-        //                     $datainventory['sku_no'] = $rbatch->sku_no;
-                            
-        //                     $this->db->insert('inventory',$datainventory);
-
-        //                     $this->m_stock->update_history(2,$rbatch->qty,$idinventory->id,$idunit,$rbatch->warehouse_id,date('Y-m-d'),'Add stock from PO:'.$nopo);
-                            
-        //                     $subtotal_qty += $rbatch->qty;
-
-        //                     // set tmp ke 0 item batch kata lain udah bukan temporary
-        //                     $this->db->where(array(
-        //                             'idpurchaseitem'=>$value->idpurchaseitem,
-        //                             'invno'=>$rbatch->invno,
-        //                             'sku_no'=>$rbatch->sku_no,
-        //                             'idpurchase'=>$idpurchase                                
-        //                         ));
-        //                     $this->db->update('purchaseitem_batch',array(
-        //                             'is_tmp'=>0
-        //                         ));
-        //                 }
-
-        //                 //buat jurnal
-        //                 $this->load->model('journal/m_jpurchase','jmodel');
-        //                 $this->jmodel->penerimaan_barang($idpurchase,$nopo,$idaccount_coa_persediaan,$total_value);
-
-        //             // } else {
-                    
-        //             // }
-        //         } else {
-        //             //gak pake batch
-        //             // $this->m_stock->update_history(2,$value->qty_terima,$value->idinventory,$idunit,$warehouse_received_id,date('Y-m-d'),'Add stock from PO:'.$nopo);
-        //         }
-
-        //         $dataitem = array(
-        //             'qty_received'=> $subtotal_qty,
-        //             // 'received_notes'=> isset($value->notes) ? $value->notes : null,
-        //             // 'warehouse_received_id'=>$warehouse_received_id,
-        //             'idunit'=>$idunit
-        //         );
-
-
-        //         $weritem = array(
-        //             'idpurchaseitem'=>$value->idpurchaseitem,
-        //             'idpurchase'=>$idpurchase
-        //         );
-                
-        //         $this->db->where($weritem);
-        //         $this->db->update('purchaseitem',$dataitem);
-
-            
-        //         $total_qty += $subtotal_qty;
-        //     } //end foreach
-
-        //     //set tmp ke 0 item batch kata lain udah bukan temporary
-        //     // $this->db->where(array(
-        //     //         'idpurchaseitem'=>$value->idpurchaseitem,
-        //     //         'idpurchase'=>$idpurchase,
-        //     //         'is_tmp'=>0
-        //     //     ));
-        //     // $this->db->delete('purchaseitem_batch');
-
-        //     //cek qty order dan qty terima
-        //     $qQtyOrder = $this->db->query("select sum(qty) as totalqtyorder
-        //                                     from purchaseitem
-        //                                     where idpurchase = $idpurchase and idunit = $idunit")->row();
-        //     if($total_qty==0) {
-        //         $idpurchasestatus = 1; //open
-        //     } else if(($total_qty < $qQtyOrder->totalqtyorder) && ($total_qty!=0)) {
-        //         $idpurchasestatus = 5; //Partial Received
-        //     } else  {
-        //         $idpurchasestatus = 4; //Received
-        //     }
-
-        //     //start update hpp per unit
-        //     $this->load->model('inventory/m_stock');
-        //     $this->m_stock->update_hpp($idunit,3,$idpurchase);
-        //     //end update hpp per unit
-
-        //     $this->db->where(array('idunit'=>$idunit,'idpurchase'=>$idpurchase));
-        //     $this->db->update('purchase',array('idpurchasestatus'=>$idpurchasestatus,'status'=>$idpurchasestatus));
-
-        //     if($this->db->trans_status() === false){
-        //         $this->db->trans_rollback();
-        //         $json = array('success'=>false,'message'=>'An unknown error was occured');
-        //     }else{
-        //         $this->db->trans_commit();
-        //         $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
-        //     }
-        //     echo json_encode($json);
     }
 
     function save_purchase_invoice(){
@@ -1219,82 +1067,6 @@ class purchase extends MY_Controller {
         // }
 
         // echo json_encode(array('data'=>$data,'qtytotal'=>$totalqty));
-    }
-
-    function save_batch(){
-        // $idunit = $this->input->post('idunit');
-        // $items = json_decode($this->input->post('datagrid'));
-        // foreach($items as $item){
-        //     $q = $this->db->get_where('inventory', array(
-        //         'invno'=>$item->invno,
-        //         'sku_no'=>$item->sku_no,
-        //         'idunit'=>$idunit,
-        //     ));
-        //     // $q = $this->db->query("select idinventory from inventory where invno = '".$value->invno."' and sku_no = '".$value->sku_no."' ");
-        //     if($q->num_rows()>0){
-        //         $message = "Kode barang <b>".$item->invno."</b> dengan No SKU <b>".$item->sku_no."</b> sudah ada di dalam database";
-        //         $success = false;
-        //         break;
-        //     } else {
-        //         $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$item->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
-        //         $notes = isset($item->notes)?: null;
-        //         $data = array(
-        //                 'warehouse_id'=>$idwarehouse,
-        //                 'warehouse_code'=>$item->warehouse_code,
-        //                 'notes'=> $notes,
-        //                 'invno'=>$item->invno,
-        //                 'sku_no'=>$item->sku_no,
-        //                 'qty'=>$item->qty,
-        //                 // 'total'=>$value->qty * $value->price,
-        //                 // 'is_tmp'=>1
-        //         );
-
-        //         $this->db->where(array(
-        //                 'purchase_batch_id'=>$value->purchase_batch_id,
-        //                 'idpurchase'=>$this->input->post('idpurchase'),
-        //                 'idpurchaseitem'=>$value->idpurchaseitem
-        //         ));
-        //         $this->db->update('purchaseitem_batch',$data);
-        //         $totalqtyterima+=$value->qty;
-        //     }
-        // }
-    }
-
-    function check_batch_item(){
-        // $postget = $this->input->get('idpurchase')=='' ? 'post' : 'get';
-
-        // $idpurchase = $this->input->get('idpurchase')=='' ? $this->input->post('idpurchase') : $this->input->get('idpurchase');
-        // $idpurchaseitem = $this->input->get('idpurchaseitem')=='' ? $this->input->post('idpurchaseitem') :  $this->input->get('idpurchaseitem');
-        // $idunit = $this->input->get('idunit')=='' ? $this->input->post('idunit') : $this->input->get('idunit');
-
-        // //cek statusnya
-        // $qstatus = $this->db->query("select idpurchasestatus from purchase where idpurchase = ".$idpurchase)->row();
-
-        // if($qstatus->idpurchasestatus==1){
-        //     //pas di form edit statusnya masih open. buka dgn status batch item yang statusnya temporary
-        //     $is_tmp = 1;
-        // } else {
-        //     $is_tmp = $this->input->get('is_tmp') == '' ? $this->input->post('is_tmp') : $this->input->get('is_tmp');
-        // }
-        
-        // $q = $this->db->get_where('purchaseitem_batch',array(
-        //         'is_tmp'=> $is_tmp,
-        //         'idpurchaseitem' => $idpurchaseitem,
-        //         'idpurchase' => $idpurchase,
-        //         'idunit'=>$idunit
-        //     ));
-        // $dataArr = $q->result_array();
-        // $totalqtyterima = 0;
-        // foreach ($dataArr as $key => $value) {
-        //    $totalqtyterima+=$value['qty'];
-        // }
-
-        // if($postget=='post'){
-        //       echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($dataArr) . ',totalqtyterima:'.$totalqtyterima .'}';
-        // } else {
-        //      echo json_encode(array('data'=>$q->result_array(),'totalqtyterima'=>$totalqtyterima,'numbatch'=>$q->num_rows()));
-        // }
-       
     }
 
     function get_poreturn_pk(){
@@ -1757,92 +1529,6 @@ class purchase extends MY_Controller {
             $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
         }
         echo json_encode($json);
-    }
-
-    function check_batch(){
-        // //cek batch item dari goods receipt duplikat apa engga untuk kode barangnya
-        // $idunit = $this->input->post('idunit');
-        // $totalqty = $this->input->post('totalqty');
-        // $items = json_decode($this->input->post('datagrid'));
-        // $success = true;
-        // $message = null;
-        // $totalqtyterima = 0;
-        // foreach ($items as $value) {
-        //     $q = $this->db->query("select idinventory from inventory where invno = '".$value->invno."' and sku_no = '".$value->sku_no."' ");
-        //     if($q->num_rows()>0){
-        //         $message = "Kode barang <b>".$value->invno."</b> dengan No SKU <b>".$value->sku_no."</b> sudah ada di dalam database";
-        //         $success = false;
-        //         break;
-        //     } else {
-        //         $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
-            
-        //         $notes = isset($value->notes) ? $value->notes : null;
-
-        //         $data = array(
-        //                 'warehouse_id'=>$idwarehouse,
-        //                 'warehouse_code'=>$value->warehouse_code,
-        //                 'notes'=> $notes,
-        //                 'invno'=>$value->invno,
-        //                 'sku_no'=>$value->sku_no,
-        //                 'qty'=>$value->qty,
-        //                 // 'total'=>$value->qty * $value->price,
-        //                 'is_tmp'=>1
-        //         );
-
-        //         $this->db->where(array(
-        //                 'purchase_batch_id'=>$value->purchase_batch_id,
-        //                 'idpurchase'=>$this->input->post('idpurchase'),
-        //                 'idpurchaseitem'=>$value->idpurchaseitem
-        //         ));
-        //         $this->db->update('purchaseitem_batch',$data);
-        //         $totalqtyterima+=$value->qty;
-        //     }
-        // }
-
-        // if($success){
-        //     $qtysisa = $totalqty-$totalqtyterima;
-        //     // if($totalqtyterima>$totalqty){
-        //     //     // $message = 'Total qty batch melebihi qty barang';
-        //     //     // $success = false;
-        //     // } else if($totalqtyterima<$totalqty){
-        //     //     $message = 'Total qty batch kurang dari qty barang';
-        //     //     $success = false;
-        //     // }
-        // }
-       
-
-        // echo json_encode(
-        //     array(
-        //         'success'=>$success,
-        //         'message'=>$message,
-        //         'totalqtyterima'=>$totalqtyterima
-        //         ));
-    }
-
-    function update_detail_batch_item_gr(){
-        // $items = json_decode($this->input->post('datagrid'));
-        // // print_r($items);
-        // // print_r($_POST);
-        // foreach ($items as $value) {
-        //     $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
-            
-        //     $notes = isset($value->notes) ? $value->notes : null;
-
-        //     $data = array(
-        //             'warehouse_id'=>$idwarehouse,
-        //             'warehouse_code'=>$value->warehouse_code,
-        //             'notes'=> $notes
-        //     );
-
-        //     $this->db->where(array(
-        //             'purchase_batch_id'=>$value->purchase_batch_id,
-        //             'idpurchase'=>$this->input->post('idpurchase'),
-        //             'invno'=>$value->invno,
-        //             'sku_no'=>$value->sku_no,
-        //             'idpurchaseitem'=>$value->idpurchaseitem
-        //     ));
-        //     $this->db->update('purchaseitem_batch',$data);
-        // }
     }
 
     function print_invoice($idpurchase,$print=null){

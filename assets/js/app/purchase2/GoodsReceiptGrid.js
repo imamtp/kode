@@ -39,8 +39,6 @@ storeGoodsReceiptGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
         'extraparams': 'b.idunit:' + Ext.getCmp('idunit_grdgr').getValue() + ', ' +
             'b.idpurchasestatus:' + Ext.getCmp('idpurchasestatus_grdgr').getValue(),
-        // 'option': 'delivered_po',
-        // 'wherenotinschedule':'true'
         'startdate': Ext.getCmp('startdate_grdgr').getValue(),
         'enddate': Ext.getCmp('enddate_grdgr').getValue(),
     };
@@ -48,7 +46,7 @@ storeGoodsReceiptGrid.on('beforeload', function(store, operation, eOpts) {
 
 // var wGoodsReceiptGrid = Ext.create('widget.window', {
 //     id: 'windowPopupGoodsReceiptGrid',
-//     title: 'Goods Receipt Form',
+//     title: 'Goods Receipt Form',status_gr
 //     header: {
 //         titlePosition: 2,
 //         titleAlign: 'center'
@@ -91,7 +89,7 @@ var smGoodsReceiptGrid = Ext.create('Ext.selection.CheckboxModel', {
             }
         },
         select: function(model, record, index) {
-            if (record.data.noinvoice === null) {
+            if (record.data.status_gr == 3) {
                 Ext.getCmp('createInvoicePOGrid').enable();
             } else {
                 Ext.getCmp('createInvoicePOGrid').disable();
@@ -146,7 +144,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
         minWidth: 150
     }, {
         header: 'No Invoice',
-        dataIndex: 'noinvoice',
+        dataIndex: 'no_invoice',
         minWidth: 150
     }, {
         header: 'No Rujukan Sup',
@@ -372,7 +370,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
                         Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                     } else {
 
-                        if (selectedRecord.data.noinvoice !== null) {
+                        if (selectedRecord.data.no_invoice !== null) {
                             Ext.Msg.alert('Failure', 'Invoice untuk data Delivery Order terpilih sudah terbentuk. Silahkan pilih data Delivery Order yang lain');
                         } else {
                             WindowEntryPurchaseInvoice.show();
@@ -386,10 +384,6 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
 
 
                             loadDataFormPurchaseInvoice(selectedRecord, 'invoice');
-
-
-
-
 
                             // Ext.getCmp('btnRecordSalesOrderInvoice').show();
 
