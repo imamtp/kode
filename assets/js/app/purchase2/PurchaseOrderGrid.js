@@ -343,25 +343,26 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                             // [7, 'Closed'],
 
                             // //if status is received or partialy received
-                            if ([4, 5].includes(selectedItem[0].data.status)) {
+                            if (selectedItem[0].data.idpurchasestatus == 5) {
                                 Ext.Ajax.request({
-                                    url: SITE_URL + 'sales/set_status',
+                                    url: SITE_URL + 'purchase/setStatusPurchase',
                                     method: 'POST',
                                     params: {
                                         status: 4,
-                                        idunit: Ext.getCmp('idunit_grddo').getValue(),
-                                        idsales: selectedRecord.data.idsales
+                                        idunit: Ext.getCmp('idunit_grdpo').getValue(),
+                                        idpurchase: selectedItem[0].data.idpurchase
                                     },
                                     success: function(form, action) {
                                         var d = Ext.decode(form.responseText);
                                         Ext.Msg.alert('Informasi', d.message);
+                                        grid.getStore().load();
                                     },
                                     failure: function(form, action) {
                                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                                     }
                                 });
                             } else {
-                                Ext.Msg.alert('Failure', 'Tidak bisak close pembelian, status pembelian bukan Received atau Partialy Received');
+                                Ext.Msg.alert('Failure', 'Tidak bisa close pembelian, pembelian ' + selectedItem[0].data.nopurchase + ' tidak dalam status Partialy Received');
                             }
                         }
                     }
