@@ -563,7 +563,7 @@ class purchase extends MY_Controller {
             'notes'=> $this->input->post('notes'),
             'supplier_direct_no'=> $this->input->post('no_rujukan_sup'),
             'idaccount_coa_persediaan'=> $this->input->post('idaccount_coa_gr'),
-            'status'=> $this->input->post('status'),
+            'status_gr'=> $this->input->post('status_gr'),
             'idpurchase'=> $this->input->post('idpurchase'),
             'idunit'=> $this->input->post('idunit'),
             'subtotal'=> $this->input->post('subtotal'),
@@ -584,7 +584,7 @@ class purchase extends MY_Controller {
         }
 
         //status is confirmed
-        if($header['status'] == 3){
+        if($header['status_gr'] == 3){
             //create journal 
             $idjournal = $this->jmodel->penerimaan_barang($header['idpurchase'],$this->input->post('nopo'),$header['idaccount_coa_persediaan'],$header['totalamount']);
 
@@ -607,7 +607,7 @@ class purchase extends MY_Controller {
             $detailItems = json_decode($this->input->post('itembatch'));
             
             //if GR status is confirmed, update qty_received of purchaseitem
-            if($header['status'] == 3 && $item->qty_receipt > 0){
+            if($header['status_gr'] == 3 && $item->qty_receipt > 0){
                 $this->db->where(array(
                     'idpurchase'=> $header['idpurchase'],
                     'idpurchaseitem'=> $item->idpurchaseitem,
@@ -678,7 +678,7 @@ class purchase extends MY_Controller {
                 }
 
                 //if GR status is confirmed (3) insert to inventory
-                if($header['status'] == 3 && $detail['deleted'] != 1){
+                if($header['status_gr'] == 3 && $detail['deleted'] != 1){
                     //harus cek invno sudah diguanakan atau belum
                     /* code */
 
@@ -769,6 +769,34 @@ class purchase extends MY_Controller {
         return $json;
     }
 
+    function get_gr_items(){
+        $idunit = $this->input->get('idunit');
+        $idgr = $this->input->get('goods_receipt_id');
+        $idpurchase = $this->input->get('idpurchase');
+
+        $sql = "select 
+                a.purchase_batch_id,
+                a.idpurchaseitem,
+                a.idpurchase,
+                a.sku_no,
+                a.invno,
+                a.nameinventory,
+                a.qty,
+                a.short_desc,
+                b.price,
+                (b.price * a.qty) as total
+                from purchaseitem_batch a
+                left join purchaseitem b on b.idpurchaseitem = a.idpurchaseitem and b.idunit = a.idunit
+                where true
+                and a.idpurchase = $idpurchase
+                and a.idunit = $idunit
+                and a.goods_receipt_id = $idgr";
+        
+        $q = $this->db->query($sql);
+        
+        echo json_encode(array('data'=>$q->result_array()));
+    }
+
     function load_goodsreceipt(){
         // $sd = $this->input->post('startdate');
         // $nd = $this->input->post('enddate');
@@ -779,69 +807,62 @@ class purchase extends MY_Controller {
 
         // $q = $this->db->get('goods_receipt');
     }
-
     function save_purchase_invoice(){
+        $this->load->model('journal/m_journal');
+        
         $params = array(
             'idunit' => $this->input->post('unit'),
             'prefix' => 'PI',
-            'table' => 'purchase',
-            'fieldpk' => 'idpurchase',
-            'fieldname' => 'noinvoice',
-            'extraparams'=> 'and idpurchasetype = 2',
+            'table' => 'goods_receipt',
+            'fieldpk' => 'goods_receipt_id',
+            'fieldname' => 'no_invoice',
+            'extraparams'=> '',
         );
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
 
         $this->db->trans_begin();
 
-        $saldo = post_number($this->input->post('sisa_bayar'));
-        $paidtoday = str_replace('.', '', $this->input->post('pembayaran'));
-        $total_pajak = $this->input->post('total_pajak') == '' ? 0 : post_number($this->input->post('total_pajak'));
-        $nopo = $this->input->post('nopo');
-        $total_amount = $saldo;
-        $idaccount_coa_hutang = $this->input->post('idaccount_coa_hutang');
-        // $idaccount_coa_persediaan = $this->input->post('idaccount_coa_persediaan');
-        $idaccount_coa_pajakmasuk = $this->input->post('idaccount_coa_pajakmasuk');
-        // if(intval($saldo)>0) {
-        //     // $invoice_status = 4; //Partially Paid
-        // }
-
-        // if(intval($paidtoday)==0) {
-        //     $invoice_status = 1; //unpaid
-        // }
-
-        $invoice_status = 1; //unpaid
-
-        $idpayment = $this->input->post('idpayment');
-
-          //buat jurnal hutang
-        $this->load->model('journal/m_journal');
-        $idjournal = $this->m_journal->create_invoice_purchase(date('Y-m-d'),'AP Purchase Order: '.$nopo,$total_amount,$this->input->post('idunit'),$idaccount_coa_hutang,$idaccount_coa_pajakmasuk,$total_pajak);
+        //buat jurnal hutang
+        $idjournal = $this->m_journal->create_invoice_purchase(date('Y-m-d'),'AP Purchase Order: '.$this->input->post('nopurchase'),$this->input->post('totalamount'),$this->input->post('idunit'),$this->input->post('idaccount_coa_hutang'),$this->input->post('idaccount_coa_pajakmasuk'),$this->input->post('tax'));
         // $this->jmodel->purchase_ap(date('Y-m-d'),$this->input->post('total_amount'),null,$this->input->post('idunit'),$this->input->post('biayaangkut'),'Piutang Penjualan: '.$this->input->post('memo'));
 
         $data = array(
-                // 'paidtoday'=> $paidtoday,
-                'paidtoday'=> 0, //masih jadi hutang
-                'balance'=>$total_amount,
-                'idaccount_coa_hutang'=>$idaccount_coa_hutang,
-                // 'idaccount_coa_persediaan'=>$idaccount_coa_persediaan,
-                'idaccount_coa_pajakmasuk'=>$idaccount_coa_pajakmasuk,
-                'idpayment' => $idpayment,
-                // 'tax' => $total_pajak, //ga perlu lagi karena udah diinput saat PO
-                'freigthcost'=> str_replace('.', '', $this->input->post('biayaangkut')),
-                'ddays' => $this->input->post('ddays')=='' ? null : $this->input->post('ddays'),
-                'eomddays' => $this->input->post('eomddays')=='' ? null : $this->input->post('eomddays'),
-                'percentagedisc' => $this->input->post('percentagedisc')=='' ? null : $this->input->post('percentagedisc'),
-                'daydisc' => $this->input->post('daydisc')=='' ? null : $this->input->post('daydisc'),
-                'notes_invoice' => $this->input->post('notes_pi'),
-                'invoice_status'=>$invoice_status,
-                'noinvoice'=> $this->input->post('noinvoice')?: $noarticle,
-                'nofpsup'=>$this->input->post('nofpsup'),
-                'idjournal_invoice'=>$idjournal
-            );
-        $this->db->where('idpurchase',$this->input->post('idpurchase'));
-        $this->db->update('purchase',$data);
+            'no_invoice'=> $this->input->post('no_invoice')?: $noarticle,
+            'invoice_date'=> date('Y-m-d'),
+            'idaccount_coa_hutang'=> $this->input->post('idaccount_coa_hutang'),
+            'idaccount_coa_pajakmasuk'=> $this->input->post('idaccount_coa_pajakmasuk'),
+            'idpaymentterm'=> $this->input->post('idpayment'),
+            'ddays'=> $this->input->post('ddays')?:null,
+            'eomddays'=> $this->input->post('eomddays')?:null,
+            'percentagedisc'=> $this->input->post('percentagedisc')?:null,
+            'daydisc'=> $this->input->post('daydisc')?:null,
+            'notes'=> $this->input->post('notes_pi'),
+            'freightcost'=> $this->input->post('freightcost'),
+            'totalamount'=> $this->input->post('totalamount'),
+            'paidtoday'=> 0,
+            'balance'=> $this->input->post('totalamount'),
+            'status_gr'=> 4,
+            'idjournal_inv'=> $idjournal,
+        );
+        
+        if($this->input->post('no_invoice') == null){
+            $data['userin_inv'] = $this->session->userdata('userid');
+            $data['datein_inv'] = date('Y-m-d H:i:s'); 
+        } else {
+            $data['usermod_inv'] = $this->session->userdata('userid');
+            $data['datemod_inv'] = date('Y-m-d H:i:s');
+        }
 
+        $this->db->where(array(
+            'goods_receipt_id'=> $this->input->post('goods_receipt_id'),
+            'idpurchase'=> $this->input->post('idpurchase'),
+            'idunit'=> $this->input->post('idunit'),
+        ));
+
+        $this->db->update('goods_receipt', $data);
+
+        
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');
@@ -955,118 +976,6 @@ class purchase extends MY_Controller {
         }
         echo json_encode($json);
 
-    }
-
-    function create_batch(){
-        // //membuat batch saat goods receipt
-        // // idpurchase:32
-        // // idpurchaseitem:41
-        // // idinventory:45
-        // // idunit:12
-        // // numbatch:20
-        // // is_temp:1
-        // $totalqty = $this->input->post('totalqty');
-        // $idunit = $this->input->post('idunit');
-        // $numbatch = $this->input->post('numbatch');
-        // $idinventory = $this->input->post('idinventory');
-        // $nameinventory = $this->input->post('nameinventory');        
-        // $measurement_id = $this->m_data->getMeasurement($this->input->post('satuan'),$idunit);
-        // $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$this->input->post('warehouse_code'),'warehouse_id','warehouse',$idunit);
-        
-        // $is_temp = $this->input->post('is_temp');
-
-        // $qtybatch = $totalqty/$numbatch;
-
-        // $qprod = $this->db->query("select sku_no,invno from inventory where idinventory = $idinventory")->row();
-
-        //  $this->db->where(array(
-        //     'idpurchaseitem' => $this->input->post('idpurchaseitem'),
-        //     'idpurchase' => $this->input->post('idpurchase'),
-        //     'is_tmp'=>1,
-        //     'idunit'=>$idunit
-        // ));
-        // $this->db->delete('purchaseitem_batch');
-
-        // for($i=1;$i<=$numbatch;$i++){            
-        //     $purchase_batch_id = $this->m_data->getPrimaryID($this->input->post('purchase_batch_id'),'purchaseitem_batch', 'purchase_batch_id', $idunit);
-        //     $data = array(
-        //         'purchase_batch_id' => $purchase_batch_id,
-        //         'no' => $i,
-        //         'idpurchaseitem' => $this->input->post('idpurchaseitem'),
-        //         'idpurchase' => $this->input->post('idpurchase'),
-        //         'warehouse_id'=>$warehouse_id,
-        //         'warehouse_code'=>$this->input->post('warehouse_code'),
-        //         'short_desc' => $this->input->post('satuan'),
-        //         'nameinventory'=>$this->input->post('nameinventory'),
-        //         'qty' => $qtybatch,
-        //         'measurement_id' => $measurement_id,
-        //         'invno' => $qprod->invno.''.$i,
-        //         'sku_no' => $qprod->sku_no,
-        //         'idunit' => $idunit,
-        //         'idinventory' => $idinventory,
-        //         'is_tmp' => $is_temp
-        //     );
-        //     $cek = $this->db->get_where('purchaseitem_batch',array(
-        //         'idpurchaseitem' => $this->input->post('idpurchaseitem'),
-        //         // 'purchase_batch_id'=>$purchase_batch_id,
-        //         'is_tmp'=>1,
-        //         'no'=>$i,
-        //         'idunit'=>$idunit
-        //     ));
-        //     if($cek->num_rows()>0){
-               
-        //     } else {
-        //         $this->db->insert('purchaseitem_batch',$data);
-        //     }
-            
-        // }
-
-        // $q = $this->db->query("SELECT
-        //                         a.*,b.bahan_coil_id,c.short_desc as satuan_kedua
-        //                     FROM
-        //                         purchaseitem_batch a
-        //                     JOIN inventory b ON b.idinventory = a.idinventory
-        //                     join productmeasurement c ON b.measurement_id_two = c.measurement_id
-        //                     WHERE
-        //                         is_tmp = 1
-        //                     AND a.idpurchaseitem = ".$this->input->post('idpurchaseitem')."
-        //                     AND a.idpurchase = ".$this->input->post('idpurchase')."
-        //                     AND a.idunit = ".$idunit."
-        //                     ORDER BY
-        //                         a.no desc");
-        // // $this->db->order_by('no','desc');
-        // // $this->db->join('inventory', 'inventory.idinventory = purchaseitem_batch.idinventory');
-        // // $q = $this->db->get_where('purchaseitem_batch',array(
-        // //         'is_tmp'=>1,
-        // //         'idpurchaseitem' => $this->input->post('idpurchaseitem'),
-        // //         'idpurchase' => $this->input->post('idpurchase'),
-        // //         'idunit'=>$idunit
-        // //     ));
-
-        // $data = array();
-        // $i=0;
-        // foreach ($q->result_array() as $r) {
-        //     $data[$i] = $r;
-
-        //     if($r['bahan_coil_id']!=null){
-        //             //ambil ke tabel konversi
-        //             $qcn = $this->db->query("select berat from bahan_coil where bahan_coil_id = ".$r['bahan_coil_id']."");
-        //             if($qcn->num_rows()>0){
-        //                 $rqcn = $qcn->row();
-
-        //                 $data[$i]['stock_kedua'] = $r['qty'] / $rqcn->berat;
-                        
-        //             } else {
-        //                 $data[$i]['stock_kedua'] = 0;
-        //             }
-                    
-        //         } else {
-        //             $data[$i]['stock_kedua'] = 0;
-        //         }
-        //         $i++;
-        // }
-
-        // echo json_encode(array('data'=>$data,'qtytotal'=>$totalqty));
     }
 
     function get_poreturn_pk(){

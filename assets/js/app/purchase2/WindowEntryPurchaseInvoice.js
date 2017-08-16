@@ -4,7 +4,8 @@ var wCoaPurchaseInvoicePajakMasukPopup = Ext.create(dir_sys + 'purchase2.wCoaPur
 
 Ext.define('GridItemPurchaseInvoiceModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement'],
+    fields: ['purchase_batch_id', 'idpurchaseitem', 'idpurchase', 'sku_no', 'invno', 'nameinventory', 'qty', 'short_desc', 'price', 'total'],
+    // fields: ['purchase_batch_id', 'idpurchaseitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement'],
     idProperty: 'id'
 });
 
@@ -15,16 +16,14 @@ var storeGridItemPurchaseInvoice = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/PurchaseOrder/purchase',
+        url: SITE_URL + 'purchase/get_gr_items',
         actionMethods: 'POST',
         reader: {
-            root: 'rows',
-            totalProperty: 'results'
+            root: 'data',
         },
-        //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
+        property: 'sku_no',
         direction: 'DESC'
     }]
 });
@@ -58,20 +57,19 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                 header: 'Nama Barang',
                 dataIndex: 'nameinventory',
             }, {
+                xtype: 'numbercolumn',
                 header: 'Harga Satuan',
                 dataIndex: 'price'
             }, {
                 header: 'Qty Terima',
-                dataIndex: 'qty_receive'
+                dataIndex: 'qty'
             }, {
                 header: 'Satuan',
-                dataIndex: 'satuan'
+                dataIndex: 'short_desc'
             }, {
-                header: 'Disc (%)',
-                dataIndex: 'disc',
-            }, {
+                xtype: 'numbercolumn',
                 header: 'Total',
-                dataIndex: 'total'
+                dataIndex: 'total',
             }],
             selModel: {
                 selType: 'cellmodel'
@@ -241,12 +239,12 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             fieldLabel: 'Pembayaran/DP',
                             fieldStyle: 'text-align: right;',
                             listeners: {
-                                'render': function(c) {
-                                    c.getEl().on('keyup', function() {
-                                        this.setRawValue(renderNomor(this.getValue()));
-                                        updateSelisih();
-                                    }, c);
-                                }
+                                // 'render': function(c) {
+                                //     c.getEl().on('keyup', function() {
+                                //         this.setRawValue(renderNomor(this.getValue()));
+                                //         updateSelisih();
+                                //     }, c);
+                                // }
                             }
                         }
                     ]
@@ -433,7 +431,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             margin: {
                                 right: 10
                             },
-                            labelWidth: 120,
+                            labelWidth: 150,
                             valueField: 'value',
                             listeners: {
                                 select: function() {
@@ -601,11 +599,6 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             fieldLabel: 'Biaya Angkut',
                             fieldStyle: 'text-align: right;',
                             listeners: {
-                                // 'render': function(c) {
-                                //     c.getEl().on('keyup', function() {
-                                //         // updateGridPurchaseInvoice('general');
-                                //     }, c);
-                                // }
                                 'blur': function() {
                                     this.setRawValue(renderNomor2(this.getValue()));
                                     updateSelisih();
@@ -638,7 +631,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
         this.on({
             scope: this,
             edit: function() {
-                updateGridPurchaseInvoice('general');
+                //updateGridPurchaseInvoice('general');
             }
         });
     },
@@ -651,31 +644,30 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
         if (validasiPurchaseInvoice()) {
             var aftertax = str_replace(',', '', Ext.getCmp('total_poinvoice').getValue()) * 1;
             var biayaangkut = str_replace(',', '', Ext.getCmp('angkut_poinvoice').getValue()) * 1;
-
+            var tax = str_replace(',', '', Ext.getCmp('totalPajak_poinvoice').getValue()) * 1;
             Ext.Ajax.request({
                 url: SITE_URL + 'purchase/save_purchase_invoice',
                 method: 'POST',
                 params: {
+                    goods_receipt_id: Ext.getCmp('goods_receipt_id_poinvoice').getValue(),
                     idpurchase: Ext.getCmp('idpurchase_poinvoice').getValue(),
+                    idunit: Ext.getCmp('cbUnit_poinvoice').getValue(),
+
+                    nopurchase: Ext.getCmp('nopo_poinvoice').getValue(),
+                    no_invoice: Ext.getCmp('nojurnal_poinvoice').getValue(),
                     idaccount_coa_hutang: Ext.getCmp('idaccount_coa_hutang_pi').getValue(),
-                    idaccount_coa_persediaan: Ext.getCmp('idaccount_coa_persediaan_pi').getValue(),
                     idaccount_coa_pajakmasuk: Ext.getCmp('idaccount_coa_pajakmasuk_pi').getValue(),
-                    nopo: Ext.getCmp('nopo_poinvoice').getValue(),
-                    noinvoice: Ext.getCmp('nojurnal_poinvoice').getValue(),
+
                     idpayment: Ext.getCmp('comboxpaymentterm_pi').getValue(),
                     ddays: Ext.getCmp('ddaysPurchaseInvoice').getValue(),
                     eomddays: Ext.getCmp('eomddaysPurchaseInvoice').getValue(),
                     percentagedisc: Ext.getCmp('percentagediscPurchaseInvoice').getValue(),
                     daydisc: Ext.getCmp('daysdiscPurchaseInvoice').getValue(),
                     notes_pi: Ext.getCmp('notes_pi').getValue(),
-                    total_pajak: Ext.getCmp('totalPajak_poinvoice').getValue(),
-                    pembayaran: Ext.getCmp('pembayaran_poinvoice').getValue(),
-                    sisa_bayar: Ext.getCmp('sisaBayar_poinvoice').getValue(),
-                    total_amount: aftertax + biayaangkut,
-                    idunit: Ext.getCmp('cbUnit_poinvoice').getValue(),
-                    biayaangkut: biayaangkut,
-                    nofpsup: Ext.getCmp('nofpsup_poinvoice').getValue(),
-                    // datagrid: json
+                    freightcost: biayaangkut,
+                    totalamount: aftertax + biayaangkut,
+                    tax: tax,
+
                 },
                 success: function(form, action) {
 
@@ -685,13 +677,22 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     } else {
                         Ext.Msg.alert('Success', d.message);
 
+                        Ext.getCmp('goods_receipt_id_poinvoice').setValue();
+                        Ext.getCmp('idpurchase_poinvoice').setValue();
+                        Ext.getCmp('cbUnit_poinvoice').setValue();
+                        Ext.getCmp('nojurnal_poinvoice').setValue();
+                        Ext.getCmp('idaccount_coa_hutang_pi').setValue();
+                        Ext.getCmp('idaccount_coa_pajakmasuk_pi').setValue();
+                        Ext.getCmp('comboxpaymentterm_pi').setValue();
+                        Ext.getCmp('ddaysPurchaseInvoice').setValue();
+                        Ext.getCmp('eomddaysPurchaseInvoice').setValue();
+                        Ext.getCmp('percentagediscPurchaseInvoice').setValue();
+                        Ext.getCmp('daysdiscPurchaseInvoice').setValue();
+                        Ext.getCmp('notes_pi').setValue();
                         Ext.getCmp('WindowEntryPurchaseInvoice').hide();
                     }
-
                     setHeaderInvoice();
-
                     Ext.getCmp('GoodsReceiptGridID').getStore().load();
-
                 },
                 failure: function(form, action) {
                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
@@ -727,26 +728,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
         //        });
     },
     onAddClick: function() {
-        //        console.log(Ext.getCmp('customerPurchaseInvoice').getValue())
-        //        Ext.getCmp('idaccount').setValue('sad');
-        //        // Create a model instance
-        //        Ext.getCmp('formAddRowJurnal').getForm().reset();
         wItemPurchasePopupOrderPopup.show();
         storeGridItemPurchasePopupOrder.load();
-
-        //        var rec = new JournalStore({
-        //            idaccount: null,
-        //            accname: null,
-        //            accnumber: null,
-        //            debit: null,
-        //            credit: null
-        //        });
-        //
-        //        this.getStore().insert(0, rec);
-        //        this.cellEditing.startEditByPosition({
-        //            row: 0,
-        //            column: 0
-        //        });
     },
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);

@@ -46,13 +46,13 @@ class m_goodsreceipt extends CI_Model {
                 b.idtax,
                 b.include_tax,
                 (c.firstname || ' ' || c.lastname) as name_received_by,
-                a.status as status_gr,
+                a.status_gr,
                 b.idsupplier,
                 case
-                    when a.status = 1 then 'Open'
-                    when a.status = 2 then 'Canceled'
-                    when a.status = 3 then 'Confirmed'
-                    when a.status = 4 then 'Invoiced'
+                    when a.status_gr = 1 then 'Open'
+                    when a.status_gr = 2 then 'Canceled'
+                    when a.status_gr = 3 then 'Confirmed'
+                    when a.status_gr = 4 then 'Invoiced'
                 end as status_gr_name,
                 e.namesupplier,
                 f.accnumber as accnumber_coa_persediaan,

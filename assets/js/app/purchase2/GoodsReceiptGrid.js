@@ -370,7 +370,7 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
                         Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                     } else {
 
-                        if (selectedRecord.data.no_invoice !== null) {
+                        if (selectedRecord.data.status_gr != 3) {
                             Ext.Msg.alert('Failure', 'Invoice untuk data Delivery Order terpilih sudah terbentuk. Silahkan pilih data Delivery Order yang lain');
                         } else {
                             WindowEntryPurchaseInvoice.show();
