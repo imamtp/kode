@@ -394,7 +394,6 @@ function showGoodsReceiptData(selectedRecord) {
                         Ext.each(d.data, function(item) {
                             qty_receipt += (item.qty * 1);
                         });
-                        console.log(qty_receipt);
 
                         var recPO = new GridReceiptItemPurchaseOrderModel({
                             idpurchaseitem: obj.idpurchaseitem,
@@ -448,13 +447,18 @@ function showGoodsReceiptData(selectedRecord) {
 }
 
 function loadDataFormPurchaseInvoice(selectedRecord, option) {
+    Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
 
     Ext.getCmp('idpurchase_poinvoice').setValue(selectedRecord.get('idpurchase'));
-    Ext.getCmp('nopo_poinvoice').setValue(selectedRecord.get('nopurchase'));
-    Ext.getCmp('po_date_poinvoice').setValue(selectedRecord.get('date'));
+    Ext.getCmp('goods_receipt_id_poinvoice').setValue(selectedRecord.get('goods_receipt_id'));
+    Ext.getCmp('nopo_poinvoice').setValue(selectedRecord.get('no_po'));
+    Ext.getCmp('nogr_poinvoice').setValue(selectedRecord.get('no_goods_receipt'));
+    Ext.getCmp('po_date_poinvoice').setValue(selectedRecord.get('po_date'));
     Ext.getCmp('cbUnit_poinvoice').setValue(selectedRecord.get('idunit'));
-    Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('nametax'));
+    Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('idtax'));
     Ext.getCmp('supplier_poinvoice').setValue(selectedRecord.get('idsupplier'));
+    Ext.getCmp('nofpsup_poinvoice').setValue(selectedRecord.get('supplier_direct_no'));
+    Ext.getCmp('notes_pi').setValue(selectedRecord.get('notes'));
 
     Ext.getCmp('supplier_poinvoice').getStore().load(function(records) {
         var supp = records.filter(function(item) {
@@ -467,7 +471,7 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
     // Ext.getCmp('cb_status_poinvoice').setValue(5);
 
     var subtotal = selectedRecord.get('subtotal') * 1;
-    var dpp = selectedRecord.get('total_dpp') * 1;
+    var dpp = selectedRecord.get('dpp') * 1;
     var tax = selectedRecord.get('tax') * 1;
     var totalamount = selectedRecord.get('totalamount') * 1;
 
@@ -484,11 +488,12 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
 
     //insert item to grid
     Ext.Ajax.request({
-        url: SITE_URL + 'purchase/get_po_items',
+        url: SITE_URL + 'purchase/get_gr_items',
         method: 'GET',
         params: {
             idpurchase: selectedRecord.get('idpurchase'),
-            option: option
+            idunit: selectedRecord.get('idunit'),
+            goods_receipt_id: selectedRecord.get('idpurchase'),
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
@@ -497,28 +502,22 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
 
             Ext.each(d.data, function(obj, i) {
                 // console.log(obj);
-
-                var recDO = new GridItemPurchaseInvoiceModel({
+                var recGR = new GridItemPurchaseInvoiceModel({
+                    purchase_batch_id: obj.purchase_batch_id,
                     idpurchaseitem: obj.idpurchaseitem,
-                    idinventory: obj.idinventory,
+                    idpurchase: obj.idpurchase,
+                    sku_no: obj.sku_no,
                     invno: obj.invno,
-                    nameinventory: obj.nameinventory,
                     qty: obj.qty,
-                    price: obj.price,
-                    disc: obj.disc,
-                    total: obj.total,
-                    ratetax: obj.ratetax,
-                    tax: obj.tax,
-                    size: obj.size,
+                    nameinventory: obj.nameinventory,
                     short_desc: obj.short_desc,
-                    size_measurement: obj.size_measurement,
-                    warehouse_code: obj.warehouse_code
+                    price: obj.price,
+                    total: obj.total,
                 });
 
 
-                grid.getStore().insert(0, recDO);
+                grid.getStore().insert(i, recGR);
             });
-
 
             // updateSelisih();
         },

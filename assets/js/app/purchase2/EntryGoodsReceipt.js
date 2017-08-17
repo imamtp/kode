@@ -314,7 +314,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             labelWidth: 60,
                             name: 'po_date',
                             id: 'po_date_poreceipt',
-                            format: 'd/m/Y',
+                            format: 'Y/m/d',
                             fieldLabel: 'PO Date'
                         },
                         //
@@ -323,7 +323,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             labelWidth: 100,
                             name: 'received_date',
                             id: 'received_date_poreceipt',
-                            format: 'd/m/Y',
+                            format: 'Y/m/d',
                             fieldLabel: 'Received Date'
                         },
                         {

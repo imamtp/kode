@@ -64,7 +64,7 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
                         receivedid: Ext.getCmp('receivedid_poreceipt').getValue(),
                         received_date: Ext.getCmp('received_date_poreceipt').getSubmitValue(),
                         no_rujukan_sup: Ext.getCmp('no_rujukan_sup_poreceipt').getValue(),
-                        status: Ext.getCmp('cb_grstatus_poreceipt').getValue(),
+                        status_gr: Ext.getCmp('cb_grstatus_poreceipt').getValue(),
                         subtotal: subtotal.toFixed(2),
                         dpp: dpp.toFixed(2),
                         tax: tax.toFixed(2),
