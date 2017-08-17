@@ -150,7 +150,7 @@ Ext.define('GridInventoryAllBySkuModel', {
     extend: 'Ext.data.Model',
     fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
         'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
-        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua'
+        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua', 'hpp_per_unit'
     ],
     idProperty: 'id'
 });
@@ -292,8 +292,16 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             minWidth: 100
         },
         {
+            header: 'HPP',
+            dataIndex: 'hpp_per_unit',
+            minWidth: 120,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
             header: 'Buying Cost',
             dataIndex: 'cost',
+            hidden: true,
             minWidth: 120,
             xtype: 'numbercolumn',
             align: 'right'
@@ -555,7 +563,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
 
                 GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
                     operation.params = {
-                        'extraparams': 'a.idinventory_batch:' + record.data.idinventory
+                        'extraparams': 'a.idinventory_parent:' + record.data.idinventory
                     };
                 });
 

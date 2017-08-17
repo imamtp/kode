@@ -2,8 +2,8 @@
 
 Ext.define('GridBatchItemPOReturnListModel', {
     extend: 'Ext.data.Model',
-     fields: [
-      'purchase_batch_id','idpurchaseitem','qty','measurement_id','idunit','idinventory','no','warehouse_id','warehouse_code','short_desc','nameinventory','sku_no','invno'
+    fields: [
+        'purchase_batch_id', 'idpurchaseitem', 'qty', 'measurement_id', 'idunit', 'idinventory', 'no', 'warehouse_id', 'warehouse_code', 'short_desc', 'nameinventory', 'sku_no', 'invno'
     ],
     idProperty: 'id'
 });
@@ -15,7 +15,7 @@ var storeGridBatchItemPOReturnList = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-         url: SITE_URL + 'backend/ext_get_all/itembatchpurchase/purchase',
+        url: SITE_URL + 'backend/ext_get_all/itembatchpurchase/purchase',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -45,7 +45,7 @@ Ext.define('MY.searchGridBatchItemPOReturnList', {
     width: 180
 });
 
-function post_poreturn_item(opsi,data){
+function post_poreturn_item(opsi, data) {
     Ext.Ajax.request({
         url: SITE_URL + 'purchase/post_poreturn_item_batch',
         method: 'POST',
@@ -71,26 +71,26 @@ var smGridBatchItemPOReturnList = Ext.create('Ext.selection.CheckboxModel', {
         deselect: function(model, record, index) {
             // console.log('deselect');
             // var selected = smGridBatchItemPOReturnList.getSelection();
-            post_poreturn_item('delete',record.data)
-            // if (selectedLen.length == 0) {
-            //     console.log(selectedLen);
-            //     Ext.getCmp('btnDeleteMasterSupplierData').disable();
-            // }
+            post_poreturn_item('delete', record.data)
+                // if (selectedLen.length == 0) {
+                //     console.log(selectedLen);
+                //     Ext.getCmp('btnDeleteMasterSupplierData').disable();
+                // }
         },
         select: function(model, record, index) {
-            post_poreturn_item('insert',record.data)
-            // Ext.getCmp('btnDeleteMasterSupplierData').enable();
+            post_poreturn_item('insert', record.data)
+                // Ext.getCmp('btnDeleteMasterSupplierData').enable();
         }
     }
 });
 
-Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
+Ext.define(dir_sys + 'purchase2.GridBatchPoReturn', {
     extend: 'Ext.grid.Panel',
     id: 'GridBatchPoReturn',
     alias: 'widget.GridBatchPoReturn',
     xtype: 'cell-editing',
     // title: 'Input Sales Order',
-//    frame: true,    
+    //    frame: true,    
     initComponent: function() {
 
         this.cellEditing = new Ext.grid.plugin.CellEditing({
@@ -101,27 +101,26 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
             width: panelW,
             height: sizeH,
             // forceFit: true,
-            selModel:smGridBatchItemPOReturnList,
+            selModel: smGridBatchItemPOReturnList,
             plugins: [this.cellEditing],
             store: storeGridBatchItemPOReturnList,
-            columns: [
-                {
+            columns: [{
                     header: 'purchase_batch_id',
                     hidden: true,
                     dataIndex: 'purchase_batch_id',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idpurchaseitem',
                     hidden: true,
                     dataIndex: 'idpurchaseitem',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idpurchase',
                     hidden: true,
                     dataIndex: 'idpurchase',
-//                    id: 'idinventory'
+                    //                    id: 'idinventory'
                 },
                 {
                     header: 'idunit',
@@ -131,21 +130,21 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
                 {
                     header: 'SKU No',
                     dataIndex: 'sku_no',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 150
                 },
                 {
                     header: 'Kode Barang',
                     dataIndex: 'invno',
-//                    id: 'invno',
+                    //                    id: 'invno',
                     width: 150
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
-                    flex:1,
+                    flex: 1,
                     width: 150,
-//                    id: 'nameinventory'
+                    //                    id: 'nameinventory'
                 },
                 {
                     xtype: 'numbercolumn',
@@ -169,10 +168,10 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
                     //     displayField: 'short_desc',
                     //     labelWidth: 100
                     // }
-                }, 
+                },
                 {
                     xtype: 'numbercolumn',
-                    hidden:true,
+                    hidden: true,
                     header: 'Qty #2',
                     width: 70,
                     dataIndex: 'stock_kedua',
@@ -185,7 +184,7 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
                 },
                 {
                     header: 'Satuan #2',
-                    hidden:true,
+                    hidden: true,
                     dataIndex: 'satuan_kedua',
                     // editor: {
                     //     xtype: 'comboxmeasurement',
@@ -194,14 +193,14 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
                     //     displayField: 'short_desc',
                     //     labelWidth: 100
                     // }
-                },   
+                },
                 {
                     header: 'Warehouse',
                     minWidth: 150,
                     dataIndex: 'warehouse_code',
                     editor: {
                         xtype: 'comboxWarehouse',
-                        hideLabel:true,
+                        hideLabel: true,
                         valueField: 'warehouse_code',
                         displayField: 'warehouse_code',
                         labelWidth: 100
@@ -213,7 +212,7 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
                     dataIndex: 'notes',
                     editor: {
                         xtype: 'textfield',
-                        hideLabel:true,
+                        hideLabel: true,
                         labelWidth: 100
                     }
                 }
@@ -221,62 +220,58 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
             // selModel: {
             //     selType: 'cellmodel'
             // },
-            dockedItems: [ 
-                {
-                    xtype:'hiddenfield',
-                    id:'idpurchase_batchitemporeceipt',
-                    name:'idpurchase'
-                },  
-                {
-                    xtype:'hiddenfield',
-                    id:'idpurchaseitem_batchitemporeceipt',
-                    name:'idpurchaseitem'
-                }, 
-                {
-                    xtype:'hiddenfield',
-                    id:'idinventory_batchitemporeceipt',
-                    name:'idinventory'
-                }, 
-                {
-                    xtype:'hiddenfield',
-                    id:'idunit_batchitemporeceipt',
-                    name:'idunit'
-                },      
-                {
-                    xtype:'hiddenfield',
-                    id:'qty_batchitemporeceipt',
-                    name:'qty'
-                }, 
-                {
-                    xtype:'hiddenfield',
-                    id:'short_desc_batchitemporeceipt'
+            dockedItems: [{
+                    xtype: 'hiddenfield',
+                    id: 'idpurchase_batchitemporeceipt',
+                    name: 'idpurchase'
                 },
-                  {
-                    xtype:'hiddenfield',
-                    id:'warehouse_code_batchitemporeceipt'
-                }, 
                 {
-                    xtype:'hiddenfield',
-                    id:'nameinventory_batchitemporeceipt'
-                },       
-                         
+                    xtype: 'hiddenfield',
+                    id: 'idpurchaseitem_batchitemporeceipt',
+                    name: 'idpurchaseitem'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'idinventory_parentitemporeceipt',
+                    name: 'idinventory'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'idunit_batchitemporeceipt',
+                    name: 'idunit'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'qty_batchitemporeceipt',
+                    name: 'qty'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'short_desc_batchitemporeceipt'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'warehouse_code_batchitemporeceipt'
+                },
+                {
+                    xtype: 'hiddenfield',
+                    id: 'nameinventory_batchitemporeceipt'
+                },
+
                 {
                     xtype: 'toolbar',
                     dock: 'top',
-                    items: [
-                        {
-                         xtype:'textfield',
-                         readOnly:true,
-                         width:190,
-                         id:'numbatch_itemporeturn',
-                         fieldLabel:'Jumlah Batch'   
-                        }
-                    ]
+                    items: [{
+                        xtype: 'textfield',
+                        readOnly: true,
+                        width: 190,
+                        id: 'numbatch_batchitemporeceiptreturn',
+                        fieldLabel: 'Jumlah Batch'
+                    }]
                 }
             ],
             listeners: {
-                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
-                },
+                cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
                 render: {
                     scope: this,
                     fn: function(grid) {
@@ -306,23 +301,18 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
         // handle after edit
         console.log('after edit');
     },
-    recordPurchaseOrder: function(button, event, mode)
-    {
+    recordPurchaseOrder: function(button, event, mode) {
 
     },
     saveRecurr: function() {
-        if (validasiPurchaseOrder())
-        {
+        if (validasiPurchaseOrder()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
     },
-    loadStore: function() {
-    },
-    onStoreLoad: function() {
-    },
-    onAddClick: function() {
-    },
+    loadStore: function() {},
+    onStoreLoad: function() {},
+    onAddClick: function() {},
     onRemoveClick: function(grid, rowIndex) {
         this.getStore().removeAt(rowIndex);
         // updateGridPurchaseOrder('general')
@@ -334,30 +324,30 @@ Ext.define(dir_sys+'purchase2.GridBatchPoReturn', {
 
 
 
-Ext.define(dir_sys+'purchase2.WindowBatchItemListPoReturn', {
+Ext.define(dir_sys + 'purchase2.WindowBatchItemListPoReturn', {
     extend: 'Ext.window.Window',
     alias: 'widget.WindowBatchItemListPoReturn',
-    id:'WindowBatchItemListPoReturn',
+    id: 'WindowBatchItemListPoReturn',
     title: 'Batch Item',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
-    autoDestroy:false,
-    modal:true,
+    autoDestroy: false,
+    modal: true,
     closeAction: 'hide',
-//    autoWidth: true,
-    width: panelW-200,
-    height: sizeH-200,
+    //    autoWidth: true,
+    width: panelW - 200,
+    height: sizeH - 200,
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridBatchPoReturn'
+        xtype: 'GridBatchPoReturn'
     }],
     listeners: {
-            show: function() {
-                // this.el.setStyle('top', '');
-            }
+        show: function() {
+            // this.el.setStyle('top', '');
         }
+    }
 });

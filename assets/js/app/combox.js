@@ -1809,7 +1809,9 @@ var ArrPurchaseOrderStatus = [
     [3, 'Ordered'],
     [4, 'Received'],
     [5, 'Partial Received'],
-    [6, 'Canceled']
+    [6, 'Canceled'],
+    [7, 'Closed'],
+
 ];
 
 Ext.define('comboxpurchasestatus', {
@@ -1825,6 +1827,29 @@ Ext.define('comboxpurchasestatus', {
     store: new Ext.data.ArrayStore({
         fields: ['id', 'value'],
         data: ArrPurchaseOrderStatus
+    })
+});
+
+var ArrGoodsReceiptStatus = [
+    [1, 'Open'],
+    [2, 'Canceled'],
+    [3, 'Confirmed'],
+    [4, 'Invoiced'],
+];
+
+Ext.define('comboxgoodsreceiptstatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxgoodsreceiptstatus',
+    fieldLabel: 'Status',
+    displayField: 'value',
+    valueField: 'id',
+    name: 'status_gr',
+    editable: false,
+    emptyText: 'Choose Status...',
+    triggerAction: 'all',
+    store: new Ext.data.ArrayStore({
+        fields: ['id', 'value'],
+        data: ArrGoodsReceiptStatus
     })
 });
 

@@ -84,8 +84,75 @@ class m_stock extends CI_Model {
 		
 
 	}
+	
+	function update_hpp($idinventory,$idunit,$tipe,$balance,$qty_trx,$idpurchase=null,$idsales=null){
+		/*
+            hitung hpp per unit inventory
 
-	function update_hpp($idunit,$tipe,$idpurchase=null,$idsales=null){
+            tipe:
+            1. LIFO
+            2. FIFO
+            3. Average
+		*/
+		$datein = date('Y-m-d H:i:s');
+		$this->db->trans_begin();
+		//average
+		switch($tipe){
+			case 3:
+				if($idpurchase != null){
+					//log hpp saat pembelian
+					$sql = "insert into inventory_hpp_history 
+							select a.idinventory_parent, a.idunit, '$datein', a.old_balance, a.old_qty, $qty_trx, round(cast((a.old_balance + $balance)/(a.old_qty + $qty_trx) as numeric), 2) as hpp_per_unit, (old_balance + $balance) as ending_balance, (old_qty + $qty_trx) as ending_qty, $idpurchase, null
+							from (
+								select idinventory_parent, a.idunit, sum(cost*stock) as old_balance, sum(stock) as old_qty from inventory a
+								join warehouse_stock b on b.idinventory = a.idinventory
+								where idinventory_parent is not null
+								and a.idinventory_parent = $idinventory
+								and a.idunit = $idunit
+								group by idinventory_parent, a.idunit
+							) a";
+					$this->db->query($sql);
+				} else {
+					//log hpp saat penjualan
+					$sql = "insert into inventory_hpp_history
+							select a.idinventory, a.idunit, '$datein', null, null, $qty_trx, a.hpp_per_unit, (b.old_balance - ($qty_trx * a.hpp_per_unit)) as ending_balance, (b.old_qty - $qty_trx) as ending_qty, null, $idsales
+							from (
+								select idinventory, idunit, hpp_per_unit 
+								from inventory a
+								where idinventory_parent is null
+							) a
+							join (
+								select idinventory_parent, a.idunit, sum(cost*stock) as old_balance, sum(stock) as old_qty from inventory a
+								join warehouse_stock b on b.idinventory = a.idinventory
+								where idinventory_parent is not null
+								group by idinventory_parent, a.idunit
+							) b on b.idinventory_parent = a.idinventory and b.idunit = a.idunit
+							where a.idunit = $idunit
+							and a.idinventory = $idinventory";
+					$this->db->query($sql);
+				}
+				break;
+		}
+
+		//update hpp di inventory
+		$sql = "select hpp_unit from inventory_hpp_history
+				where idinventory = $idinventory and idunit = $idunit and datein = '$datein'
+				order by datein desc limit 1";
+		$r = $this->db->query($sql)->row();
+
+		$this->db->where('idinventory', $idinventory);
+		$this->db->update('inventory', array('hpp_per_unit'=> $r->hpp_unit));
+
+		if($this->db->trans_status() === false){
+			$this->db->trans_rollback();
+			return false;
+		}else{
+			$this->db->trans_commit();
+			return true;
+		}
+	}
+
+	function update_hpp_old($idunit,$tipe,$idpurchase=null,$idsales=null){
         /*
             hitung hpp per unit inventory
 

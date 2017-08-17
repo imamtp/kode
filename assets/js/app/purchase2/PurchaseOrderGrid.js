@@ -83,7 +83,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
     alias: 'widget.PurchaseOrderGrid',
     // Ext.define('PurchaseOrderGrid', {
     title: 'Purchase Order',
-    // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+    // sm: new Ext.grid.RowSelectionModel({ singleSelect: true }),
     itemId: 'PurchaseOrderGridID',
     id: 'PurchaseOrderGridID',
     store: storePurchaseOrderGrid,
@@ -323,6 +323,50 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                         Ext.getCmp('TabSupplier').setActiveTab(0);
                     }
                 }
+            }, {
+                text: 'Set Status',
+                iconCls: 'edit-icon',
+                menu: [{
+                    text: 'Close',
+                    handler: function() {
+                        var grid = Ext.getCmp('PurchaseOrderGridID');
+                        var selectedItem = grid.getSelectionModel().getSelection();
+                        if (selectedItem.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            // [1, 'Open'],
+                            // [2, 'Confirmed'],
+                            // [3, 'Ordered'],
+                            // [4, 'Received'],
+                            // [5, 'Partial Received'],
+                            // [6, 'Canceled'],
+                            // [7, 'Closed'],
+
+                            // //if status is received or partialy received
+                            if (selectedItem[0].data.idpurchasestatus == 5) {
+                                Ext.Ajax.request({
+                                    url: SITE_URL + 'purchase/setStatusPurchase',
+                                    method: 'POST',
+                                    params: {
+                                        status: 4,
+                                        idunit: Ext.getCmp('idunit_grdpo').getValue(),
+                                        idpurchase: selectedItem[0].data.idpurchase
+                                    },
+                                    success: function(form, action) {
+                                        var d = Ext.decode(form.responseText);
+                                        Ext.Msg.alert('Informasi', d.message);
+                                        grid.getStore().load();
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    }
+                                });
+                            } else {
+                                Ext.Msg.alert('Failure', 'Tidak bisa close pembelian, pembelian ' + selectedItem[0].data.nopurchase + ' tidak dalam status Partialy Received');
+                            }
+                        }
+                    }
+                }]
             }, {
                 id: 'btnDeletePurchaseOrderGrid',
                 text: 'Delete',

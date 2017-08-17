@@ -8,7 +8,7 @@ var wCoaInventoryGoodsReceipt = Ext.create(dir_sys + 'inventory.wCoaInventoryGoo
 
 Ext.define('GridReceiptItemPurchaseOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received'],
+    fields: ['idpurchaseitem', 'idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'qty_received', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'total_qty_batch', 'qty_received', 'qty_receipt', 'total_receipt'],
     idProperty: 'id'
 });
 
@@ -28,16 +28,16 @@ var storeGridItemPurchaseOrder = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
-        direction: 'DESC'
+        property: 'sku_no',
+        direction: 'ASC'
     }]
 });
 
 //end store head
 
 // var GridBatchGoodsReceipt = Ext.getCmp('GridBatchGoodsReceipt').getStore();
-var gridinsertReceiveBatchPO = Ext.getCmp('GridBatchGoodsReceipt');
-var gridinsertReceiveBatchPOStore = gridinsertReceiveBatchPO.getStore();
+// var gridinsertReceiveBatchPO = Ext.getCmp('GridBatchGoodsReceipt');
+// var gridinsertReceiveBatchPOStore = gridinsertReceiveBatchPO.getStore();
 
 Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
     extend: 'Ext.grid.Panel',
@@ -68,113 +68,33 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
                     handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
                         console.log(selectedRecord)
+                        var win = Ext.getCmp('WindowEntryGoodsReceipt');
+                        WindowBatchItemList.selectedItem = selectedRecord;
+                        WindowBatchItemList.selectedItemIndex = rowIndex;
+                        WindowBatchItemList.itembatch = win.itembatch[rowIndex];
                         WindowBatchItemList.show();
 
-                        var idpurchase = Ext.getCmp('idpurchase_poreceipt').getValue();
-                        var idunit = Ext.getCmp('cbUnit_poreceipt').getValue();
+                        // var idpurchase = Ext.getCmp('idpurchase_poreceipt').getValue();
+                        // var idunit = Ext.getCmp('cbUnit_poreceipt').getValue();
+                        // var idpurchasestatus = Ext.getCmp('cb_status_poreceipt').getValue() * 1;
 
-                        Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
-                        Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
-                        Ext.getCmp('idinventory_batchitemporeceipt').setValue(selectedRecord.data.idinventory);
-                        Ext.getCmp('idunit_batchitemporeceipt').setValue(idunit);
-                        Ext.getCmp('qty_batchitemporeceipt').setValue(selectedRecord.data.qty);
-                        Ext.getCmp('short_desc_batchitemporeceipt').setValue(selectedRecord.data.short_desc);
-                        Ext.getCmp('warehouse_code_batchitemporeceipt').setValue(selectedRecord.data.warehouse_code);
-                        Ext.getCmp('nameinventory_batchitemporeceipt').setValue(selectedRecord.data.nameinventory);
+                        //insert WindowEntryGoodsReceipt.itembatch dari purchase item ini ke store batch item po list
+                        // Ext.each(win.itembatch[rowIndex], function(obj, i) {
+                        //     var record = new GridBatchItemPOListModel(obj);
+                        //     Ext.getCmp('GridBatchGoodsReceipt').getStore().insert(i, record);
+                        // });
+                        // Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
+                        // Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
+                        // Ext.getCmp('sku_no_parentitemporeceipt').setValue(selectedRecord.data.sku_no);
+                        // Ext.getCmp('idinventory_parentitemporeceipt').setValue(selectedRecord.data.idinventory);
+                        // Ext.getCmp('idunit_batchitemporeceipt').setValue(selectedRecord.data.idunit);
+                        // Ext.getCmp('price_batchitemporeceipt').setValue(selectedRecord.data.price);
+                        // Ext.getCmp('qty_batchitemporeceipt').setValue(selectedRecord.data.qty);
+                        // Ext.getCmp('short_desc_batchitemporeceipt').setValue(selectedRecord.data.short_desc);
+                        // Ext.getCmp('warehouse_code_batchitemporeceipt').setValue(selectedRecord.data.warehouse_code);
+                        // Ext.getCmp('nameinventory_batchitemporeceipt').setValue(selectedRecord.data.nameinventory);
 
-                        var idpurchasestatus = Ext.getCmp('cb_status_poreceipt').getValue() * 1;
 
-                        //cek udah bikin batch apa belum, kalo udah, tampilkan
-
-                        // gridinsertReceiveBatchPOStore.removeAll();
-                        // gridinsertReceiveBatchPOStore.sync();
-                        var btnSimpanGRBatchWindow = Ext.getCmp('btnSimpanGRBatchWindow'); //tombol simpan di window penerimaan batch GR
-                        if (idpurchasestatus != 4) {
-                            //bukan received masih bisa update
-                            btnSimpanGRBatchWindow.enable();
-                        } else {
-                            btnSimpanGRBatchWindow.disable();
-                        }
-
-                        if (Ext.getCmp('statusform_poreceipt').getValue() === 'input') {
-                            var is_temp = 1;
-                            Ext.getCmp('numbatch_itempo').setReadOnly(false);
-                            Ext.getCmp('buatbatchbtn_itempo').show();
-                        } else {
-                            if (idpurchasestatus === 1) {
-                                //kalo statusnya masih open. aktifkan tombol buat batch
-                                var is_temp = 1;
-                                Ext.getCmp('numbatch_itempo').setReadOnly(false);
-                                Ext.getCmp('buatbatchbtn_itempo').show();
-                            } else {
-                                var is_temp = 0;
-                                Ext.getCmp('numbatch_itempo').setReadOnly(true);
-                                Ext.getCmp('buatbatchbtn_itempo').hide();
-
-                                btnSimpanGRBatchWindow.disable(); //disable karna bukan open
-                            }
-
-                        }
-
-                        gridinsertReceiveBatchPOStore.load({
-                            params: {
-                                idpurchase: idpurchase,
-                                idpurchaseitem: selectedRecord.data.idpurchaseitem,
-                                idinventory: selectedRecord.data.idinventory,
-                                idunit: idunit,
-                                is_tmp: is_temp
-                            }
-                        });
-
-                        Ext.Ajax.request({
-                            url: SITE_URL + 'purchase/check_batch_item',
-                            method: 'GET',
-                            params: {
-                                idpurchase: idpurchase,
-                                idpurchaseitem: selectedRecord.data.idpurchaseitem,
-                                idinventory: selectedRecord.data.idinventory,
-                                idunit: idunit,
-                                is_temp: is_temp
-                            },
-                            success: function(form, action) {
-                                var d = Ext.decode(form.responseText);
-                                // console.log(d);
-                                Ext.getCmp('numbatch_itempo').setValue(d.numbatch);
-                                Ext.getCmp('qtytotal_batchitemporeceipt').setValue(d.totalqtyterima);
-
-                                if (d.numbatch === 0) {
-                                    //kalo masih kosong enable tombol create batch. (edit form)
-                                    Ext.getCmp('numbatch_itempo').setReadOnly(false);
-                                    Ext.getCmp('buatbatchbtn_itempo').show();
-                                }
-
-                                // Ext.each(d.data, function(obj, i) {
-                                //      var recDO = new GridBatchItemPOListModel({
-                                //             idpurchaseitem: obj.idpurchaseitem,
-                                //             idinventory: obj.idinventory,
-                                //             sku_no: obj.sku_no,
-                                //             invno: obj.invno,
-                                //             nameinventory: obj.nameinventory,
-                                //             qty: obj.qty,
-                                //             price: obj.price,
-                                //             disc: obj.disc,
-                                //             total: obj.total,
-                                //             ratetax: obj.ratetax,
-                                //             tax: obj.tax,
-                                //             size: obj.size,
-                                //             short_desc: obj.short_desc,
-                                //             size_measurement: obj.size_measurement,
-                                //             warehouse_code: obj.warehouse_code,
-                                //             notes: obj.notes
-                                //     });
-                                //     gridinsertReceiveBatchPO.getStore().insert(0, recDO);
-                                // });
-                            },
-                            failure: function(form, action) {
-                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                            }
-                        });
-                        // setValueAcc(selectedRecord,'wCoaPurchaseInvoiceBeliPopup','_coa_beli_pi');
                     }
                 },
                 {
@@ -243,22 +163,25 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     width: 120,
                     dataIndex: 'qty_received',
                     align: 'right'
-                        // editor: {
-                        //     xtype: 'numberfield',
-                        //     allowBlank: false,
-                        //     minValue: 1
-                        // }
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Qty Receipt',
+                    width: 120,
+                    dataIndex: 'qty_receipt',
+                    align: 'right'
+                },
+                {
+                    xtype: 'numbercolumn',
+                    header: 'Total Receipt',
+                    width: 120,
+                    hidden: true,
+                    dataIndex: 'total_receipt',
+                    align: 'right'
                 },
                 {
                     header: 'Satuan',
                     dataIndex: 'short_desc',
-                    // editor: {
-                    //     xtype: 'comboxmeasurement',
-                    //     hideLabel:true,
-                    //     valueField: 'short_desc',
-                    //     displayField: 'short_desc',
-                    //     labelWidth: 100
-                    // }
                 },
                 {
                     xtype: 'numbercolumn',
@@ -298,7 +221,8 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     //     allowBlank: false,
                     //     minValue: 0
                     // }
-                }, {
+                },
+                {
                     xtype: 'numbercolumn',
                     header: 'Total',
                     dataIndex: 'total',
@@ -362,6 +286,10 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
             },
             dockedItems: [{
                     xtype: 'hiddenfield',
+                    id: 'id_gr_poreceipt',
+                    name: 'id_gr'
+                }, {
+                    xtype: 'hiddenfield',
                     id: 'idpurchase_poreceipt',
                     name: 'idpurchase'
                 },
@@ -370,7 +298,60 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                     id: 'statusform_poreceipt',
                     name: 'statusFormPurchaseOrder'
                 },
-
+                {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    items: [{
+                            xtype: 'textfield',
+                            readOnly: true,
+                            labelWidth: 120,
+                            id: 'nopo_poreceipt',
+                            fieldLabel: 'NO PO #',
+                        },
+                        {
+                            xtype: 'datefield',
+                            readOnly: true,
+                            labelWidth: 60,
+                            name: 'po_date',
+                            id: 'po_date_poreceipt',
+                            format: 'Y/m/d',
+                            fieldLabel: 'PO Date'
+                        },
+                        //
+                        {
+                            xtype: 'datefield',
+                            labelWidth: 100,
+                            name: 'received_date',
+                            id: 'received_date_poreceipt',
+                            format: 'Y/m/d',
+                            fieldLabel: 'Received Date'
+                        },
+                        {
+                            xtype: 'comboxpurchasestatus',
+                            hidden: true,
+                            // readOnly:true,
+                            labelWidth: 100,
+                            id: 'cb_status_poreceipt'
+                        },
+                        {
+                            xtype: 'comboxgoodsreceiptstatus',
+                            labelWidth: 60,
+                            fieldLabel: 'Status',
+                            id: 'cb_grstatus_poreceipt'
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    items: [{
+                        xtype: 'textfield',
+                        fieldLabel: 'Recom. Supplier',
+                        readOnly: true,
+                        id: 'suppliername_poreceipt',
+                        labelWidth: 120
+                    }]
+                },
                 {
                     xtype: 'toolbar',
                     dock: 'top',
@@ -379,60 +360,17 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             readOnly: true,
                             labelWidth: 120,
                             id: 'nojurnal_poreceipt',
-                            fieldLabel: 'NO PO #',
-                            listeners: {
-                                render: function(component) {
-                                    component.getEl().on('click', function(event, el) {
-                                        insertNoRef(4, Ext.getCmp('cbUnitEntryGoodsReceipt').getValue(), 'nojurnalPurchaseOrder', 'PO');
-                                    });
-                                }
-                            }
-                        },
-                        {
-                            xtype: 'datefield',
-                            readOnly: true,
-                            labelWidth: 120,
-                            name: 'po_date',
-                            id: 'po_date_poreceipt',
-                            format: 'd/m/Y',
-                            fieldLabel: 'PO Date'
+                            fieldLabel: 'NO GR #',
+                            emptyText: 'Autogenerated',
                         },
                         {
                             xtype: 'comboxunit',
                             readOnly: true,
                             valueField: 'idunit',
-                            labelWidth: 100,
+                            labelWidth: 60,
                             valueField: 'idunit',
                             id: 'cbUnit_poreceipt'
                                 //                            ,multiSelect:true
-                        },
-                        {
-                            xtype: 'comboxtaxtype',
-                            readOnly: true,
-                            labelWidth: 100,
-                            name: 'idtax',
-                            valueField: 'idtax',
-                            id: 'cb_tax_id_poreceipt',
-                            listeners: {
-                                select: function(combo, record, index) {
-                                    // alert(combo.getValue()); // Return Unitad States and no USA
-                                    // updateGridPurchaseOrder();
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    xtype: 'toolbar',
-                    dock: 'top',
-                    items: [
-
-                        {
-                            xtype: 'textfield',
-                            fieldLabel: 'Recom. Supplier',
-                            readOnly: true,
-                            id: 'suppliername_poreceipt',
-                            labelWidth: 120
                         },
                         {
                             xtype: 'hiddenfield',
@@ -440,7 +378,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                         },
                         {
                             xtype: 'textfield',
-                            labelWidth: 120,
+                            labelWidth: 100,
                             fieldLabel: 'Received By',
                             name: 'received_name',
                             id: 'received_poreceipt',
@@ -468,21 +406,20 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             id: 'receivedid_poreceipt',
                         },
                         {
-                            xtype: 'datefield',
-                            labelWidth: 100,
-                            name: 'received_date',
-                            id: 'received_date_poreceipt',
-                            format: 'd/m/Y',
-                            fieldLabel: 'Received Date'
+                            xtype: 'comboxtaxtype',
+                            readOnly: true,
+                            labelWidth: 60,
+                            name: 'idtax',
+                            valueField: 'idtax',
+                            id: 'cb_tax_id_poreceipt',
+                            listeners: {
+                                select: function(combo, record, index) {
+                                    // alert(combo.getValue()); // Return Unitad States and no USA
+                                    // updateGridPurchaseOrder();
+                                }
+                            }
                         },
 
-                        {
-                            xtype: 'comboxpurchasestatus',
-                            hidden: true,
-                            // readOnly:true,
-                            labelWidth: 100,
-                            id: 'cb_status_poreceipt'
-                        }
                     ]
                 },
                 {
@@ -507,7 +444,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
 
                             //     Ext.getCmp('idpurchase_batchitemporeceipt').setValue(idpurchase);
                             //     Ext.getCmp('idpurchaseitem_batchitemporeceipt').setValue(selectedRecord.data.idpurchaseitem);
-                            //     Ext.getCmp('idinventory_batchitemporeceipt').setValue(selectedRecord.data.idinventory);
+                            //     Ext.getCmp('idinventory_parentitemporeceipt').setValue(selectedRecord.data.idinventory);
                             //     Ext.getCmp('idunit_batchitemporeceipt').setValue(idunit);                                    
                             //     Ext.getCmp('qty_batchitemporeceipt').setValue(selectedRecord.data.qty);   
                             //     Ext.getCmp('short_desc_batchitemporeceipt').setValue(selectedRecord.data.short_desc);
@@ -532,7 +469,7 @@ Ext.define(dir_sys + 'purchase2.EntryGoodsReceipt', {
                             //         success: function(form, action) {
                             //             var d = Ext.decode(form.responseText);
                             //             // console.log(d);
-                            //             Ext.getCmp('numbatch_itempo').setValue(d.numbatch);
+                            //             Ext.getCmp('numbatch_batchitemporeceipt').setValue(d.numbatch);
 
                             //                 Ext.each(d.data, function(obj, i) {
                             //                      var recDO = new GridBatchItemPOListModel({

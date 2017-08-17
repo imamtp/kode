@@ -965,8 +965,8 @@ function updateGridPurchaseOrder(tipe) {
         obj.set('total', net);
     });
 
-    dppPurchaseOrder = isIncludeTax ? (subtotalPurchaseOrder + totaldiskon) / 1.1 : 0;
-    totalPajak += isIncludeTax ? dppPurchaseOrder * (taxrate * 1 / 100) : subtotalPurchaseOrder * (taxrate / 100);
+    dppPurchaseOrder = isIncludeTax ? (subtotalPurchaseOrder + totaldiskon) / 1.1 : subtotalPurchaseOrder;
+    totalPajak = dppPurchaseOrder * (taxrate * 1 / 100); //isIncludeTax ? dppPurchaseOrder * (taxrate * 1 / 100) : subtotalPurchaseOrder * (taxrate / 100);
     totalPurchaseOrder = isIncludeTax ? subtotalPurchaseOrder : subtotalPurchaseOrder + totalPajak;
 
     sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;

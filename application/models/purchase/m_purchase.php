@@ -132,72 +132,17 @@ class m_purchase extends CI_Model {
     }
 
     function query_itempurchase($idpurchase,$option=null){
-        // $is_tmp = $this->input->get('is_tmp');
-        if(!isset($_GET['is_tmp'])){
-            $is_tmp = 0;
-        } else {
-            $is_tmp = $this->input->get('is_tmp');
-        }
-        // $is_tmp = $is_tmp == '' ? 0 : 1 ;
-
-         $q = $this->db->query("select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
-                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,COALESCE(total_qty_batch, 0) as total_qty_batch,a.idunit	
+        $sql = "select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
+                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,a.idunit	
                 from purchaseitem a
                 join inventory b ON a.idinventory = b.idinventory
                 left join productmeasurement c ON c.measurement_id = a.measurement_id
                 left join warehouse d ON d.warehouse_id = a.warehouse_id
                 left join productmeasurement e ON e.measurement_id = a.measurement_id_size
-                left join (select idpurchaseitem,COALESCE(sum(qty), 0) as total_qty_batch
-                            from purchaseitem_batch
-                            where is_tmp = $is_tmp
-                            group by idpurchaseitem) f ON a.idpurchaseitem = f.idpurchaseitem
-                where idpurchase = $idpurchase");
-
-        // $r = $q->result_array();
-        $data = array();
-        $i=0;
-        foreach ($q->result_array() as $r) {
-            $data[$i] = $r;
-
-            if($option=='invoice'){
-                //penyesuaian untuk data di form invoice
-                $data[$i]['qty'] = $r['qty_received'];
-            }
-
-            //cek apakah idinventory punya batch item
-            $qcek = $this->db->query("select idinventory_batch from inventory where idinventory_batch = ".$r['idinventory']."");
-            if($qcek->num_rows()>0)
-            {
-                $data[$i]['batch'] = true;
-
-                //hitung qty batch
-                // $q = $this->db->get_where('purchaseitem_batch',array(
-                //         'idpurchaseitem' => $r['idpurchaseitem'],
-                //         'idpurchase' => $r['idpurchase'],
-                //         'idunit'=>$idunit
-                //     ));
-
-                // $dataArr = $q->result_array();
-                // $totalqtyterima = 0;
-                // foreach ($dataArr as $key => $value) {
-                //     $totalqtyterima+=$value['qty'];
-                // }
-                $data[$i]['qty_received'] = $r['total_qty_batch'];
-
-                //data barang hasil batch
-                $qbatch = $this->db->query("select a.idpurchaseitem,a.qty,a.invno,a.sku_no,a.nameinventory,a.notes,b.short_desc,c.warehouse_code,a.notes
-                                                from purchaseitem_batch a
-                                                join productmeasurement b ON a.measurement_id = b.measurement_id
-                                                join warehouse c ON a.warehouse_id = c.warehouse_id
-                                                where idpurchaseitem = ".$r['idpurchaseitem']." ");
-                $data[$i]['item_details'] = $qbatch->result_array();
-
-            } else {
-                $data[$i]['batch'] = false;
-            }
-            
-            $i++;
-        }
+                where idpurchase = $idpurchase
+                ";
+        $q = $this->db->query($sql);
+        $data = $q->result_array();
         return $data;
     }
 

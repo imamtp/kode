@@ -44,7 +44,7 @@ class m_inventoryAll extends CI_Model {
             d.totalstock,
             e.short_desc as satuan_kedua,
             a.inventory_type,
-            a.idinventory_batch,
+            a.idinventory_parent,
             (totalstock / f.berat) as stock_kedua";
     }
     

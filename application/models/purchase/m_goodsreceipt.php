@@ -3,11 +3,11 @@
 class m_goodsreceipt extends CI_Model {
 
     function tableName() {
-        return 'goodsreceipt';
+        return 'goods_receipt';
     }
 
     function pkField() {
-        return 'idgoodsreceipt';
+        return 'goods_receipt_id';
     }
 
     function searchField() {
@@ -16,7 +16,66 @@ class m_goodsreceipt extends CI_Model {
     }
 
     function selectField() {
-        return "a.idgoodsreceipt,a.idpurchase,a.date,a.remarks,a.idunit,a.userin,a.datein,a.usermod,a.datemod,a.status,a.deleted,a.receiver,b.nopurchase,b.requestdate,b.delivereddate,b.subtotal,b.tax,b.discount,b.totalpaid,c.username as receivername";
+        return "a.goods_receipt_id,
+                a.no_goods_receipt,
+                a.received_date,
+                a.received_by,
+                a.no_invoice,
+                a.invoice_date,
+                a.subtotal,
+                a.tax,
+                a.discount,
+                a.dpp,
+                a.totalamount,
+                a.freightcost,
+                a.paidtoday,
+                a.balance,
+                a.notes,
+                a.supplier_direct_no,
+                a.status_gr,
+                a.idaccount_coa_persediaan,
+                a.idpurchase,
+                a.idunit,
+                a.status,
+                a.deleted,
+                a.userin,
+                a.datein,
+                a.usermod,
+                a.datemod,
+                case a.idpaymentterm
+                    when 1 then 'Cash in Advance'
+                    when 2 then 'Cash in Delivery'
+                    when 3 then 'NET d days'
+                    when 4 then 'NET EOM d days'
+                    when 5 then 'Discount'
+                end as paymentterm,
+                case a.idpaymentterm
+                    when 1 then '-'
+                    when 2 then '-'
+                    when 3 then a.ddays::text
+                    when 4 then a.eomddays::text
+                    when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
+                end as term,
+                a.duedate,
+                b.date as po_date,
+                b.nopurchase as no_po,
+                d.name as idpurchasestatusname,
+                a.received_by,
+                b.idtax,
+                b.include_tax,
+                (c.firstname || ' ' || c.lastname) as name_received_by,
+                a.status_gr,
+                b.idsupplier,
+                case
+                    when a.status_gr = 1 then 'Open'
+                    when a.status_gr = 2 then 'Canceled'
+                    when a.status_gr = 3 then 'Confirmed'
+                    when a.status_gr = 4 then 'Invoiced'
+                end as status_gr_name,
+                e.namesupplier,
+                f.accnumber as accnumber_coa_persediaan,
+                f.accname as accname_coa_persediaan,
+                g.rate";
     }
     
     function fieldCek()
@@ -31,34 +90,33 @@ class m_goodsreceipt extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
-                    left join purchase b on b.idpurchase = a.idpurchase
-                    left join sys_user c on c.user_id = a.receiver";
-
+                    join purchase b on b.idpurchase = a.idpurchase
+                    join employee c on c.idemployee = a.received_by
+                    left join purchasestatus d on d.idpurchasestatus = b.idpurchasestatus
+                    left join supplier e on e.idsupplier = b.idsupplier
+                    left join account f on f.idaccount = a.idaccount_coa_persediaan
+                    left join tax g on g.idtax = b.idtax";
         return $query;
     }
 
     function whereQuery() {
+        $wer = null;
+        switch ($this->input->post('option')){
+            case 'unpaid':
+                $wer .= " status_gr = 4 and a.paidtoday < a.totalamount  and a.duedate >= now()";
+                break;
+            case 'paid':
+                $wer .= " status_gr = 4 and a.paidtoday > 0  and a.duedate >= now()";
+                break;
+            case 'overdue':
+                $wer .= " status_gr = 4 and a.paidtoday < a.totalamount and a.duedate < now()";
+                break;
+        }
+        return $wer;
     }
 
     function orderBy() {
         return "";
-    }
-
-    function updateField() { 
-        $data = array(
-            'idgoodsreceipt' => $this->input->post('idgoodsreceipt') == '' ? $this->m_data->getSeqVal('seq_goodsreceipt') : $this->input->post('idgoodsreceipt'),
-            'idpurchase' => $this->input->post('idpurchase'),
-            'date' => $this->input->post('date'),
-            'remarks' => $this->input->post('remarks'),
-            'idunit' => $this->session->userdata('idunit'),
-            'userin' => $this->input->post('userin'),
-            'datein' => $this->input->post('datein'),
-            'usermod' => $this->input->post('usermod'),
-            'datemod' => $this->input->post('datemod'),
-            'status' => $this->input->post('status'),
-            'deleted' => $this->input->post('deleted'),
-        );
-        return $data;
     }
 }
 
