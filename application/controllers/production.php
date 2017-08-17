@@ -448,6 +448,17 @@ class production extends MY_Controller
             }
         }
 
+        if ($status==5) {
+            //buat jurnal
+            $this->load->model('journal/m_jproduction');
+            $job_no = $this->input->post('job_no');
+            $idjournal_receive_wo = $this->m_jproduction->receive_wo($job_order_id,$this->input->post('job_no'));
+            
+            $this->db->where('job_order_id', $job_order_id);
+            $this->db->update('job_order', array(
+                'idjournal_receive_wo'=>$idjournal_receive_wo
+            ));
+        }
         //start grid material
         // foreach ($gridmaterial as $value) {
         //       $data_material = array(
@@ -906,5 +917,63 @@ class production extends MY_Controller
             $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
         }
         echo json_encode($json);
+    }
+
+    function set_status(){
+        $this->db->trans_begin();
+
+        $feature = $this->input->post('feature');
+        if($feature=='input_material'){
+            //konfirmasi penggunaan raw material
+
+            $this->load->model('journal/m_jproduction');
+            $job_no = $this->input->post('job_no');
+            $idjournal_material_confirm = $this->m_jproduction->material_entry($this->hitung_bahan_baku($this->input->post('job_order_id')),$job_no);
+
+            $this->db->where('job_order_id',$this->input->post('job_order_id'));
+            $this->db->update('job_order',array(
+                'material_confirm_status'=>$this->input->post('status'),
+                'idjournal_material_confirm'=>$idjournal_material_confirm
+            ));
+
+           
+        }
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else {
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The form has been submitted succsessfully');
+        }
+        echo json_encode($json);
+    }
+
+    function hitung_bahan_baku($job_order_id){
+        $bbb = 0; //biaya bahan baku
+        
+        $this->load->model('inventory/m_stock');
+
+        $qjob_item = $this->db->query("select job_item_id
+                                from job_item a
+                                where a.job_order_id = $job_order_id");
+        foreach($qjob_item->result() as $r){
+            $qraw = $this->db->query("select a.idinventory,qty_real,b.hpp_per_unit
+                        from prod_material a
+                        join inventory b ON a.idinventory = b.idinventory
+                        where job_item_id = ".$r->job_item_id." and a.job_order_id = $job_order_id");
+            foreach($qraw->result() as $r2){
+                if($r2->hpp_per_unit==null){                    
+                   $hpp_per_unit = $this->m_stock->hitung_hpp_beli($r2->idinventory,3);
+                } else {
+                    $hpp_per_unit = $r2->hpp_per_unit;
+                }
+
+                $bbb+= $hpp_per_unit*$r2->qty_real;
+            }
+        }
+
+        // echo 'Biaya Bahan Baku: '.number_format($bbb);
+        return $bbb;
     }
 }

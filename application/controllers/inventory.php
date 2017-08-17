@@ -1174,6 +1174,7 @@ class inventory extends MY_Controller {
         if($query!=''){
             $wer = " and (a.sku_no like '%".strtoupper($query)."%' OR a.sku_no like '%".strtolower($query)."%')"; //by sku
             $wer .= " OR (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".strtolower($query)."%')"; //by inventory name
+            $wer .= " OR (a.invno like '%".strtoupper($query)."%')"; //by kode barang
         }
 
         $sql = "select a.idinventory,sku_no,a.idinventory_parent,nameinventory,a.cost,a.hpp_per_unit,a.unitmeasure, e.short_desc as satuan_beli, a.measurement_id_one, a.measurement_id_two,a.measurement_id_tre,b.short_desc AS satuan_pertama, 
@@ -1192,7 +1193,7 @@ class inventory extends MY_Controller {
                     where a.display is null and a.idinventory_parent is null $wer
                     GROUP BY a.idinventory,sku_no,d.totalitem,a.idinventory_parent,a.nameinventory,a.cost,a.hpp_per_unit,a.measurement_id_one,a.measurement_id_two,a.measurement_id_tre,b.short_desc,c.short_desc, a.panjang_satuan_id, a.tinggi_satuan_id, a.lebar_satuan_id, a.berat_satuan_id, a.ketebalan_satuan_id, a.diameter_satuan_id, e.short_desc,a.unitmeasure,a.bahan_coil_id";
         $q = $this->db->query($sql);
-        $qtotalrows = $this->db->query($sql);
+        $qtotalrows = $this->db->query($sql.$limitoffset);
         $dataArr = $q->result_array();
         // print_r($dataArr);
         $i=0;

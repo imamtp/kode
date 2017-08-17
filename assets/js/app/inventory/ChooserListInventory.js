@@ -47,10 +47,11 @@ var GridInventoryList = Ext.create('Ext.grid.Panel', {
     autoScroll: true,
     columns: [
         { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
-        { header: 'No', xtype: 'rownumberer', sortable: false, width: 30 },
-        { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
+        // { header: 'No', xtype: 'rownumberer', sortable: false, width: 30 },
+        { header: 'No SKU', dataIndex: 'sku_no', minWidth: 200 },
+        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 200 },
         { header: 'Name', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
-        { header: 'Brand', dataIndex: 'nameinventory', minWidth: 150 },
+        { header: 'Total Stok', dataIndex: 'totalstock', minWidth: 150 }
     ],
     dockedItems: [{
             xtype: 'toolbar',
@@ -146,8 +147,10 @@ var ChooserListInventory = Ext.create('widget.window', {
     modal: true,
     closable: true,
     closeAction: 'hide',
-    autoWidth: true,
-    autoHeight: true,
+    // autoWidth: true,
+    // autoHeight: true,
+    width: windowW - 50,
+    height: sizeH,
     layout: 'fit',
     border: false,
     padding: '5',
