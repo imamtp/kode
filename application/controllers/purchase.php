@@ -837,6 +837,7 @@ class purchase extends MY_Controller {
             'eomddays'=> $this->input->post('eomddays')?:null,
             'percentagedisc'=> $this->input->post('percentagedisc')?:null,
             'daydisc'=> $this->input->post('daydisc')?:null,
+            'dmax'=> $this->input->post('daydisc')?:null,
             'notes'=> $this->input->post('notes_pi'),
             'freightcost'=> $this->input->post('freightcost'),
             'totalamount'=> $this->input->post('totalamount'),
@@ -845,6 +846,21 @@ class purchase extends MY_Controller {
             'status_gr'=> 4,
             'idjournal_inv'=> $idjournal,
         );
+
+        $duedate = null;
+        switch($data['idpaymentterm']){
+            case 3:  //net d days
+                $duedate = date("Y-m-d", strtotime("+$data[ddays] day", strtotime($data['invoice_date'])));
+                break;
+            case 4: //emoddays
+                $eom = date('Y-m-t', strtotime($data['invoice_date']));
+                $duedate = date("Y-m-d", strtotime("+$data[eomddays] day", strtotime($eom)));
+                break;
+            case 5: //discount dmax
+                $duedate = date("Y-m-d", strtotime("+$data[ddmax] day", strtotime($data['invoice_date'])));
+                break;
+        }
+        $data['duedate'] = $duedate;
         
         if($this->input->post('no_invoice') == null){
             $data['userin_inv'] = $this->session->userdata('userid');
@@ -861,7 +877,6 @@ class purchase extends MY_Controller {
         ));
 
         $this->db->update('goods_receipt', $data);
-
         
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -874,34 +889,30 @@ class purchase extends MY_Controller {
     }
 
     function get_sum_invoice(){
-         $idunit = $this->session->userdata('idunit');
+        $idunit = $this->session->userdata('idunit');
+        $today = date('Y-m-d');
 
-        $q = $this->db->query("select totalPaid,totalUnpaid
-                                from (
-                                    select sum(paidtoday) as totalPaid
-                                    from purchase
-                                    where  (invoice_status = 2 OR invoice_status = 4)  and idpurchasetype = 2 and deleted = 0 and idunit = $idunit and idpurchasetype = 2
-                                ) a,
-                                ( 
-                                    select sum(balance) as totalUnpaid
-                                    from purchase
-                                    where idunit = $idunit  and idpurchasetype = 2 and deleted = 0 and idpurchasetype = 2 and (invoice_status = 1 OR invoice_status = 4) ) b");
-        if($q->num_rows()>0)
-        {
-            $r = $q->row();
-            $data = array(
-                    'totalPaid'=>isset($r->totalpaid) ? number_format($r->totalpaid) : 0,
-                    'totalUnpaid'=>isset($r->totalunpaid) ? number_format($r->totalunpaid) : 0,
-                    'totalDue'=>0
-                );
-        } else {
-            $data = array(
-                    'totalPaid'=>0,
-                    'totalUnpaid'=>0,
-                    'totalDue'=>0
-                );
-        }
-
+        $sql = "select sum(a.paidtoday) as total_paid, sum(a.balance) as total_unpaid, (
+                    select sum(balance) 
+                    from goods_receipt
+                    where idunit = $idunit
+                    and status_gr = 4
+                    and duedate < '$today'
+                    ) as total_overdue 
+                from
+                (select paidtoday, balance, duedate 
+                    from goods_receipt
+                    where idunit = $idunit
+                    and status_gr = 4
+                    and duedate >= '$today') a";
+        
+        $q = $this->db->query($sql);
+        $r = $q->row();
+        $data = array(
+            'totalPaid'=>isset($r->total_paid) ? number_format($r->total_paid) : 0,
+            'totalUnpaid'=>isset($r->total_unpaid) ? number_format($r->total_unpaid) : 0,
+            'totalDue'=>isset($r->total_overdue) ? number_format($r->total_overdue) : 0,
+        );
         echo json_encode($data);
    }
 

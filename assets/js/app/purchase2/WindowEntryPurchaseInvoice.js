@@ -439,11 +439,13 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                     Ext.getCmp('eomddaysPurchaseInvoice').setDisabled(true);
                                     Ext.getCmp('percentagediscPurchaseInvoice').setDisabled(true);
                                     Ext.getCmp('daysdiscPurchaseInvoice').setDisabled(true);
+                                    Ext.getCmp('dmaxPurchaseInvoice').setDisabled(true);
 
                                     Ext.getCmp('ddaysPurchaseInvoice').setVisible(false);
                                     Ext.getCmp('eomddaysPurchaseInvoice').setVisible(false);
                                     Ext.getCmp('percentagediscPurchaseInvoice').setVisible(false);
                                     Ext.getCmp('daysdiscPurchaseInvoice').setVisible(false);
+                                    Ext.getCmp('dmaxPurchaseInvoice').setVisible(false);
 
                                     switch (this.getValue()) {
                                         case '3':
@@ -457,8 +459,10 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                         case '5':
                                             Ext.getCmp('percentagediscPurchaseInvoice').setDisabled(false);
                                             Ext.getCmp('daysdiscPurchaseInvoice').setDisabled(false);
+                                            Ext.getCmp('dmaxPurchaseInvoice').setDisabled(false);
                                             Ext.getCmp('percentagediscPurchaseInvoice').setVisible(true);
                                             Ext.getCmp('daysdiscPurchaseInvoice').setVisible(true);
+                                            Ext.getCmp('dmaxPurchaseInvoice').setVisible(true);
 
                                             break;
                                     }
@@ -539,9 +543,30 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             xtype: 'textfield',
                             id: 'daysdiscPurchaseInvoice',
                             name: 'daydisc',
-                            width: 120,
+                            width: 70,
                             inputWidth: 60,
-                            afterSubTpl: ' NET',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'dmaxPurchaseInvoice',
+                            name: 'dmax',
+                            labelWidth: 50,
+                            inputWidth: 60,
+                            fieldLabel: 'NET ',
                             maskRe: /[0-9]/,
                             hidden: true,
                             disabled: true,
@@ -663,6 +688,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     eomddays: Ext.getCmp('eomddaysPurchaseInvoice').getValue(),
                     percentagedisc: Ext.getCmp('percentagediscPurchaseInvoice').getValue(),
                     daydisc: Ext.getCmp('daysdiscPurchaseInvoice').getValue(),
+                    dmax: Ext.getCmp('dmaxPurchaseInvoice').getValue(),
                     notes_pi: Ext.getCmp('notes_pi').getValue(),
                     freightcost: biayaangkut,
                     totalamount: aftertax + biayaangkut,
@@ -688,6 +714,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         Ext.getCmp('eomddaysPurchaseInvoice').setValue();
                         Ext.getCmp('percentagediscPurchaseInvoice').setValue();
                         Ext.getCmp('daysdiscPurchaseInvoice').setValue();
+                        Ext.getCmp('dmaxPurchaseInvoice').setValue();
                         Ext.getCmp('notes_pi').setValue();
                         Ext.getCmp('WindowEntryPurchaseInvoice').hide();
                     }
