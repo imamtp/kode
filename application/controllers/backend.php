@@ -863,9 +863,9 @@ class Backend extends MY_Controller {
             foreach ($this->datamodel->searchField() as $key => $value) {
                 if ($field == 0) {
                     // $w .="(";
-                    $w.=" AND ((" . $value . " LIKE '%" . strtoupper($_POST['query']) . "%') OR (" . $value . " LIKE '%" . strtolower($_POST['query']) . "%') ";
+                    $w.=" AND ((" . $value . " LIKE '%" . strtoupper($_POST['query']) . "%') OR (" . $value . " LIKE '%" . strtolower($_POST['query']) . "%')  OR (" . $value . " LIKE '%" . ucwords(strtolower($_POST['query'])) . "%')";
                 } else {
-                    $w.=" OR (" . $value . " LIKE '%" . strtoupper($_POST['query']) . "%') OR (" . $value . " LIKE '%" . strtolower($_POST['query']) . "%')";
+                    $w.=" OR (" . $value . " LIKE '%" . strtoupper($_POST['query']) . "%') OR (" . $value . " LIKE '%" . strtolower($_POST['query']) . "%') OR (" . $value . " LIKE '%" . ucwords(strtolower($_POST['query'])) . "%')";
                 }
                 $field++;
             }

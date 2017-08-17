@@ -6,7 +6,7 @@ var WindowMaterialUsageWOList = Ext.create(dir_sys + 'production.WindowMaterialU
 Ext.define('WOMaterialUsageGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'material_datein', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'firstname', 'namecustomer'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'material_datein', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'firstname', 'namecustomer', 'material_confirm_status'
     ],
     idProperty: 'id'
 });
@@ -52,16 +52,26 @@ var smGridWOMaterialUsageGrid = Ext.create('Ext.selection.CheckboxModel', {
             var selectedLen = smGridWOMaterialUsageGrid.getSelection().length;
             if (selectedLen == 0) {
                 console.log(selectedLen);
-                Ext.getCmp('btnDeleteWOMaterialUsageGrid').disable();
+                // Ext.getCmp('btnDeleteWOMaterialUsageGrid').disable();
+                // Ext.getCmp('btnProductionMaterialConfirmed').disable();
+            } else {
+                // Ext.getCmp('btnProductionMaterialConfirmed').enable();
             }
         },
         select: function(model, record, index) {
-            Ext.getCmp('btnDeleteWOMaterialUsageGrid').enable();
+            // Ext.getCmp('btnDeleteWOMaterialUsageGrid').enable();
+
+            if (record.data.material_confirm_status === '0') {
+                Ext.getCmp('btnProductionMaterialConfirmed').enable();
+            } else {
+                Ext.getCmp('btnProductionMaterialConfirmed').disable();
+            }
         }
     }
 });
 Ext.define(dir_sys + 'production.WOMaterialUsageGrid', {
     title: 'Material Usage Entries',
+    selModel: smGridWOMaterialUsageGrid,
     itemId: 'WOMaterialUsageGrid',
     id: 'WOMaterialUsageGrid',
     extend: 'Ext.grid.Panel',
@@ -71,6 +81,11 @@ Ext.define(dir_sys + 'production.WOMaterialUsageGrid', {
     columns: [{
             header: 'job_order_id',
             dataIndex: 'job_order_id',
+            hidden: true
+        },
+        {
+            header: 'material_confirm_status',
+            dataIndex: 'material_confirm_status',
             hidden: true
         },
         {
@@ -206,119 +221,205 @@ Ext.define(dir_sys + 'production.WOMaterialUsageGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                itemId: 'addWOMaterialUsageGrid',
-                text: 'Input Material Usage',
-                iconCls: 'add-icon',
-                handler: function() {
-                    WindowMaterialUsageWOList.show();
+                    itemId: 'addWOMaterialUsageGrid',
+                    text: 'Input Material Usage',
+                    iconCls: 'add-icon',
+                    handler: function() {
+                        WindowMaterialUsageWOList.show();
 
-                    var GridMaterialUsageWOList = Ext.getCmp('GridMaterialUsageWOList').getStore();
-                    GridMaterialUsageWOList.on('beforeload', function(store, operation, eOpts) {
-                        operation.params = {
-                            'extraparams': 'a.status:' + 3, // onprogress
-                            'option': 'scheduled'
-                                // 'wherenotinschedule':'true'
-                        };
-                    });
-                    GridMaterialUsageWOList.load();
+                        var GridMaterialUsageWOList = Ext.getCmp('GridMaterialUsageWOList').getStore();
+                        GridMaterialUsageWOList.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                'extraparams': 'a.status:' + 3, // onprogress
+                                'option': 'scheduled'
+                                    // 'wherenotinschedule':'true'
+                            };
+                        });
+                        GridMaterialUsageWOList.load();
 
 
-                    // storeGridInventoryAll.on('beforeload',function(store, operation,eOpts){
-                    //    operation.params={
-                    //                'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitWOMaterialUsageGrid').getValue()
-                    //              };
-                    //          });
+                        // storeGridInventoryAll.on('beforeload',function(store, operation,eOpts){
+                        //    operation.params={
+                        //                'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitWOMaterialUsageGrid').getValue()
+                        //              };
+                        //          });
 
-                    // Ext.getCmp('WOScheduleHeaderForm').getForm.reset();
+                        // Ext.getCmp('WOScheduleHeaderForm').getForm.reset();
 
-                    // var WOScheduleJobTabStore = Ext.getCmp('WOScheduleJobTab').getStore();
-                    // WOScheduleJobTabStore.removeAll();
-                    // WOScheduleJobTabStore.sync();
+                        // var WOScheduleJobTabStore = Ext.getCmp('WOScheduleJobTab').getStore();
+                        // WOScheduleJobTabStore.removeAll();
+                        // WOScheduleJobTabStore.sync();
 
-                    // var WOScheduleMaterialTabStore = Ext.getCmp('WOScheduleMaterialTab').getStore();
-                    // WOScheduleMaterialTabStore.removeAll();
-                    // WOScheduleMaterialTabStore.sync();
-                    // Ext.getCmp('GridSalesOrderList').getStore().load();
+                        // var WOScheduleMaterialTabStore = Ext.getCmp('WOScheduleMaterialTab').getStore();
+                        // WOScheduleMaterialTabStore.removeAll();
+                        // WOScheduleMaterialTabStore.sync();
+                        // Ext.getCmp('GridSalesOrderList').getStore().load();
 
-                    // storeUnit.load();
-                    // Ext.getCmp('cbUnitWOForm').setValue(idunit);
-                    // var comboxWOScheduleStatus_woform = Ext.getCmp('comboxWOScheduleStatus_woform');
-                    // comboxWOScheduleStatus_woform.setValue(1);
-                    // comboxWOScheduleStatus_woform.setReadOnly(true);
+                        // storeUnit.load();
+                        // Ext.getCmp('cbUnitWOForm').setValue(idunit);
+                        // var comboxWOScheduleStatus_woform = Ext.getCmp('comboxWOScheduleStatus_woform');
+                        // comboxWOScheduleStatus_woform.setValue(1);
+                        // comboxWOScheduleStatus_woform.setReadOnly(true);
 
-                    // Ext.getCmp('statusform_woform').setValue('input');
-                }
-            }, {
-                itemId: 'editWOMaterialUsageGrid',
-                hidden: true,
-                text: 'Input Material Usage',
-                iconCls: 'edit-icon',
-                handler: function() {
-                    // var grid = Ext.ComponentQuery.query('GridWOMaterialUsageGridID')[0];
-                    // var grid = Ext.getCmp('GridWOMaterialUsageGridID');
-                    // var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    // var data = grid.getSelectionModel().getSelection();
-                    // if (data.length == 0) {
-                    //     Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
-                    // } else {
-                    // loadMemberForm(selectedRecord.data.id_member)
-                    loadWoData(selectedRecord.data.job_order_id)
-
-                    // Ext.getCmp('containerScheduleWo').show();
-
-                    // Ext.getCmp('comboxWorkOrderStatus_woform').setValue(3); //set on progress
-                    // Ext.getCmp('comboxWorkOrderStatus_woform').setReadOnly(true);
-
-                    // Ext.getCmp('btnSaveWo').hide();
-
-                }
-
-            }, {
-                id: 'btnDeleteWOMaterialUsageGrid',
-                text: 'Hapus',
-                hidden: true,
-                iconCls: 'delete-icon',
-                handler: function() {
-                    Ext.Msg.show({
-                        title: 'Confirm',
-                        msg: 'Delete Selected ?',
-                        buttons: Ext.Msg.YESNO,
-                        fn: function(btn) {
-                            if (btn == 'yes') {
-                                var grid = Ext.getCmp('GridWOMaterialUsageGridID');
-                                var sm = grid.getSelectionModel();
-                                selected = [];
-                                Ext.each(sm.getSelection(), function(item) {
-                                    selected.push(item.data[Object.keys(item.data)[0]]);
-                                });
-                                Ext.Ajax.request({
-                                    url: SITE_URL + 'backend/ext_delete/WOMaterialUsageGrid',
-                                    method: 'POST',
-                                    params: {
-                                        postdata: Ext.encode(selected),
-                                        idmenu: 95
-                                    },
-                                    success: function(form, action) {
-                                        var d = Ext.decode(form.responseText);
-                                        if (!d.success) {
-                                            Ext.Msg.alert('Informasi', d.message);
-                                        }
-                                    },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                    }
-                                });
-                                storeGridWOMaterialUsageGrid.load();
-                            }
-                        }
-                    });
+                        // Ext.getCmp('statusform_woform').setValue('input');
+                    }
                 },
-                //                    disabled: true
-            }, '->', 'Searching: ', ' ', {
-                xtype: 'searchGridWOMaterialUsageGrid',
-                text: 'Left Button'
-            }]
-        }, {
+                {
+                    text: 'Konfirmasi',
+                    id: 'btnProductionMaterialConfirmed',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                        var grid = Ext.getCmp('WOMaterialUsageGrid');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            Ext.Ajax.request({
+                                url: SITE_URL + 'production/set_status',
+                                method: 'POST',
+                                params: {
+                                    feature: 'input_material',
+                                    job_order_id: selectedRecord.data.job_order_id,
+                                    job_no: selectedRecord.data.job_no,
+                                    status: 1
+                                },
+                                success: function(form, action) {
+                                    var d = Ext.decode(form.responseText);
+                                    Ext.Msg.alert('Informasi', d.message);
+
+                                    storeGridWOMaterialUsageGrid.load({
+                                        params: {
+                                            'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitWOMaterialUsageGrid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
+                                        }
+                                    });
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                }
+                            });
+                        }
+                    }
+                },
+                // {
+                //     text: 'Set Status',
+                //     iconCls: 'edit-icon',
+                //     menu: [{
+                //         text: 'Confirmed',
+                //         handler: function() {
+                //             // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                //             var grid = Ext.getCmp('WOMaterialUsageGrid');
+                //             var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                //             var data = grid.getSelectionModel().getSelection();
+                //             if (data.length == 0) {
+                //                 Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                //             } else {
+                //                 Ext.Ajax.request({
+                //                     url: SITE_URL + 'production/set_status',
+                //                     method: 'POST',
+                //                     params: {
+                //                         feature: 'input_material',
+                //                         job_order_id: selectedRecord.data.job_order_id,
+                //                         job_no: selectedRecord.data.job_no,
+                //                         status: 1
+                //                     },
+                //                     success: function(form, action) {
+                //                         var d = Ext.decode(form.responseText);
+                //                         Ext.Msg.alert('Informasi', d.message);
+
+                //                         storeGridWOMaterialUsageGrid.load({
+                //                             params: {
+                //                                 'extraparams': 'a.idunit:' + Ext.getCmp('cbUnitWOMaterialUsageGrid').getValue() + ',' + 'a.idanggotatype:' + Ext.getCmp('cbUnitPelangganType').getValue()
+
+                //                             }
+                //                         });
+                //                     },
+                //                     failure: function(form, action) {
+                //                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                //                     }
+                //                 });
+                //             }
+                //         }
+                //     }]
+                // },
+                {
+                    itemId: 'editWOMaterialUsageGrid',
+                    hidden: true,
+                    text: 'Input Material Usage',
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        // var grid = Ext.ComponentQuery.query('GridWOMaterialUsageGridID')[0];
+                        // var grid = Ext.getCmp('GridWOMaterialUsageGridID');
+                        // var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        // var data = grid.getSelectionModel().getSelection();
+                        // if (data.length == 0) {
+                        //     Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
+                        // } else {
+                        // loadMemberForm(selectedRecord.data.id_member)
+                        loadWoData(selectedRecord.data.job_order_id)
+
+                        // Ext.getCmp('containerScheduleWo').show();
+
+                        // Ext.getCmp('comboxWorkOrderStatus_woform').setValue(3); //set on progress
+                        // Ext.getCmp('comboxWorkOrderStatus_woform').setReadOnly(true);
+
+                        // Ext.getCmp('btnSaveWo').hide();
+
+                    }
+
+                },
+                {
+                    id: 'btnDeleteWOMaterialUsageGrid',
+                    text: 'Hapus',
+                    hidden: true,
+                    iconCls: 'delete-icon',
+                    handler: function() {
+                        Ext.Msg.show({
+                            title: 'Confirm',
+                            msg: 'Delete Selected ?',
+                            buttons: Ext.Msg.YESNO,
+                            fn: function(btn) {
+                                if (btn == 'yes') {
+                                    var grid = Ext.getCmp('GridWOMaterialUsageGridID');
+                                    var sm = grid.getSelectionModel();
+                                    selected = [];
+                                    Ext.each(sm.getSelection(), function(item) {
+                                        selected.push(item.data[Object.keys(item.data)[0]]);
+                                    });
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'backend/ext_delete/WOMaterialUsageGrid',
+                                        method: 'POST',
+                                        params: {
+                                            postdata: Ext.encode(selected),
+                                            idmenu: 95
+                                        },
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            if (!d.success) {
+                                                Ext.Msg.alert('Informasi', d.message);
+                                            }
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                        }
+                                    });
+                                    storeGridWOMaterialUsageGrid.load();
+                                }
+                            }
+                        });
+                    },
+                    //                    disabled: true
+                },
+                '->',
+                'Searching: ',
+                ' ',
+                {
+                    xtype: 'searchGridWOMaterialUsageGrid',
+                    text: 'Left Button'
+                }
+            ]
+        },
+        {
             xtype: 'pagingtoolbar',
             store: storeGridWOMaterialUsageGrid, // same store GridPanel is using
             dock: 'bottom',

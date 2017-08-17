@@ -56,6 +56,38 @@ class m_inventorystock extends CI_Model {
         return $data;
     }
 
+    function stock_card($idinventory,$sd,$nd){
+        $sql = "select case
+                    when type_adjustment = 1 then 'Order (+)'
+                    when type_adjustment = 2 then 'Stock In By PO (+)'
+                    when type_adjustment = 3 then 'Stock In By Cash  (+)'
+                    when type_adjustment = 4 then 'Stock Opname Plus (+)'
+                    when type_adjustment = 5 then 'Stock Opname Minus (-)'
+                    when type_adjustment = 6 then 'Sales Return (+)'
+                    when type_adjustment = 7 then 'Purchase Return (-)'
+                    when type_adjustment = 8 then 'Sales (-)'
+                    when type_adjustment = 9 then 'Opening Balance (+)'
+                    when type_adjustment = 10 then 'Stock In By Transfer (+)'
+                    when type_adjustment = 11 then 'Stock Out By Transfer (-)'
+                    when type_adjustment = 12 then 'Stock In By Received Material From Production (+)'
+                    when type_adjustment = 13 then 'Stock In By Received Return PO (+)'
+                    when type_adjustment = 14 then 'Delivery Sales Return (-)'
+                    when type_adjustment = 15 then 'Stock Out From Production (-)'
+                end as type_adjustment,
+            no_transaction,
+            old_qty,qty_transaction,balance,a.notes,
+            to_char(a.datein, 'Dy, DD Mon  YY') as tanggal,
+            to_char(a.datein, 'HH:mm:ss') as jam,
+            b.warehouse_code
+            from stock_history a
+            join warehouse b ON a.warehouse_id = b.warehouse_id
+            where a.idinventory = $idinventory
+            and (a.datein between '".$sd." 00:00:00' and '".$nd." 23:08:28')
+            order by a.datein";
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
+
 }
 
 ?>
