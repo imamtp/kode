@@ -272,7 +272,52 @@ class m_stock extends CI_Model {
                 
 
           return array('total_hpp'=>$total_hpp);
-    }
+	}
+	
+	function hitung_hpp_beli($idinventory,$tipe,$qty_tambah=0,$nominal_tambah=0){
+		$hpp_unit = 0;
+
+		$qinv = $this->db->query("select invno,nameinventory,cost,a.idinventory,coalesce(cost,0),coalesce(totalstock, 0) as totalstock,coalesce(a.nominal_persediaan, 0) as nominal_persediaan
+		from inventory a
+		left join inventoryunit b ON a.idinventory = b.idinventory
+		left join (select idinventory,sum(stock) as totalstock
+			from warehouse_stock
+			group by idinventory) c ON a.idinventory = c.idinventory
+		where a.idinventory = ".$idinventory." ")->row();
+
+			// echo $this->db->last_query().'    ';
+
+		if($tipe==3){
+			/*
+			perhitungan AVERAGE 
+			HPP per Unit = [Rp Saldo awal + Rp Pembelian] : [Qty saldo awal + Qty pembelian]
+			fn : http://nichonotes.blogspot.co.id/2015/02/metode-rata-rata-harga-pokok-penjualan-average-method.html
+			*/
+			$current_qty_stock = ($qinv->totalstock + $qty_tambah);
+
+			if($current_qty_stock==null || $current_qty_stock==0){
+				$json = array('success'=>false,'message'=>'Tidak bisa melanjutkan konfirmasi penggunaan material <b>'.$qinv->invno. ' '.$qinv->nameinventory.'</b> karena stok kosong');
+				// echo $this->db->last_query();
+				echo json_encode($json); exit;
+			}
+			
+			
+			if($qinv->nominal_persediaan==0){
+				//hitung dulu saldo persediaan. dikali dengan harga beli terkini
+				$current_balance = $current_qty_stock*$qinv->cost;
+				$this->db->where('idinventory',$qinv->idinventory);
+				$this->db->update('inventory',array(
+					'nominal_persediaan'=>$current_balance
+				));
+			} else {
+				$current_balance = $qinv->nominal_persediaan;
+			}
+			$hpp_unit = round(($current_balance + $nominal_tambah) / $current_qty_stock);
+			// echo '('.$qinv->nominal_persediaan.' + '.$nominal_tambah.') / ('.$qinv->totalstock.' + '.$qty_tambah.') - hpp_unit:'.round($hpp_unit).' <br>';
+		}
+
+		return $hpp_unit;
+	}
 
 	function update_stock_material($idunit,$idinventory,$qty,$job_no){
 		// echo 'update_stock_material';

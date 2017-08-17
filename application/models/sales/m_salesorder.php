@@ -71,7 +71,7 @@ class m_salesorder extends CI_Model {
     }
 
     function orderBy() {
-        return " a.datein desc";
+        return " a.no_sales_order desc";
     }
 
     function updateField() { 

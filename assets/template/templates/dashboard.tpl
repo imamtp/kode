@@ -54,6 +54,9 @@
         .my-mandatory-field {
             background-color: #FFD9DF;
         }
+        .my-green-field {
+            background-color: #e8f5e9;
+        }
     </style>
 
     <script type="text/javascript">
@@ -784,14 +787,14 @@
     {* <script src='{$assets_url}/js/app/report/ar/GridARGiroConfirmation.js'></script> *}
     {* <script src='{$assets_url}/js/app/report/ar/GridARCard.js'></script> *}
     <script src='{$assets_url}/js/app/report/purchase/TabReportPurchase.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridPurchaseRequestList.js'></script>
+    {* <script src='{$assets_url}/js/app/report/purchase/GridPurchaseRequestList.js'></script>
     <script src='{$assets_url}/js/app/report/purchase/GridPurchaseOrderOutstandingDetail.js'></script>
     <script src='{$assets_url}/js/app/report/purchase/GridPurchaseOrderHistory.js'></script>
     <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerSupplier.js'></script>
     <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerSupplierAndItem.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerItem.js'></script>
+    <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerItem.js'></script> *}
     <!-- <script src='{$assets_url}/js/app/report/purchase/WindowSupplierList.js'></script> -->
-    <script src='{$assets_url}/js/app/report/purchase/GridGoodRecieveDetail.js'></script>
+    {* <script src='{$assets_url}/js/app/report/purchase/GridGoodRecieveDetail.js'></script> *}
     <script src='{$assets_url}/js/app/report/ap/TabReportAP.js'></script>
     <script src='{$assets_url}/js/app/report/ap/PanelAPPurchase.js'></script>
     <script src='{$assets_url}/js/app/report/ap/PanelAPOther.js'></script>

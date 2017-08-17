@@ -8,7 +8,7 @@ var WindowEntryPurchaseInvoice = Ext.create(dir_sys + 'purchase2.WindowEntryPurc
 Ext.define('GoodsReceiptGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'notes_receipt', 'receivedby_id', 'delivereddate', 'firstname', 'lastname', 'noinvoice', 'totalorder', 'totalreceived', 'sisa', 'idpurchasestatusname', 'no_rujukan_sup', 'total_dpp', 'total_diskon'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'invoice_status', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'notes_receipt', 'receivedby_id', 'delivereddate', 'firstname', 'lastname', 'noinvoice', 'totalorder', 'totalreceived', 'sisa', 'idpurchasestatusname', 'no_rujukan_sup', 'total_dpp', 'total_diskon'
     ],
     idProperty: 'id'
 });
@@ -111,114 +111,123 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
     store: storeGoodsReceiptGrid,
     loadMask: true,
     columns: [{
-        dataIndex: 'idpurchase',
-        hidden: true,
-        header: 'idpurchase'
-    }, {
-        dataIndex: 'idunit',
-        hidden: true,
-        header: 'idunit'
-    }, {
-        dataIndex: 'comments',
-        hidden: true,
-        header: 'comments'
-    }, {
-        header: 'No Purchase',
-        dataIndex: 'nopurchase',
-        minWidth: 150
-    }, {
-        header: 'Status',
-        dataIndex: 'idpurchasestatusname',
-        minWidth: 150,
-        // renderer: function(value) {
-        //     return customColumnStatus(ArrSalesStatus,value);
-        // }
-    }, {
-        header: 'No Invoice',
-        dataIndex: 'noinvoice',
-        minWidth: 150
-    }, {
-        header: 'No Rujukan Sup',
-        dataIndex: 'no_rujukan_sup',
-        minWidth: 150
-    }, {
-        header: 'Supplier Name',
-        flex: 1,
-        dataIndex: 'namesupplier',
-        minWidth: 150
-    }, {
-        header: 'Date Requisition',
-        dataIndex: 'date',
-        minWidth: 150
-    }, {
-        header: 'Received Date',
-        dataIndex: 'delivereddate',
-        minWidth: 150
-    }, {
-        header: 'Received By',
-        dataIndex: 'firstname',
-        minWidth: 150
-    }, {
-        header: 'Total Item',
-        hidden: true,
-        dataIndex: 'totalitem',
-        minWidth: 80,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Subtotal',
-        dataIndex: 'subtotal',
-        hidden: true,
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Shipping Cost',
-        dataIndex: 'freight',
-        hidden: true,
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Total Tax',
-        dataIndex: 'tax',
-        minWidth: 150,
-        hidden: true,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Total Discount',
-        dataIndex: 'disc',
-        minWidth: 150,
-        hidden: true,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Total Amount',
-        dataIndex: 'totalamount',
-        hidden: true,
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Qty Order',
-        dataIndex: 'totalorder',
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Qty Received',
-        dataIndex: 'totalreceived',
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Qty Difference',
-        dataIndex: 'sisa',
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }],
+            dataIndex: 'idpurchase',
+            hidden: true,
+            header: 'idpurchase'
+        }, {
+            dataIndex: 'idunit',
+            hidden: true,
+            header: 'idunit'
+        }, {
+            dataIndex: 'comments',
+            hidden: true,
+            header: 'comments'
+        }, {
+            header: 'No Purchase',
+            dataIndex: 'nopurchase',
+            minWidth: 150
+        }, {
+            header: 'Status',
+            dataIndex: 'idpurchasestatusname',
+            minWidth: 150,
+            // renderer: function(value) {
+            //     return customColumnStatus(ArrSalesStatus,value);
+            // }
+        }, {
+            header: 'No Invoice',
+            dataIndex: 'noinvoice',
+            minWidth: 150
+        },
+        {
+            header: 'Status Invoice',
+            dataIndex: 'invoice_status',
+            minWidth: 150,
+            renderer: function(value) {
+                return customColumnStatus(ArrInvoiceStatus, value);
+            }
+        }, {
+            header: 'No Rujukan Sup',
+            dataIndex: 'no_rujukan_sup',
+            minWidth: 150
+        }, {
+            header: 'Supplier Name',
+            flex: 1,
+            dataIndex: 'namesupplier',
+            minWidth: 150
+        }, {
+            header: 'Date Requisition',
+            dataIndex: 'date',
+            minWidth: 150
+        }, {
+            header: 'Received Date',
+            dataIndex: 'delivereddate',
+            minWidth: 150
+        }, {
+            header: 'Received By',
+            dataIndex: 'firstname',
+            minWidth: 150
+        }, {
+            header: 'Total Item',
+            hidden: true,
+            dataIndex: 'totalitem',
+            minWidth: 80,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Subtotal',
+            dataIndex: 'subtotal',
+            hidden: true,
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Shipping Cost',
+            dataIndex: 'freight',
+            hidden: true,
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Total Tax',
+            dataIndex: 'tax',
+            minWidth: 150,
+            hidden: true,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Total Discount',
+            dataIndex: 'disc',
+            minWidth: 150,
+            hidden: true,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Total Amount',
+            dataIndex: 'totalamount',
+            hidden: true,
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Qty Order',
+            dataIndex: 'totalorder',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Qty Received',
+            dataIndex: 'totalreceived',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Qty Difference',
+            dataIndex: 'sisa',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }
+    ],
     dockedItems: [{
             xtype: 'toolbar',
             dock: 'top',

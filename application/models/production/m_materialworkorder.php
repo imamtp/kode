@@ -16,7 +16,7 @@ class m_materialworkorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.job_order_id,a.idsales,a.material_datein,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.req_ship_date,a.status,a.remarks,b.date as datesales,b.no_sales_order,b.date_sales,c.totaljob,d.totalraw,e.totalbom,f.firstname,a.pic_id,startdate_job,enddate_job,approvedby_id,g.namecustomer";
+        return "a.job_order_id,a.idsales,a.material_datein,a.idunit,a.startdate_job,a.enddate_job,a.job_no,a.req_ship_date,a.status,a.remarks,b.date as datesales,b.no_sales_order,b.date_sales,c.totaljob,d.totalraw,e.totalbom,f.firstname,a.pic_id,startdate_job,enddate_job,approvedby_id,g.namecustomer,material_confirm_status";
     }
     
     function fieldCek()

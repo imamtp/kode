@@ -643,7 +643,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                                 storeGridAccount.on('beforeload', function(store, operation, eOpts) {
                                                     operation.params = {
                                                         'idunit': idunit,
-                                                        'idaccounttype': '17,18'
+                                                        'idaccounttype': '17,18,2'
                                                     };
                                                 });
                                                 storeGridAccount.load();
