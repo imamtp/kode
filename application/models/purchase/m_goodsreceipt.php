@@ -27,6 +27,9 @@ class m_goodsreceipt extends CI_Model {
                 a.discount,
                 a.dpp,
                 a.totalamount,
+                a.freightcost,
+                a.paidtoday,
+                a.balance,
                 a.notes,
                 a.supplier_direct_no,
                 a.status_gr,
@@ -39,6 +42,21 @@ class m_goodsreceipt extends CI_Model {
                 a.datein,
                 a.usermod,
                 a.datemod,
+                case a.idpaymentterm
+                    when 1 then 'Cash in Advance'
+                    when 2 then 'Cash in Delivery'
+                    when 3 then 'NET d days'
+                    when 4 then 'NET EOM d days'
+                    when 5 then 'Discount'
+                end as paymentterm,
+                case a.idpaymentterm
+                    when 1 then '-'
+                    when 2 then '-'
+                    when 3 then a.ddays::text
+                    when 4 then a.eomddays::text
+                    when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
+                end as term,
+                a.duedate,
                 b.date as po_date,
                 b.nopurchase as no_po,
                 d.name as idpurchasestatusname,
@@ -82,6 +100,19 @@ class m_goodsreceipt extends CI_Model {
     }
 
     function whereQuery() {
+        $wer = null;
+        switch ($this->input->post('option')){
+            case 'unpaid':
+                $wer .= " status_gr = 4 and a.paidtoday < a.totalamount  and a.duedate >= now()";
+                break;
+            case 'paid':
+                $wer .= " status_gr = 4 and a.paidtoday > 0  and a.duedate >= now()";
+                break;
+            case 'overdue':
+                $wer .= " status_gr = 4 and a.paidtoday < a.totalamount and a.duedate < now()";
+                break;
+        }
+        return $wer;
     }
 
     function orderBy() {

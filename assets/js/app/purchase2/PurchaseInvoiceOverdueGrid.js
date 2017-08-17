@@ -1,7 +1,8 @@
 Ext.define('PurchaseInvoiceOverdueGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'invoice_status', 'balance', 'noinvoice', 'paidtoday', 'idpurchase_req', 'nopurchase_req', 'date_req', 'nofpsup'
+        'goods_receipt_id', 'idpurchase', 'idunit', 'no_goods_receipt', 'no_po', 'po_date', 'no_invoice', 'invoice_date', 'duedate', 'paymentterm', 'term', 'duedate', 'dpp', 'tax', 'freightcost', 'totalamount', 'paidtoday', 'balance', 'namesupplier', 'supplier_direct_no'
+        // 'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'invoice_status', 'balance', 'noinvoice', 'paidtoday', 'idpurchase_req', 'nopurchase_req', 'date_req', 'nofpsup'
     ],
     idProperty: 'id'
 });
@@ -12,7 +13,8 @@ var storeGridPurchaseInvoiceOverdueGrid = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/PurchaseInvoice/sales',
+        // url: SITE_URL + 'backend/ext_get_all/PurchaseInvoice/sales',
+        url: SITE_URL + 'backend/ext_get_all/goodsreceipt/purchase',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -28,13 +30,17 @@ var storeGridPurchaseInvoiceOverdueGrid = Ext.create('Ext.data.Store', {
 
 storeGridPurchaseInvoiceOverdueGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.invoice_status:' + 3 + ', ' +
-            'a.idunit:' + Ext.getCmp('idunit_grdpi_od').getValue(),
+        // 'extraparams': 'a.invoice_status:' + 3 + ', ' +
+        // 'a.idunit:' + Ext.getCmp('idunit_grdpi_od').getValue(),
         'startdate': Ext.getCmp('startdate_grdpi_od').getValue(),
-        'enddate': Ext.getCmp('enddate_grdpi_od').getValue()
-
+        'enddate': Ext.getCmp('enddate_grdpi_od').getValue(),
+        'option': 'overdue',
     };
 });
+
+storeGridPurchaseInvoiceOverdueGrid.on('load', function() {
+    setHeaderPurchaseInvoice();
+})
 
 Ext.define('MY.searchGridPurchaseInvoiceOverdueGrid', {
     extend: 'Ext.ux.form.SearchField',
@@ -72,90 +78,89 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceOverdueGrid', {
             hidden: true
         }, {
             header: 'No Invoice',
-            dataIndex: 'noinvoice',
+            dataIndex: 'no_invoice',
             minWidth: 150
-        }, {
-            header: 'Status',
-            dataIndex: 'invoice_status',
-            minWidth: 150,
-            xtype: 'numbercolumn',
-            align: 'right',
-            renderer: function(value) {
-                return customColumnStatus(ArrInvoiceStatus, value);
-            }
-        }, {
-            header: 'No Sales',
-            dataIndex: 'no_sales_order',
+        },
+        // {
+        //     header: 'Status',
+        //     dataIndex: 'invoice_status',
+        //     minWidth: 150,
+        //     xtype: 'numbercolumn',
+        //     align: 'right',
+        //     renderer: function(value) {
+        //         return customColumnStatus(ArrInvoiceStatus, value);
+        //     }
+        // },
+        {
+            header: 'No PO',
+            dataIndex: 'no_po',
             hidden: true
         }, {
-            header: 'No Purchase',
-            dataIndex: 'nopurchase',
-            minWidth: 150
-        }, {
-            header: 'Supplier Name',
-            flex: 1,
+            header: 'Supplier',
             dataIndex: 'namesupplier',
             minWidth: 150
         }, {
-            header: 'Date Purchase',
-            dataIndex: 'date',
+            header: 'Purchase Date',
+            dataIndex: 'po_date',
             minWidth: 150
-        },
-        {
-            header: 'Term Payment',
-            dataIndex: 'idpayment',
+        }, {
+            header: 'Payment Term',
+            dataIndex: 'paymentterm',
+            minWidth: 150
+        }, {
+            header: 'Term',
+            dataIndex: 'term',
+            minWidth: 50,
+        }, {
+            header: 'Invoice Date',
+            dataIndex: 'invoice_date',
+            minWidth: 150
+        }, {
+            header: 'Due Date',
+            dataIndex: 'duedate',
+            minWidth: 150
+        }, {
+            header: 'Subtotal',
+            dataIndex: 'dpp',
             minWidth: 150,
-            renderer: function(value) {
-                return customColumnStatus(paymenttermarr, value);
-            }
-        },
-        {
-            header: 'Total Tax',
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Tax',
             dataIndex: 'tax',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
-        },
-        {
-            header: 'Total Discount',
-            dataIndex: 'disc',
+        }, {
+            header: 'Freight Cost',
+            dataIndex: 'freightcost',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
-        },
-        {
-            header: 'Shipping Cost',
-            dataIndex: 'freight',
-            minWidth: 150,
-            xtype: 'numbercolumn',
-            align: 'right'
-        },
-        {
-            header: 'Total Amount',
+        }, {
+            header: 'Total',
             dataIndex: 'totalamount',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
-        },
-        {
-            header: 'Total Overdue',
-            dataIndex: 'Overduetoday',
+        }, {
+            header: 'Total Paid',
+            dataIndex: 'paidtoday',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
-        },
-        {
-            header: 'Total Overdue',
+        }, {
+            header: 'Total Unpaid',
             dataIndex: 'balance',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
-        },
-        {
+        }, {
             header: 'No FP Supplier',
-            dataIndex: 'nofpsup',
+            dataIndex: 'supplier_direct_no',
             minWidth: 150,
         },
+
     ],
     dockedItems: [{
         xtype: 'toolbar',
