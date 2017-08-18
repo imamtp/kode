@@ -64,6 +64,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                 header: 'Qty Terima',
                 dataIndex: 'qty'
             }, {
+                xtype: 'numbercolumn',
                 header: 'Satuan',
                 dataIndex: 'short_desc'
             }, {
