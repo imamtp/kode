@@ -493,7 +493,7 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
         params: {
             idpurchase: selectedRecord.get('idpurchase'),
             idunit: selectedRecord.get('idunit'),
-            goods_receipt_id: selectedRecord.get('idpurchase'),
+            goods_receipt_id: selectedRecord.get('goods_receipt_id'),
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
