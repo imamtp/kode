@@ -845,6 +845,7 @@ class purchase extends MY_Controller {
             'balance'=> $this->input->post('totalamount'),
             'status_gr'=> 4,
             'idjournal_inv'=> $idjournal,
+            'status_inv'=>1,
         );
 
         $duedate = null;
@@ -921,7 +922,7 @@ class purchase extends MY_Controller {
 
         $this->db->trans_begin();
 
-        $idpurchase = $this->input->post('idpurchase');
+        $goods_receipt_id = $this->input->post('goods_receipt_id');
         $balance_purchase = str_replace('.', '', $this->input->post('balance_Purchase'));
         $amount = str_replace('.', '', $this->input->post('amount'));
         $selisih = intval($balance_purchase-$amount);
@@ -936,7 +937,7 @@ class purchase extends MY_Controller {
         } else if($amount<$balance_purchase)
         {
             $invoice_status = 4; //Partially Paid
-            $memo = 'Pelunasan Hutang Sebagian PO';
+            $memo = 'Pelunasan Sebagian Hutang PO';
             // $journal = $this->jmodel->purchase_pelunasan_sebagian(date('Y-m-d'),'Pelunasan Hutang Sebagian PO',$amount,$idunit,null);
         } else {
             $invoice_status = 1; //Unpaid
@@ -945,7 +946,7 @@ class purchase extends MY_Controller {
 
 
         //get idaccount hutang
-        $qap = $this->db->query("select idaccount_coa_hutang from purchase where idpurchase = $idpurchase and idunit = $idunit")->row();
+        $qap = $this->db->query("select idaccount_coa_hutang from goods_receipt where goods_receipt_id = $goods_receipt_id and idunit = $idunit")->row();
 
         if($invoice_status!=1) {
             $journal = $this->jmodel->purchase_pelunasan(date('Y-m-d'),$amount,$memo,$idunit,$idaccount,$qap->idaccount_coa_hutang);
@@ -953,7 +954,7 @@ class purchase extends MY_Controller {
 
         $data = array(
                 'purchase_payment_id'=> $this->m_data->getPrimaryID($this->input->post('purchase_payment_id'),'purchase_payment', 'purchase_payment_id', $idunit),
-                'idpurchase'=> $this->input->post('idpurchase'),
+                'goods_receipt_id'=> $this->input->post('goods_receipt_id'),
                 'idjournal'=> $journal,
                 'idunit'=> $idunit,
                 'amount'=> $amount,
@@ -967,16 +968,16 @@ class purchase extends MY_Controller {
 
         $balance = $balance_purchase-$amount;
 
-        $purchaseCurent = $this->db->query("select paidtoday from purchase where idpurchase = $idpurchase and idunit = $idunit")->row();
+        $purchaseCurent = $this->db->query("select paidtoday from goods_receipt where goods_receipt_id = $goods_receipt_id and idunit = $idunit")->row();
 
         $update = array(
             'paidtoday' => ($purchaseCurent->paidtoday+$amount),
-            'invoice_status' => $invoice_status,
+            'status_inv' => $invoice_status,
             'balance' => $selisih
         );
 
-        $this->db->where('idpurchase',$idpurchase);
-        $this->db->update('purchase',$update);
+        $this->db->where('goods_receipt_id',$goods_receipt_id);
+        $this->db->update('goods_receipt',$update);
 
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
