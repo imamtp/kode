@@ -615,8 +615,6 @@ class purchase extends MY_Controller {
                 ));
                 $this->db->update('purchaseitem', array(
                     'qty_received'=> $item->qty_received + $item->qty_receipt, 
-                    'usermod'=> $this->session->userdata('userid'),
-                    'datemod'=> date('Y-m-d H:i:s'),
                 ));
                 
                 //hitung hpp
@@ -1472,12 +1470,12 @@ class purchase extends MY_Controller {
 
     function print_order($idpurchase,$print=null){
         $this->load->model('purchase/m_purchase','model');
-        $d['data'] = $this->model->cetak_invoice($idpurchase);
+        $d['data'] = $this->model->cetak_order($idpurchase);
         // print_r($d); die;
         $d['title'] = 'Purchase Order';
         $d['print'] = $print;
         if($print == null)
-            $this->load->view('tplcetak/purchase_invoice',$d);
+            $this->load->view('tplcetak/purchase_order',$d);
         else{    
             $filename = $d['title']."-".$d['data']['no'];
             $filename = str_replace(" ", "-", $filename);
