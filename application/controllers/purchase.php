@@ -692,6 +692,7 @@ class purchase extends MY_Controller {
                         'userin'=> $this->session->userdata('userid'),
                         'datein'=> date('Y-m-d H:i:s'),
                         'no_batch'=>$nobatch,
+                        'no_transaction'=>$header['no_goods_receipt'],
                     );
 
                     $stock = array(
@@ -726,6 +727,11 @@ class purchase extends MY_Controller {
                         'notes'=>'Penerimaan Barang dari PO '.$this->input->post('nopo'),
                         'idjournal'=>$idjournal,
                     );
+                    
+                    //update purchaseitem_batch, set no batch
+                    $this->db->update('purchaseitem_batch', array('no_batch'=>$nobatch));
+
+                    //insert inventory, stock and stock history
                     $this->db->insert('inventory', $inv);
                     $this->db->insert('warehouse_stock', $stock);
                     $this->db->insert('stock_history', $stock_history);
@@ -844,6 +850,7 @@ class purchase extends MY_Controller {
             'status_gr'=> 4,
             'idjournal_inv'=> $idjournal,
             'status_inv'=>1,
+            'nofpsup'=> $this->input->post('nofpsup'),           
         );
 
         $duedate = null;
@@ -1450,9 +1457,9 @@ class purchase extends MY_Controller {
         echo json_encode($json);
     }
 
-    function print_invoice($idpurchase,$print=null){
+    function print_invoice($goods_receipt_id,$print=null){
         $this->load->model('purchase/m_purchase','model');
-        $d['data'] = $this->model->cetak_invoice($idpurchase);
+        $d['data'] = $this->model->cetak_gr($goods_receipt_id);
         // print_r($d);
         $d['title'] = 'Purchase Invoice';
         $d['print'] = $print;
@@ -1495,9 +1502,9 @@ class purchase extends MY_Controller {
         }
     }
 
-    function print_gr($idpurchase,$print=null){
+    function print_gr($goods_receipt_id,$print=null){
         $this->load->model('purchase/m_purchase','model');
-        $d['data'] = $this->model->cetak_gr($idpurchase);
+        $d['data'] = $this->model->cetak_gr($goods_receipt_id);
         // print_r($d); die;
         $d['title'] = 'Goods Receipt';
         $d['print'] = $print;
