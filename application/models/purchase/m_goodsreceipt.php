@@ -83,7 +83,8 @@ class m_goodsreceipt extends CI_Model {
                     when status_inv = 3 then 'Overdue'
                     when status_inv = 4 then 'Partially aid'
                     when status_inv = 5 then 'Canceled'
-                end status_inv_name";
+                end status_inv_name,
+                a.nofpsup";
     }
     
     function fieldCek()

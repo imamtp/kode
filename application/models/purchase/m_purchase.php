@@ -147,6 +147,8 @@ class m_purchase extends CI_Model {
     }
 
     function cetak_order($idpurchase){
+        $dtcetak = array();
+        
         $sql = "select 
                 a.nopurchase,
                 a.date,
@@ -166,7 +168,7 @@ class m_purchase extends CI_Model {
                 end as author,
                 a.datein as created_date,
                 case 
-                    when e.firstname is not null then c.firstname || ' ' || c.lastname
+                    when e.firstname is not null then e.firstname || ' ' || e.lastname
                     else f.realname
                 end as confirmed_by,
                 a.datemod as confirmed_date
@@ -218,7 +220,7 @@ class m_purchase extends CI_Model {
         return $dtcetak;
 
     }
-    function cetak_invoice($idpurchase){
+    function cetak_invoice($goods_receipt_id){
          //generate data buat keperluan cetak
         $dtcetak = array();
 
@@ -276,13 +278,66 @@ class m_purchase extends CI_Model {
         return $dtcetak;
     }
 
-    function cetak_gr($idpurchase){
+    function query_itemgr($goods_receipt_id){
+        $sql = "select 
+                a.sku_no,
+                a.invno,
+                a.nameinventory,
+                a.no_batch,
+                a.qty,
+                a.short_desc,
+                a.warehouse_code as whcode,
+                b.price,
+                (a.qty * b.price) as total
+                from purchaseitem_batch a
+                join purchaseitem b on b.idpurchaseitem = a.idpurchaseitem and b.idpurchase = a.idpurchase
+                where goods_receipt_id=$goods_receipt_id";
+        $q = $this->db->query($sql);
+        return $q->result_array();
+    }
+    function cetak_gr($goods_receipt_id){
          //generate data buat keperluan cetak
         $dtcetak = array();
 
-        $sql = $this->query();
-        $sql.= " WHERE a.idpurchase=$idpurchase";
-        // echo $sql;
+        $sql = "select
+                a.no_goods_receipt,
+                a.no_invoice,
+                a.received_date,
+                a.invoice_date,
+                a.received_by,
+                a.dpp,
+                a.tax,
+                a.freightcost,
+                a.balance,
+                a.totalamount,
+                a.notes,
+                a.supplier_direct_no,
+                c.namesupplier,
+                c.companyaddress,
+                c.telephone,
+                c.fax,
+                b.idunit,
+                d.firstname || ' ' || d.lastname as receiver,
+                case 
+                    when e.firstname is not null then e.firstname || ' ' || e.lastname
+                    else f.realname
+                end as confirmed_by,
+                a.datemod as confirmed_date,
+                case 
+                    when g.firstname is not null then g.firstname || ' ' || g.lastname
+                    else h.realname
+                end as created_by_inv,
+                a.datein_inv as created_date_inv
+                from goods_receipt a
+                left join purchase b on b.idpurchase = a.idpurchase
+                left join supplier c on c.idsupplier = b.idsupplier
+                left join employee d on d.idemployee = a.received_by
+                left join employee e on e.user_id = a.usermod
+                left join sys_user f on f.user_id = a.usermod
+                left join employee g on g.user_id = a.userin_inv
+                left join sys_user h on h.user_id = a.userin_inv
+                where a.goods_receipt_id = $goods_receipt_id";
+
         $q = $this->db->query($sql);
         if($q->num_rows()>0)
         {
@@ -294,21 +349,14 @@ class m_purchase extends CI_Model {
             $dtcetak['supplier']['telephone'] = $r->telephone;
             $dtcetak['supplier']['fax'] = $r->fax;
 
-            $dtcetak['detail'] = $this->query_itempurchase($r->idpurchase);
-            $dtcetak['detailtotal'] = number_format($r->subtotal);
-
-            $dtcetak['no'] = $r->nopurchase;
-
-            // //get receivefrom,total,memo,tax
-            $dtcetak['dp'] = $r->paidtoday;
-            $dtcetak['freigthcost'] = $r->freigthcost;
-            // $dtcetak['receivefrom'] = $r->userin;
-            $dtcetak['totaltax'] = $r->tax;
-            $dtcetak['total'] = $r->totalamount;
-            $dtcetak['terbilang'] = terbilang($r->totalamount);
-            $dtcetak['totalowed'] = $r->balance;
-            $dtcetak['memo'] = $r->memo;
-            $dtcetak['datetrans'] = $r->date;
+            $dtcetak['detail'] = $this->query_itemgr($goods_receipt_id);
+            
+            $dtcetak['no'] = $r->no_goods_receipt;
+            $dtcetak['no_inv'] = $r->no_invoice;
+            
+            $dtcetak['notes'] = $r->notes;
+            $dtcetak['datetrans'] = $r->received_date;
+            $dtcetak['datetrans_inv'] = $r->invoice_date;
 
             $runit = $this->m_data->dataunit($r->idunit);
             $dtcetak['logo'] = $runit['logo'];
