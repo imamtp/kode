@@ -338,7 +338,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceUnpaidGrid', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
-            showPurchaseOrderData(record);
+            // showPurchaseOrderData(record); //disable sementara
             // loadMemberForm(record.data.id_member)
             // showDataSales(record.data.idsales)
         }
