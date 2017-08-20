@@ -146,6 +146,78 @@ class m_purchase extends CI_Model {
         return $data;
     }
 
+    function cetak_order($idpurchase){
+        $sql = "select 
+                a.nopurchase,
+                a.date,
+                a.memo,
+                b.namesupplier,
+                b.companyaddress,
+                b.telephone,
+                b.fax,
+                a.total_dpp,
+                a.tax,
+                a.totalamount,
+                a.balance,
+                a.idunit,
+                case 
+                    when c.firstname is not null then c.firstname || ' ' || c.lastname
+                    else d.realname
+                end as author,
+                a.datein as created_date,
+                case 
+                    when e.firstname is not null then c.firstname || ' ' || c.lastname
+                    else f.realname
+                end as confirmed_by,
+                a.datemod as confirmed_date
+                from purchase a 
+                join supplier b on b.idsupplier = a.idsupplier
+                left join employee c on c.user_id = a.userin
+                left join sys_user d on d.user_id = a.userin
+                left join employee e on e.user_id = a.usermod
+                left join sys_user f on f.user_id = a.usermod
+                where a.idpurchase = $idpurchase";
+        
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            $i=0;
+            $total=0;
+            
+            $dtcetak['supplier']['namesupplier'] = $r->namesupplier;
+            $dtcetak['supplier']['companyaddress'] = $r->companyaddress;
+            $dtcetak['supplier']['telephone'] = $r->telephone;
+            $dtcetak['supplier']['fax'] = $r->fax;
+
+            $dtcetak['detail'] = $this->query_itempurchase($idpurchase);
+
+            $dtcetak['no'] = $r->nopurchase;
+            $dtcetak['dpp'] = number_format($r->total_dpp);
+            $dtcetak['tax'] = $r->tax;
+            $dtcetak['totalamount'] = $r->totalamount;
+            $dtcetak['balance'] = $r->balance;
+            $dtcetak['terbilang'] = terbilang($r->totalamount);
+            $dtcetak['memo'] = $r->memo;
+            $dtcetak['datetrans'] = $r->date;
+
+            // $dtcetak['receivedby'] = $r->userin;
+            //get logo,address,namaunit
+            $runit = $this->m_data->dataunit($r->idunit);
+            $dtcetak['logo'] = $runit['logo'];
+            $dtcetak['namaunit'] = $runit['namaunit'];
+            $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['telp'] = $runit['telp'];
+            $dtcetak['fax'] = $runit['fax'];
+
+            $dtcetak['author'] = $r->author;
+            $dtcetak['created_date'] = $r->created_date;
+            $dtcetak['confirmed_by'] = $r->confirmed_by;
+            $dtcetak['confirmed_date'] = $r->confirmed_date;
+        }
+        return $dtcetak;
+
+    }
     function cetak_invoice($idpurchase){
          //generate data buat keperluan cetak
         $dtcetak = array();
