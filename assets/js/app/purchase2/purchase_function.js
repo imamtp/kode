@@ -752,7 +752,7 @@ function windowPurchasePayment(data) {
     Ext.getCmp('date_purchase_paymentPurchase').setValue(data.po_date);
     Ext.getCmp('paidtoday_paymentPurchase').setValue(renderNomor(data.paidtoday));
     Ext.getCmp('balance_Purchase_paymentPurchase').setValue(renderNomor(data.balance));
-    Ext.getCmp('nofpsup_Purchase_paymentPurchase').setValue(renderNomor(data.supplier_direct_no));
+    Ext.getCmp('nofpsup_Purchase_paymentPurchase').setValue(renderNomor(data.nofpsup));
 }
 
 function updateSelisihPurchasePayment() {
