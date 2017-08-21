@@ -26,8 +26,9 @@ body {
         /*display: block;*/
         /* font-family: franklin; */
         /*, Arial, "Times New Roman", serif;*/
+        font-size: 12pt;
         font-weight: none;
-        font-size: 10pt;
+        color: #000;
     }
     th,
     td {
@@ -38,8 +39,8 @@ body {
     }
     @page {
         size: 9.5in 11in;
-        /* font-family: sans-serif; */
         margin: 5mm 5mm 5mm 5mm;
+        /* font-family: sans-serif; */
         /*size: A3 landscape;*/
     }
 }
