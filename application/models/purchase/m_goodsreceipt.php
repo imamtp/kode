@@ -75,7 +75,16 @@ class m_goodsreceipt extends CI_Model {
                 e.namesupplier,
                 f.accnumber as accnumber_coa_persediaan,
                 f.accname as accname_coa_persediaan,
-                g.rate";
+                g.rate,
+                status_inv,
+                case 
+                    when status_inv = 1 then 'Unpaid'
+                    when status_inv = 2 then 'Paid'
+                    when status_inv = 3 then 'Overdue'
+                    when status_inv = 4 then 'Partially aid'
+                    when status_inv = 5 then 'Canceled'
+                end status_inv_name,
+                a.nofpsup";
     }
     
     function fieldCek()

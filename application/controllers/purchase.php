@@ -615,8 +615,6 @@ class purchase extends MY_Controller {
                 ));
                 $this->db->update('purchaseitem', array(
                     'qty_received'=> $item->qty_received + $item->qty_receipt, 
-                    'usermod'=> $this->session->userdata('userid'),
-                    'datemod'=> date('Y-m-d H:i:s'),
                 ));
                 
                 //hitung hpp
@@ -694,6 +692,7 @@ class purchase extends MY_Controller {
                         'userin'=> $this->session->userdata('userid'),
                         'datein'=> date('Y-m-d H:i:s'),
                         'no_batch'=>$nobatch,
+                        'no_transaction'=>$header['no_goods_receipt'],
                     );
 
                     $stock = array(
@@ -728,6 +727,11 @@ class purchase extends MY_Controller {
                         'notes'=>'Penerimaan Barang dari PO '.$this->input->post('nopo'),
                         'idjournal'=>$idjournal,
                     );
+                    
+                    //update purchaseitem_batch, set no batch
+                    $this->db->update('purchaseitem_batch', array('no_batch'=>$nobatch));
+
+                    //insert inventory, stock and stock history
                     $this->db->insert('inventory', $inv);
                     $this->db->insert('warehouse_stock', $stock);
                     $this->db->insert('stock_history', $stock_history);
@@ -845,6 +849,8 @@ class purchase extends MY_Controller {
             'balance'=> $this->input->post('totalamount'),
             'status_gr'=> 4,
             'idjournal_inv'=> $idjournal,
+            'status_inv'=>1,
+            'nofpsup'=> $this->input->post('nofpsup'),           
         );
 
         $duedate = null;
@@ -921,7 +927,7 @@ class purchase extends MY_Controller {
 
         $this->db->trans_begin();
 
-        $idpurchase = $this->input->post('idpurchase');
+        $goods_receipt_id = $this->input->post('goods_receipt_id');
         $balance_purchase = str_replace('.', '', $this->input->post('balance_Purchase'));
         $amount = str_replace('.', '', $this->input->post('amount'));
         $selisih = intval($balance_purchase-$amount);
@@ -936,7 +942,7 @@ class purchase extends MY_Controller {
         } else if($amount<$balance_purchase)
         {
             $invoice_status = 4; //Partially Paid
-            $memo = 'Pelunasan Hutang Sebagian PO';
+            $memo = 'Pelunasan Sebagian Hutang PO';
             // $journal = $this->jmodel->purchase_pelunasan_sebagian(date('Y-m-d'),'Pelunasan Hutang Sebagian PO',$amount,$idunit,null);
         } else {
             $invoice_status = 1; //Unpaid
@@ -945,7 +951,7 @@ class purchase extends MY_Controller {
 
 
         //get idaccount hutang
-        $qap = $this->db->query("select idaccount_coa_hutang from purchase where idpurchase = $idpurchase and idunit = $idunit")->row();
+        $qap = $this->db->query("select idaccount_coa_hutang from goods_receipt where goods_receipt_id = $goods_receipt_id and idunit = $idunit")->row();
 
         if($invoice_status!=1) {
             $journal = $this->jmodel->purchase_pelunasan(date('Y-m-d'),$amount,$memo,$idunit,$idaccount,$qap->idaccount_coa_hutang);
@@ -953,7 +959,7 @@ class purchase extends MY_Controller {
 
         $data = array(
                 'purchase_payment_id'=> $this->m_data->getPrimaryID($this->input->post('purchase_payment_id'),'purchase_payment', 'purchase_payment_id', $idunit),
-                'idpurchase'=> $this->input->post('idpurchase'),
+                'goods_receipt_id'=> $this->input->post('goods_receipt_id'),
                 'idjournal'=> $journal,
                 'idunit'=> $idunit,
                 'amount'=> $amount,
@@ -967,16 +973,16 @@ class purchase extends MY_Controller {
 
         $balance = $balance_purchase-$amount;
 
-        $purchaseCurent = $this->db->query("select paidtoday from purchase where idpurchase = $idpurchase and idunit = $idunit")->row();
+        $purchaseCurent = $this->db->query("select paidtoday from goods_receipt where goods_receipt_id = $goods_receipt_id and idunit = $idunit")->row();
 
         $update = array(
             'paidtoday' => ($purchaseCurent->paidtoday+$amount),
-            'invoice_status' => $invoice_status,
+            'status_inv' => $invoice_status,
             'balance' => $selisih
         );
 
-        $this->db->where('idpurchase',$idpurchase);
-        $this->db->update('purchase',$update);
+        $this->db->where('goods_receipt_id',$goods_receipt_id);
+        $this->db->update('goods_receipt',$update);
 
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -1451,9 +1457,9 @@ class purchase extends MY_Controller {
         echo json_encode($json);
     }
 
-    function print_invoice($idpurchase,$print=null){
+    function print_invoice($goods_receipt_id,$print=null){
         $this->load->model('purchase/m_purchase','model');
-        $d['data'] = $this->model->cetak_invoice($idpurchase);
+        $d['data'] = $this->model->cetak_gr($goods_receipt_id);
         // print_r($d);
         $d['title'] = 'Purchase Invoice';
         $d['print'] = $print;
@@ -1471,12 +1477,12 @@ class purchase extends MY_Controller {
 
     function print_order($idpurchase,$print=null){
         $this->load->model('purchase/m_purchase','model');
-        $d['data'] = $this->model->cetak_invoice($idpurchase);
+        $d['data'] = $this->model->cetak_order($idpurchase);
         // print_r($d); die;
         $d['title'] = 'Purchase Order';
         $d['print'] = $print;
         if($print == null)
-            $this->load->view('tplcetak/purchase_invoice',$d);
+            $this->load->view('tplcetak/purchase_order',$d);
         else{    
             $filename = $d['title']."-".$d['data']['no'];
             $filename = str_replace(" ", "-", $filename);
@@ -1496,9 +1502,9 @@ class purchase extends MY_Controller {
         }
     }
 
-    function print_gr($idpurchase,$print=null){
+    function print_gr($goods_receipt_id,$print=null){
         $this->load->model('purchase/m_purchase','model');
-        $d['data'] = $this->model->cetak_gr($idpurchase);
+        $d['data'] = $this->model->cetak_gr($goods_receipt_id);
         // print_r($d); die;
         $d['title'] = 'Goods Receipt';
         $d['print'] = $print;

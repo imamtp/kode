@@ -344,13 +344,13 @@ Ext.define(dir_sys + 'purchase2.GoodsReceiptGrid', {
                             height: panelH - 200,
                             items: [{
                                 xtype: 'component',
-                                html: '<iframe src="' + SITE_URL + 'purchase/print_gr/' + selectedRecord.data.idpurchase + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                                html: '<iframe src="' + SITE_URL + 'purchase/print_gr/' + selectedRecord.data.goods_receipt_id + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
                             }],
                             buttons: [{
                                 text: 'Print',
                                 iconCls: 'print-icon',
                                 handler: function() {
-                                    window.open(SITE_URL + 'purchase/print_gr/' + selectedRecord.data.idpurchase + '/print', '_blank');
+                                    window.open(SITE_URL + 'purchase/print_gr/' + selectedRecord.data.goods_receipt_id + '/print', '_blank');
                                 }
                             }]
                         }).show();

@@ -16,7 +16,6 @@
 ?>
 <body>
     <div class="container">
-
       <div class="panel panel-info">
       <div class="panel-body">
       <div class="row">
@@ -27,7 +26,7 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <h2><?=$title?></h2>
-          <h3><small>Tanggal Terima: <?=backdate2($data['datetrans'])?> <br>NO: #<?=$data['no']?></small></h3>
+          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?><br/></small></h3>
         </div>
       </div>
       
@@ -61,71 +60,108 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- row -->
 
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
-          <tr>
-            <td colspan="2"><b>Item List:</b></td>
-          </tr>
-          <?php if($data['detail']!=null) : ?>
+        
+         <tr>
+           <td colspan="2"><b>Item List:</b></td>
+         </tr>
+         <?php if($data['detail']!=null): ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
               <tr>
-                <th width="30">NO</th>  
-                <th>NO SKU</th>   
-                <th>KD BRG</th>                       
-                <th>NAMA BRG</th>    
-                <th>NO BATCH</th>
-                <th>QTY TERIMA</th>
-                <th>SATUAN</th>
-                <th>KD GUDANG</th>
+                <th width="30">No</th>  
+                <th>No SKU</th>                       
+                <th>Nama Barang</th>                                               
+                <th>Total Qty</th>
+                <th>Satuan</th>
+                <th>Harga</th>
+                <th>Total</th>
               </tr>
               <?php foreach ($data['detail'] as $key => $value) : ?>
                 <tr>
                   <td width="30"><?=$key+1?></td>
                   <td><?=$value['sku_no']?></td>
-                  <td><?=$value['invno']?></td>
                   <td><?=$value['nameinventory']?></td>  
-                  <td><?=$value['no_batch']?></td>
-                  <td align="right"><?=number_format($value['qty'],2)?></td>
+                  <td align="right"><?=$value['qty']?></td>
                   <td><?=$value['short_desc']?></td>
-                  <td><?=$value['whcode']?></td>
+                  <td align="right"><?=number_format($value['price'])?></td>
+                  <td align="right"><?=number_format($value['total'])?></td>
                 </tr>
-              <?php endforeach;?>         
+              <?php endforeach; ?>
             </table>
-          <?php endif; ?>
-          
-        </table>
-      </div>
+        <?php endif; ?>
 
-      <p>&nbsp;</p>
-       <div class="row">
+          <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
+            <tr>
+              <td></td>
+              <td> </td>
+              <td align="right"><b>Subtotal</b></td>
+              <td align="right" width="200"><?=$data['dpp']?></td>
+            </tr>
+            <tr>
+              <td></td>
+                <td> </td>
+              <td align="right"><b>Pajak (+)</b></td>
+              <td align="right"><?=number_format($data['tax'])?></td>
+            </tr>
+            <tr>
+              <td></td>
+                <td> </td>
+              <td align="right"><b>Total Setelah Pajak</b></td>
+              <td align="right" width="200"><?=number_format($data['totalamount'])?></td>
+            </tr>
+            <?php if($data['balance']!=0): ?>
+            <tr>
+              <td></td>
+                <td> </td>
+              <td align="right"><b>Saldo Terhutang</b></td>
+              <td align="right"><?=number_format($data['balance'])?></td>
+            </tr>
+            <?php endif; ?>
+          </table>
+        </table>
+      </div> <!-- row -->
+      
+      <div class="row">
+        <div class="col-xs-6">
+          <b>Total terbilang : </b><?=$data['terbilang']?>
+        </div>
+        <div class="col-xs-6 text-right">
+          <!-- <b>Operator<br><?=$data['receivedby']?></b> -->
+        </div>
+      </div> <!-- row -->
+
+      <div class="row">
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Received By</h4>
+              <h4>Created By</h4>
             </div>
             <div class="panel-body">
              <p>
-                By: <?=$data['header']->receiver?><br>
-                At: <?=backdate2($data['header']->received_date)?><br>
+                By: <?= $data['author']?><br>
+                At: <?= $data['created_date']?><br>
               </p>
             </div>
           </div>
         </div>
+
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Confirmed By</h4>
             </div>
             <div class="panel-body">
-             <p>
-                By: <?=$data['header']->confirmed_by?><br>
-                At: <?=date('d-m-Y', strtotime($data['header']->confirmed_date))?><br>
+              <p>
+                By: <?= $data['confirmed_by']?><br>
+                At: <?= $data['confirmed_date']?><br>
               </p>
             </div>
           </div>
         </div>
+
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -133,14 +169,11 @@
             </div>
             <div class="panel-body">
              <p>
-              <?=$data['header']->notes?>
+                <?=$data['memo']?>
               </p>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div> <!-- panel -->
-  </div><!-- container -->
+      </div><!-- row -->
   </body>
 </html>

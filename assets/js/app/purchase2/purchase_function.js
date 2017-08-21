@@ -449,6 +449,19 @@ function showGoodsReceiptData(selectedRecord) {
 function loadDataFormPurchaseInvoice(selectedRecord, option) {
     Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
 
+    Ext.getCmp('idaccount_coa_hutang_pi').setValue();
+    Ext.getCmp('idaccount_coa_pajakmasuk_pi').setValue();
+    Ext.getCmp('accname_coa_hutang_pi').setValue();
+    Ext.getCmp('accname_coa_pajakmasuk_pi').setValue();
+    Ext.getCmp('accnumber_coa_hutang_pi').setValue();
+    Ext.getCmp('accnumber_coa_pajakmasuk_pi').setValue();
+    Ext.getCmp('comboxpaymentterm_pi').setValue();
+    Ext.getCmp('ddaysPurchaseInvoice').setValue();
+    Ext.getCmp('eomddaysPurchaseInvoice').setValue();
+    Ext.getCmp('percentagediscPurchaseInvoice').setValue();
+    Ext.getCmp('daysdiscPurchaseInvoice').setValue();
+    Ext.getCmp('dmaxPurchaseInvoice').setValue();
+
     Ext.getCmp('idpurchase_poinvoice').setValue(selectedRecord.get('idpurchase'));
     Ext.getCmp('goods_receipt_id_poinvoice').setValue(selectedRecord.get('goods_receipt_id'));
     Ext.getCmp('nopo_poinvoice').setValue(selectedRecord.get('no_po'));
@@ -457,7 +470,7 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
     Ext.getCmp('cbUnit_poinvoice').setValue(selectedRecord.get('idunit'));
     Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('idtax'));
     Ext.getCmp('supplier_poinvoice').setValue(selectedRecord.get('idsupplier'));
-    Ext.getCmp('nofpsup_poinvoice').setValue(selectedRecord.get('supplier_direct_no'));
+    Ext.getCmp('nofpsup_poinvoice').setValue(selectedRecord.get('nofpsup'));
     Ext.getCmp('notes_pi').setValue(selectedRecord.get('notes'));
 
     Ext.getCmp('supplier_poinvoice').getStore().load(function(records) {
@@ -564,8 +577,8 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
                     name: 'purchase_payment_id'
                 }, {
                     xtype: 'hiddenfield',
-                    name: 'idpurchase',
-                    id: 'idpurchase_paymentPurchase'
+                    name: 'goods_receipt_id',
+                    id: 'goods_receipt_id_paymentPurchase'
                 },
                 {
                     xtype: 'textfield',
@@ -732,14 +745,14 @@ function windowPurchasePayment(data) {
 
     windowPopupWindowPurchasePayment.show();
 
-    Ext.getCmp('idpurchase_paymentPurchase').setValue(data.idpurchase);
-    Ext.getCmp('noinvoice_paymentPurchase').setValue(data.noinvoice);
-    Ext.getCmp('no_purchase_order_paymentPurchase').setValue(data.nopurchase);
+    Ext.getCmp('goods_receipt_id_paymentPurchase').setValue(data.goods_receipt_id);
+    Ext.getCmp('noinvoice_paymentPurchase').setValue(data.no_invoice);
+    Ext.getCmp('no_purchase_order_paymentPurchase').setValue(data.no_po);
     Ext.getCmp('namesupplier_paymentPurchase').setValue(data.namesupplier);
-    Ext.getCmp('date_purchase_paymentPurchase').setValue(data.date);
+    Ext.getCmp('date_purchase_paymentPurchase').setValue(data.po_date);
     Ext.getCmp('paidtoday_paymentPurchase').setValue(renderNomor(data.paidtoday));
     Ext.getCmp('balance_Purchase_paymentPurchase').setValue(renderNomor(data.balance));
-    Ext.getCmp('nofpsup_Purchase_paymentPurchase').setValue(renderNomor(data.nofpsup));
+    Ext.getCmp('nofpsup_Purchase_paymentPurchase').setValue(renderNomor(data.supplier_direct_no));
 }
 
 function updateSelisihPurchasePayment() {

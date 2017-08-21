@@ -679,6 +679,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                     idunit: Ext.getCmp('cbUnit_poinvoice').getValue(),
 
                     nopurchase: Ext.getCmp('nopo_poinvoice').getValue(),
+                    nofpsup: Ext.getCmp('nofpsup_poinvoice').getValue(),
                     no_invoice: Ext.getCmp('nojurnal_poinvoice').getValue(),
                     idaccount_coa_hutang: Ext.getCmp('idaccount_coa_hutang_pi').getValue(),
                     idaccount_coa_pajakmasuk: Ext.getCmp('idaccount_coa_pajakmasuk_pi').getValue(),
@@ -707,6 +708,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         Ext.getCmp('idpurchase_poinvoice').setValue();
                         Ext.getCmp('cbUnit_poinvoice').setValue();
                         Ext.getCmp('nojurnal_poinvoice').setValue();
+                        Ext.getCmp('nofpsup_poinvoice').setValue();
                         Ext.getCmp('idaccount_coa_hutang_pi').setValue();
                         Ext.getCmp('idaccount_coa_pajakmasuk_pi').setValue();
                         Ext.getCmp('comboxpaymentterm_pi').setValue();
