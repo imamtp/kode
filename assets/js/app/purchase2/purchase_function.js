@@ -744,7 +744,6 @@ var windowPopupWindowPurchasePayment = Ext.create('widget.window', {
 function windowPurchasePayment(data) {
 
     windowPopupWindowPurchasePayment.show();
-
     Ext.getCmp('goods_receipt_id_paymentPurchase').setValue(data.goods_receipt_id);
     Ext.getCmp('noinvoice_paymentPurchase').setValue(data.no_invoice);
     Ext.getCmp('no_purchase_order_paymentPurchase').setValue(data.no_po);
@@ -752,7 +751,7 @@ function windowPurchasePayment(data) {
     Ext.getCmp('date_purchase_paymentPurchase').setValue(data.po_date);
     Ext.getCmp('paidtoday_paymentPurchase').setValue(renderNomor(data.paidtoday));
     Ext.getCmp('balance_Purchase_paymentPurchase').setValue(renderNomor(data.balance));
-    Ext.getCmp('nofpsup_Purchase_paymentPurchase').setValue(renderNomor(data.nofpsup));
+    Ext.getCmp('nofpsup_paymentPurchase').setValue(data.nofpsup);
 }
 
 function updateSelisihPurchasePayment() {
