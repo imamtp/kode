@@ -755,7 +755,25 @@ class sales extends MY_Controller {
         $d['print'] = $print;
         $d['isInvoice'] = true;
         
-        $this->load->view('tplcetak/sales_print',$d);
+        if($print == null)
+            $this->load->view('tplcetak/sales_print',$d);
+        else{    
+            $filename = $d['title']."-".$d['data']['no'];
+            $filename = str_replace(" ", "-", $filename);
+            // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
+
+            ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
+            $html = $this->load->view('tplcetak/sales_print',$d, true);
+            // // $html = $this->load->view('pdf_report', $data, true); // render the view into HTML
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->WriteHTML($html); // write the HTML into the PDF
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+            redirect("download/reports/$filename.pdf");
+            unlink("download/reports/$filename.pdf");
+        }
     }
 
     function save_item_sales_return_tmp(){

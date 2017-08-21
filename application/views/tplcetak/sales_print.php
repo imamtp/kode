@@ -11,9 +11,6 @@
     </style>
 </head>
 
-<?php
-//if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
-?>
 <body>
     <div class="container">
 
@@ -85,17 +82,17 @@
               {
               ?>
                       <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
-                        <tr>
-                          <th width="30">No</th>  
-                          <th>Item Code</th>                       
-                          <th>Item Name</th>
+                        <tr class="columnHeader">
+                          <th width="30">NO</th>  
+                          <th>SKU</th>                       
+                          <th>NAMA BARANG</th>
                           <!-- <th>Warehouse</th>                           -->
-                          <th>Price</th>
-                          <th>Qty</th>
-                          <th>Measurement</th>
-                          <th>Size/Length</th>
-                          <th>Measurement</th>
-                          <th>Discount(%)</th>
+                          <th>HARGA</th>
+                          <th>QTY</th>
+                          <th>SATUAN</th>
+                          <th>UKURAN</th>
+                          <th>SATUAN</th>
+                          <th>DISKON(%)</th>
                           <!-- <th>Tax %</th> -->
                            <th>Total</th>
                         </tr>
@@ -106,7 +103,7 @@
                            ?>
                              <tr>
                               <td width="30"><?=$i?></td>
-                              <td><?=$value['invno']?></td>
+                              <td><?=$value['sku_no']?></td>
                               <td><?=$value['nameinventory']?></td>  
                               <!-- <td><?=$value['warehouse_desc']?></td>                            -->
                               <td align="right"><?=number_format($value['price'])?></td>

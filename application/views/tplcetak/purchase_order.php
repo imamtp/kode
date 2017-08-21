@@ -72,22 +72,22 @@
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
               <tr>
                 <th width="30">No</th>  
-                <th>No SKU</th>                       
-                <th>Nama Barang</th>                                               
-                <th>Total Qty</th>
-                <th>Satuan</th>
-                <th>Harga</th>
-                <th>Total</th>
+                <th>NO SKU</th>                       
+                <th>NAMA BRG</th>                                               
+                <th>QTY</th>
+                <th>SATUAN</th>
+                <th>HARGA</th>
+                <th>TOTAL</th>
               </tr>
               <?php foreach ($data['detail'] as $key => $value) : ?>
                 <tr>
                   <td width="30"><?=$key+1?></td>
                   <td><?=$value['sku_no']?></td>
                   <td><?=$value['nameinventory']?></td>  
-                  <td align="right"><?=$value['qty']?></td>
+                  <td align="right"><?=number_format($value['qty'],2)?></td>
                   <td><?=$value['short_desc']?></td>
-                  <td align="right"><?=number_format($value['price'])?></td>
-                  <td align="right"><?=number_format($value['total'])?></td>
+                  <td align="right"><?=number_format($value['price'],2)?></td>
+                  <td align="right"><?=number_format($value['total'],2)?></td>
                 </tr>
               <?php endforeach; ?>
             </table>
