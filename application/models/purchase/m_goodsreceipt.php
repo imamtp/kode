@@ -112,10 +112,10 @@ class m_goodsreceipt extends CI_Model {
         $wer = null;
         switch ($this->input->post('option')){
             case 'unpaid':
-                $wer .= " status_gr = 4 and a.paidtoday < a.totalamount  and a.duedate >= now()";
+                $wer .= " status_gr = 4 and a.paidtoday < a.totalamount  and (a.duedate >= now() or a.duedate is null)";
                 break;
             case 'paid':
-                $wer .= " status_gr = 4 and a.paidtoday > 0  and a.duedate >= now()";
+                $wer .= " status_gr = 4 and a.paidtoday > 0  and (a.duedate >= now() or a.duedate is null)";
                 break;
             case 'overdue':
                 $wer .= " status_gr = 4 and a.paidtoday < a.totalamount and a.duedate < now()";
