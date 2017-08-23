@@ -25,7 +25,7 @@
           </h1>
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
-          <h2><?=$title?></h2>
+          <h3><?=$title?></h3>
           <h4>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?><br/></h4>
         </div>
       </div>

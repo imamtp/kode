@@ -5,10 +5,6 @@
     <title><?=$title?></title>
     <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
     <link href="<?=base_url()?>/assets/css/print.css" rel="stylesheet">
-
-    <style>
-   
-    </style>
 </head>
 <body>
     <div class="container">
@@ -16,14 +12,14 @@
       <div class="panel panel-info">
       <div class="panel-body">
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-5">
           <h1>
             <?=$this->logo?>
           </h1>
         </div>
-        <div class="col-xs-6 text-right">
-          <h2><?=$title?></h2>
-          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?></small></h3>
+        <div class="col-xs-5 col-xs-offset-2 text-right">
+          <h3><?=$title?></h3>
+          <h4><small>Tanggal Order: <?=$data['datetrans']?> <br>NO: #<?=$data['no']?></small></h4>
         </div>
       </div>
       
