@@ -26,9 +26,13 @@ body {
         /*display: block;*/
         /* font-family: franklin; */
         /*, Arial, "Times New Roman", serif;*/
-        font-size: 12pt;
+        font-size: 11pt;
         font-weight: none;
         color: #000;
+    }
+    .panel-default,
+    .panel-heading {
+        border-color: #000;
     }
     th,
     td {
