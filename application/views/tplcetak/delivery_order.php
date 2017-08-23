@@ -67,20 +67,23 @@
         </tr>
         <?php if($data['detail']!=null): ?>
           <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
-            <tr>
-              <th width="30">No</th>  
-              <th>Kode Barang</th>                       
-              <th>Nama Barang</th>
-              <th>Qty Order</th>
-              <th>Satuan</th>
-              <th>Ukuran</th>
-              <th>Satuan Ukuran</th>
+            <thead>
+              <tr>
+                <th width="30">No</th>  
+                <th>Kode Barang</th>                       
+                <th>Nama Barang</th>
+                <th>Qty Order</th>
+                <th>Satuan</th>
+                <th>Ukuran</th>
+                <th>Satuan Ukuran</th>
                 <th>Qty Kirim</th>
-            </tr>
+              </tr>
+            </thead>
             <?php 
               $totalqty = 0;
               $totalkirim = 0;
             ?>
+            <tbody>
             <?php foreach ($data['detail'] as $key => $value) : ?>
               <tr>
                 <td width="30"><?=$key+1?></td>
@@ -98,6 +101,7 @@
                 <td><?=$value['qty_kirim']?></td>
               </tr>
             <?php endforeach; ?>
+            </tbody>
             <?php
               $totalqty+=$value['qty'];
               $totalkirim =$value['qty_kirim'];

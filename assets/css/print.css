@@ -41,6 +41,15 @@ body {
     .text-right {
         text-align: right;
     }
+    table.table-bordered {
+        border: 1px solid #000000;
+    }
+    table.table-bordered thead tr th {
+        border: 1px solid #000000;
+    }
+    table.table-bordered tbody tr td {
+        border: 1px solid #000000;
+    }
     @page {
         size: 9.5in 11in;
         margin: 5mm 5mm 5mm 5mm;
