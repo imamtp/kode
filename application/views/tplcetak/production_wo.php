@@ -35,19 +35,19 @@
           <?php if(count($data['fg_list'])>0) : ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
               <tr>
-                <th width="30">No</th>  
-                <th>No SKU</th>                       
-                <th>Nama Barang</th>    
-                <th>Qty</th>                 
-                <th>Satuan Qty</th>
-                <th>Ukuran</th>
-                <th>Satuan Ukuran</th>
-                <th>Raw Material</th>
-                <th>Kode  Barang</th>
-                <th>Qty</th>
-                <th>Satuan Qty</th>
-                <th>Material Terpakai</th>
-                <th>Keterangan</th>
+                <th width="30">NO</th>  
+                <th>NO SKU</th>                       
+                <th>NM BRG</th>    
+                <th>QTY</th>                 
+                <th>SATUAN</th>
+                <th>UKURAN</th>
+                <th>SATUAN/th>
+                <th>BHN BAKU</th>
+                <th>KD BRG</th>
+                <th>QTY</th>
+                <th>SATUAN</th>
+                <th>MATERIAL</th>
+                <th>KET</th>
               </tr>
           <?php foreach ($data['fg_list'] as $key => $value): ?>
               <tr>
