@@ -13,18 +13,18 @@
     <div class="panel-body">
   
     <div class="row">
-      <div class="col-xs-6">
+      <div class="col-xs-5">
         <h1>
           <?=$this->logo?>
         </h1>
       </div>
-      <div class="col-xs-6 text-right">
-        <h2><?=$title?></h2>
-        <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>
+      <div class="col-xs-5 col-xs-offset-2 text-right">
+        <h3><?=$title?></h3>
+        <h4><small>Tanggal Order: <?=$data['datetrans']?> <br>
             Tanggal Pengiriman: <?=$data['header']['delivery_date']?><br>
             NO SO: #<?=$data['no']?><br>
             NO Faktur: #<?=$data['header']['no_faktur']?></small><br>
-        </h3>
+        </h4>
       </div>
     </div>
     
@@ -63,8 +63,7 @@
     <div class="row" style="margin-left:1px;">
       <table class="table borderless" >
         <tr>
-          <td width="22%"><b>Item List:</b></td>
-          <td width="50%"></td>
+          <td colspan="2"><b>Item List:</b></td>
         </tr>
         <?php if($data['detail']!=null): ?>
           <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">

@@ -8,33 +8,22 @@
     <title><?=$title?></title>
     <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
     <link href="<?=base_url()?>/assets/css/print.css" rel="stylesheet">
-
-    <style>
-   
-    </style>
 </head>
 
-<?php
-if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
-?>
-
+<body>
     <div class="container">
-
       <div class="panel panel-info">
       <div class="panel-body">
-      
 
-    
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-5">
           <h1>
-            <!-- <img src="<?=base_url()?>/assets/images/<?=$data['logo']?>" width="200"/> -->
             <?=$this->logo?>
           </h1>
         </div>
-        <div class="col-xs-6 text-right">
-          <h2><?=$title?></h2>
-          <h3><small>Tanggal Selesai: <?=$data['finished_date']?> <br>NO: #<?=$data['job_no']?></small></h3>
+        <div class="col-xs-5 col-xs-offset-2 text-right">
+          <h3><?=$title?></h3>
+          <h4><small>Tanggal Selesai: <?=$data['finished_date']?> <br>NO: #<?=$data['job_no']?></small></h4>
         </div>
       </div>
       
@@ -55,7 +44,7 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-left">
+        <div class="col-xs-5 col-xs-offset-2 text-right">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Konsumen</h4>
@@ -75,76 +64,49 @@ if($print) { echo "<body onload=\"window.print()\">"; } else { echo "<body>"; }
 
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
-        
-         <tr>
-           <td width="22%"><b>Finished Goods List:</b></td>
-           <td width="50%"></td>
-         </tr>
-         <?php
-         // echo $data['totaltax'];
-
-              if(count($data['fg_list'])>0)
-              {
-              ?>
-                      <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
-                        <tr>
-                          <th width="30">No</th>  
-                          <th>Kode Barang</th>                       
-                          <th>Nama Barang</th>    
-                          <th>Qty</th>                 
-                          <th>Satuan Qty</th>
-                          <th>Ukuran</th>
-                          <th>Satuan Ukuran</th>
-                          <th>Qty Terima</th>
-                          <th>Gudang Terima</th>
-                          <th>Qty Reject</th>
-                          <th>Gudang Reject</th>
-                          <th>Qty Sisa</th>
-                        </tr>
-                        <?php
-                        // print_r($data['detail']);
-                        $i=1;
-                        foreach ($data['fg_list'] as $key => $value) {
-                           ?>
-                             <tr>
-                              <td width="30"><?=$i?></td>
-                              <td><?=$value['invno']?></td>
-                              <td><?=$value['nameinventory']?></td> 
-                              <td><?=$value['qty']?></td>   
-                              <td><?=$value['short_desc']?></td>  
-                              <td><?=$value['size']?></td>  
-                              <td><?=$value['size_measurement']?></td>  
-                              <td><?=$value['qty_accept']?></td>  
-                              <td><?=$value['warehouse_code_accept']?></td>  
-                              <td><?=$value['qty_reject']?></td>  
-                              <td><?=$value['warehouse_code_reject']?></td>  
-                              <td><?=$value['qty_sisa']?></td>  
-                            </tr>
-                           <?php
-                         
-                           $i++;
-                          }
-                        ?>
+          <tr>
+            <td colspan="2"><b>Finished Goods List:</b></td>
+          </tr>
+          <?php if(count($data['fg_list'])>0): ?>
+            <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
+              <tr>
+                <th width="30">No</th>  
+                <th>Kode Barang</th>                       
+                <th>Nama Barang</th>    
+                <th>Qty</th>                 
+                <th>Satuan Qty</th>
+                <th>Ukuran</th>
+                <th>Satuan Ukuran</th>
+                <th>Qty Terima</th>
+                <th>Gudang Terima</th>
+                <th>Qty Reject</th>
+                <th>Gudang Reject</th>
+                <th>Qty Sisa</th>
+              </tr>
+              <?php foreach ($data['fg_list'] as $key => $value) : ?>
+                <tr>
+                  <td width="30"><?=$key+1?></td>
+                  <td><?=$value['invno']?></td>
+                  <td><?=$value['nameinventory']?></td> 
+                  <td><?=$value['qty']?></td>   
+                  <td><?=$value['short_desc']?></td>  
+                  <td><?=$value['size']?></td>  
+                  <td><?=$value['size_measurement']?></td>  
+                  <td><?=$value['qty_accept']?></td>  
+                  <td><?=$value['warehouse_code_accept']?></td>  
+                  <td><?=$value['qty_reject']?></td>  
+                  <td><?=$value['warehouse_code_reject']?></td>  
+                  <td><?=$value['qty_sisa']?></td>  
+                </tr>
+              <?php endforeach; ?>
                        
-                      </table>
-              <?php
-              }
-              ?>
-
-
+            </table>
+          <?php endif; ?>
         </table>
       </div>
 
-
-
-
-          </div>
-  </div> <!-- panel -->
-  
-
-    </div><!-- container -->
-
-
-      
-  </body>
+    </div>
+    </div> <!-- panel -->
+  </div><!-- container -->
+</body>
 </html>
