@@ -70,16 +70,19 @@
           </tr>
           <?php if($data['detail']!=null) : ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
-              <tr>
-                <th width="30">NO</th>  
-                <th>NO SKU</th>   
-                <th>KD BRG</th>                       
-                <th>NAMA BRG</th>    
-                <th>NO BATCH</th>
-                <th>QTY TERIMA</th>
-                <th>SATUAN</th>
-                <th>KD GUDANG</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th width="30">NO</th>  
+                  <th>NO SKU</th>   
+                  <th>KD BRG</th>                       
+                  <th>NAMA BRG</th>    
+                  <th>NO BATCH</th>
+                  <th>QTY TERIMA</th>
+                  <th>SATUAN</th>
+                  <th>KD GUDANG</th>
+                </tr>
+              </thead>
+              <tbody>
               <?php foreach ($data['detail'] as $key => $value) : ?>
                 <tr>
                   <td width="30"><?=$key+1?></td>
@@ -91,7 +94,8 @@
                   <td><?=$value['short_desc']?></td>
                   <td><?=$value['whcode']?></td>
                 </tr>
-              <?php endforeach;?>         
+              <?php endforeach;?> 
+              </thead>        
             </table>
           <?php endif; ?>
           

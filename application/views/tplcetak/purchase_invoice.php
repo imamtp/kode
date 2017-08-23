@@ -70,17 +70,20 @@
           </tr>
           <?php if($data['detail']!=null) : ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
-              <tr>
-                <th width="30">NO</th>  
-                <th>NO SKU</th>   
-                <th>KD BRG</th>                       
-                <th>NAMA BRG</th>    
-                <th>NO BATCH</th>
-                <th>QTY TERIMA</th>
-                <th>SATUAN</th>
-                <th>HRG SATUAN</th>
-                <th>TOTAL</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th width="30">NO</th>  
+                  <th>NO SKU</th>   
+                  <th>KD BRG</th>                       
+                  <th>NAMA BRG</th>    
+                  <th>NO BATCH</th>
+                  <th>QTY TERIMA</th>
+                  <th>SATUAN</th>
+                  <th>HRG SATUAN</th>
+                  <th>TOTAL</th>
+                </tr>
+              </thead>
+              <tbody>
               <?php foreach ($data['detail'] as $key => $value) : ?>
                 <tr>
                   <td width="30"><?=$key+1?></td>
@@ -93,7 +96,8 @@
                   <td align="right"><?=number_format($value['price'],2)?></td>
                   <td align="right"><?=number_format($value['total'],2)?></td>
                 </tr>
-              <?php endforeach;?>         
+              <?php endforeach;?>     
+              </tbody>    
             </table>
           <?php endif; ?>
           <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
