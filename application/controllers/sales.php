@@ -1022,7 +1022,25 @@ class sales extends MY_Controller {
         $d['data'] = $this->model->cetak_so($idsales);
         $d['title'] = 'Picking Note Delivery Order';
         $d['print'] = $print;
-        $this->load->view('tplcetak/sales_picking_note',$d);
+        if($print == null)
+            $this->load->view('tplcetak/sales_picking_note',$d);
+        else{    
+            $filename = $d['title']."-".$d['data']['no'];
+            $filename = str_replace(" ", "-", $filename);
+            // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
+
+            ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
+            $html = $this->load->view('tplcetak/sales_picking_note',$d, true);
+            // // $html = $this->load->view('pdf_report', $data, true); // render the view into HTML
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->WriteHTML($html); // write the HTML into the PDF
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+            redirect("download/reports/$filename.pdf");
+            unlink("download/reports/$filename.pdf");
+        }
     }
 
     function print_picking_note_return($sales_return_id,$print=null){
@@ -1038,7 +1056,25 @@ class sales extends MY_Controller {
         $d['data'] = $this->model->cetak_do($delivery_order_id);
         $d['title'] = 'Delivery Order';
         $d['print'] = $print;
-        $this->load->view('tplcetak/delivery_order',$d);
+        if($print == null)
+            $this->load->view('tplcetak/delivery_order',$d);
+        else{    
+            $filename = $d['title']."-".$d['data']['no'];
+            $filename = str_replace(" ", "-", $filename);
+            // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
+            $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
+
+            ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
+            $html = $this->load->view('tplcetak/delivery_order',$d, true);
+            // // $html = $this->load->view('pdf_report', $data, true); // render the view into HTML
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->WriteHTML($html); // write the HTML into the PDF
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+            redirect("download/reports/$filename.pdf");
+            unlink("download/reports/$filename.pdf");
+        }        
     }
 
     function set_picking_return(){
