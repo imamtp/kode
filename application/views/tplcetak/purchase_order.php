@@ -5,10 +5,6 @@
     <title><?=$title?></title>
     <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
     <link href="<?=base_url()?>/assets/css/print.css" rel="stylesheet">
-
-    <style>
-   
-    </style>
 </head>
 
 <?php
@@ -64,11 +60,10 @@
 
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
-        
-         <tr>
-           <td colspan="2"><b>Item List:</b></td>
-         </tr>
-         <?php if($data['detail']!=null): ?>
+          <tr>
+            <td colspan="2"><b>Item List:</b></td>
+          </tr>
+          <?php if($data['detail']!=null): ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
               <thead>
                 <tr>
@@ -95,89 +90,69 @@
               <?php endforeach; ?>
               </tbody>
             </table>
-        <?php endif; ?>
+          <?php endif; ?>
 
           <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
             <tr>
-              <td></td>
-              <td> </td>
-              <td align="right"><b>Subtotal</b></td>
-              <td align="right" width="200"><?=$data['dpp']?></td>
+              <td colspan = "3" align="right"><b>Subtotal :</b></td>
+              <td colspan = "2" align="right" width="200"><?=$data['subtotal']?></td>
             </tr>
             <tr>
+              <td colspan = "3" align="right"><b>DPP :</b></td>
+              <td align="right" width="150"><?=$data['dpp']?></td>
               <td></td>
-                <td> </td>
-              <td align="right"><b>Pajak (+)</b></td>
-              <td align="right"><?=number_format($data['tax'])?></td>
             </tr>
             <tr>
+              <td colspan = "3" align="right"><b>PPN :</b></td>
+              <td align="right" width="150"><?=$data['tax']?></td>
               <td></td>
-                <td> </td>
-              <td align="right"><b>Total Setelah Pajak</b></td>
-              <td align="right" width="200"><?=number_format($data['totalamount'])?></td>
+            </tr>
+            <tr>
+              <td colspan = "3" align="right"><b>Total Setelah Pajak :</b></td>
+              <td colspan = "2" align="right" width="200"><?=$data['totalamount']?></td>
             </tr>
             <?php if($data['balance']!=0): ?>
             <tr>
-              <td></td>
-                <td> </td>
-              <td align="right"><b>Saldo Terhutang</b></td>
-              <td align="right"><?=number_format($data['balance'])?></td>
+              <td colspan = "3" align="right"><b>Saldo Terhutang :</b></td>
+              <td colspan = "2" align="right" width="200"><?=$data['balance']?></td>
             </tr>
             <?php endif; ?>
+            <tr>
+              <td colspan = "3" align="right"><b>Terbilang :</b></td>
+              <td colspan = "2" align="left" width="200"><?=$data['terbilang']?></td>
+            </tr>
           </table>
         </table>
       </div> <!-- row -->
-      
-      <div class="row">
-        <div class="col-xs-6">
-          <b>Total terbilang : </b><?=$data['terbilang']?>
-        </div>
-        <div class="col-xs-6 text-right">
-          <!-- <b>Operator<br><?=$data['receivedby']?></b> -->
-        </div>
-      </div> <!-- row -->
 
       <div class="row">
-        <div class="col-xs-4 ">
+
+        <div class="col-xs-6 ">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Created By</h4>
+              <p>Catatan</p>
             </div>
             <div class="panel-body">
-             <p>
-                By: <?= $data['author']?><br>
-                At: <?= $data['created_date']?><br>
-              </p>
+                <p>Harga di atas sudah termasuk PPN 10%.</p> 
+                <p>Waktu pengiriman segera.</p>
+                <p>Alamat pengiriman: <?= $data['alamat3']?></p>
+                <p>Harap cantumkan NO PO pada setiap surat jalan.</p>
             </div>
           </div>
         </div>
 
-        <div class="col-xs-4 ">
+        <div class="col-xs-4 col-xs-offset-2">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Confirmed By</h4>
+              <p style="text-align: center;">Dipesan Oleh</p>
             </div>
             <div class="panel-body">
-              <p>
-                By: <?= $data['confirmed_by']?><br>
-                At: <?= $data['confirmed_date']?><br>
-              </p>
+              <br><br><br><br>
+              <p style="text-align: center;">IVAN SUSANTO</p>
             </div>
           </div>
-        </div>
+        </div> 
 
-        <div class="col-xs-4 ">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4>Notes</h4>
-            </div>
-            <div class="panel-body">
-             <p>
-                <?=$data['memo']?>
-              </p>
-            </div>
-          </div>
-        </div>
       </div><!-- row -->
   </body>
 </html>
