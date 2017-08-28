@@ -209,7 +209,9 @@ function showPurchaseOrderData(record) {
     Ext.getCmp('supplierNamePurchaseOrder').setValue(record.data.namesupplier);
     Ext.getCmp('supplierPurchaseOrder').setValue(record.data.idsupplier);
 
-    Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
+    Ext.getCmp('cb_tax_id_po').getStore().load(function() {
+        Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
+    });
 
     var checktax = record.data.include_tax * 1 == 1 ? true : false;
     Ext.getCmp('include_tax_po').setValue(checktax);
