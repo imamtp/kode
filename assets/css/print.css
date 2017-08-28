@@ -50,6 +50,10 @@ body {
     table.table-bordered tbody tr td {
         border: 1px solid #000000;
     }
+    .page-break {
+        display: block;
+        page-break-before: always;
+    }
     @page {
         size: 9.5in 11in;
         margin: 5mm 5mm 5mm 5mm;
