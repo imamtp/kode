@@ -134,7 +134,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             xtype: 'comboxtaxtype',
                             labelWidth: 100,
                             readOnly: true,
-                            valueField: 'idtax',
+                            valueField: 'rate',
                             id: 'cb_tax_id_poinvoice',
                             listeners: {
                                 select: function(combo, record, index) {
@@ -142,6 +142,11 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                                     // updateGridPurchaseOrder();
                                 }
                             }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'include_tax_poinvoice',
+                            hidden: true
                         }
                     ]
                 },
@@ -850,16 +855,19 @@ function updateGridPurchaseInvoice(tipe) {
 }
 
 function updateSelisih() {
+    var freightcost = str_replace(',', '', Ext.getCmp('angkut_poinvoice').getValue()) * 1;
+    var is_include_tax = Ext.getCmp('include_tax_poinvoice').getValue() * 1;
+    var subtotal = str_replace(',', '', Ext.getCmp('subtotal_poinvoice').getValue()) * 1;
+    var dpp = is_include_tax ? subtotal / 1.1 : subtotal;
+    dpp += freightcost;
+    var rate_tax = Ext.getCmp('cb_tax_id_poinvoice').getValue() * 1;
+    var tax = dpp * rate_tax / 100;
+
     var totalPayment = str_replace(',', '', Ext.getCmp('total_poinvoice').getValue()) * 1 + str_replace(',', '', Ext.getCmp('angkut_poinvoice').getValue()) * 1;
-    // console.log('totalPayment:'+totalPayment);
-
     var sisa = totalPayment - str_replace('.', '', Ext.getCmp('pembayaran_poinvoice').getValue()) * 1;
-    console.log(sisa);
-    // Ext.getCmp('sisaBayar_poinvoice').setValue(sisa.toLocaleString('null', {
-    //     minimumFractionDigits: 0
-    // }));
-
     Ext.getCmp('sisaBayar_poinvoice').setValue(renderNomor(sisa));
+    Ext.getCmp('dpp_poinvoice').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak_poinvoice').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
 }
 
 function validasiPurchaseInvoice() {
