@@ -95,31 +95,31 @@
           <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
             <tr>
               <td colspan = "3" align="right"><b>Subtotal :</b></td>
-              <td colspan = "2" align="right" width="200"><?=$data['subtotal']?></td>
+              <td colspan = "2" align="right" width="250"><?=$data['subtotal']?></td>
             </tr>
             <tr>
               <td colspan = "3" align="right"><b>DPP :</b></td>
-              <td align="right" width="150"><?=$data['dpp']?></td>
-              <td></td>
+              <td align="right" width="130"><?=$data['dpp']?></td>
+              <td width="120"></td>
             </tr>
             <tr>
               <td colspan = "3" align="right"><b>PPN :</b></td>
-              <td align="right" width="150"><?=$data['tax']?></td>
+              <td align="right" ><?=$data['tax']?></td>
               <td></td>
             </tr>
             <tr>
               <td colspan = "3" align="right"><b>Total Setelah Pajak :</b></td>
-              <td colspan = "2" align="right" width="200"><?=$data['totalamount']?></td>
+              <td colspan = "2" align="right"><?=$data['totalamount']?></td>
             </tr>
             <?php if($data['balance']!=0): ?>
             <tr>
               <td colspan = "3" align="right"><b>Saldo Terhutang :</b></td>
-              <td colspan = "2" align="right" width="200"><?=$data['balance']?></td>
+              <td colspan = "2" align="right"><?=$data['balance']?></td>
             </tr>
             <?php endif; ?>
             <tr>
               <td colspan = "3" align="right"><b>Terbilang :</b></td>
-              <td colspan = "2" align="left" width="200"><?=$data['terbilang']?></td>
+              <td colspan = "2" align="left"><?=$data['terbilang']?></td>
             </tr>
           </table>
         </table>
