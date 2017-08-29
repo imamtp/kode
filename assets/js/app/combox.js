@@ -1074,8 +1074,10 @@ Ext.define('comboxCustomer', {
     displayField: 'namecustomer',
     valueField: 'idcustomer',
     name: 'idcustomer',
-    editable: false,
+    // editable: false,
     triggerAction: 'all',
+    queryMode: 'remote',
+    queryParam: 'searchStr',
     store: storeCustomer
 });
 
