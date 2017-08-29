@@ -5,10 +5,6 @@
     <title><?=$title?></title>
     <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
     <link href="<?=base_url()?>/assets/css/print.css" rel="stylesheet">
-
-    <style>
-   
-    </style>
 </head>
 
 <?php
@@ -46,7 +42,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-right">
+        <div class="col-xs-5 col-xs-offset-2">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Supplier: </h4>
@@ -76,10 +72,10 @@
                   <th>NO SKU</th>   
                   <th>KD BRG</th>                       
                   <th>NAMA BRG</th>    
-                  <th>KD COIL SUPP</th>
-                  <th>QTY TERIMA</th>
+                  <th width="80">KD COIL SUPP</th>
+                  <th width="80">QTY TERIMA</th>
                   <th>SATUAN</th>
-                  <th>KD GUDANG</th>
+                  <th width="30">KD GDG</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,8 +99,7 @@
       </div>
 
       <p>&nbsp;</p>
-      <div class="page-break"></div>
-       <div class="row">
+      <div class="row">
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -139,7 +134,7 @@
               <p style="text-align: center">Catatan</p>
             </div>
             <div class="panel-body">
-             <p>
+            <p>
               <?=$data['header']->notes?>
               </p>
             </div>
