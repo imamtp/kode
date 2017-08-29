@@ -209,7 +209,9 @@ function showPurchaseOrderData(record) {
     Ext.getCmp('supplierNamePurchaseOrder').setValue(record.data.namesupplier);
     Ext.getCmp('supplierPurchaseOrder').setValue(record.data.idsupplier);
 
-    Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
+    Ext.getCmp('cb_tax_id_po').getStore().load(function() {
+        Ext.getCmp('cb_tax_id_po').setValue(record.data.rate);
+    });
 
     var checktax = record.data.include_tax * 1 == 1 ? true : false;
     Ext.getCmp('include_tax_po').setValue(checktax);
@@ -468,10 +470,11 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
     Ext.getCmp('nogr_poinvoice').setValue(selectedRecord.get('no_goods_receipt'));
     Ext.getCmp('po_date_poinvoice').setValue(selectedRecord.get('po_date'));
     Ext.getCmp('cbUnit_poinvoice').setValue(selectedRecord.get('idunit'));
-    Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('idtax'));
+    Ext.getCmp('cb_tax_id_poinvoice').setValue(selectedRecord.get('rate_tax'));
     Ext.getCmp('supplier_poinvoice').setValue(selectedRecord.get('idsupplier'));
     Ext.getCmp('nofpsup_poinvoice').setValue(selectedRecord.get('nofpsup'));
     Ext.getCmp('notes_pi').setValue(selectedRecord.get('notes'));
+    Ext.getCmp('include_tax_poinvoice').setValue(selectedRecord.get('include_tax'));
 
     Ext.getCmp('supplier_poinvoice').getStore().load(function(records) {
         var supp = records.filter(function(item) {
@@ -479,9 +482,6 @@ function loadDataFormPurchaseInvoice(selectedRecord, option) {
         });
         Ext.getCmp('memo_poinvoice').setValue(selectedRecord.get('memo') || "Purchase Invoice : " + supp[0].data.namesupplier);
     });
-    Ext.getCmp('cb_tax_id_poinvoice').getStore().load();
-
-    // Ext.getCmp('cb_status_poinvoice').setValue(5);
 
     var subtotal = selectedRecord.get('subtotal') * 1;
     var dpp = selectedRecord.get('dpp') * 1;

@@ -115,6 +115,33 @@ function showSalesOrderData(record) {
     Ext.getCmp('salesman_name_so').setValue(record.data.firstname);
     Ext.getCmp('salesman_id_so').setValue(record.data.salesman_id);
 
+    Ext.getCmp('diskonSalesOrder').setValue(record.data.disc);
+
+    Ext.getCmp('comboxpaymentSalesOrder').setValue(record.data.idpayment);
+    Ext.getCmp('ddaysSalesOrder').setValue(record.data.ddays);
+    Ext.getCmp('eomddaysSalesOrder').setValue(record.data.eomddays);
+    Ext.getCmp('percentagediscSalesOrder').setValue(record.data.percentagedisc);
+    Ext.getCmp('daysdiscSalesOrder').setValue(record.data.daydisc);
+    Ext.getCmp('dmaxSalesOrder').setValue(record.data.dmax);
+
+    switch (Ext.getCmp('comboxpaymentSalesOrder').getValue()) {
+        case '3':
+            Ext.getCmp('ddaysSalesOrder').setDisabled(false);
+            Ext.getCmp('ddaysSalesOrder').setVisible(true);
+            break;
+        case '4':
+            Ext.getCmp('eomddaysSalesOrder').setDisabled(false);
+            Ext.getCmp('eomddaysSalesOrder').setVisible(true);
+            break;
+        case '5':
+            Ext.getCmp('percentagediscSalesOrder').setDisabled(false);
+            Ext.getCmp('daysdiscSalesOrder').setDisabled(false);
+            Ext.getCmp('dmaxSalesOrder').setDisabled(false);
+            Ext.getCmp('percentagediscSalesOrder').setVisible(true);
+            Ext.getCmp('daysdiscSalesOrder').setVisible(true);
+            Ext.getCmp('dmaxSalesOrder').setVisible(true);
+            break;
+    }
     //insert item to grid
     Ext.Ajax.request({
         url: SITE_URL + 'sales/get_item_sales',

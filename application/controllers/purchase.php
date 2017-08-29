@@ -729,6 +729,7 @@ class purchase extends MY_Controller {
                     );
                     
                     //update purchaseitem_batch, set no batch
+                    $this->db->where('purchase_batch_id', $v->purchase_batch_id);
                     $this->db->update('purchaseitem_batch', array('no_batch'=>$nobatch));
 
                     //insert inventory, stock and stock history

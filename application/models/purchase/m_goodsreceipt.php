@@ -63,6 +63,7 @@ class m_goodsreceipt extends CI_Model {
                 a.received_by,
                 b.idtax,
                 b.include_tax,
+                g.rate as rate_tax,
                 (c.firstname || ' ' || c.lastname) as name_received_by,
                 a.status_gr,
                 b.idsupplier,

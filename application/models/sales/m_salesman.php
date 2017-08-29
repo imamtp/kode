@@ -37,7 +37,7 @@ class m_salesman extends CI_Model {
     }
 
     function whereQuery() {
-        return "  a.deleted = 0 and b.group_id = 5 ";
+        return "  a.deleted = 0";
     }
 
     function orderBy() {

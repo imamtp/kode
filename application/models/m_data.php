@@ -146,6 +146,7 @@ class m_data extends CI_Model {
             $dtunit['logo'] = $runit->logo==null ? 'logo_aktiva2.png' : $runit->logo;
             $dtunit['namaunit'] = $runit->namaunit;
             $dtunit['alamat'] = $runit->alamat;
+            $dtunit['alamat3'] = $runit->alamat3;
             $dtunit['telp'] = $runit->telp;
             $dtunit['fax'] = $runit->fax;
         } else {

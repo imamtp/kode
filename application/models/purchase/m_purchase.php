@@ -157,6 +157,7 @@ class m_purchase extends CI_Model {
                 b.companyaddress,
                 b.telephone,
                 b.fax,
+                a.subtotal,
                 a.total_dpp,
                 a.tax,
                 a.totalamount,
@@ -195,10 +196,11 @@ class m_purchase extends CI_Model {
             $dtcetak['detail'] = $this->query_itempurchase($idpurchase);
 
             $dtcetak['no'] = $r->nopurchase;
-            $dtcetak['dpp'] = number_format($r->total_dpp);
-            $dtcetak['tax'] = $r->tax;
-            $dtcetak['totalamount'] = $r->totalamount;
-            $dtcetak['balance'] = $r->balance;
+            $dtcetak['subtotal'] = number_format($r->subtotal,2);
+            $dtcetak['dpp'] = number_format($r->total_dpp,2);
+            $dtcetak['tax'] = number_format($r->tax,2);
+            $dtcetak['totalamount'] = number_format($r->totalamount,2);
+            $dtcetak['balance'] = number_format($r->balance,2);
             $dtcetak['terbilang'] = terbilang($r->totalamount);
             $dtcetak['memo'] = $r->memo;
             $dtcetak['datetrans'] = $r->date;
@@ -209,6 +211,7 @@ class m_purchase extends CI_Model {
             $dtcetak['logo'] = $runit['logo'];
             $dtcetak['namaunit'] = $runit['namaunit'];
             $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['alamat3'] = $runit['alamat3'];
             $dtcetak['telp'] = $runit['telp'];
             $dtcetak['fax'] = $runit['fax'];
 
@@ -284,6 +287,7 @@ class m_purchase extends CI_Model {
                 a.invno,
                 a.nameinventory,
                 a.no_batch,
+                a.notes,
                 a.qty,
                 a.short_desc,
                 a.warehouse_code as whcode,
@@ -305,6 +309,7 @@ class m_purchase extends CI_Model {
                 a.received_date,
                 a.invoice_date,
                 a.received_by,
+                a.subtotal,
                 a.dpp,
                 a.tax,
                 a.freightcost,
@@ -354,6 +359,7 @@ class m_purchase extends CI_Model {
             $dtcetak['no'] = $r->no_goods_receipt;
             $dtcetak['no_inv'] = $r->no_invoice;
             
+            $dtcetak['terbilang'] = terbilang($r->totalamount);
             $dtcetak['notes'] = $r->notes;
             $dtcetak['datetrans'] = $r->received_date;
             $dtcetak['datetrans_inv'] = $r->invoice_date;
