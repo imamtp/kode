@@ -23,7 +23,7 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <h3><?=$title?></h3>
-          <h4><small>NO: #<?=$data['header']['job_no']?><br>Harus Selesai Tanggal: <?=backdate2($data['header']['req_ship_date'])?><br></small></h4>
+          <h4>NO: #<?=$data['header']['job_no']?><br>Harus Selesai Tanggal: <?=backdate2($data['header']['req_ship_date'])?><br></h4>
         </div>
       </div>
       

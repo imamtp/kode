@@ -23,7 +23,7 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <h3><?=$title?></h3>
-          <h4><small>Tanggal Selesai: <?=$data['finished_date']?> <br>NO: #<?=$data['job_no']?></small></h4>
+          <h4>Tanggal Selesai: <?=$data['finished_date']?> <br>NO: #<?=$data['job_no']?></h4>
         </div>
       </div>
       
@@ -65,7 +65,7 @@
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
           <tr>
-            <td colspan="2"><b>Finished Goods List:</b></td>
+            <td colspan="2"></td>
           </tr>
           <?php if(count($data['fg_list'])>0): ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">

@@ -5,10 +5,6 @@
     <title><?=$title?></title>
     <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
     <link href="<?=base_url()?>/assets/css/print.css" rel="stylesheet">
-
-    <style>
-   
-    </style>
 </head>
 
 <?php
@@ -26,8 +22,8 @@
           </h1>
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
-          <h2><?=$title?></h2>
-          <h3><small>Tanggal Terima: <?=backdate2($data['datetrans'])?> <br>NO: #<?=$data['no']?></small></h3>
+          <h3><?=$title?></h3>
+          <h4>Tanggal Terima: <?=backdate2($data['datetrans'])?> <br>NO: #<?=$data['no']?></h4>
         </div>
       </div>
       
@@ -46,7 +42,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-right">
+        <div class="col-xs-5 col-xs-offset-2">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Supplier: </h4>
@@ -66,7 +62,7 @@
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
           <tr>
-            <td colspan="2"><b>Item List:</b></td>
+            <td colspan="2"></td>
           </tr>
           <?php if($data['detail']!=null) : ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
@@ -76,10 +72,10 @@
                   <th>NO SKU</th>   
                   <th>KD BRG</th>                       
                   <th>NAMA BRG</th>    
-                  <th>NO BATCH</th>
-                  <th>QTY TERIMA</th>
+                  <th width="80">KD COIL SUPP</th>
+                  <th width="80">QTY TERIMA</th>
                   <th>SATUAN</th>
-                  <th>KD GUDANG</th>
+                  <th width="30">KD GDG</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,7 +85,7 @@
                   <td><?=$value['sku_no']?></td>
                   <td><?=$value['invno']?></td>
                   <td><?=$value['nameinventory']?></td>  
-                  <td><?=$value['no_batch']?></td>
+                  <td><?=$value['notes']?></td>
                   <td align="right"><?=number_format($value['qty'],2)?></td>
                   <td><?=$value['short_desc']?></td>
                   <td><?=$value['whcode']?></td>
@@ -103,14 +99,15 @@
       </div>
 
       <p>&nbsp;</p>
-       <div class="row">
+      <div class="row">
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Received By</h4>
+              <p style="text-align: center;">Diterima oleh</p>
             </div>
             <div class="panel-body">
-             <p>
+              <br><br><br><br>
+              <p>
                 By: <?=$data['header']->receiver?><br>
                 At: <?=backdate2($data['header']->received_date)?><br>
               </p>
@@ -120,10 +117,11 @@
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Confirmed By</h4>
+              <p style="text-align: center;">Dikonfirmasi oleh</p>
             </div>
             <div class="panel-body">
-             <p>
+              <br><br><br><br>
+              <p>
                 By: <?=$data['header']->confirmed_by?><br>
                 At: <?=date('d-m-Y', strtotime($data['header']->confirmed_date))?><br>
               </p>
@@ -133,10 +131,10 @@
         <div class="col-xs-4 ">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>Notes</h4>
+              <p style="text-align: center">Catatan</p>
             </div>
             <div class="panel-body">
-             <p>
+            <p>
               <?=$data['header']->notes?>
               </p>
             </div>
