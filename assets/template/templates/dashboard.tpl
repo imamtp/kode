@@ -423,7 +423,9 @@
                     }
                 }
             });
-           /* Ext.window.Window.override({
+           /* 
+           disable animasi
+           Ext.window.Window.override({
                 animateTarget: Ext.getDoc(), //animate on show/close from top left of document
 
                 maximize: function() {
