@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-right">
+        <div class="col-xs-5 col-xs-offset-2">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Supplier: </h4>
@@ -124,7 +124,7 @@
           </table>
         </table>
       </div> <!-- row -->
-      
+
       <div class="page-break"></div>
       <div class="row">
 
