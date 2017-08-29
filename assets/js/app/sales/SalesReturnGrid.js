@@ -238,6 +238,8 @@ Ext.define(dir_sys + 'sales.SalesReturnGrid', {
 
                 Ext.getCmp('btnRecordSalesReturn').show();
                 Ext.getCmp('btnRecordDeliverySalesReturn').hide();
+
+                storeCustomer.load();
             }
         }, {
             hidden: true,
