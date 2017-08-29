@@ -341,12 +341,11 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         }, '->',
                         {
                             xtype: 'textfield',
-                            readOnly: true,
                             align: 'right',
                             readOnly: true,
                             labelWidth: 150,
-                            id: 'total_poinvoice',
-                            fieldLabel: 'Setelah Pajak',
+                            id: 'totalPajak_poinvoice',
+                            fieldLabel: 'Pajak',
                             fieldStyle: 'text-align: right;'
                         }
                     ]
@@ -403,8 +402,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                             align: 'right',
                             readOnly: true,
                             labelWidth: 150,
-                            id: 'totalPajak_poinvoice',
-                            fieldLabel: 'Pajak',
+                            id: 'dpp_poinvoice',
+                            fieldLabel: 'Dasar Pengenaan Pajak',
                             fieldStyle: 'text-align: right;'
                         }
                     ]
@@ -416,12 +415,19 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
+                            // readOnly:true,
+                            id: 'angkut_poinvoice',
                             align: 'right',
-                            readOnly: true,
+                            //                            readOnly: true,
                             labelWidth: 150,
-                            id: 'dpp_poinvoice',
-                            fieldLabel: 'Dasar Pengenaan Pajak',
-                            fieldStyle: 'text-align: right;'
+                            fieldLabel: 'Biaya Angkut',
+                            fieldStyle: 'text-align: right;',
+                            listeners: {
+                                'blur': function() {
+                                    this.setRawValue(renderNomor2(this.getValue()));
+                                    updateSelisih();
+                                }
+                            }
                         }
                     ]
                 },
@@ -621,19 +627,13 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseInvoice', {
                         '->',
                         {
                             xtype: 'textfield',
-                            // readOnly:true,
-                            id: 'angkut_poinvoice',
+                            readOnly: true,
                             align: 'right',
-                            //                            readOnly: true,
+                            readOnly: true,
                             labelWidth: 150,
-                            fieldLabel: 'Biaya Angkut',
-                            fieldStyle: 'text-align: right;',
-                            listeners: {
-                                'blur': function() {
-                                    this.setRawValue(renderNomor2(this.getValue()));
-                                    updateSelisih();
-                                }
-                            }
+                            id: 'total_poinvoice',
+                            fieldLabel: 'Setelah Pajak',
+                            fieldStyle: 'text-align: right;'
                         }
                     ]
                 },
@@ -862,12 +862,12 @@ function updateSelisih() {
     dpp += freightcost;
     var rate_tax = Ext.getCmp('cb_tax_id_poinvoice').getValue() * 1;
     var tax = dpp * rate_tax / 100;
+    var total = dpp + tax;
 
-    var totalPayment = str_replace(',', '', Ext.getCmp('total_poinvoice').getValue()) * 1 + str_replace(',', '', Ext.getCmp('angkut_poinvoice').getValue()) * 1;
-    var sisa = totalPayment - str_replace('.', '', Ext.getCmp('pembayaran_poinvoice').getValue()) * 1;
-    Ext.getCmp('sisaBayar_poinvoice').setValue(renderNomor(sisa));
     Ext.getCmp('dpp_poinvoice').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('totalPajak_poinvoice').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('total_poinvoice').setValue(total.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('sisaBayar_poinvoice').setValue(total.toLocaleString('null', { maximumFractionDigits: 2 }));
 }
 
 function validasiPurchaseInvoice() {
