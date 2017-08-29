@@ -1376,6 +1376,7 @@ class Backend extends MY_Controller {
         $param = "";
         $display=false;
         $d = array();
+        $where_field = array();
         $orderby=false;
         $orderbyfield=null;
         if ($data == 'bussinestype') {
@@ -1404,6 +1405,7 @@ class Backend extends MY_Controller {
             $field = array('product_id', 'product_code');
         } else if ($data == 'customer') {
             $field = array('idcustomer', 'namecustomer');
+            $where_field = array('namecustomer');
         } else if ($data == 'customertype') {
             $field = array('idcustomertype', 'namecustype');
         } else if ($data == 'employeetype') {
@@ -1483,6 +1485,23 @@ class Backend extends MY_Controller {
             $this->db->order_by($orderbyfield);
         }
 
+        $searchStr = $this->input->get('searchStr');
+        if(count($where_field)>0 && $searchStr!=''){
+            //remote query search combobox
+            
+
+            // if(count($where_field)>0){
+                foreach($where_field as $v){
+                    // $this->db->where();
+                    $this->db->like($v,strtolower($searchStr));
+                    $this->db->or_like($v,strtoupper($searchStr));
+                    $this->db->or_like($v,ucwords(strtolower($searchStr)));
+                }
+                // >where('type','staff')
+                
+            // }
+        }
+
         if (isset($_GET['xtraparam'])) {
             $p = explode('=', $_GET['xtraparam']);
             $this->db->where($p[0], $p[1]);
@@ -1557,6 +1576,9 @@ class Backend extends MY_Controller {
          
             // $q = $this->db->get($data);
         }
+
+       
+
         $q = $this->db->get($data);
 
         // header('Content-Type: text/javascript; charset=UTF-8');
@@ -1564,6 +1586,19 @@ class Backend extends MY_Controller {
         // header('Access-Control-Allow-Origin: *');
         // header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
         $this->fetchJson($q, $field);
+    }
+
+    function cb($werfield,$query){
+        // $query = 'query';
+        // $wer = array('namecustomer','idcustomer','nocustomer');
+        $str = '';
+        if(count($werfield)>0){
+            foreach($werfield as $v){
+                $str.= " and ($v like '%".strtolower($query)."%' OR $v like '%".strtoupper($query)."%' OR $v like '%".ucwords(strtolower($query))."%')";
+                // $str.= " and ($v like '%".ucwords(strtolower($query))."%' )";
+            }
+        }
+        return $str;
     }
 
     function comboxTahunPayroll()
