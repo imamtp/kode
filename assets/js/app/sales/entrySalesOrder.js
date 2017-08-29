@@ -494,8 +494,14 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        '->',
+                    items: [{
+                            xtype: 'textfield',
+                            name: 'ship_address',
+                            id: 'shipaddressSalesOrder',
+                            labelWidth: 120,
+                            width: 600,
+                            fieldLabel: 'Alamat Pengiriman',
+                        },
                         '->',
                         {
                             xtype: 'textfield',
@@ -519,7 +525,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                             margin: {
                                 right: 10
                             },
-                            labelWidth: 100,
+                            labelWidth: 120,
                             valueField: 'value',
                             listeners: {
                                 select: function() {
@@ -687,7 +693,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     items: [{
                             xtype: 'textfield',
                             width: 620,
-                            labelWidth: 100,
+                            labelWidth: 120,
                             value: 'Sales Order',
                             id: 'memoSalesOrder',
                             fieldLabel: 'Memo'
@@ -808,7 +814,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     salesman_id: Ext.getCmp('salesman_id_so').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
                     delivery_date: Ext.getCmp('delivery_date_SalesOrder').getValue(),
-                    // shipaddressSalesOrder: Ext.getCmp('shipaddressSalesOrder').getValue(),
+                    shipaddress: Ext.getCmp('shipaddressSalesOrder').getValue(),
                     idpayment: Ext.getCmp('comboxpaymentSalesOrder').getValue(),
                     ddays: Ext.getCmp('ddaysSalesOrder').getValue(),
                     eomddays: Ext.getCmp('eomddaysSalesOrder').getValue(),
@@ -822,15 +828,6 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     discSalesOrder: Ext.getCmp('diskonSalesOrder').getValue(),
                     totalSalesOrder: Ext.getCmp('totalSalesOrder').getValue(),
                     totalPajak: Ext.getCmp('totalPajakSalesOrder').getValue(),
-                    // shippingSalesOrder: Ext.getCmp('shippingSalesOrder').getValue(),
-                    // angkutSalesOrder: Ext.getCmp('angkutSalesOrder').getValue(),
-                    // pembayaranSalesOrder: Ext.getCmp('pembayaranSalesOrder').getValue(),
-                    // sisaBayarSalesOrder: Ext.getCmp('sisaBayarSalesOrder').getValue(),
-                    // paymentSalesOrder: Ext.getCmp('paymentSalesOrder').getValue(),
-                    // tglPelunasanSalesOrder: Ext.getCmp('tglPelunasanSalesOrder').getValue(),
-                    // idcurrency: Ext.getCmp('comboxcurrencySalesOrder').getValue(),
-                    // idaccountSalesOrder: Ext.getCmp('idaccountSalesOrder').getValue(),
-                    // noinvoice: Ext.getCmp('noinvoiceSalesOrder').getValue(),
                     unit: Ext.getCmp('cbUnitEntrySalesOrder').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
                     ratetax: Ext.getCmp('cb_tax_id_so').getValue(),
@@ -1029,8 +1026,8 @@ function validasiSalesOrder() {
         Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
     } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan konsumen');
-        // } else if (Ext.getCmp('salesman_name_so').getValue() == null) {
-        //     Ext.Msg.alert('Failed', 'Tentukan Sales Person');
+    } else if (Ext.getCmp('shipaddressSalesOrder').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Tentukan Alamat Pengiriman');
     } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
     } else if (Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {

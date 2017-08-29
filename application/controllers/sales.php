@@ -152,7 +152,6 @@ class sales extends MY_Controller {
 
         $header = array(
             'idsales' => $idsales,
-            'idpayment'=> $this->input->post('paymentSalesOrder') == '' ? null : $this->input->post('paymentSalesOrder'),
             'idsales_quote'=> $this->input->post('idsales_quote') == '' ? null : $this->input->post('idsales_quote'),
             'idcustomer' => $this->input->post('customerSalesOrder'),
             // 'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
@@ -160,18 +159,25 @@ class sales extends MY_Controller {
             'date_sales' => date('Y-m-d'),
             'no_sales_order' => $this->input->post('nojurnalSalesOrder') != null ? $this->input->post('nojurnalSalesOrder') : $noarticle,
             'idtax' => $idtax,
-            // 'shipto'=> $this->input->post('shipaddressSalesOrder'),
+            'shipaddress'=> $this->input->post('shipaddress'),
             'subtotal' => clearnumberic($this->input->post('subtotalSalesOrder')),
             'freight' => clearnumberic($this->input->post('angkutSalesOrder')),
             'tax' => clearnumberic($this->input->post('totalPajak')),
             'include_tax'=> $this->input->post('include_tax') == 'true' ? 1 : 0,
             'disc' => clearnumberic($this->input->post('discSalesOrder')),
             'totalamount' => clearnumberic($this->input->post('totalSalesOrder')),
-            'comments' => $this->input->post('memoSalesOrder'),
+            'comments' => $this->input->post('memoSalesOrder')?:null,
             'idshipping' => $this->input->post('shippingSalesOrder') == '' ? null : $this->input->post('shippingSalesOrder'),
             'freight'=> clearnumberic($this->input->post('freight')),
             'paidtoday'=> 0,
             'balance'=> clearnumberic($this->input->post('totalSalesOrder')),
+
+            'idpayment'=> $this->input->post('idpayment'),
+            'ddays'=> $this->input->post('ddays')?:null,
+            'eomddays'=> $this->input->post('eomddays')?:null,
+            'percentagedisc'=> $this->input->post('percentagedisc')?:null,
+            'daydisc'=> $this->input->post('daydisc')?:null,
+            'dmax'=> $this->input->post('dmax')?:null,
             // 'isrecuring' => $this->input->post('paymentSalesQuotation'),
             // 'startdate' date,
             // 'recuntildate' date,
@@ -183,10 +189,25 @@ class sales extends MY_Controller {
              
              'status'  => $this->input->post('sales_order_status'),
             //  'idcurrency'  => $this->session->userdata('userid'),
-            'salesman_id'  => $this->input->post('salesman_id') == '' ? null : $this->input->post('salesman_id'),
+            'idemployee'=> $this->input->post('salesman_id') == '' ? null : $this->input->post('salesman_id'),
              'idunit'  => $this->input->post('unit')
         );
         
+        // $duedate = null;
+        // switch($header['idpayment']){
+        //     case 3:  //net d days
+        //         $duedate = date("Y-m-d", strtotime("+$header[ddays] day", strtotime($header['invoice_date'])));
+        //         break;
+        //     case 4: //emoddays
+        //         $eom = date('Y-m-t', strtotime($header['invoice_date']));
+        //         $duedate = date("Y-m-d", strtotime("+$header[eomddays] day", strtotime($eom)));
+        //         break;
+        //     case 5: //discount dmax
+        //         $duedate = date("Y-m-d", strtotime("+$header[ddmax] day", strtotime($header['invoice_date'])));
+        //         break;
+        // }
+        // $header['duedate'] = $duedate;
+
         if($statusform == 'input'){
             $header['userin'] = $this->session->userdata('userid');
             $header['datein'] = date('Y-m-d H:m:s');
