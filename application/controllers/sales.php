@@ -323,7 +323,7 @@ class sales extends MY_Controller {
                 'status'=>$status
             ));
            
-            $total_hpp = $this->m_stock->update_hpp($idunit,3,null,$idsales)['total_hpp'];
+            $total_hpp = $this->m_stock->update_hpp_old($idunit,3,null,$idsales)['total_hpp'];
 
             //create journal
             $journal = $this->m_jsales->sales_do(date('Y-m-d'),$total_hpp,$idunit,$qsales->idaccount_hppenjualan,$qsales->idaccount_persediaan,'Sales Delivery - NO SO : '.$qsales->no_sales_order);
