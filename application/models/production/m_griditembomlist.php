@@ -33,7 +33,7 @@ class m_griditembomlist extends CI_Model {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
                     left join brand b ON a.brand_id = b.brand_id
-                    join bom_detail c ON a.idinventory = c.idinventory and a.idunit = c.idunit
+                    join bom_detail c ON a.idinventory = c.idinventory 
                     join productmeasurement d ON d.measurement_id = c.measurement_id";
 
         return $query;
