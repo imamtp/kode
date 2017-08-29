@@ -482,9 +482,11 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                     Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
                                 } else if (selectedRecord.data.noinvoice === null || selectedRecord.data.noinvoice === '') {
                                     Ext.Msg.alert('Failure', 'Mohon buat invoice terlebih dahulu');
-                                } else if (selectedRecord.data.status * 1 == 8) {
-                                    Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
-                                } else {
+                                }
+                                // else if (selectedRecord.data.status * 1 == 8) {
+                                //     Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
+                                // } 
+                                else {
                                     Ext.Ajax.request({
                                         url: SITE_URL + 'sales/set_status',
                                         method: 'POST',
