@@ -154,9 +154,14 @@ class production extends MY_Controller
                 'enddate_job'=> backdate($end_date[0]).' '.$end_date[1],
                 'schedule_userin'=>$this->session->userdata('userid'),
                 'schedule_datein'=>date('Y-m-d H:m:s'),
-                'pic_id'=>$this->input->post('pic_id'), //idemployee
+                
                 'status'=>3 //on progress
             );
+
+            if($this->input->post('pic_id')!=''){
+                $data['pic_id'] = $this->input->post('pic_id'); //idemployee
+            }
+
             $this->db->where('job_order_id', $job_order_id);
             $this->db->update('job_order', $data);
         }

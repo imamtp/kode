@@ -494,8 +494,14 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        '->',
+                    items: [{
+                            xtype: 'textfield',
+                            name: 'ship_address',
+                            id: 'shipaddressSalesOrder',
+                            labelWidth: 120,
+                            width: 600,
+                            fieldLabel: 'Alamat Pengiriman',
+                        },
                         '->',
                         {
                             xtype: 'textfield',
@@ -511,8 +517,164 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        '->',
+                    items: [{
+                            xtype: 'comboxpaymentterm',
+                            id: 'comboxpaymentSalesOrder',
+                            // cls:'my-mandatory-field',
+                            name: 'idpayment',
+                            margin: {
+                                right: 10
+                            },
+                            labelWidth: 120,
+                            valueField: 'value',
+                            listeners: {
+                                select: function() {
+                                    Ext.getCmp('ddaysSalesOrder').setDisabled(true);
+                                    Ext.getCmp('eomddaysSalesOrder').setDisabled(true);
+                                    Ext.getCmp('percentagediscSalesOrder').setDisabled(true);
+                                    Ext.getCmp('daysdiscSalesOrder').setDisabled(true);
+                                    Ext.getCmp('dmaxSalesOrder').setDisabled(true);
+
+                                    Ext.getCmp('ddaysSalesOrder').setVisible(false);
+                                    Ext.getCmp('eomddaysSalesOrder').setVisible(false);
+                                    Ext.getCmp('percentagediscSalesOrder').setVisible(false);
+                                    Ext.getCmp('daysdiscSalesOrder').setVisible(false);
+                                    Ext.getCmp('dmaxSalesOrder').setVisible(false);
+
+                                    switch (this.getValue()) {
+                                        case '3':
+                                            Ext.getCmp('ddaysSalesOrder').setDisabled(false);
+                                            Ext.getCmp('ddaysSalesOrder').setVisible(true);
+                                            break;
+                                        case '4':
+                                            Ext.getCmp('eomddaysSalesOrder').setDisabled(false);
+                                            Ext.getCmp('eomddaysSalesOrder').setVisible(true);
+                                            break;
+                                        case '5':
+                                            Ext.getCmp('percentagediscSalesOrder').setDisabled(false);
+                                            Ext.getCmp('daysdiscSalesOrder').setDisabled(false);
+                                            Ext.getCmp('dmaxSalesOrder').setDisabled(false);
+                                            Ext.getCmp('percentagediscSalesOrder').setVisible(true);
+                                            Ext.getCmp('daysdiscSalesOrder').setVisible(true);
+                                            Ext.getCmp('dmaxSalesOrder').setVisible(true);
+                                            break;
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'ddaysSalesOrder',
+                            name: 'ddays',
+                            width: 120,
+                            inputWidth: 60,
+                            afterSubTpl: ' days',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'eomddaysSalesOrder',
+                            name: 'eomddays',
+                            width: 180,
+                            inputWidth: 60,
+                            beforeSubTpl: 'EOM ',
+                            afterSubTpl: ' days',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'percentagediscSalesOrder',
+                            name: 'percentagedisc',
+                            width: 90,
+                            inputWidth: 60,
+                            afterSubTpl: ' % /',
+                            maskRe: /[0-9.]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (this.getValue().substr(-1) == ".")
+                                            return true;
+
+                                        if (!Number.isNaN(parseFloat(this.getValue())))
+                                            this.setValue(parseFloat(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'daysdiscSalesOrder',
+                            name: 'daydisc',
+                            width: 120,
+                            inputWidth: 60,
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
+                        {
+                            xtype: 'textfield',
+                            id: 'dmaxSalesOrder',
+                            name: 'dmax',
+                            labelWidth: 50,
+                            inputWidth: 60,
+                            fieldLabel: 'NET ',
+                            maskRe: /[0-9]/,
+                            hidden: true,
+                            disabled: true,
+                            listeners: {
+                                'render': function(c) {
+                                    c.getEl().on('keyup', function() {
+                                        if (!Number.isNaN(parseInt(this.getValue())))
+                                            this.setValue(parseInt(this.getValue()));
+                                        else
+                                            this.setValue(0);
+                                    }, c)
+
+                                }
+                            }
+                        },
                         '->',
                         {
                             xtype: 'textfield',
@@ -531,7 +693,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     items: [{
                             xtype: 'textfield',
                             width: 620,
-                            labelWidth: 100,
+                            labelWidth: 120,
                             value: 'Sales Order',
                             id: 'memoSalesOrder',
                             fieldLabel: 'Memo'
@@ -652,22 +814,20 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     salesman_id: Ext.getCmp('salesman_id_so').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
                     delivery_date: Ext.getCmp('delivery_date_SalesOrder').getValue(),
-                    // shipaddressSalesOrder: Ext.getCmp('shipaddressSalesOrder').getValue(),
+                    shipaddress: Ext.getCmp('shipaddressSalesOrder').getValue(),
+                    idpayment: Ext.getCmp('comboxpaymentSalesOrder').getValue(),
+                    ddays: Ext.getCmp('ddaysSalesOrder').getValue(),
+                    eomddays: Ext.getCmp('eomddaysSalesOrder').getValue(),
+                    percentagedisc: Ext.getCmp('percentagediscSalesOrder').getValue(),
+                    daydisc: Ext.getCmp('daysdiscSalesOrder').getValue(),
+                    dmax: Ext.getCmp('dmaxSalesOrder').getValue(),
+
                     nojurnalSalesOrder: Ext.getCmp('nojurnalSalesOrder').getValue(),
                     memoSalesOrder: Ext.getCmp('memoSalesOrder').getValue(),
                     subtotalSalesOrder: Ext.getCmp('subtotalSalesOrder').getValue(),
                     discSalesOrder: Ext.getCmp('diskonSalesOrder').getValue(),
                     totalSalesOrder: Ext.getCmp('totalSalesOrder').getValue(),
                     totalPajak: Ext.getCmp('totalPajakSalesOrder').getValue(),
-                    // shippingSalesOrder: Ext.getCmp('shippingSalesOrder').getValue(),
-                    // angkutSalesOrder: Ext.getCmp('angkutSalesOrder').getValue(),
-                    // pembayaranSalesOrder: Ext.getCmp('pembayaranSalesOrder').getValue(),
-                    // sisaBayarSalesOrder: Ext.getCmp('sisaBayarSalesOrder').getValue(),
-                    // paymentSalesOrder: Ext.getCmp('paymentSalesOrder').getValue(),
-                    // tglPelunasanSalesOrder: Ext.getCmp('tglPelunasanSalesOrder').getValue(),
-                    // idcurrency: Ext.getCmp('comboxcurrencySalesOrder').getValue(),
-                    // idaccountSalesOrder: Ext.getCmp('idaccountSalesOrder').getValue(),
-                    // noinvoice: Ext.getCmp('noinvoiceSalesOrder').getValue(),
                     unit: Ext.getCmp('cbUnitEntrySalesOrder').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
                     ratetax: Ext.getCmp('cb_tax_id_so').getValue(),
@@ -707,6 +867,13 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                         storeGridItemSalesOrder.removeAll();
                         // storeGridItemSalesOrder.sync();
                         updateGridSalesOrder('general');
+
+                        Ext.getCmp('comboxpaymentSalesOrder').setValue();
+                        Ext.getCmp('ddaysSalesOrder').setValue();
+                        Ext.getCmp('eomddaysSalesOrder').setValue();
+                        Ext.getCmp('percentagediscSalesOrder').setValue();
+                        Ext.getCmp('daysdiscSalesOrder').setValue();
+                        Ext.getCmp('dmaxSalesOrder').setValue();
 
                         // if(mode=='print')
                         // {
@@ -812,8 +979,8 @@ function updateGridSalesOrder(tipe) {
         obj.set('total', net);
     });
 
-    dppSalesOrder = isIncludeTax ? (subtotalSalesOrder + total_diskon) / 1.1 : 0;
-    totalPajak += isIncludeTax ? dppSalesOrder * (taxrate * 1 / 100) : subtotalSalesOrder * (taxrate / 100);
+    dppSalesOrder = isIncludeTax ? (subtotalSalesOrder + total_diskon) / 1.1 : subtotalSalesOrder;
+    totalPajak += dppSalesOrder * (taxrate * 1 / 100);
     totalSalesOrder = isIncludeTax ? subtotalSalesOrder : subtotalSalesOrder + totalPajak;
     totalSalesOrder += angkutSalesOrder;
 
@@ -859,8 +1026,8 @@ function validasiSalesOrder() {
         Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
     } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan konsumen');
-        // } else if (Ext.getCmp('salesman_name_so').getValue() == null) {
-        //     Ext.Msg.alert('Failed', 'Tentukan Sales Person');
+    } else if (Ext.getCmp('shipaddressSalesOrder').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Tentukan Alamat Pengiriman');
     } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
     } else if (Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {
