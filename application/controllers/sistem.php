@@ -89,7 +89,9 @@ class sistem extends MY_Controller {
             // }
 
             if ($leaf == 'false') {
-                $menu .=",\"children\": [" . $this->makeSubMenu($r->sys_menu_id,$expanded) . "]";
+                if($this->input->get('node')!=0){
+                    $menu .=",\"children\": [" . $this->makeSubMenu($r->sys_menu_id,$expanded) . "]";
+                }                
             }
 
             $menu .="},";

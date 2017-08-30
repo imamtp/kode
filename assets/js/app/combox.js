@@ -1618,18 +1618,20 @@ Ext.define('comboxjenisptkp', {
     }
 });
 
-var tmpStoreShippingAddress = Ext.create('Ext.data.Store', {
-    fields: ['alamat', 'alamat2', 'alamat3'],
-    proxy: {
-        type: 'ajax',
-        url: SITE_URL + 'backend/combox/shippingaddress',
-        reader: {
-            type: 'json',
-            root: 'dat'
-        }
-    },
-    autoLoad: true
-});
+
+//di remarks. karna address harus diload pada saat dibutuhkan saja
+// var tmpStoreShippingAddress = Ext.create('Ext.data.Store', {
+//     fields: ['alamat', 'alamat2', 'alamat3'],
+//     proxy: {
+//         type: 'ajax',
+//         url: SITE_URL + 'backend/combox/shippingaddress',
+//         reader: {
+//             type: 'json',
+//             root: 'dat'
+//         }
+//     },
+//     autoLoad: true
+// });
 
 var storeShippingAddress = new Ext.data.ArrayStore({
     fields: ['address'],
@@ -1935,31 +1937,32 @@ Ext.define('comboxshipping', {
 });
 
 //shipping address//
-var tmpStoreShipAddress = Ext.create('Ext.data.Store', {
-    fields: ['alamat', 'alamat2', 'alamat3'],
-    proxy: {
-        type: 'ajax',
-        url: SITE_URL + 'backend/combox/shipaddress',
-        reader: {
-            type: 'json',
-            root: 'dat'
-        }
-    },
-    autoLoad: true
-});
+// var tmpStoreShipAddress = Ext.create('Ext.data.Store', {
+//     fields: ['alamat', 'alamat2', 'alamat3'],
+//     proxy: {
+//         type: 'ajax',
+//         url: SITE_URL + 'backend/combox/shipaddress',
+//         reader: {
+//             type: 'json',
+//             root: 'dat'
+//         }
+//     },
+//     autoLoad: true
+// });
 
 var storeShipAddress = new Ext.data.ArrayStore({
     fields: ['address'],
 });
 
 Ext.onReady(function() {
-    var data = tmpStoreShipAddress.data.items[0].data;
-    var addressarr = [
-        [data.alamat],
-        [data.alamat2],
-        [data.alamat3]
-    ];
-    storeShipAddress.loadData(addressarr);
+    // console.log(tmpStoreShipAddress)
+    // var data = tmpStoreShipAddress.data.items[0].data;
+    // var addressarr = [
+    //     [data.alamat],
+    //     [data.alamat2],
+    //     [data.alamat3]
+    // ];
+    // storeShipAddress.loadData(addressarr);
 });
 
 Ext.define('comboxshipaddress', {

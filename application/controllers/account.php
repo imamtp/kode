@@ -577,7 +577,9 @@ class account extends MY_Controller {
                     \"leaf\": $leaf";
 //            echo $leaf;
             if ($leaf == 'false') {
-                $menu .=",\"children\": [" . $this->makeSubMenu($r->idaccount, $active) . "]";
+                if($this->input->get('node')!=0){
+                    $menu .=",\"children\": [" . $this->makeSubMenu($r->idaccount, $active) . "]";
+                }
             }
 
             $menu .="},";
