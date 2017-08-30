@@ -605,11 +605,11 @@
 
     <script src='{$assets_url}/js/app/jurnal/AccList.js'></script>
     <script src='{$assets_url}/js/app/jurnal/formaddrow.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/formRecurring.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/gridRecurringPopup.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/gridRecurringDetail.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/formRecurringDetail.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/gridRecurring.js'></script>
+    {* <script src='{$assets_url}/js/app/jurnal/formRecurring.js'></script> *}
+    {* <script src='{$assets_url}/js/app/jurnal/gridRecurringPopup.js'></script> *}
+    {* <script src='{$assets_url}/js/app/jurnal/gridRecurringDetail.js'></script> *}
+    {* <script src='{$assets_url}/js/app/jurnal/formRecurringDetail.js'></script> *}
+    {* <script src='{$assets_url}/js/app/jurnal/gridRecurring.js'></script> *}
     <script src='{$assets_url}/js/app/jurnal/gridJournalTransDisburs.js'></script>
     <script src='{$assets_url}/js/app/jurnal/gridJournalTransGeneral.js'></script>
     <script src='{$assets_url}/js/app/jurnal/tabJournalTransaction.js'></script>
