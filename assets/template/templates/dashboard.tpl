@@ -703,6 +703,10 @@
     <script src='{$assets_url}/js/app/money/TabReconcile.js'></script>
     <script src='{$assets_url}/js/app/money/TabTransferMoney.js'></script>
 
+    
+    {* 
+    disable dulu
+    
     <script src='{$assets_url}/js/app/employee/ChooserListSalesman.js'></script>
     <script src='{$assets_url}/js/app/employee/importDataPegawai.js'></script>
     <script src='{$assets_url}/js/app/employee/importDataPotongan.js'></script>
@@ -730,7 +734,7 @@
     <script src='{$assets_url}/js/app/penggajian/dataPayroll.js'></script>
 
     <script src='{$assets_url}/js/app/clossing/clossingFormMonth.js'></script>
-    <script src='{$assets_url}/js/app/clossing/clossingFormYear.js'></script>
+    <script src='{$assets_url}/js/app/clossing/clossingFormYear.js'></script> *}
 
     <script src='{$assets_url}/js/app/report/neraca.js'></script>
     <script src='{$assets_url}/js/app/report/labarugi.js'></script>
