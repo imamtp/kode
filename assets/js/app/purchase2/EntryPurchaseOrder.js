@@ -935,7 +935,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
 });
 
 function updateGridPurchaseOrder(tipe) {
-    console.log('update run');
+    // console.log('update run');
     var addprefix = 'PurchaseOrder';
 
     var subtotalPurchaseOrder = 0 * 1;
@@ -957,7 +957,7 @@ function updateGridPurchaseOrder(tipe) {
         var diskon = (total / 100) * obj.data.disc;
         totaldiskon += diskon;
         var net = total - diskon;
-        console.log(total + ' - ' + diskon);
+        // console.log(total + ' - ' + diskon);
 
         subtotalPurchaseOrder += net;
         // totalPajak += (net / 100) * (taxrate * 1);
@@ -971,11 +971,25 @@ function updateGridPurchaseOrder(tipe) {
 
     sisaBayarPurchaseOrder = totalPurchaseOrder - pembayaranPurchaseOrder;
     // alert(totalPajak);
+
+    /*
     Ext.getCmp('subtotal' + addprefix).setValue(subtotalPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('total' + addprefix).setValue(totalPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('diskon' + addprefix).setValue(totaldiskon.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('dpp' + addprefix).setValue(dppPurchaseOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
+    
+    notes; remakrs dulu. ada kasus di firefox hasil number format beda diantara satu dengan yg lain
+    */
+
+    Ext.getCmp('subtotal' + addprefix).setValue(number_format(subtotalPurchaseOrder, 1));
+    Ext.getCmp('total' + addprefix).setValue(number_format(totalPurchaseOrder, 1));
+    Ext.getCmp('totalPajak' + addprefix).setValue(number_format(totalPajak, 1));
+    Ext.getCmp('diskon' + addprefix).setValue(number_format(totaldiskon, 1));
+    Ext.getCmp('dpp' + addprefix).setValue(number_format(dppPurchaseOrder, 1));
+
+    console.log(number_format(totalPajak, 1) + ' -> ' + totalPajak);
+
     // Ext.getCmp('pembayaran').setValue(pembayaranPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
     // Ext.getCmp('sisaBayarPurchaseOrder').setValue(sisaBayarPurchaseOrder.toLocaleString('null', {minimumFractionDigits: 2}));
 
