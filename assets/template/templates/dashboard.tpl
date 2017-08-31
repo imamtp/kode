@@ -532,11 +532,24 @@
    
 
     <!-- <script src='{$assets_url}/js/app/master/GridCustomerType.js'></script> -->
+    <script src='{$assets_url}/js/app/master/customer/type/FormCustomerType.js'></script>
+    <script src='{$assets_url}/js/app/master/customer/type/GridCustomerType.js'></script>
+    <script src='{$assets_url}/js/app/master/customer/ChooserListCustomer.js'></script>
+    <script src='{$assets_url}/js/app/master/customer/FormCustomer.js'></script>
+    <script src='{$assets_url}/js/app/master/customer/GridCustomer.js'></script>
+    <script src='{$assets_url}/js/app/master/customer/TabCustomer.js'></script>
 
+    <script src='{$assets_url}/js/app/master/InventoryCategory.js'></script>
     <!-- <script src='{$assets_url}/js/app/master/GridMasterProject.js'></script> -->
     <!-- <script src='{$assets_url}/js/app/master/WindowProjectList.js'></script> -->
 
-  
+    <script src='{$assets_url}/js/app/master/GridMasterMachineType.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterMachine.js'></script>
+    <script src='{$assets_url}/js/app/master/TabMasterProduction.js'></script>
+
+    <script src='{$assets_url}/js/app/master/GridMasterBank.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterCurrency.js'></script>
+    <script src='{$assets_url}/js/app/master/TabMasterFinancial.js'></script>
 
     <!-- <script src='{$assets_url}/js/app/master/GridMasterSupplierType.js'></script> -->
     <script src='{$assets_url}/js/app/master/supplier/type/FormSupplierType.js'></script>
