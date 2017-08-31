@@ -140,7 +140,7 @@ function addTab(title, menu_link, idmenu, first_load_store_id) {
 
             if (Ext.ClassManager.get(dir_sys + menu_link) === null) { //cek dulu, nama classnya udah ada apa belum. kalo belum load filenya
                 Ext.Loader.loadScript({
-                    url: 'assets/js/app/' + mod[0] + '/' + mod[1] + '.js',
+                    url: BASE_URL+'assets/js/app/' + mod[0] + '/' + mod[1] + '.js',
                     onLoad: function() {
                         console.log('ok');
                         if (!Ext.isDefined(tab)) {
