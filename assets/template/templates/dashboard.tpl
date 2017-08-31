@@ -661,7 +661,7 @@
 
     {*
     <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script> *}
-    {* <script src='{$assets_url}/js/app/money/gridReceiveMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/gridReceiveMoney.js'></script>
     <script src='{$assets_url}/js/app/money/AccListAddRowReceive.js'></script>
     <script src='{$assets_url}/js/app/money/formaddrowReceive.js'></script>
     <script src='{$assets_url}/js/app/money/accListReceive.js'></script>
@@ -727,7 +727,7 @@
     <script src='{$assets_url}/js/app/penggajian/prosesGaji2.js'></script>
     <script src='{$assets_url}/js/app/penggajian/prosesGaji.js'></script>
     <script src='{$assets_url}/js/app/penggajian/dataGajiGrid.js'></script>
-    <script src='{$assets_url}/js/app/penggajian/dataPayroll.js'></script> *}
+    <script src='{$assets_url}/js/app/penggajian/dataPayroll.js'></script>
 
     <script src='{$assets_url}/js/app/clossing/clossingFormMonth.js'></script>
     <script src='{$assets_url}/js/app/clossing/clossingFormYear.js'></script> 
