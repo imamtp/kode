@@ -476,8 +476,8 @@
     <!-- // <script src='{$assets_url}js/app/account/treeAccount.js'></script> -->
 
 
-    {* <script src='{$assets_url}/js/app/siswa/ImportDataSiswa.js'></script>
-    <script src='{$assets_url}/js/app/siswaGrid.js'></script> *}
+    <script src='{$assets_url}/js/app/siswa/ImportDataSiswa.js'></script>
+    <script src='{$assets_url}/js/app/siswaGrid.js'></script>
     <script src='{$assets_url}/js/app/pelangganGrid.js'></script>
     <script src='{$assets_url}/js/app/supplierGrid.js'></script>
 
@@ -490,7 +490,10 @@
     <script src='{$assets_url}js/app/hutangpiutang/regPiutang.js'></script> *}
 
 
-   
+    <script src='{$assets_url}/js/app/setup/company.js'></script>
+    <script src='{$assets_url}/js/app/setup/dataLocation.js'></script>
+    <script src='{$assets_url}/js/app/setup/companyUnit.js'></script>
+    <script src='{$assets_url}/js/app/setup/setupCompanyTab.js'></script>
 
     <!--<script src='{$assets_url}/js/app/setup/references/refTambahanGaji.js'></script>-->
     <!--<script src='{$assets_url}/js/app/setup/references/refTunjanganType.js'></script>-->
@@ -500,6 +503,14 @@
 
     <!--<script src='{$assets_url}/js/app/setup/references/refJenisPtkp.js'></script>-->
 
+    <script src='{$assets_url}/js/app/setup/MenuIndukListPopup.js'></script>
+    <script src='{$assets_url}/js/app/setup/AccKasListPayroll.js'></script>
+    <script src='{$assets_url}/js/app/setup/AccListPayroll.js'></script>
+    <script src='{$assets_url}/js/app/setup/AccListThr.js'></script>
+    <script src='{$assets_url}/js/app/setup/employeetype.js'></script>
+    <script src='{$assets_url}/js/app/setup/GridTreeAccUnitSetup.js'></script>
+    <script src='{$assets_url}/js/app/setup/linkedacc.js'></script>
+    <script src='{$assets_url}/js/app/setup/linkedacc2.js'></script>
     <!-- // <script src='{$assets_url}/js/app/setup/accountListCollected.js'></script> -->
     <!-- // <script src='{$assets_url}/js/app/setup/accountListPaid.js'></script> -->
    <!-- // <script src='{$assets_url}/js/app/setup/taxcode.js'></script>
@@ -528,7 +539,22 @@
   
 
     <!-- <script src='{$assets_url}/js/app/master/GridMasterSupplierType.js'></script> -->
-  
+    <script src='{$assets_url}/js/app/master/supplier/type/FormSupplierType.js'></script>
+    <script src='{$assets_url}/js/app/master/supplier/type/GridSupplierType.js'></script>
+    <script src='{$assets_url}/js/app/master/supplier/ChooserListSupplier.js'></script>
+    <script src='{$assets_url}/js/app/master/supplier/FormSupplier.js'></script>
+    <script src='{$assets_url}/js/app/master/supplier/GridSupplier.js'></script>
+    <script src='{$assets_url}/js/app/master/supplier/TabSupplier.js'></script>
+
+    <script src='{$assets_url}/js/app/master/GridMasterBrand.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterProductData.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterProductMeasurements.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterProductType.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterThickness.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterWarehouse.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterProductData.js'></script>
+    <script src='{$assets_url}/js/app/master/GridMasterRack.js'></script>
+    <script src='{$assets_url}/js/app/master/TabMasterInventory.js'></script>
 
     <script src='{$assets_url}/js/app/inventory/accListInventory.js'></script>
     <script src='{$assets_url}/js/app/inventory/inventoryProfileForm.js'></script>
