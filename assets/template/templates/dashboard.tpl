@@ -529,7 +529,9 @@
     <script src='{$assets_url}/js/app/setup/SetupUnitInsurance.js'></script>
     <script src='{$assets_url}/js/app/setup/supplierInvOpeningPopup.js'></script>-->
 
-   
+    <script src='{$assets_url}/js/app/master/project/ChooserListProject.js'></script>
+    <script src='{$assets_url}/js/app/master/project/FormProject.js'></script>
+    <script src='{$assets_url}/js/app/master/project/GridProject.js'></script>
 
     <!-- <script src='{$assets_url}/js/app/master/GridCustomerType.js'></script> -->
     <script src='{$assets_url}/js/app/master/customer/type/FormCustomerType.js'></script>
@@ -659,7 +661,74 @@
 
     {*
     <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script> *}
-  
+    {* <script src='{$assets_url}/js/app/money/gridReceiveMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/AccListAddRowReceive.js'></script>
+    <script src='{$assets_url}/js/app/money/formaddrowReceive.js'></script>
+    <script src='{$assets_url}/js/app/money/accListReceive.js'></script>
+    <script src='{$assets_url}/js/app/money/entryReceiveMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/TabReceiveMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/transferKasForm.js'></script>
+    <script src='{$assets_url}/js/app/money/gridTransferMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/SiswaListAddRowReceiveSiswa.js'></script>
+    <script src='{$assets_url}/js/app/money/AccListAddRowReceiveSiswa.js'></script>
+    <script src='{$assets_url}/js/app/money/formaddrowReceiveSiswa.js'></script>
+    <script src='{$assets_url}/js/app/money/accListReceiveSiswa.js'></script>
+    <script src='{$assets_url}/js/app/money/gridReceiveMoneySiswa.js'></script>
+    <script src='{$assets_url}/js/app/money/entryReceiveMoneySiswa.js'></script>
+    <script src='{$assets_url}/js/app/money/TabReceiveMoneySiswa.js'></script>
+
+    <script src='{$assets_url}/js/app/money/AccListAddRowImportReceive.js'></script>
+    <script src='{$assets_url}/js/app/money/importReceiveMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/gridImportReceiveMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/TabImportReceiveMoney.js'></script>
+
+    <script src='{$assets_url}/js/app/money/AccListAddRowImportSpend.js'></script>
+    <script src='{$assets_url}/js/app/money/importSpendMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/gridImportSpendMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/TabImportSpendMoney.js'></script>
+
+    <script src='{$assets_url}/js/app/money/gridSpendMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/AccListAddRowSpend.js'></script>
+    <script src='{$assets_url}/js/app/money/formaddrowSpend.js'></script>
+    <script src='{$assets_url}/js/app/money/accListSpend.js'></script>
+    <script src='{$assets_url}/js/app/money/entrySpendMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/TabSpendMoney.js'></script>
+    <script src='{$assets_url}/js/app/money/accListReconcile.js'></script>
+    <script src='{$assets_url}/js/app/money/accListReconcileEntryBank.js'></script>
+    <script src='{$assets_url}/js/app/money/accListReconcileOther.js'></script>
+    <script src='{$assets_url}/js/app/money/formaddrowReconcile.js'></script>
+    <script src='{$assets_url}/js/app/money/formaddrowReconcileOther.js'></script>
+    <script src='{$assets_url}/js/app/money/gridReconcile.js'></script>
+    <script src='{$assets_url}/js/app/money/entryReconcile.js'></script>
+    <script src='{$assets_url}/js/app/money/TabReconcile.js'></script>
+    <script src='{$assets_url}/js/app/money/TabTransferMoney.js'></script>
+    
+    <script src='{$assets_url}/js/app/employee/ChooserListSalesman.js'></script>
+    <script src='{$assets_url}/js/app/employee/importDataPegawai.js'></script>
+    <script src='{$assets_url}/js/app/employee/importDataPotongan.js'></script>
+    <script src='{$assets_url}/js/app/employee/importDataTunjangan.js'></script>
+    <script src='{$assets_url}/js/app/employee/gridAsuransiPopup.js'></script>
+    <script src='{$assets_url}/js/app/employee/sutriGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/anakGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/dataGaji.js'></script>
+    <script src='{$assets_url}/js/app/employee/tunjanganGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/potonganGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/asuransiEmpGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/payrollHistoryGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/TambahanGaji.js'></script>
+    <script src='{$assets_url}/js/app/employee/employeeGrid.js'></script>
+    <script src='{$assets_url}/js/app/employee/dataTHRGrid.js'></script>
+
+    <script src='{$assets_url}/js/app/penggajian/PilihPegawaiThr.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/ProsesThr.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/TunjanganPayroll.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/PotonganPayroll.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/PilihPegawaiPayroll.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/prosesGaji2.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/prosesGaji.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/dataGajiGrid.js'></script>
+    <script src='{$assets_url}/js/app/penggajian/dataPayroll.js'></script> *}
+
     <script src='{$assets_url}/js/app/clossing/clossingFormMonth.js'></script>
     <script src='{$assets_url}/js/app/clossing/clossingFormYear.js'></script> 
 
