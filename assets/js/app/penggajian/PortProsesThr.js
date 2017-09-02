@@ -388,7 +388,7 @@ Ext.define('TabPortDetailThr', {
     }
 });
 
-Ext.define('PortProsesThr', {
+Ext.define(dir_sys + 'penggajian.PortProsesThr', {
     extend: 'Ext.Panel',
     alias: 'widget.PortProsesThr',
     layout: 'border',

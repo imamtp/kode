@@ -16,7 +16,7 @@ class m_supplier extends CI_Model {
     }
 
     function selectField() {
-        return "a.idsupplier,a.idpayment,a.idshipping,a.code,a.namesupplier,a.companyaddress,a.companyaddress2,a.companyaddress3,a.companyaddress4,a.shipaddress,a.billaddress,a.telephone,a.handphone,a.fax,a.email,a.website,a.city,a.state,a.postcode,a.country,a.highestpo,a.avgdaypay,a.lastpayment,a.lastpurchase,a.expenseaccount,a.notes,a.userin,a.usermod,a.datein,a.datemod,a.idunit,a.status,a.deleted,a.idsuppliertype,b.name as typename";
+        return "a.idsupplier,a.idpayment,a.idshipping,a.code,a.namesupplier,a.companyaddress,a.companyaddress2,a.companyaddress3,a.companyaddress4,a.shipaddress,a.billaddress,a.telephone,a.handphone,a.fax,a.email,a.website,a.city,a.state,a.postcode,a.country,a.highestpo,a.avgdaypay,a.lastpayment,a.lastpurchase,a.expenseaccount,a.notes,a.userin,a.usermod,a.datein,a.datemod,a.idunit,a.status,a.deleted,a.supplier_type_id,b.supplier_type_name as typename";
     }
     
     function fieldCek()
@@ -31,7 +31,7 @@ class m_supplier extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join supplier_type b on b.idsuppliertype = a.idsuppliertype and b.idunit = a.idunit";
+                    join supplier_type b on b.supplier_type_id = a.supplier_type_id and b.idunit = a.idunit";
 
         return $query;
     }
@@ -63,7 +63,7 @@ class m_supplier extends CI_Model {
             'postcode' => $this->input->post('postcode'),
             'country' => $this->input->post('country'),
             'notes' => $this->input->post('notes'),
-            'idsuppliertype' => $this->input->post('idsuppliertype'),
+            'supplier_type_id' => $this->input->post('supplier_type_id'),
             'idunit' => $this->session->userdata('idunit'),
             'status'=>$this->input->post('status'),
             'deleted'=>$this->input->post('deleted'),

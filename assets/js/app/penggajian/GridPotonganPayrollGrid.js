@@ -25,7 +25,7 @@ var storeGridPotonganPayrollGrid = Ext.create('Ext.data.Store', {
         }]
 });
 
-Ext.define('GridPotonganPayrollGrid', {
+Ext.define(dir_sys + 'penggajian.GridPotonganPayrollGrid', {
     autoWidth:true,
     autoHeight:true,
     title: 'Potongan',

@@ -137,7 +137,7 @@ var smGridMasterProductMeasurements = Ext.create('Ext.selection.CheckboxModel', 
         }
     }
 });
-Ext.define('GridMasterProductMeasurements', {
+Ext.define(dir_sys + 'master.GridMasterProductMeasurements', {
     title: 'Product Measurements',
     itemId: 'GridMasterProductMeasurementsID',
     id: 'GridMasterProductMeasurementsID',

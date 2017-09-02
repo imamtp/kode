@@ -1,20 +1,22 @@
-Ext.define('TabSupplier', {
+Ext.create(dir_sys + 'master.GridSupplier');
+Ext.create(dir_sys + 'master.GridMasterSupplierType');
+
+Ext.define(dir_sys + 'master.TabSupplier', {
     extend: 'Ext.tab.Panel',
     id: 'TabSupplier',
     alias: 'widget.TabSupplier',
     activeTab: 0,
-    plain:true,
+    plain: true,
     autoWidth: '100%',
     autoScroll: true,
     defaults: {
         autoScroll: true
     },
-    items: [
-        {
+    items: [{
             xtype: 'GridSupplier'
         },
         {
-            xtype:'GridSupplierType'
+            xtype: 'GridMasterSupplierType'
         }
     ],
 });

@@ -1,30 +1,4 @@
-Ext.define('GridemployeeProsesGajiGridModel', {
-    extend: 'Ext.data.Model',
-    fields: ['idemployee','penambahangaji','idemployeetype','payrolltypeid','pembayaranperjamkehadiran','code','firstname','lastname','namaunit','nametype','jumlahjam','jumlahkehadiran','totalgaji' ,'totaltunjangan','pph21' ,'totalpotongan','totalpembayaran','payname','userin'],
-    idProperty: 'id'
-});
 
-var storeGridemployeeProsesGajiGrid = Ext.create('Ext.data.Store', {
-    pageSize: 100,
-    model: 'GridemployeeProsesGajiGridModel',
-    //remoteSort: true,
-    // autoload:true,
-    proxy: {
-        type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/employeeProsesGajiGridTmp/payroll',
-        actionMethods: 'POST',
-        reader: {
-            root: 'rows',
-            totalProperty: 'results'
-        },
-        //simpleSortMode: true
-    },
-    sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
-});
-////////////////////////////////////////////////////////
 
 
 Ext.define('GridPilihPegawaiPayrollGridModel', {
@@ -81,7 +55,7 @@ var smGridPilihPegawaiPayrollGrid = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridPilihPegawaiPayrollGrid', {
+Ext.define(dir_sys + 'penggajian.GridPilihPegawaiPayrollGrid', {
     // renderTo:'mytabpanel',
    multiSelect: true,
 //    selModel: smGridPilihPegawaiPayrollGrid,
@@ -132,7 +106,7 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
                                     if (d.success)
                                     {
                                             Ext.getCmp('wPilihPegawaiPayroll').hide();
-                                            storeGridemployeeProsesGajiGrid.load();
+                                            Ext.getCmp('GridemployeeProsesGajiGridID').getStore().load();
                                             getSummaryPayroll();
                                     } else {
                                     }
@@ -215,26 +189,7 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
 });
 
 
-var wPilihPegawaiPayroll = Ext.create('widget.window', {
-    id: 'wPilihPegawaiPayroll',
-    title: 'Pilih Pegawai Yang Akan Digaji',
-    header: {
-        titlePosition: 2,
-        titleAlign: 'center'
-    },
-    width: 750,
-    height: 360,
-    autoScroll: true,
-    closable: true,
-    closeAction: 'hide',
-//    autoWidth: true,
-//    autoHeight: true,
-    layout: 'fit',
-    border: false,
-    items: [{
-        xtype:'GridPilihPegawaiPayrollGrid'
-    }]
-});
+
 
 
 function getSummaryPayroll()

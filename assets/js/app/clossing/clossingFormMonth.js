@@ -24,7 +24,7 @@ var storeClossingInvGrid = Ext.create('Ext.data.Store', {
 });
 
 
-Ext.define('clossingFormMonth', {
+Ext.define(dir_sys + 'clossing.clossingFormMonth', {
     title: 'Penutupan Buku Bulanan',
     itemId: 'clossingFormMonth',
     id: 'clossingFormMonth',

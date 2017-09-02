@@ -484,6 +484,9 @@
     <script src='{$assets_url}js/app/account/treeAccount2.js'></script>
     <script src='{$assets_url}js/app/account/accListAkunInduk.js'></script>
     <script src='{$assets_url}js/app/account/gridAccount.js'></script>
+
+    <script src='{$assets_url}/js/app/master/supplier/ChooserListSupplier.js'></script>
+    
     <!-- // <script src='{$assets_url}js/app/account/ChooserListAccount.js'></script> -->
 
     {*

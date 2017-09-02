@@ -138,7 +138,8 @@ var smGridMasterThickness = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterThickness', {
+
+Ext.define(dir_sys + 'master.GridMasterThickness', {
     title: 'Thickness',
     itemId: 'GridMasterThicknessID',
     id: 'GridMasterThicknessID',

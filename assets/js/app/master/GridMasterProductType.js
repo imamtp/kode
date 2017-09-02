@@ -136,7 +136,7 @@ var smGridMasterProductType = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterProductType', {
+Ext.define(dir_sys + 'master.GridMasterProductType', {
     title: 'Product Type',
     itemId: 'GridMasterProductTypeID',
     id: 'GridMasterProductTypeID',

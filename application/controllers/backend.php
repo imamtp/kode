@@ -1447,7 +1447,7 @@ class Backend extends MY_Controller {
             $field = array('idpelanggantype', 'pelanggantype');
            
         } else if ($data == 'supplier_type') {
-            $field = array('idsuppliertype', 'name');
+            $field = array('supplier_type_id', 'supplier_type_name');
         } else if ($data == 'machine_type') {
             $field = array('machine_type_id', 'machine_type_name');           
         } else if ($data == 'product_type') {

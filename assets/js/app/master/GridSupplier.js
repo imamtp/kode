@@ -1,3 +1,5 @@
+var FormSupplier = Ext.create(dir_sys + 'master.FormSupplier');
+
 var storeGridSupplier = Ext.create('Ext.data.Store', {
     pageSize: 100,
     model: 'App.model.Supplier',
@@ -39,7 +41,7 @@ Ext.define('MY.searchGridSupplier', {
     width: 180
 });
 
-Ext.define('GridSupplier', {
+Ext.define(dir_sys + 'master.GridSupplier', {
     title: 'Supplier',
     itemId: 'GridSupplierID',
     id: 'GridSupplierID',
