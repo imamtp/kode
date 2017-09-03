@@ -31,7 +31,7 @@ class m_supplier extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join supplier_type b on b.supplier_type_id = a.supplier_type_id and b.idunit = a.idunit";
+                    left join supplier_type b on b.supplier_type_id = a.supplier_type_id and b.idunit = a.idunit";
 
         return $query;
     }
