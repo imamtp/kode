@@ -2,6 +2,8 @@
 Ext.create(dir_sys + 'penggajian.GridTunjanganPayrollGrid');
 Ext.create(dir_sys + 'penggajian.GridPotonganPayrollGrid');
 
+load_js_file('setup/AccKasListPayroll.js');
+load_js_file('setup/AccListPayroll.js');
 
 Ext.create(dir_sys + 'penggajian.GridPilihPegawaiPayrollGrid');
 var wPilihPegawaiPayroll = Ext.create('widget.window', {

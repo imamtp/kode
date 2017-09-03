@@ -152,6 +152,9 @@ Ext.define('AccListBebanThr', {
     ]
 });
 
+// Ext.define(dir_sys + 'setup.wAccListBebanThr',{
+//     extend: 'Ext.window.Window',
+//     alias: 'widget.wAccListBebanThr',
 var wAccListBebanThr = Ext.create('widget.window', {
     id: 'wAccListBebanThr',
      title: 'Pilih Akun Untuk Pembayaran THR',

@@ -239,7 +239,7 @@ var smGridSetupUnit = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridSetupUnit', {
+Ext.define(dir_sys + 'setup.GridSetupUnit', {
     title: 'Unit Usaha',
     itemId: 'GridSetupUnitID',
     id: 'GridSetupUnitID',

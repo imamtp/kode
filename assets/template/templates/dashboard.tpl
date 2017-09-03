@@ -134,30 +134,6 @@
 
 
 
-        // Ext.require(['*']);
-
-        Ext.require([
-            // dir_sys+'sales.deliveryOrderGrid',
-            // dir_sys+'production.WorkOrderJobTab',
-            // dir_sys+'production.WindowSaleOrderWoList',
-            // dir_sys+'production.WorkOrderGrid',
-            // dir_sys+'production.WindowEntryWorkOrder',
-            // dir_sys+'production.WOScheduleGrid',
-            // dir_sys+'production.ReceiptWOGrid',
-            // dir_sys+'production.WOMaterialUsageGrid',
-            // dir_sys+'employee.employeeAccessTab',
-            // dir_sys+'sales.TabSalesInvoicePanel',
-            // dir_sys+'sales.SalesReturnGrid',
-            // dir_sys+'purchase2.PurchaseRequisitionGrid',
-            // dir_sys+'purchase2.PurchaseOrderGrid',
-            // dir_sys+'purchase2.GoodsReceiptGrid',
-            // dir_sys+'purchase2.TabPurchaseInvoicePanel',
-            // dir_sys+'purchase2.PurchaseReturnGrid',
-            // dir_sys+'inventory.GridInventoryCount'                
-        ]);
-
-
-
         // var windowH = Ext.getBody().getViewSize().height;
         var windowW = Ext.getBody().getViewSize().width;
         var panelW = windowW - 100;
@@ -474,10 +450,6 @@
     </div>
 
     <!-- // <script src='{$assets_url}js/app/account/treeAccount.js'></script> -->
-
-
-    <script src='{$assets_url}/js/app/siswa/ImportDataSiswa.js'></script>
-    <script src='{$assets_url}/js/app/siswaGrid.js'></script>
     <script src='{$assets_url}/js/app/pelangganGrid.js'></script>
     <script src='{$assets_url}/js/app/supplierGrid.js'></script>
 
@@ -486,59 +458,7 @@
     <script src='{$assets_url}js/app/account/gridAccount.js'></script>
 
     <script src='{$assets_url}/js/app/master/supplier/ChooserListSupplier.js'></script>
-
-{* <script src='{$assets_url}/js/app/money/SiswaListAddRowReceiveSiswa.js'></script>
-<script src='{$assets_url}/js/app/money/AccListAddRowReceiveSiswa.js'></script>
-<script src='{$assets_url}/js/app/money/formaddrowReceiveSiswa.js'></script>
-<script src='{$assets_url}/js/app/money/accListReceiveSiswa.js'></script>
-<script src='{$assets_url}/js/app/money/gridReceiveMoneySiswa.js'></script>
-<script src='{$assets_url}/js/app/money/entryReceiveMoneySiswa.js'></script>
-<script src='{$assets_url}/js/app/money/TabReceiveMoneySiswa.js'></script> *}
-
-    <!-- // <script src='{$assets_url}js/app/account/ChooserListAccount.js'></script> -->
-
-    {*
-    <script src='{$assets_url}js/app/hutangpiutang/regPiutang.js'></script> *}
-
-
-
-
-    <!--<script src='{$assets_url}/js/app/setup/references/refTambahanGaji.js'></script>-->
-    <!--<script src='{$assets_url}/js/app/setup/references/refTunjanganType.js'></script>-->
-    <!--<script src='{$assets_url}/js/app/setup/references/refPotonganType.js'></script>-->
-    
-    <!-- <script src='{$assets_url}/js/app/setup/references/refCatInventory.js'></script> ini ga dipake -->
-
-    <!--<script src='{$assets_url}/js/app/setup/references/refJenisPtkp.js'></script>-->
-
-
-    <!-- // <script src='{$assets_url}/js/app/setup/accountListCollected.js'></script> -->
-    <!-- // <script src='{$assets_url}/js/app/setup/accountListPaid.js'></script> -->
-   <!-- // <script src='{$assets_url}/js/app/setup/taxcode.js'></script>
-    <script src='{$assets_url}/js/app/setup/entryOpeningBalance.js'></script>
-    <script src='{$assets_url}/js/app/setup/linkpiutang.js'></script>
-    <script src='{$assets_url}/js/app/setup/AccListInsuranceEmpSetup.js'></script>
-    <script src='{$assets_url}/js/app/setup/AccListInsuranceCmpSetup.js'></script>
-    <script src='{$assets_url}/js/app/setup/popupSupplierOpeningHutang.js'></script>
-    <script src='{$assets_url}/js/app/setup/formRegHutangOpening.js'></script>
-    <script src='{$assets_url}/js/app/setup/entryOpeningHutang.js'></script>
-    <script src='{$assets_url}/js/app/setup/formRegPiutangOpening.js'></script>
-    <script src='{$assets_url}/js/app/setup/entryOpeningPiutang.js'></script>
-    <script src='{$assets_url}/js/app/setup/AccListInventoryOpening.js'></script>
-    <script src='{$assets_url}/js/app/setup/formRegPersediaanOpening.js'></script>
-    <script src='{$assets_url}/js/app/setup/entryOpeningPersediaan.js'></script>
-    <script src='{$assets_url}/js/app/setup/SetupUnitInsurance.js'></script>
-    <script src='{$assets_url}/js/app/setup/supplierInvOpeningPopup.js'></script>-->
-
-
-    <!-- <script src='{$assets_url}/js/app/master/GridCustomerType.js'></script> -->
-
-    <!-- <script src='{$assets_url}/js/app/master/GridMasterProject.js'></script> -->
-    <!-- <script src='{$assets_url}/js/app/master/WindowProjectList.js'></script> -->
-
-
-    <!-- <script src='{$assets_url}/js/app/master/GridMasterSupplierType.js'></script> -->
-    
+    <script src='{$assets_url}/js/app/master/customer/ChooserListCustomer.js'></script>
 
     <script src='{$assets_url}/js/app/inventory/accListInventory.js'></script>
     <script src='{$assets_url}/js/app/inventory/inventoryProfileForm.js'></script>
@@ -552,11 +472,7 @@
     <script src='{$assets_url}/js/app/inventory/GridDepresiasiInventoryTab.js'></script>
     <script src='{$assets_url}/js/app/inventory/inventoryWindow.js'></script>
     <script src='{$assets_url}/js/app/inventory/func.js'></script>
-    {*
-    <script src='{$assets_url}/js/app/inventory/inventoryAllGrid.js'></script>*} {*
-    <script src='{$assets_url}/js/app/inventory/inventoryInvGrid.js'></script>
-    <script src='{$assets_url}/js/app/inventory/inventoryBuyGrid.js'></script>
-    <script src='{$assets_url}/js/app/inventory/inventorySellGrid.js'></script>*}
+
     <script src='{$assets_url}/js/app/inventory/inventoryTab.js'></script>
     <script src='{$assets_url}/js/app/inventory/treeAddRowAdj.js'></script>
     <script src='{$assets_url}/js/app/inventory/gridAddRowAdj.js'></script>
@@ -569,16 +485,9 @@
 
     <script src='{$assets_url}/js/app/inventory/ChooserListInventory.js'></script>
 
-    <!-- <script src='{$assets_url}/js/app/supplier/formInventorySupplier.js'></script>
-        <script src='{$assets_url}/js/app/supplier/GridInventorySupplier.js'></script> -->
-
     <script src='{$assets_url}/js/app/jurnal/AccList.js'></script>
     <script src='{$assets_url}/js/app/jurnal/formaddrow.js'></script>
-    {* <script src='{$assets_url}/js/app/jurnal/formRecurring.js'></script> *}
-    {* <script src='{$assets_url}/js/app/jurnal/gridRecurringPopup.js'></script> *}
-    {* <script src='{$assets_url}/js/app/jurnal/gridRecurringDetail.js'></script> *}
-    {* <script src='{$assets_url}/js/app/jurnal/formRecurringDetail.js'></script> *}
-    {* <script src='{$assets_url}/js/app/jurnal/gridRecurring.js'></script> *}
+
     <script src='{$assets_url}/js/app/jurnal/gridJournalTransDisburs.js'></script>
     <script src='{$assets_url}/js/app/jurnal/gridJournalTransGeneral.js'></script>
     <script src='{$assets_url}/js/app/jurnal/tabJournalTransaction.js'></script>
@@ -591,35 +500,6 @@
     <script src='{$assets_url}/js/app/hutangpiutang/gridHutangLain.js'></script>
     <script src='{$assets_url}/js/app/hutangpiutang/gridHutangPurchase.js'></script>
 
-    <!-- <script src='{$assets_url}/js/app/purchase/model.js'></script>
-        <script src='{$assets_url}/js/app/purchase/addressPopUp.js'></script>
-        <script src='{$assets_url}/js/app/purchase/gridItemPopUp.js'></script>
-        <script src='{$assets_url}/js/app/purchase/wSelectAccListAssetPurchase.js'></script>
-        <script src='{$assets_url}/js/app/purchase/accListPurchase.js'></script>
-        <script src='{$assets_url}/js/app/purchase/accListPayment.js'></script>
-        <script src='{$assets_url}/js/app/purchase/entry.js'></script>
-        <script src='{$assets_url}/js/app/purchase/entryPayment.js'></script>
-        <script src='{$assets_url}/js/app/purchase/gridPurchaseAll.js'></script>
-        <script src='{$assets_url}/js/app/purchase/gridReturn.js'></script>
-        <script src='{$assets_url}/js/app/purchase/TabReturn.js'></script>
-        <script src='{$assets_url}/js/app/purchase/gridPaymentHistory.js'></script>
-        <script src='{$assets_url}/js/app/purchase/gridDebt.js'></script>
-        <script src='{$assets_url}/js/app/purchase/TabTransPurchase.js'></script>
-        <script src='{$assets_url}/js/app/purchase/acclistReturn.js'></script>
-        <script src='{$assets_url}/js/app/purchase/entryReturn.js'></script> -->
-    <!-- <script src='{$assets_url}/js/app/purchase/TabPurchaseRequisition.js'></script> -->
-    <!-- <script src='{$assets_url}/js/app/purchase/WindowInventoryIsBuyList.js'></script> -->
-    <!-- <script src='{$assets_url}/js/app/purchase/entryPurchaseRequisition.js'></script> -->
-    <!-- // <script src='{$assets_url}/js/app/purchase/entryReturn.js'></script> -->
-    <!-- // <script src='{$assets_url}/js/app/purchase/formaddrowReturn.js'></script> -->
-    <!--  // <script src='{$assets_url}/js/app/purchase/formaddrowReturn.js'></script>
-        // <script src='{$assets_url}/js/app/purchase/entryReturn.js'></script>
-        // <script src='{$assets_url}/js/app/purchase/ChooserListPurchase.js'></script>
-        // <script src='{$assets_url}/js/app/purchase/FormGoodsReceipt.js'></script>
-        // <script src='{$assets_url}/js/app/purchase/GridGoodsReceipt.js'></script>
-        // <script src='{$assets_url}/js/app/purchase/FormPurchase.js'></script>
-        // <script src='{$assets_url}/js/app/purchase/GridPurchase.js'></script> -->
-
     <script src='{$assets_url}/js/app/sales/gridItemSalesOrderPopUp.js'></script>
     <script src='{$assets_url}/js/app/sales/WindowSaleQuoteList.js'></script>
     <script src='{$assets_url}/js/app/sales/entrySalesOrder.js'></script>
@@ -627,10 +507,6 @@
     <script src='{$assets_url}/js/app/sales/gridItemSalesQuotationPopUp.js'></script>
     <script src='{$assets_url}/js/app/sales/entrySalesQuotation.js'></script>
     <script src='{$assets_url}/js/app/sales/salesQuotationGrid.js'></script>
-
-    {*
-    <script src='{$assets_url}/js/app/hutangpiutang/RegHutang.js'></script> *}
-   
 
 
     <script src='{$assets_url}/js/app/report/neraca.js'></script>
@@ -661,76 +537,34 @@
     <script src='{$assets_url}/js/app/report/sales/PanelSalesOrderByCustomer.js'></script>
     <script src='{$assets_url}/js/app/report/sales/PanelSalesOrderBySalesman.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowProductList.js'></script>
-    <!-- <script src='{$assets_url}/js/app/report/sales/WindowCustomerList.js'></script> -->
-    <!-- <script src='{$assets_url}/js/app/report/sales/WindowSalesOrderList.js'></script>
-        <script src='{$assets_url}/js/app/report/sales/WindowDeliveryOrderList.js'></script>
-        <script src='{$assets_url}/js/app/report/sales/WindowSalesInvoiceList.js'></script> -->
+
     <script src='{$assets_url}/js/app/report/sales/WindowWarehouseList.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowSalesmanList.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowBrandList.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowGroupList.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowFamilyList.js'></script>
     <script src='{$assets_url}/js/app/report/sales/WindowStyleList.js'></script>
-    <!--<script src='{$assets_url}/js/app/report/sales/GridSalesOrderDetail.js'></script>-->
+
     <script src='{$assets_url}/js/app/report/sales/GridSalesOrderHistory.js'></script>
-    <!--<script src='{$assets_url}/js/app/report/sales/GridSalesByItem.js'></script>-->
-    <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesByCustomer.js'></script> -->
-    <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesBySalesman.js'></script> -->
+
     <script src='{$assets_url}/js/app/report/sales/GridSalesReturnDetail.js'></script>
     <script src='{$assets_url}/js/app/report/sales/GridSalesBook.js'></script>
-    <!-- <script src='{$assets_url}/js/app/report/sales/GridSalesDeliveryActual.js'></script> -->
+
     <script src='{$assets_url}/js/app/report/ar/TabReportAR.js'></script>
     <script src='{$assets_url}/js/app/report/ar/PanelARAging.js'></script>
     <script src='{$assets_url}/js/app/report/ar/PanelAROutstanding.js'></script>
     <script src='{$assets_url}/js/app/report/ar/PanelARSales.js'></script>
     <script src='{$assets_url}/js/app/report/ar/PanelAROther.js'></script>
-    <!--<script src='{$assets_url}/js/app/report/ar/GridARAging.js'></script>-->
-    <!---<script src='{$assets_url}/js/app/report/ar/GridAROutstanding.js'></script>-->
-    {* <script src='{$assets_url}/js/app/report/ar/GridARConfirmation.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ar/GridARGiroConfirmation.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ar/GridARCard.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/purchase/TabReportPurchase.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/purchase/GridPurchaseRequestList.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridPurchaseOrderOutstandingDetail.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridPurchaseOrderHistory.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerSupplier.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerSupplierAndItem.js'></script>
-    <script src='{$assets_url}/js/app/report/purchase/GridGoodRecievePerItem.js'></script> *}
-    <!-- <script src='{$assets_url}/js/app/report/purchase/WindowSupplierList.js'></script> -->
-    {* <script src='{$assets_url}/js/app/report/purchase/GridGoodRecieveDetail.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/TabReportAP.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/PanelAPPurchase.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/PanelAPOther.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/PanelAPOtherOutstanding.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/GridAPOutstanding.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/GridAPOutstandingDetail.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/ap/GridAPAging.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/inventory/TabReportInventory.js'></script>
-    <script src='{$assets_url}/js/app/report/inventory/PanelInventory.js'></script>
-    <script src='{$assets_url}/js/app/report/inventory/PanelInventoryStockCard.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/inventory/GridInventoryPerItem.js'></script> *}
-    {* <script src='{$assets_url}/js/app/report/inventory/GridStockCardSummary.js'></script> *}
 
     <script src='{$assets_url}/js/app/sistem/editRules.js'></script>
     <script src='{$assets_url}/js/app/sistem/sysMenuTree.js'></script>
     <script src='{$assets_url}/js/app/sistem/sysGroupMenuAkses.js'></script>
     <script src='{$assets_url}/js/app/sistem/gridRules.js'></script>
-    <!-- // <script src='{$assets_url}/js/app/sistem/portGroupAkses.js'></script> -->
+
     <script src='{$assets_url}/js/app/sistem/SysGroup.js'></script>
-
-    <!--    // <script src='{$assets_url}/js/app/dashboard/accListChartLine.js'></script>
-        // <script src='{$assets_url}/js/app/dashboard/chartline_account.js'></script>
-
-        // <script src='{$assets_url}/js/app/dashboard/labarugi.js'></script>
-        // <script src='{$assets_url}/js/app/dashboard/hutangGrid.js'></script>
-        // <script src='{$assets_url}/js/app/dashboard/neraca.js'></script>
-        // <script src='{$assets_url}/js/app/dashboard/pendapatanPie.js'></script> -->
 
     <script src='{$assets_url}/js/app/dashboard/pendingdata.js'></script>
     <script src='{$assets_url}/js/app/dashboard.js'></script>
-    <!-- // <script src='{$assets_url}/js/app/siswa/pembayaranGrid.js'></script> -->
-
-    <!-- <script src='{$assets_url}/js/app/customerGrid.js'></script> -->
 
     <script src='{$assets_url}/js/app/commonfunc.js'></script>
     <script src='{$assets_url}/js/app/sales/sales_function.js'></script>

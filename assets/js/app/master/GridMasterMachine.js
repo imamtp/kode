@@ -154,7 +154,7 @@ var smGridMasterMachine = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterMachine', {
+Ext.define(dir_sys + 'master.GridMasterMachine', {
     // renderTo:'mytabpanel',
     //    multiSelect: true,
     //    selModel: smGridMasterMachine,

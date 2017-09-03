@@ -1,3 +1,5 @@
+load_js_file('setup/MenuIndukListPopup.js');
+
 Ext.define('sysMenuTreeModel', {
     extend: 'Ext.data.Model',
     fields: [

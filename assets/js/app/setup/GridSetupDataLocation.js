@@ -149,7 +149,7 @@ var smGridSetupDataLocation = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridSetupDataLocation', {
+Ext.define(dir_sys + 'setup.GridSetupDataLocation', {
     title: 'Data Location',
     itemId: 'GridSetupDataLocationID',
     id: 'GridSetupDataLocationID',

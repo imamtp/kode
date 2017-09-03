@@ -1,4 +1,7 @@
-Ext.define('TabMasterFinancial', {
+Ext.create(dir_sys + 'master.GridMasterBank');
+Ext.create(dir_sys + 'master.GridMasterCurrency');
+
+Ext.define(dir_sys + 'master.TabMasterFinancial', {
     extend: 'Ext.tab.Panel',
     id: 'TabMasterFinancial',
     alias: 'widget.TabMasterFinancial',
