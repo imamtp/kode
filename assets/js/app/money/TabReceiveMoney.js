@@ -1,4 +1,7 @@
-Ext.define('TabReceiveMoney', {
+Ext.create(dir_sys + 'money.EntryReceiveMoney');
+Ext.create(dir_sys + 'money.GridReceiveMoney');
+
+Ext.define(dir_sys + 'money.TabReceiveMoney', {
     extend: 'Ext.tab.Panel',
     id: 'TabReceiveMoney',
     alias: 'widget.TabReceiveMoney',

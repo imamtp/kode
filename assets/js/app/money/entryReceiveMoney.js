@@ -1,9 +1,17 @@
+Ext.define('ReceiveGridStoreModel', {
+    extend: 'Ext.data.Model',
+    fields: ['idaccount','accnumber','accname','amount','ratetax'],
+    idProperty: 'id'
+});
 
-//////////////////////////////END RECEIVE SISWA
+var ReceiveGridStore = Ext.create('Ext.data.Store', {
+    model: 'ReceiveGridStoreModel'
+});
 
+var wAddRowReceive = Ext.create(dir_sys + 'money.windowPopupAddRowReceive');
+var wAccReceivePopup = Ext.create(dir_sys + 'money.wAccReceivePopup');
 
-
-Ext.define('KitchenSink.view.grid.EntryReceiveMoney', {
+Ext.define(dir_sys + 'money.EntryReceiveMoney', {
         extend: 'Ext.grid.Panel',
         id: 'EntryReceiveMoney',
         alias: 'widget.EntryReceiveMoney',
@@ -365,22 +373,26 @@ Ext.define('KitchenSink.view.grid.EntryReceiveMoney', {
             return true;
         }
     }
-    var wEntryReceiveMoney = Ext.create('widget.window', {
-        id: 'wEntryReceiveMoney',
-        title: 'Input Penerimaan',
-        header: {
-            titlePosition: 2,
-            titleAlign: 'center'
-        },
-        closable: true,
-        closeAction: 'hide',
-        autoWidth: true,
-        autoHeight: true,
-        layout: 'fit',
-        border: false,
-        items: [{
-            xtype: 'EntryReceiveMoney'
-        }]
-    });
+
+    // Ext.define(dir_sys + 'money.wEntryReceiveMoney',{
+    //     extend: 'Ext.window.Window',
+    //     alias: 'widget.wEntryReceiveMoney',
+    // // var wEntryReceiveMoney = Ext.create('widget.window', {
+    //     id: 'wEntryReceiveMoney',
+    //     title: 'Input Penerimaan',
+    //     header: {
+    //         titlePosition: 2,
+    //         titleAlign: 'center'
+    //     },
+    //     closable: true,
+    //     closeAction: 'hide',
+    //     autoWidth: true,
+    //     autoHeight: true,
+    //     layout: 'fit',
+    //     border: false,
+    //     items: [{
+    //         xtype: 'EntryReceiveMoney'
+    //     }]
+    // });
 
 

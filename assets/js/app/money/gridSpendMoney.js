@@ -49,7 +49,7 @@ var smGridSpendMoney = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridSpendMoney', {
+Ext.define(dir_sys + 'money.GridSpendMoney', {
     title: 'Daftar Riwayat Pengeluaran Kas',
     itemId: 'GridSpendMoneyID',
     id: 'GridSpendMoneyID',

@@ -49,7 +49,7 @@ var smGridReceiveMoney = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridReceiveMoney', {
+Ext.define(dir_sys + 'money.GridReceiveMoney', {
     title: 'Daftar Riwayat Penerimaan Kas',
     itemId: 'GridReceiveMoneyID',
     id: 'GridReceiveMoneyID',

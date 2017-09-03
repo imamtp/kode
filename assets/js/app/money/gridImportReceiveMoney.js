@@ -49,7 +49,7 @@ var smGridImportReceiveMoney = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridImportReceiveMoney', {
+Ext.define(dir_sys + 'money.GridImportReceiveMoney', {
     title: 'Riwayat Import Penerimaan Kas',
     itemId: 'GridImportReceiveMoneyID',
     id: 'GridImportReceiveMoneyID',
@@ -68,79 +68,6 @@ Ext.define('GridImportReceiveMoney', {
             xtype: 'toolbar',
             dock: 'top',
             items: [
-//                {
-//                    itemId: 'addImportReceiveMoney',
-//                    text: 'Tambah',
-//                    iconCls: 'add-icon',
-//                    handler: function() {
-//                         wImportReceiveMoney.show();
-//                         Ext.getCmp('statusformImportReceiveMoney').setValue('input');
-//                    }
-//                },
-//                {
-//                    itemId: 'editImportReceiveMoney',
-//                    text: 'Ubah',
-//                    iconCls: 'edit-icon',
-//                    handler: function() {
-//                        var grid = Ext.ComponentQuery.query('GridImportReceiveMoney')[0];
-//                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-//                        var data = grid.getSelectionModel().getSelection();
-//                        if (data.length == 0)
-//                        {
-//                            Ext.Msg.alert('Failure', 'Pilih data pajak terlebih dahulu!');
-//                        } else {
-//                            //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-//                            var formImportReceiveMoney = Ext.getCmp('formImportReceiveMoney');
-//
-//                            formImportReceiveMoney.getForm().load({
-//                                url: SITE_URL + 'backend/loadFormData/ImportReceiveMoney/1/setup',
-//                                params: {
-//                                    extraparams: 'a.idtax:' + selectedRecord.data.idtax
-//                                },
-//                                success: function(form, action) {
-//                                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                                },
-//                                failure: function(form, action) {
-//                                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                                }
-//                            })
-//
-//                            wImportReceiveMoney.show();
-//                            Ext.getCmp('statusformImportReceiveMoney').setValue('edit');
-//                        }
-//
-//                    }
-//                },
-//                {
-//                    id: 'btnDeleteImportReceiveMoney',
-//                    text: 'Hapus',
-//                    iconCls: 'delete-icon',
-//                    handler: function() {
-//                        Ext.Msg.show({
-//                            title: 'Confirm',
-//                            msg: 'Delete Selected ?',
-//                            buttons: Ext.Msg.YESNO,
-//                            fn: function(btn) {
-//                                if (btn == 'yes') {
-//                                    var grid = Ext.ComponentQuery.query('GridImportReceiveMoney')[0];
-//                                    var sm = grid.getSelectionModel();
-//                                    selected = [];
-//                                    Ext.each(sm.getSelection(), function(item) {
-//                                        selected.push(item.data[Object.keys(item.data)[0]]);
-//                                    });
-//                                    Ext.Ajax.request({
-//                                        url: SITE_URL + 'backend/ext_delete/ImportReceiveMoney/setup',
-//                                        method: 'POST',
-//                                        params: {postdata: Ext.encode(selected)}
-//                                    });
-//                                    storeGridImportReceiveMoney.remove(sm.getSelection());
-//                                    sm.select(0);
-//                                }
-//                            }
-//                        });
-//                    },
-////                    disabled: true
-//                },
                 '->',
                 'Pencarian: ', ' ',
                 {
@@ -207,29 +134,6 @@ Ext.define('GridImportReceiveMoney', {
                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                 }
             });
-
-
-
-            // var formAgama = Ext.create('formAgama');
-//            var formImportReceiveMoney = Ext.getCmp('formImportReceiveMoney');
-//            wImportReceiveMoney.show();
-//
-//            formImportReceiveMoney.getForm().load({
-//                url: SITE_URL + 'backend/loadFormData/ImportReceiveMoney/1/setup',
-//                params: {
-//                    extraparams: 'a.idtax:' + record.data.idtax
-//                },
-//                success: function(form, action) {
-//                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                },
-//                failure: function(form, action) {
-//                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-//                }
-//            })
-
-//            
-//            Ext.getCmp('kddaerahS').setReadOnly(true);
-//            Ext.getCmp('statusformImportReceiveMoney').setValue('edit');
         }
     }
 });

@@ -1,12 +1,4 @@
-Ext.define('SpendGridStoreModel', {
-    extend: 'Ext.data.Model',
-    fields: ['idaccount','accnumber','accname','amount','ratetax'],
-    idProperty: 'id'
-});
-
-var SpendGridStore = Ext.create('Ext.data.Store', {
-    model: 'SpendGridStoreModel'
-});
+var wAccAddRowSpendPopup = Ext.create(dir_sys + 'money.wAccAddRowSpendPopup');
 
 var formAddRowSpend = Ext.create('Ext.form.Panel', {
     id: 'formAddRowSpend',
@@ -111,7 +103,10 @@ var formAddRowSpend = Ext.create('Ext.form.Panel', {
         }]
 });
 
-var wAddRowSpend = Ext.create('widget.window', {
+Ext.define(dir_sys + 'money.windowPopupAddRowSpend',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.windowPopupAddRowSpend',
+// var wAddRowSpend = Ext.create('widget.window', {
     id: 'windowPopupAddRowSpend',
     title: 'Tambah Item Pengeluaran Kas',
     header: {

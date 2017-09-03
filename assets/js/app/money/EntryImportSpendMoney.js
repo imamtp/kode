@@ -1,3 +1,4 @@
+var wAccImportSpendPopup = Ext.create(dir_sys + 'money.wAccImportSpendPopup');
 
 Ext.define('ImportSpendGridStoreModel', {
     extend: 'Ext.data.Model',
@@ -10,7 +11,7 @@ var ImportSpendGridStore = Ext.create('Ext.data.Store', {
 });
 
 
-Ext.define('EntryImportSpendMoney', {
+Ext.define(dir_sys + 'money.EntryImportSpendMoney', {
     extend: 'Ext.grid.Panel',
     id: 'EntryImportSpendMoney',
     alias: 'widget.EntryImportSpendMoney',

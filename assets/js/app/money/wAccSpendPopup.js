@@ -1,10 +1,8 @@
-// Ext.define('GridTreeAccReceive', {
-//     title: 'Daftar Akun',
-//     // selModel : smGridIP,   
-//     itemId: 'GridTreeAccReceive',
-//     id: 'GridTreeAccReceive',
+// Ext.define('GridTreeAccListSpend', {
+//     itemId: 'GridTreeAccListSpend',
+//     id: 'GridTreeAccListSpend',
 //     extend: 'Ext.tree.Panel',
-//     alias: 'widget.GridTreeAccReceive',
+//     alias: 'widget.GridTreeAccListSpend',
 //     xtype: 'tree-grid',
 //     store: storeAccountAktive,
 //     loadMask: true,
@@ -26,13 +24,14 @@
 //             text: 'Nama Akun',
 //             // flex: 2,
 //             minWidth: 300,
+//             flex:1,
 //             sortable: true,
 //             dataIndex: 'text'
 //         },  {
 //             //we must use the templateheader component so we can use a custom tpl
 //             xtype: 'numbercolumn',
-//             text: 'balance',
 //             align:'right',
+//             text: 'balance',
 //             sortable: true,
 //             minWidth: 100,
 //             dataIndex: 'balance'
@@ -43,23 +42,24 @@
 //             dock: 'top',
 //             items: [
 //                 {
-//                     itemId: 'PilihAccReceive',
+//                     itemId: 'PilihAccLink',
 //                     text: 'Pilih Akun',
 //                     iconCls: 'add-icon',
 //                     handler: function() {
-//                         var grid = Ext.ComponentQuery.query('GridTreeAccReceive')[0];
+//                         var grid = Ext.ComponentQuery.query('GridTreeAccListSpend')[0];
 //                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
 //                         var data = grid.getSelectionModel().getSelection();
 //                         if (data.length == 0)
 //                         {
 //                             Ext.Msg.alert('Failure', 'Pilih Akun terlebih dahulu!');
 //                         } else {
-// //                            console.log(selectedRecord);
-//                             Ext.getCmp('accnameReceiveAdd').setValue(selectedRecord.get('text'));
-//                             Ext.getCmp('idaccountReceiveAdd').setValue(selectedRecord.get('id'));
-//                             Ext.getCmp('accnumberReceiveAdd').setValue(selectedRecord.get('accnumber'));
+//                             console.log(selectedRecord);
+                            
+//                             Ext.getCmp('accnameSpend').setValue(selectedRecord.get('text'));
+//                             Ext.getCmp('idaccountSpend').setValue(selectedRecord.get('id'));
+//                             Ext.getCmp('accnumberSpend').setValue(selectedRecord.get('accnumber'));
 
-//                             Ext.getCmp('windowPopupAccReceive').hide();
+//                             Ext.getCmp('windowPopupAccListSpend').hide();
 //                         }
 
 
@@ -67,14 +67,14 @@
 //                 },'->',
 //                 {
 //                     xtype: 'textfield',
-//                     id: 'searchAccReceive',
+//                     id: 'searchAccListSpend',
 //                     blankText:'Cari akun disini',
 //                     listeners: {
 //                         specialkey: function(f, e) {
 //                             if (e.getKey() == e.ENTER) {
 //                                 storeAccountAktive.load({
 //                                     params: {
-//                                         'accname': Ext.getCmp('searchAccReceive').getValue(),
+//                                         'accname': Ext.getCmp('searchAccListSpend').getValue(),
 //                                     }
 //                                 });
 //                             }
@@ -87,19 +87,19 @@
 //                     , handler: function() {
 //                         storeAccountAktive.load({
 //                             params: {
-//                                 'accname': Ext.getCmp('searchAccReceive').getValue(),
+//                                 'accname': Ext.getCmp('searchAccListSpend').getValue(),
 //                             }
 //                         });
 //                     }
 //                 }, '-', {
-//                     itemId: 'reloadDataAccReceive',
+//                     itemId: 'reloadDataAccListSpend',
 //                     text: 'Refresh',
 //                     iconCls: 'add-icon',
 //                     handler: function() {
-//                         var grid = Ext.getCmp('GridTreeAccReceive');
+//                         var grid = Ext.getCmp('GridTreeAccListSpend');
 //                         grid.getView().refresh();
 //                         storeAccountAktive.load();
-//                         Ext.getCmp('searchAccReceive').setValue(null)
+//                         Ext.getCmp('searchAccListSpend').setValue(null)
 //                     }
 //                 }]
 //         }
@@ -108,14 +108,14 @@
 //         render: {
 //             scope: this,
 //             fn: function(grid) {
-//                 Ext.getCmp('GridTreeAccReceive').expandAll();
+//                 Ext.getCmp('GridTreeAccListSpend').expandAll();
 //             }
 //         }
 //     }
 // });
 
-// var windowPopupAccReceive = Ext.create('widget.window', {
-//     id: 'windowPopupAccReceive',
+// var windowPopupAccListSpend = Ext.create('widget.window', {
+//     id: 'windowPopupAccListSpend',
 //     header: {
 //         titlePosition: 2,
 //         titleAlign: 'center'
@@ -123,41 +123,39 @@
 //     closable: true,
 //     closeAction: 'hide',
 //     autoWidth: true,
-//     minWidth: 650,
-//     height: 450,
+//      minWidth: 750,
+//             height: 550,
 //     x: 300,
 //     y: 50,
 //     layout: 'fit',
 //     border: false,
+//     title: 'Daftar Akun',
 //     items: [
 //         Ext.create('Ext.panel.Panel', {
 //             bodyPadding: 5,  // Don't want content to crunch against the borders
 //             width: 500,
 //             height: 300,
 //             layout:'fit',
-//             id: 'tabAccTreeReceive',
+// //            id: 'tabAccTreeLinked',
 //             items: [{
-//                 xtype: 'GridTreeAccReceive'
+//                 xtype: 'GridTreeAccListSpend'
 //             }]
 //         })
 //     ],
 //     buttons: [{
 //             text: 'Tutup',
 //             handler: function() {
-//                 var windowPopupAccReceive = Ext.getCmp('windowPopupAccReceive');
-//                 windowPopupAccReceive.hide();
+//                 var windowPopupAccListSpend = Ext.getCmp('windowPopupAccListSpend');
+//                 windowPopupAccListSpend.hide();
 //             }
 //         }]
 // });
 
-
-////////////
-
-Ext.define('GridAccReceiveAddRow', {
-    itemId: 'GridAccReceiveAddRow',
-    id: 'GridAccReceiveAddRow',
+Ext.define('GridAccSpend', {
+    itemId: 'GridAccSpend',
+    id: 'GridAccSpend',
     extend: 'Ext.grid.Panel',
-    alias: 'widget.GridAccReceiveAddRow',
+    alias: 'widget.GridAccSpend',
     store: storeGridAccount,
     loadMask: true,
     columns: [
@@ -170,11 +168,7 @@ Ext.define('GridAccReceiveAddRow', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-                    Ext.getCmp('accnameReceiveAdd').setValue(selectedRecord.get('accname'));
-                    Ext.getCmp('idaccountReceiveAdd').setValue(selectedRecord.get('idaccount'));
-                    Ext.getCmp('accnumberReceiveAdd').setValue(selectedRecord.get('accnumber'));
-
-                    Ext.getCmp('wAccReceiveAddRowPopup').hide();
+               setValueAcc(selectedRecord,'wAccSpendPopup','Spend');
             }
         },
         {header: 'idaccount', dataIndex: 'idaccount', hidden: true},
@@ -182,7 +176,7 @@ Ext.define('GridAccReceiveAddRow', {
         {header: 'No Akun', dataIndex: 'accnumber',},
         {header: 'Nama Akun', dataIndex: 'accname', minWidth: 150,flex:1},
         {header: 'Saldo', dataIndex: 'balance', minWidth: 150,xtype:'numbercolumn',align:'right',hidden:true},
-        {header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 150},
+        {header: 'Tipe Akun', dataIndex: 'acctypename', minWidth: 170},
         // {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
     ]
     , dockedItems: [
@@ -194,20 +188,15 @@ Ext.define('GridAccReceiveAddRow', {
                     text: 'Pilih Akun',
                     iconCls: 'add-icon',
                     handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridAccReceiveAddRow')[0];
+                        var grid = Ext.ComponentQuery.query('GridAccSpend')[0];
                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
                         if (data.length == 0)
                         {
                             Ext.Msg.alert('Failure', 'Pilih akun terlebih dahulu!');
                         } else {
-
-                             Ext.getCmp('accnameReceiveAdd').setValue(selectedRecord.get('accname'));
-                            Ext.getCmp('idaccountReceiveAdd').setValue(selectedRecord.get('idaccount'));
-                            Ext.getCmp('accnumberReceiveAdd').setValue(selectedRecord.get('accnumber'));
-
-                            Ext.getCmp('wAccReceiveAddRowPopup').hide();
                             
+                            setValueAcc(selectedRecord,'wAccSpendPopup','Spend');
                         }
                     }
                 },
@@ -215,6 +204,7 @@ Ext.define('GridAccReceiveAddRow', {
                 'Pencarian: ', ' ',
                 {
                     xtype: 'searchGridAcc',
+                    id:'textSearchAccListSpend',
                     text: 'Left Button'
                 }
 
@@ -229,8 +219,11 @@ Ext.define('GridAccReceiveAddRow', {
     ]
 });
 
-var wAccReceiveAddRowPopup = Ext.create('widget.window', {
-    id: 'wAccReceiveAddRowPopup',
+Ext.define(dir_sys + 'money.wAccSpendPopup',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.wAccSpendPopup',
+// var wAccSpendPopup = Ext.create('widget.window', {
+    id: 'wAccSpendPopup',
     title: 'Pilih Akun',
     header: {
         titlePosition: 2,
@@ -244,6 +237,6 @@ var wAccReceiveAddRowPopup = Ext.create('widget.window', {
     layout: 'fit',
     border: false,
     items: [{
-            xtype:'GridAccReceiveAddRow'
+            xtype:'GridAccSpend'
     }]
 });
