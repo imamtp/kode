@@ -467,7 +467,6 @@
     <script src='{$assets_url}/js/app/inventory/inventoryInvForm.js'></script>
     <script src='{$assets_url}/js/app/inventory/inventoryHistory.js'></script>
     <script src='{$assets_url}/js/app/inventory/formInventoryV2.js'></script>
-    <script src='{$assets_url}/js/app/inventory/formInventoryV2.js'></script>
     <script src='{$assets_url}/js/app/inventory/GridAccInventory.js'></script>
     <script src='{$assets_url}/js/app/inventory/GridDepresiasiInventoryTab.js'></script>
     <script src='{$assets_url}/js/app/inventory/inventoryWindow.js'></script>
