@@ -104,7 +104,7 @@ Ext.define('GridItemSelectSalesQuotation', {
 
                 var gridPO = Ext.getCmp('EntrySalesQuotation');
                 gridPO.getStore().insert(0, recPO);
-                updateGridSalesOrder('general');
+                updateGridSalesQuotation('general');
 
                 Ext.getCmp('wItemSelectSalesQuotationPopup').hide();
 
