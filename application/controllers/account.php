@@ -451,12 +451,7 @@ class account extends MY_Controller {
     }
 
     function createMenu($PARENT, $active) {
-//        $childmenu = $this->cekChildMenu(0);
-        // $sql = "select a.idpos,d.namepos,a.lock,a.display,a.idclassificationcf,a.idaccounttype,a.idparent,a.idaccount,a.accname,a.accnumber,a.balance,a.description,b.classname,c.acctypename,b.prefixno,active
-        //         from account a
-        //         left join classificationcf b ON a.idclassificationcf = b.idclassificationcf
-        //         left join accounttype c ON a.idaccounttype = c.idaccounttype 
-        //         left join accountpos d ON a.idpos = d.idpos ";
+
         $sql = "select a.idpos,d.namepos,a.lock,a.display,a.idclassificationcf,a.idaccounttype,a.idparent,a.idaccount,a.accname,a.accnumber,a.balance,a.description,b.classname,c.acctypename,b.prefixno,active
                 from account a
                 left join accounttype c ON a.idaccounttype = c.idaccounttype 
@@ -596,16 +591,7 @@ class account extends MY_Controller {
         $json = "{
                     \"text\": \".\",
                     \"children\": [
-                        {
-                            \"id\": '0',
-                            \"text\": \" \",
-                            \"user\": \"Tommy Maintz\",
-                            \"iconCls\": \"id-folder\",
-                            \"expanded\": true,
-                            \"children\": [
-                                " . $this->createMenu($parent, $active) . "
-                            ]
-                        }
+                        " . $this->createMenu($this->input->get('node'), $active) . "
                     ]
                 }";
         echo $json;
