@@ -157,7 +157,10 @@ Ext.define('GridAsuransiPopup', {
     }
 });
 
-var wGridAsuransiPopup = Ext.create('widget.window', {
+Ext.define(dir_sys + 'employee.gridAsuransiPopup',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.gridAsuransiPopup',
+// var wGridAsuransiPopup = Ext.create('widget.window', {
     id: 'windowPopupGridAsuransiPopup',
     title: 'Pilih kesertaan Asuransi',
     header: {

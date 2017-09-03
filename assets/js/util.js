@@ -284,3 +284,15 @@ function convertDate2(tgl) {
     }
 
 }
+
+function load_js_file(file){
+    Ext.Loader.loadScript({
+        url: 'assets/js/app/'+file,
+        onLoad: function() {
+            console.log(file+' loaded');
+        },
+        onError: function() {
+            Ext.Msg.alert('Failed', 'Failed while loading file '+file);
+        }
+    });    
+}

@@ -1,23 +1,21 @@
-//Ext.define('OngoingGridStoreModel', {
-//    extend: 'Ext.data.Model',
-//    fields: ['idjournalitem', 'idaccount', 'debit', 'credit', 'memo', 'datejournal', 'nojournal'],
-//    idProperty: 'id'
-//});
-//
-//var OngoingGridStore = Ext.create('Ext.data.Store', {
-//    model: 'OngoingGridStoreModel',
-//    //remoteSort: true,
-//    autoload: false,
-//    proxy: {
-//        type: 'ajax',
-//        url: SITE_URL + 'backend/ext_get_all/ongoingtrans/money',
-//        actionMethods: 'POST',
-//        reader: {
-//            root: 'rows',
-//            totalProperty: 'results'
-//        }
-//    }
-//});
+// load_js_file('money/formaddrowReconcile.js');
+var wAddRowReconcile = Ext.create(dir_sys + 'money.windowPopupAddRowReconcile');
+var windowPopupAddRowReconcileOther = Ext.create(dir_sys + 'money.windowPopupAddRowReconcileOther');
+
+var wAccReconcilePopup = Ext.create(dir_sys + 'money.wAccReconcilePopup');
+
+// load_js_file('money/formaddrowReconcileOther.js');
+
+Ext.define('reconcileGridStoreModel', {
+    extend: 'Ext.data.Model',
+    fields: ['noref', 'date', 'expenseaccount', 'incomeaccount', 'accnameE', 'accnameI', 'amount', 'memo', 'deposit', 'withdraw'],
+    idProperty: 'id'
+});
+
+var reconcileGridStore = Ext.create('Ext.data.Store', {
+    model: 'reconcileGridStoreModel'
+});
+
 
 Ext.define('KitchenSink.view.grid.EntryReconcile', {
     extend: 'Ext.grid.Panel',
@@ -463,7 +461,7 @@ Ext.define('KitchenSink.view.grid.EntryReconcile', {
         } else {
             Ext.getCmp('formAddRowReconcile').getForm().reset();
 
-            wAddRowReconcileOther.show();
+            windowPopupAddRowReconcileOther.show();
             Ext.getCmp('formAddRowReconcileOther').getForm().reset();
         }
 
@@ -633,7 +631,10 @@ function validasiReconcile()
     }
 }
 
-var wEntryReconcile = Ext.create('widget.window', {
+Ext.define(dir_sys + 'money.wEntryReconcile',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.wEntryReconcile',
+// var wEntryReconcile = Ext.create('widget.window', {
     id: 'wEntryReconcile',
     title: 'Input Pembayaran',
     header: {

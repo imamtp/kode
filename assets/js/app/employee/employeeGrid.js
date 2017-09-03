@@ -1,4 +1,18 @@
 var employeeAccessTab = Ext.create(dir_sys + 'employee.employeeAccessTab');
+var wGridAsuransiPopup = Ext.create(dir_sys + 'employee.gridAsuransiPopup');
+var ChooserListSalesman = Ext.create(dir_sys + 'employee.ChooserListSalesman');
+
+Ext.create(dir_sys + 'employee.PayrollHistoryGrid');
+Ext.create(dir_sys + 'employee.AsuransiEmpGrid');
+Ext.create(dir_sys + 'employee.GridPotonganGrid');
+Ext.create(dir_sys + 'employee.GridTunjanganGrid');
+Ext.create(dir_sys + 'employee.GridTambahanGajiGrid');
+
+load_js_file('employee/importDataPegawai.js');
+load_js_file('employee/importDataPotongan.js');
+load_js_file('employee/importDataTunjangan.js');
+
+var storePayrollHistoryGrid = Ext.getCmp('PayrollHistoryGridID').getStore();
 
 var keaktifan = Ext.create('Ext.data.Store', {
     fields: ['abbr', 'keaktifan'],
@@ -611,9 +625,9 @@ Ext.define('TabPortDetailPegawai', {
 });
 
 
-Ext.define('PortPegawai', {
+Ext.define(dir_sys + 'employee.EmployeeGrid', {
     extend: 'Ext.Panel',
-    alias: 'widget.PortPegawai',
+    alias: 'widget.EmployeeGrid',
     layout: 'border',
     bodyBorder: false,
     defaults: {

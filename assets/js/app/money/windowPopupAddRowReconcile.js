@@ -1,13 +1,5 @@
-Ext.define('reconcileGridStoreModel', {
-    extend: 'Ext.data.Model',
-    fields: ['noref', 'date', 'expenseaccount', 'incomeaccount', 'accnameE', 'accnameI', 'amount', 'memo', 'deposit', 'withdraw'],
-    idProperty: 'id'
-});
-
-var reconcileGridStore = Ext.create('Ext.data.Store', {
-    model: 'reconcileGridStoreModel'
-});
-
+var windowPopupAccListReconcileE = Ext.create(dir_sys + 'money.windowPopupAccListReconcileE');
+var windowPopupAccListReconcileI = Ext.create(dir_sys + 'money.windowPopupAccListReconcileI');
 
 var formAddRowReconcile = Ext.create('Ext.form.Panel', {
     id: 'formAddRowReconcile',
@@ -227,7 +219,10 @@ var formAddRowReconcile = Ext.create('Ext.form.Panel', {
         }]
 });
 
-var wAddRowReconcile = Ext.create('widget.window', {
+Ext.define(dir_sys + 'money.windowPopupAddRowReconcile',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.windowPopupAddRowReconcile',
+// var wAddRowReconcile = Ext.create('widget.window', {
     id: 'windowPopupAddRowReconcile',
     title: 'Entry Penyesuaian Bank',
     header: {

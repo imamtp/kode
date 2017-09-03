@@ -49,7 +49,7 @@ var smGridTransferMoney = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridTransferMoney', {
+Ext.define(dir_sys + 'money.GridTransferMoney', {
     title: 'Daftar Riwayat Transfer Kas',
     itemId: 'GridTransferMoneyID',
     id: 'GridTransferMoneyID',

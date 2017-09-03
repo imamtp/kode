@@ -1,3 +1,5 @@
+var wAccReconcileOtherPopup = Ext.create(dir_sys + 'money.wAccReconcileOtherPopup');
+
 var formAddRowReconcileOther = Ext.create('Ext.form.Panel', {
     id: 'formAddRowReconcileOther',
     width: 450,
@@ -192,7 +194,10 @@ var formAddRowReconcileOther = Ext.create('Ext.form.Panel', {
         }]
 });
 
-var wAddRowReconcileOther = Ext.create('widget.window', {
+Ext.define(dir_sys + 'money.windowPopupAddRowReconcileOther',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.windowPopupAddRowReconcileOther',
+// var wAddRowReconcileOther = Ext.create('widget.window', {
     id: 'windowPopupAddRowReconcileOther',
     title: 'Entry Penyesuaian',
     header: {

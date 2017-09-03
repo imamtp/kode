@@ -1,31 +1,5 @@
-Ext.define('GridemployeeProsesThrGridModel', {
-    extend: 'Ext.data.Model',
-    fields: ['idemployee','pengali','kehadiranjam','totalpendapatan','masakerja','jumlahthr','thrtambahan','totalthr','month','year','firstname','lastname','code','keterangan'],
-    idProperty: 'id'
-});
 
-var storeGridemployeeProsesThrGrid = Ext.create('Ext.data.Store', {
-    pageSize: 100,
-    model: 'GridemployeeProsesThrGridModel',
-    //remoteSort: true,
-    // autoload:true,
-    proxy: {
-        type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/employeeProsesThrGridTmp/payroll',
-        actionMethods: 'POST',
-        reader: {
-            root: 'rows',
-            totalProperty: 'results'
-        },
-        //simpleSortMode: true
-    },
-    sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
-});
-////////////////////////////////////////////////////////
-
+// var storeGridemployeeProsesThrGrid =  Ext.getCmp('GridemployeeProsesThrGridID').getStore();
 
 Ext.define('GridPilihPegawaiThrGridModel', {
     extend: 'Ext.data.Model',
@@ -132,7 +106,7 @@ Ext.define('GridPilihPegawaiThrGrid', {
                                     if (d.success)
                                     {
                                             Ext.getCmp('wPilihPegawaiThr').hide();
-                                            storeGridemployeeProsesThrGrid.load();
+                                            Ext.getCmp('GridemployeeProsesThrGridID').getStore().load();
                                             getSummaryThr();
                                     } else {
                                     }
@@ -214,8 +188,10 @@ Ext.define('GridPilihPegawaiThrGrid', {
     }
 });
 
-
-var wPilihPegawaiThr  = Ext.create('widget.window', {
+Ext.define(dir_sys + 'penggajian.wPilihPegawaiThr', {
+// var wPilihPegawaiThr  = Ext.create('widget.window', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.wPilihPegawaiThr',
     id: 'wPilihPegawaiThr',
     title: 'Pilih Pegawai Yang Akan Diproses THR-nya',
     header: {

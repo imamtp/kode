@@ -50,7 +50,7 @@ var smPayrollHistoryGrid = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('PayrollHistoryGrid', {
+Ext.define(dir_sys + 'employee.PayrollHistoryGrid', {
     title: 'Riwayat Pembayaran Gaji',
     itemId: 'PayrollHistoryGridID',
     id: 'PayrollHistoryGridID',
