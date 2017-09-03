@@ -142,7 +142,7 @@ var smGridMasterCurrency = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterCurrency', {
+Ext.define(dir_sys + 'master.GridMasterCurrency', {
     // renderTo:'mytabpanel',
     //    multiSelect: true,
     //    selModel: smGridMasterCurrency,

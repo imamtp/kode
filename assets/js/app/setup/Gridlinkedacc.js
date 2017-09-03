@@ -1,3 +1,5 @@
+var winAccUnit = Ext.create(dir_sys + 'setup.windowPopupAccUnitSetup');
+
 Ext.define('GridSetupUnitLinkModel', {
     extend: 'Ext.data.Model',
     fields: ['idunit', 'namaunit', 'idlinked', 'namelinked', 'idaccount', 'accname', 'accnumber'],
@@ -354,7 +356,7 @@ var smGridlinkedacc = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('Gridlinkedacc', {
+Ext.define(dir_sys + 'setup.Gridlinkedacc', {
     // renderTo:'mytabpanel',
     //    multiSelect: true,
     //    selModel: smGridlinkedacc,

@@ -1,8 +1,11 @@
-var storeGridCustomer = Ext.create('Ext.data.Store', {
+load_js_file('master/FormProject.js');
+load_js_file('master/ChooserListProject.js');
+
+var storeGridProject = Ext.create('Ext.data.Store', {
     pageSize: 100,
-    model: 'App.model.Customer',
+    model: 'App.model.Project',
     sorters: [{
-        property: 'namecustomer',
+        property: 'namesupplier',
         direction: 'ASC'
     }],
     listeners: {
@@ -14,62 +17,58 @@ var storeGridCustomer = Ext.create('Ext.data.Store', {
     },
 });
 
-var smGridCustomer = Ext.create('Ext.selection.CheckboxModel', {
+var smGridProject = Ext.create('Ext.selection.CheckboxModel', {
     allowDeselect: true,
     mode: 'MULTI',
     listeners: {
         deselect: function(model, record, index) {
-            var selectedLen = smGridCustomer.getSelection().length;
+            var selectedLen = smGridProject.getSelection().length;
             if (selectedLen == 0) {
-                Ext.getCmp('GridCustomerID').queryById('btnEdit').setDisabled(true);
-                Ext.getCmp('GridCustomerID').queryById('btnDelete').setDisabled(true);
+                Ext.getCmp('GridProjectID').queryById('btnEdit').setDisabled(true);
+                Ext.getCmp('GridProjectID').queryById('btnDelete').setDisabled(true);
             }
         },
         select: function(model, record, index) {
-            Ext.getCmp('GridCustomerID').queryById('btnEdit') .setDisabled(false);
-            Ext.getCmp('GridCustomerID').queryById('btnDelete') .setDisabled(false);
+            Ext.getCmp('GridProjectID').queryById('btnEdit') .setDisabled(false);
+            Ext.getCmp('GridProjectID').queryById('btnDelete') .setDisabled(false);
         }
     }
 });
 
-Ext.define('MY.searchGridCustomer', {
+Ext.define('MY.searchGridProject', {
     extend: 'Ext.ux.form.SearchField',
-    alias: 'widget.searchGridCustomer',
-    store: storeGridCustomer,
+    alias: 'widget.searchGridProject',
+    store: storeGridProject,
     width: 180
 });
 
-Ext.define('GridCustomer', {
-    title: 'Customer',
-    itemId: 'GridCustomerID',
-    id: 'GridCustomerID',
+Ext.define(dir_sys + 'master.GridProject', {
+    itemId: 'GridProjectID',
+    id: 'GridProjectID',
     extend: 'Ext.grid.Panel',
-    alias: 'widget.GridCustomer',
-    store: storeGridCustomer,
-    selModel: smGridCustomer,
+    alias: 'widget.GridProject',
+    store: storeGridProject,
+    selModel: smGridProject,
     loadMask: true,
     columns: [
-        {header: 'idcustomer', dataIndex:'idcustomer', hidden:true},
-        {header: 'No', xtype:'rownumberer', sortable:false, width: 50},
-        {header: 'No Customer', minWidth: 100, dataIndex: 'nocustomer' },
-        {header: 'Name', minWidth: 150, dataIndex: 'namecustomer' },
-        {header: 'Type', minWidth: 100, dataIndex: 'namecustype' },
-        {header: 'Address', minWidth: 200, dataIndex: 'address' },
-        {header: 'Shipping Address', minWidth: 200, dataIndex: 'shipaddress' },
-        {header: 'Bill Address', minWidth: 200, dataIndex: 'billaddress' },
-        {header: 'No. Telp.', minWidth: 200, dataIndex: 'telephone' },
-        {header: 'No. HP', minWidth: 100, dataIndex: 'handphone' },
-        {header: 'Fax', minWidth: 100, dataIndex: 'fax' },
-        {header: 'Email', minWidth: 100, dataIndex: 'email' },
-        {header: 'Website', minWidth: 100, dataIndex: 'website' },
-        {header: 'City', minWidth: 150, dataIndex: 'city' },
-        {header: 'State', minWidth: 150, dataIndex: 'state' },
-        {header: 'Post Code', minWidth: 150, dataIndex: 'postcode' },
-        {header: 'Country', minWidth: 150, dataIndex: 'country' },
-        {header: 'Notes', minWidth: 250, dataIndex: 'notes', flex:1 },
-        {header: 'Status', dataIndex:'status', minWidth: 100, renderer: function(value){
+        {header:'project_id', dataIndex:'project_id', hidden:true},
+        {header:'No', xtype:'rownumberer', sortable:false, width: 50},
+        {header:'Project Name', dataIndex:'projectname', minWidth: 150},
+        {header:'Budget', dataIndex:'budget', minWidth: 150},
+        {header:'Expense', dataIndex:'expense', minWidth: 150},
+        {header:'Realization', dataIndex:'realization', minWidth: 150},
+        {header:'Profit', dataIndex:'profit', minWidth: 150},
+        {header:'Tax', dataIndex:'taxcode', minWidth: 150},
+        {header:'Curr', dataIndex:'namecurr', minWidth: 200},
+        {header:'Start Date', dataIndex:'startdate', minWidth: 150},
+        {header:'End Date', dataIndex:'enddate', minWidth: 150},
+        {header:'Status', dataIndex:'status', minWidth: 100, renderer: function(value){
+            return projectstatusarr.map(function(val){return val[1]})[value-1];
+        }},
+        {header:'Active', dataIndex:'status', minWidth: 100, renderer: function(value){
             return togglearr.map(function(val){return val[1]})[value];
         }},
+        {header:'Description', dataIndex:'description', minWidth: 200, flex:1},
     ],
     dockedItems: [
         {
@@ -80,8 +79,8 @@ Ext.define('GridCustomer', {
                 text: 'Add',
                 iconCls: 'add-icon',
                 handler: function() {
-                    FormCustomer.statusform = 'input';
-                    FormCustomer.show();
+                    FormProject.statusform = 'input';
+                    FormProject.show();
                 }
             }, {
                 itemId: 'btnEdit',
@@ -89,23 +88,23 @@ Ext.define('GridCustomer', {
                 iconCls: 'edit-icon',
                 disabled: true,
                 handler: function() {
-                    var grid = Ext.ComponentQuery.query('GridCustomer')[0];
+                    var grid = Ext.ComponentQuery.query('GridProject')[0];
                     var selectedRecord = grid.getSelectionModel().getSelection()[0];
                     var rows = grid.getSelectionModel().getSelection();
                     if (rows.length == 0) {
-                        Ext.Msg.alert('Failure', 'Brand is not set!');
+                        Ext.Msg.alert('Failure', 'Pilih data brand terlebih dahulu!');
                     } else {
-                        FormCustomer.statusform = 'edit';
+                        FormProject.statusform = 'edit';
                         var data = null;
-                        storeGridCustomer.getRange().every(function(rec){
-                            if(rec.data['idcustomer'] == selectedRecord.data['idcustomer']){
+                        storeGridProject.getRange().every(function(rec){
+                            if(rec.data['idsupplier'] == selectedRecord.data['idsupplier']){
                                 data = rec;
                                 return false; 
                             }
                             return true;
                         });
-                        formCustomer.loadRecord(data);
-                        FormCustomer.show();
+                        formProject.loadRecord(data);
+                        FormProject.show();
                     }
                 }
             }, {
@@ -120,7 +119,7 @@ Ext.define('GridCustomer', {
                         buttons: Ext.Msg.YESNO,
                         fn: function(btn) {
                             if (btn == 'yes') {
-                                var grid = Ext.ComponentQuery.query('GridCustomer')[0];
+                                var grid = Ext.ComponentQuery.query('GridProject')[0];
                                 var sm = grid.getSelectionModel();
                                 selected = [];
                                 Ext.each(sm.getSelection(), function(item) {
@@ -128,7 +127,7 @@ Ext.define('GridCustomer', {
                                 });
                                 console.log(selected);
                                 Ext.Ajax.request({
-                                    url: SITE_URL + 'backend/ext_delete/Customer/master',
+                                    url: SITE_URL + 'backend/ext_delete/Project/master',
                                     method: 'POST',
                                     params: {
                                         postdata: Ext.encode(selected),
@@ -139,7 +138,7 @@ Ext.define('GridCustomer', {
                                         if (!d.success) {
                                             Ext.Msg.alert('Informasi', d.message);
                                         } else {
-                                            storeGridCustomer.load();
+                                            storeGridProject.load();
                                         }
                                     },
                                     failure: function(form, action) {
@@ -156,13 +155,13 @@ Ext.define('GridCustomer', {
             'Pencarian: ', 
             ' ', 
             {
-                xtype: 'searchGridCustomer',
+                xtype: 'searchGridProject',
                 text: 'Left Button',
             }
         ],
     }, {
         xtype: 'pagingtoolbar',
-        store: storeGridCustomer, // same store GridPanel is using
+        store: storeGridProject, // same store GridPanel is using
         dock: 'bottom',
         displayInfo: true
         // pageSize:20
@@ -171,21 +170,21 @@ Ext.define('GridCustomer', {
         render: {
             scope: this,
             fn: function(grid) {
-                storeGridCustomer.load();
+                storeGridProject.load();
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
-            FormCustomer.statusform = 'edit';
+            FormProject.statusform = 'edit';
             var data = null;
-            storeGridCustomer.getRange().every(function(rec){
-                if(rec.data['idcustomer'] == record.data.idcustomer){
+            storeGridProject.getRange().every(function(rec){
+                if(rec.data['idsupplier'] == record.data.idsupplier){
                     data = rec;
                     return false; 
                 }
                 return true;
             });
-            formCustomer.loadRecord(data);
-            FormCustomer.show();
+            formProject.loadRecord(data);
+            FormProject.show();
         }
     }
 });

@@ -1,4 +1,7 @@
-Ext.define('TabCustomer', {
+Ext.create(dir_sys + 'master.GridCustomer');
+Ext.create(dir_sys + 'master.GridCustomerType');
+
+Ext.define(dir_sys + 'master.TabCustomer', {
     extend: 'Ext.tab.Panel',
     id: 'TabCustomer',
     alias: 'widget.TabCustomer',

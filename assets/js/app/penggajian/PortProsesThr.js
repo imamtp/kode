@@ -1,5 +1,9 @@
 var wPilihPegawaiThr = Ext.create(dir_sys + 'penggajian.wPilihPegawaiThr');
-load_js_file('setup/AccListThr.js');
+// var wAccListBebanThr = Ext.create(dir_sys + 'setup.wAccListBebanThr');
+
+load_js_file('setup/wAccListBebanThr.js');
+
+
 //
 Ext.define('GridemployeeProsesThrGridModel', {
     extend: 'Ext.data.Model',

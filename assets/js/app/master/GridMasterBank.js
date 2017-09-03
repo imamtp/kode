@@ -146,7 +146,7 @@ var smGridMasterBank = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterBank', {
+Ext.define(dir_sys + 'master.GridMasterBank', {
     title: 'Bank Data',
     itemId: 'GridMasterBankID',
     id: 'GridMasterBankID',

@@ -6,7 +6,7 @@ Ext.define('logoheaderthumb', {
     autoEl: {tag: 'img', width: 80, height: 50}
 });
 
-Ext.define('MyApp.view.companyData', {
+Ext.define(dir_sys + 'setup.companyData', {
     extend: 'Ext.form.Panel',
     alias: 'widget.companyData',
     id: 'formSetupCompany',

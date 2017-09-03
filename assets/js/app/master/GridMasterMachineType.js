@@ -137,7 +137,7 @@ var smGridMasterMachineType = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterMachineType', {
+Ext.define(dir_sys + 'master.GridMasterMachineType', {
     title: 'Machine Type',
     itemId: 'GridMasterMachineTypeID',
     id: 'GridMasterMachineTypeID',

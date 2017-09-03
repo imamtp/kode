@@ -1,6 +1,9 @@
-var GridMasterProductionCost = Ext.create(dir_sys + 'master.GridMasterProductionCost');
+Ext.create(dir_sys + 'master.GridMasterProductionCost');
+Ext.create(dir_sys + 'master.GridMasterMachineType');
+Ext.create(dir_sys + 'master.GridMasterProductionCost');
+Ext.create(dir_sys + 'master.GridMasterMachine');
 
-Ext.define('TabMasterProduction', {
+Ext.define(dir_sys + 'master.TabMasterProduction', {
     extend: 'Ext.tab.Panel',
     id: 'TabMasterProduction',
     alias: 'widget.TabMasterProduction',
@@ -18,7 +21,9 @@ Ext.define('TabMasterProduction', {
         {
             xtype:'GridMasterMachineType'
         },
-        GridMasterProductionCost
+        {
+            xtype:'GridMasterProductionCost'
+        }
     ], listeners: {
         render: {
             scope: this,

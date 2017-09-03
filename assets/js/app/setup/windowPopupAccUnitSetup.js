@@ -118,7 +118,10 @@ Ext.define('GridTreeAccUnitSetup', {
     }
 });
 
-var winAccUnit = Ext.create('widget.window', {
+Ext.define(dir_sys + 'setup.windowPopupAccUnitSetup',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.windowPopupAccUnitSetup',
+// var winAccUnit = Ext.create('widget.window', {
     id: 'windowPopupAccUnitSetup',
     header: {
         titlePosition: 2,
