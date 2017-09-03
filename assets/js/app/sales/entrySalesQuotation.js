@@ -1,4 +1,35 @@
-Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
+Ext.define('GridItemSalesQuotationModel', {
+    extend: 'Ext.data.Model',
+    fields: ['idsalesitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'size', 'size_measurement', 'deleted'],
+    idProperty: 'id'
+});
+
+var storeGridItemSalesQuotation = Ext.create('Ext.data.Store', {
+    pageSize: 100,
+    model: 'GridItemSalesQuotationModel',
+    //remoteSort: true,
+    // autoload:true,
+    proxy: {
+        type: 'ajax',
+        url: SITE_URL + 'backend/ext_get_all/ItemSalesQuotation/sales',
+        actionMethods: 'POST',
+        reader: {
+            root: 'rows',
+            totalProperty: 'results'
+        },
+        //simpleSortMode: true
+    },
+    sorters: [{
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
+});
+
+//end store head
+
+var wItemSelectSalesQuotationPopup = Ext.create(dir_sys + 'sales.wItemSelectSalesQuotationPopup');
+
+Ext.define(dir_sys + 'sales.EntrySalesQuotation', {
     extend: 'Ext.grid.Panel',
     id: 'EntrySalesQuotation',
     alias: 'widget.EntrySalesQuotation',
@@ -706,7 +737,7 @@ Ext.define('KitchenSink.view.grid.EntrySalesQuotation', {
         //     Ext.Msg.alert('Peringatan', 'Supplier belum dipilih!');
         // } else {
         wItemSelectSalesQuotationPopup.show();
-        storeGridItemSelectSalesQuotation.load();
+        Ext.getCmp('GridItemSelectSalesQuotationID').getStore().load();
         // }
 
         //        var rec = new JournalStore({

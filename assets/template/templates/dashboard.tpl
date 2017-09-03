@@ -500,15 +500,6 @@
     <script src='{$assets_url}/js/app/hutangpiutang/gridHutangLain.js'></script>
     <script src='{$assets_url}/js/app/hutangpiutang/gridHutangPurchase.js'></script>
 
-    <script src='{$assets_url}/js/app/sales/gridItemSalesOrderPopUp.js'></script>
-    <script src='{$assets_url}/js/app/sales/WindowSaleQuoteList.js'></script>
-    <script src='{$assets_url}/js/app/sales/entrySalesOrder.js'></script>
-    <script src='{$assets_url}/js/app/sales/salesOrderGrid.js'></script>
-    <script src='{$assets_url}/js/app/sales/gridItemSalesQuotationPopUp.js'></script>
-    <script src='{$assets_url}/js/app/sales/entrySalesQuotation.js'></script>
-    <script src='{$assets_url}/js/app/sales/salesQuotationGrid.js'></script>
-
-
     <script src='{$assets_url}/js/app/report/neraca.js'></script>
     <script src='{$assets_url}/js/app/report/labarugi.js'></script>
     <script src='{$assets_url}/js/app/report/generalledger.js'></script>

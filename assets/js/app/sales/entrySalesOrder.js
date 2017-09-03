@@ -1,8 +1,42 @@
-Ext.require([
-    dir_sys + 'sales.GridSalesmanSOPopup'
-]);
+Ext.define('GridItemSalesOrderModel', {
+    extend: 'Ext.data.Model',
+    fields: ['idsalesitem', 'idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'price', 'qty', 'total', 'ratetax', 'disc', 'short_desc', 'sku_no', 'size', 'warehouse_code', 'size_measurement', 'deleted'],
+    idProperty: 'id'
+});
 
-Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
+var storeGridItemSalesOrder = Ext.create('Ext.data.Store', {
+    pageSize: 100,
+    model: 'GridItemSalesOrderModel',
+    //remoteSort: true,
+    // autoload:true,
+    proxy: {
+        type: 'ajax',
+        url: SITE_URL + 'backend/ext_get_all/ItemSalesOrder/sales',
+        actionMethods: 'POST',
+        reader: {
+            root: 'rows',
+            totalProperty: 'results'
+        },
+        //simpleSortMode: true
+    },
+    sorters: [{
+        property: 'menu_name',
+        direction: 'DESC'
+    }]
+});
+
+//end store head
+
+var wItemSalesPopupOrderPopup = Ext.create(dir_sys + 'sales.wItemSalesPopupOrderPopup');
+Ext.create(dir_sys + 'sales.wGridSalesQuoteListPopup');
+
+load_js_file('sales/GridSalesmanSOPopup.js');
+
+// Ext.require([
+//     dir_sys + 'sales.GridSalesmanSOPopup'
+// ]);
+
+Ext.define(dir_sys + 'sales.EntrySalesOrder', {
     extend: 'Ext.grid.Panel',
     id: 'EntrySalesOrder',
     alias: 'widget.EntrySalesOrder',
@@ -921,8 +955,8 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
         //        // Create a model instance
         //        Ext.getCmp('formAddRowJurnal').getForm().reset();
         wItemSalesPopupOrderPopup.show();
-        storeGridItemSalesPopupOrder.load();
-
+        // storeGridItemSalesPopupOrder.load();
+        Ext.getCmp('GridItemSalesPopupOrderID').getStore().load();
         //        var rec = new JournalStore({
         //            idaccount: null,
         //            accname: null,
@@ -949,90 +983,3 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
     }
 });
 
-function updateGridSalesOrder(tipe) {
-    console.log('update run');
-    var addprefix = 'SalesOrder';
-
-    var subtotalSalesOrder = 0 * 1;
-    var dppSalesOrder = 0 * 1;
-    var totalSalesOrder = 0 * 1;
-    var totalPajak = 0 * 1;
-    // var angkutSalesOrder = Ext.getCmp('angkutSalesOrder').getValue();
-    var angkutSalesOrder = str_replace(",", "", Ext.getCmp('freightSalesOrder').getValue()) * 1;
-    // var pembayaranSalesOrder = Ext.getCmp('pembayaranSalesOrder').getValue();
-    var sisaBayarSalesOrder = 0 * 1;
-    var taxrate = Ext.getCmp('cb_tax_id_so').getValue() * 1;
-    var isIncludeTax = Ext.getCmp('include_tax_so').getValue() * 1;
-    var total_diskon = 0;
-
-    Ext.each(storeGridItemSalesOrder.data.items, function(obj, i) {
-        var total = obj.data.qty * (obj.data.price * obj.data.size);
-        var diskon = (total / 100) * obj.data.disc;
-        total_diskon += diskon;
-
-        var net = total - diskon;
-        console.log(total + ' - ' + diskon);
-
-        subtotalSalesOrder += net;
-        // totalPajak += (net / 100) * (taxrate * 1);
-        obj.set('ratetax', taxrate);
-        obj.set('total', net);
-    });
-
-    dppSalesOrder = isIncludeTax ? (subtotalSalesOrder + total_diskon) / 1.1 : subtotalSalesOrder;
-    totalPajak += dppSalesOrder * (taxrate * 1 / 100);
-    totalSalesOrder = isIncludeTax ? subtotalSalesOrder : subtotalSalesOrder + totalPajak;
-    totalSalesOrder += angkutSalesOrder;
-
-    // var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
-    // totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
-    // //     console.log(subtotalSalesOrder);
-    // totalSalesOrder = subtotalSalesOrder;
-    // //     console.log(totalSalesOrder+' '+totalPajak);
-    // if (include_tax * 1 != 1) {
-    //     //include tax
-    //     totalSalesOrder = dppPurchaseOrder;
-    // } else {
-    //     totalSalesOrder = dppPurchaseOrder + totalPajak;
-    // }
-    // console.log(angkutSalesOrder);
-    // console.log(totalSalesOrder);
-
-    // totalSalesOrder = totalSalesOrder + angkutSalesOrder * 1;
-    // console.log(totalSalesOrder);
-
-    //     console.log(totalSalesOrder);
-    // sisaBayarSalesOrder = totalSalesOrder - pembayaranSalesOrder;
-    // alert(totalPajak);
-    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
-    Ext.getCmp('total' + addprefix).setValue(totalSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
-    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { maximumFractionDigits: 2 }));
-    Ext.getCmp('diskonSalesOrder').setValue(total_diskon.toLocaleString('null', { maximumFractionDigits: 2 }));
-    Ext.getCmp('dppSalesOrder').setValue(dppSalesOrder.toLocaleString('null', { maximumFractionDigits: 2 }));
-    // Ext.getCmp('pembayaran').setValue(pembayaranSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
-    // Ext.getCmp('sisaBayarSalesOrder').setValue(sisaBayarSalesOrder.toLocaleString('null', {minimumFractionDigits: 2}));
-
-}
-
-function validasiSalesOrder() {
-    //    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
-
-    // if (Ext.getCmp('nojurnalSalesOrder').getValue() == null) {
-    //     Ext.Msg.alert('Failed', 'Tentukan No SO #');
-    // } else 
-    if (Ext.getCmp('delivery_date_SalesOrder').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Masukkan tanggal Delivery Date');
-    } else if (Ext.getCmp('cb_tax_id_so').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
-    } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Tentukan konsumen');
-    } else if (Ext.getCmp('shipaddressSalesOrder').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Tentukan Alamat Pengiriman');
-    } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
-        Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
-    } else if (Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {
-        Ext.Msg.alert('Failed', 'Msukkan barang terlebih dahulu');
-    } else {
-        return true;
-    }
-}

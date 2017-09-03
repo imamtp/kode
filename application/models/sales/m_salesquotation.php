@@ -56,7 +56,7 @@ class m_salesquotation extends CI_Model {
             $wer .= " AND a.date_quote BETWEEN '$sd' AND '$nd'";
 
         return " a.type = 1 and a.display is null $wer
-         group by a.idsales,h.idsales_quote,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,a.idunit,a.idtax,g.rate,comments,f.nocustomer,f.address,f.telephone,f.handphone";
+         group by a.idsales,h.idsales_quote,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,namecustomer,a.idcustomer,a.idunit,a.idtaxcomments,a.expireddate,f.nocustomer,f.address,f.telephone,f.handphone,e.totalitem,a.idtax,g.rate";
     }
 
     function orderBy() {
