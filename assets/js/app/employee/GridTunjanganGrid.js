@@ -213,7 +213,7 @@ var smGridTunjanganGrid = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridTunjanganGrid', {
+Ext.define(dir_sys + 'employee.GridTunjanganGrid', {
      autoWidth:true,
     autoHeight:true,
     title: 'Tunjangan',

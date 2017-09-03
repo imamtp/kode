@@ -1,4 +1,7 @@
-Ext.define('TabReconcile', {
+Ext.create(dir_sys + 'money.wEntryReconcile');
+Ext.create(dir_sys + 'money.GridReconcile');
+
+Ext.define(dir_sys + 'money.TabReconcile', {
     extend: 'Ext.tab.Panel',
     id: 'TabReconcile',
     alias: 'widget.TabReconcile',

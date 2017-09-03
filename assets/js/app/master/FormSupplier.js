@@ -70,7 +70,10 @@ var formSupplier = Ext.create('Ext.form.Panel', {
     }]
 });
 
-var FormSupplier = Ext.create('widget.window', {
+Ext.define(dir_sys + 'master.FormSupplier', {
+// var FormSupplier = Ext.create('widget.window', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.FormSupplier',
     title: 'Form Supplier',
     header: {
         titlePosition: 2,

@@ -49,7 +49,7 @@ var smGridReconcile = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridReconcile', {
+Ext.define(dir_sys + 'money.GridReconcile', {
     title: 'Daftar Riwayat Rekonsiliasi',
     itemId: 'GridReconcileID',
     id: 'GridReconcileID',

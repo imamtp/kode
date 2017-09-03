@@ -142,7 +142,7 @@ var smGridMasterRack = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterRack', {
+Ext.define(dir_sys + 'master.GridMasterRack', {
     title: 'Rack',
     itemId: 'GridMasterRackID',
     id: 'GridMasterRackID',

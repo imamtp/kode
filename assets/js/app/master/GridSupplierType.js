@@ -1,3 +1,5 @@
+var FormSupplierType = Ext.create(dir_sys + 'master.FormSupplierType');
+
 var storeGridSupplierType = Ext.create('Ext.data.Store', {
     pageSize: 100,
     model: 'App.model.SupplierType',
@@ -39,7 +41,7 @@ var smGridSupplierType = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridSupplierType', {
+Ext.define(dir_sys + 'master.supplier.type.GridSupplierType', {
     title: 'Supplier Type',
     itemId: 'GridSupplierTypeID',
     id: 'GridSupplierTypeID',

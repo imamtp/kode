@@ -104,7 +104,7 @@ var smGridDataTHR = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridDataTHR', {
+Ext.define(dir_sys + 'employee.GridDataTHR', {
     // renderTo:'mytabpanel',
     // layout:'fit',
 //    selModel: smGridDataTHR,

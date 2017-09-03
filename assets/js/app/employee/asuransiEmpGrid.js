@@ -146,7 +146,7 @@ var smAsuransiEmpGrid = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('AsuransiEmpGrid', {
+Ext.define(dir_sys + 'employee.AsuransiEmpGrid', {
     autoWidth:true,
     autoHeight:true,
     title: 'Asuransi',

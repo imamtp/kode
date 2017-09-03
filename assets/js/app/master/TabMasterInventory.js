@@ -1,6 +1,15 @@
+Ext.create(dir_sys + 'master.GridMasterBrand');
+Ext.create(dir_sys + 'master.GridMasterProductData');
+Ext.create(dir_sys + 'master.GridMasterProductMeasurements');
+Ext.create(dir_sys + 'master.GridMasterProductType');
+Ext.create(dir_sys + 'master.GridMasterThickness');
+Ext.create(dir_sys + 'master.GridMasterWarehouse');
+Ext.create(dir_sys + 'master.GridMasterRack');
+Ext.create(dir_sys + 'master.GridInventoryCat');
+
 Ext.create(dir_sys + 'master.GridMasterCoil');
 
-Ext.define('TabMasterInventory', {
+Ext.define(dir_sys + 'master.TabMasterInventory', {
     extend: 'Ext.tab.Panel',
     id: 'TabMasterInventory',
     alias: 'widget.TabMasterInventory',

@@ -51,7 +51,11 @@ var formSupplierType = Ext.create('Ext.form.Panel', {
     }]
 });
 
-var FormSupplierType = Ext.create('widget.window', {
+Ext.define(dir_sys + 'master.FormSupplierType', {
+    // var FormSupplier = Ext.create('widget.window', {
+        extend: 'Ext.window.Window',
+        alias: 'widget.FormSupplierType',
+// var FormSupplierType = Ext.create('widget.window', {
     title: 'Form Supplier Type',
     header: {
         titlePosition: 2,

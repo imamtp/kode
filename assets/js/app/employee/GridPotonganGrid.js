@@ -231,7 +231,7 @@ var smGridPotonganGrid = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridPotonganGrid', {
+Ext.define(dir_sys + 'employee.GridPotonganGrid', {
     autoWidth:true,
     autoHeight:true,
     title: 'Potongan',

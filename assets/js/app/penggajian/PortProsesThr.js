@@ -1,4 +1,34 @@
+var wPilihPegawaiThr = Ext.create(dir_sys + 'penggajian.wPilihPegawaiThr');
+load_js_file('setup/AccListThr.js');
+//
+Ext.define('GridemployeeProsesThrGridModel', {
+    extend: 'Ext.data.Model',
+    fields: ['idemployee','pengali','kehadiranjam','totalpendapatan','masakerja','jumlahthr','thrtambahan','totalthr','month','year','firstname','lastname','code','keterangan'],
+    idProperty: 'id'
+});
 
+var storeGridemployeeProsesThrGrid = Ext.create('Ext.data.Store', {
+    pageSize: 100,
+    model: 'GridemployeeProsesThrGridModel',
+    //remoteSort: true,
+    // autoload:true,
+    proxy: {
+        type: 'ajax',
+        url: SITE_URL + 'backend/ext_get_all/employeeProsesThrGridTmp/payroll',
+        actionMethods: 'POST',
+        reader: {
+            root: 'rows',
+            totalProperty: 'results'
+        },
+        //simpleSortMode: true
+    },
+    sorters: [{
+            property: 'menu_name',
+            direction: 'DESC'
+        }]
+});
+////////////////////////////////////////////////////////
+//
 Ext.define('tabPembayaranProsesThr', {
     // itemId: 'rTabPanelProsesThr',
     id: 'tabPembayaranProsesThr',
@@ -188,7 +218,7 @@ Ext.define('GridemployeeProsesThrGrid', {
                             Ext.Msg.alert('Info', 'Unit Belum Dipilih');
                          } else {
                             wPilihPegawaiThr.show();
-                            storeGridPilihPegawaiThrGrid.load({
+                            Ext.getCmp('GridPilihPegawaiThrGridID').getStore().load({
                                params: {
                                    'periode':periode,
                                    'idunit':unitThr
@@ -388,7 +418,7 @@ Ext.define('TabPortDetailThr', {
     }
 });
 
-Ext.define('PortProsesThr', {
+Ext.define(dir_sys + 'penggajian.PortProsesThr', {
     extend: 'Ext.Panel',
     alias: 'widget.PortProsesThr',
     layout: 'border',

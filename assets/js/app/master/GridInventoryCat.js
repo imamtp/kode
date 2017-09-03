@@ -126,7 +126,7 @@ var smGridInventoryCat = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridInventoryCat', {
+Ext.define(dir_sys + 'master.GridInventoryCat', {
     // renderTo:'mytabpanel',
     //    multiSelect: true,
     //    selModel: smGridInventoryCat,

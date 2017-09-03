@@ -490,7 +490,7 @@ var wAccTransferKasTujuanPopup = Ext.create('widget.window', {
 });
 //END LIST ACC TUJUAN
 
-Ext.define('MyApp.view.transferKasForm', {
+Ext.define(dir_sys + 'money.transferKasForm', {
     extend: 'Ext.form.Panel',
     alias: 'widget.transferKasForm',
     id: 'transferKasForm',

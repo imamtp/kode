@@ -115,7 +115,9 @@ var GridSalesman2List = Ext.create('Ext.grid.Panel', {
     }
 });
 
-var ChooserListSalesman = Ext.create('widget.window', {
+Ext.define(dir_sys + 'employee.ChooserListSalesman',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.ChooserListSalesman',
     title: 'Salesman List',
     header: {
         titlePosition: 2,

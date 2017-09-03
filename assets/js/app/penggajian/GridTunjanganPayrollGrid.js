@@ -25,7 +25,7 @@ var storeGridTunjanganPayrollGrid = Ext.create('Ext.data.Store', {
         }]
 });
 
-Ext.define('GridTunjanganPayrollGrid', {
+Ext.define(dir_sys + 'penggajian.GridTunjanganPayrollGrid', {
      autoWidth:true,
     autoHeight:true,
     title: 'Tunjangan',

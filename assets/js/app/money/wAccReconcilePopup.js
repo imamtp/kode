@@ -230,7 +230,10 @@ Ext.define('GridAccReconcile', {
     ]
 });
 
-var wAccReconcilePopup = Ext.create('widget.window', {
+Ext.define(dir_sys + 'money.wAccReconcilePopup',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.wAccReconcilePopup',
+// var wAccReconcilePopup = Ext.create('widget.window', {
     id: 'wAccReconcilePopup',
     title: 'Pilih Akun',
     header: {

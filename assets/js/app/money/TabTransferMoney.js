@@ -1,4 +1,7 @@
-Ext.define('TabTransferMoney', {
+Ext.create(dir_sys + 'money.transferKasForm');
+Ext.create(dir_sys + 'money.GridTransferMoney');
+
+Ext.define(dir_sys + 'money.TabTransferMoney', {
     extend: 'Ext.tab.Panel',
     id: 'TabTransferMoney',
     alias: 'widget.TabTransferMoney',

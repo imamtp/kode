@@ -1,46 +1,20 @@
-Ext.define('GridemployeeProsesGajiGridModel', {
+
+// var storeGridemployeeProsesThrGrid =  Ext.getCmp('GridemployeeProsesThrGridID').getStore();
+
+Ext.define('GridPilihPegawaiThrGridModel', {
     extend: 'Ext.data.Model',
-    fields: ['idemployee','penambahangaji','idemployeetype','payrolltypeid','pembayaranperjamkehadiran','code','firstname','lastname','namaunit','nametype','jumlahjam','jumlahkehadiran','totalgaji' ,'totaltunjangan','pph21' ,'totalpotongan','totalpembayaran','payname','userin'],
+    fields: ['idemployee','penambahanThr','idPilihPegawaiThr','code','firstname','lastname','address','telephone','handphone','fax','email','website','city','state','postcode','country','notes','nametype'],
     idProperty: 'id'
 });
 
-var storeGridemployeeProsesGajiGrid = Ext.create('Ext.data.Store', {
+var storeGridPilihPegawaiThrGrid = Ext.create('Ext.data.Store', {
     pageSize: 100,
-    model: 'GridemployeeProsesGajiGridModel',
-    //remoteSort: true,
-    // autoload:true,
-    proxy: {
-        type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/employeeProsesGajiGridTmp/payroll',
-        actionMethods: 'POST',
-        reader: {
-            root: 'rows',
-            totalProperty: 'results'
-        },
-        //simpleSortMode: true
-    },
-    sorters: [{
-            property: 'menu_name',
-            direction: 'DESC'
-        }]
-});
-////////////////////////////////////////////////////////
-
-
-Ext.define('GridPilihPegawaiPayrollGridModel', {
-    extend: 'Ext.data.Model',
-    fields: ['idemployee','penambahangaji','idPilihPegawaiPayroll','code','firstname','lastname','address','telephone','handphone','fax','email','website','city','state','postcode','country','notes','nametype'],
-    idProperty: 'id'
-});
-
-var storeGridPilihPegawaiPayrollGrid = Ext.create('Ext.data.Store', {
-    pageSize: 100,
-    model: 'GridPilihPegawaiPayrollGridModel',
+    model: 'GridPilihPegawaiThrGridModel',
     //remoteSort: true,
     autoload:false,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/pilihemployeegrid/payroll',
+        url: SITE_URL + 'backend/ext_get_all/pilihemployeethrgrid/payroll',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -57,42 +31,42 @@ var storeGridPilihPegawaiPayrollGrid = Ext.create('Ext.data.Store', {
                         
 
 
-Ext.define('MY.searchGridPilihPegawaiPayrollGrid', {
+Ext.define('MY.searchGridPilihPegawaiThrGrid', {
     extend: 'Ext.ux.form.SearchField',
-    alias: 'widget.searchGridPilihPegawaiPayrollGrid',
-    store: storeGridPilihPegawaiPayrollGrid,
+    alias: 'widget.searchGridPilihPegawaiThrGrid',
+    store: storeGridPilihPegawaiThrGrid,
     width: 180
 });
 
-var smGridPilihPegawaiPayrollGrid = Ext.create('Ext.selection.CheckboxModel', {
+var smGridPilihPegawaiThrGrid = Ext.create('Ext.selection.CheckboxModel', {
     allowDeselect: true,
     mode: 'SINGLE',
     listeners: {
         deselect: function(model, record, index) {
-            var selectedLen = smGridPilihPegawaiPayrollGrid.getSelection().length;
+            var selectedLen = smGridPilihPegawaiThrGrid.getSelection().length;
             if (selectedLen == 0) {
                 console.log(selectedLen);
-                Ext.getCmp('btnDeletePilihPegawaiPayrollGrid').disable();
+                Ext.getCmp('btnDeletePilihPegawaiThrGrid').disable();
             }
         },
         select: function(model, record, index) {
-            Ext.getCmp('btnDeletePilihPegawaiPayrollGrid').enable();
+            Ext.getCmp('btnDeletePilihPegawaiThrGrid').enable();
         }
     }
 });
 
-Ext.define('GridPilihPegawaiPayrollGrid', {
+Ext.define('GridPilihPegawaiThrGrid', {
     // renderTo:'mytabpanel',
    multiSelect: true,
-//    selModel: smGridPilihPegawaiPayrollGrid,
+//    selModel: smGridPilihPegawaiThrGrid,
 //    title: 'Daftar Pegawai',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     autoHeight:true,
-    itemId: 'GridPilihPegawaiPayrollGridID',
-    id: 'GridPilihPegawaiPayrollGridID',
+    itemId: 'GridPilihPegawaiThrGridID',
+    id: 'GridPilihPegawaiThrGridID',
     extend: 'Ext.grid.Panel',
-    alias: 'widget.GridPilihPegawaiPayrollGrid',
-    store: storeGridPilihPegawaiPayrollGrid,
+    alias: 'widget.GridPilihPegawaiThrGrid',
+    store: storeGridPilihPegawaiThrGrid,
     loadMask: true,
     columns: [
         {header: 'idemployee', dataIndex: 'idemployee', hidden: true},  
@@ -111,7 +85,7 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
                     text: 'Pilih Pegawai',
                     iconCls: 'add-icon',
                     handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridPilihPegawaiPayrollGrid')[0];
+                        var grid = Ext.ComponentQuery.query('GridPilihPegawaiThrGrid')[0];
                         var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
                         if (data.length == 0)
@@ -124,16 +98,16 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
                                 selected.push(item.data[Object.keys(item.data)[0]]);
                             });
                             Ext.Ajax.request({
-                                url: SITE_URL + 'penggajian/insertPayrollListTmp',
+                                url: SITE_URL + 'penggajian/insertThrListTmp',
                                 method: 'POST',
-                                params: {postdata: Ext.encode(selected), periode:Ext.getCmp('payrollPeriode').getValue()},
+                                params: {postdata: Ext.encode(selected), periode:Ext.getCmp('ThrPeriode').getValue()},
                                 success: function(form, action) {
                                     var d = Ext.decode(form.responseText);
                                     if (d.success)
                                     {
-                                            Ext.getCmp('wPilihPegawaiPayroll').hide();
-                                            storeGridemployeeProsesGajiGrid.load();
-                                            getSummaryPayroll();
+                                            Ext.getCmp('wPilihPegawaiThr').hide();
+                                            Ext.getCmp('GridemployeeProsesThrGridID').getStore().load();
+                                            getSummaryThr();
                                     } else {
                                     }
 
@@ -151,14 +125,14 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
                '->',
                 'Pencarian: ', ' ',
                 {
-                    xtype: 'searchGridPilihPegawaiPayrollGrid',
+                    xtype: 'searchGridPilihPegawaiThrGrid',
                     text: 'Left Button'
                 }
 
             ]
         }, {
             xtype: 'pagingtoolbar',
-            store: storeGridPilihPegawaiPayrollGrid, // same store GridPanel is using
+            store: storeGridPilihPegawaiThrGrid, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
                     // pageSize:20
@@ -167,37 +141,37 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
         render: {
             scope: this,
             fn: function(grid) {
-                storeGridPilihPegawaiPayrollGrid.load();
+                storeGridPilihPegawaiThrGrid.load();
 
             }
         },
         itemclick: function(dv, record, item, index, e) {
 //            console.log(record.data.idsiswa)
 
-            // storePayrollHistoryGrid.on('beforeload', function (store, operation, eOpts) {
+            // storeThrHistoryGrid.on('beforeload', function (store, operation, eOpts) {
             //     operation.params = {
-            //         'bulantahunpenggajian': Ext.getCmp('PayrollHistoryPeriod').getValue(),
-            //         'extraparams': 'a.idPilihPegawaiPayroll:' + record.data.idPilihPegawaiPayroll
+            //         'bulantahunpengThran': Ext.getCmp('ThrHistoryPeriod').getValue(),
+            //         'extraparams': 'a.idPilihPegawaiThr:' + record.data.idPilihPegawaiThr
             //     }
             // });
-            // storePayrollHistoryGrid.load();
-//            storePayrollHistoryGrid.load({
+            // storeThrHistoryGrid.load();
+//            storeThrHistoryGrid.load({
 //                            params: {
-//                                'bulantahunpenggajian': Ext.getCmp('PayrollHistoryPeriod').getValue(),
-//                                'extraparams': 'a.idPilihPegawaiPayroll:' + record.data.idPilihPegawaiPayroll
+//                                'bulantahunpengThran': Ext.getCmp('ThrHistoryPeriod').getValue(),
+//                                'extraparams': 'a.idPilihPegawaiThr:' + record.data.idPilihPegawaiThr
 //                            }
 //                        });
         },
         itemdblclick: function(dv, record, item, index, e) {
 
             // var formAgama = Ext.create('formAgama');
-//             var formPilihPegawaiPayrollGrid = Ext.getCmp('formPilihPegawaiPayrollGrid');
-//             wPilihPegawaiPayrollGrid.show();
+//             var formPilihPegawaiThrGrid = Ext.getCmp('formPilihPegawaiThrGrid');
+//             wPilihPegawaiThrGrid.show();
 
-//             formPilihPegawaiPayrollGrid.getForm().load({
-//                 url: SITE_URL + 'backend/loadFormData/PilihPegawaiPayrollGrid/1',
+//             formPilihPegawaiThrGrid.getForm().load({
+//                 url: SITE_URL + 'backend/loadFormData/PilihPegawaiThrGrid/1',
 //                 params: {
-//                     extraparams: 'a.idPilihPegawaiPayroll:' + record.data.idPilihPegawaiPayroll
+//                     extraparams: 'a.idPilihPegawaiThr:' + record.data.idPilihPegawaiThr
 //                 },
 //                 success: function(form, action) {
 //                     // Ext.Msg.alert("Load failed", action.result.errorMessage);
@@ -207,17 +181,19 @@ Ext.define('GridPilihPegawaiPayrollGrid', {
 //                 }
 //             })
 
-//             dataGaji(record.data.idPilihPegawaiPayroll)
+//             dataThr(record.data.idPilihPegawaiThr)
 // //            Ext.getCmp('kddaerahS').setReadOnly(true);
-//             Ext.getCmp('statusformPilihPegawaiPayrollGrid').setValue('edit');
+//             Ext.getCmp('statusformPilihPegawaiThrGrid').setValue('edit');
         }
     }
 });
 
-
-var wPilihPegawaiPayroll = Ext.create('widget.window', {
-    id: 'wPilihPegawaiPayroll',
-    title: 'Pilih Pegawai Yang Akan Digaji',
+Ext.define(dir_sys + 'penggajian.wPilihPegawaiThr', {
+// var wPilihPegawaiThr  = Ext.create('widget.window', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.wPilihPegawaiThr',
+    id: 'wPilihPegawaiThr',
+    title: 'Pilih Pegawai Yang Akan Diproses THR-nya',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
@@ -232,23 +208,23 @@ var wPilihPegawaiPayroll = Ext.create('widget.window', {
     layout: 'fit',
     border: false,
     items: [{
-        xtype:'GridPilihPegawaiPayrollGrid'
+        xtype:'GridPilihPegawaiThrGrid'
     }]
 });
 
 
-function getSummaryPayroll()
+function getSummaryThr()
 {
     Ext.Ajax.request({
-        url: SITE_URL + 'penggajian/getSummaryPayroll',
+        url: SITE_URL + 'penggajian/getSummaryThr',
         method: 'GET',
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
             if (d.success)
             {
-                   Ext.getCmp('summaryProsesGaji').setValue(d.val);
+                   Ext.getCmp('summaryProsesThr').setValue(d.val);
             } else {
-                    Ext.getCmp('summaryProsesGaji').setValue('GET SUMMARY FAILED!');
+                    Ext.getCmp('summaryProsesThr').setValue('GET SUMMARY FAILED!');
             }
 
         },

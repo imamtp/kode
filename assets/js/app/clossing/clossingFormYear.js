@@ -1,4 +1,4 @@
-Ext.define('clossingFormYear', {
+Ext.define(dir_sys + 'clossing.clossingFormYear', {
     title: 'Penutupan Buku Tahunan',
     itemId: 'clossingFormYear',
     id: 'clossingFormYear',

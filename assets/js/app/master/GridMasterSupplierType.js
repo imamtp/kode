@@ -137,7 +137,7 @@ var smGridMasterSupplierType = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterSupplierType', {
+Ext.define(dir_sys + 'master.GridMasterSupplierType', {
     title: 'Supplier Type',
     itemId: 'GridMasterSupplierTypeID',
     id: 'GridMasterSupplierTypeID',

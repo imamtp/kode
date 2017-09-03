@@ -98,7 +98,7 @@ var smGridDataGaji = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridDataGaji', {
+Ext.define(dir_sys + 'penggajian.GridDataGaji', {
     // renderTo:'mytabpanel',
     // layout:'fit',
 //    selModel: smGridDataGaji,

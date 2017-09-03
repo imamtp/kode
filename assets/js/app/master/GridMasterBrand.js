@@ -137,7 +137,7 @@ var smGridMasterBrand = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterBrand', {
+Ext.define(dir_sys + 'master.GridMasterBrand', {
     title: 'Brand',
     itemId: 'GridMasterBrandID',
     id: 'GridMasterBrandID',

@@ -150,7 +150,7 @@ var smGridMasterWarehouse = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridMasterWarehouse', {
+Ext.define(dir_sys + 'master.GridMasterWarehouse', {
     title: 'Warehouse',
     itemId: 'GridMasterWarehouseID',
     id: 'GridMasterWarehouseID',

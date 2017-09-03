@@ -1,3 +1,5 @@
+Ext.create(dir_sys + 'penggajian.GridDataGaji');
+
 Ext.define('storeGridPayrollDataModel', {
     extend: 'Ext.data.Model',
     fields: ['idpayroll','idjournal','month','year','datein','namaunit','memo'],
@@ -203,7 +205,7 @@ Ext.define('GridPayrollData', {
         itemdblclick: function(dv, record, item, index, e) {}
     }
 });
-Ext.define('PortPayrollData', {
+Ext.define(dir_sys + 'penggajian.PortPayrollData', {
     extend: 'Ext.Panel',
     alias: 'widget.PortPayrollData',
     layout: 'border',

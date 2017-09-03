@@ -169,7 +169,7 @@ var smGridTambahanGajiGrid = Ext.create('Ext.selection.CheckboxModel', {
         }
     }
 });
-Ext.define('GridTambahanGajiGrid', {
+Ext.define(dir_sys + 'employee.GridTambahanGajiGrid', {
      autoWidth:true,
     autoHeight:true,
     title: 'Tambahan Gaji',
