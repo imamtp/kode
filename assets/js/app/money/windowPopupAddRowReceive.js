@@ -1,12 +1,5 @@
-Ext.define('ReceiveGridStoreModel', {
-    extend: 'Ext.data.Model',
-    fields: ['idaccount','accnumber','accname','amount','ratetax'],
-    idProperty: 'id'
-});
 
-var ReceiveGridStore = Ext.create('Ext.data.Store', {
-    model: 'ReceiveGridStoreModel'
-});
+var wAccReceiveAddRowPopup = Ext.create(dir_sys + 'money.wAccReceiveAddRowPopup');
 
 var formAddRowReceive = Ext.create('Ext.form.Panel', {
     id: 'formAddRowReceive',
@@ -105,7 +98,10 @@ var formAddRowReceive = Ext.create('Ext.form.Panel', {
         }]
 });
 
-var wAddRowReceive = Ext.create('widget.window', {
+Ext.define(dir_sys + 'money.windowPopupAddRowReceive',{
+    extend: 'Ext.window.Window',
+    alias: 'widget.windowPopupAddRowReceive',
+// var wAddRowReceive = Ext.create('widget.window', {
     id: 'windowPopupAddRowReceive',
     title: 'Tambah Item (kredit)',
     header: {

@@ -486,7 +486,15 @@
     <script src='{$assets_url}js/app/account/gridAccount.js'></script>
 
     <script src='{$assets_url}/js/app/master/supplier/ChooserListSupplier.js'></script>
-    
+
+{* <script src='{$assets_url}/js/app/money/SiswaListAddRowReceiveSiswa.js'></script>
+<script src='{$assets_url}/js/app/money/AccListAddRowReceiveSiswa.js'></script>
+<script src='{$assets_url}/js/app/money/formaddrowReceiveSiswa.js'></script>
+<script src='{$assets_url}/js/app/money/accListReceiveSiswa.js'></script>
+<script src='{$assets_url}/js/app/money/gridReceiveMoneySiswa.js'></script>
+<script src='{$assets_url}/js/app/money/entryReceiveMoneySiswa.js'></script>
+<script src='{$assets_url}/js/app/money/TabReceiveMoneySiswa.js'></script> *}
+
     <!-- // <script src='{$assets_url}js/app/account/ChooserListAccount.js'></script> -->
 
     {*

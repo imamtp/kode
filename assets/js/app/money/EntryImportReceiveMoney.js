@@ -1,3 +1,4 @@
+var wAccImportReceivePopup = Ext.create(dir_sys + 'money.wAccImportReceivePopup');
 
 Ext.define('ImportReceiveGridStoreModel', {
     extend: 'Ext.data.Model',
@@ -10,7 +11,7 @@ var ImportReceiveGridStore = Ext.create('Ext.data.Store', {
 });
 
 
-Ext.define('KitchenSink.view.grid.EntryImportReceiveMoney', {
+Ext.define(dir_sys + 'money.EntryImportReceiveMoney', {
     extend: 'Ext.grid.Panel',
     id: 'EntryImportReceiveMoney',
     alias: 'widget.EntryImportReceiveMoney',

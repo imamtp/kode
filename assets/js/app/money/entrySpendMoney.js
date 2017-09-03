@@ -1,4 +1,18 @@
-Ext.define('KitchenSink.view.grid.EntrySpendMoney', {
+Ext.define('SpendGridStoreModel', {
+    extend: 'Ext.data.Model',
+    fields: ['idaccount','accnumber','accname','amount','ratetax'],
+    idProperty: 'id'
+});
+
+var SpendGridStore = Ext.create('Ext.data.Store', {
+    model: 'SpendGridStoreModel'
+});
+
+var wAddRowSpend = Ext.create(dir_sys + 'money.windowPopupAddRowSpend');
+var wAccSpendPopup = Ext.create(dir_sys + 'money.wAccSpendPopup');
+
+
+Ext.define(dir_sys + 'money.EntrySpendMoney', {
     extend: 'Ext.grid.Panel',
     id: 'EntrySpendMoney',
     alias: 'widget.EntrySpendMoney',

@@ -49,7 +49,7 @@ var smGridImportSpendMoney = Ext.create('Ext.selection.CheckboxModel', {
     }
 });
 
-Ext.define('GridImportSpendMoney', {
+Ext.define(dir_sys + 'money.GridImportSpendMoney', {
     title: 'Riwayat Import Pengeluaran',
     itemId: 'GridImportSpendMoneyID',
     id: 'GridImportSpendMoneyID',
