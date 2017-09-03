@@ -1046,3 +1046,74 @@ function validasiSalesOrder() {
         return true;
     }
 }
+
+
+function updateGridSalesQuotation() {
+    console.log('update run');
+    var addprefix = 'SalesQuotation';
+
+    var subtotalSalesQuotation = 0 * 1;
+    var totalSalesQuotation = 0 * 1;
+    var totalPajak = 0 * 1;
+    var angkutSalesQuotation = Ext.getCmp('angkutSalesQuotation').getValue();
+    var pembayaranSalesQuotation = Ext.getCmp('pembayaranSalesQuotation').getValue();
+    var sisaBayarSalesQuotation = 0 * 1;
+    var rateTax = Ext.getCmp('cb_tax_id_sq').getValue();
+    console.log(rateTax);
+
+    var storeGridItemSalesQuotation = Ext.getCmp('EntrySalesQuotation').getStore();
+    Ext.each(storeGridItemSalesQuotation.data.items, function(obj, i) {
+        var total = obj.data.qty * (obj.data.price * obj.data.size);
+        var diskon = (total / 100) * obj.data.disc;
+
+        var net = total - diskon;
+        subtotalSalesQuotation += net;
+        totalPajak += (net / 100) * rateTax * 1;
+        obj.set('total', net);
+    });
+
+    //     console.log(subtotalSalesQuotation);
+    totalSalesQuotation = subtotalSalesQuotation + angkutSalesQuotation * 1;
+    //     console.log(totalSalesQuotation+' '+totalPajak);
+    totalSalesQuotation = totalSalesQuotation + totalPajak;
+    //     console.log(totalSalesQuotation);
+    sisaBayarSalesQuotation = totalSalesQuotation - pembayaranSalesQuotation;
+
+    Ext.getCmp('subtotal' + addprefix).setValue(subtotalSalesQuotation.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('total' + addprefix).setValue(totalSalesQuotation.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('totalPajak' + addprefix).setValue(totalPajak.toLocaleString('null', { minimumFractionDigits: 2 }));
+    Ext.getCmp('angkut' + addprefix).setValue(angkutSalesQuotation.toLocaleString('null', { minimumFractionDigits: 2 }));
+    // Ext.getCmp('pembayaranSalesQuotation').setValue(pembayaranSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
+    // Ext.getCmp('sisaBayarSalesQuotation').setValue(sisaBayarSalesQuotation.toLocaleString('null', {minimumFractionDigits: 2}));
+
+}
+
+function validasiSalesQuotation() {
+    //    alert(Ext.getCmp('comboxcurrencySalesQuotation').getValue());   
+
+    if (Ext.getCmp('customerSalesQuotation').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Customer belum dipilih');
+
+    } else if (Ext.getCmp('tanggalSalesQuotation').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Masukkan tanggal Sales Quotation');
+    } else if (Ext.getCmp('memoSalesQuotation').getValue() == '') {
+        Ext.Msg.alert('Failed', 'Masukkan Memo SQ');
+    } else if (Ext.getCmp('totalSalesQuotation').getValue() == '') {
+        Ext.Msg.alert('Failed', 'Masukkan barang');
+    }
+    // else if (Ext.getCmp('paymentSalesQuotation').getValue() == 3 && Ext.getCmp('tglPelunasanSalesQuotation').getValue() == null)
+    // {
+    //     Ext.Msg.alert('Failed', 'Masukkan tanggal pelunasan');
+    // } else if(Ext.getCmp('paymentSalesQuotation').getValue()==1 && Ext.getCmp('pembayaranSalesQuotation').getValue()==0)
+    // {
+    //      Ext.Msg.alert('Failed', 'Jumlah Pembayaran Tunai Belum Diinput');
+    // }
+    // else if (Ext.getCmp('paymentSalesQuotation').getValue() == 1 && Ext.getCmp('idaccountSalesQuotation').getValue() == '')
+    // {
+    //     //kalo tunai harus menggunakan akun persediaan / barang datang
+    //     Ext.Msg.alert('Failed', 'Tentukan akun persediaan/barang dagang');
+    // } 
+    else {
+        return true;
+    }
+}
