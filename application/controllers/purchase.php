@@ -910,8 +910,7 @@ class purchase extends MY_Controller {
                 (select paidtoday, balance, duedate 
                     from goods_receipt
                     where idunit = $idunit
-                    and status_gr = 4
-                    and duedate >= '$today') a";
+                    and status_gr = 4) a";
         
         $q = $this->db->query($sql);
         $r = $q->row();

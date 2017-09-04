@@ -59,7 +59,7 @@ var storeGridItemJobWOPopup = Ext.create('Ext.data.Store', {
 
 storeGridItemJobWOPopup.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'inventory_type:' + 1 + ', idinventory_parent: null'
+        'extraparams': 'inventory_type:' + 1
     };
 });
 
