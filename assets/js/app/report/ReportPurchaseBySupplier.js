@@ -193,10 +193,18 @@ Ext.define(dir_sys + 'report.ReportPurchaseBySupplier', {
                 iconCls: 'print-icon',
                 listeners: {
                     click: function(component) {
-                        var report1 = Ext.getCmp('tanggalReportReportPurchaseBySupplier1').getSubmitValue();
-                        //                            var report2 = Ext.getCmp('tanggalReportReportPurchaseBySupplier2').getSubmitValue();
-                        var unitReportReportPurchaseBySupplier = Ext.getCmp('unitReportReportPurchaseBySupplier').getValue();
-                        Ext.getCmp('reportReportPurchaseBySupplier').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportReportPurchaseBySupplier' src='" + SITE_URL + "laporan/ReportPurchaseBySupplier/" + unitReportReportPurchaseBySupplier + "/" + report1 + "/print'>");
+                        var unit = Ext.getCmp('unitReportReportPurchaseBySupplier').getValue();
+                        var sd = Ext.getCmp('startdateReportReportPurchaseBySupplier').getSubmitValue();
+                        var nd = Ext.getCmp('enddateReportReportPurchaseBySupplier').getSubmitValue();
+                        var idsupplier = Ext.getCmp('idsupplierReportReportPurchaseBySupplier').getSubmitValue();
+                        
+                        if(sd==''){
+                            Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                        } else if(nd==''){
+                            Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                        } else {
+                            Ext.getCmp('reportReportPurchaseBySupplier').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportReportPurchaseBySupplier' src='" + SITE_URL + "laporan/ReportPurchaseBySupplier/" + unitReportReportPurchaseBySupplier + "/" + report1 + "/print'>");
+                        }
                     }
                 }
             },

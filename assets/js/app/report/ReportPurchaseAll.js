@@ -27,10 +27,13 @@ Ext.define(dir_sys + 'report.ReportPurchaseAll', {
                 iconCls: 'print-icon',
                 listeners: {
                     click: function(component) {
-                        var report1 = Ext.getCmp('tanggalreportPurchaseAll1').getSubmitValue();
-                        //                            var report2 = Ext.getCmp('tanggalreportPurchaseAll2').getSubmitValue();
-                        var unitreportPurchaseAll = Ext.getCmp('unitreportPurchaseAll').getValue();
-                        Ext.getCmp('reportPurchaseAll').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframereportPurchaseAll' src='" + SITE_URL + "laporan/purchase_all/" + unitreportPurchaseAll + "/" + report1 + "/print'>");
+                        if(sd==''){
+                            Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                        } else if(nd==''){
+                            Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                        } else {
+                            Ext.getCmp('reportPurchaseAll').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframereportPurchaseAll' src='" + SITE_URL + "laporan/purchase_all/" + unitreportPurchaseAll + "/" + report1 + "/print'>");
+                        }
                     }
                 }
             },
