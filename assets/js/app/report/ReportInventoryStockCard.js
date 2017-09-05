@@ -111,11 +111,17 @@ Ext.define(dir_sys + 'report.ReportInventoryStockCard', {
                             var unit = Ext.getCmp('unitReportInventoryStockCard').getValue();
                             var sd = Ext.getCmp('startdateReportInventoryStockCard').getSubmitValue();
                             var nd = Ext.getCmp('enddateReportInventoryStockCard').getSubmitValue();
-                            // var brand = Ext.getCmp('brandReportInventoryStockCard').getValue();
-                            // var invcat = Ext.getCmp('invcatReportInventoryStockCard').getValue();
-                            // var invtype = Ext.getCmp('invtypeReportInventoryStockCard').getValue();
                             var idinventory = Ext.getCmp('idinventoryReportInventoryStockCard').getValue();
-                            Ext.getCmp('ReportInventoryStockCard').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportInventoryStockCard' src='" + SITE_URL + "laporan/inventory_kartu_stok?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idinventory=" + idinventory + "'>");
+
+                            if(sd==''){
+                                Ext.Msg.alert("Info", 'Tanggal mulai belum ditentukan');
+                            } else if(nd==''){
+                                Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                            } else if(idinventory==''){
+                                Ext.Msg.alert("Info", 'Barang belum ditentukan');
+                            } else {
+                                Ext.getCmp('ReportInventoryStockCard').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportInventoryStockCard' src='" + SITE_URL + "laporan/inventory_kartu_stok?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idinventory=" + idinventory + "'>");
+                            }                            
                         }
                     }
                 }

@@ -38,8 +38,8 @@ foreach ($data as $v) {
             <tr>
                 <td><?=$value['accnumber']?></td>
                 <td><?=$value['accname']?></td>
-                <td><div align="right"><?=  number_format($value['debit'])?></div></td>
-                <td><div align="right"><?=  number_format($value['credit'])?></div></td>
+                <td><div align="right"><?=  number_field($value['debit'])?></div></td>
+                <td><div align="right"><?=  number_field($value['credit'])?></div></td>
                 <td><div align="right"><?=  $value['saldo']?></div></td>
             </tr>
         <?php
@@ -50,9 +50,9 @@ foreach ($data as $v) {
 ?>
  <tr>
      <td class="trsummary" colspan="2"><center><b>TOTAL</b></center></td>
-    <td class="trsummary"><div align="right"><?=  number_format($totaldebit)?></div></td>
-    <td class="trsummary"><div align="right"><?=  number_format($totalcredit)?></div></td>
-    <td class="trsummary"><div align="right"><?=  number_format($totalsaldo)?></div></td>
+    <td class="trsummary"><div align="right"><?=  number_field($totaldebit)?></div></td>
+    <td class="trsummary"><div align="right"><?=  number_field($totalcredit)?></div></td>
+    <td class="trsummary"><div align="right"><?=  number_field($totalsaldo)?></div></td>
 </tr>
 <?php
 if($option=='print')

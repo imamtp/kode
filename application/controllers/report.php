@@ -102,7 +102,7 @@ class report extends MY_Controller {
         $idunit = $this->input->get('idunit');
         $startdate = $this->input->get('startdate');
         $enddate = $this->input->get('enddate');
-        $customer_id = $this->input->get('customer_id');
+        $customer_id = $this->input->get('idcustomer');
 
         $wer_period = null;
         if($startdate!=null && $enddate!=null){
@@ -110,7 +110,7 @@ class report extends MY_Controller {
         }
 
         $wer_customer = null;
-        if($customer_id!=null){
+        if($customer_id!=''){
             $wer_customer = "and a.idcustomer = ".$customer_id."";
         }
 
@@ -707,10 +707,10 @@ class report extends MY_Controller {
                         a .datein,
                         a .idunit,
                         a .idcurrency,
-                        a .subtotal,
-                        a .total_dpp,
-                        a .tax,
-                        a .totalamount,
+                        x .subtotal,
+                        x .dpp as total_dpp,
+                        x .tax,
+                        x .totalamount,
                         a .nopurchase,
                         a .idsupplier,
                         c .nametax,
@@ -721,9 +721,9 @@ class report extends MY_Controller {
                         a .delivereddate,
                         f.firstname,
                         f.lastname,
-                        a .balance,
-                        a .noinvoice,
-                        a .paidtoday,
+                        x .balance,
+                        x .no_invoice,
+                        x .paidtoday,
                         totalorder,
                         totalreceived,
                         sisa,
@@ -736,8 +736,9 @@ class report extends MY_Controller {
                             when a.idpayment = 5 then 'Discount'
                             ELSE 'Undefined'
                         END as payment_term
-                    from
-                        purchase a
+                        from
+                        goods_receipt x
+                    join purchase a ON a.idpurchase = x.idpurchase
                     join purchasestatus b ON a .idpurchasestatus = b.idpurchasestatus
                     left join tax c ON a .idtax = c .idtax
                     left join payment d ON a .idpayment = d.idpayment
@@ -770,14 +771,15 @@ class report extends MY_Controller {
                     and a.idunit = $idunit
                     $wer_period
                     and(
-                        a .invoice_status = 1
-                        OR a .invoice_status = 4
+                        x .status_inv = 1
+                       OR x .status_inv = 4
                     )
                     ORDER BY
                         a .datein desc";
 
         $q = $this->db->query($sql);
         return $q->result_array();
+
         // echo '{success:true,numrow:' .$q->num_rows() . ',results:' . $q->num_rows() .',rows:' . json_encode($q->result_array()) . ' }';
     }
 
