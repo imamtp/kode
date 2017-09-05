@@ -17,7 +17,14 @@ class m_salesinvoice extends CI_Model {
 
     function selectField() {
         return "a.idsales,a.no_sales_order,a.idunit,a.subtotal,a.freight,a.date_sales,a.tax,a.disc,a.totalamount,a.paidtoday,a.balance,a.comments,a.noinvoice,a.ddays,a.eomddays,a.percentagedisc,a.daydisc,a.notes_si,b.nocustomer,b.namecustomer,a.idpayment,a.invoice_status,a.invoice_date,
-        b.address as address_customer, b.telephone as telephone_customer, b.handphone as handphone_customer";
+        b.address as address_customer, b.telephone as telephone_customer, b.handphone as handphone_customer,a.duedate,
+        case a.idpaymentterm
+            when 1 then '-'
+            when 2 then '-'
+            when 3 then a.ddays::text
+            when 4 then a.eomddays::text
+            when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
+        end as term";
     }
     
     function fieldCek()

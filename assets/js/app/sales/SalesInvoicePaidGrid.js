@@ -1,7 +1,7 @@
 Ext.define('SalesInvoicePaidGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date'
+        'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate'
     ],
     idProperty: 'id'
 });
@@ -101,6 +101,11 @@ Ext.define(dir_sys + 'sales.SalesInvoicePaidGrid', {
             }
         },
         {
+            header: 'Term',
+            dataIndex: 'term',
+            minWidth: 150,
+        },
+        {
             header: 'Total Tax',
             dataIndex: 'tax',
             minWidth: 150,
@@ -141,6 +146,11 @@ Ext.define(dir_sys + 'sales.SalesInvoicePaidGrid', {
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
+        },
+        {
+            header: 'Due Date',
+            dataIndex: 'duedate',
+            minWidth: 150,
         },
         {
             header: 'Status',
