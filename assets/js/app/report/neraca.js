@@ -24,10 +24,17 @@ Ext.define('reportNeraca', {
                     iconCls: 'print-icon',
                     listeners: {
                         click: function(component) {
-                             var report1 = Ext.getCmp('tanggalReportNeraca1').getSubmitValue();
+                            var report1 = Ext.getCmp('tanggalReportNeraca1').getSubmitValue();
                             var report2 = Ext.getCmp('tanggalReportNeraca2').getSubmitValue();
                             var unitReportNeraca = Ext.getCmp('unitReportNeraca').getValue();
-                            Ext.getCmp('reportNeraca').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportNeraca' src='"+SITE_URL+"laporan/neraca/" + unitReportNeraca + "/" + report1 + "/" + report2 + "/print'>");
+
+                            if(report1==''){
+                                Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                            } else if(report2==''){
+                                Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportNeraca').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportNeraca' src='"+SITE_URL+"laporan/neraca/" + unitReportNeraca + "/" + report1 + "/" + report2 + "/print'>");
+                            }
                         }
                     }
                 },

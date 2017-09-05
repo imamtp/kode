@@ -30,7 +30,12 @@ Ext.define(dir_sys + 'report.ReportPurchaseOutstanding', {
                         var report1 = Ext.getCmp('tanggalReportReportPurchaseOutstanding1').getSubmitValue();
                         //                            var report2 = Ext.getCmp('tanggalReportReportPurchaseOutstanding2').getSubmitValue();
                         var unitReportReportPurchaseOutstanding = Ext.getCmp('unitReportReportPurchaseOutstanding').getValue();
-                        Ext.getCmp('reportReportPurchaseOutstanding').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportReportPurchaseOutstanding' src='" + SITE_URL + "laporan/ReportPurchaseOutstanding/" + unitReportReportPurchaseOutstanding + "/" + report1 + "/print'>");
+
+                        if(report1==''){
+                            Ext.Msg.alert("Info", 'Periode belum ditentukan');
+                        }  else {
+                            Ext.getCmp('reportReportPurchaseOutstanding').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportReportPurchaseOutstanding' src='" + SITE_URL + "laporan/ReportPurchaseOutstanding/" + unitReportReportPurchaseOutstanding + "/" + report1 + "/print'>");
+                        }
                     }
                 }
             },

@@ -30,9 +30,18 @@ Ext.define(dir_sys + 'report.reportAPOther', {
                 iconCls: 'print-icon',
                 listeners: {
                     click: function(component) {
-                        var report1 = Ext.getCmp('tanggalReportAPOther1').getSubmitValue();
-                        //                            var report2 = Ext.getCmp('tanggalReportAPOther2').getSubmitValue();
-                        var unitReportAPOther = Ext.getCmp('unitReportAPOther').getValue();
+                        var unit = Ext.getCmp('unitReportAPOther').getValue();
+                        var sd = Ext.getCmp('startdateReportAPOther').getSubmitValue();
+                        var nd = Ext.getCmp('enddateReportAPOther').getSubmitValue();
+                        var idsupp = Ext.getCmp('supplierReportAPOther').getValue();
+
+                        if(sd==''){
+                        Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                    } else if(nd==''){
+                        Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                    } else {
+                        Ext.getCmp('reportAPOther').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportAPOther' src='" + SITE_URL + "laporan/APOther?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idsupplier=" + idsupp + "'>");
+                    }
                         Ext.getCmp('reportAPOther').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportAPOther' src='" + SITE_URL + "laporan/APOther/" + unitReportAPOther + "/" + report1 + "/print'>");
                     }
                 }
