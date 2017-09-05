@@ -114,5 +114,13 @@ function post_number($val){
 	return str_replace(',','',$val);
 }
 
+function number_field($val){
+	if(isset($val) && $val!='NaN'){
+		return number_format($val);
+	} else {
+		return 0;
+	}
+}
+
 
 ?>

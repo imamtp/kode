@@ -6,7 +6,7 @@ class m_purchasereport extends CI_Model {
         $wer = '';
         
         if($sd!='' && $nd!=''){
-            $wer.=" and (a.date between '".$sd."' and '".$nd."')";
+            $wer.=" and (a.received_date between '".$sd."' and '".$nd."')";
         }
 
         if($idsupplier!=null){

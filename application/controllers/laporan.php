@@ -27,7 +27,7 @@ class laporan extends MY_Controller {
         } else {
             $data['fontsize'] = 12;
             $data['lineheight'] = 14;
-            $data['tablewidth'] = '150%';
+            $data['tablewidth'] = '100%';
         }
         $this->load->view('report/ap/purchase', $data);
     }

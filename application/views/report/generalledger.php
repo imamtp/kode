@@ -52,8 +52,8 @@ if($option!='print')
                 <td><?=$vtr['datejournal']?></td>
                 <td><?=$vtr['nojournal']?></td>
                 <td><?=$vtr['memo']?></td>
-                <td><div  style="float: right;"><?=number_format($vtr['debit'])?></div></td>
-                <td><div  style="float: right;"><?=number_format($vtr['credit'])?></div></td>
+                <td><div  style="float: right;"><?=number_field($vtr['debit'])?></div></td>
+                <td><div  style="float: right;"><?=number_field($vtr['credit'])?></div></td>
             </tr>
         <?php
                 $totaldebit+=$vtr['debit'];
@@ -72,17 +72,17 @@ if($option!='print')
            
         ?>
             <tr>
-                <td><b>Saldo Awal:<div  style="float: right;"><b><?=number_format($value['balance'])?></div></td>
+                <td><b>Saldo Awal:<div  style="float: right;"><b><?=number_field($value['balance'])?></div></td>
                 <td></td>
                 <td><div  style="float: right;"><b>Total:</div></td>
-                <td><div  style="float: right;"><b><?=number_format($totaldebit)?></div></td>
-                <td><div  style="float: right;"><b><?=number_format($totalcredit)?></div></td>
+                <td><div  style="float: right;"><b><?=number_field($totaldebit)?></div></td>
+                <td><div  style="float: right;"><b><?=number_field($totalcredit)?></div></td>
             </tr>
             <tr>
-                <td><b>Saldo Akhir: <div  style="float: right;"><b><?=number_format($newbalance)?></div></td>
+                <td><b>Saldo Akhir: <div  style="float: right;"><b><?=number_field($newbalance)?></div></td>
                 <td></td>
                 <td><div  style="float: right;"><b>Mutasi:</div></td>
-                <td><div  style="float: right;"><b><?=number_format($mutasi)?></div></td>
+                <td><div  style="float: right;"><b><?=number_field($mutasi)?></div></td>
                 <td></td>
             </tr>
         

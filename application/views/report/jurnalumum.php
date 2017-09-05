@@ -59,8 +59,8 @@ if($option!='print')
                 <tr style="font-size: 12px;">
                      <td><?=$item['accnumber']?></td>
                      <td colspan="2"><?=$item['accname']?></td>
-                     <td><div  style="float: right;"><?=number_format($item['debit'])?></div></td>
-                     <td><div  style="float: right;"><?=number_format($item['credit'])?></div></td>
+                     <td><div  style="float: right;"><?=number_field($item['debit'])?></div></td>
+                     <td><div  style="float: right;"><?=number_field($item['credit'])?></div></td>
                 </tr>
                 <?php
             }
@@ -69,8 +69,8 @@ if($option!='print')
                 <tr class="trsummary">
                      <!-- <td width="132"><b>Akun</td> -->
                      <td colspan="3"><b>TOTAL</td>
-                     <td align="right"><b><?=number_format($value['totaldebit'])?></td>
-                     <td align="right"><b><?=number_format($value['totalcredit'])?></td>
+                     <td align="right"><b><?=number_field($value['totaldebit'])?></td>
+                     <td align="right"><b><?=number_field($value['totalcredit'])?></td>
                 </tr>
                 </table>
             <?php
