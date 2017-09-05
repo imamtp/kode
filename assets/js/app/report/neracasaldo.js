@@ -79,7 +79,13 @@ Ext.define('reportNeracaSaldo', {
                         click: function(component) {
                             var report1 = Ext.getCmp('tanggalReportNeracaSaldo1').getSubmitValue();
                             var unitReportNeracaSaldo = Ext.getCmp('unitReportNeracaSaldo').getValue();
-                            Ext.getCmp('reportNeracaSaldo').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportNeracaSaldo' src='"+SITE_URL+"laporan/neracasaldo/" + unitReportNeracaSaldo + "/" + report1 + "'>");
+
+                            if(report1==''){
+                                Ext.Msg.alert("Info", 'Periode belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportNeracaSaldo').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportNeracaSaldo' src='"+SITE_URL+"laporan/neracasaldo/" + unitReportNeracaSaldo + "/" + report1 + "'>");
+                            }
+                           
                         }
                     }
                 }]

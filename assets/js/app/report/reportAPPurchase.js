@@ -114,7 +114,15 @@ Ext.define(dir_sys + 'report.reportAPPurchase', {
                     var sd = Ext.getCmp('startdateReportAPPurchase').getSubmitValue();
                     var nd = Ext.getCmp('enddateReportAPPurchase').getSubmitValue();
                     var idsupp = Ext.getCmp('supplierReportAPPurchase').getValue();
-                    Ext.getCmp('reportAPPurchase').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportAPPurchase' src='" + SITE_URL + "laporan/APPurchase?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idsupplier=" + idsupp + "'>");
+
+                    if(sd==''){
+                        Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                    } else if(nd==''){
+                        Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                    } else {
+                        Ext.getCmp('reportAPPurchase').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportAPPurchase' src='" + SITE_URL + "laporan/APPurchase?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idsupplier=" + idsupp + "'>");
+                    }
+                    
                 }
             }
         }, {

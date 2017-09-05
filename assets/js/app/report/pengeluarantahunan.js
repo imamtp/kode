@@ -81,7 +81,13 @@ Ext.define('reportPengeluaranTahun', {
                             var report1 = Ext.getCmp('tanggalReportPengeluaranTahun1').getSubmitValue();
 //                            var report2 = Ext.getCmp('tanggalReportPengeluaranTahun2').getSubmitValue();
                             var unitReportPengeluaranTahun = Ext.getCmp('unitReportPengeluaranTahun').getValue();
-                            Ext.getCmp('reportPengeluaranTahun').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportPengeluaranTahun' src='"+SITE_URL+"laporan/PengeluaranTahun/" + unitReportPengeluaranTahun + "/" + report1+"'>");
+
+                            if(report1==''){
+                                Ext.Msg.alert("Info", 'Periode belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportPengeluaranTahun').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportPengeluaranTahun' src='"+SITE_URL+"laporan/PengeluaranTahun/" + unitReportPengeluaranTahun + "/" + report1+"'>");
+                            }
+                            
                         }
                     }
                 }]

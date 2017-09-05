@@ -86,7 +86,15 @@ Ext.define('reportKasKeluar', {
                             var report1 = Ext.getCmp('tanggalReportKasKeluar1').getSubmitValue();
                             var report2 = Ext.getCmp('tanggalReportKasKeluar2').getSubmitValue();
                             var unitReportKasKeluar = Ext.getCmp('unitReportKasKeluar').getValue();
-                            Ext.getCmp('reportKasKeluar').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportKasKeluar' src='"+SITE_URL+"laporan/kaskeluar/" + unitReportKasKeluar + "/" + report1 + "/" + report2 + "'>");
+
+                            if(report1==''){
+                                Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                            } else if(report2==''){
+                                Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportKasKeluar').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportKasKeluar' src='"+SITE_URL+"laporan/kaskeluar/" + unitReportKasKeluar + "/" + report1 + "/" + report2 + "'>");
+                            }
+                            
                         }
                     }
                 }]

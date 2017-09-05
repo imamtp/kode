@@ -114,7 +114,15 @@ Ext.define(dir_sys + 'report.reportAPOtherOutstanding', {
                     var sd = Ext.getCmp('startdateReportAPOtherOutstanding').getSubmitValue();
                     var nd = Ext.getCmp('enddateReportAPOtherOutstanding').getSubmitValue();
                     var idsupp = Ext.getCmp('supplierReportAPOtherOutstanding').getValue();
-                    Ext.getCmp('reportAPOtherOutstanding').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportAPOtherOutstanding' src='" + SITE_URL + "laporan/APOther?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idsupplier=" + idsupp + "&jatuh_tempo=ya'>");
+
+                    if(sd==''){
+                        Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                    } else if(nd==''){
+                        Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                    } else {
+                        Ext.getCmp('reportAPOtherOutstanding').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportAPOtherOutstanding' src='" + SITE_URL + "laporan/APOther?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&idsupplier=" + idsupp + "&jatuh_tempo=ya'>");
+                    }
+                   
                 }
             }
         }, {

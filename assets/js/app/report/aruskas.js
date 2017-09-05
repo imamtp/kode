@@ -82,7 +82,11 @@ Ext.define('reportArusKas', {
                            // var report1 = Ext.getCmp('tanggalReportArusKas1').getSubmitValue();
                             var report2 = Ext.getCmp('tanggalReportArusKas2').getSubmitValue();
                             var unitReportArusKas = Ext.getCmp('unitReportArusKas').getValue();
-                            Ext.getCmp('reportArusKas').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportArusKas' src='"+SITE_URL+"laporan/aruskas2/" + unitReportArusKas + "/" + report2 + "'>");
+                            if(report2==''){
+                                Ext.Msg.alert("Info", 'Periode belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportArusKas').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportArusKas' src='"+SITE_URL+"laporan/aruskas2/" + unitReportArusKas + "/" + report2 + "'>");
+                            }
                         }
                     }
                 }]
