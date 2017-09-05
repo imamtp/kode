@@ -81,7 +81,13 @@ Ext.define('reportPenerimaanTahun', {
                             var report1 = Ext.getCmp('tanggalReportPenerimaanTahun1').getSubmitValue();
 //                            var report2 = Ext.getCmp('tanggalReportPenerimaanTahun2').getSubmitValue();
                             var unitReportPenerimaanTahun = Ext.getCmp('unitReportPenerimaanTahun').getValue();
-                            Ext.getCmp('reportPenerimaanTahun').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportPenerimaanTahun' src='"+SITE_URL+"laporan/PenerimaanTahun/" + unitReportPenerimaanTahun + "/" + report1+"'>");
+
+                            if(report1==''){
+                                Ext.Msg.alert("Info", 'Periode belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportPenerimaanTahun').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportPenerimaanTahun' src='"+SITE_URL+"laporan/PenerimaanTahun/" + unitReportPenerimaanTahun + "/" + report1+"'>");
+                            }
+                            
                         }
                     }
                 }]

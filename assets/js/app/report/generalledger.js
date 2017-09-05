@@ -80,7 +80,13 @@ Ext.define('reportGeneralLedger', {
                         click: function(component) {
                             var report1 = Ext.getCmp('tanggalReportGeneralLedger1').getSubmitValue();
                             var unitReportGeneralLedger = Ext.getCmp('unitReportGeneralLedger').getValue();
-                            Ext.getCmp('reportGeneralLedger').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportGeneralLedger' src='"+SITE_URL+"laporan/generalledger/" + unitReportGeneralLedger + "/" + report1 + "'>");
+
+                            if(report1==''){
+                                Ext.Msg.alert("Info", 'Periode belum ditentukan');
+                            } else {
+                                Ext.getCmp('reportGeneralLedger').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportGeneralLedger' src='"+SITE_URL+"laporan/generalledger/" + unitReportGeneralLedger + "/" + report1 + "'>");
+                            }
+                           
                         }
                     }
                 }]
