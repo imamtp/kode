@@ -2,7 +2,7 @@
 
 class m_stock extends CI_Model {
 
-	function update_history($type,$qty,$idinventory,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null){
+	function update_history($type,$qty,$idinventory,$idinventory_parent,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
 		/*
 			1: Order, (+)
 			2: Stock In By PO (+)
@@ -21,71 +21,74 @@ class m_stock extends CI_Model {
 			15: Stock Out From Production (-)
 		*/
 		
-		$qoldstok = $this->db->get_where('warehouse_stock',array(
-				'idinventory' =>$idinventory,
-				'warehouse_id' =>$idwarehouse
-		));
-		// echo $this->db->last_query(); 
+		//stock all child utk stock history 
+		$sql = "select sum(stock)as old_qty from warehouse_stock
+				where idinventory in (
+					select idinventory from inventory 
+					where idinventory_parent = $idinventory_parent
+					and warehouse_id = $idwarehouse
+					and idunit = $idunit
+					and deleted = 0
+				)";
+		$q = $this->db->query($sql);
+		$r = $q->row();
 
-		if($qoldstok->num_rows()>0){
-			$roldstok = $qoldstok->row();
-			$old_qty = $roldstok->stock;
-		} else {
-			$old_qty = 0;
-		}
+		//stock child utk warehouse_stock
+		$q = $this->db->query("select stock as old_qty from warehouse_stock where idinventory = $idinventory");
+		$r_inv = $q->row();
+		$old_qty_inv = $q->num_rows() > 0 ? $r_inv->old_qty : 0;
 
 		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12 || $type==13) {
-			$balance = $old_qty+$qty;
+			$balance = $r->old_qty + $qty;
+			$balance_inv = $old_qty_inv + $qty;
 		} else if($type==7 || $type==5 || $type==8 || $type==11 || $type==14 || $type==15) {
-			$balance = $old_qty-$qty;
+			$balance = $r->old_qty - $qty;
+			$balance_inv = $old_qty_inv - $qty;
 		}
 
-		$data = array(
-				'idinventory'=>$idinventory,
-				'idunit'=>$idunit,
-				'type_adjustment'=>$type,
-				'no_transaction'=> rand(1111,9999),
-				'old_qty'=> $old_qty,
-				'qty_transaction'=>$qty,
-				'balance'=> $balance,
-				'notes'=>$notes,
-				'datein'=>date('Y-m-d H:m:s'),
-				'warehouse_id'=>$idwarehouse,
-				'idjournal'=>$idjournal
-			);
-		$this->db->insert('stock_history',$data);
-
-		//update current stock
-		$cs_data = array(
-			'idinventory' =>$idinventory,
-			'warehouse_id' =>$idwarehouse,
-			'stock' =>$balance,
-			// 'afs_stock' =>,
-			'usermod' => $this->session->userdata('userid'),
-			'datemod' =>date('Y-m-d H:m:s'),
-			'idunit' =>$idunit
+		$stock = array(
+		    'idinventory'=> $idinventory,
+		    'idunit'=> $idunit,
+		    'warehouse_id'=> $idwarehouse,
+		    'stock'=> $balance_inv,
+		    'usermod'=> $this->session->userdata('userid'),
+		    'datemod'=> date('Y-m-d H:i:s'),
 		);
 
-		$wer = array(
-				'idinventory'=>$idinventory,
-				'warehouse_id'=>$idwarehouse,
-				'idunit'=>$idunit
+		$stock_history = array(
+			'idinventory'=>$idinventory_parent,
+			'idunit'=>$idunit,
+			'type_adjustment'=>$type,
+			'no_transaction'=> $no_transaction ?: rand(1111,9999),
+			'old_qty'=> $r->old_qty,
+			'qty_transaction'=>$qty,
+			'balance'=> $balance,
+			'notes'=>$notes,
+			// 'datein'=>date('Y-m-d H:m:s'),
+			'warehouse_id'=>$idwarehouse,
+			'idjournal'=>$idjournal
 		);
-
-		$qcurrent = $this->db->get_where('warehouse_stock',$wer);
-		if($qcurrent->num_rows()>0)
-		{
-			$this->db->where($wer);
-			$this->db->update('warehouse_stock',$cs_data);
-			
-		} else {
-			$this->db->insert('warehouse_stock',$cs_data);
+		
+		$qcek = $this->db->get_where('warehouse_stock', array(
+			'idinventory'=> $idinventory,
+		    'idunit'=> $idunit,
+		    'warehouse_id'=> $idwarehouse,
+		));
+		if($qcek->num_rows()==0)
+			$this->db->insert('warehouse_stock',$stock);
+		else{
+			$this->db->where(array(
+				'idinventory'=> $idinventory,
+				'idunit'=> $idunit,
+				'warehouse_id'=> $idwarehouse,
+			));
+			$this->db->update('warehouse_stock', $stock);
 		}
 		
-
+		$this->db->insert('stock_history',$stock_history);
 	}
 	
-	function update_hpp($idinventory,$idunit,$tipe,$balance,$qty_trx,$idpurchase=null,$idsales=null){
+	function update_hpp($idinventory,$idunit,$tipe,$tipe_trx,$balance,$qty_trx,$idpurchase='null',$idsales='null',$idjob='null'){
 		/*
             hitung hpp per unit inventory
 
@@ -94,45 +97,42 @@ class m_stock extends CI_Model {
             2. FIFO
             3. Average
 		*/
-		$datein = date('Y-m-d H:i:s');
+		/*
+			tipe_trx:[in | out]
+		*/
+		$datein = date('Y-m-d H:i:s.u');
 		$this->db->trans_begin();
+		$sql = "";
 		//average
 		switch($tipe){
 			case 3:
-				if($idpurchase != null){
-					//log hpp saat pembelian
-					$sql = "insert into inventory_hpp_history 
-							select a.idinventory_parent, a.idunit, '$datein', a.old_balance, a.old_qty, $qty_trx, round(cast((a.old_balance + $balance)/(a.old_qty + $qty_trx) as numeric), 2) as hpp_per_unit, (old_balance + $balance) as ending_balance, (old_qty + $qty_trx) as ending_qty, $idpurchase, null
-							from (
-								select idinventory_parent, a.idunit, sum(cost*stock) as old_balance, sum(stock) as old_qty from inventory a
-								join warehouse_stock b on b.idinventory = a.idinventory
-								where idinventory_parent is not null
-								and a.idinventory_parent = $idinventory
-								and a.idunit = $idunit
-								group by idinventory_parent, a.idunit
-							) a";
-					$this->db->query($sql);
-				} else {
-					//log hpp saat penjualan
-					$sql = "insert into inventory_hpp_history
-							select a.idinventory, a.idunit, '$datein', null, null, $qty_trx, a.hpp_per_unit, (b.old_balance - ($qty_trx * a.hpp_per_unit)) as ending_balance, (b.old_qty - $qty_trx) as ending_qty, null, $idsales
-							from (
-								select idinventory, idunit, hpp_per_unit 
-								from inventory a
-								where idinventory_parent is null
-							) a
-							join (
-								select idinventory_parent, a.idunit, sum(cost*stock) as old_balance, sum(stock) as old_qty from inventory a
-								join warehouse_stock b on b.idinventory = a.idinventory
-								where idinventory_parent is not null
-								group by idinventory_parent, a.idunit
-							) b on b.idinventory_parent = a.idinventory and b.idunit = a.idunit
-							where a.idunit = $idunit
-							and a.idinventory = $idinventory";
-					$this->db->query($sql);
+				if($tipe_trx == 'in'){
+					//log hpp (in)
+					$selector = "select idinventory, idunit, '$datein', coalesce(old_balance,0), coalesce(old_qty,0), $qty_trx, round(cast(( coalesce(old_balance,0 ) + $balance)/( coalesce(old_qty,0) + $qty_trx) as numeric), 2) as hpp_per_unit, ( coalesce(old_balance,0) + $balance ) as ending_balance, ( coalesce(old_qty,0) + $qty_trx ) as ending_qty, $idpurchase, $idsales, $idjob";
+				}else{
+					//log hpp (out)
+					$selector = "select idinventory, idunit, '$datein', coalesce(old_balance,0), coalesce(old_qty,0), $qty_trx, hpp_per_unit, ( coalesce(old_balance,0) - $balance ) as ending_balance, ( coalesce(old_qty,0) - $qty_trx ) as ending_qty, $idpurchase, $idsales, $idjob";
 				}
+
+				$sql = "insert into inventory_hpp_history 
+						$selector
+						from ( 
+							select idinventory, idunit, hpp_per_unit from inventory
+							where idinventory= $idinventory
+							and idinventory_parent is null
+							and idunit = $idunit
+						) a
+						left join (
+							select idinventory_parent, sum(cost*stock) as old_balance, sum(stock) as old_qty from inventory a
+							join warehouse_stock b on b.idinventory = a.idinventory
+							where idinventory_parent is not null
+							and a.idinventory_parent = $idinventory
+							and a.idunit = $idunit
+							group by idinventory_parent, a.idunit
+						) b on b.idinventory_parent = a.idinventory";
 				break;
 		}
+		$this->db->query($sql);
 
 		//update hpp di inventory
 		$sql = "select hpp_unit from inventory_hpp_history
