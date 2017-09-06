@@ -133,7 +133,7 @@ class m_purchase extends CI_Model {
 
     function query_itempurchase($idpurchase,$option=null){
         $sql = "select a.idpurchaseitem,a.idpurchase,a.idinventory,a.qty,a.qty_received,a.price,a.disc,a.total,a.ratetax,a.tax,a.measurement_id,a.measurement_id_size,
-                a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,a.idunit	
+                a.ratio_two,a.ratio_tre,a.size,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,b.sku_no,a.idunit	
                 from purchaseitem a
                 join inventory b ON a.idinventory = b.idinventory
                 left join productmeasurement c ON c.measurement_id = a.measurement_id

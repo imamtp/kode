@@ -1,6 +1,7 @@
 Ext.define('GridItemPurchaseOrderPopupModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan'],
+    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock', 'cost', 'ratio_two', 'ratio_tre', 'measurement_id_one', 'measurement_id_two', 'measurement_id_tre', 'measurement_id_buy'],
+    // fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'lebar', 'ketebalan', 'ratio_two', 'ratio_tre'],
     idProperty: 'id'
 });
 
@@ -11,7 +12,7 @@ var storeGridItemPurchaseOrderPopup = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'inventory/get_by_sku',
+        url: SITE_URL + 'inventory/get_by_sku2',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -20,8 +21,8 @@ var storeGridItemPurchaseOrderPopup = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
-        direction: 'DESC'
+        property: 'sku_no',
+        direction: 'ASC'
     }]
 });
 
@@ -80,9 +81,11 @@ Ext.define(dir_sys + 'purchase2.GridItemPurchaseOrderPopup', {
                     idinventory: selectedRecord.get('idinventory'),
                     invno: selectedRecord.get('invno'),
                     nameinventory: selectedRecord.get('nameinventory'),
-                    short_desc: selectedRecord.get('satuan_pertama'),
-                    size_measurement: selectedRecord.get('satuan_kedua'),
+                    short_desc: selectedRecord.get('uom_one'),
+                    size_measurement: selectedRecord.get('uom_two'),
                     price: selectedRecord.get('cost'),
+                    ratio_two: selectedRecord.get('ratio_two'),
+                    ratio_tre: selectedRecord.get('ratio_tre'),
                     idunit: idunit,
                     assetaccount: selectedRecord.get('assetaccount'),
                     qty: 1,
@@ -109,25 +112,38 @@ Ext.define(dir_sys + 'purchase2.GridItemPurchaseOrderPopup', {
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
-            header: 'Total Stock',
-            dataIndex: 'totalstock',
+            header: 'Stock',
+            dataIndex: 'stock_one',
             minWidth: 120,
             align: 'right'
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            dataIndex: 'uom_one',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
+            dataIndex: 'stock_two',
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
+            minWidth: 100
+        },
+        {
+            header: 'Stock #3',
+            dataIndex: 'stock_tre',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
             minWidth: 100
         },
         // { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },

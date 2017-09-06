@@ -404,6 +404,8 @@ function showGoodsReceiptData(selectedRecord) {
                             sku_no: obj.sku_no,
                             invno: obj.invno,
                             nameinventory: obj.nameinventory,
+                            ratio_two: obj.ratio_two,
+                            ratio_tre: obj.ratio_tre,
                             qty: obj.qty,
                             qty_received: obj.qty_received || 0,
                             qty_receipt: qty_receipt || 0,
