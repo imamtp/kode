@@ -10,7 +10,7 @@ function showInputInv() {
 
     tabInventory.setActiveTab(0);
 
-    Ext.getCmp('qtystockInv').setDisabled(false);
+    // Ext.getCmp('qtystockInv').setDisabled(false);
 }
 
 function showEditInv(idinventory) {
@@ -69,9 +69,16 @@ function showEditInv(idinventory) {
             extraparams: 'a.idinventory:' + idinventory
         },
         success: function(form, action) {
+            console.log(action.result.data);
             Ext.getCmp('measurement_id_one').setValue(action.result.data.measurement_id_one);
             Ext.getCmp('measurement_id_two').setValue(action.result.data.measurement_id_two);
             Ext.getCmp('measurement_id_tre').setValue(action.result.data.measurement_id_tre);
+            Ext.getCmp('ratio_two').setValue(action.result.data.ratio_two);
+            Ext.getCmp('ratio_tre').setValue(action.result.data.ratio_tre);
+            Ext.getCmp('comboxInventoryType_inv_form').setValue(action.result.data.inventory_type);
+            Ext.getCmp('qtystockminInv').setValue(action.result.data.minstock);
+            Ext.getCmp('qtystockInv').setValue((action.result.data.totalstock * 1).toLocaleString({ maximumFractionDigits: 2 }));
+            Ext.getCmp('hpp_inv_form').setValue((action.result.data.hpp * 1).toLocaleString({ maximumFractionDigits: 2 }));
 
             //tab specs
             Ext.getCmp('panjang_inv_specs').setValue(action.result.data.measurement_id_tre);
@@ -127,20 +134,20 @@ function showEditInv(idinventory) {
             //                                    FormProfileID.getForm().findField('fotothumb').el.dom.src = BASE_URL + "/upload/" + action.result.data.images;
             //                                    fotothumb.autoEl.src = BASE_URL + "upload/" + action.result.data.images;
 
-            FormProfileID.query('.field').forEach(function(field) {
-                //                                         console.log(field)
-                //                                        field.setReadOnly(false);
-                //                                        if (field.inputEl.id == 'pegawainid-inputEl') {
-                //                                            field.inputEl.dom.setAttribute('setReadOnly', false);
-                //                                        }
-                //                                        else if (field.id == 'pegawainid-inputEl') {
-                //                                            field.readOnly = false;
-                //                                        }
-            });
+            // FormProfileID.query('.field').forEach(function(field) {
+            //                                         console.log(field)
+            //                                        field.setReadOnly(false);
+            //                                        if (field.inputEl.id == 'pegawainid-inputEl') {
+            //                                            field.inputEl.dom.setAttribute('setReadOnly', false);
+            //                                        }
+            //                                        else if (field.id == 'pegawainid-inputEl') {
+            //                                            field.readOnly = false;
+            //                                        }
+            // });
 
             //disable field stok
             // Ext.getCmp('qtystockInv').setDisabled(true);
-            Ext.getCmp('qtystockInv').setReadOnly(true);
+            // Ext.getCmp('qtystockInv').setReadOnly(true);
 
         },
         failure: function(form, action) {
