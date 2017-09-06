@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-right">
+        <div class="col-xs-5 col-xs-offset-2 text-left">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Billed To</h4>
@@ -118,6 +118,12 @@
                     <td align="right"><b>Biaya Angkut (+)</b></td>
                     <td align="right"><?=number_format($data['freigthcost'])?></td>
                   </tr>
+                  <tr>
+                    <td></td>
+                      <td> </td>
+                    <td align="right"><b>Dasar Pengenaan Pajak</b></td>
+                    <td align="right"><?=number_format($data['total_dpp'])?></td>
+                  </tr>
                     <tr>
                     <td></td>
                       <td> </td>
@@ -157,22 +163,28 @@
                 <?php
                 }
                 ?>
+                <tr>
+                    <td></td>
+                      <td> </td>
+                    <td align="right"><b>Terbilang</b></td>
+                    <td align="right"><?=$data['terbilang']?></td>
+                  </tr>
           </table>
-         <tr>
+         <!-- <tr>
            <td width="22%"><b> Notes:</b></td>
            <td width="50%"><?=$data['memo']?></td>
-         </tr>
+         </tr> -->
         </table>
       </div>
       
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-xs-6">
-          <b>Amount in Words: </b><?=$data['terbilang']?>
+          <b>Terbilang: </b><?=$data['terbilang']?>
         </div>
         <div class="col-xs-6 text-right">
           <!-- <b>Operator<br><?=$data['receivedby']?></b> -->
         </div>
-      </div>
+      </div> 
 
 
 
