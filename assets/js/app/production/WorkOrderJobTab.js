@@ -32,7 +32,8 @@ var storeGridItemJobWO = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemJobWOPopupModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'inventory_type', 'idinventorycat', 'measurement_id_one'],
+    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock', 'measurement_id_sell', 'measurement_id_one'],
+    // fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua', 'inventory_type', 'idinventorycat', 'measurement_id_one'],
     idProperty: 'id'
 });
 
@@ -43,7 +44,8 @@ var storeGridItemJobWOPopup = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'inventory/get_by_sku',
+        // url: SITE_URL + 'inventory/get_by_sku',
+        url: SITE_URL + 'inventory/get_by_sku2',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -52,14 +54,15 @@ var storeGridItemJobWOPopup = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
+        property: 'sku_no',
         direction: 'DESC'
     }]
 });
 
 storeGridItemJobWOPopup.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'inventory_type:' + 1 + ', idinventory_parent: null'
+        // 'extraparams': 'inventory_type:' + 1 + ', idinventory_parent: null'
+        'inventory_type': 1, //finished goods
     };
 });
 
@@ -102,25 +105,39 @@ Ext.define('GridItemJobWOPopup', {
         // {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},        
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
-            header: 'Total Stock',
-            dataIndex: 'totalstock',
+            header: 'Stock',
+            xtype: 'numbercolumn',
+            dataIndex: 'stock_one',
             minWidth: 120,
             align: 'right'
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            dataIndex: 'uom_one',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
+            dataIndex: 'stock_two',
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
+            minWidth: 100
+        },
+        {
+            header: 'Stock #3',
+            dataIndex: 'stock_tre',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
             minWidth: 100
         },
     ],
@@ -176,6 +193,8 @@ Ext.define('GridItemJobWOPopup', {
                                     idinventory: selectedRecord.get('idinventory'),
                                     invno: selectedRecord.get('invno'),
                                     nameinventory: selectedRecord.get('nameinventory'),
+                                    measurement_id: selectedRecord.get('measurement_id_sell'),
+                                    measurement_id_size: selectedRecord.get('measurement_id_one'),
                                     price: selectedRecord.get('cost'),
                                     idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
                                     qty: 1,

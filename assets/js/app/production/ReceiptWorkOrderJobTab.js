@@ -77,15 +77,15 @@ Ext.define(dir_sys + 'production.ReceiptWorkOrderJobTab', {
                     //                    id: 'idinventory'
                 },
                 {
-                    header: 'Kode Barang',
-                    dataIndex: 'invno',
+                    header: 'SKU',
+                    dataIndex: 'sku_no',
                     //                    id: 'invno',
-                    minWidth: 100
+                    minWidth: 150
                 },
                 {
                     header: 'Nama Barang',
                     dataIndex: 'nameinventory',
-                    minWidth: 150,
+                    minWidth: 200,
                     //                    id: 'nameinventory'
                 },
                 {
