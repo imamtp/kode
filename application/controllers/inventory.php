@@ -12,7 +12,7 @@ class inventory extends MY_Controller {
     function SaveInventoryV2($input = null)
     {
         $statusformInventory2 = $this->input->post('statusformInventory2');
-
+        
         $opsion = $statusformInventory2 == 'input' ? 'add' : 'edit';
         $retAkses = $this->cekAksesUser(19,$opsion);
         if(!$retAkses['success'])
@@ -69,36 +69,38 @@ class inventory extends MY_Controller {
     {
         $this->db->trans_begin();
         $idinventory = $this->idinventory($this->input->post('idinventory'));
-        $namaunit2 = $this->input->post('namaunit2');
+        // $namaunit2 = $this->input->post('namaunit2');
         $idsupplier = $this->input->post('idsupplier');
         
         $isinventory = $this->input->post('cbpersediaan') == 'on' ? 'TRUE' : 'FALSE';
         $issell = $this->input->post('cbdijual') == 'on' ? 'TRUE' : 'FALSE';
         $isbuy = $this->input->post('cbdibeli') == 'on' ? 'TRUE' : 'FALSE';
 
-        $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $this->input->post('namaunit'));
+        $idunit = $this->input->post('idunit');//$this->m_data->getID('unit', 'namaunit', 'idunit', $this->input->post('namaunit2')[0]);
         $invno = $this->input->post('invno');
 
         $d = array(
-            'invno' => $invno,
             'nameinventory' => $this->input->post('nameinventory'),
             'inventory_type' => $this->input->post('inventory_type'),
             'description' => $this->input->post('description'),
             'isinventory' => $isinventory,
-            // 'idsupplier' => $this->input->post('idsupplier'),
             'issell' => $issell,
             'isbuy' => $isbuy,
 //            'images'=>$images,
 //            'userin'=>$this->session->userdata('userid'),
-            'usermod' => $this->session->userdata('userid'),
+            // 'usermod' => $this->session->userdata('userid'),
 //            'datein'=>date('Y-m-d H:m:s'),
-            'datemod' => date('Y-m-d H:m:s'),
+            // 'datemod' => date('Y-m-d H:m:s'),
             // 'idinventorycat' => $this->m_data->getID('inventorycat', 'namecat', 'idinventorycat', $this->input->post('namecat')),
             'idinventorycat'=>$this->input->post('idinventorycat'),
             // 'idsupplier' => $this->input->post('idsupplier'),
-            'measurement_id_one' => $this->input->post('measurement_id_one') !=null ? $this->input->post('measurement_id_one') : null,
-            'measurement_id_two' => $this->input->post('measurement_id_two') !=null ? $this->input->post('measurement_id_two') : null,
-            'measurement_id_tre' => $this->input->post('measurement_id_tre') !=null ? $this->input->post('measurement_id_tre') : null,
+            'measurement_id_one' => $this->input->post('measurement_id_one')?: null,
+            'measurement_id_two' => $this->input->post('measurement_id_two')?: null,
+            'measurement_id_tre' => $this->input->post('measurement_id_tre')?: null,
+            'ratio_two' => $this->input->post('ratio_two')?: null,
+            'ratio_tre' => $this->input->post('ratio_tre')?: null,
+            'minstock'=> $this->input->post('qtystockmin')?: 0,
+
             'brand_id' => $this->input->post('brand_id') !=null ? $this->input->post('brand_id') : null,
             'sku_no' => $this->input->post('sku_no'),
             'bahan_coil_id' => $this->input->post('bahan_coil_id'),
@@ -114,25 +116,26 @@ class inventory extends MY_Controller {
             'lebar_satuan_id' =>$this->input->post('lebar_satuan_id') !=null ? $this->input->post('lebar_satuan_id') : null,
             'berat_satuan_id' =>$this->input->post('berat_satuan_id') !=null ? $this->input->post('berat_satuan_id') : null,
             'ketebalan_satuan_id' =>$this->input->post('ketebalan_satuan_id') !=null ? $this->input->post('ketebalan_satuan_id') : null,
-            'diameter_satuan_id' =>$this->input->post('diameter_satuan_id') !=null ? $this->input->post('diameter_satuan_id') : null
+            'diameter_satuan_id' =>$this->input->post('diameter_satuan_id') !=null ? $this->input->post('diameter_satuan_id') : null,
+            'idunit'=> $idunit,
         );
 
-        if ($idinventory == null || $idinventory == '') {
-                foreach ($namaunit2 as $idunit) {
-                   // $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
-                   $sql = "select b.invno
-                            from inventoryunit a
-                            join inventory b ON a.idinventory = b.idinventory
-                            where a.idunit=$idunit and b.invno='$invno'";
-                    $q = $this->db->query($sql);
-                    // echo $sql.'        ';
-                    if($q->num_rows()>0)
-                    {
-                        echo "{success:false, message:'Gagal disimpan. No Inventory sudah ada di unit ".$u.".'}";
-                        exit;
-                    }
-                }
-        }
+        // if ($idinventory == null || $idinventory == '') {
+        //         foreach ($namaunit2 as $idunit) {
+        //            // $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
+        //            $sql = "select b.invno
+        //                     from inventoryunit a
+        //                     join inventory b ON a.idinventory = b.idinventory
+        //                     where a.idunit=$idunit and b.invno='$invno'";
+        //             $q = $this->db->query($sql);
+        //             // echo $sql.'        ';
+        //             if($q->num_rows()>0)
+        //             {
+        //                 echo "{success:false, message:'Gagal disimpan. No Inventory sudah ada di unit ".$u.".'}";
+        //                 exit;
+        //             }
+        //         }
+        // }
 
         //buy
         if($isbuy!='FALSE')
@@ -146,32 +149,25 @@ class inventory extends MY_Controller {
                 $d['datebuy'] = backdate($datebuy);
             }
 
-            $d['cosaccount'] = $this->input->post('cosaccount')=='' ? null : $this->input->post('cosaccount');
-            $d['cost'] = $this->input->post('cost')=='' ? null : $this->input->post('cost');
-            $d['unitmeasure'] = $this->input->post('unitmeasure')=='' ? null : $this->input->post('unitmeasure');
-            // $d['usermod'] = $this->session->userdata('userid');
+            $d['cosaccount'] = $this->input->post('cosaccount')?: null;
+            $d['cost'] = $this->input->post('cost')?: null;
+            $d['unitmeasure'] = $this->input->post('unitmeasure')?: null;
             $d['idprimarysupplier'] = $this->m_data->getID('supplier', 'namesupplier', 'idsupplier', $this->input->post('namesupplier'));
-            // $d['datemod'] = date('Y-m-d H:m:s');
-            
-            $d['idbuytax'] = $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametaxbuy'));
+            // $d['idbuytax'] = $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametaxbuy'));
         }
         //end buy
 
         //sell
         if($issell!='FALSE')
         {
-            $d['incomeaccount'] = $this->input->post('incomeaccount') == '' ? null : $this->input->post('incomeaccount');
-            $d['sellingprice'] = $this->input->post('sellingprice')=='' ? null : $this->input->post('sellingprice');
-            $d['unitmeasuresell'] = $this->input->post('unitmeasuresell')=='' ? null : $this->input->post('unitmeasuresell');
-            $d['usermod'] = $this->session->userdata('userid');
-    //            'idprimarysupplier'=>$this->m_data->getID('supplier', 'namesupplier', 'idsupplier', $this->input->post('namesupplier')),
-            $d['datemod'] = date('Y-m-d H:m:s');
-            $d['idselingtax'] = $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametax'));
+            $d['incomeaccount'] = $this->input->post('incomeaccount')  ?: null;
+            $d['unitmeasuresell'] = $this->input->post('unitmeasuresell') ?: null;
+            // $d['sellingprice'] = $this->input->post('sellingprice') ?: null;
+            // $d['idselingtax'] = $this->m_data->getID('tax', 'nametax', 'idtax', $this->input->post('nametax'));
         }
         //end sell
 
         //inventory
-         // $d = array(
         if($isinventory!='FALSE')
         {
             $d['qtystock'] = $this->input->post('qtystock');
@@ -181,8 +177,6 @@ class inventory extends MY_Controller {
             $d['bebanberjalan'] = str_replace(",", "", cleardot2($this->input->post('bebanberjalan')));
             $d['nilaibuku'] = str_replace(",", "", cleardot2($this->input->post('nilaibuku')));
             $d['bebanperbulan'] = str_replace(",", "", cleardot2($this->input->post('bebanperbulan')));
-            // $d['usermod'] = $this->session->userdata('userid'),
-            // $d['datemod'] = date('Y-m-d H:m:s'),
             $d['akumulasiakhir'] = str_replace(",", "", cleardot2($this->input->post('akumulasiakhir')));
         }
         // );
@@ -191,7 +185,6 @@ class inventory extends MY_Controller {
         if ($images != '' || $images != null) {
             $d['images'] = $images;
         } else {
-
             $d['images'] = 'inventory.png';
         }
 
@@ -202,27 +195,28 @@ class inventory extends MY_Controller {
             // $this->db->delete('inventoryunit');
             // $qunit = $this->db->get_where('unit',array('idcompany'=>$this->session->userdata('idcompany')));
             // foreach ($qunit->result() as $runit) {
-                $idunitdiremove=null;
+                // $idunitdiremove=null;
 
-                $qcekremove = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
-                foreach ($qcekremove->result() as $rremove) {
-                    $idunitdiremove[]=$rremove->idunit;
-                }
+                // $qcekremove = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory));
+                // foreach ($qcekremove->result() as $rremove) {
+                //     $idunitdiremove[]=$rremove->idunit;
+                // }
 
-                foreach ($namaunit2 as $u) {
-                    $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
-                    // $idunit = $u;
-                    $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
-                    if($qcek->num_rows()>0)
-                    {
+                // foreach ($namaunit2 as $u) {
+                //     $idunit = $this->m_data->getID('unit', 'namaunit', 'idunit', $u);
+                //     // $idunit = $u;
+                //     $qcek = $this->db->get_where('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+                //     if($qcek->num_rows()>0)
+                //     {
 
-                    } else {
-                        $idunit = $idunit == '' ? $u : $idunit;
-                        $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
-                    }
-                }
+                //     } else {
+                //         $idunit = $idunit == '' ? $u : $idunit;
+                //         $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
+                //     }
+                // }
             // }
-            
+            $d['usermod'] = $this->session->userdata('userid');
+            $d['datemod'] = date('Y-m-d H:i:s');
 
             $this->db->where('idinventory', $idinventory);
             $this->db->update('inventory', $d);
@@ -230,29 +224,21 @@ class inventory extends MY_Controller {
             // $qseq = $this->db->query("select nextval('seq_inventory') as id")->row();
             // $idinventory = $qseq->id;
             $d['idinventory'] = $idinventory;
-/*<<<<<<< HEAD
-            foreach ($namaunit2 as $idunit) {
-                $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$idunit));
-            }
-=======
->>>>>>> ad604b887366c19f3b714a69d4a4bcb9d4363987*/
-        // print_r($d);
             $d['userin'] = $this->session->userdata('userid');
             $d['datein'] = date('Y-m-d H:m:s');
             $this->db->insert('inventory', $d);
-            foreach ($namaunit2 as $u) {
+            // foreach ($namaunit2 as $u) {
                 // $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$this->m_data->getID('unit', 'namaunit', 'idunit', $u)));
-                 $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
-            }
+                //  $this->db->insert('inventoryunit',array('idinventory'=>$idinventory,'idunit'=>$u));
+            // }
         }
 
         //insert by supplier
-        // print_r($idsupplier); die;
         if($idsupplier[0]=='Choose Suppler...'){
             echo "{success:false, message:'Tentukan supplier terlebih dahulu'}";
             return false;
         }
-// print_r($idsupplier);
+
         if($idsupplier[0]!=null){
              $this->db->delete('inventory_supplier',array('idinventory'=>$idinventory));
             foreach ($idsupplier as $u) {
@@ -309,9 +295,6 @@ class inventory extends MY_Controller {
     }
 
     function saveProfile($input = null) {
-
-
-
         $config['upload_path'] = './upload/';
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = '10000';
@@ -500,7 +483,7 @@ class inventory extends MY_Controller {
         $this->db->trans_begin();
 
         $d = array(
-            'cosaccount' => $this->input->post('cosaccount')=='' ? null : $this->input->post('cosaccount'),
+            'cosaccount' => $this->input->post('cosaccount')?: null,
             'cost' => $this->input->post('cost'),
             'unitmeasure' => $this->input->post('unitmeasure'),
             'usermod' => $this->session->userdata('userid'),
@@ -876,16 +859,16 @@ class inventory extends MY_Controller {
                     'idinventory'=>$idinventory,
                     'idunit'=>$idunit,
                     'assetaccount'=>$this->input->post('assetaccount'),
-                    'akumpenyusutaccount'=>$this->input->post('akumpenyusutaccount') =='' ? null : $this->input->post('akumpenyusutaccount'),
-                    'depresiasiaccount'=>$this->input->post('depresiasiaccount') =='' ? null : $this->input->post('depresiasiaccount')
+                    'akumpenyusutaccount'=>$this->input->post('akumpenyusutaccount') ?: null,
+                    'depresiasiaccount'=>$this->input->post('depresiasiaccount') ?: null,
                 ));
         } else {
             $this->db->insert('inventoryunit',array(
                     'idinventory'=>$idinventory,
                     'idunit'=>$idunit,
                     'assetaccount'=>$this->input->post('assetaccount'),
-                    'akumpenyusutaccount'=>$this->input->post('akumpenyusutaccount') =='' ? null : $this->input->post('akumpenyusutaccount'),
-                    'depresiasiaccount'=>$this->input->post('depresiasiaccount') =='' ? null : $this->input->post('depresiasiaccount')
+                    'akumpenyusutaccount'=>$this->input->post('akumpenyusutaccount') ?: null,
+                    'depresiasiaccount'=>$this->input->post('depresiasiaccount') ?: null,
                 ));
         }
 
@@ -1150,6 +1133,114 @@ class inventory extends MY_Controller {
         $this->db->update('warehouse_stock',array('stock'=>$stock));
     }
 
+    function get_by_sku2(){
+        $idunit = $this->session->userdata('idunit');
+        $inventory_type = $this->input->post('inventory_type');
+
+        $wer_type = null;
+        if($inventory_type !== false)
+            $wer_type = "and inventory_type = $inventory_type";
+
+        $sql = "select 
+                    a.idinventory,
+                    a.sku_no,
+                    a.invno,
+                    a.nameinventory,
+                    a.minstock,
+                    a.inventory_type,
+                    a.measurement_id_one,
+                    a.measurement_id_two,
+                    a.measurement_id_tre,
+                    a.unitmeasure as measurement_id_buy,
+                    a.unitmeasuresell as measurement_id_sell,
+                    a.ratio_two,
+                    a.ratio_tre,
+                    a.cost,
+                    coalesce(a.hpp_per_unit,0) as hpp,
+                    coalesce(f.stock,0) as stock_one,
+                    b.short_desc as uom_one,
+                    case
+                        when b.short_desc is null then null
+                        else coalesce(f.stock_two,0)
+                    end as stock_two,
+                    c.short_desc as uom_two,
+                    case
+                        when d.short_desc is null then null
+                        else coalesce(f.stock_tre,0)
+                    end as stock_tre,
+                    d.short_desc as uom_tre,
+                    g.brand_name
+                from inventory a
+                left join productmeasurement b on b.measurement_id = a.measurement_id_one
+                left join productmeasurement c on c.measurement_id = a.measurement_id_two
+                left join productmeasurement d on d.measurement_id = a.measurement_id_tre
+                left join (
+                    select sum(stock) as stock, sum(stock / b.ratio_two) as stock_two, sum(stock / b.ratio_tre) as stock_tre, idinventory_parent from warehouse_stock a
+                    join inventory b on b.idinventory = a.idinventory
+                    group by idinventory_parent
+                ) f on f.idinventory_parent = a.idinventory
+                left join brand g on g.brand_id = a.brand_id
+                where true
+                and a.deleted = 0
+                and a.status = 1
+                and a.idunit = $idunit
+                and a.idinventory_parent is null
+                $wer_type
+                order by idinventory
+                ";
+        $q = $this->db->query($sql);
+        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+    }
+
+    function get_detail_item(){
+        $idunit = $this->input->post('idunit');
+        $idinventory_parent = $this->input->post('idinventory_parent');
+
+        $wer_parent = null;
+        if($idinventory_parent !== false)
+            $wer_parent = "and a.idinventory_parent = $idinventory_parent";
+
+        $sql = "select 
+                    b.sku_no,
+                    b.nameinventory,
+                    a.invno,
+                    a.notes,
+                    a.idinventory,
+                    a.cost,
+                    a.no_batch,
+                    coalesce(c.stock,0) as stock_one,
+                    d.short_desc as uom_one,
+                    case 
+                        when b.measurement_id_two is null then null
+                        else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
+                    end as stock_two,
+                    e.short_desc as uom_two,
+                    case
+                        when b.measurement_id_tre is null then null
+                        else round(coalesce(c.stock,0) / a.ratio_tre) 
+                    end as stock_tre,
+                    f.short_desc as uom_tre,
+                    g.warehouse_code,
+                    h.received_date
+                from inventory a
+                join inventory b on a.idinventory_parent = b.idinventory
+                join warehouse_stock c on c.idinventory = a.idinventory
+                left join productmeasurement d on d.measurement_id = b.measurement_id_one
+                left join productmeasurement e on e.measurement_id = b.measurement_id_two
+                left join productmeasurement f on f.measurement_id = b.measurement_id_tre
+                left join warehouse g on g.warehouse_id = c.warehouse_id
+                left join goods_receipt h on h.no_goods_receipt = a.no_transaction
+                where true
+                and a.deleted = 0
+                and a.status = 1
+                and a.idunit = $idunit
+                $wer_parent
+                order by a.idinventory_parent, a.idinventory";
+        
+        $q = $this->db->query($sql);
+        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+        
+    }
     function get_by_sku(){
         $wer = null;
 
