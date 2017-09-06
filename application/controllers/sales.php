@@ -771,7 +771,7 @@ class sales extends MY_Controller {
     function print_invoice($id=null,$print=false){
         $this->load->model('sales/m_salesinvoice','model');
         $d['data'] = $this->model->cetak($id);
-        // print_r($d);
+        // print_r($d);die;
         $d['title'] = 'Sales Invoice';
         $d['print'] = $print;
         $d['isInvoice'] = true;

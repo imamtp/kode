@@ -17,7 +17,7 @@ class m_salesinvoice extends CI_Model {
 
     function selectField() {
         return "a.idsales,a.no_sales_order,a.idunit,a.subtotal,a.freight,a.date_sales,a.tax,a.disc,a.totalamount,a.paidtoday,a.balance,a.comments,a.noinvoice,a.ddays,a.eomddays,a.percentagedisc,a.daydisc,a.notes_si,b.nocustomer,b.namecustomer,a.idpayment,a.invoice_status,a.invoice_date,
-        b.address as address_customer, b.telephone as telephone_customer, b.handphone as handphone_customer";
+        b.address as address_customer, b.telephone as telephone_customer, b.handphone as handphone_customer,total_dpp";
     }
     
     function fieldCek()
@@ -130,6 +130,7 @@ class m_salesinvoice extends CI_Model {
             $dtcetak['memo'] = $r->notes_si;
             $dtcetak['datetrans'] = $r->date_sales;
             $dtcetak['invoice_date'] = $r->invoice_date;
+            $dtcetak['total_dpp'] = $r->total_dpp;
 
             // $dtcetak['receivedby'] = $r->userin;
             //get logo,address,namaunit
