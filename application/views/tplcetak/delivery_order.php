@@ -172,6 +172,10 @@
           </div>
           <div class="panel-body">
            <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+
+           <center>
+            Pelanggan
+           </center>
           </div>
         </div>
       </div>
@@ -183,6 +187,9 @@
           <div class="panel-body">
             <p>
               <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+               <center>
+            Kepala Pabrik
+           </center>
             </p>
           </div>
         </div>
@@ -195,6 +202,9 @@
           <div class="panel-body">
             <p>
               <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+               <center>
+            Gudang
+           </center>
             </p>
           </div>
         </div>
