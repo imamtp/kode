@@ -2,7 +2,7 @@
 
 class m_stock extends CI_Model {
 
-	function update_history($type,$qty,$idinventory,$idinventory_parent,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
+	function update_history($type,$qty,$idinventory,$idinventory_parent=null,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
 		/*
 			1: Order, (+)
 			2: Stock In By PO (+)
@@ -20,16 +20,27 @@ class m_stock extends CI_Model {
 			14: Delivery Sales Return (-)
 			15: Stock Out From Production (-)
 		*/
+		 
+		if($idinventory_parent==null){
+			$sql = "select sum(stock)as old_qty from warehouse_stock
+			where idinventory in (
+				select idinventory from inventory 
+				where idinventory = $idinventory
+				and warehouse_id = $idwarehouse
+				and idunit = $idunit
+				and deleted = 0
+			)";
+		} else {
+			$sql = "select sum(stock)as old_qty from warehouse_stock
+			where idinventory in (
+				select idinventory from inventory 
+				where idinventory_parent = $idinventory_parent
+				and warehouse_id = $idwarehouse
+				and idunit = $idunit
+				and deleted = 0
+			)";
+		}
 		
-		//stock all child utk stock history 
-		$sql = "select sum(stock)as old_qty from warehouse_stock
-				where idinventory in (
-					select idinventory from inventory 
-					where idinventory_parent = $idinventory_parent
-					and warehouse_id = $idwarehouse
-					and idunit = $idunit
-					and deleted = 0
-				)";
 		$q = $this->db->query($sql);
 		$r = $q->row();
 
@@ -56,7 +67,7 @@ class m_stock extends CI_Model {
 		);
 
 		$stock_history = array(
-			'idinventory'=>$idinventory_parent,
+			'idinventory'=>$idinventory_parent == null ? $idinventory : $idinventory_parent,
 			'idunit'=>$idunit,
 			'type_adjustment'=>$type,
 			'no_transaction'=> $no_transaction ?: rand(1111,9999),
