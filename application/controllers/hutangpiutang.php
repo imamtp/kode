@@ -251,7 +251,7 @@ class hutangpiutang extends MY_Controller {
     }
 
     function import_hutang(){
-        $file = '/Applications/MAMP/htdocs/nusafin2/saldo awal AP Supplier.xlsx';
+        $file = '/var/www/html/redsfindev/saldo awal AP Supplier.xlsx';
         // $orig_name = $this->upload->data()['orig_name'];
 
         require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
@@ -390,7 +390,7 @@ class hutangpiutang extends MY_Controller {
     }
 
     function import_piutang(){
-        $file = '/Applications/MAMP/htdocs/nusafin2/saldo awal AR Customer.xlsx';
+        $file = '/var/www/html/redsfindev/saldo awal AR Customer.xlsx';
         // $orig_name = $this->upload->data()['orig_name'];
 
         require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
