@@ -286,7 +286,7 @@ class laporan extends MY_Controller {
 
                 $kas = $this->m_laporan->getDataNeraca3($idunit, $startdate, $enddate, 19);
                 // print_r($kas);
-               // exit;
+            //    exit;
                 $bank = $this->m_laporan->getDataNeraca3($idunit, $startdate, $enddate, 1);
                 // print_r($bank);
                 // exit;

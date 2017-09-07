@@ -262,6 +262,9 @@ class m_laporan extends CI_Model {
                 if($rlog->debit>$rlog->credit)
                 {
                     $balance = $rlog->debit-$rlog->credit;
+                } else if($idaccounttype==1 || $idaccounttype==19){
+                    //kas and bank
+                    $balance = $rlog->debit-$rlog->credit;
                 } else {
                     $balance = $rlog->credit-$rlog->debit;
                 }
