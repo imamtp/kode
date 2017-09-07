@@ -2,7 +2,8 @@
 
 Ext.define('GridItemSalesPopupOrderModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua'],
+    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock', ],
+    //fields: ['idinventory', 'invno', 'sku_no', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'stock_kedua', 'satuan_pertama', 'satuan_kedua'],
     idProperty: 'id'
 });
 
@@ -13,7 +14,7 @@ var storeGridItemSalesPopupOrder = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'inventory/get_by_sku',
+        url: SITE_URL + 'inventory/get_by_sku2',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -82,21 +83,21 @@ Ext.define(dir_sys + 'sales.GridItemSalesPopupOrder', {
                     idinventory: selectedRecord.get('idinventory'),
                     invno: selectedRecord.get('invno'),
                     nameinventory: selectedRecord.get('nameinventory'),
-                    short_desc: selectedRecord.get('satuan_pertama'),
-                    price: selectedRecord.get('sellingprice'),
+                    short_desc: selectedRecord.get('uom_two'),
+                    price: selectedRecord.get('hpp'),
                     idunit: idunit,
                     sku_no: selectedRecord.get('sku_no'),
                     assetaccount: selectedRecord.get('assetaccount'),
 
                     qty: 1,
                     size: 1,
-                    size_measurement: selectedRecord.get('satuan_kedua'),
+                    size_measurement: selectedRecord.get('uom_one'),
                     disc: 0,
-                    total: selectedRecord.get('sellingprice'),
+                    total: selectedRecord.get('hpp'),
                     ratetax: 0
                         //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
                 });
-
+                console.log(recPO);
                 var gridPO = Ext.getCmp('EntrySalesOrder');
                 gridPO.getStore().insert(0, recPO);
                 updateGridSalesOrder('general');
@@ -107,33 +108,50 @@ Ext.define(dir_sys + 'sales.GridItemSalesPopupOrder', {
         },
         { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
-        { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        // { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
-            header: 'Total Stock',
-            dataIndex: 'totalstock',
+            header: 'Stock',
+            xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_one',
             minWidth: 120,
             align: 'right'
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            dataIndex: 'uom_one',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
-            minWidth: 70,
             xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_two',
+            minWidth: 120,
             align: 'right'
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
             minWidth: 100
         },
-        { header: 'Beli', dataIndex: 'cost', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
-        { header: 'Jual', dataIndex: 'sellingprice', minWidth: 130, xtype: 'numbercolumn', align: 'right' }
+        {
+            header: 'Stock #3',
+            xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_tre',
+            minWidth: 120,
+            align: 'right'
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
+            minWidth: 100
+        },
+        // { header: 'Beli', dataIndex: 'cost', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        { header: 'HPP', dataIndex: 'hpp', minWidth: 130, xtype: 'numbercolumn', align: 'right' }
     ],
     dockedItems: [
         // {

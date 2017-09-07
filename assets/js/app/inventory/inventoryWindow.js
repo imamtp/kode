@@ -152,7 +152,7 @@ Ext.define('WindowInventory', {
                                         });
                                         storeGridItemPurchase.load();
                                     } else {
-                                        storeGridInventoryAll.load();
+                                        storeGridInventoryAllBySku.load();
                                     }
 
                                 }

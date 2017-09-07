@@ -5,10 +5,11 @@
 //               });
 Ext.define('GridItemGridDetailInventoryModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
-        'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
-        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua'
-    ],
+    fields: ['sku_no', 'nameinventory', 'invno', 'notes', 'idinventory', 'cost', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'warehouse_code', 'no_batch', 'received_date'],
+    // fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
+    // 'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
+    // 'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua'
+    // ],
     idProperty: 'id'
 });
 
@@ -19,7 +20,8 @@ var storeGridItemGridDetailInventory = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/',
+        // url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/',
+        url: SITE_URL + 'inventory/get_detail_item',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -28,8 +30,8 @@ var storeGridItemGridDetailInventory = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
-        direction: 'DESC'
+        property: 'received_date',
+        direction: 'ASC'
     }]
 });
 
@@ -78,11 +80,23 @@ Ext.define('GridItemGridDetailInventory', {
         {
             header: 'No SKU',
             dataIndex: 'sku_no',
-            minWidth: 220
+            minWidth: 220,
+            hidden: true,
         },
         {
             header: 'No Barang',
             dataIndex: 'invno',
+            minWidth: 120
+        },
+        {
+            header: 'No Brg Supp.',
+            dataIndex: 'notes',
+            minWidth: 120
+        },
+        {
+            header: 'No Batch',
+            dataIndex: 'no_batch',
+            hidden: true,
             minWidth: 120
         },
         // {header: 'Unit', dataIndex: 'namaunit', minWidth: 100},
@@ -90,46 +104,92 @@ Ext.define('GridItemGridDetailInventory', {
             header: 'Inventory Name',
             dataIndex: 'nameinventory',
             minWidth: 300,
-            flex: 1
-        },
-        {
-            header: 'Brand',
+            flex: 1,
             hidden: true,
-            dataIndex: 'brand_name',
-            minWidth: 200
         },
+        // {
+        //     header: 'Brand',
+        //     hidden: true,
+        //     dataIndex: 'brand_name',
+        //     minWidth: 200
+        // },
+        // {
+        //     header: 'Total Stok',
+        //     dataIndex: 'totalstock',
+        //     minWidth: 120,
+        //     xtype: 'numbercolumn',
+        //     align: 'right',
+        //     renderer: function(value) {
+        //         if (value === null) {
+        //             return 0;
+        //         } else {
+        //             return value; //renderNomor(value);
+        //         }
+        //     }
+        // },
         {
-            header: 'Total Stok',
-            dataIndex: 'totalstock',
-            minWidth: 120,
+            header: 'Stock',
             xtype: 'numbercolumn',
+            minWidth: 120,
             align: 'right',
-            renderer: function(value) {
-                if (value === null) {
-                    return 0;
-                } else {
-                    return value; //renderNomor(value);
-                }
-            }
+            dataIndex: 'stock_one',
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
-            // hidden: true,
+            dataIndex: 'uom_one',
+            // dataIndex: 'satuan_pertama',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
-            // hidden: true,
-            minWidth: 70,
             xtype: 'numbercolumn',
-            align: 'right'
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'stock_two',
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
+            // dataIndex: 'satuan_pertama',
             minWidth: 100
+        },
+        {
+            header: 'Stock #3',
+            xtype: 'numbercolumn',
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'stock_tre',
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
+            // dataIndex: 'satuan_pertama',
+            minWidth: 100
+        },
+        {
+            header: 'Kode Gudang',
+            minWidth: 100,
+            dataIndex: 'warehouse_code',
+            flex: 1,
+        },
+        {
+            header: 'Tgl Masuk',
+            minWidth: 150,
+            dataIndex: 'received_date'
         }
+        // {
+        //     header: 'Stock #2',
+        //     dataIndex: 'stock_kedua',
+        //     // hidden: true,
+        //     minWidth: 70,
+        //     xtype: 'numbercolumn',
+        //     align: 'right'
+        // },
+        // {
+        //     header: 'Satuan #2',
+        //     dataIndex: 'satuan_kedua',
+        //     minWidth: 100
+        // }
     ],
     dockedItems: [{
         xtype: 'toolbar',

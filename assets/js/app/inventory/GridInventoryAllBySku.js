@@ -148,10 +148,11 @@ var wInventoryAllBySku = Ext.create('widget.window', {
 
 Ext.define('GridInventoryAllBySkuModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
-        'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
-        'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua', 'hpp_per_unit'
-    ],
+    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock', ],
+    // fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
+    // 'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
+    // 'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua', 'hpp_per_unit'
+    // ],
     idProperty: 'id'
 });
 
@@ -162,17 +163,17 @@ var storeGridInventoryAllBySku = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'inventory/get_by_sku',
+        url: SITE_URL + 'inventory/get_by_sku2',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
-            totalProperty: 'results'
+            totalProperty: 'numrow'
         },
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
-        direction: 'DESC'
+        property: 'sku_no',
+        direction: 'ASC'
     }]
 });
 
@@ -228,12 +229,6 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             dataIndex: 'sku_no',
             minWidth: 220
         },
-        {
-            header: 'No Barang',
-            hidden: true,
-            dataIndex: 'invno',
-            minWidth: 120
-        },
         // {header: 'Unit', dataIndex: 'namaunit', minWidth: 100},
         {
             header: 'Inventory Name',
@@ -247,68 +242,72 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
             dataIndex: 'brand_name',
             minWidth: 200
         },
-        {
-            header: 'Total Item',
-            dataIndex: 'totalitem',
-            minWidth: 120,
-            xtype: 'numbercolumn',
-            align: 'right',
-            renderer: function(value) {
-                if (value === null) {
-                    return 0;
-                } else {
-                    return value;
-                }
-            }
-        },
+        // {
+        //     header: 'Total Item',
+        //     dataIndex: 'totalitem',
+        //     minWidth: 120,
+        //     xtype: 'numbercolumn',
+        //     align: 'right',
+        //     renderer: function(value) {
+        //         if (value === null) {
+        //             return 0;
+        //         } else {
+        //             return value;
+        //         }
+        //     }
+        // },
         {
             header: 'Stock',
-            dataIndex: 'totalstock',
+            // dataIndex: 'totalstock',
+            dataIndex: 'stock_one',
             minWidth: 120,
             xtype: 'numbercolumn',
             align: 'right',
-            renderer: function(value) {
-                if (value === null) {
-                    return 0;
-                } else {
-                    return value;
-                }
-            }
+            // renderer: function(value) {
+            //     if (value === null) {
+            //         return 0;
+            //     } else {
+            //         return value;
+            //     }
+            // }
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            // dataIndex: 'satuan_pertama',
+            dataIndex: 'uom_one',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
+            // dataIndex: 'stock_kedua',
+            dataIndex: 'stock_two',
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
+            // dataIndex: 'satuan_kedua',
+            minWidth: 100
+        },
+        {
+            header: 'Stock #3',
+            // dataIndex: 'stock_kedua',
+            dataIndex: 'stock_tre',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
+            // dataIndex: 'satuan_kedua',
             minWidth: 100
         },
         {
             header: 'HPP',
-            dataIndex: 'hpp_per_unit',
-            minWidth: 120,
-            xtype: 'numbercolumn',
-            align: 'right'
-        },
-        {
-            header: 'Buying Cost',
-            dataIndex: 'cost',
-            hidden: true,
-            minWidth: 120,
-            xtype: 'numbercolumn',
-            align: 'right'
-        },
-        {
-            header: 'Selling Price',
-            dataIndex: 'sellingprice',
+            dataIndex: 'hpp',
             minWidth: 120,
             xtype: 'numbercolumn',
             align: 'right'
@@ -345,6 +344,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                 },
                 {
                     xtype: 'comboxunit',
+                    hidden: true,
                     valueField: 'idunit',
                     labelWidth: 50,
                     id: 'idunitDaftarPersediaan',
@@ -396,8 +396,6 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                         Ext.getCmp('statusformInventory2').setValue('input');
 
                         brandStore.load();
-
-
                     }
                 },
                 {
@@ -556,22 +554,24 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
         },
         itemdblclick: function(dv, record, item, index, e) {
 
-            if (record.data.totalitem * 1 > 1) {
-                windowGridDetailInventory.show();
+            // if (record.data.totalitem * 1 > 1) {
+            windowGridDetailInventory.show();
 
-                var GridItemGridDetailInventoryID = Ext.getCmp('GridItemGridDetailInventory').getStore();
+            var GridItemGridDetailInventoryID = Ext.getCmp('GridItemGridDetailInventory').getStore();
 
-                GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
-                    operation.params = {
-                        'extraparams': 'a.idinventory_parent:' + record.data.idinventory
-                    };
-                });
+            GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {
+                operation.params = {
+                    'idunit': idunit,
+                    'idinventory_parent': record.data.idinventory,
+                    // 'extraparams': 'a.idinventory_parent:' + record.data.idinventory
+                };
+            });
 
-                GridItemGridDetailInventoryID.load();
-            } else if (record.data.totalitem * 1 != 0) {
-                //langsung tampil window detail
-                showInventoryData();
-            }
+            GridItemGridDetailInventoryID.load();
+            // } else if (record.data.totalitem * 1 != 0) {
+            //     //langsung tampil window detail
+            //     showInventoryData();
+            // }
 
 
 

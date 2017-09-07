@@ -16,7 +16,7 @@ class m_itempurchaseorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpurchaseitem,a.idpurchase,c.sku_no,a.idinventory,a.idtax,a.qty,a.backorder,a.price,a.disc,a.total,a.invno,a.ratetax,b.nametax,c.nameinventory,d.short_desc,a.deleted";
+        return "a.idpurchaseitem,a.idpurchase,c.sku_no,a.idinventory,a.idtax,a.qty,a.backorder,a.price,a.disc,a.total,a.invno,a.ratetax,b.nametax,c.nameinventory,d.short_desc,a.deleted,a.ratio_two,a.ratio_tre";
     }
 
     function fieldCek() {

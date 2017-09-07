@@ -108,14 +108,13 @@ function showSalesOrderData(record) {
     Ext.getCmp('nojurnalSalesOrder').setValue(record.data.no_sales_order);
     Ext.getCmp('delivery_date_SalesOrder').setValue(record.data.delivery_date);
 
-    var customerSalesOrder = Ext.getCmp('customerSalesOrder');
-    customerSalesOrder.setValue(record.data.idcustomer);
+    Ext.getCmp('customerSalesOrder').setValue(record.data.idcustomer);
     Ext.getCmp('namecustomerSalesOrder').setValue(record.data.namecustomer);
 
     Ext.getCmp('salesman_name_so').setValue(record.data.firstname);
     Ext.getCmp('salesman_id_so').setValue(record.data.salesman_id);
 
-    Ext.getCmp('diskonSalesOrder').setValue(record.data.disc);
+    Ext.getCmp('shipaddressSalesOrder').setValue(record.data.shipaddress);
 
     Ext.getCmp('comboxpaymentSalesOrder').setValue(record.data.idpayment);
     Ext.getCmp('ddaysSalesOrder').setValue(record.data.ddays);
@@ -179,9 +178,6 @@ function showSalesOrderData(record) {
 
                 gridDO.getStore().insert(0, recDO);
             });
-
-
-
         },
         failure: function(form, action) {
             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
@@ -189,41 +185,17 @@ function showSalesOrderData(record) {
     });
 
     var subtotal = record.data.subtotal * 1;
+    var disc = record.data.disc * 1;
+    var dpp = record.data.total_dpp * 1;
+    var freight = record.data.freight * 1;
     var tax = record.data.tax * 1;
     var totalamount = record.data.totalamount * 1;
-    var dpp = (subtotal + record.data.disc * 1) / 1.1;
+    Ext.getCmp('diskonSalesOrder').setValue(disc.toLocaleString('null', { maximumFractionDigits: 2 }));
+    Ext.getCmp('freightSalesOrder').setValue(freight.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('dppSalesOrder').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
     Ext.getCmp('subtotalSalesOrder').setValue(subtotal.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('totalPajakSalesOrder').setValue(tax.toLocaleString('null', { minimumFractionDigits: 2 }));
     Ext.getCmp('totalSalesOrder').setValue(totalamount.toLocaleString('null', { minimumFractionDigits: 2 }));
-
-
-
-
-    // Ext.getCmp('cb_tax_id_so').setValue(record.data.idsales);
-
-
-
-
-
-    // no_sales_quote
-    // sales_quotation_date
-    // id_sales_quote_SalesOrder
-    // idsales_order
-    // nojurnalSalesOrder
-    // delivery_date_SalesOrder
-    // cbUnitEntrySalesOrder
-    // cb_tax_id_so
-    // customerSalesOrder
-    // salesman_name_so
-    // salesman_id_so
-    // memoSalesOrder
-
-    // cb_sales_order_status
-
-    // subtotalSalesOrder
-    // totalPajakSalesOrder
-    // totalSalesOrder
 }
 
 function showSalesQuotationData(record) {
@@ -365,8 +337,8 @@ function loadDataFormInvoice(idsales) {
             var dpp = (subtotal + disc) / 1.1;
             var freightcost = d.data.freight * 1;
 
-            setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
-            setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');
+            // setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
+            // setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');
 
             Ext.getCmp('discountSalesInvoice_si').setValue(disc.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('dppSalesInvoice_si').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
@@ -399,6 +371,7 @@ function loadDataFormInvoice(idsales) {
             Ext.getCmp('totalPajakSalesInvoice_si').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('sisaBayarSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
 
+            Ext.getCmp('memoSalesInvoice_si').setValue('Sales Invoice : ' + d.data.namecustomer)
             var grid = Ext.getCmp('EntrySalesInvoice');
 
             Ext.each(d.items, function(obj, i) {

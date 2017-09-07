@@ -16,7 +16,7 @@ class m_itemmaterialwo extends CI_Model {
     }
 
     function selectField() {
-        return "a.prod_material_id,a.job_order_id,a.idinventory,a.bom_id,a.measurement_id,a.qty,a.idunit,a.material_type,a.qty_real,a.qty_sisa,a.whs_sisa_id,a.notes,b.nameinventory,b.invno,b.sku_no,c.short_desc as measurement_name,slice";
+        return "a.prod_material_id,a.job_order_id,a.idinventory,a.bom_id,a.measurement_id,a.qty,a.idunit,a.material_type,a.qty_real,a.qty_sisa,a.whs_sisa_id,a.notes,d.nameinventory,b.invno,b.sku_no,c.short_desc as measurement_name,slice";
     }
     
     function fieldCek()
@@ -32,7 +32,8 @@ class m_itemmaterialwo extends CI_Model {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
                    join inventory b ON a.idinventory = b.idinventory
-                    left join productmeasurement c ON a.measurement_id = c.measurement_id";
+                   join inventory d on d.idinventory = b.idinventory_parent
+                   left join productmeasurement c ON a.measurement_id = c.measurement_id";
 
         return $query;
     }

@@ -417,6 +417,8 @@ class purchase extends MY_Controller {
                 'disc' => $value->disc,
                 'price' => $value->price,
                 'total' => $value->total,
+                'ratio_two'=> $value->ratio_two?: null,
+                'ratio_tre'=> $value->ratio_tre?: null,
                 // 'remarks' => $value->remarks,
                 'ratetax' => $value->ratetax,
                 'deleted' => $value->deleted == null ? 0 : $value->deleted,
@@ -606,8 +608,9 @@ class purchase extends MY_Controller {
             $nobatch = null;
             $detailItems = json_decode($this->input->post('itembatch'));
             
-            //if GR status is confirmed, update qty_received of purchaseitem
+            //if GR status is confirmed, update qty_received of purchaseitem, update buy cost, calculation hpp and set nobatch
             if($header['status_gr'] == 3 && $item->qty_receipt > 0){
+                //update qty received of purchaseitem
                 $this->db->where(array(
                     'idpurchase'=> $header['idpurchase'],
                     'idpurchaseitem'=> $item->idpurchaseitem,
@@ -617,8 +620,12 @@ class purchase extends MY_Controller {
                     'qty_received'=> $item->qty_received + $item->qty_receipt, 
                 ));
                 
+                //update buy cost of inventory
+                $this->db->where('idinventory', $item->idinventory);
+                $this->db->update('inventory', array('cost'=>$item->price));
+                
                 //hitung hpp
-                if(!$this->mstock->update_hpp($item->idinventory,$header['idunit'], 3, $item->total_receipt,$item->qty_receipt,$header['idpurchase'])){
+                if(!$this->mstock->update_hpp($item->idinventory,$header['idunit'], 3, 'in',$item->total_receipt,$item->qty_receipt,$header['idpurchase'])){
                     $this->db->trans_rollback();
                     $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
                     echo json_encode($json);
@@ -628,16 +635,16 @@ class purchase extends MY_Controller {
                 //create no batch if purchaseitem_batch > 1
                 $params_batch = array(
                     'idunit' => $this->input->post('unit'),
-                    'prefix' => 'BCH',
+                    'prefix' => 'BGR',
                     'table' => 'inventory',
                     'fieldpk' => 'idinventory',
                     'fieldname' => 'no_batch',
-                    'extraparams'=> '',
+                    'extraparams'=> 'and inventory_type = 2', //raw material
                 );
                 if(sizeof($detailItems[$key]) > 1)
                     $nobatch = $this->setup->getNextNoArticle2($params_batch);
             }
-            
+
             //save detail item received to purchaseitem_batch
             foreach($detailItems[$key] as $v){
                 $idwarehouse = $this->m_data->getIDmaster('warehouse_code',$v->warehouse_code,'warehouse_id','warehouse',$this->input->post('idunit'));
@@ -680,52 +687,26 @@ class purchase extends MY_Controller {
                     //harus cek invno sudah diguanakan atau belum
                     /* code */
 
+                    //ratio di set secara hard code. khusus utk kasus di alfasteel
+                    //ratio two mengikuti parent. 
+                    //ratio tre ambil dari qty receipt
+
                     $inv = array(
                         'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
                         'idinventory_parent'=> $v->idinventory,
                         'invno'=> $v->invno,
-                        'sku_no'=> $v->sku_no,
-                        'nameinventory'=> $v->nameinventory,
+                        // 'sku_no'=> $v->sku_no,
+                        // 'nameinventory'=> $v->nameinventory,
+                        'ratio_two'=> $item->ratio_two,
+                        'ratio_tre'=> $v->qty,
                         'cost'=> $item->price,
-                        'notes'=> $v->notes,
+                        'notes'=> $v->notes, //kode kooil supplier
+                        'idsupplier'=> $this->input->post('idsupplier'),
                         'idunit'=> $v->idunit,
                         'userin'=> $this->session->userdata('userid'),
                         'datein'=> date('Y-m-d H:i:s'),
                         'no_batch'=>$nobatch,
                         'no_transaction'=>$header['no_goods_receipt'],
-                    );
-
-                    $stock = array(
-                        'idinventory'=> $inv['idinventory'],
-                        'idunit'=> $v->idunit,
-                        'warehouse_id'=> $idwarehouse,
-                        'stock'=> $v->qty,
-                        'usermod'=> $this->session->userdata('userid'),
-                        'datemod'=> date('Y-m-d H:i:s'),
-                    );
-
-                    $sql = "select sum(stock)as old_qty from warehouse_stock
-                                    where idinventory in (
-                                        select idinventory from inventory 
-                                        where idinventory_parent = $v->idinventory
-                                        and idunit = $v->idunit
-                                        and deleted = 0
-                                    )";
-                    $q = $this->db->query($sql);
-                    $r = $q->row();
-
-                    $stock_history = array(
-                        'idinventory'=> $inv['idinventory_parent'],
-                        'idunit'=> $v->idunit,
-                        'type_adjustment'=> 2,
-                        'no_transaction'=> $header['no_goods_receipt'],
-                        'old_qty'=> $r->old_qty,
-                        'qty_transaction'=> $v->qty,
-                        'balance'=> $r->old_qty + $v->qty,
-                        'warehouse_id'=> $idwarehouse,
-                        'datein'=> date('Y-m-d H:i:s'),
-                        'notes'=>'Penerimaan Barang dari PO '.$this->input->post('nopo'),
-                        'idjournal'=>$idjournal,
                     );
                     
                     //update purchaseitem_batch, set no batch
@@ -734,8 +715,7 @@ class purchase extends MY_Controller {
 
                     //insert inventory, stock and stock history
                     $this->db->insert('inventory', $inv);
-                    $this->db->insert('warehouse_stock', $stock);
-                    $this->db->insert('stock_history', $stock_history);
+                    $this->mstock->update_history(2, $v->qty, $inv['idinventory'], $inv['idinventory_parent'], $v->idunit, $idwarehouse, date('Y-m-d'),'Penerimaan Barang dari PO '.$this->input->post('nopo'), $idjournal, $header['no_goods_receipt']);
                 }
             } //end loop detail purchaseitem / batch
         } //end loop purchaseitem

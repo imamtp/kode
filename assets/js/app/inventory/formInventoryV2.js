@@ -89,19 +89,21 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                                     }, {
                                         xtype: 'textfield',
                                         fieldLabel: 'No Barang',
+                                        hidden: true,
                                         // allowBlank: false,
                                         name: 'invno'
                                     }, {
                                         xtype: 'comboxunit',
                                         allowBlank: false,
+                                        name: 'idunit',
                                         // labelWidth:230,
                                         // width:500,
-                                        multiSelect: true,
-                                        id: 'namaunitFormInvX',
-                                        name: 'namaunit2[]'
-                                            // ,value: 'Unit 1, SMIP'
-                                            // ,value: ["Unit 1","SMIP"]
-                                            // value: 'Unit 1,SMIP'
+                                        // multiSelect: true,
+                                        // id: 'namaunitFormInvX',
+                                        // name: 'namaunit',
+                                        // ,value: 'Unit 1, SMIP'
+                                        // ,value: ["Unit 1","SMIP"]
+                                        // value: 'Unit 1,SMIP'
                                     }, {
                                         xtype: 'textfield',
                                         fieldLabel: 'Nama Barang',
@@ -112,11 +114,12 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                                     },
                                     {
                                         xtype: 'comboxInventoryType',
+                                        fieldLabel: 'Tipe Inventory',
                                         id: 'comboxInventoryType_inv_form',
                                         allowBlank: false
                                     }, {
                                         xtype: 'comboxinventorycat',
-                                        fieldLabel: 'Product Type',
+                                        fieldLabel: 'Tipe Produk',
                                         allowBlank: false,
                                         valueField: 'idinventorycat',
                                         name: 'idinventorycat'
@@ -128,22 +131,31 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                                             // allowBlank: false,
                                     }, {
                                         xtype: 'comboxmeasurement',
-                                        fieldLabel: 'Basic UoM',
+                                        fieldLabel: 'Satuan Terkecil',
                                         allowBlank: false,
                                         id: 'measurement_id_one',
                                         name: 'measurement_id_one'
                                     }, {
                                         xtype: 'comboxmeasurement',
-                                        fieldLabel: 'Second UoM',
-                                        // allowBlank: false,
+                                        fieldLabel: 'Satuan Ke dua',
                                         id: 'measurement_id_two',
-                                        name: 'measurement_id_two'
+                                        name: 'measurement_id_two',
+                                    }, {
+                                        xtype: 'numberfield',
+                                        fieldLabel: 'Rasio',
+                                        id: 'ratio_two',
+                                        name: 'ratio_two'
                                     }, {
                                         xtype: 'comboxmeasurement',
                                         fieldLabel: 'Third UoM',
-                                        // allowBlank: false,
+                                        width: 80,
                                         id: 'measurement_id_tre',
-                                        name: 'measurement_id_tre'
+                                        name: 'measurement_id_tre',
+                                    }, {
+                                        xtype: 'numberfield',
+                                        fieldLabel: 'Rasio',
+                                        id: 'ratio_tre',
+                                        name: 'ratio_tre'
                                     }, {
                                         xtype: 'textareafield',
                                         fieldLabel: 'Deskripsi',
@@ -296,7 +308,9 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                                     xtype: 'textfield',
                                     anchor: '100%',
                                     fieldLabel: 'Harga Dasar Penjualan',
-                                    name: 'sellingprice'
+                                    readOnly: true,
+                                    name: 'hpp',
+                                    id: 'hpp_inv_form',
                                 }, {
                                     xtype: 'comboxtax',
                                     hidden: true,
@@ -323,6 +337,7 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                             }, {
                                 xtype: 'textfield',
                                 fieldLabel: 'Harga Beli',
+                                hidden: true,
                                 id: 'costInventory',
                                 name: 'cost'
                             }, {
@@ -353,9 +368,11 @@ var formInventoryV2 = Ext.create('Ext.form.Panel', {
                             id: 'fieldsetInvPersediaan',
                             // collapsible: true,
                             items: [{
-                                xtype: 'numberfield',
+                                xtype: 'textfield',
                                 anchor: '98%',
                                 fieldLabel: 'Jumlah Stok',
+                                emptyText: '0',
+                                readOnly: true,
                                 id: 'qtystockInv',
                                 name: 'qtystock'
                             }, {

@@ -69,6 +69,7 @@ Ext.define(dir_sys + 'purchase2.WindowEntryGoodsReceipt', {
                         dpp: dpp.toFixed(2),
                         tax: tax.toFixed(2),
                         totalamount: totalamount.toFixed(2),
+                        idsupplier: Ext.getCmp('supplier_poreceipt').getValue(),
                     },
                     success: function(form, action) {
                         var d = Ext.decode(form.responseText);

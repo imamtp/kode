@@ -16,7 +16,7 @@ class m_inventoryBuy extends CI_Model {
     }
 
     function selectField() {
-        return "a.idinventory,invno,a.description,nameinventory,images,qtystock,a.cosaccount,a.cost,a.unitmeasure,a.idinventorycat,a.numperunit,a.idsupplier,b.namesupplier,yearbuy,monthbuy,datebuy,c.namecat,d.nametax as nametaxbuy,d.rate as ratetax,f.accname,f.accnumber, g.assetaccount";
+        return "a.idinventory,invno,a.description,nameinventory,images,a.cosaccount,a.cost,a.unitmeasure,a.idinventorycat,a.numperunit,a.idsupplier,b.namesupplier,yearbuy,monthbuy,datebuy,c.namecat,d.nametax as nametaxbuy,d.rate as ratetax,f.accname,f.accnumber, g.assetaccount";
     }
     
     function fieldCek()

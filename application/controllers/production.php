@@ -343,17 +343,21 @@ class production extends MY_Controller
 
         echo json_encode($data);
     }
-
+    
     function saveworeceipt()
     {
-
+        $this->load->model('inventory/m_stock');
+        
         $this->db->trans_begin();
+
+        $idjournal_receive_wo = null;
 
         $gridjob = json_decode($this->input->post('gridjob'));
         $gridmaterial = json_decode($this->input->post('gridmaterial'));
         $gridcost = json_decode($this->input->post('gridcost'));
         // $finished_date = explode(' ', $this->input->post('finished_date'));
         $job_order_id = $this->input->post('job_order_id');
+        $job_no = $this->input->post('job_no');
         $idunit = $this->input->post('idunit');
         $status = $this->input->post('status');
 
@@ -369,6 +373,18 @@ class production extends MY_Controller
 
         $this->db->where('job_order_id', $job_order_id);
         $this->db->update('job_order', $header);
+
+        if ($status==5) { //status is ready to delivery
+            //buat jurnal
+            $this->load->model('journal/m_jproduction');
+            $job_no = $this->input->post('job_no');
+            $idjournal_receive_wo = $this->m_jproduction->receive_wo($job_order_id,$this->input->post('job_no'));
+            
+            $this->db->where('job_order_id', $job_order_id);
+            $this->db->update('job_order', array(
+                'idjournal_receive_wo'=>$idjournal_receive_wo
+            ));
+        }
 
         //grid job
         foreach ($gridjob as $value) {
@@ -396,74 +412,109 @@ class production extends MY_Controller
                     )
                 );
             $this->db->update('job_item', $data_job_item);
-            // echo $this->db->last_query();
-            // $this->db->trans_rollback();
-            // exit();
+
             if ($status==5) {
-                //status ready to deliver - update stok
+                //status ready to deliver - insert to inventory and update stok
+
+                //hitung biaya produksi (dari penggunaan raw material) per item
+                //cost fg dalam satuan meter (satuan_kedua), hpp_material dalam satuan kg (satuan_pertama)
+                //konversi hpp dari satuan_pertama (kg) ke satuan_kedua (m): hpp / ratio_two
+                //cost_per_meter: hpp(kg) / ratio_two(kg/m) 
+                $sql = "select round(cast(d.hpp_per_unit / c.ratio_two as numeric ),2) as cost_prod  from job_item a
+                        join prod_material b on a.job_item_id = b.job_item_id and a.job_order_id = b.job_order_id and a.idunit = b.idunit
+                        join inventory c on c.idinventory = b.idinventory --child
+                        join inventory d on d.idinventory = c.idinventory_parent --parent
+                    where true
+                    and a.job_order_id = $job_order_id
+                    and a.idunit = $idunit";
+                $q = $this->db->query($sql);
+                $r = $q->row();
                 
-                 $this->load->model('inventory/m_stock');
-
-                 $this->m_stock->update_history(12, $value->qty_accept, $value->idinventory, $idunit, $warehouse_id_accept, date('Y-m-d'), 'Update accepted stock from Work Order: '.$this->input->post('job_no'));
-                if ($value->qty_reject != 0) {
-                    $this->m_stock->update_history(12, $value->qty_reject, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update rejected stock from Work Order: '.$this->input->post('job_no'));
+                $qty_item = $value->qty_accept * $value->size; //convert qty dlm lembar/batang menjadi dlm meter. $value-size => ratio_two
+                $balance_item = $qty_item * $r->cost_prod; // balance dalam meter
+                //hitung hpp fg accept
+                if(!$this->m_stock->update_hpp($value->idinventory,$idunit, 3, 'in',$balance_item,$qty_item, 'null', 'null', $job_order_id)){
+                    $this->db->trans_rollback();
+                    $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+                    echo json_encode($json);
+                    exit();
                 }
-                if ($value->qty_sisa != 0) {
-                    $this->m_stock->update_history(12, $value->qty_sisa, $value->idinventory, $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update stock sisa dari Work Order: '.$this->input->post('job_no'));
-                }
-
-
                 
+                //insert FG accept ke inventory 
+                $inv = array(
+                    'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
+                    'idinventory_parent'=> $value->idinventory,
+                    'ratio_two'=> $value->size,
+                    'cost'=> $r->cost_prod,
+                    'idunit'=> $idunit,
+                    'userin'=> $this->session->userdata('userid'),
+                    'datein'=> date('Y-m-d H:i:s'),
+                    'no_transaction'=> $job_no,
+                );
+                $this->db->insert('inventory', $inv);
 
+                //insert data FG ke warehouse_stock dan log ke dalam stock_history 
+                $this->m_stock->update_history(12,$qty_item, $inv['idinventory'],$inv['idinventory_parent'],$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
 
-                // if($qjobitem->num_rows()>0){
-                //     $rjobitem = $qjobitem->row();
-                    
-                //     $qjobmaterial = $this->db->query("select idinventory from prod_material 
-                //                                         where job_item_id = ".$rjobitem->job_item_id." and job_order_id = $job_order_id
-                //                                         and idunit = $idunit");
-                //     if($qjobmaterial->num_rows()>0){
-                //         $rmaterial = $qjobmaterial->row();
-                //         $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$this->input->post('job_no'));
-                //     }
-                // }                
-                //end update stok material 
+                //disable sementara
+                // if ($value->qty_reject != 0) {
+                //     $this->m_stock->update_history(12, $value->qty_reject, $inv['idinventory'],$inv['idinventory_parent'], $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update rejected stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                // }
+
+                // if ($value->qty_sisa != 0) {
+                //     $this->m_stock->update_history(12, $value->qty_sisa, $inv['idinventory'],$inv['idinventory_parent'], $idunit, $warehouse_id_reject, date('Y-m-d'), 'Update stock lebih dari Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                // }
             }
         }
         //end grib job
 
         if ($status==5) {
-            //status ready to deliver - update stok
-            $qjobitem = $this->db->query("select job_item_id,job_order_id,idinventory
-                                        from job_item a
-                                        where a.job_order_id = $job_order_id");
-            foreach($qjobitem->result() as $rjob){
-                // var_dump($rjob);
-                $qjobmaterial = $this->db->query("select idinventory,qty_real from 
-                                                    prod_material 
-                                                    where job_item_id = ".$rjob->job_item_id." and job_order_id = $job_order_id
-                                                    and idunit = $idunit");
-                if($qjobmaterial->num_rows()>0){
-                    $rmaterial = $qjobmaterial->row();
-                    // echo $rmaterial->idinventory.' ';
-                    if($rmaterial->qty_real!==null || $rmaterial->qty_real!=0){
-                        $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$rmaterial->qty_real,$this->input->post('job_no'));
-                    }                        
+            // //status ready to deliver - potong stok raw material yg diguanakan dlm produksi
+
+            //kurangi stock raw material yg digunakan dalam produksi
+            $sql = "select c.idinventory, c.idinventory_parent, c.hpp_per_unit, c.ratio_two, coalesce(b.qty_real,0) as qty_used, d.warehouse_id, idjournal_material_confirm from job_item a
+                    join prod_material b on a.job_item_id = b.job_item_id and a.job_order_id = b.job_order_id and a.idunit = b.idunit
+                    join inventory c on c.idinventory = b.idinventory --child
+                    join warehouse_stock d on d.idinventory= c.idinventory
+                    join job_order e on e.job_order_id = a.job_order_id
+                    where true
+                    and a.job_order_id = $job_order_id
+                    and a.idunit = $idunit";
+            $q_material = $this->db->query($sql);
+            
+            foreach($q_material->result() as $r){
+                //update hpp history raw material
+                $qty_item = $r->qty_used * $r->ratio_two; //qty dalam m dikonversi ke kg
+                $balance_item = $qty_item * $r->hpp_per_unit; // menghitung new balance dalam satuan kg
+                if(!$this->m_stock->update_hpp($r->idinventory_parent,$idunit, 3, 'out',$balance_item,$qty_item, 'null', 'null', $job_order_id)){
+                    $this->db->trans_rollback();
+                    $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+                    echo json_encode($json);
+                    exit();
                 }
+                $this->m_stock->update_history(15, $qty_item, $r->idinventory, $r->idinventory_parent, $idunit, $r->warehouse_id, date('Y-m-d'), 'Stock Out From Production. WO: '.$job_no, $r->idjournal_material_confirm, $job_no);
             }
+
+
+            // $qjobitem = $this->db->query("select job_item_id,job_order_id,idinventory
+            //                             from job_item a
+            //                             where a.job_order_id = $job_order_id");
+            // foreach($qjobitem->result() as $rjob){
+            //     // var_dump($rjob);
+            //     $qjobmaterial = $this->db->query("select idinventory,qty_real from 
+            //                                         prod_material 
+            //                                         where job_item_id = ".$rjob->job_item_id." and job_order_id = $job_order_id
+            //                                         and idunit = $idunit");
+            //     if($qjobmaterial->num_rows()>0){
+            //         $rmaterial = $qjobmaterial->row();
+            //         // echo $rmaterial->idinventory.' ';
+            //         if($rmaterial->qty_real!==null || $rmaterial->qty_real!=0){
+            //             $this->m_stock->update_stock_material($idunit,$rmaterial->idinventory,$rmaterial->qty_real,$this->input->post('job_no'));
+            //         }                        
+            //     }
+            // }
         }
 
-        if ($status==5) {
-            //buat jurnal
-            $this->load->model('journal/m_jproduction');
-            $job_no = $this->input->post('job_no');
-            $idjournal_receive_wo = $this->m_jproduction->receive_wo($job_order_id,$this->input->post('job_no'));
-            
-            $this->db->where('job_order_id', $job_order_id);
-            $this->db->update('job_order', array(
-                'idjournal_receive_wo'=>$idjournal_receive_wo
-            ));
-        }
         //start grid material
         // foreach ($gridmaterial as $value) {
         //       $data_material = array(
@@ -976,8 +1027,6 @@ class production extends MY_Controller
                 'material_confirm_status'=>$this->input->post('status'),
                 'idjournal_material_confirm'=>$idjournal_material_confirm
             ));
-
-           
         }
 
         if ($this->db->trans_status() === false) {
@@ -992,29 +1041,47 @@ class production extends MY_Controller
 
     function hitung_bahan_baku($job_order_id){
         $bbb = 0; //biaya bahan baku
-        
+        $idunit = $this->session->userdata('idunit');
         $this->load->model('inventory/m_stock');
 
-        $qjob_item = $this->db->query("select job_item_id
-                                from job_item a
-                                where a.job_order_id = $job_order_id");
-        foreach($qjob_item->result() as $r){
-            $qraw = $this->db->query("select a.idinventory,qty_real,b.hpp_per_unit
-                        from prod_material a
-                        join inventory b ON a.idinventory = b.idinventory
-                        where job_item_id = ".$r->job_item_id." and a.job_order_id = $job_order_id");
-            foreach($qraw->result() as $r2){
-                if($r2->hpp_per_unit==null){                    
-                   $hpp_per_unit = $this->m_stock->hitung_hpp_beli($r2->idinventory,3);
-                } else {
-                    $hpp_per_unit = $r2->hpp_per_unit;
-                }
+        //hitung penggunaan bahan baku.
+        //qty_used dalam satuan meter, hpp dalam satuan kg
+        //konversi qty_used(m) ke qty_used(kg) dg cara dikalikan ratio_two(kg/m)
 
-                $bbb+= $hpp_per_unit*$r2->qty_real;
-            }
-        }
+        $sql = "select sum(coalesce(b.qty_real,0) * c.ratio_two * d.hpp_per_unit) as total_cost_prod from job_item a
+                join prod_material b on a.job_item_id = b.job_item_id and a.job_order_id = b.job_order_id and a.idunit = b.idunit
+                join inventory c on c.idinventory = b.idinventory --child
+                join inventory d on d.idinventory = c.idinventory_parent --parent
+                where true
+                and a.job_order_id = $job_order_id
+                and a.idunit = $idunit
+                group by a.job_order_id";
+
+        $q = $this->db->query($sql);
+        $r = $q->row();
+        return $r->total_cost_prod;
+        // echo $r[0]->total_cost
+
+        // $qjob_item = $this->db->query("select job_item_id
+        //                         from job_item a
+        //                         where a.job_order_id = $job_order_id");
+        // foreach($qjob_item->result() as $r){
+        //     $qraw = $this->db->query("select a.idinventory,qty_real,b.hpp_per_unit
+        //                 from prod_material a
+        //                 join inventory b ON a.idinventory = b.idinventory
+        //                 where job_item_id = ".$r->job_item_id." and a.job_order_id = $job_order_id");
+        //     foreach($qraw->result() as $r2){
+        //         if($r2->hpp_per_unit==null){                    
+        //            $hpp_per_unit = $this->m_stock->hitung_hpp_beli($r2->idinventory,3);
+        //         } else {
+        //             $hpp_per_unit = $r2->hpp_per_unit;
+        //         }
+
+        //         $bbb+= $hpp_per_unit*$r2->qty_real;
+        //     }
+        // }
 
         // echo 'Biaya Bahan Baku: '.number_format($bbb);
-        return $bbb;
+        // return $bbb;
     }
 }

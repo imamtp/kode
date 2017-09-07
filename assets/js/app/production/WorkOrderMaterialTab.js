@@ -31,7 +31,8 @@ var storeGridItemMaterialWO = Ext.create('Ext.data.Store', {
 
 Ext.define('GridItemRawMaterialWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'satuan_pertama', 'stock_kedua', 'satuan_kedua'],
+    fields: ['sku_no', 'nameinventory', 'invno', 'notes', 'idinventory', 'cost', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'warehouse_code', 'no_batch', 'received_date'],
+    // fields: ['idinventory', 'invno', 'nameinventory', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'totalstock', 'satuan_pertama', 'stock_kedua', 'satuan_kedua'],
     idProperty: 'id'
 });
 
@@ -42,7 +43,8 @@ var storeGridItemRawMaterialWO = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/',
+        url: SITE_URL + 'inventory/get_detail_item',
+        // url: SITE_URL + 'backend/ext_get_all/InventoryAll/inventory/',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -51,14 +53,16 @@ var storeGridItemRawMaterialWO = Ext.create('Ext.data.Store', {
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'menu_name',
-        direction: 'DESC'
+        property: 'received_date',
+        direction: 'ASC'
     }]
 });
 
 storeGridItemRawMaterialWO.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.inventory_type:' + 2
+        // 'extraparams': 'a.inventory_type:' + 2
+        'inventory_type': 2,
+        'idunit': idunit,
     };
 });
 
@@ -147,30 +151,81 @@ Ext.define('GridItemRawMaterialWO', {
         { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        { header: 'SKU', dataIndex: 'sku_no', minWidth: 150 },
         { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
         {
-            header: 'Total Stock',
-            dataIndex: 'totalstock',
+            header: 'Stock',
+            xtype: 'numbercolumn',
             minWidth: 120,
-            align: 'right'
+            align: 'right',
+            dataIndex: 'stock_one',
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            dataIndex: 'uom_one',
+            // dataIndex: 'satuan_pertama',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
-            minWidth: 70,
             xtype: 'numbercolumn',
-            align: 'right'
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'stock_two',
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
+            // dataIndex: 'satuan_pertama',
             minWidth: 100
         },
+        {
+            header: 'Stock #3',
+            xtype: 'numbercolumn',
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'stock_tre',
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
+            // dataIndex: 'satuan_pertama',
+            minWidth: 100
+        },
+        {
+            header: 'Kode Gudang',
+            minWidth: 100,
+            dataIndex: 'warehouse_code',
+            flex: 1,
+        },
+        {
+            header: 'Tgl Masuk',
+            minWidth: 150,
+            dataIndex: 'received_date'
+        }
+        // {
+        //     header: 'Total Stock',
+        //     dataIndex: 'totalstock',
+        //     minWidth: 120,
+        //     align: 'right'
+        // },
+        // {
+        //     header: 'Satuan',
+        //     dataIndex: 'satuan_pertama',
+        //     minWidth: 100
+        // }, {
+        //     header: 'Stock #2',
+        //     dataIndex: 'stock_kedua',
+        //     minWidth: 70,
+        //     xtype: 'numbercolumn',
+        //     align: 'right'
+        // },
+        // {
+        //     header: 'Satuan #2',
+        //     dataIndex: 'satuan_kedua',
+        //     minWidth: 100
+        // },
     ],
     dockedItems: [
         // {

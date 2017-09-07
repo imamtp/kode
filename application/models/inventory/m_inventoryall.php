@@ -23,6 +23,8 @@ class m_inventoryAll extends CI_Model {
             a.measurement_id_one,
             a.measurement_id_two,
             a.measurement_id_tre,
+            a.ratio_two,
+            a.ratio_tre,
             a.bahan_coil_id,
             a.diameter,
             a.ketebalan,
@@ -45,7 +47,8 @@ class m_inventoryAll extends CI_Model {
             e.short_desc as satuan_kedua,
             a.inventory_type,
             a.idinventory_parent,
-            (totalstock / f.berat) as stock_kedua";
+            (totalstock / f.berat) as stock_kedua,
+            a.hpp_per_unit as hpp";
     }
     
     function fieldCek()
@@ -62,9 +65,11 @@ class m_inventoryAll extends CI_Model {
                     from " . $this->tableName()." a 
                     left join brand b ON a.brand_id = b.brand_id
                     left join productmeasurement c ON a.measurement_id_one = c.measurement_id
-                    left join (select idinventory,sum(stock) as totalstock 
-                                from warehouse_stock
-                                group by idinventory) d ON a.idinventory = d.idinventory
+                    left join (select idinventory_parent,sum(stock) as totalstock 
+                                from warehouse_stock a
+                                join inventory b on b.idinventory = a.idinventory
+                                group by idinventory_parent
+                    ) d ON a.idinventory = d.idinventory_parent
                     left join productmeasurement e ON a.measurement_id_two = e.measurement_id
                     left join bahan_coil f on f.bahan_coil_id = a.bahan_coil_id";
 
