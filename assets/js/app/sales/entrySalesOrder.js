@@ -796,16 +796,18 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
 
                     nojurnalSalesOrder: Ext.getCmp('nojurnalSalesOrder').getValue(),
                     memoSalesOrder: Ext.getCmp('memoSalesOrder').getValue(),
-                    subtotalSalesOrder: Ext.getCmp('subtotalSalesOrder').getValue(),
-                    discSalesOrder: Ext.getCmp('diskonSalesOrder').getValue(),
-                    totalSalesOrder: Ext.getCmp('totalSalesOrder').getValue(),
-                    totalPajak: Ext.getCmp('totalPajakSalesOrder').getValue(),
                     unit: Ext.getCmp('cbUnitEntrySalesOrder').getValue(),
                     customerSalesOrder: Ext.getCmp('customerSalesOrder').getValue(),
-                    ratetax: Ext.getCmp('cb_tax_id_so').getValue(),
                     include_tax: Ext.getCmp('include_tax_so').getValue(),
                     sales_order_status: Ext.getCmp('cb_sales_order_status').getValue(),
+
+                    subtotalSalesOrder: Ext.getCmp('subtotalSalesOrder').getValue(),
+                    discSalesOrder: Ext.getCmp('diskonSalesOrder').getValue(),
+                    dppSalesOrder: Ext.getCmp('dppSalesOrder').getValue(),
                     freight: Ext.getCmp('freightSalesOrder').getValue(),
+                    totalPajak: Ext.getCmp('totalPajakSalesOrder').getValue(),
+                    totalSalesOrder: Ext.getCmp('totalSalesOrder').getValue(),
+                    ratetax: Ext.getCmp('cb_tax_id_so').getValue(),
                     datagrid: json
                 },
                 success: function(form, action) {

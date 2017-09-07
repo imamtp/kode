@@ -1,7 +1,7 @@
 Ext.define('GridSalesOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'delivery_date', 'invoice_status', 'no_sales_order_quote', 'idsales_quote', 'date_sales_quote', 'firstname', 'lastname', 'salesman_id', 'idtax', 'rate', 'no_sales_order_quote', 'date_sales_quote', 'include_tax', 'idpayment', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'dmax'
+        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'delivery_date', 'invoice_status', 'no_sales_order_quote', 'idsales_quote', 'date_sales_quote', 'firstname', 'lastname', 'salesman_id', 'idtax', 'rate', 'no_sales_order_quote', 'date_sales_quote', 'include_tax', 'idpayment', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'dmax', 'shipaddress', 'total_dpp',
     ],
     idProperty: 'id'
 });
@@ -189,7 +189,6 @@ var wSalesOrderGrid = Ext.create('widget.window', {
     listeners: {
         'show': function() {
             storeGridSalesOrderGrid.load();
-            Ext.getCmp('freightSalesOrder').setValue(0);
         }
     }
 });
@@ -562,29 +561,7 @@ Ext.define('GridSalesOrderGrid', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
-
             showSalesOrderData(record);
-            // showSalesOrderData(record);
-            // var formAgama = Ext.create('formAgama');
-            // var formSalesOrderGrid = Ext.getCmp('formSalesOrderGrid');
-            // wSalesOrderGrid.show();
-            // formSalesOrderGrid.getForm().load({
-            //     url: SITE_URL + 'backend/loadFormData/SalesOrderGrid/1',
-            //     params: {
-            //         extraparams: 'a.idsupplier:' + record.data.idsupplier
-            //     },
-            //     success: function(form, action) {
-            //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
-            //     },
-            //     failure: function(form, action) {
-            //         Ext.Msg.alert("Load failed", action.result.errorMessage);
-            //     }
-            // })
-            // //            
-            // //            Ext.getCmp('kddaerahS').setReadOnly(true);
-            // Ext.getCmp('statusformSalesOrderGrid').setValue('edit');
-
-            // Ext.getCmp('TabSupplier').setActiveTab(0);
         }
     }
 });
