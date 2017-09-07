@@ -40,9 +40,9 @@ if($option!='print')
 <?php foreach($rows as $r): ?>
     <tr>
         <td><?=$no++?></td>
-        <td><?=$r['invno']?></td>
-        <td><?=$r['sku_no']?></td>
-        <td><?=$r['nameinventory']?></td>
+        <td><?=$r['invno']==null ? $r['invno_parent'] : $r['invno']?></td>
+        <td><?=$r['sku_no']==null ? $r['sku_no_parent'] : $r['sku_no']?></td>
+        <td><?=$r['nameinventory']==null ? $r['nameinventory_parent'] : $r['nameinventory']?></td>
         <td class="number"><?=number_format($r['cost'],2)?></td>
         <td class="number"><?=number_format($r['stock'],2)?></td>
         <td><?=$r['satuan']?></td>

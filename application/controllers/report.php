@@ -931,16 +931,19 @@ class report extends MY_Controller {
 
         $sql = "select 
                 a.idinventory,
-                invno,
-                sku_no,
-                nameinventory,
+                a.invno,
+                a.sku_no,
+                a.nameinventory,
+                g.nameinventory as nameinventory_parent,
+                g.invno as invno_parent,
+                g.sku_no as sku_no_parent,            
                 brand_name,
-                cost,
+                a.cost,
                 stock,
                 c.short_desc as satuan,
                 case 
                     when e.bahan_coil_id is not null then round((stock/ e.berat)::numeric, 2)
-                    when e.bahan_coil_id is null and inventory_type = 2 then 0
+                    when e.bahan_coil_id is null and a.inventory_type = 2 then 0
                     else null
                 end as stock_kedua,
                 case 
@@ -948,6 +951,7 @@ class report extends MY_Controller {
                     else null
                 end as satuan_kedua
                 from inventory a
+                left join inventory g ON a.idinventory_parent = g.idinventory
                 inner join (
                     select 
                     a.idinventory,sum(stock) as stock
@@ -963,7 +967,8 @@ class report extends MY_Controller {
                 $wer_brand
                 $wer_invcat
                 $wer_invtype
-                order by idinventory";
+                order by a.idinventory";
+                // echo $sql; die;
         $q = $this->db->query($sql);
         return $q->result_array();
     }

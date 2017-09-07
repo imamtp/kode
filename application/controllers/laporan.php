@@ -2830,6 +2830,8 @@ if($option=='print')
             'rows'=>$this->report->inventory(),
         );
 
+        // print_r($this->report->inventory()); die;
+
         if($data['option']=='print')
         {
             $data['fontsize'] = 9;
