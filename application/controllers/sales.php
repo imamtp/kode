@@ -461,15 +461,16 @@ class sales extends MY_Controller {
         $items = json_decode($this->input->post('datagrid'));
         foreach ($items as $value) {
             //ambil inventory_parent, hanya utk sementara ambil dr db. biar cepet ngodingnya, nantinya harus ada di $items
-            $sql = "select 
-                    a.idinventory_parent, a.ratio_two, a.ratio_tre, b.hpp_per_unit as hpp 
-                    from inventory a
-                    join inventory b on b.idinventory = a.idinventory_parent
-                    where a.idinventory = $value->idinventory";
+            $sql = "select b.idinventory_parent, b.invno, c.nameinventory, a.idinventory, stock, d.size, b.ratio_two, c.hpp_per_unit as hpp from warehouse_stock a
+                    join inventory b on b.idinventory = a.idinventory --child
+                    join inventory c on c.idinventory = b.idinventory_parent --parent
+                    join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
+                    where b.idinventory_parent = $value->idinventory 
+                    and idsalesitem = $value->idsalesitem
+                    and stock > 0";
             $qinv = $this->db->query($sql);
             $inv = $qinv->row();
-            print_r($inv);
-
+            
             $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
             $sisakirim = $value->qtysisakirim==null ? 0 : $value->qtysisakirim;
             $arrWer = array(
@@ -1147,12 +1148,13 @@ class sales extends MY_Controller {
         $idinventory = $this->input->get('idinventory');
         $idsalesitem = $this->input->get('idsalesitem');
         
-        $sql = "select b.invno, b.nameinventory, a.idinventory, stock, d.size from warehouse_stock a
+        $sql = "select b.invno, c.nameinventory, a.idinventory, stock, d.size from warehouse_stock a
                 join inventory b on b.idinventory = a.idinventory --child
                 join inventory c on c.idinventory = b.idinventory_parent --parent
                 join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
                 where b.idinventory_parent = $idinventory 
-                and idsalesitem = $idsalesitem";
+                and idsalesitem = $idsalesitem
+                and stock > 0";
         $qcek = $this->db->query($sql);
 
         // $qcek = $this->db->get_where('warehouse_stock',array(
