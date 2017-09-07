@@ -1129,7 +1129,7 @@ class m_journal extends CI_Model {
 //                    name character varying(225),
             'datejournal' => $tglJournal,
             // 'memo' => 'Registrasi Piutang '.$accname,
-            'memo'=>$this->input->post('description'),
+            'memo'=>$this->input->post('description')=='' ? $accname : null,
             'totaldebit' => $jumlah,
             'totalcredit' => $jumlah,
 //                    'totaltax' double precision,

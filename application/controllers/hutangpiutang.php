@@ -250,6 +250,258 @@ class hutangpiutang extends MY_Controller {
         echo json_encode($json);  
     }
 
+    function import_hutang(){
+        $file = '/Applications/MAMP/htdocs/nusafin2/saldo awal AP Supplier.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
 
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 1;
+        // while (isset($val[$start])) {
+        //     $d = $val[$start];
+        //     if($d['0']!='')
+        //     {
+        //         $valid = $this->validasi($d);
+        //         if ($valid['status']) {
+        //             $oke = true;
+        //         } else {
+        //             $oke = false;
+        //             break;
+        //         }
+        //         $start++;
+        //     }
+        // }
+
+        // $start-=1;
+        if ($oke) {
+          
+
+            $start = 1;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                // print_r($d); $start++; continue;
+                if($d['0']!='')
+                {
+                    if($d[6]=='0' || $d[6]==0){
+                        $start++;
+                        continue;
+                    }
+
+                    $idregistrasihutang = $this->input->post('idregistrasihutang') == '' ? $this->m_data->getSeqVal('seq_registrasihutang') : $this->input->post('idregistrasihutang');
+                    
+                    if(isset($d[16])){
+                        $sd = $d[16];
+                        $mulaihutang = new DateTime("1899-12-30 + $sd days");
+                    }
+                   
+                    if(isset($d[17])){ 
+                        if($d[17]!=''){
+                            $nd = $d[17];
+                            $jatuhtempo = new DateTime("1899-12-30 + $nd days");
+                        } else {
+                            $jatuhtempo = null;
+                        }
+                       
+                    }
+
+                    if(!isset($d[2])){
+                        //create supplier
+                    }
+
+                    $this->db->trans_begin();
+                    $memo =  'Hutang Usaha - '.$d[3];
+
+                    $mulaihutang_val = isset($mulaihutang) ? $mulaihutang->format("Y-m-d") : null;
+                    $jatuhtempo_val = isset($jatuhtempo) ? $jatuhtempo->format("Y-m-d") : null;
+                    $data = array(
+                        'idregistrasihutang' => $idregistrasihutang,
+                        'idacchutang' => $d[0],
+                        'idacckenahutang' => $d[1],
+                        'jumlah' => isset($d[5]) ? $d[5] : 0,
+                        'sisahutang' => isset($d[6]) ? $d[6] : 0,
+                        'memo' => $memo,
+                        'idsupplier' => $d[2],
+                        // 'bulan' => ambilNoBulan($this->input->post('namabulan')),
+                        // 'tahun' => $this->input->post('tahun'),
+                        // 'description' => $this->input->post('description'),
+                        'mulaihutang' => $mulaihutang_val,
+                        'jatuhtempo' => $jatuhtempo_val,
+                        'idunit' => $d[4]
+                    );
+                    $this->db->insert('registrasihutang',$data);
+                    // print_r($data);
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+
+                           //bikin jurnal
+                           $this->load->model('m_journal');
+                           $idjournal = $this->m_journal->saveRegistrasiHutang($d[4],$memo,$d[0],$d[1],$mulaihutang_val,$data['sisahutang']);
+
+                           $this->db->where('idregistrasihutang',$idregistrasihutang);
+                           $this->db->update('registrasihutang',array('idjournal'=>$idjournal));
+                    }
+
+                //     $data = array(
+                //         "idunit"=> $d[2],
+                //         "namasiswa"=> $d[3],
+                //         "namaibu"=> $d[4],
+                //         "namaayah"=> $d[5],
+                //         "alamat"=> $d[6],
+                //         "kota"=> $d[7],
+                //         "phone"=> $d[8],
+                //         "tglmasuk"=> $d[10]=='' ? null : $this->convertdateimport($d[10]),
+                //         "tglkeluar"=> null,
+                //         "tahunajaranmasuk"=> $d[11],
+                //         // "foto" varchar(100),
+                //         // "display" int2,
+                //         "userin" => $this->session->userdata('username'),
+                //         "usermod" => $this->session->userdata('username'),
+                //         "datein"=>date('Y-m-d H:m:s'),
+                //         "datemod"=>date('Y-m-d H:m:s'),
+                //         "noinduk"=> $d[1],
+                //         "kelas"=> $d[8]
+                //     );
+                //     $this->db->insert('siswa',$data);
+                    $start++;
+                }
+            }
+
+        }
+
+          $start-=1;
+//          if ($this->db->trans_status() === FALSE) {
+//             $this->db->trans_rollback();
+//             echo json_encode(array('success' => false, 'message' => $start . ' Data Gagal Diimport.'));
+//         } else {
+//             $this->db->trans_commit();
+// //                     $this->db->trans_rollback();
+//             echo json_encode(array('success' => true, 'message' => $start . ' Data Berhasil Diimport.'));
+//         }
+    }
+
+    function import_piutang(){
+        $file = '/Applications/MAMP/htdocs/nusafin2/saldo awal AR Customer.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
+
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 1;
+
+        // $start-=1;
+        if ($oke) {
+          
+
+            $start = 1;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                // print_r($d); $start++; continue;
+                if($d['0']!='')
+                {
+                    if(intval($d[9])==0){
+                        $start++;
+                        continue;
+                    }
+
+                    $idregistrasipiutang =  $this->m_data->getSeqVal('seq_registrasipiutang');
+                    
+                    if(isset($d[4])){
+                        $sd = $d[4];
+                        $mulaihutang = new DateTime("1899-12-30 + $sd days");
+                    }
+                   
+                    // if(isset($d[17])){ 
+                    //     if($d[17]!=''){
+                    //         $nd = $d[17];
+                    //         $jatuhtempo = new DateTime("1899-12-30 + $nd days");
+                    //     } else {
+                    //         $jatuhtempo = null;
+                    //     }
+                       
+                    // }
+
+                    if(isset($d[0])){
+                        //customer
+                        $qc = $this->db->get_where('customer',array('nocustomer'=>$d[0]));
+                        if($qc->num_rows()>0){
+                            $r = $qc->row();
+                            $idcustomer = $r->idcustomer;
+                        } else {
+                            $idcustomer = $this->m_data->getSeqVal('seq_customer');
+                            //create customer
+                            $this->db->insert('customer',array(
+                                'idcustomer'=>$idcustomer,
+                                'status'=>1,
+                                'deleted'=>0,
+                                'nocustomer'=>$d[0],
+                                'namecustomer'=>$d[1],
+                                'idunit'=>12
+                            ));
+                        }
+                    }
+
+                    $this->db->trans_begin();
+                    $memo =  'Piutang Usaha - '.$d[1];
+
+                    $mulaihutang_val = isset($mulaihutang) ? $mulaihutang->format("Y-m-d") : null;
+                    // $jatuhtempo_val = isset($jatuhtempo) ? $jatuhtempo->format("Y-m-d") : null;
+                  
+                    $data = array(
+                        'idregistrasipiutang' => $idregistrasipiutang,
+                        'idcustomer' => $idcustomer,
+                        'idaccount' => $d[2],
+                        // 'bulan' => ambilNoBulan($this->input->post('namabulan')),
+                        // 'tahun' => $this->input->post('tahun'),
+                        'idaccountlink' => $d[3],
+                        'tglpiutang' => $mulaihutang_val,
+                        'description' => $memo,
+                        'jumlah' => $d[9],
+                        'sisapiutang' => $d[9],
+                        'idunit' => 12
+                    );
+
+                    $this->db->insert('registrasipiutang',$data);
+                    // print_r($data);
+                    $start++;
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+
+                           //bikin jurnal
+                           $this->load->model('m_journal');
+                           $idjournal = $this->m_journal->saveRegistrasiPiutang($data['idunit'],$data['idaccount'],$data['tglpiutang'],$data['sisapiutang'],$data['description'],$data['idaccountlink']);
+                        //    $d['idjournal'] = $idjournal;
+
+                           $this->db->where('idregistrasipiutang',$idregistrasipiutang);
+                           $this->db->update('registrasipiutang',array('idjournal'=>$idjournal));
+                    }
+                    
+                }
+            }
+
+            if($start==81){
+                break;
+            }
+        }
+
+          $start-=1;
+    }
 }
 ?>

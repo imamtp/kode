@@ -401,20 +401,23 @@ class sistem extends MY_Controller {
         $this->db->where('idunit',$idunit);
         $this->db->delete('clossing');
 
-        //
-        $q = $this->db->get_where('employee',array('idunit'=>$idunit));
-        foreach ($q->result() as $r) {
-            $this->db->where('idemployee',$r->idemployee);
-            $this->db->delete('dataanak');
-
-             $this->db->where('idemployee',$r->idemployee);
-            $this->db->delete('datasutri');
-        }
-         $this->db->where('idunit',$idunit);
-        $this->db->delete('employee');
-
         $this->db->where('idunit',$idunit);
-        $this->db->delete('employeetype');
+        $this->db->update('account',array('balance'=>0));
+
+        //
+        // $q = $this->db->get_where('employee',array('idunit'=>$idunit));
+        // foreach ($q->result() as $r) {
+        //     $this->db->where('idemployee',$r->idemployee);
+        //     $this->db->delete('dataanak');
+
+        //      $this->db->where('idemployee',$r->idemployee);
+        //     $this->db->delete('datasutri');
+        // }
+        //  $this->db->where('idunit',$idunit);
+        // $this->db->delete('employee');
+
+        // $this->db->where('idunit',$idunit);
+        // $this->db->delete('employeetype');
         //
 
         //
@@ -460,17 +463,17 @@ class sistem extends MY_Controller {
         $this->db->where('idunit',$idunit);
         $this->db->delete('inventoryunit');
 
-        $q = $this->db->get_where('inventory',array('idunit'=>$idunit));
-        foreach ($q->result() as $r) {
-            $this->db->where('idinventory',$r->idinventory);
-            $this->db->delete('inventorydeprecitem');          
-        }
+        // $q = $this->db->get_where('inventory',array('idunit'=>$idunit));
+        // foreach ($q->result() as $r) {
+        //     $this->db->where('idinventory',$r->idinventory);
+        //     $this->db->delete('inventorydeprecitem');          
+        // }
 
-        $this->db->where('idunit',$idunit);
-        $this->db->delete('inventorydeprec');
+        // $this->db->where('idunit',$idunit);
+        // $this->db->delete('inventorydeprec');
 
-        $this->db->where('idunit',$idunit);
-        $this->db->delete('inventory');
+        // $this->db->where('idunit',$idunit);
+        // $this->db->delete('inventory');
         //
 
          $this->db->where('idunit',$idunit);
@@ -479,8 +482,8 @@ class sistem extends MY_Controller {
          $this->db->where('idunit',$idunit);
         $this->db->delete('linkpiutang');
 
-         $this->db->where('idunit',$idunit);
-        $this->db->delete('pelanggan');
+        //  $this->db->where('idunit',$idunit);
+        // $this->db->delete('pelanggan');
 
         $this->db->where('idunit',$idunit);
         $this->db->delete('journal');
@@ -495,6 +498,17 @@ class sistem extends MY_Controller {
         }
         $this->db->where('idunit',$idunit);
         $this->db->delete('spendmoney');
+
+        $q = $this->db->get_where('receivemoney',array('idunit'=>$idunit));
+        foreach ($q->result() as $r) {
+            $this->db->where('idreceivemoney',$r->idspendmoney);
+            $this->db->delete('receivemoneyitem');          
+        }
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('receivemoney');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('transferkas');
 
         $q = $this->db->get_where('job_order',array('idunit'=>$idunit));
         foreach ($q->result() as $r) {
@@ -589,10 +603,25 @@ class sistem extends MY_Controller {
         }        
         $this->db->where('idunit',$idunit);
         $this->db->delete('inventoryunit');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('stock_history');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->update('warehouse_stock',array('stock'=>0));
         ////
 
         $this->db->where('idunit',$idunit);
         $this->db->delete('inventory_hpp_history');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('registrasihutang');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('registrasipiutang');
+
+        $this->db->where('idunit',$idunit);
+        $this->db->delete('goods_receipt');
 
         if ($this->db->trans_status() === FALSE)
         {
