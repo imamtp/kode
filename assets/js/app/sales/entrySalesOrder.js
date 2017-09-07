@@ -771,34 +771,6 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
     recordSalesOrder: function(button, event, mode) {
         // console.log(Ext.getCmp('idaccountSalesOrder').getValue())
         if (validasiSalesOrder()) {
-            // var dp = Ext.getCmp('angkutSalesOrder').getValue();
-            // if(dp!='')
-            // {
-            //     //cek link dp
-            //     Ext.Ajax.request({
-            //         url: SITE_URL + 'account/cekAccLink',
-            //         method: 'POST',
-            //         params: {
-            //             idacclink: 17,
-            //             idunit:Ext.getCmp('cbUnitEntrySalesOrder').getValue()
-            //         },
-            //         success: function(form, action) {
-
-            //             var d = Ext.decode(form.responseText);
-            //             if (!d.success)
-            //             {
-            //                 Ext.Msg.alert('Peringatan', d.message);
-            //             } else {
-            //                 // Ext.getCmp('wEntryPayment').hide();
-            //                 // PaymentGridStore.load();
-            //             }
-
-            //         },
-            //         failure: function(form, action) {
-            //             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            //         }
-            //     });
-            // } 
             storeGridItemSalesOrder.clearFilter();
             var json = Ext.encode(Ext.pluck(storeGridItemSalesOrder.data.items, 'data'));
             //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesOrder').getValue());
@@ -844,36 +816,51 @@ Ext.define('KitchenSink.view.grid.EntrySalesOrder', {
                     } else {
                         Ext.Msg.alert('Success', d.message);
 
-                        Ext.getCmp('customerSalesOrder').setValue(null);
 
-                        Ext.getCmp('namecustomerSalesOrder').setValue(null);
+                        //clear form
                         Ext.getCmp('delivery_date_SalesOrder').setValue(null);
-                        // Ext.getCmp('shipaddressSalesOrder').setValue(null);
                         Ext.getCmp('nojurnalSalesOrder').setValue(null);
-                        Ext.getCmp('memoSalesOrder').setValue(null);
-                        Ext.getCmp('subtotalSalesOrder').setValue(null);
-                        Ext.getCmp('totalSalesOrder').setValue(null);
-                        Ext.getCmp('totalPajakSalesOrder').setValue(null);
-                        // Ext.getCmp('shippingSalesOrder').setValue(null);
                         Ext.getCmp('cb_tax_id_so').setValue(null);
+                        Ext.getCmp('include_tax_so').setValue(null);
+
+                        Ext.getCmp('customerSalesOrder').setValue(null);
+                        Ext.getCmp('namecustomerSalesOrder').setValue(null);
+                        Ext.getCmp('salesman_id_so').setValue(null);
+                        Ext.getCmp('salesman_name_so').setValue(null);
+
+                        Ext.getCmp('memoSalesOrder').setValue(null);
+                        Ext.getCmp('comboxpaymentSalesOrder').setValue(null);
+                        Ext.getCmp('ddaysSalesOrder').setValue();
+                        Ext.getCmp('eomddaysSalesOrder').setValue();
+                        Ext.getCmp('percentagediscSalesOrder').setValue();
+                        Ext.getCmp('daysdiscSalesOrder').setValue();
+                        Ext.getCmp('dmaxSalesOrder').setValue();
+                        Ext.getCmp('ddaysSalesOrder').setVisible(false);
+                        Ext.getCmp('eomddaysSalesOrder').setVisible(false);
+                        Ext.getCmp('percentagediscSalesOrder').setVisible(false);
+                        Ext.getCmp('daysdiscSalesOrder').setVisible(false);
+                        Ext.getCmp('dmaxSalesOrder').setVisible(false);
+                        Ext.getCmp('shipaddressSalesOrder').setValue(null);
+
+                        Ext.getCmp('subtotalSalesOrder').setValue(null);
+                        Ext.getCmp('diskonSalesOrder').setValue(null);
+                        Ext.getCmp('dppSalesOrder').setValue(null);
+                        Ext.getCmp('freightSalesOrder').setValue(null);
+                        Ext.getCmp('totalPajakSalesOrder').setValue(null);
+                        Ext.getCmp('totalSalesOrder').setValue(null);
+                        // Ext.getCmp('shippingSalesOrder').setValue(null);
                         // Ext.getCmp('pembayaranSalesOrder').setValue(null);
                         // Ext.getCmp('sisaBayarSalesOrder').setValue(null);
                         // Ext.getCmp('paymentSalesOrder').setValue(null);
                         // Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
                         // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
-                        Ext.getCmp('freightSalesOrder').setValue();
 
                         storeGridItemSalesOrder.clearFilter();
                         storeGridItemSalesOrder.removeAll();
                         // storeGridItemSalesOrder.sync();
                         updateGridSalesOrder('general');
 
-                        Ext.getCmp('comboxpaymentSalesOrder').setValue();
-                        Ext.getCmp('ddaysSalesOrder').setValue();
-                        Ext.getCmp('eomddaysSalesOrder').setValue();
-                        Ext.getCmp('percentagediscSalesOrder').setValue();
-                        Ext.getCmp('daysdiscSalesOrder').setValue();
-                        Ext.getCmp('dmaxSalesOrder').setValue();
+
 
                         // if(mode=='print')
                         // {
@@ -957,7 +944,6 @@ function updateGridSalesOrder(tipe) {
     var dppSalesOrder = 0 * 1;
     var totalSalesOrder = 0 * 1;
     var totalPajak = 0 * 1;
-    // var angkutSalesOrder = Ext.getCmp('angkutSalesOrder').getValue();
     var angkutSalesOrder = str_replace(",", "", Ext.getCmp('freightSalesOrder').getValue()) * 1;
     // var pembayaranSalesOrder = Ext.getCmp('pembayaranSalesOrder').getValue();
     var sisaBayarSalesOrder = 0 * 1;
@@ -980,9 +966,8 @@ function updateGridSalesOrder(tipe) {
     });
 
     dppSalesOrder = isIncludeTax ? (subtotalSalesOrder + total_diskon) / 1.1 : subtotalSalesOrder;
-    totalPajak += dppSalesOrder * (taxrate * 1 / 100);
-    totalSalesOrder = isIncludeTax ? subtotalSalesOrder : subtotalSalesOrder + totalPajak;
-    totalSalesOrder += angkutSalesOrder;
+    totalPajak += (dppSalesOrder + angkutSalesOrder) * (taxrate * 1 / 100);
+    totalSalesOrder = dppSalesOrder + totalPajak;
 
     // var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
     // totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
