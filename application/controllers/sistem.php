@@ -501,7 +501,7 @@ class sistem extends MY_Controller {
 
         $q = $this->db->get_where('receivemoney',array('idunit'=>$idunit));
         foreach ($q->result() as $r) {
-            $this->db->where('idreceivemoney',$r->idspendmoney);
+            $this->db->where('idreceivemoney',$r->idreceivemoney);
             $this->db->delete('receivemoneyitem');          
         }
         $this->db->where('idunit',$idunit);
