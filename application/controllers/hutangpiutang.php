@@ -496,9 +496,9 @@ class hutangpiutang extends MY_Controller {
                 }
             }
 
-            if($start==81){
-                break;
-            }
+            // if($start==81){
+            //     break;
+            // }
         }
 
           $start-=1;
