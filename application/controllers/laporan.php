@@ -2109,12 +2109,21 @@ class laporan extends MY_Controller {
         
         $sql1 = "select a.idjournal,a.datejournal,a.memo,a.nojournal
                 from journal a
-                where datejournal BETWEEN '$startdate' and '$enddate' and ".$this->fetchWhereUnit($idunit,'a')." and (idjournaltype = 7 OR idjournaltype=2)";
+                where datejournal BETWEEN '$startdate' and '$enddate' and ".$this->fetchWhereUnit($idunit,'a')." and (idjournaltype = 7 OR idjournaltype=2 OR idjournaltype=9)";
         $qj = $this->db->query($sql1);
         $d = array();
         $i=0;
         foreach ($qj->result() as $r)
         {
+            //cek dulu apakah dalam idaccount di dalam journalitem memiliki coa dengan iddaccounttype = 19 (kas)
+            $qcek = $this->db->query("select a.idaccount,idaccounttype
+            from journalitem a
+            join account b ON a.idaccount = b.idaccount
+            where a.idjournal = ".$r->idjournal." and idaccounttype = 19");
+            if($qcek->num_rows()<=0){
+                continue;
+            }
+
             $d[$i]['datejournal'] = $r->datejournal;
             $d[$i]['memo'] = $r->memo;
             $d[$i]['nojournal'] = $r->nojournal;
