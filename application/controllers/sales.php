@@ -464,7 +464,8 @@ class sales extends MY_Controller {
             $this->db->update('salesitem',array('qty_kirim'=>$current_qty+$value->qty_kirim,'warehouse_id'=>$warehouse_id));
 
             //update stock history
-            $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do);
+            $qparent = $this->db->query("select idinventory_parent from inventory where idinventory = ".$value->idinventory." and idunit = $idunit")->row();
+            $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$qparent->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do);
             $totalkirim+=$value->qty_kirim;
 
             $total_amount_kirim+=$value->qty_kirim*$qkirim->price;
@@ -1189,6 +1190,7 @@ class sales extends MY_Controller {
             $q = $this->db->query("select sum(stock) as totalstock
                                     from warehouse_stock
                                     where idinventory = ".$v['idinventory']." ");
+
             if($q->num_rows()>0){
                 $r = $q->row();
                 if($r->totalstock==0 || $r->totalstock==null){

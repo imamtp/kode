@@ -200,14 +200,14 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-left">
+        <div class="col-xs-5 col-xs-offset-2 text-right">
           <div class="">
             <div class="panel-body">
-             <p>
-             <center>
+             <p align="right">
+             <!-- <center> -->
              <br><br><br>
-               (............................................)
-               </center>
+               (........................................)
+               <!-- </center> -->
               </p>
             </div>
           </div>

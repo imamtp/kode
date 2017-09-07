@@ -84,8 +84,8 @@ class m_salesinvoice extends CI_Model {
                                         b.invno,b.nameinventory,b.sku_no,c.warehouse_desc,c.warehouse_code,d.short_desc,e.short_desc as size_measurement
                                         from salesitem a
                                         join inventory b ON a.idinventory = b.idinventory
-                                        join warehouse c ON a.warehouse_id = c.warehouse_id
-                                        join productmeasurement d ON a.measurement_id = d.measurement_id
+                                        left join warehouse c ON a.warehouse_id = c.warehouse_id
+                                        left join productmeasurement d ON a.measurement_id = d.measurement_id
                                         left join productmeasurement e ON a.measurement_id_size = e.measurement_id
                                         where a.idsales = $idsales");
 
