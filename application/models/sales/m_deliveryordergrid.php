@@ -16,7 +16,7 @@ class m_deliveryordergrid extends CI_Model {
     }
 
     function selectField() {
-        return "a.delivery_order_id,a.delivery_date,a.idunit,a.date_created,a.idsales,a.remarks,a.userin,a.status,b.totalamount,b.tax,b.disc,b.freight,b.paidtoday,b.balance,b.date_sales,b.no_sales_order,c.namecustomer,b.noinvoice,qtyorder,qtykirim, c.address as address_customer, c.telephone as telephone_customer, c.handphone as handphone_customer,nocustomer,b.no_faktur";
+        return "a.delivery_order_id,a.delivery_date,a.idunit,a.date_created,a.idsales,a.remarks,a.userin,a.status,b.totalamount,b.tax,b.disc,b.freight,b.paidtoday,b.balance,b.date_sales,b.no_sales_order,c.namecustomer,b.noinvoice,qtyorder,qtykirim, c.address as address_customer, c.telephone as telephone_customer, c.handphone as handphone_customer,nocustomer,b.no_faktur,ship_address,vehicle_number,driver_name";
     }
     
     function fieldCek()
@@ -102,6 +102,8 @@ class m_deliveryordergrid extends CI_Model {
             $dtcetak['totalowed'] = $r->balance;
             $dtcetak['memo'] = $r->remarks;
             $dtcetak['datetrans'] = $r->delivery_date;
+            $dtcetak['vehicle_number'] = $r->vehicle_number;
+            $dtcetak['driver_name'] = $r->driver_name;
 
             // $dtcetak['receivedby'] = $r->userin;
             //get logo,address,namaunit

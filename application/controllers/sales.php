@@ -1076,6 +1076,7 @@ class sales extends MY_Controller {
     function print_delivery_order($delivery_order_id,$print=null){
         $this->load->model('sales/m_deliveryordergrid','model');
         $d['data'] = $this->model->cetak_do($delivery_order_id);
+        // print_r($d['data']);
         $d['title'] = 'Delivery Order';
         $d['print'] = $print;
         if($print == null)

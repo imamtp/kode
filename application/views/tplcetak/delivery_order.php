@@ -43,14 +43,15 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-5 col-xs-offset-2 text-right">
+      <div class="col-xs-5 col-xs-offset-2 text-left">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4>Delivery To</h4>
+            <h4>Customer</h4>
           </div>
           <div class="panel-body">
             <p>
-              <?=$data['header']['namecustomer'].'<br>'.
+              <?=$data['header']['namecustomer'].'<br>
+              Alamat: '.
               $data['header']['address_customer']?> <br>
               Phone: <?=$data['header']['telephone_customer']?> <br>
               Mobile: <?=$data['header']['handphone_customer']?> <br>
@@ -63,6 +64,7 @@
     <div class="row" style="margin-left:1px;">
       <table class="table borderless" >
         <tr>
+           &nbsp;&nbsp;NO SO: #<?=$data['no']?><br>
           <td colspan="2"><b>Item List:</b></td>
         </tr>
         <?php if($data['detail']!=null): ?>
@@ -70,7 +72,7 @@
             <thead>
               <tr>
                 <th width="30">No</th>  
-                <th>Kode Barang</th>                       
+                <th>Kode SKU</th>                       
                 <th>Nama Barang</th>
                 <th>Qty Order</th>
                 <th>Satuan</th>
@@ -87,7 +89,7 @@
             <?php foreach ($data['detail'] as $key => $value) : ?>
               <tr>
                 <td width="30"><?=$key+1?></td>
-                <td><?=$value['invno']?></td>
+                <td><?=$value['sku_no']?></td>
                 <td><?=$value['nameinventory']?></td>  
                 <!-- <td><?=$value['warehouse_desc']?></td>                            -->
                 <!--<td align="right"><?=number_format($value['price'])?></td>-->
@@ -131,12 +133,12 @@
             </tr>
           <?php endif; ?>
           <?php if($data['totalowed']!=0): ?>
-            <tr>
+           <!--  <tr>
               <td></td>
                 <td> </td>
               <td align="right"><b>Saldo Terhutang</b></td>
               <td align="right"><?=number_format($data['totalowed'])?></td>
-            </tr>
+            </tr> -->
           <?php endif;?>
         </table>
         <tr>
@@ -145,8 +147,61 @@
         </tr>
       </table>
     </div>
-      
+    
     </div>
+
+      <div class="row">
+      <div class="col-xs-5">
+        <div class="">
+          <div class="panel-body">
+            <p>            
+              Alamat Pengiriman: <?=$data['header']['ship_address']?> <br>
+              Tgl Pengiriman: <?=$data['header']['delivery_date']?> <br>
+              No Kendaraan: <?=$data['vehicle_number']?> <br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>Diterima Oleh</h4>
+          </div>
+          <div class="panel-body">
+           <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-4 text-left">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>Diketahui Oleh</h4>
+          </div>
+          <div class="panel-body">
+            <p>
+              <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-4 text-left">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>Dibuat Oleh</h4>
+          </div>
+          <div class="panel-body">
+            <p>
+              <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
     </div> <!-- panel -->
   </div><!-- container -->
 </body>
