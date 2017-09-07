@@ -105,13 +105,13 @@ Ext.define(dir_sys + 'report.ReportInventory', {
                     var invcat = Ext.getCmp('invcatReportInventory').getValue();
                     var invtype = Ext.getCmp('invtypeReportInventory').getValue();
 
-                    if(sd==''){
-                        Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
-                    } else if(nd==''){
-                        Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
-                    } else {
+                    // if(sd==''){
+                    //     Ext.Msg.alert("Info", 'Tanggal awal belum ditentukan');
+                    // } else if(nd==''){
+                    //     Ext.Msg.alert("Info", 'Tanggal akhir belum ditentukan');
+                    // } else {
                         Ext.getCmp('ReportInventory').body.update("<iframe style='border:0;' width='100%' height='100%' id='iframeReportInventory' src='" + SITE_URL + "laporan/Inventory?idunit=" + unit + "&startdate=" + sd + "&enddate=" + nd + "&brand=" + brand + "&invcat=" + invcat + "&invtype=" + invtype + "'>");
-                    }
+                    // }
 
                     
                 }
