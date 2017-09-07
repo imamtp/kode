@@ -154,6 +154,7 @@ class m_salesorder extends CI_Model {
             $dtcetak['totalowed'] = $r->balance;
             $dtcetak['memo'] = $r->comments;
             $dtcetak['datetrans'] = $r->date_sales;
+            $dtcetak['total_dpp'] = $r->total_dpp;
 
             // $dtcetak['receivedby'] = $r->userin;
             //get logo,address,namaunit

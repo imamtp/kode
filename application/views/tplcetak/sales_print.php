@@ -188,11 +188,35 @@
 
 
 
-
+      <div class="row">
+        <div class="col-xs-5">
+          <div class="" >
+            <div class="panel-body">
+              <p>
+              Pembayaran  dengan Cek/Giro a/n
+              PT Alfa Prima Sentosa <br>
+              Pembayaran dianggap lunas setelah Clossing
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-5 col-xs-offset-2 text-left">
+          <div class="">
+            <div class="panel-body">
+             <p>
+             <center>
+             <br><br><br>
+               (............................................)
+               </center>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
           </div>
   </div> <!-- panel -->
   
-
+                
     </div><!-- container -->
 
 
