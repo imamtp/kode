@@ -21,13 +21,13 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <h2><?=$title?></h2>
-          <h3><small>Tanggal Order: <?=$data['datetrans']?> <br>
+          <h3>Tanggal Order: <?=$data['datetrans']?> <br>
               <?php 
                 if($isInvoice){
                   echo "Tanggal Invoice: ". $data['invoice_date'] ."<br>";
                 }
               ?>
-              NO: #<?=$data['no']?></small><br>
+              NO: #<?=$data['no']?><br>
           </h3>
         </div>
       </div>

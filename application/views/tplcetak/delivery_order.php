@@ -20,10 +20,10 @@
       </div>
       <div class="col-xs-5 col-xs-offset-2 text-right">
         <h3><?=$title?></h3>
-        <h4><small>Tanggal Order: <?=$data['datetrans']?> <br>
+        <h4>Tanggal Order: <?=$data['datetrans']?> <br>
             Tanggal Pengiriman: <?=$data['header']['delivery_date']?><br>
-            NO SO: #<?=$data['no']?><br>
-            NO Faktur: #<?=$data['header']['no_faktur']?></small><br>
+            NO DO: #<?=$data['no_do']?><br>
+            NO Faktur: #<?=$data['header']['no_faktur']?><br>
         </h4>
       </div>
     </div>
@@ -165,7 +165,7 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-4">
+      <div class="col-xs-3">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4>Diterima Oleh</h4>
@@ -179,7 +179,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-4 text-left">
+      <div class="col-xs-3 text-left">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4>Diketahui Oleh</h4>
@@ -194,7 +194,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-4 text-left">
+      <div class="col-xs-3 text-left">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4>Dibuat Oleh</h4>
