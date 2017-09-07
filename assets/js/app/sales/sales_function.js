@@ -330,12 +330,12 @@ function loadDataFormInvoice(idsales) {
             var d = Ext.decode(form.responseText);
             // console.log(d)
 
-            var disc = d.data.disc * 1;
             var subtotal = d.data.subtotal * 1;
+            var disc = d.data.disc * 1;
+            var dpp = data.total_dpp;
+            var freightcost = d.data.freight * 1;
             var tax = d.data.tax * 1;
             var totalamount = d.data.totalamount * 1;
-            var dpp = (subtotal + disc) / 1.1;
-            var freightcost = d.data.freight * 1;
 
             // setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
             // setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');

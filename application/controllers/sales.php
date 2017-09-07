@@ -369,6 +369,16 @@ class sales extends MY_Controller {
         $this->load->model('inventory/m_stock');
         $this->load->model('journal/m_jsales');
 
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'DO',
+            'table' => 'delivery_order',
+            'fieldpk' => 'delivery_order_id',
+            'fieldname' => 'no_do',
+            'extraparams'=> null,
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
 
@@ -401,7 +411,7 @@ class sales extends MY_Controller {
         $delivery_order_id = $this->m_data->getPrimaryID($this->input->post('delivery_order_id'),'delivery_order', 'delivery_order_id', $this->input->post('unit'));
 
         $header = array(
-            'no_do'=>$no_do,
+            'no_do'=>$no_do?: $noarticle,
             'delivery_order_id' => $delivery_order_id,
             'idunit' => $idunit,
             // 'idtax'=> $this->m_data->getIdTax($this->input->post('ratetax')),
@@ -409,8 +419,7 @@ class sales extends MY_Controller {
             'delivery_date'=> backdate($this->input->post('tanggal')),
             'idsales'=> $idsales,
             'remarks' => $this->input->post('memo'),
-            'userin' => $this->session->userdata('userid'),
-            'datein' => date('Y-m-d H:m:s'),
+            
             'idshipping'=>$this->input->post('idshipping') == '' ? null : $this->input->post('idshipping'),
             'driver_name'=>$this->input->post('driver_name'),
             'vehicle_number'=>$this->input->post('vehicle_number'),
@@ -423,10 +432,14 @@ class sales extends MY_Controller {
         if($qdo->num_rows()>0){
             $qdo = $qdo->row();
             $delivery_order_id = $qdo->delivery_order_id;
+            $header['usermod']= $this->session->userdata('userid');
+            $header['datemod']= date('Y-m-d H:i:s');
             $this->db->where('delivery_order_id', $delivery_order_id);
             $this->db->update('delivery_order', $header);
         } else {
-             $this->db->insert('delivery_order', $header);
+            $header['userin']= $this->session->userdata('userid');
+            $header['datein']= date('Y-m-d H:i:s');
+            $this->db->insert('delivery_order', $header);
         }
 
         // if($statusform == 'input'){
@@ -447,10 +460,18 @@ class sales extends MY_Controller {
         $total_amount_kirim = 0;
         $items = json_decode($this->input->post('datagrid'));
         foreach ($items as $value) {
+            //ambil inventory_parent, hanya utk sementara ambil dr db. biar cepet ngodingnya, nantinya harus ada di $items
+            $sql = "select 
+                    a.idinventory_parent, a.ratio_two, a.ratio_tre, b.hpp_per_unit as hpp 
+                    from inventory a
+                    join inventory b on b.idinventory = a.idinventory_parent
+                    where a.idinventory = $value->idinventory";
+            $qinv = $this->db->query($sql);
+            $inv = $qinv->row();
+            print_r($inv);
+
             $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
-
             $sisakirim = $value->qtysisakirim==null ? 0 : $value->qtysisakirim;
-
             $arrWer = array(
                 'idsalesitem'=>$value->idsalesitem,
                 'idsales'=>$idsales
@@ -463,8 +484,19 @@ class sales extends MY_Controller {
             $this->db->where($arrWer);
             $this->db->update('salesitem',array('qty_kirim'=>$current_qty+$value->qty_kirim,'warehouse_id'=>$warehouse_id));
 
+            $qty_item = $value->qty_kirim * $inv->ratio_two; //konversi qty_kirim(lbr/btg) jadi satuan terkecil (m)
+            $balance_item = $qty_item * $inv->hpp; // menghitung new balance dalam satuan m
+            
+            //log hpp history
+            if(!$this->m_stock->update_hpp($inv->idinventory_parent,$idunit, 3, 'out',$balance_item,$qty_item, 'null', $idsales, 'null')){
+                $this->db->trans_rollback();
+                $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+                echo json_encode($json);
+                exit();
+            }
+            
             //update stock history
-            $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do);
+            $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$inv->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
             $totalkirim+=$value->qty_kirim;
 
             $total_amount_kirim+=$value->qty_kirim*$qkirim->price;
@@ -1113,12 +1145,21 @@ class sales extends MY_Controller {
         $qty_kirim = $this->input->get('qty_kirim');
         $idunit = $this->input->get('idunit');
         $idinventory = $this->input->get('idinventory');
+        $idsalesitem = $this->input->get('idsalesitem');
+        
+        $sql = "select b.invno, b.nameinventory, a.idinventory, stock, d.size from warehouse_stock a
+                join inventory b on b.idinventory = a.idinventory --child
+                join inventory c on c.idinventory = b.idinventory_parent --parent
+                join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
+                where b.idinventory_parent = $idinventory 
+                and idsalesitem = $idsalesitem";
+        $qcek = $this->db->query($sql);
 
-        $qcek = $this->db->get_where('warehouse_stock',array(
-                'idinventory'=> $idinventory,
-                'warehouse_id'=>$this->m_data->getIDmaster('warehouse_code',$this->input->get('warehouse_code'),'warehouse_id','warehouse',$idunit),
-                'idunit'=>$idunit
-            ));
+        // $qcek = $this->db->get_where('warehouse_stock',array(
+        //         'idinventory'=> $idinventory,
+        //         'warehouse_id'=>$this->m_data->getIDmaster('warehouse_code',$this->input->get('warehouse_code'),'warehouse_id','warehouse',$idunit),
+        //         'idunit'=>$idunit
+        //     ));
 
         $success = true;
         $msg = null;

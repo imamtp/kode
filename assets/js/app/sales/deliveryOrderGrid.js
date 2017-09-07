@@ -6,7 +6,7 @@ var WindowEntryDeliveryOrder = Ext.create(dir_sys + 'sales.WindowEntryDeliveryOr
 Ext.define('GriddeliveryOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo'
+        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress'
     ],
     idProperty: 'id'
 });
@@ -54,6 +54,7 @@ var smGriddeliveryOrderGrid = Ext.create('Ext.selection.CheckboxModel', {
         deselect: function(model, record, index) {
             var selectedLen = smGriddeliveryOrderGrid.getSelection().length;
             if (selectedLen == 0) {
+                Ext.getCmp('createDOformGrid').disable();
                 Ext.getCmp('createInvoiceDOGrid').disable();
             }
         },
@@ -80,11 +81,11 @@ var smGriddeliveryOrderGrid = Ext.create('Ext.selection.CheckboxModel', {
                 Ext.getCmp('createInvoiceDOGrid').disable();
             }
 
-            if (record.data.status * 1 === 5 || record.data.status * 1 === 6) {
-                Ext.getCmp('createDOformGrid').enable();
-            } else {
-                Ext.getCmp('createDOformGrid').disable();
-            }
+            // if (record.data.status * 1 === 5 || record.data.status * 1 === 6) {
+            Ext.getCmp('createDOformGrid').enable();
+            // } else {
+            //     Ext.getCmp('createDOformGrid').disable();
+            // }
 
             if (record.data.delivery_order_id === null || record.data.delivery_order_id === '') {
                 Ext.getCmp('btnPrintDO').disable();
@@ -687,7 +688,7 @@ function formDO(selectedRecord) {
     var memoSalesOrder_do = Ext.getCmp('memoSalesOrder_do');
     memoSalesOrder_do.setValue('Delivery Order: ' + selectedRecord.get('no_sales_order'));
 
-    Ext.getCmp('shipaddressSalesOrder_do').setValue(selectedRecord.get('shipto'));
+    Ext.getCmp('shipaddressSalesOrder_do').setValue(selectedRecord.get('shipaddress'));
     Ext.getCmp('comboxcurrencySalesOrder_do').setValue(selectedRecord.get('idcurrency'));
 
     var cb_tax_id_do = Ext.getCmp('cb_tax_id_do');
@@ -706,6 +707,7 @@ function formDO(selectedRecord) {
     Ext.getCmp('totalSalesOrder_do').setValue(renderNomor(selectedRecord.get('totalamount')));
     Ext.getCmp('pembayaranSalesOrder_do').setValue(renderNomor(selectedRecord.get('paidtoday')));
     Ext.getCmp('sisaBayarSalesOrder_do').setValue(renderNomor(selectedRecord.get('balance')));
+    Ext.getCmp('angkutSalesOrder_do').setValue(renderNomor(selectedRecord.get('freight')));
 
     var cb_sales_order_status_do = Ext.getCmp('cb_sales_order_status_do');
     // alert(selectedRecord.get('status'))
@@ -755,14 +757,10 @@ function formDO(selectedRecord) {
 
                 gridDO.getStore().insert(0, recDO);
             });
-
-
-
         },
         failure: function(form, action) {
             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
         }
     });
 
-    Ext.getCmp('angkutSalesOrder_do').setValue(0);
 }
