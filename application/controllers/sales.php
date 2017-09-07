@@ -488,16 +488,16 @@ class sales extends MY_Controller {
             $qty_item = $value->qty_kirim * $inv->ratio_two; //konversi qty_kirim(lbr/btg) jadi satuan terkecil (m)
             $balance_item = $qty_item * $inv->hpp; // menghitung new balance dalam satuan m
             
-            //log hpp history
-            if(!$this->m_stock->update_hpp($inv->idinventory_parent,$idunit, 3, 'out',$balance_item,$qty_item, 'null', $idsales, 'null')){
-                $this->db->trans_rollback();
-                $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
-                echo json_encode($json);
-                exit();
-            }
+            // //log hpp history
+            // if(!$this->m_stock->update_hpp($inv->idinventory_parent,$idunit, 3, 'out',$balance_item,$qty_item, 'null', $idsales, 'null')){
+            //     $this->db->trans_rollback();
+            //     $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+            //     echo json_encode($json);
+            //     exit();
+            // }
             
             //update stock history
-            $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$inv->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
+            $this->m_stock->update_history(8,$qty_item,$inv->idinventory,$inv->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
             $totalkirim+=$value->qty_kirim;
 
             $total_amount_kirim+=$value->qty_kirim*$qkirim->price;
