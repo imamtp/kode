@@ -167,6 +167,12 @@ Ext.define('GridItemGridDetailInventory', {
             minWidth: 100
         },
         {
+            header: 'Harga Beli',
+            dataIndex: 'cost',
+            xtype: 'numbercolumn',
+            align: 'right',
+        },
+        {
             header: 'Kode Gudang',
             minWidth: 100,
             dataIndex: 'warehouse_code',
