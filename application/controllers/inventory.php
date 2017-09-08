@@ -1641,7 +1641,7 @@ class inventory extends MY_Controller {
                         'idinventory_parent' => $d[1]=='' ? null : $d[1],
                         'invno' => $d[3],
                         'sku_no'=>$d[2],
-                        'nameinventory' => str_replace('-','',$this->filler($d[5]).' '.$this->filler($d[6]).' '.$this->filler($d[7]).' '.$this->filler($d[8]).' '.$this->filler($d[9]).' '.$this->filler($d[10]).' '.$this->filler($d[11]).' '.$this->filler($d[12])),
+                        'nameinventory' => str_replace('-','',$this->filler($d[5]).' '.$this->filler($d[6]).' '.$this->filler($d[7]).' '.$this->filler($d[8]).' '.$this->filler($d[9]).' '.$this->filler($d[10]).' '.$this->filler($d[11]).' '.$this->filler($d[12]).' '.$this->filler($d[22])),
                         // 'cost' => $cost=='' ? null : $cost,
                         'sellingprice'=> $sellingprice == '' ? null : $sellingprice,
                         'idinventorycat' => $idinventorycat,
