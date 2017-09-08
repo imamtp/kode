@@ -497,12 +497,7 @@ class sales extends MY_Controller {
             // }
             
             //update stock history
-<<<<<<< HEAD
-            $qparent = $this->db->query("select idinventory_parent from inventory where idinventory = ".$value->idinventory." and idunit = $idunit")->row();
-            $this->m_stock->update_history(8,$value->qty_kirim,$value->idinventory,$qparent->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do);
-=======
             $this->m_stock->update_history(8,$qty_item,$inv->idinventory,$inv->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
->>>>>>> dev_inventory
             $totalkirim+=$value->qty_kirim;
 
             $total_amount_kirim+=$value->qty_kirim*$qkirim->price;
