@@ -1045,7 +1045,7 @@ function validasiSalesOrder() {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Delivery Date');
     } else if (Ext.getCmp('cb_tax_id_so').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
-    } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
+    } else if (Ext.getCmp('customerSalesOrder').getValue() == null || Ext.getCmp('customerSalesOrder').getValue() == '') {
         Ext.Msg.alert('Failed', 'Tentukan konsumen');
     } else if (Ext.getCmp('shipaddressSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Alamat Pengiriman');
