@@ -1137,40 +1137,20 @@ class inventory extends MY_Controller {
         $idunit = $this->session->userdata('idunit');
         $inventory_type = $this->input->post('inventory_type');
         $idinventorycat = $this->input->post('idinventorycat');
-        // $extraparams = $this->input->post('extraparams');
+        $query = $this->input->post('query');
 
-        // $arrWer = array();
-        // if ($extraparams != '') {
-        //     $wer = "";
-        //     $p = explode(',', $extraparams);
-        //     $jum = count($p);
-        //     $i = 1;
-        //     $arrWer = array();
-        //     foreach ($p as $key => $value) {
-
-        //         $vparam = explode(':', $value);
-        //         if (preg_match('/null/', $vparam[1])) {
-        //             //null
-        //         } else {
-        //             $wer .= $vparam[0] . "='$vparam[1]'";
-        //             if ($vparam[1] != 'undefined') {
-        //                 $arrWer[$vparam[0]] = $vparam[1];
-        //             }
-        //         }
-        //         if($i!=$jum){
-        //             $wer.=' and';
-        //         }
-        //         $i++;
-        //     }
-        // } else {
-        //     $wer = null;
-        // }
-
-        // echo $wer;
+        $search_txt = null;
+        if($query!=''){
+            $search_txt =" AND (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".ucwords(strtolower($query))."%' 
+            OR a.invno like '%".strtoupper($query)."%' OR a.invno like '%".ucwords(strtolower($query))."%' OR a.invno like '%".strtolower($query)."%'
+            OR a.sku_no like '%".strtoupper($query)."%' OR a.sku_no like '%".ucwords(strtolower($query))."%' OR a.sku_no like '%".strtolower($query)."%') 
+            ";            
+        }
 
         $wer_type = null;
-        if($inventory_type !== '')
+        if($inventory_type != '' && $inventory_type != null) {
             $wer_type = "and inventory_type = $inventory_type";
+        }
 
         $sql = "select 
                     a.idinventory,
@@ -1218,6 +1198,7 @@ class inventory extends MY_Controller {
                 and a.idunit = $idunit
                 and a.idinventory_parent is null
                 $wer_type
+                $search_txt
                 order by idinventory
                 ";
         $q = $this->db->query($sql);

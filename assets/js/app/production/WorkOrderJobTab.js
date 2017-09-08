@@ -299,7 +299,7 @@ var wItemJobWOPopupPopup = Ext.create('widget.window', {
     closable: true,
     closeAction: 'hide',
     //    autoWidth: true,
-    width: 830,
+    width: panelW,
     modal: true,
     height: 450,
     layout: 'fit',
