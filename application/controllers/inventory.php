@@ -1166,7 +1166,7 @@ class inventory extends MY_Controller {
                     c.short_desc as uom_two,
                     case
                         when d.short_desc is null then null
-                        else coalesce(f.stock_tre,0)
+                        else ceil(coalesce(f.stock_tre,0))
                     end as stock_tre,
                     d.short_desc as uom_tre,
                     g.brand_name
@@ -1217,7 +1217,7 @@ class inventory extends MY_Controller {
                     e.short_desc as uom_two,
                     case
                         when b.measurement_id_tre is null then null
-                        else round(coalesce(c.stock,0) / a.ratio_tre) 
+                        else ceil(coalesce(c.stock,0) / a.ratio_tre) 
                     end as stock_tre,
                     f.short_desc as uom_tre,
                     g.warehouse_code,
