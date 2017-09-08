@@ -1514,7 +1514,7 @@ class inventory extends MY_Controller {
     // }
 
     function import_inventory_fg(){
-        $file = '/Applications/MAMP/htdocs/nusafin2/data finished goods per 31 Agt 2017.xlsx';
+        $file = '/var/www/html/redsfin/data finished goods per 31 Agt 2017.xlsx';
         // $orig_name = $this->upload->data()['orig_name'];
 
         require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
@@ -1647,13 +1647,17 @@ class inventory extends MY_Controller {
                     $this->db->insert('inventory',$data);
                     // print_r($data); 
 
-                    $this->db->insert('warehouse_stock',array(
-                        'idinventory'=>$idinventory,
-                        'stock'=>$d[18]=='' ? null :$d[18],
-                        'warehouse_id'=>2,
-                        'datemod'=>date('Y-m-d H:m:s'),
-                        'idunit'=>12
-                    ));
+                    if($d[1]!=''){
+                        //kalo parent ga masuk
+                        $this->db->insert('warehouse_stock',array(
+                            'idinventory'=>$idinventory,
+                            'stock'=>$d[18]=='' ? null :$d[18],
+                            'warehouse_id'=>2,
+                            'datemod'=>date('Y-m-d H:m:s'),
+                            'idunit'=>12
+                        ));
+                    }
+                    
 
                     if ($this->db->trans_status() === FALSE) {
                         $this->db->trans_rollback();
@@ -1679,8 +1683,59 @@ class inventory extends MY_Controller {
         // }
     }
 
+    function kd_brg_supplier(){
+          $file = '/var/www/html/redsfin/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
+
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 4;
+
+        // $start-=1;
+        if ($oke) {
+            $start = 3;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                echo $start.' ';
+                // if($start==300){
+                //     exit;
+                // }
+                // print_r($d); $start++; continue;
+                if(isset($d['0']) && $d['0']!='')
+                {
+                    $idinventory = $d[0];
+                    $this->db->trans_begin();
+                    $data = array(
+                        'idinventory' => $idinventory,
+                        'notes'=>$d[4]='' ? null : $d[4]
+                    );
+                    $this->db->where('idinventory',$idinventory);
+                    $this->db->update('inventory',$data);
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+                    }
+                   
+                }
+
+                $start++;
+            }
+        }
+
+          $start-=1;
+    }
+
     function import_inventory(){
-        $file = '/Applications/MAMP/htdocs/nusafin2/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        $file = '/var/www/html/redsfin/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
         // $orig_name = $this->upload->data()['orig_name'];
 
         require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
@@ -1781,6 +1836,7 @@ class inventory extends MY_Controller {
                         'idinventory_parent' => $d[1]=='' ? null : $d[1],
                         'invno' => $d[3],
                         'sku_no'=>$d[2],
+                        'notes'=>$d[4],
                         'nameinventory' => $d[5].' '.$d[6].' '.$d[7].' '.$d[8].' '.$d[9].' '.$d[10].' '.$d[11],
                         'cost' => $cost=='' ? null : $cost,
                         'idinventorycat' => $idinventorycat,
@@ -1805,13 +1861,15 @@ class inventory extends MY_Controller {
                     $this->db->insert('inventory',$data);
                     // print_r($data); 
 
-                    $this->db->insert('warehouse_stock',array(
-                        'idinventory'=>$idinventory,
-                        'stock'=>$d[17]=='' ? null :$d[17],
-                        'warehouse_id'=>1,
-                        'datemod'=>date('Y-m-d H:m:s'),
-                        'idunit'=>12
-                    ));
+                    if($d[1]!=''){
+                        $this->db->insert('warehouse_stock',array(
+                            'idinventory'=>$idinventory,
+                            'stock'=>$d[17]=='' ? null :$d[17],
+                            'warehouse_id'=>1,
+                            'datemod'=>date('Y-m-d H:m:s'),
+                            'idunit'=>12
+                        ));
+                    }
 
                     if ($this->db->trans_status() === FALSE) {
                         $this->db->trans_rollback();
