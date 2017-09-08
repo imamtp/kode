@@ -17,7 +17,7 @@ class m_salesorder extends CI_Model {
 
     function selectField() {
         return "a.idsales,a.idemployee,g.no_do,g.delivery_date,a.idjournal,a.idtax,a.idcustomer,a.date_sales,a.no_sales_order,a.subtotal,a.freight,a.tax,a.disc,a.totalamount,a.comments,a.userin,a.datein,a.status,a.idcurrency,c.namecurr,b.namepayment,d.firstname,d.lastname,e.totalitem,namecustomer,a.idcustomer,nocustomer,a.noinvoice,a.invoice_status,a.idpayment,a.ddays,a.eomddays,a.percentagedisc,a.daydisc,a.dmax,a.shipaddress,
-        f.address as address_customer, f.telephone as telephone_customer, f.handphone as handphone_customer, a.idunit,a.paidtoday,a.balance,a.delivery_date,totalitem,COALESCE(totalitemkirim, 0) as totalitemkirim,((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,g.delivery_order_id,idsales_quote,
+        f.address as address_customer, f.telephone as telephone_customer, f.handphone as handphone_customer, a.idunit,a.paidtoday,a.balance,a.delivery_date as delivery_date_sales,totalitem,COALESCE(totalitemkirim, 0) as totalitemkirim,((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,g.delivery_order_id,idsales_quote,
         i.no_sales_quote as no_sales_order_quote,i.idsales as idsales_quote,i.date_quote as date_sales_quote,a.salesman_id,j.rate,k.job_order_id,k.status as statuswo,a.include_tax,a.shipaddress,a.total_dpp";
     }
     
@@ -155,6 +155,13 @@ class m_salesorder extends CI_Model {
             $dtcetak['memo'] = $r->comments;
             $dtcetak['datetrans'] = $r->date_sales;
             $dtcetak['total_dpp'] = $r->total_dpp;
+            $dtcetak['dmax'] = $r->dmax;
+            $dtcetak['ddays'] = $r->ddays;
+            $dtcetak['eomddays'] = $r->eomddays;
+            $dtcetak['daydisc'] = $r->daydisc;
+            $dtcetak['shipaddress'] = $r->shipaddress;
+            $dtcetak['delivery_date_sales'] = $r->delivery_date_sales;
+            $dtcetak['payment_term'] = payment_term_sales($r->idpayment,$r->dmax,$r->ddays,$r->eomddays,$r->daydisc);
 
             // $dtcetak['receivedby'] = $r->userin;
             //get logo,address,namaunit

@@ -122,5 +122,19 @@ function number_field($val){
 	}
 }
 
+function payment_term_sales($id,$dmax=null,$ddays=null,$eomddays=null,$daydisc=null){
+	if($id==1){
+		return "Cash in Advance";
+	} else if($id==2){
+			return "Cash in Delivery";
+		}  else if($id==3){
+			return "NET $ddays days";
+		}  else if($id==4){
+			return "NET EOM $eomddays days";
+		}  else if($id==5){
+			return "Discount";
+		} 
+}
+
 
 ?>

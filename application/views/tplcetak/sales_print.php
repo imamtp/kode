@@ -21,14 +21,15 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <h2><?=$title?></h2>
-          <h3>Tanggal Order: <?=$data['datetrans']?> <br>
+          Tanggal Order: <?=$data['datetrans']?> <br>
               <?php 
                 if($isInvoice){
                   echo "Tanggal Invoice: ". $data['invoice_date'] ."<br>";
                 }
               ?>
-              NO: #<?=$data['no']?><br>
-          </h3>
+              NO SO: #<?=$data['no']?><br>
+              Delivery Date: #<?=$data['delivery_date_sales']?>
+              
         </div>
       </div>
       
@@ -183,6 +184,28 @@
         </div>
         <div class="col-xs-6 text-right">
           <!-- <b>Operator<br><?=$data['receivedby']?></b> -->
+
+          <div class="row">
+        <div class="col-xs-5">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Shipping Address</h4>
+            </div>
+            <div class="panel-body">
+              <p>
+              <?=$data['shipaddress']?>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-5 col-xs-offset-2 text-right">
+          <div class="">
+            <div class="panel-heading">
+            Payment Term: <?=$data['payment_term']?>
+            </div>
+          </div>
+        </div>
+      </div>
         </div>
       </div> 
 
