@@ -20,11 +20,11 @@
       </div>
       <div class="col-xs-5 col-xs-offset-2 text-right">
         <h3><?=$title?></h3>
-        <h4>Tanggal Order: <?=$data['datetrans']?> <br>
+        Tanggal Order: <?=$data['datetrans']?> <br>
             Tanggal Pengiriman: <?=$data['header']['delivery_date']?><br>
             NO DO: #<?=$data['no_do']?><br>
             NO Faktur: #<?=$data['header']['no_faktur']?><br>
-        </h4>
+        
       </div>
     </div>
     
