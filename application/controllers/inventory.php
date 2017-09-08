@@ -1221,7 +1221,8 @@ class inventory extends MY_Controller {
                     end as stock_tre,
                     f.short_desc as uom_tre,
                     g.warehouse_code,
-                    h.received_date
+                    h.received_date,
+                    coalesce(a.hpp_per_unit,0) as hpp
                 from inventory a
                 join inventory b on a.idinventory_parent = b.idinventory
                 join warehouse_stock c on c.idinventory = a.idinventory
@@ -1521,6 +1522,7 @@ class inventory extends MY_Controller {
             $total = 0;
             while (isset($val[$start])) {
                 $d = $val[$start];
+                echo $start.' ';
                 // if($start==300){
                 //     exit;
                 // }
@@ -1611,7 +1613,7 @@ class inventory extends MY_Controller {
                         'hpp_per_unit'=>$cost=='' ? null : $cost,
                         'nominal_persediaan'=>$cost*$d[17],
                         'ratio_two'=>$d[15]=='' ? null :$d[15],
-                        'ratio_tre'=>null,
+                        'ratio_tre'=>$d[17]=='' ? null :$d[17],
                         // 'memo' => $memo,
                         // 'idsupplier' => $d[2],
                         'isinventory' => 't',
