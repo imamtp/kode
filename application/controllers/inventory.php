@@ -1136,9 +1136,40 @@ class inventory extends MY_Controller {
     function get_by_sku2(){
         $idunit = $this->session->userdata('idunit');
         $inventory_type = $this->input->post('inventory_type');
+        $idinventorycat = $this->input->post('idinventorycat');
+        // $extraparams = $this->input->post('extraparams');
+
+        // $arrWer = array();
+        // if ($extraparams != '') {
+        //     $wer = "";
+        //     $p = explode(',', $extraparams);
+        //     $jum = count($p);
+        //     $i = 1;
+        //     $arrWer = array();
+        //     foreach ($p as $key => $value) {
+
+        //         $vparam = explode(':', $value);
+        //         if (preg_match('/null/', $vparam[1])) {
+        //             //null
+        //         } else {
+        //             $wer .= $vparam[0] . "='$vparam[1]'";
+        //             if ($vparam[1] != 'undefined') {
+        //                 $arrWer[$vparam[0]] = $vparam[1];
+        //             }
+        //         }
+        //         if($i!=$jum){
+        //             $wer.=' and';
+        //         }
+        //         $i++;
+        //     }
+        // } else {
+        //     $wer = null;
+        // }
+
+        // echo $wer;
 
         $wer_type = null;
-        if($inventory_type !== false)
+        if($inventory_type !== '')
             $wer_type = "and inventory_type = $inventory_type";
 
         $sql = "select 
@@ -1156,6 +1187,7 @@ class inventory extends MY_Controller {
                     a.ratio_two,
                     a.ratio_tre,
                     a.cost,
+                    a.sellingprice,
                     coalesce(a.hpp_per_unit,0) as hpp,
                     coalesce(f.stock,0) as stock_one,
                     b.short_desc as uom_one,
