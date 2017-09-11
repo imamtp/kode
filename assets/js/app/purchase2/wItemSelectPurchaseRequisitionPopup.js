@@ -106,15 +106,58 @@ Ext.define('GridItemSelectPurchaseRequisition', {
 
             }
         },
-        { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
-        { header: 'idunit', dataIndex: 'idunit', hidden: true },
-        { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
-        { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
-        { header: 'Merk', dataIndex: 'brand_name', minWidth: 150 },
-        { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
-        { header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
-        { header: 'Stok Sekarang', dataIndex: 'qtystock', minWidth: 100, align: 'right' },
+        // { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
+        // { header: 'idunit', dataIndex: 'idunit', hidden: true },
+        // { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
+        // { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
+        // { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        // { header: 'Merk', dataIndex: 'brand_name', minWidth: 150 },
+        // { header: 'Lebar', dataIndex: 'lebar', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        // { header: 'Tebal', dataIndex: 'ketebalan', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        // { header: 'Stok Sekarang', dataIndex: 'qtystock', minWidth: 100, align: 'right' },
+        { header: 'No. SKU', dataIndex: 'sku_no', width: 150},
+        { header: 'Nama Barang', dataIndex: 'nameinventory', width: 400, flex:1 },
+        {
+            header: 'Stock',
+            xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_one',
+            width: 110,
+            align: 'right'
+        },
+        {
+            header: 'Satuan',
+            dataIndex: 'uom_one',
+            width: 80
+        },
+        {
+            header: 'Stock #2',
+            xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_two',
+            width: 110,
+            align: 'right'
+        },
+        {
+            header: 'Satuan #2',
+            dataIndex: 'uom_two',
+            width: 90
+        },
+        {
+            header: 'Stock #3',
+            xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_tre',
+            width: 110,
+            align: 'right'
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
+            width: 90
+        },
+        // { header: 'Beli', dataIndex: 'cost', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
+        // { header: 'HPP', dataIndex: 'hpp', width: 100, xtype: 'numbercolumn', align: 'right' }
     ],
     dockedItems: [{
         xtype: 'toolbar',
@@ -182,7 +225,7 @@ Ext.define(dir_sys + 'purchase2.wItemSelectPurchaseRequisitionPopup', {
     autoDestroy: false,
     closeAction: 'hide',
     modal: true,
-    width: panelW - 100,
+    width: panelW,
     height: sizeH - 100,
     layout: 'fit',
     border: false,
