@@ -152,50 +152,52 @@ Ext.define('GridItemRawMaterialWO', {
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 150 },
-        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        { header: 'Kode Barang', dataIndex: 'invno', minWidth: 120 },
+        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 450, flex: 1 },
         {
             header: 'Stock',
             xtype: 'numbercolumn',
-            minWidth: 120,
             align: 'right',
             dataIndex: 'stock_one',
+            width: 110,
+            align: 'right'
         },
         {
             header: 'Satuan',
             dataIndex: 'uom_one',
-            // dataIndex: 'satuan_pertama',
-            minWidth: 100
+            width: 80
         },
         {
             header: 'Stock #2',
             xtype: 'numbercolumn',
-            minWidth: 120,
             align: 'right',
             dataIndex: 'stock_two',
+            width: 110,
+            align: 'right'
         },
         {
             header: 'Satuan #2',
             dataIndex: 'uom_two',
-            // dataIndex: 'satuan_pertama',
-            minWidth: 100
+            width: 90
         },
         {
             header: 'Stock #3',
             xtype: 'numbercolumn',
-            minWidth: 120,
             align: 'right',
             dataIndex: 'stock_tre',
+            width: 110,
+            align: 'right',
+            hidden: true,
         },
         {
             header: 'Satuan #3',
             dataIndex: 'uom_tre',
-            // dataIndex: 'satuan_pertama',
-            minWidth: 100
+            width: 90,
+            hidden: true,
         },
         {
             header: 'Kode Gudang',
-            minWidth: 100,
+            minWidth: 120,
             dataIndex: 'warehouse_code',
             flex: 1,
         },
@@ -204,28 +206,6 @@ Ext.define('GridItemRawMaterialWO', {
             minWidth: 150,
             dataIndex: 'received_date'
         }
-        // {
-        //     header: 'Total Stock',
-        //     dataIndex: 'totalstock',
-        //     minWidth: 120,
-        //     align: 'right'
-        // },
-        // {
-        //     header: 'Satuan',
-        //     dataIndex: 'satuan_pertama',
-        //     minWidth: 100
-        // }, {
-        //     header: 'Stock #2',
-        //     dataIndex: 'stock_kedua',
-        //     minWidth: 70,
-        //     xtype: 'numbercolumn',
-        //     align: 'right'
-        // },
-        // {
-        //     header: 'Satuan #2',
-        //     dataIndex: 'satuan_kedua',
-        //     minWidth: 100
-        // },
     ],
     dockedItems: [
         // {
