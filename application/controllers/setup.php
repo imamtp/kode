@@ -565,9 +565,29 @@ class Setup extends MY_Controller {
 
         $nextval += 1;
         $nextval = sprintf("%0".$digit."d", $nextval);
-        return $prefix.$y.$m.$nextval;
+        
+        //cek udah ada yg make apa blum
+        if($this->check_exists($prefix.$y.$m.$nextval)){
+            return $prefix.$y.$m.$nextval;
+        } else {
+            return $this->next_loop($params);
+        }
+       
         //echo json_encode(array('success'=>true,'nextval'=>$prefix.$y.$m.$nextval));
     }
+
+    function check_exists($noso){
+        $q = $this->db->get_where('sales',array('no_sales_order'=>$noso));
+        if($q->num_rows()>0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function next_loop($params){
+        return $this->getNextNoArticle2($params);
+    }   
 
     function getseq($date=null)
     {

@@ -336,27 +336,7 @@ Ext.define(dir_sys + 'money.EntryReceiveMoney', {
             }
         });
 
-    function updateGridReceive() {
-        var subtotalReceive = 0 * 1;
-        var totalPajak = 0 * 1;
-        var totalReceive = 0 * 1;
-        Ext.each(ReceiveGridStore.data.items, function(obj, i) {
-            var pajak = (obj.data.amount * 1 / 100) * obj.data.ratetax;
-            totalPajak += pajak;
-            subtotalReceive += obj.data.amount * 1;
-        });
-        totalReceive = subtotalReceive * 1 - totalPajak * 1;
-        Ext.getCmp('subtotalReceive').setValue(subtotalReceive.toLocaleString('null', {
-            minimumFractionDigits: 2
-        }));
-        Ext.getCmp('taxReceive').setValue(totalPajak.toLocaleString('null', {
-            minimumFractionDigits: 2
-        }));
-        Ext.getCmp('totalReceive').setValue(totalReceive.toLocaleString('null', {
-            minimumFractionDigits: 2
-        }));
-    }
-
+   
     function validasiReceive() {
         //    alert(Ext.getCmp('comboxcurrencyPayment').getValue());
         if (Ext.getCmp('accnameReceive').getValue() == '') {

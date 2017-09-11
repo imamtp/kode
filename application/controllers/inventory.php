@@ -1136,10 +1136,25 @@ class inventory extends MY_Controller {
     function get_by_sku2(){
         $idunit = $this->session->userdata('idunit');
         $inventory_type = $this->input->post('inventory_type');
+        $idinventorycat = $this->input->post('idinventorycat');
+        $query = $this->input->post('query');
+        $start = $this->input->post('start');
+        $limit = $this->input->post('limit');
+
+        $limit_offset = "LIMIT $limit OFFSET $start";
+
+        $search_txt = null;
+        if($query!=''){
+            $search_txt =" AND (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".ucwords(strtolower($query))."%' 
+            OR a.invno like '%".strtoupper($query)."%' OR a.invno like '%".ucwords(strtolower($query))."%' OR a.invno like '%".strtolower($query)."%'
+            OR a.sku_no like '%".strtoupper($query)."%' OR a.sku_no like '%".ucwords(strtolower($query))."%' OR a.sku_no like '%".strtolower($query)."%') 
+            ";            
+        }
 
         $wer_type = null;
-        if($inventory_type !== false)
+        if($inventory_type != '' && $inventory_type != null) {
             $wer_type = "and inventory_type = $inventory_type";
+        }
 
         $sql = "select 
                     a.idinventory,
@@ -1156,6 +1171,7 @@ class inventory extends MY_Controller {
                     a.ratio_two,
                     a.ratio_tre,
                     a.cost,
+                    a.sellingprice,
                     coalesce(a.hpp_per_unit,0) as hpp,
                     coalesce(f.stock,0) as stock_one,
                     b.short_desc as uom_one,
@@ -1186,10 +1202,16 @@ class inventory extends MY_Controller {
                 and a.idunit = $idunit
                 and a.idinventory_parent is null
                 $wer_type
-                order by idinventory
+                $search_txt                
+                order by nameinventory
                 ";
-        $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+        
+        $qtotal = $this->db->query($sql);
+
+        $q = $this->db->query($sql.' '.$limit_offset);
+                    // echo $sql.' '.$limit_offset;
+        
+        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
     }
 
     function get_detail_item(){
@@ -1500,8 +1522,229 @@ class inventory extends MY_Controller {
     //     }
     // }
 
+    function import_inventory_fg(){
+        $file = '/var/www/html/redsfin/data finished goods per 31 Agt 2017.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
+
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 4;
+
+        // $start-=1;
+        if ($oke) {
+          
+
+            $start = 3;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                echo $start.' ';
+                // if($start==300){
+                //     exit;
+                // }
+                // print_r($d); $start++; continue;
+                if(isset($d['0']) && $d['0']!='')
+                {
+                    // if($d[1]==''){
+                    //     $start++;
+                    //     continue;
+                    // }
+
+                    $idinventory = $d[0];
+                    // echo $idinventory.' '; continue;
+                    // $idinventory =  $this->m_data->getSeqVal('seq_inventory') ;                    
+
+                    if(isset($d[5]) && $d[5]!=''){
+                        //idinventorycat
+                        $q = $this->db->get_where('inventorycat',array('namecat'=>$d[5]));
+                        if($q->num_rows()>0){
+                            $r = $q->row();
+                            $idinventorycat = $r->idinventorycat;
+                        } else {
+                            $idinventorycat = null;
+                        }
+                    }
+
+                    if(isset($d[6]) && $d[6]!=''){
+                       //brand_id
+                        $q = $this->db->get_where('brand',array('brand_name'=>$d[6],'idunit'=>12));
+                        if($q->num_rows()>0){
+                            $r = $q->row();
+                            $brand_id = $r->brand_id;
+                        } else {
+                            $brand_id = null;
+                        }
+                    }
+
+                    if(isset($d[13]) && $d[13]!=''){
+                        //measurement_id_one
+                         $q = $this->db->get_where('productmeasurement',array('short_desc'=>$d[13]));
+                         if($q->num_rows()>0){
+                             $r = $q->row();
+                             $measurement_id_one = $r->measurement_id;
+                         } else {
+                             $measurement_id_one = null;
+                         }
+                     } else {
+                        $measurement_id_one = null;
+                     }
+ 
+                     if(isset($d[14]) && $d[14]!=''){
+                        //measurement_id_two
+                         $q = $this->db->get_where('productmeasurement',array('short_desc'=>$d[14]));
+                         if($q->num_rows()>0){
+                             $r = $q->row();
+                             $measurement_id_two = $r->measurement_id;
+                         } else {
+                             $measurement_id_two = null;
+                         }
+                     } else {
+                        $measurement_id_two = null;
+                     }
+
+                     if(isset($d[15]) && $d[15]!=''){
+                        //measurement_id_tre
+                         $q = $this->db->get_where('productmeasurement',array('short_desc'=>$d[15]));
+                         if($q->num_rows()>0){
+                             $r = $q->row();
+                             $measurement_id_tre = $r->measurement_id;
+                         } else {
+                             $measurement_id_tre = null;
+                         }
+                     } else {
+                        $measurement_id_tre = null;
+                     }
+                     
+                        
+
+                    $this->db->trans_begin();
+                    // $cost = isset($d[20]) ? $d[20] : 0;
+                    $sellingprice = isset($d[20]) ? $d[20] : 0;
+                    $data = array(
+                        'idinventory' => $idinventory,
+                        'idinventory_parent' => $d[1]=='' ? null : $d[1],
+                        'invno' => $d[3],
+                        'sku_no'=>$d[2],
+                        'nameinventory' => str_replace('-','',$this->filler($d[5]).' '.$this->filler($d[6]).' '.$this->filler($d[7]).' '.$this->filler($d[8]).' '.$this->filler($d[9]).' '.$this->filler($d[10]).' '.$this->filler($d[11]).' '.$this->filler($d[12]).' '.$this->filler($d[22])),
+                        // 'cost' => $cost=='' ? null : $cost,
+                        'sellingprice'=> $sellingprice == '' ? null : $sellingprice,
+                        'idinventorycat' => $idinventorycat,
+                        'brand_id'=> $brand_id,
+                        'inventory_type'=>1,
+                        'measurement_id_one'=>$measurement_id_one,
+                        'measurement_id_two'=>$measurement_id_two,
+                        'measurement_id_tre'=>$measurement_id_tre,
+                        'hpp_per_unit'=>$sellingprice=='' ? null : $sellingprice,
+                        'nominal_persediaan'=>$sellingprice*$d[18],
+                        'ratio_two'=>$d[16]=='' ? null :$d[16],
+                        'ratio_tre'=>$d[17]=='' ? null :$d[17],
+                        // 'memo' => $memo,
+                        // 'idsupplier' => $d[2],
+                        'isinventory' => 't',
+                        'isbuy' => 't',
+                        'issell' => 't',
+                        'idunit' => 12,
+                        'status'=>1,
+                        'deleted'=>0
+                    );
+                    $this->db->insert('inventory',$data);
+                    // print_r($data); 
+
+                    if($d[1]!=''){
+                        //kalo parent ga masuk
+                        $this->db->insert('warehouse_stock',array(
+                            'idinventory'=>$idinventory,
+                            'stock'=>$d[18]=='' ? null :$d[18],
+                            'warehouse_id'=>2,
+                            'datemod'=>date('Y-m-d H:m:s'),
+                            'idunit'=>12
+                        ));
+                    }
+                    
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+                    }
+                   
+                }
+
+                $start++;
+            }
+
+        }
+
+          $start-=1;
+    }
+
+    function filler($val){
+        // if($val=="" && $val!="-" && $val!="'-"){
+            return $val;
+        // } else {
+        //     return null;
+        // }
+    }
+
+    function kd_brg_supplier(){
+          $file = '/var/www/html/redsfin/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
+
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 4;
+
+        // $start-=1;
+        if ($oke) {
+            $start = 3;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                echo $start.' ';
+                // if($start==300){
+                //     exit;
+                // }
+                // print_r($d); $start++; continue;
+                if(isset($d['0']) && $d['0']!='')
+                {
+                    $idinventory = $d[0];
+                    $this->db->trans_begin();
+                    $data = array(
+                        'idinventory' => $idinventory,
+                        'notes'=>$d[4]='' ? null : $d[4]
+                    );
+                    $this->db->where('idinventory',$idinventory);
+                    $this->db->update('inventory',$data);
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+                    }
+                   
+                }
+
+                $start++;
+            }
+        }
+
+          $start-=1;
+    }
+
     function import_inventory(){
-        $file = '/Applications/MAMP/htdocs/nusafin2/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        $file = '/var/www/html/redsfin/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
         // $orig_name = $this->upload->data()['orig_name'];
 
         require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
@@ -1602,6 +1845,7 @@ class inventory extends MY_Controller {
                         'idinventory_parent' => $d[1]=='' ? null : $d[1],
                         'invno' => $d[3],
                         'sku_no'=>$d[2],
+                        'notes'=>$d[4],
                         'nameinventory' => $d[5].' '.$d[6].' '.$d[7].' '.$d[8].' '.$d[9].' '.$d[10].' '.$d[11],
                         'cost' => $cost=='' ? null : $cost,
                         'idinventorycat' => $idinventorycat,
@@ -1626,13 +1870,15 @@ class inventory extends MY_Controller {
                     $this->db->insert('inventory',$data);
                     // print_r($data); 
 
-                    $this->db->insert('warehouse_stock',array(
-                        'idinventory'=>$idinventory,
-                        'stock'=>$d[17]=='' ? null :$d[17],
-                        'warehouse_id'=>1,
-                        'datemod'=>date('Y-m-d H:m:s'),
-                        'idunit'=>12
-                    ));
+                    if($d[1]!=''){
+                        $this->db->insert('warehouse_stock',array(
+                            'idinventory'=>$idinventory,
+                            'stock'=>$d[17]=='' ? null :$d[17],
+                            'warehouse_id'=>1,
+                            'datemod'=>date('Y-m-d H:m:s'),
+                            'idunit'=>12
+                        ));
+                    }
 
                     if ($this->db->trans_status() === FALSE) {
                         $this->db->trans_rollback();
@@ -1649,8 +1895,123 @@ class inventory extends MY_Controller {
 
           $start-=1;
     }
+
+    function update_rm_name(){
+        //ubah nama raw amterial
+        $file = '/Applications/MAMP/htdocs/nusafin2/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        // $file = '/var/www/html/redsfin/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
+
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 4;
+
+        // $start-=1;
+        if ($oke) {
+            $start = 3;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                echo $start.' ';
+                // if($start==300){
+                //     exit;
+                // }
+                // print_r($d); $start++; continue;
+                if(isset($d['0']) && $d['0']!='')
+                {
+                    $idinventory = $d[0];
+
+                    $this->db->trans_begin();
+                    $cost = isset($d[18]) ? $d[18] : 0;
+                    $data = array(
+                        'nameinventory' => $d[5].' '.$d[6].' '.$this->remove_space($d[7]).' '.$this->remove_space($d[8]).' '.$this->remove_space($d[9]).' '.$d[10].' '.$d[11]
+                    );
+                    $this->db->where('idinventory',$idinventory);
+                    $this->db->update('inventory',$data);
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+                    }
+                   
+                }
+
+                $start++;
+            }
+
+        }
+
+          $start-=1;
+    }
+
+function update_fg_name(){
+    // $file = '/var/www/html/redsfin/data finished goods per 31 Agt 2017.xlsx';
+    $file = '/Applications/MAMP/htdocs/nusafin2/data finished goods per 31 Agt 2017.xlsx';
+    // $orig_name = $this->upload->data()['orig_name'];
+
+    require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+    $xlsx = new SimpleXLSX($file);
+    $getWorksheetName = $xlsx->getWorksheetName();
+
+    $val = $xlsx->rows(1);
+
+    $oke = true;
+    $start = 4;
+
+    // $start-=1;
+    if ($oke) {
+      
+
+        $start = 3;
+
+        $total = 0;
+        while (isset($val[$start])) {
+            $d = $val[$start];
+            echo $start.' ';
+            // if($start==300){
+            //     exit;
+            // }
+            // print_r($d); $start++; continue;
+            if(isset($d['0']) && $d['0']!='')
+            {
+
+                $idinventory = $d[0];
+                $this->db->trans_begin();
+                $data = array(
+                    'nameinventory' => str_replace('-','',$this->filler($d[5]).' '.$this->filler($d[7]).' '.$this->filler($d[6]).' '.$this->remove_space($d[8]).' '.$this->remove_space($d[9]).' '.$this->filler($d[10]).' '.$this->remove_space($d[11]).' '.$this->remove_space($d[12]).' '.$this->filler($d[22])),
+                  
+                );
+                $this->db->where('idinventory',$idinventory);
+                $this->db->update('inventory',$data);                
+
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                } else {
+                    $this->db->trans_commit();
+                }
+               
+            }
+
+            $start++;
+        }
+
+    }
+
+      $start-=1;
 }
 
+function remove_space($va){
+    return isset($va) ? str_replace(' ','',$va) : null;
+}
+
+}
 
 
 ?>

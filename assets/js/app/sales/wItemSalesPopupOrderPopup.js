@@ -72,7 +72,7 @@ Ext.define(dir_sys + 'sales.GridItemSalesPopupOrder', {
     loadMask: true,
     columns: [{
             text: 'Pilih',
-            width: 45,
+            width: 55,
             xtype: 'actioncolumn',
             tooltip: 'Pilih ini',
             align: 'center',
@@ -333,7 +333,7 @@ Ext.define(dir_sys + 'sales.wItemSalesPopupOrderPopup',{
     closable: true,
     closeAction: 'hide',
     //    autoWidth: true,
-    width: 870,
+    width: panelW,
     modal: true,
     height: 450,
     layout: 'fit',

@@ -7,7 +7,7 @@
 //               });
 Ext.define('GridItemSelectSalesQuotationModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'invno', 'nameinventory', 'totalstock', 'stock_kedua', 'cost', 'sellingprice', 'qtystock', 'idunit', 'assetaccount', 'brand_name', 'sku_no', 'short_desc', 'size_measurement', 'satuan_pertama', 'satuan_kedua'],
+    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock','sellingprice','cost' ],
     idProperty: 'id'
 });
 
@@ -18,7 +18,7 @@ var storeGridItemSelectSalesQuotation = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'inventory/get_by_sku',
+        url: SITE_URL + 'inventory/get_by_sku2',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -113,31 +113,43 @@ Ext.define('GridItemSelectSalesQuotation', {
         { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
-        { header: 'No SKU', dataIndex: 'sku_no', minWidth: 150 },
+        { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
-        // { header: 'Merk', dataIndex: 'brand_name', minWidth: 150 },
         {
-            header: 'Total Stock',
-            dataIndex: 'totalstock',
+            header: 'Stock',
+            dataIndex: 'stock_one',
             minWidth: 120,
             align: 'right'
         },
         {
             header: 'Satuan',
-            dataIndex: 'satuan_pertama',
+            dataIndex: 'uom_one',
             minWidth: 100
-        }, {
+        },
+        {
             header: 'Stock #2',
-            dataIndex: 'stock_kedua',
+            dataIndex: 'stock_two',
             minWidth: 70,
             xtype: 'numbercolumn',
             align: 'right'
         },
         {
             header: 'Satuan #2',
-            dataIndex: 'satuan_kedua',
+            dataIndex: 'uom_two',
             minWidth: 100
-        }
+        },
+        {
+            header: 'Stock #3',
+            dataIndex: 'stock_tre',
+            minWidth: 70,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
+        {
+            header: 'Satuan #3',
+            dataIndex: 'uom_tre',
+            minWidth: 100
+        },
     ],
     dockedItems: [{
         xtype: 'toolbar',

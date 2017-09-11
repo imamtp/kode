@@ -190,7 +190,7 @@ Ext.define(dir_sys+'production.wItemReceiptMaterialWOPopup', {
     closable: true,
     closeAction: 'hide',
 //    autoWidth: true,
-    width: 900,
+    width: panelW,
     modal:true,
     height: 450,
     layout: 'fit',
