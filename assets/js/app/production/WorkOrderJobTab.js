@@ -145,42 +145,45 @@ Ext.define('GridItemJobWOPopup', {
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
         // {header: 'Kode Barang', dataIndex: 'invno', minWidth: 150},        
-        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 400, flex: 1 },
         {
             header: 'Stock',
             xtype: 'numbercolumn',
+            align: 'right',
             dataIndex: 'stock_one',
-            minWidth: 120,
+            width: 110,
             align: 'right'
         },
         {
             header: 'Satuan',
             dataIndex: 'uom_one',
-            minWidth: 100
+            width: 80
         },
         {
             header: 'Stock #2',
-            dataIndex: 'stock_two',
-            minWidth: 70,
             xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_two',
+            width: 110,
             align: 'right'
         },
         {
             header: 'Satuan #2',
             dataIndex: 'uom_two',
-            minWidth: 100
+            width: 90
         },
         {
             header: 'Stock #3',
-            dataIndex: 'stock_tre',
-            minWidth: 70,
             xtype: 'numbercolumn',
+            align: 'right',
+            dataIndex: 'stock_tre',
+            width: 110,
             align: 'right'
         },
         {
             header: 'Satuan #3',
             dataIndex: 'uom_tre',
-            minWidth: 100
+            width: 90
         },
     ],
     dockedItems: [{
