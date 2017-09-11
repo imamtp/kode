@@ -1886,8 +1886,123 @@ class inventory extends MY_Controller {
 
           $start-=1;
     }
+
+    function update_rm_name(){
+        //ubah nama raw amterial
+        $file = '/Applications/MAMP/htdocs/nusafin2/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        // $file = '/var/www/html/redsfin/STOK OPNAME RM 31 AGUSTUS 2017.xlsx';
+        // $orig_name = $this->upload->data()['orig_name'];
+
+        require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+        $xlsx = new SimpleXLSX($file);
+        $getWorksheetName = $xlsx->getWorksheetName();
+
+        $val = $xlsx->rows(1);
+
+        $oke = true;
+        $start = 4;
+
+        // $start-=1;
+        if ($oke) {
+            $start = 3;
+
+            $total = 0;
+            while (isset($val[$start])) {
+                $d = $val[$start];
+                echo $start.' ';
+                // if($start==300){
+                //     exit;
+                // }
+                // print_r($d); $start++; continue;
+                if(isset($d['0']) && $d['0']!='')
+                {
+                    $idinventory = $d[0];
+
+                    $this->db->trans_begin();
+                    $cost = isset($d[18]) ? $d[18] : 0;
+                    $data = array(
+                        'nameinventory' => $d[5].' '.$d[6].' '.$this->remove_space($d[7]).' '.$this->remove_space($d[8]).' '.$this->remove_space($d[9]).' '.$d[10].' '.$d[11]
+                    );
+                    $this->db->where('idinventory',$idinventory);
+                    $this->db->update('inventory',$data);
+
+                    if ($this->db->trans_status() === FALSE) {
+                        $this->db->trans_rollback();
+                    } else {
+                        $this->db->trans_commit();
+                    }
+                   
+                }
+
+                $start++;
+            }
+
+        }
+
+          $start-=1;
+    }
+
+function update_fg_name(){
+    // $file = '/var/www/html/redsfin/data finished goods per 31 Agt 2017.xlsx';
+    $file = '/Applications/MAMP/htdocs/nusafin2/data finished goods per 31 Agt 2017.xlsx';
+    // $orig_name = $this->upload->data()['orig_name'];
+
+    require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+    $xlsx = new SimpleXLSX($file);
+    $getWorksheetName = $xlsx->getWorksheetName();
+
+    $val = $xlsx->rows(1);
+
+    $oke = true;
+    $start = 4;
+
+    // $start-=1;
+    if ($oke) {
+      
+
+        $start = 3;
+
+        $total = 0;
+        while (isset($val[$start])) {
+            $d = $val[$start];
+            echo $start.' ';
+            // if($start==300){
+            //     exit;
+            // }
+            // print_r($d); $start++; continue;
+            if(isset($d['0']) && $d['0']!='')
+            {
+
+                $idinventory = $d[0];
+                $this->db->trans_begin();
+                $data = array(
+                    'nameinventory' => str_replace('-','',$this->filler($d[5]).' '.$this->filler($d[7]).' '.$this->filler($d[6]).' '.$this->remove_space($d[8]).' '.$this->remove_space($d[9]).' '.$this->filler($d[10]).' '.$this->remove_space($d[11]).' '.$this->remove_space($d[12]).' '.$this->filler($d[22])),
+                  
+                );
+                $this->db->where('idinventory',$idinventory);
+                $this->db->update('inventory',$data);                
+
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                } else {
+                    $this->db->trans_commit();
+                }
+               
+            }
+
+            $start++;
+        }
+
+    }
+
+      $start-=1;
 }
 
+function remove_space($va){
+    return isset($va) ? str_replace(' ','',$va) : null;
+}
+
+}
 
 
 ?>
