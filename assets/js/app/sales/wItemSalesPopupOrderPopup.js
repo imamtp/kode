@@ -109,49 +109,49 @@ Ext.define(dir_sys + 'sales.GridItemSalesPopupOrder', {
         { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         // { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
-        { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150 },
-        { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 150, flex: 1 },
+        { header: 'No. SKU', dataIndex: 'sku_no', width: 150},
+        { header: 'Nama Barang', dataIndex: 'nameinventory', width: 400, flex:1 },
         {
             header: 'Stock',
             xtype: 'numbercolumn',
             align: 'right',
             dataIndex: 'stock_one',
-            minWidth: 120,
+            width: 110,
             align: 'right'
         },
         {
             header: 'Satuan',
             dataIndex: 'uom_one',
-            minWidth: 100
+            width: 80
         },
         {
             header: 'Stock #2',
             xtype: 'numbercolumn',
             align: 'right',
             dataIndex: 'stock_two',
-            minWidth: 120,
+            width: 110,
             align: 'right'
         },
         {
             header: 'Satuan #2',
             dataIndex: 'uom_two',
-            minWidth: 100
+            width: 90
         },
         {
             header: 'Stock #3',
             xtype: 'numbercolumn',
             align: 'right',
             dataIndex: 'stock_tre',
-            minWidth: 120,
+            width: 110,
             align: 'right'
         },
         {
             header: 'Satuan #3',
             dataIndex: 'uom_tre',
-            minWidth: 100
+            width: 90
         },
         // { header: 'Beli', dataIndex: 'cost', minWidth: 130, xtype: 'numbercolumn', align: 'right' },
-        { header: 'HPP', dataIndex: 'hpp', minWidth: 130, xtype: 'numbercolumn', align: 'right' }
+        { header: 'HPP', dataIndex: 'hpp', width: 100, xtype: 'numbercolumn', align: 'right' }
     ],
     dockedItems: [
         // {
@@ -287,11 +287,30 @@ Ext.define(dir_sys + 'sales.GridItemSalesPopupOrder', {
         }
     ],
     listeners: {
+        refresh : function (dataview) {
+            // console.log(dataview);
+            // Ext.each(dataview.panel.columns, function (column) {
+            //  if (column.autoSizeColumn === true)
+            //   column.autoSize();
+            //   console.log(column);
+            // });
+        },
         render: {
             scope: this,
             fn: function(grid) {
-                //                storeGridItemSalesPopupOrder.load();
-
+                // var grd = Ext.getCmp('GridItemSalesPopupOrderID');
+                // grd.getView().autoSizeColumn(grd.columns[0]);
+                // grid.columns[0].autoSize();
+                // grid.autoSizeColumn(grid.columns[1]);
+                // grid.getView().autoSizeColumn(2);
+                // console.log(grid);
+                // Ext.each(grid.columns, function (column) {
+                // //     // console.log(column);
+                //     if (column.autoSizeColumn === true)
+                //     //  column.autoSize();
+                //     dataview.panel.columns[0].autoSize();
+                //      console.log(column);
+                //    });
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
