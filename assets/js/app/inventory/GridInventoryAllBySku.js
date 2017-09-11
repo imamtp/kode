@@ -167,12 +167,12 @@ var storeGridInventoryAllBySku = Ext.create('Ext.data.Store', {
         actionMethods: 'POST',
         reader: {
             root: 'rows',
-            totalProperty: 'numrow'
+            totalProperty: 'results'
         },
         //simpleSortMode: true
     },
     sorters: [{
-        property: 'sku_no',
+        property: 'nameinventory',
         direction: 'ASC'
     }]
 });

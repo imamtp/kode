@@ -1141,6 +1141,8 @@ class inventory extends MY_Controller {
         $start = $this->input->post('start');
         $limit = $this->input->post('limit');
 
+        $limit_offset = "LIMIT $limit OFFSET $start";
+
         $search_txt = null;
         if($query!=''){
             $search_txt =" AND (a.nameinventory like '%".strtoupper($query)."%' OR a.nameinventory like '%".ucwords(strtolower($query))."%' 
@@ -1200,11 +1202,16 @@ class inventory extends MY_Controller {
                 and a.idunit = $idunit
                 and a.idinventory_parent is null
                 $wer_type
-                $search_txt
+                $search_txt                
                 order by nameinventory
                 ";
-        $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+        
+        $qtotal = $this->db->query($sql);
+
+        $q = $this->db->query($sql.' '.$limit_offset);
+                    // echo $sql.' '.$limit_offset;
+        
+        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
     }
 
     function get_detail_item(){
