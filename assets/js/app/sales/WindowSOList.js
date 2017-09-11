@@ -1,4 +1,4 @@
-var WindowEntryPOReturn = Ext.create(dir_sys + 'sales.WindowEntryPOReturn');
+// var WindowEntryPOReturn = Ext.create(dir_sys + 'sales.WindowEntryPOReturn');
 // var ContainerPurchaseReturn = Ext.create(dir_sys+'sales.ContainerPurchaseReturn');
 
 Ext.define('GridSalesOrderListModel', {
