@@ -152,7 +152,7 @@
                   </tr>
                 <?php
                 }
-                if($data['totalowed']!=0)
+                if($data['totalowed']=='9x0')
                 {
                   ?>
                   <tr>
@@ -200,7 +200,7 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <div class="">
-            <div class="panel-heading">
+            <div class="panel-heading" style=" text-decoration: underline;">
             Payment Term: <?=$data['payment_term']?>
             </div>
           </div>
@@ -218,7 +218,7 @@
               <p>
               Pembayaran  dengan Cek/Giro a/n
               PT Alfa Prima Sentosa <br>
-              Pembayaran dianggap lunas setelah Clossing
+              Mohon ditandatangani dan difax kembali
               </p>
             </div>
           </div>
@@ -229,7 +229,7 @@
              <p align="right">
              <!-- <center> -->
              <br><br><br>
-               (........................................)
+               Ivan Susanto
                <!-- </center> -->
               </p>
             </div>
