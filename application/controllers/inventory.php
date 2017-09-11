@@ -1138,6 +1138,8 @@ class inventory extends MY_Controller {
         $inventory_type = $this->input->post('inventory_type');
         $idinventorycat = $this->input->post('idinventorycat');
         $query = $this->input->post('query');
+        $start = $this->input->post('start');
+        $limit = $this->input->post('limit');
 
         $search_txt = null;
         if($query!=''){
@@ -1199,7 +1201,7 @@ class inventory extends MY_Controller {
                 and a.idinventory_parent is null
                 $wer_type
                 $search_txt
-                order by idinventory
+                order by nameinventory
                 ";
         $q = $this->db->query($sql);
         echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
