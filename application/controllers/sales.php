@@ -1149,7 +1149,7 @@ class sales extends MY_Controller {
         $idinventory = $this->input->get('idinventory');
         $idsalesitem = $this->input->get('idsalesitem');
         
-        $sql = "select b.invno, c.nameinventory, a.idinventory, stock, d.size from warehouse_stock a
+        $sql = "select b.invno, c.nameinventory, a.idinventory, stock, d.size, b.ratio_two from warehouse_stock a
                 join inventory b on b.idinventory = a.idinventory --child
                 join inventory c on c.idinventory = b.idinventory_parent --parent
                 join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
@@ -1169,12 +1169,13 @@ class sales extends MY_Controller {
 
         if($qcek->num_rows()>0){
             $r = $qcek->row();
-            if($qty_kirim>$r->stock){
+            $stock = $r->stock / $r->ratio_two; //stock dalam satuan ke dua
+            if($qty_kirim>$stock){
                 $success = false;
                 $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
             }
 
-            if($r->stock<=0 || $r->stock==null){
+            if($stock<=0 || $stock==null){
                 $success = false;
                 $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
             }
