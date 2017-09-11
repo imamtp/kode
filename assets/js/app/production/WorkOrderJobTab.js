@@ -97,7 +97,49 @@ Ext.define('GridItemJobWOPopup', {
     alias: 'widget.GridItemJobWOPopup',
     store: storeGridItemJobWOPopup,
     loadMask: true,
-    columns: [
+    columns: [{
+            text: 'Pilih',
+            width: 55,
+            xtype: 'actioncolumn',
+            tooltip: 'Pilih ini',
+            align: 'center',
+            icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
+            handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
+                Ext.Ajax.request({
+                    url: SITE_URL + 'production/save_fg',
+                    method: 'POST',
+                    params: {
+                        job_order_id: job_order_id,
+                        token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
+                        idinventory: selectedRecord.get('idinventory'),
+                        invno: selectedRecord.get('invno'),
+                        nameinventory: selectedRecord.get('nameinventory'),
+                        measurement_id: selectedRecord.get('measurement_id_sell'),
+                        measurement_id_size: selectedRecord.get('measurement_id_one'),
+                        price: selectedRecord.get('cost'),
+                        idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
+                        qty: 1,
+                        size: 1,
+                        total: selectedRecord.get('cost')
+                    },
+                    success: function(form, action) {
+                        var d = Ext.decode(form.responseText);
+                        storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                'extraparams': 'a.job_order_id:' + job_order_id
+                            };
+                        });
+                        storeGridItemJobWO.load();
+                    },
+                    failure: function(form, action) {
+                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    }
+                })
+                updateGridJobWO();
+                Ext.getCmp('wItemJobWOPopupPopup').hide();
+            }
+        },
         { header: 'idinventory', dataIndex: 'idinventory', hidden: true },
         { header: 'idunit', dataIndex: 'idunit', hidden: true },
         { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
@@ -141,120 +183,27 @@ Ext.define('GridItemJobWOPopup', {
             minWidth: 100
         },
     ],
-    dockedItems: [
-        // {
-        //     xtype: 'toolbar',
-        //     dock: 'top',
-        //     items: [                
-        //             {
-        //                 xtype:'comboxinventorycat'
-        //             },
-        //             {
-        //                 xtype:'comboxunit',
-        //                 valueField:'idunit',
-        //                 // id:'cbUnitInvAll',
-        //                 listeners: {
-        //                     'change': function(field, newValue, oldValue) {
-        //                         storeGridInventoryAll.load({
-        //                             params: {
-        //                               'extraparams': 'a.idunit:'+Ext.getCmp('cbUnitInvAll').getValue()
-        //                             }
-        //                         });
-        //                     }
-        //                 }
-        //             },
-        //             {
-        //                 xtype:'comboxbrand'
-        //             }
-        //     ]
-        // },
-        {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [{
-                    itemId: 'chooseItemJobWOPopup',
-                    text: 'Pilih Barang',
-                    iconCls: 'add-icon',
-                    handler: function() {
-                        // var grid = Ext.ComponentQuery.query('GridItemJobWOPopup')[0];
-                        var grid = Ext.getCmp('GridItemJobWOPopup');
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0) {
-                            Ext.Msg.alert('Failure', 'Pilih Barang terlebih dahulu!');
-                        } else {
-                            var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
-                            Ext.Ajax.request({
-                                url: SITE_URL + 'production/save_fg',
-                                method: 'POST',
-                                params: {
-                                    job_order_id: job_order_id,
-                                    token_tmp: Ext.getCmp('token_tmp_woform').getValue(),
-                                    idinventory: selectedRecord.get('idinventory'),
-                                    invno: selectedRecord.get('invno'),
-                                    nameinventory: selectedRecord.get('nameinventory'),
-                                    measurement_id: selectedRecord.get('measurement_id_sell'),
-                                    measurement_id_size: selectedRecord.get('measurement_id_one'),
-                                    price: selectedRecord.get('cost'),
-                                    idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
-                                    qty: 1,
-                                    size: 1,
-                                    total: selectedRecord.get('cost')
-                                },
-                                success: function(form, action) {
-                                    var d = Ext.decode(form.responseText);
+    dockedItems: [{
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [
+            '->',
+            '-',
+            '->',
+            'Pencarian: ', ' ',
+            {
+                xtype: 'searchGridItemJobWOPopup',
+                text: 'Left Button'
+            }
 
-                                    storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
-                                        operation.params = {
-                                            'extraparams': 'a.job_order_id:' + job_order_id
-                                        };
-                                    });
-
-                                    storeGridItemJobWO.load();
-                                },
-                                failure: function(form, action) {
-                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                }
-                            });
-
-                            //  var recWO = new GridItemJobWOModel({
-                            //     idinventory: selectedRecord.get('idinventory'),
-                            //     invno: selectedRecord.get('invno'),
-                            //     nameinventory: selectedRecord.get('nameinventory'),
-                            //     price: selectedRecord.get('cost'),
-                            //     idunit:idunit,
-                            //     qty: 1,
-                            //     size: 1,
-                            //     total: selectedRecord.get('cost')
-                            // });
-
-                            // var gridWO = Ext.getCmp('WorkOrderJobTab');
-                            // gridWO.getStore().insert(0, recWO);
-                            updateGridJobWO();
-                            Ext.getCmp('wItemJobWOPopupPopup').hide();
-
-
-                        }
-
-
-                    }
-                }, '-',
-                '->',
-                'Pencarian: ', ' ',
-                {
-                    xtype: 'searchGridItemJobWOPopup',
-                    text: 'Left Button'
-                }
-
-            ]
-        }, {
-            xtype: 'pagingtoolbar',
-            store: storeGridItemJobWOPopup, // same store GridPanel is using
-            dock: 'bottom',
-            displayInfo: true
-                // pageSize:20
-        }
-    ],
+        ]
+    }, {
+        xtype: 'pagingtoolbar',
+        store: storeGridItemJobWOPopup, // same store GridPanel is using
+        dock: 'bottom',
+        displayInfo: true
+            // pageSize:20
+    }],
     listeners: {
         render: {
             scope: this,
