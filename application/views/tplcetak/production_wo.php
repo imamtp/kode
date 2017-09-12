@@ -42,7 +42,7 @@
                   <th>QTY</th>                 
                   <th>SATUAN</th>
                   <th>UKURAN</th>
-                  <th>SATUAN/th>
+                  <th>SATUAN</th>
                   <th>BHN BAKU</th>
                   <th>KD BRG</th>
                   <th>QTY</th>
@@ -61,10 +61,10 @@
                   <td><?=$value['short_desc']?></td>  
                   <td><?=$value['size']?></td>  
                   <td><?=$value['size_measurement']?></td>  
-                  <td><?=$value['rm_list'][0]['invno']?></td>  
-                  <td><?=$value['rm_list'][0]['nameinventory']?></td>
-                  <td><?=$value['rm_list'][0]['qty']?></td>  
-                  <td><?=$value['rm_list'][0]['measurement_name']?></td>
+                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['invno']; ?></td>  
+                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['nameinventory'];?></td>
+                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['qty'];?></td>  
+                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['measurement_name'];?></td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                 </tr>
