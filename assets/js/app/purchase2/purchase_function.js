@@ -171,6 +171,8 @@ var wPurchaseOrderGrid = Ext.create('widget.window', {
     listeners: {
         'show': function() {
             // storePurchaseOrderGrid.load();
+            Ext.getCmp('cb_purchase_order_status').getStore().load();
+            Ext.getCmp('cb_purchase_order_status').getStore().filter([function(item) { return [1, 2, 5].includes(item.get('id')) }]);
         }
     }
 });
