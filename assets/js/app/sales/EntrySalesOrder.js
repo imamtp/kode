@@ -512,16 +512,12 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                         {
                             xtype: 'textfield',
                             align: 'right',
+                            name: 'totalPajak',
+                            readOnly: true,
                             labelWidth: 150,
-                            id: 'freightSalesOrder',
-                            fieldLabel: 'Biaya Angkut',
-                            fieldStyle: 'text-align: right;',
-                            listeners: {
-                                'blur': function() {
-                                    this.setRawValue(renderNomor2(this.getValue()));
-                                    updateGridSalesOrder();
-                                }
-                            }
+                            id: 'totalPajakSalesOrder',
+                            fieldLabel: 'Pajak',
+                            fieldStyle: 'text-align: right;'
                         }
                     ]
                 },
@@ -753,12 +749,16 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                         {
                             xtype: 'textfield',
                             align: 'right',
-                            name: 'totalPajak',
-                            readOnly: true,
                             labelWidth: 150,
-                            id: 'totalPajakSalesOrder',
-                            fieldLabel: 'Pajak',
-                            fieldStyle: 'text-align: right;'
+                            id: 'freightSalesOrder',
+                            fieldLabel: 'Biaya Kirim',
+                            fieldStyle: 'text-align: right;',
+                            listeners: {
+                                'blur': function() {
+                                    this.setRawValue(renderNomor2(this.getValue()));
+                                    updateGridSalesOrder();
+                                }
+                            }
                         }
                     ]
                 },
@@ -1002,8 +1002,8 @@ function updateGridSalesOrder(tipe) {
     });
 
     dppSalesOrder = isIncludeTax ? (subtotalSalesOrder + total_diskon) / 1.1 : subtotalSalesOrder;
-    totalPajak += (dppSalesOrder + angkutSalesOrder) * (taxrate * 1 / 100);
-    totalSalesOrder = dppSalesOrder + totalPajak;
+    totalPajak += (dppSalesOrder) * (taxrate * 1 / 100);
+    totalSalesOrder = dppSalesOrder + totalPajak + angkutSalesOrder;
 
     // var dppPurchaseOrder = (subtotalSalesOrder + total_diskon) / 1.1;
     // totalPajak = dppPurchaseOrder * (taxrate * 1 / 100);
@@ -1057,4 +1057,3 @@ function validasiSalesOrder() {
         return true;
     }
 }
-
