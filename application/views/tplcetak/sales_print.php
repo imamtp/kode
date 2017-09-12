@@ -83,7 +83,8 @@
                   <th>SATUAN</th>
                   <th>UKURAN</th>
                   <th>SATUAN</th>
-                  <th>DISKON(%)</th>
+                  <th>QUANTUM</th>
+                  <!-- <th>DISKON(%)</th> -->
                   <th>Total</th>
                 </tr>
               </thead>
@@ -98,7 +99,8 @@
                   <td><?=$value['short_desc']?></td>
                   <td align="right"><?=$value['size']?></td>
                   <td><?=$value['size_measurement']?></td>
-                  <td align="right"><?=number_format($value['disc'])?></td>
+                  <!-- <td align="right"><?=number_format($value['disc'])?></td> -->
+                  <td align="right"><?php echo $value['qty']*$value['size']; ?></td>
                   <td align="right"><?=number_format($value['total'])?></td>
                 </tr>
               <?php endforeach; ?>
