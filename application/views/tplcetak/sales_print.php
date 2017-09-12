@@ -109,69 +109,43 @@
           <?php endif; ?>
 
           <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
-              <tr>
-                  <td></td>
-                    <td> </td>
-                  <td align="right"><b>Subtotal</b></td>
-                  <td align="right" width="200"><?=$data['detailtotal']?></td>
-                </tr>
-                  <tr>
-                    <td></td>
-                      <td> </td>
-                    <td align="right"><b>Biaya Angkut (+)</b></td>
-                    <td align="right"><?=number_format($data['freigthcost'])?></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                      <td> </td>
-                    <td align="right"><b>Dasar Pengenaan Pajak</b></td>
-                    <td align="right"><?=number_format($data['total_dpp'])?></td>
-                  </tr>
-                    <tr>
-                    <td></td>
-                      <td> </td>
-                    <td align="right"><b>Pajak (+)</b></td>
-                    <td align="right"><?=number_format($data['totaltax'])?></td>
-                  </tr>
-            
-                  <tr>
-                  <td></td>
-                    <td> </td>
-                  <td align="right"><b>Total Setelah Pajak</b></td>
-                  <td align="right" width="200"><?=number_format($data['total'])?></td>
-                </tr>
-
-                <?php 
-
-                if($data['dp']!=0)
-                {
-                  ?>
-                  <tr>
-                    <td></td>
-                      <td> </td>
-                    <td align="right"><b>Uang Muka/Terbayar (-)</b></td>
-                    <td align="right"><?=number_format($data['dp'])?></td>
-                  </tr>
-                <?php
-                }
-                if($data['totalowed']=='9x0')
-                {
-                  ?>
-                  <tr>
-                    <td></td>
-                      <td> </td>
-                    <td align="right"><b>Saldo Terhutang</b></td>
-                    <td align="right"><?=number_format($data['totalowed'])?></td>
-                  </tr>
-                <?php
-                }
-                ?>
-                <tr>
-                    <td></td>
-                      <td> </td>
-                    <td align="right"><b>Terbilang</b></td>
-                    <td align="right"><?=$data['terbilang']?></td>
-                  </tr>
+          <tr>
+              <td colspan = "3" align="right"><b>Subtotal :</b></td>
+              <td colspan = "2" align="right" width="250"><?=$data['detailtotal']?></td>
+            </tr>
+            <tr>
+              <td colspan = "3" align="right"><b>DPP :</b></td>
+              <td align="right" width="130"><?=number_format($data['total_dpp'],2)?></td>
+              <td width="120"></td>
+            </tr>
+            <tr>
+              <td colspan = "3" align="right"><b>PPN :</b></td>
+              <td align="right" ><?=number_format($data['totaltax'],2)?></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan = "3" align="right"><b>Biaya Angkut :</b></td>
+              <td colspan = "2" align="right"><?=number_format($data['freigthcost'],2)?></td>
+            </tr>
+            <tr>
+              <td colspan = "3" align="right"><b>Grand Total :</b></td>
+              <td colspan = "2" align="right"><?=number_format($data['total'],2)?></td>
+            </tr>
+            <?php if($data['totalowed']=='9x0'): ?>
+            <tr>
+              <td colspan = "3" align="right"><b>Saldo Terhutang :</b></td>
+              <td colspan = "2" align="right"><?=number_format($data['totalowed'],2)?></td>
+            </tr>
+            <?php endif; ?>
+            <tr>
+              <td colspan = "2" width="590"></td>
+              <td align="left"><b>Terbilang :</b></td>
+              <td colspan = "2" align="left"></td>
+            </tr>
+            <tr>
+              <td colspan = "2" width="590"></td>
+              <td colspan = "3 "align="left"><?=$data['terbilang']?></td>
+            </tr>
           </table>
          <!-- <tr>
            <td width="22%"><b> Notes:</b></td>
