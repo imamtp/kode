@@ -144,6 +144,12 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoiceOverdueGrid', {
             xtype: 'numbercolumn',
             align: 'right'
         }, {
+            header: 'Down Payment',
+            dataIndex: 'downpayment',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
             header: 'Total Paid',
             dataIndex: 'paidtoday',
             minWidth: 150,

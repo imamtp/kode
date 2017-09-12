@@ -61,6 +61,7 @@ class m_goodsreceipt extends CI_Model {
                 b.nopurchase as no_po,
                 d.name as idpurchasestatusname,
                 a.received_by,
+                a.downpayment,
                 b.idtax,
                 b.include_tax,
                 g.rate as rate_tax,

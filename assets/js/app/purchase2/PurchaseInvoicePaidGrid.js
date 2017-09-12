@@ -1,7 +1,7 @@
 Ext.define('PurchaseInvoicePaidGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'goods_receipt_id', 'idpurchase', 'idunit', 'no_goods_receipt', 'no_po', 'po_date', 'no_invoice', 'invoice_date', 'duedate', 'paymentterm', 'term', 'duedate', 'dpp', 'tax', 'freightcost', 'totalamount', 'paidtoday', 'balance', 'namesupplier', 'supplier_direct_no', 'status_inv', 'status_inv_name'
+        'goods_receipt_id', 'idpurchase', 'idunit', 'no_goods_receipt', 'no_po', 'po_date', 'no_invoice', 'invoice_date', 'duedate', 'paymentterm', 'term', 'duedate', 'dpp', 'tax', 'freightcost', 'totalamount', 'paidtoday', 'balance', 'namesupplier', 'supplier_direct_no', 'status_inv', 'status_inv_name', 'downpayment'
         // 'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'invoice_status', 'balance', 'noinvoice', 'paidtoday', 'idpurchase_req', 'nopurchase_req', 'date_req', 'nofpsup'
     ],
     idProperty: 'id'
@@ -140,6 +140,12 @@ Ext.define(dir_sys + 'purchase2.PurchaseInvoicePaidGrid', {
         }, {
             header: 'Total',
             dataIndex: 'totalamount',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        }, {
+            header: 'Down Payment',
+            dataIndex: 'downpayment',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'

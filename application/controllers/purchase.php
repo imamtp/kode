@@ -948,7 +948,7 @@ class purchase extends MY_Controller {
                 'userin' => $this->session->userdata('userid'),
                 'datein' => date('Y-m-d H:m:s'),
             );
-            
+               
         $this->db->insert('purchase_payment',$data);
 
         $balance = $balance_purchase-$amount;
@@ -960,6 +960,15 @@ class purchase extends MY_Controller {
             'status_inv' => $invoice_status,
             'balance' => $selisih
         );
+
+        //cek apakah sudah melakukan pembayaran atau belum (paidtoday is 0 or not)
+        //jika paidtoday = 0, cek apakah amount < balance_purchase
+        //jika ya maka downpayment = amount dan paidtoday += amount
+        //jika tidak maka downpayment = 0 dan paidtoday += amount 
+        $qcek = $this->db->get_where('goods_receipt', array('goods_receipt_id'=>$goods_receipt_id));
+        $rcek = $qcek->row();
+        if($rcek->paidtoday == 0 && $amount < $balance_purchase )
+            $update['downpayment'] = $amount;
 
         $this->db->where('goods_receipt_id',$goods_receipt_id);
         $this->db->update('goods_receipt',$update);
