@@ -403,25 +403,6 @@ Ext.define(dir_sys + 'money.EntrySpendMoney', {
     }
 });
 
-function updateGridSpend()
-{    
-    var subtotalSpend = 0 * 1;
-    var totalPajak = 0 * 1;
-    var totalSpend = 0 * 1;
-
-    Ext.each(SpendGridStore.data.items, function(obj, i) {
-        var pajak = (obj.data.amount*1 / 100) * obj.data.ratetax;
-        totalPajak += pajak;
-        subtotalSpend += obj.data.amount*1;
-    });
-
-    totalSpend = subtotalSpend*1-totalPajak*1;
-
-    Ext.getCmp('subtotalSpend').setValue(subtotalSpend.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('taxSpend').setValue(totalPajak.toLocaleString('null', {minimumFractionDigits: 2}));
-    Ext.getCmp('totalSpend').setValue(totalSpend.toLocaleString('null', {minimumFractionDigits: 2}));
-
-}
 
 function validasiSpend()
 {

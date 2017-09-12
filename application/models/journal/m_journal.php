@@ -759,7 +759,7 @@ class m_journal extends CI_Model {
         return $qseq->id;
     }
 
-    function saveReceiveMoney($idunit, $accdebet, $dataGrid, $memo, $noref, $date, $amount) {
+    function saveReceiveMoney($idunit, $accdebet, $dataGrid, $memo, $noref, $date, $amount,$taxReceive=0) {
         $amount = intval($amount);
         $tgl = explode("-", $date);
 
@@ -839,6 +839,24 @@ class m_journal extends CI_Model {
 //            $this->db->insert('journalitem', $ditem);
 //            $this->m_account->saveNewBalance($value->idaccount, $newBalanceD, $idunit);
         }
+
+        if($taxReceive!=0){
+            //pajak
+            $idaccount = $this->m_data->getIdAccount(34, $idunit);
+            $curBalanceK = $this->m_account->getCurrBalance($idaccount, $idunit);
+            $newBalanceK = $curBalanceK + $taxReceive;
+            $ditem = array(
+                'idjournal' => $qseq->id,
+                'idaccount' => $idaccount,
+                'debit' => 0,
+                'credit' => $taxReceive,
+                'lastbalance' => $curBalanceK,
+                'currbalance' => $newBalanceK
+            );
+            $this->db->insert('journalitem', $ditem);
+            $this->m_account->saveNewBalance($idaccount, $newBalanceK, $idunit);
+            $this->m_account->saveAccountLog($idunit,$idaccount,$taxReceive,0,$date,$qseq->id);
+        }
       
 
         return $qseq->id;
@@ -912,7 +930,7 @@ class m_journal extends CI_Model {
         return $qseq->id;
     }
 
-    function saveSpendMoney($idunit, $idaccountSpend, $dataGrid, $memo, $noref, $date, $subtotalSpend) {
+    function saveSpendMoney($idunit, $idaccountSpend, $dataGrid, $memo, $noref, $date, $subtotalSpend,$taxSpend=0) {
         $amount = intval($subtotalSpend);
         $tgl = explode("-", $date);
 
@@ -976,6 +994,25 @@ class m_journal extends CI_Model {
 
             $this->m_account->saveAccountLog($idunit,$value->idaccount,0,$value->amount,$date,$qseq->id);
         }
+
+        if($taxSpend!=0){
+            //pajak
+            $idaccount = $this->m_data->getIdAccount(35, $idunit);
+            $curBalanceK = $this->m_account->getCurrBalance($idaccount, $idunit);
+            $newBalanceK = $curBalanceK + $taxSpend;
+            $ditem = array(
+                'idjournal' => $qseq->id,
+                'idaccount' => $idaccount,
+                'debit' => $taxSpend,
+                'credit' => 0,
+                'lastbalance' => $curBalanceK,
+                'currbalance' => $newBalanceK
+            );
+            $this->db->insert('journalitem', $ditem);
+            $this->m_account->saveNewBalance($idaccount, $newBalanceK, $idunit);
+            $this->m_account->saveAccountLog($idunit,$idaccount,0,$taxSpend,$date,$qseq->id);
+        }
+      
 
         return $qseq->id;
     }
