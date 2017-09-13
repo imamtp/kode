@@ -81,7 +81,7 @@
               <table border="0" style="width:99%;">
                 <tr><td width="100" >NO SKP (SO):</td><td style="text-align:right; font-size:13pt"><?=$data['header']['no_sales_order']?></td></tr>
                 <tr><td>Customer:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['namecustomer']?></td></tr>
-                <tr><td>Aalamt:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['address_customer']?></td></tr>
+                <tr><td>Alamat:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['address_customer']?></td></tr>
               </table>
             </div>
           </div>
