@@ -451,8 +451,8 @@ class sales extends MY_Controller {
 
         $this->db->where('idsales',$idsales);
         $this->db->update('sales',array(
-            'freight'=>str_replace('.', '', $this->input->post('biaya_angkut')),
-            'no_faktur'=>$no_faktur,
+            'freight'=>str_replace('.', '', $this->input->post('biaya_angkut')?:0),
+            'no_faktur'=>$no_faktur?:null,
             ));
 
         //update qty kirim
