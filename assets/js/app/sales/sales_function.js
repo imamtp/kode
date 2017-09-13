@@ -328,11 +328,11 @@ function loadDataFormInvoice(idsales) {
         },
         success: function(form, action) {
             var d = Ext.decode(form.responseText);
-            // console.log(d)
+            console.log(d.data)
 
             var subtotal = d.data.subtotal * 1;
             var disc = d.data.disc * 1;
-            var dpp = data.total_dpp;
+            var dpp = d.data.total_dpp * 1;
             var freightcost = d.data.freight * 1;
             var tax = d.data.tax * 1;
             var totalamount = d.data.totalamount * 1;

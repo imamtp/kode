@@ -128,6 +128,11 @@ class money extends MY_Controller {
         $idunitReceive = $this->input->post('idunitReceive');
         $dataGrid = json_decode($this->input->post('dataGrid'));
 
+        if($taxReceive!=0 && $taxReceive!='' && $taxReceive!='0.00'){
+            $this->m_data->getIdAccount(34, $idunitReceive);
+        }
+        
+
         $seq = $this->db->query("select nextval('seq_receivemoney') as id")->row();
 
          $data = array(
@@ -154,105 +159,81 @@ class money extends MY_Controller {
         $this->db->insert('receivemoney', $data);
 
         //cek dan kalkulasi piutang jika ada
-        $tanggalReceiveArr = explode('-', $tanggalReceive);
+        // $tanggalReceiveArr = explode('-', $tanggalReceive);
 
-        $i = 0;
+        // $i = 0;
 
-        $arrPembayaran = array();
-        $jumlahPenguranganPiutang=0;
-        foreach ($dataGrid as $key => $value) {
-            $dataitem = array(
-                'idaccount' => $value->idaccount,
-                'idreceivemoney' => $seq->id,
-                'amount' => isset($value->denda) ? $value->amount+$value->denda : $value->amount,
-                'denda' => isset($value->denda) ? $value->denda : 0,
-                'ratetax' => isset($value->ratetax) ? $value->ratetax : 0,
-            );
-            $this->db->insert('receivemoneyitem', $dataitem);
+        // $arrPembayaran = array();
+        // $jumlahPenguranganPiutang=0;
+        // foreach ($dataGrid as $key => $value) {
+        //     $dataitem = array(
+        //         'idaccount' => $value->idaccount,
+        //         'idreceivemoney' => $seq->id,
+        //         'amount' => isset($value->denda) ? $value->amount+$value->denda : $value->amount,
+        //         'denda' => isset($value->denda) ? $value->denda : 0,
+        //         'ratetax' => isset($value->ratetax) ? $value->ratetax : 0,
+        //     );
+        //     $this->db->insert('receivemoneyitem', $dataitem);
 
-            //cek link piutang. kalo ada kurangi piutang sesuai dengan akun pembayaran/pendapatan
-            $sql = "SELECT a.idregistrasipiutang,a.idaccount,a.bulan,a.tahun,a.idunit,a.sisapiutang,a.jumlah,a.idaccountlink
-                    from registrasipiutang a
-                    where a.idunit=$idunitReceive and a.idaccountlink=$value->idaccount and tglpiutang<='$tanggalReceive' and autodecrease=1";
-                    // echo $sql;
-            $qlp = $this->db->query($sql);
-            // $qlp = $this->db->get_where('registrasipiutang',array('idaccountlink'=>$value->idaccount,'idunit'=>$idunitReceive,'tahun'=>$tanggalReceiveArr[0]));
-            if($qlp->num_rows()>0)
-            {
-                // echo '<br>1:'.$this->db->last_query();
-                $r = $qlp->row();
+        //     //cek link piutang. kalo ada kurangi piutang sesuai dengan akun pembayaran/pendapatan
+        //     $sql = "SELECT a.idregistrasipiutang,a.idaccount,a.bulan,a.tahun,a.idunit,a.sisapiutang,a.jumlah,a.idaccountlink
+        //             from registrasipiutang a
+        //             where a.idunit=$idunitReceive and a.idaccountlink=$value->idaccount and tglpiutang<='$tanggalReceive' and autodecrease=1";
+        //             // echo $sql;
+        //     $qlp = $this->db->query($sql);
+            
+        //     if($qlp->num_rows()>0)
+        //     {
+        //         $r = $qlp->row();
 
-                if($r->sisapiutang>0)
-                {
-                    $idaccountpiutang = $r->idaccount;
+        //         if($r->sisapiutang>0)
+        //         {
+        //             $idaccountpiutang = $r->idaccount;
 
-                // $qrp = $this->db->get_where('registrasipiutang',array('idaccount'=>$idaccountpiutang,'idunit'=>$idunitReceive,'tahun'=>$tanggalReceiveArr[0]));
-                // // echo '<br>2:'.$this->db->last_query();
-                // if($qrp->num_rows()>0)
-                // {
+        //             $sisapiutang = $r->sisapiutang;
+        //             $sisapiutangBaru = $sisapiutang-$value->amount;
+        //             $this->db->where('idregistrasipiutang',$r->idregistrasipiutang);
+        //             $this->db->update('registrasipiutang',array('sisapiutang'=>$sisapiutangBaru));
 
-                    // $rp = $qrp->row();
-                    $sisapiutang = $r->sisapiutang;
-                    $sisapiutangBaru = $sisapiutang-$value->amount;
+        //             $dpiutanghistory = array(
+        //                     "idregistrasipiutang" => $r->idregistrasipiutang,
+        //                     "month" => $tglArr[1],
+        //                     "year" => $tglArr[0],
+        //                     "tanggal" => $tanggalReceive,
+        //                     "diterima" => $value->amount,
+        //                     "sisa" =>$sisapiutangBaru,
+        //                     "idreceivemoney"=>$seq->id,
+        //                     // "idjournal" => $idjournal,
+        //                     // "source" =>,
+        //                     "userin" => $this->session->userdata('username'),
+        //                     "datein" => date('Y-m-d H:m:s')
+        //             );
+        //             $this->db->insert('piutanghistory',$dpiutanghistory);
 
-                    // $this->load->model('account/m_regpiutang');
-                    // $this->m_regpiutang->saveHistory($r->idregistrasipiutang,$tanggalReceive,$value->amount,$sisapiutangBaru,null);
+        //            $jumlahPenguranganPiutang+=$value->amount;
+        //            $arrPembayaran[$i] = array(
+        //                 'idaccount'=>$value->idaccount,
+        //                 'amount'=>$value->amount
+        //             );
+        //            $i++;
+        //        }
+        //     }
+        // }
 
-                    // $this->db->where(array('idaccount'=>$idaccountpiutang,'idunit'=>$idunitReceive));
-                    $this->db->where('idregistrasipiutang',$r->idregistrasipiutang);
-                    $this->db->update('registrasipiutang',array('sisapiutang'=>$sisapiutangBaru));
-
-                    $dpiutanghistory = array(
-                            "idregistrasipiutang" => $r->idregistrasipiutang,
-                            "month" => $tglArr[1],
-                            "year" => $tglArr[0],
-                            "tanggal" => $tanggalReceive,
-                            "diterima" => $value->amount,
-                            "sisa" =>$sisapiutangBaru,
-                            "idreceivemoney"=>$seq->id,
-                            // "idjournal" => $idjournal,
-                            // "source" =>,
-                            "userin" => $this->session->userdata('username'),
-                            "datein" => date('Y-m-d H:m:s')
-                    );
-                    $this->db->insert('piutanghistory',$dpiutanghistory);
-
-                    //nilai saldo piutang di account juga diupdate * dipindahin di saveReceiveMoneyPengurangPiutang
-                   //  $qacc = $this->db->get_where('account',array('idaccount'=>$idaccountpiutang,'idunit'=>$idunitReceive));
-                   //  if($qacc->num_rows()>0)
-                   //  {
-                   //      $racc = $qacc->row();
-                   //      $saldoBaru = $racc->balance-$value->amount;
-                   //  } 
-
-                   // $this->db->where(array('idaccount'=>$idaccountpiutang,'idunit'=>$idunitReceive));
-                   // $this->db->update('account',array('balance'=>$saldoBaru));
-                // }
-
-                   $jumlahPenguranganPiutang+=$value->amount;
-                   $arrPembayaran[$i] = array(
-                        'idaccount'=>$value->idaccount,
-                        'amount'=>$value->amount
-                    );
-                   $i++;
-               }
-            }
-        }
-
-        if($jumlahPenguranganPiutang!=0)
-        {
+        // if($jumlahPenguranganPiutang!=0)
+        // {
             // echo 'jumlahPenguranganPiutang:';
             //buat jurnal pengurangan piutang
-            $idjournal = $this->m_journal->saveReceiveMoneyPengurangPiutang($idunitReceive,$idaccountpiutang,$arrPembayaran,$tanggalReceive,$memoReceive,$idaccountReceive);
-        } else {
+            // $idjournal = $this->m_journal->saveReceiveMoneyPengurangPiutang($idunitReceive,$idaccountpiutang,$arrPembayaran,$tanggalReceive,$memoReceive,$idaccountReceive);
+        // } else {
             //tidak ada piutang
         /*
          * buat jurnal 
          * akun penerimaan kas (debet)   
          */
         // echo 'saveReceiveMoney:';
-                $idjournal = $this->m_journal->saveReceiveMoney($idunitReceive, $idaccountReceive, $dataGrid, $memoReceive, $notransReceive, $tanggalReceive, $totalReceive);
-        }
+                $idjournal = $this->m_journal->saveReceiveMoney($idunitReceive, $idaccountReceive, $dataGrid, $memoReceive, $notransReceive, $tanggalReceive, $totalReceive,$taxReceive);
+        // }
 
         if($tipe=='siswa')
         {
@@ -295,17 +276,20 @@ class money extends MY_Controller {
         $notransSpend = $this->input->post('notransSpend');
         $SpendFrom = $this->input->post('SpendFromSpend');
         $tanggalSpend = str_replace("T00:00:00", "", $this->input->post('tanggalSpend'));
-        $memoSpend = $this->input->post('memoSpend');
-        $totalSpend = clearnumberic($this->input->post('totalSpend'));
+        $memoSpend = $this->input->post('memoSpend');        
         $taxSpend = clearnumberic($this->input->post('taxSpend'));
+        $totalSpend = clearnumberic($this->input->post('totalSpend'));
         $subtotalSpend = clearnumberic($this->input->post('subtotalSpend'));
         $idunitSpend = $this->input->post('idunitSpend');
         $dataGrid = json_decode($this->input->post('dataGrid'));
 
+        if($taxSpend!=0 && $taxSpend!='' && $taxSpend!='0.00'){
+            $this->m_data->getIdAccount(35, $idunitSpend);
+        }
 
         $seq = $this->db->query("select nextval('seq_spendmoney') as id")->row();
 
-        $idjournal = $this->m_journal->saveSpendMoney($idunitSpend, $idaccountSpend, $dataGrid, $memoSpend, $notransSpend, $tanggalSpend, $subtotalSpend);
+        $idjournal = $this->m_journal->saveSpendMoney($idunitSpend, $idaccountSpend, $dataGrid, $memoSpend, $notransSpend, $tanggalSpend, $totalSpend,$taxSpend);
 
         $data = array(
             'idspendmoney' => $seq->id,
