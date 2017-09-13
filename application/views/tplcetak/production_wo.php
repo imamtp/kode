@@ -30,42 +30,40 @@
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
           <tr>
-            <td colspan="2"><b>Finished Goods List:</b></td>
+            <td colspan="2"><b>Rincian Barang:</b></td>
           </tr>
           <?php if(count($data['fg_list'])>0) : ?>
             <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
               <thead>
                 <tr>
                   <th width="30">NO</th>  
-                  <th>NO SKU</th>                       
-                  <th>NM BRG</th>    
+                  <th>BARANG JADI</th>    
                   <th>QTY</th>                 
-                  <th>SATUAN</th>
-                  <th>UKURAN</th>
-                  <th>SATUAN</th>
+                  <th>SAT.</th>
+                  <th>UKRN</th>
+                  <th>SAT.</th>
+                  <th>KODE BRG</th>
                   <th>BHN BAKU</th>
-                  <th>KD BRG</th>
                   <th>QTY</th>
-                  <th>SATUAN</th>
-                  <th>KET</th>
+                  <th>SAT.</th>
+                  <th width="150">KET</th>
                 </tr>
               </thead>
               <tbody>
               <?php foreach ($data['fg_list'] as $key => $value): ?>
-                  <tr>
-                  <td width="30"><?=$key+1?></td>
-                  <td><?=$value['sku_no']?></td>
-                  <td><?=$value['nameinventory']?></td> 
-                  <td><?=$value['qty']?></td>   
-                  <td><?=$value['short_desc']?></td>  
-                  <td><?=$value['size']?></td>  
-                  <td><?=$value['size_measurement']?></td>  
-                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['invno']; ?></td>  
-                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['nameinventory'];?></td>
-                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['qty'];?></td>  
-                  <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['measurement_name'];?></td>
-                  <td>&nbsp;</td>
-                </tr>
+                  <tr style="font-size: 13pt">
+                    <td width="30"><?=$key+1?></td>
+                    <td><?=$value['nameinventory']?></td> 
+                    <td><?=number_format($value['qty'])?></td>   
+                    <td><?=$value['short_desc']?></td>  
+                    <td><?=$value['size']?></td>  
+                    <td><?=$value['size_measurement']?></td>  
+                    <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['invno']; ?></td>  
+                    <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['nameinventory'];?></td>
+                    <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['qty'];?></td>  
+                    <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['measurement_name'];?></td>
+                    <td>&nbsp;</td>
+                  </tr>
               <?php endforeach; ?>
               </tbody>
             </table>
@@ -80,11 +78,11 @@
               <h4>SKP (SO)</h4>
             </div>
             <div class="panel-body">
-              <p>
-              <div style="float:left;">NO SKP (SO):</div> <div style="float:right;"><?=$data['header']['no_sales_order']?></div> <br>
-              <div style="float:left;">Customer: </div> <div style="float:right;"><?=$data['header']['namecustomer']?> </div><br>
-              <div style="float:left;">Alamat: </div> <div style="float:right;"><?=$data['header']['address_customer']?> </div><br>
-              </p>
+              <table border="0" style="width:99%;">
+                <tr><td width="100" >NO SKP (SO):</td><td style="text-align:right; font-size:13pt"><?=$data['header']['no_sales_order']?></td></tr>
+                <tr><td>Customer:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['namecustomer']?></td></tr>
+                <tr><td>Aalamt:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['address_customer']?></td></tr>
+              </table>
             </div>
           </div>
         </div>
