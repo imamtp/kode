@@ -1379,7 +1379,7 @@ class laporan extends MY_Controller {
         {
             $pajakpenghasilan = $tax->is_taxable == 1 ? $pendapatan['total']*(1/100) : 0;
         } else {
-
+            $pajakpenghasilan = 0;
         }
         $data = array(
             'pendapatan'=>$pendapatan['data'],
