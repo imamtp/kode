@@ -131,7 +131,7 @@
             </tr>
             <tr>
               <td colspan = "3"></td>
-              <td align="left"><b>Biaya Angkut </b></td>
+              <td align="left"><b>Biaya Kirim </b></td>
               <td>:</td>
               <td colspan = "2" align="right"><?=number_format($data['freigthcost'],2)?></td>
             </tr>
