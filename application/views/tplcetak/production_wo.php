@@ -47,7 +47,6 @@
                   <th>KD BRG</th>
                   <th>QTY</th>
                   <th>SATUAN</th>
-                  <th>MATERIAL</th>
                   <th>KET</th>
                 </tr>
               </thead>
@@ -65,7 +64,6 @@
                   <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['nameinventory'];?></td>
                   <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['qty'];?></td>  
                   <td><?php if($value['rm_list'][0]['invno']) echo $value['rm_list'][0]['measurement_name'];?></td>
-                  <td>&nbsp;</td>
                   <td>&nbsp;</td>
                 </tr>
               <?php endforeach; ?>
