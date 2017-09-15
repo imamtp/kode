@@ -128,22 +128,30 @@ class sales extends MY_Controller {
     }  
 
     function saveSalesOrder(){
-        $params = array(
-            'idunit' => $this->input->post('unit'),
-            'prefix' => 'SO',
-            'table' => 'sales',
-            'fieldpk' => 'idsales',
-            'fieldname' => 'no_sales_order',
-            'extraparams'=> null,
-        );
-        $this->load->library('../controllers/setup');
-        $noarticle = $this->setup->getNextNoArticle2($params);
+       
+        $statusform = $this->input->post('statusform');
+
+        if($statusform == 'input'){
+            $params = array(
+                'idunit' => $this->input->post('unit'),
+                'prefix' => 'SO',
+                'table' => 'sales',
+                'fieldpk' => 'idsales',
+                'fieldname' => 'no_sales_order',
+                'extraparams'=> null,
+            );
+            $this->load->library('../controllers/setup');
+            $noarticle = $this->setup->getNextNoArticle2($params);
+        }
+        else if($statusform == 'edit'){
+            // $noarticle = $this->input->post('nojurnalSalesOrder') != null ? $this->input->post('nojurnalSalesOrder') : $noarticle,
+        }
 
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
         $items = json_decode($this->input->post('datagrid'));
 
-        $statusform = $this->input->post('statusform');
+       
 
         $idsales = $this->m_data->getPrimaryID($this->input->post('idsales'),'sales', 'idsales', $this->input->post('unit'));
 
@@ -157,7 +165,7 @@ class sales extends MY_Controller {
             // 'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
             'delivery_date' => inputDate($this->input->post('delivery_date')),
             'date_sales' => date('Y-m-d'),
-            'no_sales_order' => $this->input->post('nojurnalSalesOrder') != null ? $this->input->post('nojurnalSalesOrder') : $noarticle,
+           
             'idtax' => $idtax,
             'shipaddress'=> $this->input->post('shipaddress'),
             'subtotal' => clearnumberic($this->input->post('subtotalSalesOrder')),
@@ -209,6 +217,7 @@ class sales extends MY_Controller {
         // $header['duedate'] = $duedate;
 
         if($statusform == 'input'){
+            $header['no_sales_order'] = $noarticle;
             $header['userin'] = $this->session->userdata('userid');
             $header['datein'] = date('Y-m-d H:m:s');
             $this->db->insert('sales', $header);

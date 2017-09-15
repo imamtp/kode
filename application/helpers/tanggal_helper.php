@@ -47,6 +47,12 @@ function inputDate($v) {
     return $v == null ? null : str_replace("T00:00:00", "", $v);
 }
 
+function inputDate_reverse($v) {
+    $s = str_replace("T00:00:00", "", $v);
+    $tgl = explode("-", $s);
+    return $tgl[2].'-'.$tgl[1].'-'.$tgl[0];
+}
+
 function backdate($d)
 {
     $tgl = explode("/", $d);
