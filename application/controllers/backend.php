@@ -963,6 +963,9 @@ class Backend extends MY_Controller {
         $results = $query->num_rows();
         echo '{success:true,numrow:' . $query->num_rows() . ',results:' . $results .
         ',rows:' . json_encode($arr) . '}';
+        
+        $query->free_result(); 
+        $query_page->free_result(); 
     }
 
     public function exportxl($table, $tahun, $bulan, $kodebank) {

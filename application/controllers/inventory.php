@@ -1212,6 +1212,9 @@ class inventory extends MY_Controller {
                     // echo $sql.' '.$limit_offset;
         
         echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+
+        $q->free_result(); 
+        $qtotal->free_result(); 
     }
 
     function get_detail_item(){
@@ -1396,6 +1399,9 @@ class inventory extends MY_Controller {
         }
 
         echo '{success:true,numrow:' .$qtotalrows->num_rows() . ',results:' . $qtotalrows->num_rows() .',rows:' . json_encode($dataArr) . ' }';
+
+        $qtotalrows->free_result(); 
+        $qtotalrows->free_result(); 
     }
 
     function update_hpp($idunit,$tipe,$idpurchase=null){
