@@ -561,17 +561,19 @@ class Setup extends MY_Controller {
             $nextval = (int) str_replace($prefix.$y.$m, '', $q->row()->$fieldname);
         
         if($nextval == 999)
-            $digit = 4;
+            $digit = 4; 
 
         $nextval += 1;
         $nextval = sprintf("%0".$digit."d", $nextval);
+
+        $q->free_result(); //relese memory
         
         //cek udah ada yg make apa blum
-        // if($this->check_exists($prefix.$y.$m.$nextval)){
+        if($this->check_exists($prefix.$y.$m.$nextval)){
             return $prefix.$y.$m.$nextval;
-        // } else {
-        //     return $this->next_loop($params);
-        // }
+        } else {
+            return $this->next_loop($params);
+        }
        
         //echo json_encode(array('success'=>true,'nextval'=>$prefix.$y.$m.$nextval));
     }
@@ -579,8 +581,10 @@ class Setup extends MY_Controller {
     function check_exists($noso){
         $q = $this->db->get_where('sales',array('no_sales_order'=>$noso));
         if($q->num_rows()>0){
+            $q->free_result();
             return false;
         } else {
+            $q->free_result();
             return true;
         }
     }

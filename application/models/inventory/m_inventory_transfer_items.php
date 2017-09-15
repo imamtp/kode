@@ -16,7 +16,7 @@ class m_inventory_transfer_items extends CI_Model {
     }
 
     function selectField() {
-        return "a.inventory_transfer_item_id,a.transfer_stock_id,a.idunit,a.idinventory,a.qty_transfer,a.note,a.warehouse_source_id,a.warehouse_dest_id,b.warehouse_code,b.warehouse_code as warehouse_code_dest,d.invno,d.sku_no,d.nameinventory";
+        return "a.inventory_transfer_item_id,a.transfer_stock_id,a.idunit,a.idinventory,a.qty_transfer,a.note,a.warehouse_source_id,a.warehouse_dest_id,b.warehouse_code,c.warehouse_code as warehouse_code_dest,d.invno,d.sku_no,d.nameinventory";
     }
     
     function fieldCek()
