@@ -922,7 +922,7 @@ class inventory extends MY_Controller {
             $warehouse_id_source = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
             $warehouse_id_dest = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code_dest,'warehouse_id','warehouse',$idunit);
             // $inventory_transfer_item_id = inventory_transfer_item_id;
-            // echo $warehouse_id;
+            echo $warehouse_id_source.' '.$warehouse_id_dest;
             $ditem = array(
                     // 'inventory_transfer_item_id'=>$inventory_transfer_item_id,
                     'transfer_stock_id'=> $transfer_stock_id,
@@ -948,10 +948,10 @@ class inventory extends MY_Controller {
 
             if($mode=='apply'){
                  //update history stock - warehouse source - pengurangan
-                $this->m_stock->update_history(11,$value->qty_transfer,$value->idinventory,$idunit,$warehouse_id_source,date('Y-m-d H:m:s'),'Inventory Transfer Out: '.$this->input->post('no_trans'));
+                $this->m_stock->update_history(11,$value->qty_transfer,$value->idinventory,null,$idunit,$warehouse_id_source,date('Y-m-d H:m:s'),'Inventory Transfer Out: '.$this->input->post('no_trans'));
 
                 //update history stock - warehouse destination - penambahan
-                $this->m_stock->update_history(10,$value->qty_transfer,$value->idinventory,$idunit,$warehouse_id_dest,date('Y-m-d H:m:s'),'Inventory Transfer In: '.$this->input->post('no_trans'));
+                $this->m_stock->update_history(10,$value->qty_transfer,$value->idinventory,null,$idunit,$warehouse_id_dest,date('Y-m-d H:m:s'),'Inventory Transfer In: '.$this->input->post('no_trans'));
             }
            
         }
