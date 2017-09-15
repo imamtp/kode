@@ -1216,12 +1216,18 @@ class inventory extends MY_Controller {
 
     function get_detail_item(){
         $idunit = $this->input->post('idunit');
+        $inventory_type = $this->input->post('inventory_type');
         $idinventory_parent = $this->input->post('idinventory_parent');
 
         $wer_parent = null;
         if($idinventory_parent !== false)
             $wer_parent = "and a.idinventory_parent = $idinventory_parent";
 
+
+        $wer_type = null;
+        if($inventory_type != '' && $inventory_type != null) {
+            $wer_type = "and b.inventory_type = $inventory_type";
+        }
         $sql = "select 
                     b.sku_no,
                     b.nameinventory,
@@ -1258,6 +1264,7 @@ class inventory extends MY_Controller {
                 and a.status = 1
                 and a.idunit = $idunit
                 $wer_parent
+                $wer_type
                 order by a.idinventory_parent, a.idinventory";
         
         $q = $this->db->query($sql);
