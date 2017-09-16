@@ -28,7 +28,7 @@
                 }
               ?>
               NO SO: #<?=$data['no']?><br>
-              Delivery Date: #<?=$data['delivery_date_sales']?>
+              <?php if(!$isInvoice) echo "Delivery Date: ".$data['delivery_date_sales'];?>
               
         </div>
       </div>
@@ -78,12 +78,12 @@
                   <th width="30">NO</th>  
                   <th>SKU</th>                       
                   <th>NAMA BARANG</th>
-                  <th>HARGA</th>
                   <th>QTY</th>
-                  <th>SATUAN</th>
+                  <th>SAT.</th>
                   <th>UKURAN</th>
-                  <th>SATUAN</th>
-                  <th>QUANTUM</th>
+                  <th>SAT.</th>
+                  <th>JML</th>
+                  <th>HARGA</th>
                   <!-- <th>DISKON(%)</th> -->
                   <th>Total</th>
                 </tr>
@@ -94,13 +94,13 @@
                   <td width="30"><?=$key+1?></td>
                   <td><?=$value['sku_no']?></td>
                   <td><?=$value['nameinventory']?></td>  
-                  <td align="right"><?=number_format($value['price'])?></td>
                   <td align="right"><?=$value['qty']?></td>
                   <td><?=$value['short_desc']?></td>
                   <td align="right"><?=$value['size']?></td>
                   <td><?=$value['size_measurement']?></td>
                   <!-- <td align="right"><?=number_format($value['disc'])?></td> -->
                   <td align="right"><?php echo $value['qty']*$value['size']; ?></td>
+                  <td align="right"><?=number_format($value['price'])?></td>
                   <td align="right"><?=number_format($value['total'])?></td>
                 </tr>
               <?php endforeach; ?>
