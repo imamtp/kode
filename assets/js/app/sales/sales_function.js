@@ -719,7 +719,7 @@ function load_tmp_sales_return() {
 }
 
 function clearFormSQ() {
-    Ext.getCmp('EntrySalesQuotation').getStore().removeAll();
+    // Ext.getCmp('EntrySalesQuotation').getStore().removeAll();
     Ext.getCmp('noinvoiceSalesQuotation').setValue();
     Ext.getCmp('statusformSalesQuotationGrid').setValue();
     Ext.getCmp('idsales_quotation').setValue();
@@ -736,12 +736,17 @@ function clearFormSQ() {
     Ext.getCmp('totalSalesQuotation').setValue();
     Ext.getCmp('totalPajakSalesQuotation').setValue();
     Ext.getCmp('subtotalSalesQuotation').setValue();
+    Ext.getCmp('cb_tax_id_so').setValue(null);
+    var EntrySalesQuotation = Ext.getCmp('EntrySalesQuotation').getStore();
+    EntrySalesQuotation.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.sales:0'
+        };
+    });
+    EntrySalesQuotation.load();
 }
 
 function clearFormSO() {
-    var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
-    EntrySalesOrder.removeAll();
-    EntrySalesOrder.sync();
     Ext.getCmp('no_sales_quote').setValue(null);
     Ext.getCmp('sales_quotation_date').setValue(null);
     Ext.getCmp('id_sales_quote_SalesOrder').setValue(null);
@@ -761,6 +766,13 @@ function clearFormSO() {
     Ext.getCmp('subtotalSalesOrder').setValue(null);
     // Ext.getCmp('pembayaranSalesOrder').setValue(null);
     Ext.getCmp('cb_tax_id_so').setValue(null);
+    var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
+    EntrySalesOrder.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'idsales': 0
+        };
+    });
+    EntrySalesOrder.load();
 }
 
 function clearFormSR() {
