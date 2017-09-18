@@ -892,7 +892,7 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                         // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
 
                         storeGridItemSalesOrder.clearFilter();
-                        storeGridItemSalesOrder.removeAll();
+                        Ext.each(storeGridItemSalesOrder.getRange(), function() { storeGridItemSalesOrder.removeAt(0) });
                         // storeGridItemSalesOrder.sync();
                         updateGridSalesOrder('general');
 
