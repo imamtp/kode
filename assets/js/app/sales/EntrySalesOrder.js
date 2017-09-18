@@ -30,7 +30,7 @@ var storeGridItemSalesOrder = Ext.create('Ext.data.Store', {
 var wItemSalesPopupOrderPopup = Ext.create(dir_sys + 'sales.wItemSalesPopupOrderPopup');
 var wCustomerSalesPopupOrderPopup = Ext.create(dir_sys + 'sales.wCustomerSalesPopupOrderPopup');
 
-Ext.create(dir_sys + 'sales.wGridSalesQuoteListPopup');
+var wGridSalesQuoteListPopup = Ext.create(dir_sys + 'sales.wGridSalesQuoteListPopup');
 
 load_js_file('sales/GridSalesmanSOPopup.js');
 
@@ -265,7 +265,7 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                                         //                 'status': '1'
                                         //     };
                                         // });
-                                        storeGridSalesQuoteList.load();
+                                        Ext.getCmp('GridSalesQuoteListID').getStore().load();
 
                                     });
                                 }

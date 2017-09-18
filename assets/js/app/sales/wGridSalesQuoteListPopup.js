@@ -101,6 +101,9 @@ Ext.define('GridSalesQuoteList', {
             Ext.getCmp('totalPajakSalesOrder').setValue(selectedRecord.get('tax'));
             Ext.getCmp('totalSalesOrder').setValue(selectedRecord.get('totalamount'));
 
+            var storeGridItemSalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
+            Ext.each(storeGridItemSalesOrder.getRange(), function() { storeGridItemSalesOrder.removeAt(0) });
+
             Ext.Ajax.request({
                 url: SITE_URL + 'sales/get_item_sales',
                 method: 'GET',
@@ -140,6 +143,8 @@ Ext.define('GridSalesQuoteList', {
                     // gridSO.getStore().insert(0, recSO);
                 }
             });
+
+            Ext.getCmp('wGridSalesQuoteListPopup').hide();
         }
     }, {
         dataIndex: 'idsales',
