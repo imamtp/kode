@@ -198,27 +198,43 @@
         </div>
       </div> 
 
-
-
       <div class="row">
         <div class="col-xs-5">
           <div class="" >
             <div class="panel-body">
+              <p>Catatan: </p>
               <p>
-              Pembayaran  dengan Cek/Giro a/n
-              PT Alfa Prima Sentosa <br>
-              Mohon ditandatangani dan difax kembali
+              <?php foreach($data['notes'] as $note):?>
+              <ul>
+                <?php if($note != null): ?>
+                  <li><?=$note?></li>
+                <?php endif; ?>
+                </ul>
+              <?php endforeach; ?>
               </p>
             </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-right">
+        <div class="col-xs-3 text-right">
           <div class="">
             <div class="panel-body">
-             <p align="right">
+             <p align="center">
+             Disetujui oleh:
              <!-- <center> -->
-             <br><br><br>
-               Ivan Susanto
+             <br><br><br><br><br>
+              (<?=$data['customer']['namecustomer']?>)
+               <!-- </center> -->
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-2 text-right">
+          <div class="">
+            <div class="panel-body">
+             <p align="center">
+             <!-- <center> -->
+             <br><br><br><br><br>
+               (Ivan Susanto)
                <!-- </center> -->
               </p>
             </div>
