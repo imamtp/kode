@@ -567,13 +567,14 @@ class Setup extends MY_Controller {
         $nextval = sprintf("%0".$digit."d", $nextval);
 
         $q->free_result(); //relese memory
+        return $prefix.$y.$m.$nextval;
         
-        //cek udah ada yg make apa blum
-        if($this->check_exists($prefix.$y.$m.$nextval)){
-            return $prefix.$y.$m.$nextval;
-        } else {
-            return $this->next_loop($params);
-        }
+        // //cek udah ada yg make apa blum
+        // if($this->check_exists($prefix.$y.$m.$nextval)){
+        //     return $prefix.$y.$m.$nextval;
+        // } else {
+        //     return $this->next_loop($params);
+        // }
        
         //echo json_encode(array('success'=>true,'nextval'=>$prefix.$y.$m.$nextval));
     }

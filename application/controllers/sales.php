@@ -128,10 +128,9 @@ class sales extends MY_Controller {
     }  
 
     function saveSalesOrder(){
-       
         $statusform = $this->input->post('statusform');
-
-        if($statusform == 'input'){
+        
+        // if($statusform == 'input'){
             $params = array(
                 'idunit' => $this->input->post('unit'),
                 'prefix' => 'SO',
@@ -142,11 +141,9 @@ class sales extends MY_Controller {
             );
             $this->load->library('../controllers/setup');
             $noarticle = $this->setup->getNextNoArticle2($params);
-        }
-        else if($statusform == 'edit'){
-            // $noarticle = $this->input->post('nojurnalSalesOrder') != null ? $this->input->post('nojurnalSalesOrder') : $noarticle,
-        }
-
+        // }
+        // $noarticle = $this->input->post('nojurnalSalesOrder') ?: $noarticle;
+        
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
         $items = json_decode($this->input->post('datagrid'));
