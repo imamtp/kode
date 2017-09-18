@@ -28,7 +28,7 @@
                 }
               ?>
               NO SO: #<?=$data['no']?><br>
-              <?php if(!$isInvoice) echo "Delivery Date: ".$data['delivery_date_sales'];?>
+              <?php if($isInvoice) echo "Delivery Date: ".$data['delivery_date_sales'];?>
               
         </div>
       </div>
