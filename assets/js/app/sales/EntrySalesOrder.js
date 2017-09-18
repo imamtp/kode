@@ -854,58 +854,8 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
-
-
-                        //clear form
-                        Ext.getCmp('delivery_date_SalesOrder').setValue(null);
-                        Ext.getCmp('nojurnalSalesOrder').setValue(null);
-                        Ext.getCmp('cb_tax_id_so').setValue(null);
-                        Ext.getCmp('include_tax_so').setValue(null);
-
-                        Ext.getCmp('customerSalesOrder').setValue(null);
-                        Ext.getCmp('namecustomerSalesOrder').setValue(null);
-                        Ext.getCmp('salesman_id_so').setValue(null);
-                        Ext.getCmp('salesman_name_so').setValue(null);
-
-                        Ext.getCmp('memoSalesOrder').setValue(null);
-                        Ext.getCmp('comboxpaymentSalesOrder').setValue(null);
-                        Ext.getCmp('ddaysSalesOrder').setValue();
-                        Ext.getCmp('eomddaysSalesOrder').setValue();
-                        Ext.getCmp('percentagediscSalesOrder').setValue();
-                        Ext.getCmp('daysdiscSalesOrder').setValue();
-                        Ext.getCmp('dmaxSalesOrder').setValue();
-                        Ext.getCmp('ddaysSalesOrder').setVisible(false);
-                        Ext.getCmp('eomddaysSalesOrder').setVisible(false);
-                        Ext.getCmp('percentagediscSalesOrder').setVisible(false);
-                        Ext.getCmp('daysdiscSalesOrder').setVisible(false);
-                        Ext.getCmp('dmaxSalesOrder').setVisible(false);
-                        Ext.getCmp('shipaddressSalesOrder').setValue(null);
-
-                        Ext.getCmp('subtotalSalesOrder').setValue(null);
-                        Ext.getCmp('diskonSalesOrder').setValue(null);
-                        Ext.getCmp('dppSalesOrder').setValue(null);
-                        Ext.getCmp('freightSalesOrder').setValue(null);
-                        Ext.getCmp('totalPajakSalesOrder').setValue(null);
-                        Ext.getCmp('totalSalesOrder').setValue(null);
-                        // Ext.getCmp('shippingSalesOrder').setValue(null);
-                        // Ext.getCmp('pembayaranSalesOrder').setValue(null);
-                        // Ext.getCmp('sisaBayarSalesOrder').setValue(null);
-                        // Ext.getCmp('paymentSalesOrder').setValue(null);
-                        // Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
-                        // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
-
-                        storeGridItemSalesOrder.clearFilter();
-                        Ext.each(storeGridItemSalesOrder.getRange(), function() { storeGridItemSalesOrder.removeAt(0) });
-                        // storeGridItemSalesOrder.sync();
+                        clearFormSO();
                         updateGridSalesOrder('general');
-
-
-
-                        // if(mode=='print')
-                        // {
-                        //     cetak('FAKTUR Sales Order','SalesOrder',d.id);
-                        // }
-
                         Ext.getCmp('windowPopupSalesOrderGrid').hide();
                         Ext.getCmp('GridSalesOrderGridID').getStore().load();
                     }
@@ -925,14 +875,7 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
             wformRecc.show();
         }
     },
-    loadStore: function() {
-
-
-        //        this.getStore().load({
-        //            // store loading is asynchronous, use a load listener or callback to handle results
-        //            callback: this.onStoreLoad
-        //        });
-    },
+    loadStore: function() {},
     onStoreLoad: function() {
         //        Ext.Msg.show({
         //            title: 'Store Load Callback',

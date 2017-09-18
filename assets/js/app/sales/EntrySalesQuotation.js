@@ -284,18 +284,18 @@ Ext.define(dir_sys + 'sales.EntrySalesQuotation', {
                         listeners: {
                             select: {
                                 fn: function(combo, value) {
-                                    if(combo.getValue() == 3) {
+                                    if (combo.getValue() == 3) {
                                         //kredit
                                         Ext.getCmp('tglPelunasanSalesQuotation').setDisabled(false);
                                         Ext.getCmp('pembayaranSalesQuotation').setValue(0);
                                         //                                                Ext.getCmp('pembayaranSalesQuotation').setReadOnly(true);
-                                    } else if(combo.getValue() == 4) {
+                                    } else if (combo.getValue() == 4) {
                                         //cod
                                         Ext.getCmp('tglPelunasanSalesQuotation').setDisabled(true);
                                         Ext.getCmp('tglPelunasanSalesQuotation').setValue(null);
                                         Ext.getCmp('pembayaranSalesQuotation').setValue(0);
                                         Ext.getCmp('pembayaranSalesQuotation').setReadOnly(false);
-                                    } else if(combo.getValue() == 1) {
+                                    } else if (combo.getValue() == 1) {
                                         //tunai
                                         Ext.getCmp('tglPelunasanSalesQuotation').setDisabled(true);
                                         Ext.getCmp('tglPelunasanSalesQuotation').setValue(null);
@@ -411,7 +411,7 @@ Ext.define(dir_sys + 'sales.EntrySalesQuotation', {
                     listeners: {
                         render: function(component) {
                             component.getEl().on('click', function(event, el) {
-                                if(group_id == 99) {
+                                if (group_id == 99) {
                                     var extraparams = null;
                                 } else {
                                     var extraparams = 'a.idunit:' + Ext.getCmp('cbUnitEntrySalesQuotation').getValue();
@@ -549,7 +549,7 @@ Ext.define(dir_sys + 'sales.EntrySalesQuotation', {
     },
     recordSalesQuotation: function(button, event, mode) {
         console.log(Ext.getCmp('idaccountSalesQuotation').getValue())
-        if(validasiSalesQuotation()) {
+        if (validasiSalesQuotation()) {
             storeGridItemSalesQuotation.clearFilter();
             var json = Ext.encode(Ext.pluck(storeGridItemSalesQuotation.data.items, 'data'));
             //            var cbUnitP = Ext.encode(Ext.getCmp('cbUnitEntrySalesQuotation').getValue());
@@ -586,28 +586,11 @@ Ext.define(dir_sys + 'sales.EntrySalesQuotation', {
                 },
                 success: function(form, action) {
                     var d = Ext.decode(form.responseText);
-                    if(!d.success) {
+                    if (!d.success) {
                         Ext.Msg.alert('Peringatan', d.message);
                     } else {
                         Ext.Msg.alert('Success', d.message);
-                        Ext.getCmp('customerSalesQuotation').setValue(null);
-                        Ext.getCmp('tanggalSalesQuotation').setValue(null);
-                        Ext.getCmp('shipaddressSalesQuotation').setValue(null);
-                        Ext.getCmp('nojurnalSalesQuotation').setValue(null);
-                        Ext.getCmp('memoSalesQuotation').setValue(null);
-                        Ext.getCmp('subtotalSalesQuotation').setValue(null);
-                        Ext.getCmp('totalSalesQuotation').setValue(null);
-                        // Ext.getCmp('totalPajak').setValue(null);
-                        // Ext.getCmp('shippingSalesQuotation').setValue(null);
-                        // Ext.getCmp('angkutSalesQuotation').setValue(null);
-                        // Ext.getCmp('pembayaranSalesQuotation').setValue(null);
-                        // Ext.getCmp('sisaBayarSalesQuotation').setValue(null);
-                        // Ext.getCmp('paymentSalesQuotation').setValue(null);
-                        // Ext.getCmp('tglPelunasanSalesQuotation').setValue(null);
-                        // Ext.getCmp('comboxcurrencySalesQuotation').setValue(null);
-                        storeGridItemSalesQuotation.clearFilter();
-                        // storeGridItemSalesQuotation.removeAll();
-                        // storeGridItemSalesQuotation.sync();
+                        clearFormSQ();
                         updateGridSalesQuotation('general');
                         Ext.getCmp('windowPopupSalesQuotationGrid').hide();
                         Ext.getCmp('GridSalesQuotationGridID').getStore().load();
@@ -624,7 +607,7 @@ Ext.define(dir_sys + 'sales.EntrySalesQuotation', {
         }
     },
     saveRecurr: function() {
-        if(validasiSalesQuotation()) {
+        if (validasiSalesQuotation()) {
             Ext.getCmp('formformRecc').getForm().reset();
             wformRecc.show();
         }
