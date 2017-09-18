@@ -136,8 +136,8 @@ Ext.define('GridSalesQuoteList', {
                         gridSO.getStore().insert(0, recSO);
                     });
                     
-                    var gridSO = Ext.getCmp('EntrySalesOrder');
-                    gridSO.getStore().insert(0, recSO);
+                    // var gridSO = Ext.getCmp('EntrySalesOrder');
+                    // gridSO.getStore().insert(0, recSO);
                 }
             });
         }

@@ -565,8 +565,8 @@ Ext.define('KitchenSink.view.grid.EntryPurchase', {
                         Ext.getCmp('tglPelunasanPurchase').setValue(null);
                         Ext.getCmp('comboxcurrencyPurchase').setValue(null);
 
-                        PurchaseGridStore.removeAll();
-                        PurchaseGridStore.sync();
+                        // PurchaseGridStore.removeAll();
+                        // PurchaseGridStore.sync();
                         updateGridPurchase('general');
 
                         if(mode=='print')

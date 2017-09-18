@@ -363,9 +363,9 @@ Ext.define(dir_sys + 'production.ReceiptWorkOrderJobTab', {
 
                         Ext.getCmp('customerSalesOrder').setValue(null);
 
-                        storeGridItemSalesOrder.removeAll();
-                        storeGridItemSalesOrder.sync();
-                        updateGridSalesOrder('general');
+                        // storeGridItemSalesOrder.removeAll();
+                        // storeGridItemSalesOrder.sync();
+                        // updateGridSalesOrder('general');
 
                         // if(mode=='print')
                         // {

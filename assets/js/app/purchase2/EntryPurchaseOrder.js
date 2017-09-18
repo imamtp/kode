@@ -852,8 +852,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                         // // Ext.getCmp('paymentPurchaseOrder').setValue(null);
                         // // Ext.getCmp('tglPelunasanPurchaseOrder').setValue(null);
                         // Ext.getCmp('comboxcurrencyPurchaseOrder').setValue(null);
-                        storeGridItemPurchaseOrder.clearFilter();
-                        storeGridItemPurchaseOrder.removeAll();
+                        // storeGridItemPurchaseOrder.clearFilter();
+                        // storeGridItemPurchaseOrder.removeAll();
                         // storeGridItemPurchaseOrder.sync();
                         updateGridPurchaseOrder('general');
 
