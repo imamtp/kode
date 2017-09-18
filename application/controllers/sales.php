@@ -129,20 +129,16 @@ class sales extends MY_Controller {
 
     function saveSalesOrder(){
         $statusform = $this->input->post('statusform');
-        
-        // if($statusform == 'input'){
-            $params = array(
-                'idunit' => $this->input->post('unit'),
-                'prefix' => 'SO',
-                'table' => 'sales',
-                'fieldpk' => 'idsales',
-                'fieldname' => 'no_sales_order',
-                'extraparams'=> null,
-            );
-            $this->load->library('../controllers/setup');
-            $noarticle = $this->setup->getNextNoArticle2($params);
-        // }
-        // $noarticle = $this->input->post('nojurnalSalesOrder') ?: $noarticle;
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'SO',
+            'table' => 'sales',
+            'fieldpk' => 'idsales',
+            'fieldname' => 'no_sales_order',
+            'extraparams'=> null,
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
         
         $this->db->trans_begin();
         // $items = json_decode($this->input->post('items'), true)[0];
@@ -297,9 +293,7 @@ class sales extends MY_Controller {
         //                         left join warehouse d ON d.warehouse_id = a.warehouse_id
         //                         where idsales = $idsales $wer");
         // $r = $q->result_array();
-        $idsales = $this->input->get('idsales') == '' ? 0 : $this->input->get('idsales');
-        // $idsales = $this->input->get('idsales');
-        $r = $this->m_salesorder->query_itemsales($idsales,$this->input->get('item_selector_sr'),$this->input->get('token'));
+        $r = $this->m_salesorder->query_itemsales($this->input->get('idsales'),$this->input->get('item_selector_sr'),$this->input->get('token'));
         echo json_encode(array('data'=>$r));
     }
 
