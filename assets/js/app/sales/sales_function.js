@@ -2,13 +2,13 @@ function clearFormSQ() {}
 
 function loadReturnSOData(record) {
     console.log(record);
-    if (!Ext.isDefined(Ext.getCmp('WindowEntrySalesReturn'))) {
+    if(!Ext.isDefined(Ext.getCmp('WindowEntrySalesReturn'))) {
         Ext.create(dir_sys + 'sales.WindowEntrySalesReturn');
     }
     Ext.getCmp('WindowEntrySalesReturn').show();
     Ext.getCmp('status_sr').setReadOnly(false);
     Ext.getCmp('status_sr').setValue(record.data.status * 1);
-    if (record.data.status * 1 == 1) {
+    if(record.data.status * 1 == 1) {
         Ext.getCmp('btnRecordSalesReturn').enable();
     } else {
         Ext.getCmp('btnRecordSalesReturn').disable();
@@ -66,13 +66,13 @@ function showSalesOrderData(record) {
     // cb_sales_order_status.getStore().load();
     cb_sales_order_status.setValue(record.data.status * 1);
     cb_sales_order_status.setReadOnly(true);
-    if (record.data.status * 1 == 1) {
+    if(record.data.status * 1 == 1) {
         //status open masih bisa dieedit
         Ext.getCmp('btnRecordSalesOrder').enable();
     } else {
         Ext.getCmp('btnRecordSalesOrder').disable();
     }
-    if (record.data.idsales_quote === null) {
+    if(record.data.idsales_quote === null) {
         Ext.getCmp('is_from_sq_soform').setValue({ is_from_sq: 2 });
     } else {
         Ext.getCmp('is_from_sq_soform').setValue({ is_from_sq: 1 });
@@ -96,7 +96,7 @@ function showSalesOrderData(record) {
     Ext.getCmp('percentagediscSalesOrder').setValue(record.data.percentagedisc);
     Ext.getCmp('daysdiscSalesOrder').setValue(record.data.daydisc);
     Ext.getCmp('dmaxSalesOrder').setValue(record.data.dmax);
-    switch (Ext.getCmp('comboxpaymentSalesOrder').getValue()) {
+    switch(Ext.getCmp('comboxpaymentSalesOrder').getValue()) {
         case '3':
             Ext.getCmp('ddaysSalesOrder').setDisabled(false);
             Ext.getCmp('ddaysSalesOrder').setVisible(true);
@@ -189,7 +189,7 @@ function showSalesQuotationData(record) {
     var cbSalesQuotation = Ext.getCmp('cbSalesQuotation');
     // cbSalesQuotation.getStore().load();
     cbSalesQuotation.setValue(record.data.status * 1);
-    if (record.data.status * 1 === 1) {
+    if(record.data.status * 1 === 1) {
         //masih open
         Ext.getCmp('btnRecordSalesQuote').enable();
         cbSalesQuotation.setReadOnly(false);
@@ -197,7 +197,7 @@ function showSalesQuotationData(record) {
         Ext.getCmp('btnRecordSalesQuote').disable();
         cbSalesQuotation.setReadOnly(true);
     }
-    if (record.data.idsales_quote !== null) {
+    if(record.data.idsales_quote !== null) {
         //udah jadi sales order gaboleh edit
         Ext.getCmp('btnRecordSalesQuote').disable();
     }
@@ -488,24 +488,24 @@ var windowPopupWindowSalesPayment = Ext.create('widget.window', {
         text: 'Save',
         handler: function() {
             var selisih = str_replace('.', '', Ext.getCmp('balance_sales_paymentsales').getValue()) * 1 - str_replace('.', '', Ext.getCmp('amount_salesPayment').getValue()) * 1
-            if (selisih * 1 < 0) {
+            if(selisih * 1 < 0) {
                 Ext.Msg.alert("Error!", "Payment exceeds the outstanding balance");
             } else {
                 var form = Ext.getCmp('form_salesPayment').getForm();
-                if (form.isValid()) {
+                if(form.isValid()) {
                     form.submit({
                         success: function(form, action) {
                             Ext.Msg.alert('Success', action.result.message);
                             Ext.getCmp('form_salesPayment').getForm().reset();
                             Ext.getCmp('windowPopupWindowSalesPayment').hide();
                             setHeaderInvoice();
-                            if (Ext.isDefined(Ext.getCmp('SalesInvoicePaidGrid'))) {
+                            if(Ext.isDefined(Ext.getCmp('SalesInvoicePaidGrid'))) {
                                 Ext.getCmp('SalesInvoicePaidGrid').getStore().load();
                             }
-                            if (Ext.isDefined(Ext.getCmp('SalesInvoiceUnpaidGrid'))) {
+                            if(Ext.isDefined(Ext.getCmp('SalesInvoiceUnpaidGrid'))) {
                                 Ext.getCmp('SalesInvoiceUnpaidGrid').getStore().load();
                             }
-                            if (Ext.isDefined(Ext.getCmp('SalesInvoiceOverdueGrid'))) {
+                            if(Ext.isDefined(Ext.getCmp('SalesInvoiceOverdueGrid'))) {
                                 Ext.getCmp('SalesInvoiceOverdueGrid').getStore().load();
                             }
                             // storeGridSalesInvoicePaidGrid.load();
@@ -752,8 +752,11 @@ function clearFormSQ() {
     Ext.getCmp('subtotalSalesQuotation').setValue();
     Ext.getCmp('cb_tax_id_sq').setValue(null);
     var EntrySalesQuotation = Ext.getCmp('EntrySalesQuotation').getStore();
-    EntrySalesQuotation.clearFilter();
-    Ext.each(EntrySalesQuotation.getRange(), function() { EntrySalesQuotation.removeAt(0) });
+    EntrySalesQuotation.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idsales:' + 0
+        };
+    });
     EntrySalesQuotation.load();
 }
 
@@ -777,10 +780,13 @@ function clearFormSO() {
     Ext.getCmp('subtotalSalesOrder').setValue(null);
     // Ext.getCmp('pembayaranSalesOrder').setValue(null);
     Ext.getCmp('cb_tax_id_so').setValue(null);
-    var storeGridItemSalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
-    storeGridItemSalesOrder.clearFilter();
-    Ext.each(storeGridItemSalesOrder.getRange(), function() { storeGridItemSalesOrder.removeAt(0) });
-    storeGridItemSalesOrder.load();
+    var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
+    EntrySalesOrder.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idsales:' + 0
+        };
+    });
+    EntrySalesOrder.load();
 }
 
 function clearFormSR() {
@@ -805,11 +811,11 @@ function paymentTermSO(idterm) {
     var aftertax = str_replace('.', '', Ext.getCmp('totalSalesInvoice_si').getValue()) * 1;
     var shipcost = str_replace('.', '', Ext.getCmp('angkutSalesInvoice_si').getValue()) * 1;
     // var paymenttermarr = [['1', 'Cash in Advance'], ['2', 'Cash in Delivery'], ['3','NET d days'], ['4','NET EOM d days'],['5','Discount']];
-    if (idterm * 1 === 1) {
+    if(idterm * 1 === 1) {
         pembayaranSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
         pembayaranSalesInvoice_si.setReadOnly(true);
         // sisaBayarSalesInvoice_si.setValue(0);
-    } else if (idterm * 1 === 2) {
+    } else if(idterm * 1 === 2) {
         pembayaranSalesInvoice_si.setValue(0);
         pembayaranSalesInvoice_si.setReadOnly(true);
         // sisaBayarSalesInvoice_si.setValue(renderNomor(aftertax + shipcost));
@@ -885,17 +891,17 @@ function validasiSalesOrder() {
     // if (Ext.getCmp('nojurnalSalesOrder').getValue() == null) {
     //     Ext.Msg.alert('Failed', 'Tentukan No SO #');
     // } else 
-    if (Ext.getCmp('delivery_date_SalesOrder').getValue() == null) {
+    if(Ext.getCmp('delivery_date_SalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Delivery Date');
-    } else if (Ext.getCmp('cb_tax_id_so').getValue() == null) {
+    } else if(Ext.getCmp('cb_tax_id_so').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Jenis Pajak');
-    } else if (Ext.getCmp('customerSalesOrder').getValue() == null) {
+    } else if(Ext.getCmp('customerSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan konsumen');
-    } else if (Ext.getCmp('shipaddressSalesOrder').getValue() == null) {
+    } else if(Ext.getCmp('shipaddressSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan Alamat Pengiriman');
-    } else if (Ext.getCmp('memoSalesOrder').getValue() == null) {
+    } else if(Ext.getCmp('memoSalesOrder').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan memo Sales Order');
-    } else if (Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {
+    } else if(Ext.getCmp('EntrySalesOrder').getStore().getRange().length == 0) {
         Ext.Msg.alert('Failed', 'Msukkan barang terlebih dahulu');
     } else {
         return true;
@@ -938,13 +944,13 @@ function updateGridSalesQuotation() {
 
 function validasiSalesQuotation() {
     //    alert(Ext.getCmp('comboxcurrencySalesQuotation').getValue());   
-    if (Ext.getCmp('customerSalesQuotation').getValue() == null) {
+    if(Ext.getCmp('customerSalesQuotation').getValue() == null) {
         Ext.Msg.alert('Failed', 'Customer belum dipilih');
-    } else if (Ext.getCmp('tanggalSalesQuotation').getValue() == null) {
+    } else if(Ext.getCmp('tanggalSalesQuotation').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal Sales Quotation');
-    } else if (Ext.getCmp('memoSalesQuotation').getValue() == '') {
+    } else if(Ext.getCmp('memoSalesQuotation').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan Memo SQ');
-    } else if (Ext.getCmp('totalSalesQuotation').getValue() == '') {
+    } else if(Ext.getCmp('totalSalesQuotation').getValue() == '') {
         Ext.Msg.alert('Failed', 'Masukkan barang');
     }
     // else if (Ext.getCmp('paymentSalesQuotation').getValue() == 3 && Ext.getCmp('tglPelunasanSalesQuotation').getValue() == null)
