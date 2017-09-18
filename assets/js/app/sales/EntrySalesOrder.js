@@ -894,8 +894,8 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                         // Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
                         // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
 
-                        // storeGridItemSalesOrder.clearFilter();
-                        // storeGridItemSalesOrder.removeAll();
+                        storeGridItemSalesOrder.clearFilter();
+                        Ext.each(storeGridItemSalesOrder.getRange(), function() { storeGridItemSalesOrder.removeAt(0) });
                         // storeGridItemSalesOrder.sync();
                         updateGridSalesOrder('general');
 
