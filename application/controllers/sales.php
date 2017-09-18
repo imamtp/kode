@@ -297,7 +297,9 @@ class sales extends MY_Controller {
         //                         left join warehouse d ON d.warehouse_id = a.warehouse_id
         //                         where idsales = $idsales $wer");
         // $r = $q->result_array();
-        $r = $this->m_salesorder->query_itemsales($this->input->get('idsales'),$this->input->get('item_selector_sr'),$this->input->get('token'));
+        $idsales = $this->input->get('idsales') == '' ? 0 : $this->input->get('idsales');
+        // $idsales = $this->input->get('idsales');
+        $r = $this->m_salesorder->query_itemsales($idsales,$this->input->get('item_selector_sr'),$this->input->get('token'));
         echo json_encode(array('data'=>$r));
     }
 

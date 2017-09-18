@@ -44,7 +44,7 @@ function loadReturnSOData(record) {
 }
 
 function showSalesOrderData(record) {
-    console.log(record);
+    // console.log(record);
     wSalesOrderGrid.show();
     storeCustomer.load();
     storeUnit.load();
@@ -114,44 +114,51 @@ function showSalesOrderData(record) {
             Ext.getCmp('dmaxSalesOrder').setVisible(true);
             break;
     }
-    //insert item to grid
-    Ext.Ajax.request({
-        url: SITE_URL + 'sales/get_item_sales',
-        method: 'GET',
-        params: {
-            idsales: record.data.idsales
-        },
-        success: function(form, action) {
-            var d = Ext.decode(form.responseText);
-            var gridDO = Ext.getCmp('EntrySalesOrder');
-            Ext.each(d.data, function(obj, i) {
-                console.log(obj);
-                var recDO = new GridItemSalesOrderModel({
-                    idsalesitem: obj.idsalesitem,
-                    idinventory: obj.idinventory,
-                    invno: obj.invno,
-                    nameinventory: obj.nameinventory,
-                    warehouse_code: obj.warehouse_code,
-                    price: obj.price * 1,
-                    short_desc: obj.short_desc,
-                    size: obj.size,
-                    size_measurement: obj.size_measurement,
-                    // assetaccount:obj.idsalesitem,
-                    deleted: obj.deleted,
-                    sku_no: obj.sku_no,
-                    qty: obj.qty * 1,
-                    disc: obj.disc * 1,
-                    total: obj.total * 1,
-                    ratetax: obj.ratetax * 1
-                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
-                });
-                gridDO.getStore().insert(0, recDO);
-            });
-        },
-        failure: function(form, action) {
-            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-        }
+    var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
+    EntrySalesOrder.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idsales:' + record.data.idsales
+        };
     });
+    EntrySalesOrder.load();
+    //insert item to grid
+    // Ext.Ajax.request({
+    //     url: SITE_URL + 'sales/get_item_sales',
+    //     method: 'GET',
+    //     params: {
+    //         idsales: record.data.idsales
+    //     },
+    //     success: function(form, action) {
+    //         var d = Ext.decode(form.responseText);
+    //         var gridDO = Ext.getCmp('EntrySalesOrder');
+    //         Ext.each(d.data, function(obj, i) {
+    //             console.log(obj);
+    //             var recDO = new GridItemSalesOrderModel({
+    //                 idsalesitem: obj.idsalesitem,
+    //                 idinventory: obj.idinventory,
+    //                 invno: obj.invno,
+    //                 nameinventory: obj.nameinventory,
+    //                 warehouse_code: obj.warehouse_code,
+    //                 price: obj.price * 1,
+    //                 short_desc: obj.short_desc,
+    //                 size: obj.size,
+    //                 size_measurement: obj.size_measurement,
+    //                 // assetaccount:obj.idsalesitem,
+    //                 deleted: obj.deleted,
+    //                 sku_no: obj.sku_no,
+    //                 qty: obj.qty * 1,
+    //                 disc: obj.disc * 1,
+    //                 total: obj.total * 1,
+    //                 ratetax: obj.ratetax * 1
+    //                     //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+    //             });
+    //             gridDO.getStore().insert(0, recDO);
+    //         });
+    //     },
+    //     failure: function(form, action) {
+    //         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+    //     }
+    // });
     var subtotal = record.data.subtotal * 1;
     var disc = record.data.disc * 1;
     var dpp = record.data.total_dpp * 1;
@@ -220,45 +227,52 @@ function showSalesQuotationData(record) {
     // Ext.getCmp('totalPajakSalesQuotation').setValue(renderNomor(record.data.tax));
     // Ext.getCmp('totalSalesQuotation').setValue(renderNomor(record.data.totalamount));
     var EntrySalesQuotationRM = Ext.getCmp('EntrySalesQuotation').getStore();
-    EntrySalesQuotationRM.removeAll();
-    EntrySalesQuotationRM.sync();
-    Ext.Ajax.request({
-        url: SITE_URL + 'sales/get_item_sales',
-        method: 'GET',
-        params: {
-            idsales: record.data.idsales
-        },
-        success: function(form, action) {
-            var d = Ext.decode(form.responseText);
-            var gridSO = Ext.getCmp('EntrySalesQuotation');
-            Ext.each(d.data, function(obj, i) {
-                var recSO = new GridItemSalesQuotationModel({
-                    idsalesitem: obj.idsalesitem,
-                    idinventory: obj.idinventory,
-                    invno: obj.invno,
-                    nameinventory: obj.nameinventory,
-                    short_desc: obj.short_desc,
-                    price: obj.price * 1,
-                    // idunit:obj.idsalesitem,
-                    // assetaccount:obj.idsalesitem,
-                    qty: obj.qty * 1,
-                    sku_no: obj.sku_no,
-                    size: obj.size == null ? 1 : obj.size,
-                    short_desc: obj.short_desc,
-                    size_measurement: obj.size_measurement,
-                    disc: obj.disc * 1,
-                    total: obj.total * 1,
-                    ratetax: obj.ratetax * 1
-                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
-                });
-                gridSO.getStore().insert(0, recSO);
-            });
-            updateGridSalesQuotation();
-        },
-        failure: function(form, action) {
-            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-        }
+    // var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
+    EntrySalesQuotationRM.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idsales:' + record.data.idsales
+        };
     });
+    EntrySalesQuotationRM.load();
+    // EntrySalesQuotationRM.removeAll();
+    // EntrySalesQuotationRM.sync();
+    // Ext.Ajax.request({
+    //     url: SITE_URL + 'sales/get_item_sales',
+    //     method: 'GET',
+    //     params: {
+    //         idsales: record.data.idsales
+    //     },
+    //     success: function(form, action) {
+    //         var d = Ext.decode(form.responseText);
+    //         var gridSO = Ext.getCmp('EntrySalesQuotation');
+    //         Ext.each(d.data, function(obj, i) {
+    //             var recSO = new GridItemSalesQuotationModel({
+    //                 idsalesitem: obj.idsalesitem,
+    //                 idinventory: obj.idinventory,
+    //                 invno: obj.invno,
+    //                 nameinventory: obj.nameinventory,
+    //                 short_desc: obj.short_desc,
+    //                 price: obj.price * 1,
+    //                 // idunit:obj.idsalesitem,
+    //                 // assetaccount:obj.idsalesitem,
+    //                 qty: obj.qty * 1,
+    //                 sku_no: obj.sku_no,
+    //                 size: obj.size == null ? 1 : obj.size,
+    //                 short_desc: obj.short_desc,
+    //                 size_measurement: obj.size_measurement,
+    //                 disc: obj.disc * 1,
+    //                 total: obj.total * 1,
+    //                 ratetax: obj.ratetax * 1
+    //                     //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+    //             });
+    //             gridSO.getStore().insert(0, recSO);
+    //         });
+    //         updateGridSalesQuotation();
+    //     },
+    //     failure: function(form, action) {
+    //         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+    //     }
+    // });
 }
 
 function loadDataFormInvoice(idsales) {
@@ -719,7 +733,7 @@ function load_tmp_sales_return() {
 }
 
 function clearFormSQ() {
-    Ext.getCmp('EntrySalesQuotation').getStore().removeAll();
+    // Ext.getCmp('EntrySalesQuotation').getStore().removeAll();
     Ext.getCmp('noinvoiceSalesQuotation').setValue();
     Ext.getCmp('statusformSalesQuotationGrid').setValue();
     Ext.getCmp('idsales_quotation').setValue();
@@ -736,12 +750,17 @@ function clearFormSQ() {
     Ext.getCmp('totalSalesQuotation').setValue();
     Ext.getCmp('totalPajakSalesQuotation').setValue();
     Ext.getCmp('subtotalSalesQuotation').setValue();
+    Ext.getCmp('cb_tax_id_so').setValue(null);
+    var EntrySalesQuotation = Ext.getCmp('EntrySalesQuotation').getStore();
+    EntrySalesQuotation.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idsales:' + 0
+        };
+    });
+    EntrySalesQuotation.load();
 }
 
 function clearFormSO() {
-    var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
-    EntrySalesOrder.removeAll();
-    EntrySalesOrder.sync();
     Ext.getCmp('no_sales_quote').setValue(null);
     Ext.getCmp('sales_quotation_date').setValue(null);
     Ext.getCmp('id_sales_quote_SalesOrder').setValue(null);
@@ -761,6 +780,13 @@ function clearFormSO() {
     Ext.getCmp('subtotalSalesOrder').setValue(null);
     // Ext.getCmp('pembayaranSalesOrder').setValue(null);
     Ext.getCmp('cb_tax_id_so').setValue(null);
+    var EntrySalesOrder = Ext.getCmp('EntrySalesOrder').getStore();
+    EntrySalesOrder.on('beforeload', function(store, operation, eOpts) {
+        operation.params = {
+            'extraparams': 'a.idsales:' + 0
+        };
+    });
+    EntrySalesOrder.load();
 }
 
 function clearFormSR() {
