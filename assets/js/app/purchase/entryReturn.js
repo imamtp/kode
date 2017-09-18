@@ -566,8 +566,8 @@ Ext.define('KitchenSink.view.grid.EntryReturn', {
                         Ext.getCmp('subtotalReturn').setValue(null);
 //                        Ext.getCmp('idunitReturn').setValue(null);
 
-                        storeGridItemReturn.removeAll();
-                        storeGridItemReturn.sync();
+                        // storeGridItemReturn.removeAll();
+                        // storeGridItemReturn.sync();
                         updateGridReturn();
 
                         if(mode=='print')

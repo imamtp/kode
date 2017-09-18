@@ -588,8 +588,8 @@ Ext.define('KitchenSink.view.grid.EntryPurchaseRequisition', {
                         Ext.getCmp('taxRequisition').setValue(null);
                         Ext.getCmp('subtotalRequisition').setValue(null);
                         //                        Ext.getCmp('idunitRequisition').setValue(null);
-                        RequisitionGridStore.removeAll();
-                        RequisitionGridStore.sync();
+                        // RequisitionGridStore.removeAll();
+                        // RequisitionGridStore.sync();
                         updateGridRequisition();
                         if (mode == 'print') {
                             cetak('Cetak Kwitansi', 'receivemoney', d.id);

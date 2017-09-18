@@ -201,7 +201,7 @@ function showSalesQuotationData(record) {
         //udah jadi sales order gaboleh edit
         Ext.getCmp('btnRecordSalesQuote').disable();
     }
-    var sales_quotation_date = Ext.getCmp('sales_quotation_date');
+    var sales_quotation_date = Ext.getCmp('tanggalSalesQuotation');
     sales_quotation_date.setValue(record.data.date_quote);
     var cbUnitEntrySalesOrder = Ext.getCmp('cbUnitEntrySalesQuotation');
     cbUnitEntrySalesOrder.setValue(record.data.idunit);
@@ -750,7 +750,7 @@ function clearFormSQ() {
     Ext.getCmp('totalSalesQuotation').setValue();
     Ext.getCmp('totalPajakSalesQuotation').setValue();
     Ext.getCmp('subtotalSalesQuotation').setValue();
-    Ext.getCmp('cb_tax_id_so').setValue(null);
+    Ext.getCmp('cb_tax_id_sq').setValue(null);
     var EntrySalesQuotation = Ext.getCmp('EntrySalesQuotation').getStore();
     EntrySalesQuotation.on('beforeload', function(store, operation, eOpts) {
         operation.params = {
