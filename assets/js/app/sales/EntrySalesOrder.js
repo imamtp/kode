@@ -28,6 +28,8 @@ var storeGridItemSalesOrder = Ext.create('Ext.data.Store', {
 //end store head
 
 var wItemSalesPopupOrderPopup = Ext.create(dir_sys + 'sales.wItemSalesPopupOrderPopup');
+var wCustomerSalesPopupOrderPopup = Ext.create(dir_sys + 'sales.wCustomerSalesPopupOrderPopup');
+
 Ext.create(dir_sys + 'sales.wGridSalesQuoteListPopup');
 
 load_js_file('sales/GridSalesmanSOPopup.js');
@@ -378,8 +380,9 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                             listeners: {
                                 render: function(component) {
                                     component.getEl().on('click', function(event, el) {
-                                        ChooserListCustomer.target = Ext.getCmp('EntrySalesOrder');
-                                        ChooserListCustomer.show();
+                                        // ChooserListCustomer.target = Ext.getCmp('EntrySalesOrder');
+                                        wCustomerSalesPopupOrderPopup.show();
+                                        Ext.getCmp('GridCustomerSalesPopupOrderID').getStore().load();
                                     });
                                 }
                             }
@@ -891,8 +894,8 @@ Ext.define(dir_sys + 'sales.EntrySalesOrder', {
                         // Ext.getCmp('tglPelunasanSalesOrder').setValue(null);
                         // Ext.getCmp('comboxcurrencySalesOrder').setValue(null);
 
-                        storeGridItemSalesOrder.clearFilter();
-                        Ext.each(storeGridItemSalesOrder.getRange(), function() { storeGridItemSalesOrder.removeAt(0) });
+                        // storeGridItemSalesOrder.clearFilter();
+                        // storeGridItemSalesOrder.removeAll();
                         // storeGridItemSalesOrder.sync();
                         updateGridSalesOrder('general');
 
