@@ -321,7 +321,7 @@ var arrWorkOrderStatus = [
     [2, 'Confirmed'],
     [3, 'On Progress'],
     [4, 'Received'],
-    [5, 'Ready To Delivery'],
+    [5, 'Ready To Deliver'],
     [6, 'Canceled']
 ];
 
