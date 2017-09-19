@@ -144,15 +144,13 @@ class sales extends MY_Controller {
         // $items = json_decode($this->input->post('items'), true)[0];
         $items = json_decode($this->input->post('datagrid'));
 
-       
-
-        $idsales = $this->m_data->getPrimaryID($this->input->post('idsales'),'sales', 'idsales', $this->input->post('unit'));
+        // $idsales = $this->m_data->getPrimaryID($this->input->post('idsales'),'sales', 'idsales', $this->input->post('unit'));
 
         $ratetax = $this->input->post('ratetax');
         $idtax = $this->m_data->getIdTax($ratetax);
 
         $header = array(
-            'idsales' => $idsales,
+            // 'idsales' => $idsales,
             'idsales_quote'=> $this->input->post('idsales_quote') == '' ? null : $this->input->post('idsales_quote'),
             'idcustomer' => $this->input->post('customerSalesOrder'),
             // 'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
@@ -210,18 +208,19 @@ class sales extends MY_Controller {
         // $header['duedate'] = $duedate;
 
         if($statusform == 'input'){
+            $header['idsales'] = $this->m_data->getPrimaryID(null,'sales', 'idsales', $this->input->post('unit'));
             $header['no_sales_order'] = $noarticle;
             $header['userin'] = $this->session->userdata('userid');
             $header['datein'] = date('Y-m-d H:m:s');
             $this->db->insert('sales', $header);
         }
         else if($statusform == 'edit'){
+            $header['idsales'] = $this->input->post('idsales');
             $header['usermod'] = $this->session->userdata('userid');
             $header['datemod'] = date('Y-m-d H:m:s');
             $this->db->where('idsales', $idsales);
             $this->db->update('sales', $header);
         }
-
 
         foreach ($items as $value) {
             $item = array(
