@@ -62,7 +62,7 @@ Ext.define(dir_sys + 'money.GridSpendMoney', {
         {header: 'idjournal', dataIndex: 'idjournal', hidden: true},
         {header: 'no trans', dataIndex: 'notrans', minWidth: 100},
         {header: 'date trans', dataIndex: 'datetrans', minWidth: 100},
-        {header: 'memo', dataIndex: 'memo', minWidth: 200},
+        {header: 'memo', dataIndex: 'memo', minWidth: 200,flex:1},
         {header: 'Total Pengeluaran', dataIndex: 'totalpaid', minWidth: 100, xtype: 'numbercolumn', align: 'right'},
         {header: 'Akun Pengeluaran Kas', dataIndex: 'accname', minWidth: 150},
         {header: 'nama unit', dataIndex: 'namaunit', minWidth: 100},
@@ -74,6 +74,41 @@ Ext.define(dir_sys + 'money.GridSpendMoney', {
             xtype: 'toolbar',
             dock: 'top',
             items: [
+                {
+                    itemId: 'cetakRiwayatGridSpendMoney',
+                    text: 'Cetak',
+                    iconCls: 'print-icon',
+                    handler: function() {
+                        var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0)
+                        {
+                            Ext.Msg.alert('Failure', 'Pilih datanya terlebih dahulu!');
+                        } else {
+                         var src = SITE_URL+"backend/cetak/spendmoney/" + selectedRecord.data.idspendmoney;
+                            
+                          var myWin = Ext.create("Ext.window.Window", {
+                                 title: 'Cetak Kwitansi',
+                                 modal: true,
+                                 html: '<iframe src="'+src+'" width="100%" height="100%" ></iframe>',
+                                 width: 700,
+                                 height: 500
+                             });
+                             myWin.show();
+                            // Ext.getCmp('GridHistoryPembayaranSiswa').body.update("<iframe style='border:0;' width='100%' height='100%' id='GridHistoryPembayaranSiswa' src='"+SITE_URL+"backend/cetak/penerimaansiswa/" + selectedRecord.data.idsiswapembayaran + "'>");
+                            // Ext.Ajax.request({
+                            //     url: SITE_URL + 'backend/cetak',
+                            //     method: 'GET',
+                            //     params: {
+                            //          id: selectedRecord.data.idsiswapembayaran,
+                            //          modul:'penerimaansiswa'
+                            //      }
+                            // });
+                        }
+ 
+                    }
+                },
                 {
                        text: 'Batalkan Pengeluaran',
                        iconCls: 'delete-icon',

@@ -62,7 +62,7 @@ Ext.define(dir_sys + 'money.GridReceiveMoney', {
         {header: 'idjournal', dataIndex: 'idjournal', hidden: true},
         {header: 'no trans', dataIndex: 'notrans', minWidth: 100},
         {header: 'date trans', dataIndex: 'datetrans', minWidth: 100},
-        {header: 'memo', dataIndex: 'memo', minWidth: 200},
+        {header: 'memo', dataIndex: 'memo', minWidth: 200,flex:1},
         {header: 'total', dataIndex: 'total', minWidth: 100, xtype: 'numbercolumn', align: 'right'},
         {header: 'Akun Penerimaan Kas', dataIndex: 'accname', minWidth: 150},
         {header: 'nama unit', dataIndex: 'namaunit', minWidth: 100},

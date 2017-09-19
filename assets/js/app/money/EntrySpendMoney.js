@@ -11,7 +11,6 @@ var SpendGridStore = Ext.create('Ext.data.Store', {
 var wAddRowSpend = Ext.create(dir_sys + 'money.windowPopupAddRowSpend');
 var wAccSpendPopup = Ext.create(dir_sys + 'money.wAccSpendPopup');
 
-
 Ext.define(dir_sys + 'money.EntrySpendMoney', {
     extend: 'Ext.grid.Panel',
     id: 'EntrySpendMoney',
@@ -449,7 +448,7 @@ function validasiSpend()
 
 var wEntrySpendMoney = Ext.create('widget.window', {
     id: 'wEntrySpendMoney',
-    title: 'Input Pengeluaran',
+    title: 'Entri Pengeluaran',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
@@ -464,3 +463,4 @@ var wEntrySpendMoney = Ext.create('widget.window', {
             xtype: 'EntrySpendMoney'
         }]
 });
+

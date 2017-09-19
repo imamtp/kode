@@ -16,7 +16,7 @@ class m_spendmoney extends CI_Model {
     }
 
     function selectField() {
-        return "a.idspendmoney,d.filename,d.totalamount,a.idaccount,a.idjournal,a.totalpaid,a.userin,b.datein,a.subtotal,a.notrans,a.memo,a.datetrans,a.spendfrom,a.month,a.year,b.accname,c.namaunit";
+        return "a.idspendmoney,d.filename,d.totalamount,a.idaccount,a.idjournal,a.totalpaid,a.userin,b.datein,a.subtotal,a.notrans,a.memo,a.datetrans,a.spendfrom,a.month,a.year,b.accname,c.namaunit,a.idunit";
     }
 
     function fieldCek() {
@@ -64,6 +64,101 @@ class m_spendmoney extends CI_Model {
         );
         return $data;
     }
+
+    function cetak($idspendmoney){
+         //generate data buat keperluan cetak
+         $dtcetak = array();
+         
+                 $sql = $this->query();
+                 $sql.= " WHERE idspendmoney=$idspendmoney";
+                 // echo $sql;
+                 $q = $this->db->query($sql);
+                 if($q->num_rows()>0)
+                 {
+                     $r = $q->row();
+                     //detail pembayaran
+                     $i=0;
+                     $total=0;
+         
+                     $qitem = $this->db->get_where('spendmoneyitem',array('idspendmoney'=>$r->idspendmoney));
+                     // echo $this->db->last_query();
+                     foreach ($qitem->result() as $ritem) {
+                         $qaccbayar = $this->db->get_where('account',array('idaccount'=>$ritem->idaccount,'idunit'=>$r->idunit))->row();
+                         $detail[$i]['accname']=$qaccbayar->accname;
+                         $detail[$i]['tax']=$ritem->ratetax;
+                         $detail[$i]['jumlah']=number_format($ritem->amount);
+                        //  if($ritem->denda!=0)
+                        //  {
+                        //      $detail[$i]['denda']['accname']='Denda '.$qaccbayar->accname;
+                        //      $detail[$i]['denda']['jumlah']=number_format($ritem->denda);
+                        //  } else {
+                              $detail[$i]['denda']=null;
+                        //  }
+                        
+                         $total+=$ritem->amount;
+                         $i++;
+                     }
+         
+                     $dtcetak['detail'] = $detail;
+                     $dtcetak['detailtotal'] = number_format($total);
+         
+                      //get no/reff
+                     $qjurnal = $this->db->get_where('journal',array('idjournal'=>$r->idjournal));
+                     if($qjurnal->num_rows()>0)
+                     {
+                         $rjurnal = $qjurnal->row();
+                         $dtcetak['no'] = $rjurnal->nojournal;
+         
+                     } else {
+                        //  echo $this->db->last_query().'<hr>';
+                        //  exit;
+                        $dtcetak['no'] = null;
+                     }
+         
+                     //get receivefrom,total,memo,tax
+                     $qrecmoney = $this->db->get_where('spendmoney',array('idjournal'=>$r->idjournal));
+                     if($qrecmoney->num_rows()>0)
+                     {
+                         $rrecmoney = $qrecmoney->row();
+         
+                         $dtcetak['receivefrom'] = $rrecmoney->spendfrom;
+                         $dtcetak['totaltax'] = $rrecmoney->tax;
+                         $dtcetak['total'] = number_format($rrecmoney->total);
+                         $dtcetak['terbilang'] = terbilang($rrecmoney->total);
+                         $dtcetak['memo'] = $rrecmoney->memo;
+                         $dtcetak['datetrans'] = backdate2($rrecmoney->datetrans);
+         
+                         $qreceive = $this->db->get_where('sys_user',array('username'=>$rrecmoney->userin));
+                         if($qreceive->num_rows()>0)
+                         {
+                             $rreceive = $qreceive->row();
+                             $dtcetak['receivedby'] = $rreceive->username == '' ? $rreceive->username : $rreceive->username;
+                         } else {
+                             echo $this->db->last_query().'<hr>';
+                             exit;
+                         }
+         
+                     } else {
+                         echo $this->db->last_query().'<hr>';
+                         exit;
+                     }
+         
+                     //get logo,address,namaunit
+                     $qunit = $this->db->get_where('unit',array('idunit'=>$r->idunit));
+                     if($qunit->num_rows()>0)
+                     {
+                         $runit = $qunit->row();
+                         $dtcetak['logo'] = $runit->logo==null ? 'logo_aktiva2.png' : $runit->logo;
+                         $dtcetak['namaunit'] = $runit->namaunit;
+                         $dtcetak['alamat'] = $runit->alamat;
+                     } else {
+                         echo $this->db->last_query().'<hr>';
+                         exit;
+                     }
+                 }
+                 return $dtcetak;
+    }
+
 
 }
 
