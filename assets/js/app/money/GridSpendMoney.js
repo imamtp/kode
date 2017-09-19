@@ -75,6 +75,41 @@ Ext.define(dir_sys + 'money.GridSpendMoney', {
             dock: 'top',
             items: [
                 {
+                    itemId: 'cetakRiwayatGridSpendMoney',
+                    text: 'Cetak',
+                    iconCls: 'print-icon',
+                    handler: function() {
+                        var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0)
+                        {
+                            Ext.Msg.alert('Failure', 'Pilih datanya terlebih dahulu!');
+                        } else {
+                         var src = SITE_URL+"backend/cetak/spendmoney/" + selectedRecord.data.idspendmoney;
+                            
+                          var myWin = Ext.create("Ext.window.Window", {
+                                 title: 'Cetak Kwitansi',
+                                 modal: true,
+                                 html: '<iframe src="'+src+'" width="100%" height="100%" ></iframe>',
+                                 width: 700,
+                                 height: 500
+                             });
+                             myWin.show();
+                            // Ext.getCmp('GridHistoryPembayaranSiswa').body.update("<iframe style='border:0;' width='100%' height='100%' id='GridHistoryPembayaranSiswa' src='"+SITE_URL+"backend/cetak/penerimaansiswa/" + selectedRecord.data.idsiswapembayaran + "'>");
+                            // Ext.Ajax.request({
+                            //     url: SITE_URL + 'backend/cetak',
+                            //     method: 'GET',
+                            //     params: {
+                            //          id: selectedRecord.data.idsiswapembayaran,
+                            //          modul:'penerimaansiswa'
+                            //      }
+                            // });
+                        }
+ 
+                    }
+                },
+                {
                        text: 'Batalkan Pengeluaran',
                        iconCls: 'delete-icon',
                        handler: function() {
