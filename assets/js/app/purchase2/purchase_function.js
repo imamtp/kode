@@ -804,12 +804,7 @@ function clearFormPO() {
 
     //clear grid
     var EntryGoodsReceiptRM = Ext.getCmp('EntryPurchaseOrder').getStore();
-    EntryGoodsReceiptRM.on('beforeload', function(store, operation, eOpts) {
-        operation.params = {
-            'extraparams': 'a.idpurchase:0'
-        };
-    });
-    EntryGoodsReceiptRM.load();
+    Ext.each(EntryGoodsReceiptRM.getRange(), function() { EntryGoodsReceiptRM.removeAt(0) });
 
     // Ext.getCmp('rg_is_from_pr_poform').setValue({ is_from_pr: 2 });
 
