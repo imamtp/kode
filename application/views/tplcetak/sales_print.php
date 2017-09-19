@@ -21,14 +21,14 @@
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <h2><?=$title?></h2>
-          Tanggal Order: <?=$data['datetrans']?> <br>
+          Tanggal Order: <?=backdate2($data['datetrans'])?> <br>
               <?php 
                 if($isInvoice){
-                  echo "Tanggal Invoice: ". $data['invoice_date'] ."<br>";
+                  echo "Tanggal Invoice: ". backdate2($data['invoice_date']) ."<br>";
                 }
               ?>
               NO SO: #<?=$data['no']?><br>
-              <?php if($isInvoice) echo "Delivery Date: ".$data['delivery_date_sales'];?>
+              <?php if($isInvoice) echo "Delivery Date: ".backdate2($data['delivery_date_sales']);?>
               
         </div>
       </div>
