@@ -218,7 +218,7 @@ class sales extends MY_Controller {
             $header['idsales'] = $this->input->post('idsales');
             $header['usermod'] = $this->session->userdata('userid');
             $header['datemod'] = date('Y-m-d H:m:s');
-            $this->db->where('idsales', $idsales);
+            $this->db->where('idsales', $header['idsales']);
             $this->db->update('sales', $header);
         }
 
