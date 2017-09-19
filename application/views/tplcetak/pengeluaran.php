@@ -119,12 +119,7 @@
               ?>
 
               <table class="table" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px; border:0px;">
-                  <tr>
-                      <td></td>
-                       <td> </td>
-                      <td align="right"><b>Subtotal</b></td>
-                      <td align="right" width="200"><?=$data['total']?></td>
-                    </tr>
+                 
                  <?php
                     if($data['totaltax']!=0)
                     {
@@ -142,7 +137,7 @@
                       <td></td>
                        <td> </td>
                       <td align="right"><b>Total</b></td>
-                      <td align="right" width="200"><?=$data['total']?></td>
+                      <td align="right" width="200"><?=$data['detailtotal']?></td>
                     </tr>
               </table>
          <tr>
