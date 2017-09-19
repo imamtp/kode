@@ -363,6 +363,10 @@ function validasiReceiptWO() {
     } else {
         var ReceiptWorkOrderJobTabStore = Ext.getCmp('ReceiptWorkOrderJobTab').getStore();
 
+        var is_whcode_acc_null = false;
+        var is_whcode_reject_null = false;
+        var is_whcode_sisa_null = false;
+
         var total_qtysisa_fg = 0;
         var total_qtyaccept_fg = 0;
         var total_qtyreject_fg = 0;
@@ -372,11 +376,16 @@ function validasiReceiptWO() {
             total_qtyaccept_fg += obj.data.qty_accept * 1;
             total_qtyreject_fg += obj.data.qty_reject * 1;
             total_qtyorder_fg += obj.data.qty * 1;
+            if (obj.data.warehouse_code_accept == null) is_whcode_acc_null = true;
+            if (obj.data.warehouse_code_reject == null && (obj.data.qty_reject * 1) > 0) is_whcode_reject_null = true;
+            if (obj.data.warehouse_code_sisa == null && (obj.data.qty_sisa * 1) > 0) is_whcode_sisa_null = true;
         });
         var total = total_qtyreject_fg + total_qtyaccept_fg;
         if (total_qtyorder_fg !== total) {
             //sisa penerimaan finished goodsnya belum kosong
             Ext.Msg.alert('Failed', 'Kuantitas sisa penerimaan finished goods harus bernilai kosong / 0');
+        } else if (is_whcode_acc_null || is_whcode_reject_null || is_whcode_sisa_null) {
+            Ext.Msg.alert('Failed', 'Data gagal disimpan. Tentukan kode gudang terlebih dahulu!');
         } else {
             return true;
         }
