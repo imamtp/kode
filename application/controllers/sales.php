@@ -225,7 +225,7 @@ class sales extends MY_Controller {
         foreach ($items as $value) {
             $item = array(
                 'idsalesitem' => $value->idsalesitem,
-                'idsales' => $idsales,
+                'idsales' => $header['idsales'],
                 'idinventory' => $value->idinventory,
                 'measurement_id' => $this->m_data->getMeasurement($value->short_desc,$this->input->post('unit')),
                 'warehouse_id' => $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$this->input->post('unit')),
