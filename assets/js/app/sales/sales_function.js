@@ -704,6 +704,7 @@ function load_tmp_sales_return() {
 
 function clearFormSQ() {
     // Ext.getCmp('EntrySalesQuotation').getStore().removeAll();
+    Ext.getCmp('idsales_quotation').setValue(null);
     Ext.getCmp('noinvoiceSalesQuotation').setValue();
     Ext.getCmp('statusformSalesQuotationGrid').setValue();
     Ext.getCmp('idsales_quotation').setValue();
@@ -727,6 +728,7 @@ function clearFormSQ() {
 
 function clearFormSO() {
     //clear form
+    Ext.getCmp('idsales_order').setValue(null);
     Ext.getCmp('delivery_date_SalesOrder').setValue(null);
     Ext.getCmp('nojurnalSalesOrder').setValue(null);
     Ext.getCmp('cb_tax_id_so').setValue(null);
