@@ -27,8 +27,12 @@
                   echo "Tanggal Invoice: ". backdate2($data['invoice_date']) ."<br>";
                 }
               ?>
-              NO SO: #<?=$data['no']?><br>
-              <?php if($isInvoice) echo "Delivery Date: ".backdate2($data['delivery_date_sales']);?>
+              <?php if($isInvoice):?>
+              "NO SI: #"
+              <?php else:?> 
+              NO SO: #
+              <?php endif; ?>
+              <?=$data['no']?><br>
               
         </div>
       </div>
