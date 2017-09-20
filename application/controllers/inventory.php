@@ -1221,6 +1221,7 @@ class inventory extends MY_Controller {
         $idunit = $this->input->post('idunit');
         $inventory_type = $this->input->post('inventory_type');
         $idinventory_parent = $this->input->post('idinventory_parent');
+        $find = strtoupper($this->input->post('query'));
 
         $wer_parent = null;
         if($idinventory_parent !== false)
@@ -1231,6 +1232,9 @@ class inventory extends MY_Controller {
         if($inventory_type != '' && $inventory_type != null) {
             $wer_type = "and b.inventory_type = $inventory_type";
         }
+
+        $wer_find = "and ( a.sku_no like '%$find%' or a.nameinventory like '%$find%')";
+
         $sql = "select 
                     b.sku_no,
                     b.nameinventory,
@@ -1268,12 +1272,14 @@ class inventory extends MY_Controller {
                 and a.idunit = $idunit
                 $wer_parent
                 $wer_type
+                $wer_find
                 order by a.idinventory_parent, a.idinventory";
         
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
-        
+        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . '}';
+        $q->free_result();
     }
+
     function get_by_sku(){
         $wer = null;
 
