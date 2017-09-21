@@ -148,7 +148,7 @@ var wInventoryAllBySku = Ext.create('widget.window', {
 
 Ext.define('GridInventoryAllBySkuModel', {
     extend: 'Ext.data.Model',
-    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock','sellingprice','cost' ],
+    fields: ['idinventory', 'sku_no', 'invno', 'nameinventory', 'hpp', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'minstock', 'sellingprice', 'cost'],
     // fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
     // 'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
     // 'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua', 'hpp_per_unit'
@@ -179,8 +179,8 @@ var storeGridInventoryAllBySku = Ext.create('Ext.data.Store', {
 
 storeGridInventoryAllBySku.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-          'inventory_type':  Ext.getCmp('inventorytypeDaftarPersediaan').getValue(),
-        'idinventorycat':  Ext.getCmp('inventorycatDaftarPersediaan').getValue(),
+        'inventory_type': Ext.getCmp('inventorytypeDaftarPersediaan').getValue(),
+        'idinventorycat': Ext.getCmp('inventorycatDaftarPersediaan').getValue(),
         'extraparams': 'inventory_type:' + Ext.getCmp('inventorytypeDaftarPersediaan').getValue() + ',' +
             'idinventorycat:' + Ext.getCmp('inventorycatDaftarPersediaan').getValue() + ',' +
             'idunit:' + Ext.getCmp('idunitDaftarPersediaan').getValue() + ',' +
@@ -572,7 +572,8 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
 
             // if (record.data.totalitem * 1 > 1) {
             windowGridDetailInventory.show();
-
+            Ext.getCmp('skunoDetailInventory').setValue(record.data.sku_no + ' - ' + record.data.nameinventory);
+            Ext.getCmp('stock_oneDetailInventory').setValue(record.data.stock_one + ' ' + record.data.uom_one);
             var GridItemGridDetailInventoryID = Ext.getCmp('GridItemGridDetailInventory').getStore();
 
             GridItemGridDetailInventoryID.on('beforeload', function(store, operation, eOpts) {

@@ -201,7 +201,20 @@ Ext.define('GridItemGridDetailInventory', {
         xtype: 'toolbar',
         dock: 'top',
         items: [{
+            xtype: 'displayfield',
+            id: 'skunoDetailInventory'
+        }]
+    }, {
+        xtype: 'toolbar',
+        dock: 'top',
+        items: [{
+                xtype: 'displayfield',
+                fieldLabel: 'Total Stock #1',
+                id: 'stock_oneDetailInventory'
+            },
+            {
                 text: 'Detail',
+                hidden: true,
                 iconCls: 'edit-icon',
                 handler: function() {
                     var grid = Ext.ComponentQuery.query('GridItemGridDetailInventory')[0];
