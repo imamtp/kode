@@ -192,21 +192,6 @@ class sales extends MY_Controller {
              'idunit'  => $this->input->post('unit')
         );
         
-        // $duedate = null;
-        // switch($header['idpayment']){
-        //     case 3:  //net d days
-        //         $duedate = date("Y-m-d", strtotime("+$header[ddays] day", strtotime($header['invoice_date'])));
-        //         break;
-        //     case 4: //emoddays
-        //         $eom = date('Y-m-t', strtotime($header['invoice_date']));
-        //         $duedate = date("Y-m-d", strtotime("+$header[eomddays] day", strtotime($eom)));
-        //         break;
-        //     case 5: //discount dmax
-        //         $duedate = date("Y-m-d", strtotime("+$header[ddmax] day", strtotime($header['invoice_date'])));
-        //         break;
-        // }
-        // $header['duedate'] = $duedate;
-
         if($statusform == 'input'){
             $header['no_sales_order'] = $noarticle;
             $header['userin'] = $this->session->userdata('userid');
@@ -655,6 +640,22 @@ class sales extends MY_Controller {
                 'invoice_date' => backdate($this->input->post('invoice_date')),
                 'status'=> 8 //invoiced
             );
+
+        $duedate = null;
+        switch($data['idpayment']){
+            case 3:  //net d days
+                $duedate = date("Y-m-d", strtotime("+$data[ddays] day", strtotime($data['invoice_date'])));
+                break;
+            case 4: //emoddays
+                $eom = date('Y-m-t', strtotime($header['invoice_date']));
+                $duedate = date("Y-m-d", strtotime("+$data[eomddays] day", strtotime($eom)));
+                break;
+            case 5: //discount dmax
+                $duedate = date("Y-m-d", strtotime("+$data[ddmax] day", strtotime($data['invoice_date'])));
+                break;
+        }
+        $data['duedate'] = $duedate;
+
         $this->db->where('idsales',$this->input->post('idsales'));
         $this->db->update('sales',$data);
 
