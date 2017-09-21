@@ -144,13 +144,13 @@ class sales extends MY_Controller {
         // $items = json_decode($this->input->post('items'), true)[0];
         $items = json_decode($this->input->post('datagrid'));
 
-        // $idsales = $this->m_data->getPrimaryID($this->input->post('idsales'),'sales', 'idsales', $this->input->post('unit'));
+        $idsales = $this->m_data->getPrimaryID($this->input->post('idsales'),'sales', 'idsales', $this->input->post('unit'));
 
         $ratetax = $this->input->post('ratetax');
         $idtax = $this->m_data->getIdTax($ratetax);
 
         $header = array(
-            // 'idsales' => $idsales,
+            'idsales' => $idsales,
             'idsales_quote'=> $this->input->post('idsales_quote') == '' ? null : $this->input->post('idsales_quote'),
             'idcustomer' => $this->input->post('customerSalesOrder'),
             // 'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
@@ -208,14 +208,12 @@ class sales extends MY_Controller {
         // $header['duedate'] = $duedate;
 
         if($statusform == 'input'){
-            $header['idsales'] = $this->m_data->getPrimaryID(null,'sales', 'idsales', $this->input->post('unit'));
             $header['no_sales_order'] = $noarticle;
             $header['userin'] = $this->session->userdata('userid');
             $header['datein'] = date('Y-m-d H:m:s');
             $this->db->insert('sales', $header);
         }
         else if($statusform == 'edit'){
-            $header['idsales'] = $this->input->post('idsales');
             $header['usermod'] = $this->session->userdata('userid');
             $header['datemod'] = date('Y-m-d H:m:s');
             $this->db->where('idsales', $header['idsales']);
@@ -603,6 +601,18 @@ class sales extends MY_Controller {
     }
 
     function save_sales_invoice(){
+        $statusform = $this->input->post('statusform');
+        $params = array(
+            'idunit' => $this->input->post('unit'),
+            'prefix' => 'SI',
+            'table' => 'sales',
+            'fieldpk' => 'id_inv',
+            'fieldname' => 'noinvoice',
+            'extraparams'=> null,
+        );
+        $this->load->library('../controllers/setup');
+        $noarticle = $this->setup->getNextNoArticle2($params);
+        
         $this->db->trans_begin();
 
         $saldo = post_number($this->input->post('sisa_bayar'));
@@ -636,7 +646,7 @@ class sales extends MY_Controller {
                 'invoice_status'=>$invoice_status,
                 'disc'=>$diskon,
                 'freight'=>$freight,
-                'noinvoice'=> $this->input->post('noinvoice'),
+                'noinvoice'=> $this->input->post('noinvoice')?: $noarticle,
                 'invoice_date' => backdate($this->input->post('invoice_date')),
                 'status'=> 8 //invoiced
             );
