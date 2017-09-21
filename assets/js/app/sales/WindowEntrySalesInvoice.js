@@ -437,7 +437,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
                             labelWidth: 120,
                             name: 'driver_name',
                             id: 'driver_name_si',
-                            fieldLabel: 'Nama Supier',
+                            fieldLabel: 'Nama Supir',
                         }, {
                             xtype: 'textfield',
                             labelWidth: 120,
