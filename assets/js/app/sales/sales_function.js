@@ -289,6 +289,35 @@ function loadDataFormInvoice(idsales) {
             Ext.getCmp('totalPajakSalesInvoice_si').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('sisaBayarSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
             Ext.getCmp('memoSalesInvoice_si').setValue('Sales Invoice : ' + d.data.namecustomer)
+
+            Ext.getCmp('comboxpaymentterm_si').setValue(d.data.idpayment);
+            Ext.getCmp('ddaysSalesInvoice').setVisible(false);
+            Ext.getCmp('eomddaysSalesInvoice').setVisible(false);
+            Ext.getCmp('percentagediscSalesInvoice').setVisible(false);
+            Ext.getCmp('daysdiscSalesInvoice').setVisible(false);
+            switch (d.data.idpayment) {
+                case "3":
+                    Ext.getCmp('ddaysSalesInvoice').setVisible(true);
+                    Ext.getCmp('ddaysSalesInvoice').setDisabled(false);
+                    Ext.getCmp('ddaysSalesInvoice').setValue(d.data.ddays * 1);
+                    break;
+                case "4":
+                    Ext.getCmp('eomddaysSalesInvoice').setVisible(true);
+                    Ext.getCmp('eomddaysSalesInvoice').setDisabled(false);
+                    Ext.getCmp('eomddaysSalesInvoice').setValue(d.data.eomddays * 1);
+                    break;
+                case "5":
+                    Ext.getCmp('percentagediscSalesInvoice').setVisible(true);
+                    Ext.getCmp('daydiscSalesInvoice').setVisible(true);
+                    Ext.getCmp('percentagediscSalesInvoice').setDisabled(false);
+                    Ext.getCmp('daydiscSalesInvoice').setDisabled(false);
+                    Ext.getCmp('percentagediscSalesInvoice').setValue(d.data.percentagedisc * 1);
+                    Ext.getCmp('daydiscSalesInvoice').setValue(d.data.daydisc * 1);
+                    break;
+            }
+
+            Ext.getCmp('notes_si').setValue(null);
+            Ext.getCmp('invoice_date_si').setValue(new Date());
             var grid = Ext.getCmp('EntrySalesInvoice');
             Ext.each(d.items, function(obj, i) {
                 console.info(obj)
