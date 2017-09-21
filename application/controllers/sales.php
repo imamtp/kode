@@ -555,7 +555,7 @@ class sales extends MY_Controller {
         $qHeader = $this->db->query("select a.no_faktur,a.idsales,a.idpayment,a.idemployee,a.idjournal,a.idcustomer,a.date_quote,a.no_sales_quote,a.subtotal,a.freight,a.tax,a.disc,
                     a.total_dpp,a.totalamount,a.paidtoday,a.balance,a.comments,a.userin,a.datein,a.status,a.idcurrency,a.idunit,a.type,a.idsales_quote,a.date_sales,a.no_sales_order,
                     b.namepayment,c.firstname as fn_sales,c.lastname as ln_sales,d.nocustomer,d.namecustomer,e.namecurr,e.symbol as symbol_currency,
-                    f.namaunit,g.delivery_order_id,g.no_do,g.remarks,g.delivery_date,g.vehicle_number,g.driver_name,g.idshipping,g.ship_address,g.notes as note_shipping,h.nameshipping,i.nametax
+                    f.namaunit,g.delivery_order_id,g.no_do,g.remarks,g.delivery_date,g.vehicle_number,g.driver_name,g.idshipping,g.ship_address,g.notes as note_shipping,h.nameshipping,i.nametax,a.ddays,a.eomddays,a.percentagedisc,a.daydisc,a.dmax
                     from sales a
                     left join payment b ON a.idpayment = b.idpayment
                     left join employee c ON a.idsales = c.idemployee
@@ -601,6 +601,8 @@ class sales extends MY_Controller {
     }
 
     function save_sales_invoice(){
+        $this->load->model('journal/m_jsales','jmodel');
+        
         $statusform = $this->input->post('statusform');
         $params = array(
             'idunit' => $this->input->post('unit'),
@@ -612,6 +614,8 @@ class sales extends MY_Controller {
         );
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
+        
+        $id_inv = $this->m_data->getPrimaryID(null,'sales', 'id_inv', $this->input->post('idunit'));
         
         $this->db->trans_begin();
 
@@ -635,6 +639,7 @@ class sales extends MY_Controller {
 
         $data = array(
                 // 'paidtoday'=> $paidtoday,
+                'id_inv'=> $id_inv,
                 'paidtoday'=> 0, //masih jadi piutang
                 'balance'=>$saldo, //piutang masih full
                 'idpayment' => $idpayment,
@@ -654,7 +659,6 @@ class sales extends MY_Controller {
         $this->db->update('sales',$data);
 
         //buat jurnal piutang
-        $this->load->model('journal/m_jsales','jmodel');
         $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo'),$diskon,$pajak);
 
           if($this->db->trans_status() === false){
