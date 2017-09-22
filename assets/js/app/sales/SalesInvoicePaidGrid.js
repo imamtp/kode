@@ -1,7 +1,7 @@
 Ext.define('SalesInvoicePaidGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate'
+        'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur'
     ],
     idProperty: 'id'
 });
@@ -78,19 +78,28 @@ Ext.define(dir_sys + 'sales.SalesInvoicePaidGrid', {
             dataIndex: 'noinvoice',
             // hidden: true
         }, {
+            header: 'No Faktur',
+            dataIndex: 'no_faktur',
+            minWidth: 130,
+            // hidden: true
+        }, {
             header: 'Customer',
             dataIndex: 'namecustomer',
-            minWidth: 150
+            minWidth: 200
         },
         {
             header: 'Invoice Date',
             dataIndex: 'invoice_date',
-            minWidth: 150
+            minWidth: 150,
+            xtype: 'datecolumn',
+            format: 'd-m-Y'
         },
         {
             header: 'Sales Date',
             dataIndex: 'date_sales',
-            minWidth: 150
+            minWidth: 150,
+            xtype: 'datecolumn',
+            format: 'd-m-Y'
         },
         {
             header: 'Term Payment',
