@@ -128,12 +128,6 @@
             </tr>
             <tr>
               <td colspan = "3"></td>
-              <td align="left"><b>Biaya Kirim </b></td>
-              <td>:</td>
-              <td colspan = "2" align="right"><?=number_format($data['freigthcost'],2)?></td>
-            </tr>
-            <tr>
-              <td colspan = "3"></td>
               <td align="left"><b>Grand Total </b></td>
               <td>:</td>
               <td colspan = "2" align="right"><?=number_format($data['total'],2)?></td>

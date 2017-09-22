@@ -133,9 +133,9 @@ class m_salesinvoice extends CI_Model {
             $dtcetak['freigthcost'] = $r->freight;
             // $dtcetak['receivefrom'] = $r->userin;
             $dtcetak['totaltax'] = $r->tax;
-            $dtcetak['total'] = $r->totalamount;
-            $dtcetak['terbilang'] = terbilang($r->totalamount);
-            $dtcetak['totalowed'] = $r->balance;
+            $dtcetak['total'] = $r->totalamount - $r->freight;
+            $dtcetak['terbilang'] = terbilang($r->totalamount - $r->freight);
+            $dtcetak['totalowed'] = $r->balance - $r->freight;
             $dtcetak['memo'] = $r->notes_si;
             $dtcetak['datetrans'] = $r->date_sales;
             $dtcetak['invoice_date'] = $r->invoice_date;
@@ -163,6 +163,7 @@ class m_salesinvoice extends CI_Model {
                 'Pembayaran dengan Cek/Giro atau transfer ke Rek. BCA ac. 601.001.5888 an. PT. ALFA PRIMA SENTOSA',
             );
         }
+        $q->free_result();
         return $dtcetak;
     }
 
