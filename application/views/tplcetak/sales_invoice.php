@@ -213,7 +213,7 @@
              <p align="center">
              <!-- <center> -->
              <br><br><br><br><br>
-               (Zora Suzana)
+               (Zora Suzanna)
                <!-- </center> -->
               </p>
             </div>
