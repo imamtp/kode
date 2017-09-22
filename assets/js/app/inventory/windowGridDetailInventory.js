@@ -5,7 +5,7 @@
 //               });
 Ext.define('GridItemGridDetailInventoryModel', {
     extend: 'Ext.data.Model',
-    fields: ['sku_no', 'nameinventory', 'invno', 'hpp', 'notes', 'idinventory', 'cost', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'warehouse_code', 'no_batch', 'received_date'],
+    fields: ['sku_no', 'nameinventory', 'invno', 'hpp', 'notes', 'idinventory', 'cost', 'stock_one', 'uom_one', 'stock_two', 'uom_two', 'stock_tre', 'uom_tre', 'warehouse_code', 'no_batch', 'received_date', 'ratio_two', 'ratio_tre'],
     // fields: ['idinventory', 'totalitem', 'sku_no', 'satuan_pertama', 'invno', 'nameinventory', 'description', 'isinventory', 'issell', 'isbuy', 'cosaccount',
     // 'incomeaccount', 'assetaccount', 'qtystock', 'images', 'cost', 'unitmeasure', 'numperunit', 'minstock', 'idprimarysupplier',
     // 'sellingprice', 'idselingtax', 'unitmeasuresell', 'numperunitsell', 'notes', 'display', 'namesupplier', 'yearbuy', 'monthbuy', 'datebuy', 'namaunit', 'brand_name', 'brand_id', 'sku', 'totalstock', 'stock_kedua', 'satuan_kedua'
@@ -141,6 +141,13 @@ Ext.define('GridItemGridDetailInventory', {
             minWidth: 100
         },
         {
+            header: 'Ratio #2',
+            xtype: 'numbercolumn',
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'ratio_two',
+        },
+        {
             header: 'Stock #2',
             xtype: 'numbercolumn',
             minWidth: 120,
@@ -152,6 +159,13 @@ Ext.define('GridItemGridDetailInventory', {
             dataIndex: 'uom_two',
             // dataIndex: 'satuan_pertama',
             minWidth: 100
+        },
+        {
+            header: 'Ratio #3',
+            xtype: 'numbercolumn',
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'ratio_tre',
         },
         {
             header: 'Stock #3',

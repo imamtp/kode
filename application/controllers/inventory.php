@@ -1250,10 +1250,12 @@ class inventory extends MY_Controller {
                         else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
                     end as stock_two,
                     e.short_desc as uom_two,
+                    a.ratio_two,
                     case
                         when b.measurement_id_tre is null then null
                         else ceil(coalesce(c.stock,0) / a.ratio_tre) 
                     end as stock_tre,
+                    a.ratio_tre,
                     f.short_desc as uom_tre,
                     g.warehouse_code,
                     h.received_date,
