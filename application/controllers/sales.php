@@ -155,7 +155,6 @@ class sales extends MY_Controller {
             'idcustomer' => $this->input->post('customerSalesOrder'),
             // 'date_quote' => inputDate($this->input->post('tanggalSalesQuotation')),
             'delivery_date' => inputDate($this->input->post('delivery_date')),
-            'date_sales' => date('Y-m-d'),
            
             'idtax' => $idtax,
             'shipaddress'=> $this->input->post('shipaddress'),
@@ -196,6 +195,7 @@ class sales extends MY_Controller {
             $header['no_sales_order'] = $noarticle;
             $header['userin'] = $this->session->userdata('userid');
             $header['datein'] = date('Y-m-d H:m:s');
+            $header['date_sales'] = date('Y-m-d');
             $this->db->insert('sales', $header);
         }
         else if($statusform == 'edit'){
@@ -826,7 +826,7 @@ class sales extends MY_Controller {
         $d['isInvoice'] = true;
         
         if($print == null)
-            $this->load->view('tplcetak/sales_print',$d);
+            $this->load->view('tplcetak/sales_invoice',$d);
         else{    
             $filename = $d['title']."-".$d['data']['no'];
             $filename = str_replace(" ", "-", $filename);
@@ -834,7 +834,7 @@ class sales extends MY_Controller {
             $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
 
             ini_set('memory_limit','32M'); // boost the memory limit if it's low ;)
-            $html = $this->load->view('tplcetak/sales_print',$d, true);
+            $html = $this->load->view('tplcetak/sales_invoice',$d, true);
             // // $html = $this->load->view('pdf_report', $data, true); // render the view into HTML
             $this->load->library('pdf');
             $pdf = $this->pdf->load();
