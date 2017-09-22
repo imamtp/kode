@@ -161,13 +161,6 @@ Ext.define('GridItemGridDetailInventory', {
             minWidth: 100
         },
         {
-            header: 'Ratio #3',
-            xtype: 'numbercolumn',
-            minWidth: 120,
-            align: 'right',
-            dataIndex: 'ratio_tre',
-        },
-        {
             header: 'Stock #3',
             xtype: 'numbercolumn',
             minWidth: 120,
@@ -179,6 +172,13 @@ Ext.define('GridItemGridDetailInventory', {
             dataIndex: 'uom_tre',
             // dataIndex: 'satuan_pertama',
             minWidth: 100
+        },
+        {
+            header: 'Ratio #3',
+            xtype: 'numbercolumn',
+            minWidth: 120,
+            align: 'right',
+            dataIndex: 'ratio_tre',
         },
         {
             header: 'Harga Beli',
