@@ -1165,14 +1165,14 @@ class sales extends MY_Controller {
         $idinventory = $this->input->get('idinventory');
         $idsalesitem = $this->input->get('idsalesitem');
         
-        $sql = "select b.invno, c.nameinventory, sum(stock) as stock, d.size, b.ratio_two from warehouse_stock a
+        $sql = "select c.sku_no, c.nameinventory, sum(stock) as stock, d.size, b.ratio_two from warehouse_stock a
                 join inventory b on b.idinventory = a.idinventory --child
                 join inventory c on c.idinventory = b.idinventory_parent --parent
                 join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
                 where b.idinventory_parent = $idinventory 
                 and idsalesitem = $idsalesitem
                 and stock > 0
-                group by b.invno, c.nameinventory, d.size, b.ratio_two";
+                group by c.sku_no, c.nameinventory, d.size, b.ratio_two";
         $qcek = $this->db->query($sql);
 
         // $qcek = $this->db->get_where('warehouse_stock',array(
@@ -1198,7 +1198,7 @@ class sales extends MY_Controller {
             }
         } else {
             $success = false;
-            $msg = "Stok untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+            $msg = "Stok untuk barang: <b>".$this->input->get('nameinventory'). "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
         }
 
         //cek status
