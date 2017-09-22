@@ -1233,7 +1233,7 @@ class inventory extends MY_Controller {
             $wer_type = "and b.inventory_type = $inventory_type";
         }
 
-        $wer_find = "and ( a.sku_no like '%$find%' or a.nameinventory like '%$find%')";
+        $wer_find = "and ( b.sku_no like '%$find%' or b.nameinventory like '%$find%')";
 
         $sql = "select 
                     b.sku_no,
