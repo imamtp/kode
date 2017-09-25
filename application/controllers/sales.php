@@ -647,7 +647,7 @@ class sales extends MY_Controller {
                 $duedate = date("Y-m-d", strtotime("+$data[ddays] day", strtotime($data['invoice_date'])));
                 break;
             case 4: //emoddays
-                $eom = date('Y-m-t', strtotime($header['invoice_date']));
+                $eom = date('Y-m-t', strtotime($data['invoice_date']));
                 $duedate = date("Y-m-d", strtotime("+$data[eomddays] day", strtotime($eom)));
                 break;
             case 5: //discount dmax
