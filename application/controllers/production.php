@@ -19,7 +19,7 @@ class production extends MY_Controller
             'table' => 'job_order',
             'fieldpk' => 'job_no',
             'fieldname' => 'job_no',
-            'extraparams'=> 'a.job_no is not null',
+            'extraparams'=> 'and job_no is not null',
         );
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
