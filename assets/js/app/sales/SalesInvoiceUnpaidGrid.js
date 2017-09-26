@@ -242,7 +242,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                             text: 'Print',
                             iconCls: 'print-icon',
                             handler: function() {
-                                window.location = SITE_URL + 'sales/print_invoice/' + selectedRecord.data.idsales + '/print';
+                                window.open(SITE_URL + 'sales/print_invoice/' + selectedRecord.data.idsales + '/print');
                                 // storeGridSertifikat.load();
                             }
                         }]
