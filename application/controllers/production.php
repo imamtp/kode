@@ -17,9 +17,9 @@ class production extends MY_Controller
             'idunit' => $this->input->post('unit'),
             'prefix' => 'WO',
             'table' => 'job_order',
-            'fieldpk' => 'job_order_id',
+            'fieldpk' => 'job_no',
             'fieldname' => 'job_no',
-            'extraparams'=> null,
+            'extraparams'=> 'a.job_no is not null',
         );
         $this->load->library('../controllers/setup');
         $noarticle = $this->setup->getNextNoArticle2($params);
