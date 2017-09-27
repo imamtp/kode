@@ -106,7 +106,8 @@ class m_salesorder extends CI_Model {
                                 left join warehouse d ON d.warehouse_id = a.warehouse_id
                                 left join productmeasurement e ON a.measurement_id_size = e.measurement_id
                                 where idsales = $idsales $wer
-                                group by a.deleted,a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement");
+                                group by a.deleted,a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement
+                                order by a.idsalesitem desc");
 
         return $q->result_array();
     }
