@@ -3,7 +3,7 @@ Ext.create(dir_sys + 'sales.EntrySalesOrder');
 Ext.define('GridSalesOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'delivery_date', 'invoice_status', 'no_sales_order_quote', 'idsales_quote', 'date_sales_quote', 'firstname', 'lastname', 'salesman_id', 'idtax', 'rate', 'no_sales_order_quote', 'date_sales_quote', 'include_tax', 'idpayment', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'dmax', 'shipaddress', 'total_dpp',
+        'idsales', 'idpayment', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'delivery_date_sales', 'invoice_status', 'no_sales_order_quote', 'idsales_quote', 'date_sales_quote', 'firstname', 'lastname', 'salesman_id', 'idtax', 'rate', 'no_sales_order_quote', 'date_sales_quote', 'include_tax', 'idpayment', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'dmax', 'shipaddress', 'total_dpp',
     ],
     idProperty: 'id'
 });
@@ -265,8 +265,8 @@ Ext.define(dir_sys + 'sales.GridSalesOrderGrid', {
             dataIndex: 'date_sales',
             minWidth: 150
         }, {
-            header: 'Delivery Date',
-            dataIndex: 'delivery_date',
+            header: 'Req Delivery Date',
+            dataIndex: 'delivery_date_sales',
             minWidth: 150
         }, {
             header: 'Total Item',
