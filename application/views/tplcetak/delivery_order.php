@@ -102,11 +102,14 @@
                 <!--<td align="right"><?=number_format($value['total'])?></td>-->
                 <td><?=$value['qty_kirim']?></td>
               </tr>
-            <?php endforeach; ?>
+            <?php 
+             $totalqty+=$value['qty'];
+             $totalkirim+=$value['qty_kirim'];
+             
+            endforeach; ?>
             </tbody>
             <?php
-              $totalqty+=$value['qty'];
-              $totalkirim =$value['qty_kirim'];
+             
             ?>
           </table>
         <?php endif; ?>
