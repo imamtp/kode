@@ -164,14 +164,13 @@
 							<tr>
 								<!-- notes -->
 								<td>
-									<p>Notes:</p>
-									<p>
-										<?php foreach($data['notes'] as $note):?>
-											<?php if($note != null): ?>
-												<p><?=$note?></p>
-											<?php endif; ?>
-										<?php endforeach; ?>
-									</p>
+									Notes:<br><br>
+									<?php 
+									foreach($data['notes'] as $note){
+										if($note != null)
+											echo $note."<br><br>";
+									}
+									?>
 								</td>
 								<!-- end of notes -->
 
@@ -181,7 +180,7 @@
 
 								<!-- ttd 2 -->
 								<td colspan="2" align="center">
-									<br><br><br><br>(Zora Suzanna)
+									<br><br><br><br><br><br><br>(Zora Suzanna)
 								</td>
 								<!-- end of ttd 2 -->
 							</tr>
