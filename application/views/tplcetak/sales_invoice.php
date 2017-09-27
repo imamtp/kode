@@ -22,6 +22,7 @@
 						No SO: #<?=$data['no_so']?><br> 
 						Tanggal Invoice: <?=backdate2($data['invoice_date']);?><br> 
 						No SI: #<?=$data['no_si']?><br>
+						No Faktur: #<?=$data['no_faktur']?><br>
 					</td>
         </tr>
         <tr>
