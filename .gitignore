@@ -3,3 +3,4 @@ application/config/constants.php
 application/third_party/mpdf60/
 download/reports
 assets/template/templates_c/
+upload/
