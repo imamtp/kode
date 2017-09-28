@@ -168,13 +168,15 @@
 					<tr>
 						<!-- notes -->
 						<td>
-							Notes:<br><br>
+							<p>Notes:</p>
+							<ul>
 							<?php 
 							foreach($data['notes'] as $note){
 								if($note != null)
-									echo $note."<br><br>";
+									echo "<li>".$note."</li>";
 							}
 							?>
+							</ul>
 						</td>
 						<!-- end of notes -->
 
