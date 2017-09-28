@@ -176,7 +176,7 @@ class m_salesorder extends CI_Model {
             $dtcetak['notes'] = array(
                 $r->comments,
                 'Pembayaran dengan Cek/Giro atau transfer ke Rek. BCA ac. 601.001.5888 an. PT. ALFA PRIMA SENTOSA',
-                'Setelah disetujui mohon ditandatangani dan dikirim kembali via fax atau email ke: sales.alfasteel@gmail.com',
+                'Setelah disetujui mohon ditandatangani dan dikirim kembali via fax/email ke: sales.alfasteel@gmail.com',
             );
 
         }
