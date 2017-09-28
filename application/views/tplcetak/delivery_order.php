@@ -1,221 +1,146 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title><?=$title?></title>
-    <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
-    <link href="<?=base_url()?>/assets/css/print.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>
+			<?=$title?>
+	</title>
+	<link href="<?=base_url()?>/assets/css/print2.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="container">
-    <div class="panel panel-info">
-    <div class="panel-body">
-  
-    <div class="row">
-      <div class="col-xs-5">
-        <h1>
-          <?=$this->logo?>
-        </h1>
-      </div>
-      <div class="col-xs-5 col-xs-offset-2 text-right">
-        <h3><?=$title?></h3>
-        Tanggal Order: <?=$data['datetrans']?> <br>
-            Tanggal Pengiriman: <?=$data['header']['delivery_date']?><br>
-            NO DO: #<?=$data['no_do']?><br>
-            NO Faktur: #<?=$data['header']['no_faktur']?><br>
-        
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="col-xs-5">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4><?=$data['namaunit']?></h4>
-          </div>
-          <div class="panel-body">
-            <p>
-            <?=$data['alamat']?> <br>
-              Phone: <?=$data['telp']?> <br>
-              Fax: <?=$data['fax']?> <br>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-5 col-xs-offset-2 text-left">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4>Customer</h4>
-          </div>
-          <div class="panel-body">
-            <p>
-              <?=$data['header']['namecustomer'].'<br>
-              Alamat: '.
-              $data['header']['address_customer']?> <br>
-              Phone: <?=$data['header']['telephone_customer']?> <br>
-              Mobile: <?=$data['header']['handphone_customer']?> <br>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="margin-left:1px;">
-      <table class="table borderless" >
-        <tr>
-           &nbsp;&nbsp;NO SO: #<?=$data['no']?><br>
-          <td colspan="2"><b>Item List:</b></td>
-        </tr>
-        <?php if($data['detail']!=null): ?>
-          <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
-            <thead>
-              <tr>
-                <th width="30">No</th>  
-                <th>Kode SKU</th>                       
-                <th>Nama Barang</th>
-                <th>Qty Order</th>
-                <th>Satuan</th>
-                <th>Ukuran</th>
-                <th>Satuan Ukuran</th>
-                <th>Qty Kirim</th>
-              </tr>
-            </thead>
-            <?php 
-              $totalqty = 0;
-              $totalkirim = 0;
-            ?>
-            <tbody>
-            <?php foreach ($data['detail'] as $key => $value) : ?>
-              <tr>
-                <td width="30"><?=$key+1?></td>
-                <td><?=$value['sku_no']?></td>
-                <td><?=$value['nameinventory']?></td>  
-                <!-- <td><?=$value['warehouse_desc']?></td>                            -->
-                <!--<td align="right"><?=number_format($value['price'])?></td>-->
-                <td align="right"><?=$value['qty']?></td>
-                <td><?=$value['short_desc']?></td>
-                <td align="right"><?=$value['size']?></td>
-                <td><?=$value['size_measurement']?></td>
-                <!--<td align="right"><?=number_format($value['disc'])?></td>-->
-                <?php //if($data['totaltax']!=0) { echo "<td>".$value['ratetax']."</td>"; } ?>
-                <!--<td align="right"><?=number_format($value['total'])?></td>-->
-                <td><?=$value['qty_kirim']?></td>
-              </tr>
-            <?php 
-             $totalqty+=$value['qty'];
-             $totalkirim+=$value['qty_kirim'];
-             
-            endforeach; ?>
-            </tbody>
+	<table class="table" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td style="width:45%">
+				<?=$this->logo?>
+			</td>
+			<td rowspan="3" style="width:10%">&nbsp;</td>
+			<td style="width:45%" align="right">
+				<h2><?=$title?></h2>
+				Tanggal Pengiriman: <?=backdate2($data['delivery_date']);?><br> 
+				No DO: #<?=$data['no_do']?><br>
+			</td>
+		</tr>
+		<tr>
+			<td class="cell-bordered">
+				<h3><?=$data['namaunit']?></h3>
+			</td>
+			<td class="cell-bordered">
+				<h3>Customer</h3>
+			</td>
+		</tr>
+		<tr>
+			<td class="cell-bordered">
+				<p><?=$data['alamat']?><br> 
+				Phone: <?=$data['telp']?><br> 
+				Fax: <?=$data['fax']?> </p>
+			</td>
+			<td class="cell-bordered">
+				<p><?=$data['header']['namecustomer']?><br> 
+				Alamat: <?=$data['header']['address_customer']?><br> 
+				Phone: <?=$data['header']['telephone_customer']?><br> 
+				Mobile: <?=$data['header']['handphone_customer']?> </p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<table class="table-child" border="1" cellspacing="0" cellpadding="2">
+					<thead>	
+						<tr>
+							<th width="30">NO</th>  
+							<th>SKU</th>                       
+							<th>NAMA BARANG</th>
+							<th>QTY ORDER</th>
+							<th>SAT.</th>
+							<th>UKURAN</th>
+							<th>SAT.</th>
+							<th>QTY KIRIM</th>
+						</tr>
+					</thead>
+					<tbody>
+          <?php 
+            $total_order = 0;
+            $total_kirim = 0;
+          ?>
+					<?php foreach ($data['detail'] as $key => $value) : ?>
+						<tr>
+							<td width="30"><?=$key+1?></td>
+							<td><?=$value['sku_no']?></td>
+							<td><?=$value['nameinventory']?></td>  
+							<td align="right"><?=$value['qty']?></td>
+							<td align="center"><?=$value['short_desc']?></td>
+							<td align="right"><?=$value['size']?></td>
+							<td align="center"><?=$value['size_measurement']?></td>
+							<td align="right"><?=number_format($value['qty_kirim'])?></td>
+						</tr>
             <?php
-             
+              $total_order += $value['qty'];
+              $total_kirim += $value['qty_kirim'];
             ?>
-          </table>
-        <?php endif; ?>
-
-        <table class="table borderless" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
+					<?php endforeach; ?>
+            
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr>
+      <td colspan="3">
+        <table class="table-child" border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td></td>
-            <td> </td>
-            <td align="right"><b>Total Qty Order</b></td>
-            <td align="right" width="200"><?=$totalqty?></td>
+            <td rowspan="2" colspan="4" width="75%">&nbsp;</td>
+            <td colspan="3" width="15%">Total Qty Order</td>
+            <td>:</td>
+            <td align="right"><?=$total_order?></td>
           </tr>
           <tr>
-            <td></td>
-            <td> </td>
-            <td align="right"><b>Total Qty Kirim</b></td>
-            <td align="right" width="200"><?=$totalkirim?></td>
+            <td colspan="3">Total Qty Kirim</td>
+            <td>:</td>
+            <td align="right"><?=$total_kirim?></td>
           </tr>
-          <?php if($data['dp']!=0) : ?>
-            <tr>
-              <td></td>
-                <td> </td>
-              <td align="right"><b>Uang Muka/Terbayar (-)</b></td>
-              <td align="right"><?=number_format($data['dp'])?></td>
-            </tr>
-          <?php endif; ?>
-          <?php if($data['totalowed']!=0): ?>
-           <!--  <tr>
-              <td></td>
-                <td> </td>
-              <td align="right"><b>Saldo Terhutang</b></td>
-              <td align="right"><?=number_format($data['totalowed'])?></td>
-            </tr> -->
-          <?php endif;?>
         </table>
-        <tr>
-          <td width="22%"><b> Notes:</b></td>
-          <td width="50%"><?=$data['memo']?></td>
-        </tr>
-      </table>
-    </div>
-    
-    </div>
+      </td>
+		</tr>
+    <tr>
+      <td colspan="3">
+        <table class="table-child" border="0" cellspacing="0">
+          <tr>
+            <td width="30%">&nbsp;</td>
+            <td width="5%"></td>
+            <td width="15%">&nbsp;</td>
+            <td width="15%">&nbsp;</td>
+            <td width="5%"></td>
+            <td width="30%">&nbsp;</td>
+          </tr>
+          <tr>
+						<td colspan="3">
+              <!-- notes -->
+              <p>Notes:</p>
+              <ul>
+              <?php 
+              foreach($data['notes'] as $note){
+                if($note != null)
+                  echo "<li>".$note."</li>";
+              }
+              ?>
+              </ul>
+              <!-- end of notes -->
+            </td>
 
-      <div class="row">
-      <div class="col-xs-5">
-        <div class="">
-          <div class="panel-body">
-            <p>            
-              Alamat Pengiriman: <?=$data['header']['ship_address']?> <br>
-              Tgl Pengiriman: <?=$data['header']['delivery_date']?> <br>
-              No Kendaraan: <?=$data['vehicle_number']?> <br>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-3">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4>Diterima Oleh</h4>
-          </div>
-          <div class="panel-body">
-           <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-
-           <center>
-            Pelanggan
-           </center>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-3 text-left">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4>Diketahui Oleh</h4>
-          </div>
-          <div class="panel-body">
-            <p>
-              <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-               <center>
-            Kepala Pabrik
-           </center>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-3 text-left">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4>Dibuat Oleh</h4>
-          </div>
-          <div class="panel-body">
-            <p>
-              <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-               <center>
-            Gudang
-           </center>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-
-    </div> <!-- panel -->
-  </div><!-- container -->
+          </tr>
+          <tr>
+              <td align="center">Diterima Oleh:<br><br><br><br><br><br><br>Pelanggan</td>
+              <td></td>
+              <td colspan="2" align="center">Diketahui Oleh:<br><br><br><br><br><br><br>Kepala Pabrik</td>
+              <td></td>
+              <td align="center">Dibuat Oleh:<br><br><br><br><br><br><br>Gudang</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+	</table>
 </body>
 </html>
