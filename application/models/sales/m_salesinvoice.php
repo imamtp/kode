@@ -126,6 +126,7 @@ class m_salesinvoice extends CI_Model {
             $dtcetak['detailtotal'] = number_format($r->subtotal);
 
             $dtcetak['no_si'] = $r->noinvoice;
+            $dtcetak['no_so'] = $r->no_sales_order;
             $dtcetak['no_do'] = $r->no_do;
             $dtcetak['no_faktur'] = $r->no_faktur;
 
