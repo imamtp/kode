@@ -828,7 +828,7 @@ class sales extends MY_Controller {
         if($print == null)
             $this->load->view('tplcetak/sales_invoice',$d);
         else{    
-            $filename = $d['title']."-".$d['data']['no'];
+            $filename = $d['title']."-".$d['data']['no_si'];
             $filename = str_replace(" ", "-", $filename);
             // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
             $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
