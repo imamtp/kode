@@ -24,7 +24,7 @@ class m_salesinvoice extends CI_Model {
             when 3 then a.ddays::text
             when 4 then a.eomddays::text
             when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
-        end as term";
+        end as term, c.no_do";
     }
     
     function fieldCek()
@@ -39,7 +39,8 @@ class m_salesinvoice extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join customer b ON a.idcustomer = b.idcustomer";
+                    join customer b ON a.idcustomer = b.idcustomer
+                    join delivery_order c on c.idsales = a.idsales";
 
         return $query;
     }
@@ -125,7 +126,7 @@ class m_salesinvoice extends CI_Model {
             $dtcetak['detailtotal'] = number_format($r->subtotal);
 
             $dtcetak['no_si'] = $r->noinvoice;
-            $dtcetak['no_so'] = $r->no_sales_order;
+            $dtcetak['no_do'] = $r->no_do;
             $dtcetak['no_faktur'] = $r->no_faktur;
 
             // //get receivefrom,total,memo,tax
@@ -160,6 +161,7 @@ class m_salesinvoice extends CI_Model {
             
             $dtcetak['notes'] = array(
                 $r->comments,
+                'No DO #'.$r->no_do,
                 'Pembayaran dengan Cek/Giro atau transfer ke Rek. BCA ac. 601.001.5888 an. PT. ALFA PRIMA SENTOSA',
             );
         }
