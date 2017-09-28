@@ -18,8 +18,6 @@
 					<td rowspan="3" style="width:10%">&nbsp;</td>
 					<td style="width:45%" align="right">
 						<h2><?=$title?></h2>
-						Tanggal Order: <?=backdate2($data['datetrans']);?><br> 
-						No SO: #<?=$data['no_so']?><br> 
 						Tanggal Invoice: <?=backdate2($data['invoice_date']);?><br> 
 						No SI: #<?=$data['no_si']?><br>
 						No Faktur: #<?=$data['no_faktur']?><br>
@@ -165,13 +163,15 @@
 							<tr>
 								<!-- notes -->
 								<td>
-									Notes:<br><br>
+									<p>Notes:</p>
+									<ul>
 									<?php 
 									foreach($data['notes'] as $note){
 										if($note != null)
-											echo $note."<br><br>";
+											echo "<li>".$note."</li>";
 									}
 									?>
+									</ul>
 								</td>
 								<!-- end of notes -->
 
