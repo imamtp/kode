@@ -120,8 +120,8 @@ class m_deliveryordergrid extends CI_Model {
             $vehicle_number = $r->vehicle_number?: "-";
 
             $dtcetak['notes'] = array(
-                'No SO #'.$r->no_sales_order,
                 $r->notes,
+                'No SO #'.$r->no_sales_order,
                 'Alamat Pengiriman: '.$dtcetak['header']['ship_address'],
                 'Tgl Pengiriman: '. backdate2($dtcetak['header']['delivery_date']),
                 'No Kendaraan: '.$vehicle_number,

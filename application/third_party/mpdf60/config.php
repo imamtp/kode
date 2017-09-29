@@ -221,7 +221,7 @@ $this->ignore_table_percents = false;
 $this->ignore_table_widths = false;
 $this->keep_table_proportions = true;	// If table width set > page width, force resizing but keep relative sizes
 							// Also forces respect of cell widths set by %
-$this->shrink_tables_to_fit = 1.4;	// automatically reduce fontsize in table if words would have to split ( not in CJK)
+$this->shrink_tables_to_fit = 0;	// automatically reduce fontsize in table if words would have to split ( not in CJK)
 						// 0 or false to disable; value (if set) gives maximum factor to reduce fontsize
 
 $this->tableMinSizePriority = false;	// If page-break-inside:avoid but cannot fit on full page without 

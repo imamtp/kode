@@ -43,104 +43,92 @@
 				Mobile: <?=$data['header']['handphone_customer']?> </p>
 			</td>
 		</tr>
+	</table>
+	<br>
+	<table class="table" border="1" cellspacing="0" cellpadding="4">
+		<thead>	
+			<tr>
+				<th width="30">NO</th>  
+				<th>SKU</th>                       
+				<th>NAMA BARANG</th>
+				<th>QTY ORDER</th>
+				<th>SAT.</th>
+				<th>UKURAN</th>
+				<th>SAT.</th>
+				<th>QTY KIRIM</th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php 
+			$total_order = 0;
+			$total_kirim = 0;
+		?>
+		<?php foreach ($data['detail'] as $key => $value) : ?>
+			<tr>
+				<td width="30"><?=$key+1?></td>
+				<td><?=$value['sku_no']?></td>
+				<td><?=$value['nameinventory']?></td>  
+				<td align="right"><?=$value['qty']?></td>
+				<td align="center"><?=$value['short_desc']?></td>
+				<td align="right"><?=$value['size']?></td>
+				<td align="center"><?=$value['size_measurement']?></td>
+				<td align="right"><?=number_format($value['qty_kirim'])?></td>
+			</tr>
+			<?php
+				$total_order += $value['qty'];
+				$total_kirim += $value['qty_kirim'];
+			?>
+		<?php endforeach; ?>
+			
+		</tbody>
+	</table>
+	<br>
+	<table class="table-child" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
 		<tr>
-			<td colspan="3">&nbsp;</td>
+			<td rowspan="2" colspan="4" width="75%">&nbsp;</td>
+			<td colspan="3" width="15%">Total Qty Order</td>
+			<td>:</td>
+			<td align="right"><?=$total_order?></td>
+		</tr>
+		<tr>
+			<td colspan="3">Total Qty Kirim</td>
+			<td>:</td>
+			<td align="right"><?=$total_kirim?></td>
+		</tr>
+	</table>
+  <br>
+	<table class="table" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
+		<tr>
+			<td width="30%">&nbsp;</td>
+			<td width="5%"></td>
+			<td width="15%">&nbsp;</td>
+			<td width="15%">&nbsp;</td>
+			<td width="5%"></td>
+			<td width="30%">&nbsp;</td>
 		</tr>
 		<tr>
 			<td colspan="3">
-				<table class="table-child" border="1" cellspacing="0" cellpadding="2">
-					<thead>	
-						<tr>
-							<th width="30">NO</th>  
-							<th>SKU</th>                       
-							<th>NAMA BARANG</th>
-							<th>QTY ORDER</th>
-							<th>SAT.</th>
-							<th>UKURAN</th>
-							<th>SAT.</th>
-							<th>QTY KIRIM</th>
-						</tr>
-					</thead>
-					<tbody>
-          <?php 
-            $total_order = 0;
-            $total_kirim = 0;
-          ?>
-					<?php foreach ($data['detail'] as $key => $value) : ?>
-						<tr>
-							<td width="30"><?=$key+1?></td>
-							<td><?=$value['sku_no']?></td>
-							<td><?=$value['nameinventory']?></td>  
-							<td align="right"><?=$value['qty']?></td>
-							<td align="center"><?=$value['short_desc']?></td>
-							<td align="right"><?=$value['size']?></td>
-							<td align="center"><?=$value['size_measurement']?></td>
-							<td align="right"><?=number_format($value['qty_kirim'])?></td>
-						</tr>
-            <?php
-              $total_order += $value['qty'];
-              $total_kirim += $value['qty_kirim'];
-            ?>
-					<?php endforeach; ?>
-            
-					</tbody>
-				</table>
+				<!-- notes -->
+				<p>Notes:</p>
+				<ul>
+				<?php 
+				foreach($data['notes'] as $note){
+					if($note != null)
+						echo "<li>".$note."</li>";
+				}
+				?>
+				</ul>
+				<!-- end of notes -->
 			</td>
+
 		</tr>
 		<tr>
-      <td colspan="3">
-        <table class="table-child" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td rowspan="2" colspan="4" width="75%">&nbsp;</td>
-            <td colspan="3" width="15%">Total Qty Order</td>
-            <td>:</td>
-            <td align="right"><?=$total_order?></td>
-          </tr>
-          <tr>
-            <td colspan="3">Total Qty Kirim</td>
-            <td>:</td>
-            <td align="right"><?=$total_kirim?></td>
-          </tr>
-        </table>
-      </td>
+				<td align="center">Diterima Oleh:<br><br><br><br><br><br><br>Pelanggan</td>
+				<td></td>
+				<td colspan="2" align="center">Diketahui Oleh:<br><br><br><br><br><br><br>Kepala Pabrik</td>
+				<td></td>
+				<td align="center">Dibuat Oleh:<br><br><br><br><br><br><br>Gudang</td>
 		</tr>
-    <tr>
-      <td colspan="3">
-        <table class="table-child" border="0" cellspacing="0">
-          <tr>
-            <td width="30%">&nbsp;</td>
-            <td width="5%"></td>
-            <td width="15%">&nbsp;</td>
-            <td width="15%">&nbsp;</td>
-            <td width="5%"></td>
-            <td width="30%">&nbsp;</td>
-          </tr>
-          <tr>
-						<td colspan="3">
-              <!-- notes -->
-              <p>Notes:</p>
-              <ul>
-              <?php 
-              foreach($data['notes'] as $note){
-                if($note != null)
-                  echo "<li>".$note."</li>";
-              }
-              ?>
-              </ul>
-              <!-- end of notes -->
-            </td>
-
-          </tr>
-          <tr>
-              <td align="center">Diterima Oleh:<br><br><br><br><br><br><br>Pelanggan</td>
-              <td></td>
-              <td colspan="2" align="center">Diketahui Oleh:<br><br><br><br><br><br><br>Kepala Pabrik</td>
-              <td></td>
-              <td align="center">Dibuat Oleh:<br><br><br><br><br><br><br>Gudang</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
 	</table>
 </body>
 </html>

@@ -974,7 +974,7 @@ class production extends MY_Controller
         if($print == null)
             $this->load->view('tplcetak/production_wo',$d);
         else{    
-            $filename = $d['title']."-".$d['data']['no'];
+            $filename = $d['title']."-".$d['data']['header']['job_no'];
             $filename = str_replace(" ", "-", $filename);
             // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
             $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";

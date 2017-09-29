@@ -162,6 +162,7 @@ class m_salesinvoice extends CI_Model {
             
             $dtcetak['notes'] = array(
                 $r->comments,
+                'No SO #'.$r->no_sales_order,
                 'No DO #'.$r->no_do,
                 'Pembayaran dengan Cek/Giro atau transfer ke Rek. BCA ac. 601.001.5888 an. PT. ALFA PRIMA SENTOSA',
             );
