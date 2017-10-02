@@ -1777,7 +1777,13 @@ class Backend extends MY_Controller {
                         $d['data'] = $this->model->cetak($id);
                         $d['title'] = 'FAKTUR RETUR';
                         $this->load->view('tplcetak/retur',$d);
-                    }
+                    } else if($modul=='piutang_history')
+                        {
+                            $this->load->model('hutangpiutang/m_piutangbayar','model');
+                            $d['data'] = $this->model->cetak($id);
+                            $d['title'] = 'KWITANSI PENERIMAAN';
+                            $this->load->view('tplcetak/piutang_history',$d);
+                        }
     }
 
     function cmb() {
