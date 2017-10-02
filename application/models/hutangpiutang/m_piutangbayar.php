@@ -16,7 +16,7 @@ class m_piutangbayar extends CI_Model {
     }
 
     function selectField() {
-        return "z.idpiutanghistory,z.idregistrasipiutang,z.tanggal,z.diterima,z.sisa,z.idjournal,z.datein,b.namaunit,c.accname as accnamepiutang,f.namecustomer,f.nocustomer,d.accnumber as accnumberlink,d.accname";
+        return "z.idpiutanghistory,z.idregistrasipiutang,z.tanggal,z.diterima,z.sisa,z.idjournal,z.datein,b.namaunit,c.accname as accnamepiutang,f.namecustomer,f.nocustomer,d.accnumber as accnumberlink,d.accname,h.accname as accnamekas";
     }
      function fieldCek()
     {
@@ -34,7 +34,9 @@ class m_piutangbayar extends CI_Model {
                     join unit b ON a.idunit = b.idunit
                     join account c ON a.idaccount = c.idaccount and a.idunit = c.idunit
                     join customer f ON a.idcustomer = f.idcustomer
-                    join account d ON a.idaccountlink = d.idaccount  and a.idunit = d.idunit";
+                    join account d ON a.idaccountlink = d.idaccount  and a.idunit = d.idunit
+                    join journalitem g ON z.idjournal = g.idjournal and credit = 0
+                    join account h ON h .idaccount = g.idaccount and h.idunit = b.idunit";
 
         return $query;
     }
