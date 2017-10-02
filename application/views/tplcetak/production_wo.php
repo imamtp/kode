@@ -27,6 +27,35 @@
         </div>
       </div>
       
+      <div class="row">
+        <div class="col-xs-5">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>SKP (SO)</h4>
+            </div>
+            <div class="panel-body">
+              <table border="0" style="width:99%;">
+                <tr><td width="100" >NO SKP (SO):</td><td style="text-align:right; font-size:13pt"><?=$data['header']['no_sales_order']?></td></tr>
+                <tr><td>Customer:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['namecustomer']?></td></tr>
+                <tr><td>Alamat:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['address_customer']?></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-5 col-xs-offset-2 text-left">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Delivery Order Address</h4>
+            </div>
+            <div class="panel-body">
+             <p>
+             <?=$data['shipaddress_so']?>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
           <tr>
@@ -75,30 +104,17 @@
         <div class="col-xs-5">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>SKP (SO)</h4>
+            <h4>Keterangan</h4>
             </div>
             <div class="panel-body">
-              <table border="0" style="width:99%;">
-                <tr><td width="100" >NO SKP (SO):</td><td style="text-align:right; font-size:13pt"><?=$data['header']['no_sales_order']?></td></tr>
-                <tr><td>Customer:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['namecustomer']?></td></tr>
-                <tr><td>Alamat:</td><td style="text-align:right; font-size:13pt"><?=$data['header']['address_customer']?></td></tr>
-              </table>
-            </div>
+            <p>
+             Tanggal Cetak: <?=date('d-m-Y')?> <br>
+             Dicetak Oleh: <?=$this->session->userdata('realname')?> <br>
+             </p>
+           </div>
           </div>
         </div>
-        <div class="col-xs-5 col-xs-offset-2 text-left">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4>Keterangan</h4>
-            </div>
-            <div class="panel-body">
-             <p>
-              Tanggal Cetak: <?=date('d-m-Y')?> <br>
-              Dicetak Oleh: <?=$this->session->userdata('realname')?> <br>
-              </p>
-            </div>
-          </div>
-        </div>
+       
       </div>
 
     </div>
