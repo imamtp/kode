@@ -85,12 +85,13 @@
 	<br>
 	<table class="table-child" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
 		<tr>
-			<td rowspan="2" colspan="4" width="75%">&nbsp;</td>
+			<td width="75%">&nbsp;</td>
 			<td colspan="3" width="15%">Total Qty Order</td>
 			<td>:</td>
 			<td align="right"><?=$total_order?></td>
 		</tr>
 		<tr>
+			<td>&nbsp;</td>
 			<td colspan="3">Total Qty Kirim</td>
 			<td>:</td>
 			<td align="right"><?=$total_kirim?></td>
@@ -123,11 +124,11 @@
 
 		</tr>
 		<tr>
-				<td align="center">Diterima Oleh:<br><br><br><br><br><br><br>Pelanggan</td>
-				<td></td>
-				<td colspan="2" align="center">Diketahui Oleh:<br><br><br><br><br><br><br>Kepala Pabrik</td>
-				<td></td>
-				<td align="center">Dibuat Oleh:<br><br><br><br><br><br><br>Gudang</td>
+			<td align="center">Diterima Oleh:<br><br><br><br><br><br><br>Pelanggan</td>
+			<td></td>
+			<td colspan="2" align="center">Diketahui Oleh:<br><br><br><br><br><br><br>Kepala Pabrik</td>
+			<td></td>
+			<td align="center">Dibuat Oleh:<br><br><br><br><br><br><br>Gudang</td>
 		</tr>
 	</table>
 </body>
