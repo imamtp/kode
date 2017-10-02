@@ -104,6 +104,18 @@
 				</table>
 			</td>
 		</tr>
+		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr>
+			<td class="cell-bordered" width="40%">
+				<h4>Ship to</h4>
+			</td>
+			<td colspan="2">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="cell-bordered">
+				<?=$data['shipaddress_so']?:"- <br>"?>
+			</td>
+		</tr>
 	</table>
 </body>
 </html>
