@@ -9,8 +9,8 @@
     <meta name="author" content="">
     <link href="{$assets_url}/css/icons.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{$assets_url}/ext/resources/css/TabScrollerMenu.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="{$assets_url}/css/offline-theme-slide.css" /> -->
-    <!-- <link rel="stylesheet" type="text/css" href="{$assets_url}/css/offline-language-english-indicator.css" /> -->
+    <link rel="stylesheet" type="text/css" href="{$assets_url}/css/offline-theme-slide.css" /> 
+     <link rel="stylesheet" type="text/css" href="{$assets_url}/css/offline-language-english-indicator.css" /> 
 
 
     <style type="text/css">
@@ -87,7 +87,7 @@
     <script src='{$assets_url}/js/app/data/models.js'></script>
     <script src='{$assets_url}/js/app/combox.js'></script>
     <script src='{$assets_url}/js/util.js'></script>
-    <!-- // <script src='{$assets_url}/js/offline.min.js'></script>         -->
+    <script src='{$assets_url}/js/offline.min.js'></script>        
     <script src='{$assets_url}/ext/NumericField.js'></script>
 
 
