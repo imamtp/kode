@@ -126,7 +126,7 @@ class m_deliveryordergrid extends CI_Model {
                 'Alamat Pengiriman: '.$dtcetak['header']['ship_address'],
                 'No Kendaraan: '.$vehicle_number,
                 'Supir: '. $driver_name,
-                'Barang yang sudah diterima tidak dapat  ditukar atau dikembalikann'
+                'Barang yang sudah diterima tidak dapat ditukar atau dikembalikan'
             );
         }
         return $dtcetak;
