@@ -50,19 +50,24 @@ class production extends MY_Controller
             // 'pic_id' => $this->input->post('pic_id')=='' ? null : $this->input->post('pic_id'),
             'status' => $this->input->post('status'),
             'remarks' => $this->input->post('remarks'),
-            'userin' => $this->session->userdata('userid'),
-            'datein' => date('Y-m-d H:m:s')
+            
         );
 
       
         if ($statusform == 'input') {
             if ($this->input->post('token_tmp')!='') {
+                $data['usermod'] = $this->session->userdata('userid');
+                $data['datemod'] = date('Y-m-d H:m:s');
                 $this->db->where('job_order_id', $job_order_id);
                 $this->db->update('job_order', $header);
             } else {
+                $data['userin'] = $this->session->userdata('userid');
+                $data['datein'] = date('Y-m-d H:m:s');
                 $this->db->insert('job_order', $header);
             }
         } elseif ($statusform == 'edit') {
+            $data['usermod'] = $this->session->userdata('userid');
+            $data['datemod'] = date('Y-m-d H:m:s');
             $this->db->where('job_order_id', $job_order_id);
             $this->db->update('job_order', $header);
         }
