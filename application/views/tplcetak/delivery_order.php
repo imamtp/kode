@@ -20,6 +20,8 @@
 				<h2><?=$title?></h2>
 				Tanggal Pengiriman: <?=backdate2($data['delivery_date']);?><br> 
 				No DO: #<?=$data['no_do']?><br>
+				No Faktur: #<?=$data['no_faktur']?><br>
+
 			</td>
 		</tr>
 		<tr>
@@ -124,11 +126,18 @@
 
 		</tr>
 		<tr>
-			<td align="center">Diterima Oleh:<br><br><br><br><br><br><br>Pelanggan</td>
+			<td align="center" class="cell-bordered">Diterima Oleh:
 			<td></td>
-			<td colspan="2" align="center">Diketahui Oleh:<br><br><br><br><br><br><br>Kepala Pabrik</td>
+			<td colspan="2" align="center"  class="cell-bordered">Diketahui Oleh:
 			<td></td>
-			<td align="center">Dibuat Oleh:<br><br><br><br><br><br><br>Gudang</td>
+			<td align="center" class="cell-bordered">Dibuat Oleh:
+		</tr>
+		<tr>
+			<td align="center" class="cell-bordered" style="height:150px; vertical-align:bottom;">Pelanggan</td>
+			<td></td>
+			<td colspan="2" align="center" class="cell-bordered" style="height:150px; vertical-align:bottom;">Kepala Pabrik</td>
+			<td></td>
+			<td align="center" class="cell-bordered" style="height:150px; vertical-align:bottom;">Gudang</td>
 		</tr>
 	</table>
 </body>

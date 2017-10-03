@@ -92,6 +92,7 @@ class m_deliveryordergrid extends CI_Model {
             $dtcetak['no'] = $r->no_sales_order;
             $dtcetak['no_do'] = $r->no_do;
             $dtcetak['delivery_date'] = $r->delivery_date;
+            $dtcetak['no_faktur'] = $r->no_faktur ?: ' - ';
 
 
             // //get receivefrom,total,memo,tax
