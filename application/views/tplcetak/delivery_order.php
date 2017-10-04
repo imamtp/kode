@@ -85,7 +85,7 @@
 		</tbody>
 	</table>
 	<br>
-	<table class="table" border="1" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
+	<table class="table" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
 		<tr>
 			<td width="75%">&nbsp;</td>
 			<td colspan="3" width="15%">Total Qty Order</td>
