@@ -163,6 +163,9 @@ class m_purchase extends CI_Model {
                 a.totalamount,
                 a.balance,
                 a.idunit,
+                a.include_tax,
+                a.shipaddress,
+                a.req_delivery_date,
                 case 
                     when c.firstname is not null then c.firstname || ' ' || c.lastname
                     else d.realname
@@ -219,6 +222,14 @@ class m_purchase extends CI_Model {
             $dtcetak['created_date'] = $r->created_date;
             $dtcetak['confirmed_by'] = $r->confirmed_by;
             $dtcetak['confirmed_date'] = $r->confirmed_date;
+
+            $dtcetak['notes'] = array(
+                $r->include_tax ? 'Harga di atas sudah termasuk PPN 10%' : 'Harga di atas belum termasuk PPN 10%', 
+                'Alamat pengirian: '. $r->shipaddress,
+                'Waktu pengiriman: '. $r->req_delivery_date,
+                $r->memo,
+                'Harap cantumkan No PO pada setiap surat jalan',
+            );
         }
         return $dtcetak;
 

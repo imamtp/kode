@@ -252,56 +252,10 @@ function showPurchaseOrderData(record) {
             // updateGridPurchaseOrder();
         }
     });
-    // EntryGoodsReceiptRM.removeAll();
-    // EntryGoodsReceiptRM.sync();
-
-    // //insert item to grid
-    // Ext.Ajax.request({
-    //     url: SITE_URL + 'purchase/get_po_items',
-    //     method: 'GET',
-    //     params: {
-    //         idpurchase: record.data.idpurchase
-    //     },
-    //     success: function(form, action) {
-    //         var d = Ext.decode(form.responseText);
-
-    //         var gridInsertBaruGRPO = Ext.getCmp('EntryPurchaseOrder');
-
-    //         Ext.each(d.data, function(obj, i) {
-    //             // console.log(obj);
-
-    //             var recDO = new GridItemPurchaseOrderModel({
-    //                 idpurchaseitem: obj.idpurchaseitem,
-    //                 idinventory: obj.idinventory,
-    //                 sku_no: obj.sku_no,
-    //                 invno: obj.invno,
-    //                 nameinventory: obj.nameinventory,
-    //                 qty: obj.qty,
-    //                 price: obj.price,
-    //                 disc: obj.disc,
-    //                 total: obj.total,
-    //                 ratetax: obj.ratetax,
-    //                 tax: obj.tax,
-    //                 size: obj.size,
-    //                 short_desc: obj.short_desc,
-    //                 size_measurement: obj.size_measurement,
-    //                 warehouse_code: obj.warehouse_code
-    //             });
-
-    //             gridInsertBaruGRPO.getStore().insert(0, recDO);
-    //         });
-
-
-
-    //     },
-    //     failure: function(form, action) {
-    //         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-    //     }
-    // });
-
-    // 'idpurchase_req','nopurchase_req','date_req'
-
     Ext.getCmp('po_date_PurchaseOrder').setValue(convertDate2(record.data.date));
+
+    Ext.getCmp('shipaddressPurchaseOrder').setValue(record.data.shipaddress);
+    Ext.getCmp('po_req_date_PurchaseOrder').setRawValue(record.data.req_delivery_date);
 }
 
 function showGoodsReceiptData(selectedRecord) {
@@ -801,6 +755,8 @@ function clearFormPO() {
     Ext.getCmp('totalPurchaseOrder').setValue(null);
     Ext.getCmp('purchase_req_date').setValue(null);
     Ext.getCmp('no_purchase_req').setValue(null);
+    Ext.getCmp('shipaddressPurchaseOrder').setValue(null);
+    Ext.getCmp('req_delivery_date_PurchaseOrder').setValue(null);
 
     //clear grid
     var EntryGoodsReceiptRM = Ext.getCmp('EntryPurchaseOrder').getStore();

@@ -9,7 +9,7 @@ if (!Ext.isDefined(Ext.getCmp('EntryPurchaseOrder'))) {
 Ext.define('PurchaseOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'status', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'idpurchase_req', 'nopurchase_req', 'date_req', 'idpurchasestatusname', 'include_tax', 'total_dpp', 'total_diskon'
+        'idpurchase', 'idshipping', 'idpurchasetype', 'idpurchasestatus', 'status', 'idtax', 'idpayment', 'date', 'requestdate', 'tax', 'totalamount', 'memo', 'datein', 'idunit', 'idcurrency', 'subtotal', 'nopurchase', 'idsupplier', 'nametax', 'rate', 'namesupplier', 'disc', 'idpurchase_req', 'nopurchase_req', 'date_req', 'idpurchasestatusname', 'include_tax', 'total_dpp', 'total_diskon', 'shipaddress', 'req_delivery_date'
     ],
     idProperty: 'id'
 });
@@ -236,25 +236,19 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
                 text: 'Add New Order',
                 iconCls: 'add-icon',
                 handler: function() {
-                    // wPurchaseOrderGrid.show();
                     Ext.getCmp('windowPopupPurchaseOrderGrid').show();
                     clearFormPO();
 
-                    // storeCustomer.load();
-                    // storeUnit.load();
                     productMeasurementStore.load();
                     StorePayment.load();
                     comboxWarehouseStore.load();
                     supplierStore.load();
-                    // clearFormSO();
 
-                    // Ext.getCmp('cbUnitEntryPurchaseOrder').setValue(idunit);
                     Ext.getCmp('statusformPurchaseOrderGrid').setValue('input');
                     var cb_purchase_order_status = Ext.getCmp('cb_purchase_order_status');
-                    // cb_purchase_order_status.getStore().load();
                     cb_purchase_order_status.setValue(1);
                     cb_purchase_order_status.setReadOnly(true);
-
+                    Ext.getCmp('shipaddressPurchaseOrder').setValue('Pergudangan Pantai Indah Dadap Blok CK no. 22-27 Jl. Raya Perancis, Dadap, Tangerang');
                     //enabling btn record
                     Ext.getCmp('btnRecordPurchaseOrder').enable(true);
 

@@ -381,7 +381,7 @@ class purchase extends MY_Controller {
             'nopurchase' => $this->input->post('no_po') != null ? $this->input->post('no_po') : $noarticle,
             // 'id_payment_term' =>,
             'idsupplier' => $this->input->post('idsupplier'),
-            'status' => $this->input->post('po_status') 
+            'status' => $this->input->post('po_status'),
             // 'netddays' => ,
             // 'neteomddays' => ,
             // 'discount' =>,
@@ -389,6 +389,8 @@ class purchase extends MY_Controller {
             // 'delivered=>' =>,
             // 'approver' =>,
             // 'norecord' =>
+            'req_delivery_date'=> $this->input->post('req_delivery_date'),
+            'shipaddress'=> $this->input->post('shipaddress'),
         );
 
         if($statusform == 'input'){

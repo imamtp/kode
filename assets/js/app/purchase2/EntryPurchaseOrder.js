@@ -554,43 +554,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [{
-                            xtype: 'textfield',
-                            id: 'shipaddressPurchaseOrder',
-                            hidden: true,
-                            labelWidth: 120,
-                            width: 500,
-                            fieldLabel: 'Alamat Pengiriman',
-                            listeners: {
-                                render: function(component) {
-                                    component.getEl().on('click', function(event, el) {
-
-                                        if (group_id == 99) {
-                                            var extraparams = null;
-                                        } else {
-                                            var extraparams = 'a.idunit:' + Ext.getCmp('cbUnitEntryPurchaseOrder').getValue();
-                                        }
-
-                                        var FormChooseAddress = Ext.getCmp('FormChooseAddress');
-                                        FormChooseAddress.getForm().load({
-                                            url: SITE_URL + 'backend/loadFormData/unitcompany/1/setup',
-                                            params: {
-                                                extraparams: extraparams
-                                            },
-                                            success: function(form, action) {
-                                                var d = Ext.decode(form.responseText);
-                                                console.log(d.alamat)
-                                            },
-                                            failure: function(form, action) {
-                                                Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                            }
-                                        });
-                                        wAddPurchaseOrderPopup.show();
-
-                                    });
-                                }
-                            }
-                        }, ,
+                    items: [
                         '->',
                         {
                             xtype: 'textfield',
@@ -644,7 +608,13 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
+                    items: [{
+                            xtype: 'textfield',
+                            width: 620,
+                            labelWidth: 120,
+                            id: 'memoPurchaseOrder',
+                            fieldLabel: 'Memo'
+                        },
                         '->',
                         {
                             xtype: 'textfield',
@@ -659,7 +629,15 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                 }, {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
+                    items: [{
+                            xtype: 'datefield',
+                            labelWidth: 120,
+                            name: 'po_req_date_PurchaseOrder',
+                            id: 'po_req_date_PurchaseOrder',
+                            format: 'd-m-Y',
+                            fieldLabel: 'Waktu Pengiriman',
+                            // maxValue: new Date(),
+                        },
                         '->',
                         {
                             xtype: 'textfield',
@@ -678,16 +656,9 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                     items: [{
                             xtype: 'textfield',
                             width: 620,
-                            labelWidth: 100,
-                            value: 'Purchase Order',
-                            id: 'memoPurchaseOrder',
-                            fieldLabel: 'Memo'
-                        },
-                        {
-                            xtype: 'comboxcurrency',
-                            hidden: true,
-                            id: 'comboxcurrencyPurchaseOrder',
-                            labelWidth: 120
+                            labelWidth: 120,
+                            id: 'shipaddressPurchaseOrder',
+                            fieldLabel: 'Ship Address'
                         },
                         '->',
                         {
@@ -705,29 +676,7 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                 {
                     xtype: 'toolbar',
                     dock: 'bottom',
-                    items: [
-                        //                        {
-                        //                            itemId: 'useRecuringPurchaseOrder',
-                        //                            text: 'Gunakan Sales Order Tersimpan',
-                        //                            iconCls: 'add-icon',
-                        //                            handler: function() {
-                        //                                wGridRecurringPopup.show();
-                        //                                storeGridRecurringPopup.load();
-                        //                            }
-                        //                        }, {
-                        //                            itemId: 'recordandsavePurchaseOrder',
-                        //                            text: 'Simpan Sebagai Sales Order Berulang',
-                        //                            iconCls: 'add-icon',
-                        //                            handler: this.saveRecurr
-                        //                        },
-
-                        // {
-                        //     itemId: 'recordPurchaseOrder',
-                        //     text: 'Rekam Sales Order',
-                        //     iconCls: 'disk',
-                        //     handler: this.recordPurchaseOrder
-                        // }
-                        , '->',
+                    items: ['->',
                         {
                             xtype: 'textfield',
                             id: 'pembayaranPurchaseOrder',
@@ -827,6 +776,8 @@ Ext.define(dir_sys + 'purchase2.EntryPurchaseOrder', {
                     idtax: Ext.getCmp('cb_tax_id_po').getValue(),
                     include_tax: Ext.getCmp('include_tax_po').getValue(),
                     po_status: Ext.getCmp('cb_purchase_order_status').getValue(),
+                    shipaddress: Ext.getCmp('shipaddressPurchaseOrder').getValue(),
+                    req_delivery_date: Ext.getCmp('po_req_date_PurchaseOrder').getRawValue(),
                     datagrid: json
                 },
                 success: function(form, action) {
@@ -1006,6 +957,10 @@ function validasiPurchaseOrder() {
         Ext.Msg.alert('Failed', 'Tentukan supplier');
     } else if (Ext.getCmp('subtotalPurchaseOrder').getValue() == '' || Ext.getCmp('subtotalPurchaseOrder').getValue() == '0.00') {
         Ext.Msg.alert('Failed', 'Masukan minimal satu barang');
+    } else if (Ext.getCmp('shipaddressPurchaseOrder').getValue() == '') {
+        Ext.Msg.alert('Failed', 'Masukan alamat pengiriman');
+    } else if (Ext.getCmp('po_req_date_PurchaseOrder').getRawValue() == '') {
+        Ext.Msg.alert('Failed', 'Tentulan waktu pengiriman');
     } else {
         return true;
     }
