@@ -720,57 +720,57 @@ Ext.define(dir_sys + 'sales.EntryDeliveryOrder', {
         console.log('after edit');
     },
     recordDeliveryOrder: function(button, event, mode) {
-        if (validasiQtyKirim()) {
+        // if (validasiQtyKirim()) {
 
-            if (validasiStockKirim()) {
+        // if (validasiStockKirim()) {
 
-                if (validasiFormDO()) {
-                    var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
+        if (validasiFormDO()) {
+            var json = Ext.encode(Ext.pluck(storeGridItemDeliveryOrder.data.items, 'data'));
 
-                    Ext.Ajax.request({
-                        url: SITE_URL + 'sales/saveDeliveryOrder',
-                        method: 'POST',
-                        params: {
-                            no_do: Ext.getCmp('nojurnalDO_do').getValue(),
-                            no_faktur: Ext.getCmp('no_faktur_do').getValue(),
-                            delivery_order_id: Ext.getCmp('delivery_order_id').getValue(),
-                            statusform: Ext.getCmp('statusformSalesOrderGrid_do').getValue(),
-                            idsales: Ext.getCmp('id_sales_order_do').getValue(),
-                            shipaddress: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
-                            idshipping: Ext.getCmp('shippingSalesOrder_do').getValue(),
-                            driver_name: Ext.getCmp('driver_name_do').getValue(),
-                            vehicle_number: Ext.getCmp('vehicle_number_do').getValue(),
-                            ship_address: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
-                            memo: Ext.getCmp('memoSalesOrder_do').getValue(),
-                            notes: Ext.getCmp('notes_do').getValue(),
-                            tanggal: Ext.getCmp('tanggalDeliveryOrder_do').getSubmitValue(),
-                            unit: Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(),
-                            biaya_angkut: Ext.getCmp('angkutSalesOrder_do').getValue(),
-                            subtotal: Ext.getCmp('subtotalSalesOrder_do').getValue(),
-                            status: Ext.getCmp('cb_sales_order_status_do').getValue(),
-                            ratetax: Ext.getCmp('cb_tax_id_do').getValue(),
-                            idaccount_hppenjualan: Ext.getCmp('idaccount_coa_hppenjualan_do').getValue(),
-                            idaccount_persediaan: Ext.getCmp('idaccount_coa_persediaan_do').getValue(),
-                            datagrid: json
-                        },
-                        success: function(form, action) {
+            Ext.Ajax.request({
+                url: SITE_URL + 'sales/saveDeliveryOrder',
+                method: 'POST',
+                params: {
+                    no_do: Ext.getCmp('nojurnalDO_do').getValue(),
+                    no_faktur: Ext.getCmp('no_faktur_do').getValue(),
+                    delivery_order_id: Ext.getCmp('delivery_order_id').getValue(),
+                    statusform: Ext.getCmp('statusformSalesOrderGrid_do').getValue(),
+                    idsales: Ext.getCmp('id_sales_order_do').getValue(),
+                    shipaddress: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
+                    idshipping: Ext.getCmp('shippingSalesOrder_do').getValue(),
+                    driver_name: Ext.getCmp('driver_name_do').getValue(),
+                    vehicle_number: Ext.getCmp('vehicle_number_do').getValue(),
+                    ship_address: Ext.getCmp('shipaddressSalesOrder_do').getValue(),
+                    memo: Ext.getCmp('memoSalesOrder_do').getValue(),
+                    notes: Ext.getCmp('notes_do').getValue(),
+                    tanggal: Ext.getCmp('tanggalDeliveryOrder_do').getSubmitValue(),
+                    unit: Ext.getCmp('cbUnitEntryDeliveryOrder').getValue(),
+                    biaya_angkut: Ext.getCmp('angkutSalesOrder_do').getValue(),
+                    subtotal: Ext.getCmp('subtotalSalesOrder_do').getValue(),
+                    status: Ext.getCmp('cb_sales_order_status_do').getValue(),
+                    ratetax: Ext.getCmp('cb_tax_id_do').getValue(),
+                    idaccount_hppenjualan: Ext.getCmp('idaccount_coa_hppenjualan_do').getValue(),
+                    idaccount_persediaan: Ext.getCmp('idaccount_coa_persediaan_do').getValue(),
+                    datagrid: json
+                },
+                success: function(form, action) {
 
-                            var d = Ext.decode(form.responseText);
-                            if (!d.success) {
-                                Ext.Msg.alert('Peringatan', d.message);
-                            } else {
-                                Ext.Msg.alert('Success', d.message);
-                                Ext.getCmp('WindowEntryDeliveryOrder').hide();
-                            }
+                    var d = Ext.decode(form.responseText);
+                    if (!d.success) {
+                        Ext.Msg.alert('Peringatan', d.message);
+                    } else {
+                        Ext.Msg.alert('Success', d.message);
+                        Ext.getCmp('WindowEntryDeliveryOrder').hide();
+                    }
 
-                        },
-                        failure: function(form, action) {
-                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                        }
-                    });
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                 }
-            }
+            });
         }
+        // }
+        // }
     },
     saveRecurr: function() {
         if (validasiSalesOrder()) {
