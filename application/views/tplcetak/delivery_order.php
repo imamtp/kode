@@ -45,8 +45,9 @@
 				Mobile: <?=$data['header']['handphone_customer']?> </p>
 			</td>
 		</tr>
+		<tr><td colspan="3"></td></tr>
 	</table>
-	<br>
+
 	<table class="table" border="1" cellspacing="0" cellpadding="4">
 		<thead>	
 			<tr>
@@ -81,11 +82,11 @@
 				$total_kirim += $value['qty_kirim'];
 			?>
 		<?php endforeach; ?>
-			
 		</tbody>
 	</table>
-	<br>
+
 	<table class="table" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
+		<tr><td colspan="4"></td></tr>
 		<tr>
 			<td width="75%">&nbsp;</td>
 			<td colspan="3" width="15%">Total Qty Order</td>
@@ -105,15 +106,15 @@
 			<td align="right"><?=$total_order - $total_kirim?></td>
 		</tr>
 	</table>
-  <br>
+
 	<table class="table" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid;">
 		<tr>
-			<td width="30%">&nbsp;</td>
+			<td width="30%"></td>
 			<td width="5%"></td>
-			<td width="15%">&nbsp;</td>
-			<td width="15%">&nbsp;</td>
+			<td width="15%"></td>
+			<td width="15%"></td>
 			<td width="5%"></td>
-			<td width="30%">&nbsp;</td>
+			<td width="30%"></td>
 		</tr>
 		<tr>
 			<td colspan="3">

@@ -81,16 +81,16 @@
 		<?php endforeach; ?>
 		</tbody>
 	</table>
-	<br>
+	<!-- <br> -->
 	<table class="table" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid">
 		<tr>
 			<td width="45%">&nbsp;</td>
+			<td width="5%"></td>
 			<td width="10%"></td>
-			<td width="10%"></td>
-			<td width="10%"></td>
+			<td width="12.5%"></td>
 			<td width="2.5%"></td>
-			<td width="11.5%"></td>
-			<td width="11%"></td>
+			<td width="15%"></td>
+			<td width="10%"></td>
 		</tr>
 		<tr>
 			<td colspan="3" ></td>
