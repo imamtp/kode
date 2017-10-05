@@ -801,6 +801,7 @@ class sales extends MY_Controller {
         else{    
             $filename = $d['title']."-".$d['data']['no'];
             $filename = str_replace(" ", "-", $filename);
+            $filename .= "_".date('d-m-Y H:i:s');
             // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
             $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
 
@@ -830,6 +831,8 @@ class sales extends MY_Controller {
         else{    
             $filename = $d['title']."-".$d['data']['no_si'];
             $filename = str_replace(" ", "-", $filename);
+            $filename .= "_".date('d-m-Y H:i:s');
+            
             // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
             $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
 
@@ -1132,6 +1135,8 @@ class sales extends MY_Controller {
         else{    
             $filename = $d['title']."-".$d['data']['no'];
             $filename = str_replace(" ", "-", $filename);
+            $filename .= "_".date('d-m-Y H:i:s');
+            
             // $pdfFilePath = '/var/www/html/'.DIR_APP."/download/reports/$filename.pdf";
             $pdfFilePath = DIR_DOWNLOAD."/reports/$filename.pdf";
 
