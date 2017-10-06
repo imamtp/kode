@@ -16,7 +16,7 @@ class m_spendmoney extends CI_Model {
     }
 
     function selectField() {
-        return "a.idspendmoney,d.filename,d.totalamount,a.idaccount,a.idjournal,a.totalpaid,a.userin,b.datein,a.subtotal,a.notrans,a.memo,a.datetrans,a.spendfrom,a.month,a.year,b.accname,c.namaunit,a.idunit";
+        return "a.idspendmoney,d.filename,d.totalamount,a.idaccount,a.idjournal,a.totalpaid,a.userin,b.datein,a.subtotal,a.notrans,a.memo,a.datetrans,a.spendfrom,a.month,a.year,b.accnumber,b.accname,c.namaunit,a.idunit";
     }
 
     function fieldCek() {
@@ -85,6 +85,7 @@ class m_spendmoney extends CI_Model {
                      foreach ($qitem->result() as $ritem) {
                          $qaccbayar = $this->db->get_where('account',array('idaccount'=>$ritem->idaccount,'idunit'=>$r->idunit))->row();
                          $detail[$i]['accname']=$qaccbayar->accname;
+                         $detail[$i]['accnumber']=$qaccbayar->accnumber;
                          $detail[$i]['tax']=$ritem->ratetax;
                          $detail[$i]['jumlah']=number_format($ritem->amount);
                         //  if($ritem->denda!=0)
@@ -124,10 +125,10 @@ class m_spendmoney extends CI_Model {
                          $dtcetak['receivefrom'] = $rrecmoney->spendfrom;
                          $dtcetak['totaltax'] = $rrecmoney->tax;
                          $dtcetak['total'] = number_format($rrecmoney->total);
-                         $dtcetak['terbilang'] = terbilang($rrecmoney->total);
+                         $dtcetak['terbilang'] = terbilang($dtcetak['detailtotal']);
                          $dtcetak['memo'] = $rrecmoney->memo;
                          $dtcetak['datetrans'] = backdate2($rrecmoney->datetrans);
-         
+        //  print_r($dtcetak); die;
                          $qreceive = $this->db->get_where('sys_user',array('username'=>$rrecmoney->userin));
                          if($qreceive->num_rows()>0)
                          {

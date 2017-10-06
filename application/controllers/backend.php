@@ -1756,14 +1756,14 @@ class Backend extends MY_Controller {
             {
                 $this->load->model('money/m_receivemoney','model');
                 $d['data'] = $this->model->cetak($id);
-                $d['title'] = 'KWITANSI';
+                $d['title'] = 'Bukti Penerimaan';
                 $this->load->view('tplcetak/penerimaan',$d);
             } else if($modul=='spendmoney')
             {
                 //buat cetak pengeluaran kas
                 $this->load->model('money/m_spendmoney','model');
                 $d['data'] = $this->model->cetak($id);
-                $d['title'] = 'KWITANSI';
+                $d['title'] = 'Bukti Pengeluaran';
                 $this->load->view('tplcetak/pengeluaran',$d); 
             }  else if($modul=='purchase')
                 {

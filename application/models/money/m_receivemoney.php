@@ -117,6 +117,7 @@ class m_receivemoney extends CI_Model {
 
             $qitem = $this->db->get_where('receivemoneyitem',array('idreceivemoney'=>$r->idreceivemoney));
             // echo $this->db->last_query();
+            $detail = array();
             foreach ($qitem->result() as $ritem) {
                 $qaccbayar = $this->db->get_where('account',array('idaccount'=>$ritem->idaccount,'idunit'=>$r->idunit))->row();
                 $detail[$i]['accname']=$qaccbayar->accname;

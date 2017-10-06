@@ -89,7 +89,7 @@ function bilangRatusan($x)
 
 function terbilang($x)
 {
-	$x = number_format($x, 0, "", ".");
+	$x = number_format(intval($x), 0, "", ".");
 	$pecah = explode(".", $x);
 	$string = "";
 	for ($i = 0; $i <= count($pecah) - 1; $i++)

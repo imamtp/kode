@@ -37,6 +37,7 @@
         <div class="col-xs-6 text-right">
           <h2><?=$title?></h2>
           <h3><small>NO: #<?=$data['no']?></small></h3>
+          <h3><small>Tanggal: <?=$data['datetrans']?></small></h3>
         </div>
       </div>
       
@@ -62,8 +63,9 @@
               ?>
                       <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
                         <tr>
-                          <th width="30">No</th>                         
-                          <th>Keterangan</th>
+                          <th width="30">No</th>   
+                          <th>No Akun</th>                      
+                          <th>Nama Akun</th>
                            <?php
                           if($data['totaltax']!=0)
                           {
@@ -82,6 +84,7 @@
                            ?>
                              <tr>
                               <td width="30"><?=$i?></td>
+                              <td><?=$value['accnumber']?></td>
                               <td><?=$value['accname']?></td>
                               <?php
                               if($data['totaltax']!=0)
@@ -152,12 +155,53 @@
           <b>Terbilang: </b><?=$data['terbilang']?>
         </div>
         <div class="col-xs-6 text-right">
-          <b><?=$data['datetrans']?><br><?=$data['receivedby']?></b>
+          <!-- <b><br></b> -->
         </div>
       </div>
 
-
-
+      <p>&nbsp;</p>
+      <div class="row">
+        <div class="col-xs-4 ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <p style="text-align: center;">Dibukukan Oleh</p>
+            </div>
+            <div class="panel-body">
+              <br><br>
+              <p>
+              <center><?=$data['receivedby']?><center>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4 ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <p style="text-align: center;">Disetujui oleh</p>
+            </div>
+            <div class="panel-body">
+              <br><br><br>
+              <p>
+              <!-- <center>(______________________________) -->
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4 ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <p style="text-align: center">Penerima</p>
+            </div>
+            <div class="panel-body">
+            <br><br><br>
+            <p>
+            <!-- <center>(______________________________) -->
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+                    
 
           </div>
   </div> <!-- panel -->
