@@ -121,7 +121,11 @@ class m_spendmoney extends CI_Model {
                      if($qrecmoney->num_rows()>0)
                      {
                          $rrecmoney = $qrecmoney->row();
-         
+                         
+                         $qaccbayar = $this->db->get_where('account',array('idaccount'=>$rrecmoney->idaccount,'idunit'=>$rrecmoney->idunit))->row();
+                         $dtcetak['accname']=$qaccbayar->accname;
+                         $dtcetak['accnumber']=$qaccbayar->accnumber;
+
                          $dtcetak['receivefrom'] = $rrecmoney->spendfrom;
                          $dtcetak['totaltax'] = $rrecmoney->tax;
                          $dtcetak['total'] = number_format($rrecmoney->total);

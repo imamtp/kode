@@ -52,8 +52,8 @@
         <table class="table borderless" >
          
         <tr>
-           <td width="22%"><b>Akun Biaya/Beban:</b></td>
-           <td width="50%"><?=$data['detail'][0]['accnumber']?> <?=$data['detail'][0]['accname']?></td>
+           <td width="22%"><b>Akun Kas/Bank:</b></td>
+           <td width="50%"><?=$data['accnumber']?> <?=$data['accname']?></td>
          </tr>
 
          <tr>
