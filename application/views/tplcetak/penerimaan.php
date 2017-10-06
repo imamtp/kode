@@ -11,11 +11,32 @@
         font-family: 'Bree Serif', serif;
       }*/
     /*}*/
-
-    .borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
-    border: none;
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    /* line-height: 1; */
+    color: #333;
+    background-color: #fff;
 }
-    </style>
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 2px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+.panel-heading {
+    padding: 0px 0px 0px 0px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+p {
+    margin: 0 0 0px;
+}
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+border: none;
+}
+</style>
 </head>
   <!-- <body> -->
   <body onload="window.print()">

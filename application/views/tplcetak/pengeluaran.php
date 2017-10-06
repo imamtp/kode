@@ -5,17 +5,38 @@
     <title><?=$title?></title>
     <link rel="stylesheet" href="<?=base_url()?>/assets/css/bootstrap.min.css">
 
-    <style>
+<style>
     /*  @import url(http://fonts.googleapis.com/css?family=Bree+Serif);
       body, h1, h2, h3, h4, h5, h6{
         font-family: 'Bree Serif', serif;
       }*/
     /*}*/
-
-    .borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
-    border: none;
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    /* line-height: 1; */
+    color: #333;
+    background-color: #fff;
 }
-    </style>
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 2px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+.panel-heading {
+    padding: 0px 0px 0px 0px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+p {
+    margin: 0 0 0px;
+}
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+border: none;
+}
+</style>
 </head>
   <!-- <body> -->
   <body onload="window.print()">
@@ -24,7 +45,7 @@
     <div class="container">
 
       <div class="panel panel-info">
-      <div class="panel-body">
+      <div class="panel-body" stye="padding: 0px;">
       
 
     
@@ -35,7 +56,7 @@
           </h1>
         </div>
         <div class="col-xs-6 text-right">
-          <h2><?=$title?></h2>
+          <span style="font-size:22px;"><?=$title?></span><br>
           NO: #<?=$data['no']?><br>
           Tanggal: <?=$data['datetrans']?>
         </div>
@@ -164,7 +185,7 @@
         </div>
       </div>
 
-      <p>&nbsp;</p>
+      <!-- <p>&nbsp;</p> --><br>
       <div class="row">
         <div class="col-xs-4 ">
           <div class="panel panel-default">
