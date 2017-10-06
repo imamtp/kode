@@ -36,8 +36,8 @@
         </div>
         <div class="col-xs-6 text-right">
           <h2><?=$title?></h2>
-          <h3><small>NO: #<?=$data['no']?></small></h3>
-          <h3><small>Tanggal: <?=$data['datetrans']?></small></h3>
+          NO: #<?=$data['no']?><br>
+          Tanggal: <?=$data['datetrans']?>
         </div>
       </div>
       
@@ -51,6 +51,11 @@
       <div class="row" style="margin-left:1px;">
         <table class="table borderless" >
          
+        <tr>
+           <td width="22%"><b>Akun Biaya/Beban:</b></td>
+           <td width="50%"><?=$data['detail'][0]['accnumber']?> <?=$data['detail'][0]['accname']?></td>
+         </tr>
+
          <tr>
            <td width="22%"><b>Pembayaran:</b></td>
            <td width="50%"></td>
@@ -61,7 +66,7 @@
               if($data['detail']!=null)
               {
               ?>
-                      <table class="table table-bordered" style="width:99%; margin-left:1px; margin-right:2px;">
+                      <table class="table table-bordered" style="width:99%; margin-top:-20px; margin-left:1px; margin-right:2px;">
                         <tr>
                           <th width="30">No</th>   
                           <th>No Akun</th>                      

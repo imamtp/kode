@@ -36,8 +36,8 @@
         </div>
         <div class="col-xs-6 text-right">
           <h2><?=$title?></h2>
-          <h3><small>NO: #<?=$data['no']?></small></h3>
-          <h3><small>Tanggal: <?=$data['datetrans']?></small></h3>
+          NO: #<?=$data['no']?><br>
+          Tanggal: <?=$data['datetrans']?>
         </div>
       </div>
       
@@ -53,6 +53,10 @@
          <tr>
            <td width="22%"><b> Diterima Dari:</b></td>
            <td width="50%"><?=$data['receivefrom']?></td>
+         </tr>
+         <tr>
+           <td width="22%"><b>Akun Kas/Bank:</b></td>
+           <td width="50%"><?=$data['accnumber']?> <?=$data['accname']?></td>
          </tr>
          <tr>
            <td width="22%"><b>Pembayaran:</b></td>

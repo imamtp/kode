@@ -121,6 +121,7 @@ class m_receivemoney extends CI_Model {
             foreach ($qitem->result() as $ritem) {
                 $qaccbayar = $this->db->get_where('account',array('idaccount'=>$ritem->idaccount,'idunit'=>$r->idunit))->row();
                 $detail[$i]['accname']=$qaccbayar->accname;
+                // $detail[$i]['accnumber']=$qaccbayar->accnumber;
                 $detail[$i]['tax']=$ritem->ratetax;
                 $detail[$i]['jumlah']=number_format($ritem->amount-$ritem->denda);
                 if($ritem->denda!=0)
@@ -156,10 +157,15 @@ class m_receivemoney extends CI_Model {
             {
                 $rrecmoney = $qrecmoney->row();
 
+                $qaccbayar = $this->db->get_where('account',array('idaccount'=>$rrecmoney->depositaccount,'idunit'=>$rrecmoney->idunit))->row();
+                $dtcetak['accname']=$qaccbayar->accname;
+                $dtcetak['accnumber']=$qaccbayar->accnumber;
+
                 $dtcetak['receivefrom'] = $rrecmoney->receivefrom;
                 $dtcetak['totaltax'] = $rrecmoney->tax;
                 $dtcetak['total'] = number_format($rrecmoney->total);
-                $dtcetak['terbilang'] = terbilang($rrecmoney->total);
+                // $dtcetak['terbilang'] = terbilang(str_replace(',','',$dtcetak['detailtotal']));
+                $dtcetak['terbilang'] = terbilang(str_replace(',','',$rrecmoney->total));
                 $dtcetak['memo'] = $rrecmoney->memo;
                 $dtcetak['datetrans'] = backdate2($rrecmoney->datetrans);
 

@@ -125,7 +125,7 @@ class m_spendmoney extends CI_Model {
                          $dtcetak['receivefrom'] = $rrecmoney->spendfrom;
                          $dtcetak['totaltax'] = $rrecmoney->tax;
                          $dtcetak['total'] = number_format($rrecmoney->total);
-                         $dtcetak['terbilang'] = terbilang($dtcetak['detailtotal']);
+                         $dtcetak['terbilang'] = terbilang(str_replace(',','',$dtcetak['detailtotal']));
                          $dtcetak['memo'] = $rrecmoney->memo;
                          $dtcetak['datetrans'] = backdate2($rrecmoney->datetrans);
         //  print_r($dtcetak); die;
