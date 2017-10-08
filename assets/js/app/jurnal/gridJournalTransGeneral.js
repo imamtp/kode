@@ -427,9 +427,9 @@ function getSummary(startdate, enddate)
         success: function(form, action) {
 
             var d = Ext.decode(form.responseText);
-            Ext.getCmp('totaldebitJGeneral').setValue(d.totaldebit);
-            Ext.getCmp('totalcreditJGeneral').setValue(d.totalcredit);
-            Ext.getCmp('selisihJGeneral').setValue(d.selisih);
+            // Ext.getCmp('totaldebitJGeneral').setValue(d.totaldebit);
+            // Ext.getCmp('totalcreditJGeneral').setValue(d.totalcredit);
+            // Ext.getCmp('selisihJGeneral').setValue(d.selisih);
 
         },
         failure: function(form, action) {
