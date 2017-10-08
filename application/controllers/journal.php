@@ -475,6 +475,70 @@ class journal extends MY_Controller {
         
         echo json_encode(array('success'=>true,'totaldebit'=>number_format($r->totaldebit,2),'totalcredit'=>number_format($r->totalcredit,2),'selisih'=>number_format($selisih,2)));
     }
+
+    function delete_journal($idjournal){
+       
+
+        $qunit = $this->db->query("select idunit from journal where idjournal = $idjournal");
+        if($qunit->num_rows()>0){
+            $runit = $qunit->row();
+
+                $this->db->trans_begin();
+
+                /*
+                accounthistory tidak terlacak
+                */
+
+                $this->db->where('idjournal',$idjournal);
+                $this->db->delete('accountlog');
+
+                $q = $this->db->get_where('journalitem',array('idjournal'=>$idjournal));
+                foreach ($q->result() as $r) {
+                    $qacc = $this->db->query("select balance,idaccounttype from account where idaccount = ".$r->idaccount." and idunit = ".$runit->idunit." ")->row();
+                    $current_balance = $qacc->balance;
+                    $trx_amount = $r->debit == 0 ? $r->credit : $r->debit;
+
+                    if($qacc->idaccounttype==1 || $qacc->idaccounttype==2 || $qacc->idaccounttype==3 || $qacc->idaccounttype==4 || $qacc->idaccounttype==5 || $qacc->idaccounttype==6 || $qacc->idaccounttype==11 || $qacc->idaccounttype==17 || $qacc->idaccounttype==19 || $qacc->idaccounttype==20 || $qacc->idaccounttype==21){
+                        $newbalance = $current_balance + $trx_amount;
+                    } else {
+                        $newbalance = $current_balance - $trx_amount;
+                    }
+
+                    $this->db->where(array(
+                            'idaccount'=>$r->idaccount,
+                            'idunit'=>$runit->idunit
+                        ));
+                    $this->db->update('account',array(
+                            'balance'=>$newbalance
+                        ));
+                }
+
+                $this->db->where('idjournal',$idjournal);
+                $this->db->delete('journalitem');
+
+                $this->db->where('idjournal',$idjournal);
+                $this->db->delete('journal');
+
+                if ($this->db->trans_status() === FALSE)
+                {
+                    $this->db->trans_rollback();
+                    $json = array('success'=>false,'message'=>'hapus jurnal gagal');
+                }
+                else
+                {
+                    $this->db->trans_commit();
+                    $json = array('success'=>true,'message'=>'hapus jurnal berhasil');
+                }
+                
+                echo json_encode($json);
+        } else {
+            $json = array('success'=>false,'message'=>'id journal tidak ditemukan');
+            echo json_encode($json);
+            exit();
+        }
+
+
+    }
     
     function tesunit()
     {
