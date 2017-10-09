@@ -272,7 +272,19 @@ Ext.define('GridJurnal', {
         //     }
         // }
         ]
-    }, {
+    },
+    {
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [
+                            {
+                               text: 'Entry Jurnal',
+                               iconCls: 'add-icon',
+                               handler: function() {
+                                wEntryJurnal.show();
+                               }
+                           }]
+                }, {
         xtype: 'pagingtoolbar',
         store: storeGridJurnal, // same store GridPanel is using
         dock: 'bottom',

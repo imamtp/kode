@@ -487,9 +487,9 @@
     <script src='{$assets_url}/js/app/jurnal/AccList.js'></script>
     <script src='{$assets_url}/js/app/jurnal/formaddrow.js'></script>
 
-    <script src='{$assets_url}/js/app/jurnal/gridJournalTransDisburs.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/gridJournalTransGeneral.js'></script>
-    <script src='{$assets_url}/js/app/jurnal/tabJournalTransaction.js'></script>
+    <!-- // <script src='{$assets_url}/js/app/jurnal/gridJournalTransDisburs.js'></script> -->
+    <!-- // <script src='{$assets_url}/js/app/jurnal/gridJournalTransGeneral.js'></script> -->
+    <!-- // <script src='{$assets_url}/js/app/jurnal/tabJournalTransaction.js'></script> -->
     <script src='{$assets_url}/js/app/jurnal/entry.js'></script>
 
     <script src='{$assets_url}/js/app/hutangpiutang/popupPelangganPiutang.js'></script>
