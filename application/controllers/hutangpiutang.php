@@ -11,6 +11,8 @@ class hutangpiutang extends MY_Controller {
 
     function deletePiutang()
     {
+        $this->db->trans_begin();
+        
         $retAkses = $this->cekAksesUser(74,'delete');
         if(!$retAkses['success'])
         {
@@ -31,6 +33,26 @@ class hutangpiutang extends MY_Controller {
 
         	$this->db->where('idregistrasipiutang',$id);
         	$this->db->delete('registrasipiutang');
+
+            $this->db->query("delete
+            from journalitem
+            where idjournal = ".$q->idjournal."");
+
+             $this->db->query(" delete
+            from journal
+            where idjournal = ".$q->idjournal."");
+
+              $this->db->query("delete
+                    from accountlog
+                    where idjournal = ".$q->idjournal."");
+        }
+
+         if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo json_encode(array('success' => false, 'message' => 'Hapus Piutang Gagal'));
+        } else {
+            $this->db->trans_commit();
+            echo json_encode(array('success' => true, 'message' => 'Hapus Piutang Berhasil'));
         }
     }
 
