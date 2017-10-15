@@ -1170,29 +1170,35 @@ class sales extends MY_Controller {
         $idinventory = $this->input->get('idinventory');
         $idsalesitem = $this->input->get('idsalesitem');
         
-        $sql = "select c.sku_no, c.nameinventory, sum(stock) as stock, d.size, b.ratio_two from warehouse_stock a
+        if($qty_kirim == 0){
+            echo json_encode(array('success'=>true));
+            exit();
+        }
+        
+        $sql = "select 
+                    c.sku_no, 
+                    c.nameinventory, 
+                    coalesce(sum(stock),0) as stock_one, 
+                    coalesce((sum(stock)/b.ratio_two),0) as stock_two, 
+                    coalesce((sum(stock)/b.ratio_tre),0) as stock_tre
+                from warehouse_stock a
                 join inventory b on b.idinventory = a.idinventory --child
                 join inventory c on c.idinventory = b.idinventory_parent --parent
                 join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
                 where b.idinventory_parent = $idinventory 
                 and idsalesitem = $idsalesitem
                 and stock > 0
-                group by c.sku_no, c.nameinventory, d.size, b.ratio_two";
+                group by c.sku_no, c.nameinventory, b.ratio_two, b.ratio_tre";
         $qcek = $this->db->query($sql);
-
-        // $qcek = $this->db->get_where('warehouse_stock',array(
-        //         'idinventory'=> $idinventory,
-        //         'warehouse_id'=>$this->m_data->getIDmaster('warehouse_code',$this->input->get('warehouse_code'),'warehouse_id','warehouse',$idunit),
-        //         'idunit'=>$idunit
-        //     ));
 
         $success = true;
         $msg = null;
 
         if($qcek->num_rows()>0){
             $r = $qcek->row();
-            $stock = $r->stock / $r->ratio_two; //stock dalam satuan ke dua
-            if($qty_kirim>$stock){
+            $stock = $r->stock_two;
+            
+            if($qty_kirim > $stock){
                 $success = false;
                 $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
             }
