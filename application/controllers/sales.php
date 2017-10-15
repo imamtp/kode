@@ -635,7 +635,7 @@ class sales extends MY_Controller {
                 'notes_si' => $this->input->post('notes_si'),
                 'invoice_status'=>$invoice_status,
                 'disc'=>$diskon,
-                'freight'=>$freight,
+                'freight'=> clearnumberic($freight),
                 'noinvoice'=> $this->input->post('noinvoice')?: $noarticle,
                 'invoice_date' => backdate($this->input->post('invoice_date')),
                 'status'=> 8 //invoiced
