@@ -16,7 +16,7 @@ class m_receivemoney extends CI_Model {
     }
 
     function selectField() {
-        return "a.idreceivemoney,a.idjournal,a.notrans,a.datetrans,a.total,a.memo,a.userin,a.datein,a.idunit,a.subtotal,b.accname,c.namaunit";
+        return "a.idreceivemoney,a.idjournal,a.notrans,a.datetrans,a.total,a.memo,a.userin,a.datein,a.idunit,a.subtotal,b.accname,c.namaunit,a.status";
     }
 
     function fieldCek() {
@@ -47,7 +47,7 @@ class m_receivemoney extends CI_Model {
     }
 
     function orderBy() {
-        return "";
+        return " a.idreceivemoney desc";
     }
 
     function updateField() {

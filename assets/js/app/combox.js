@@ -146,6 +146,30 @@ Ext.define('comboxSalesStatus', {
     })
 });
 
+var ArrConfirmMoneyStatus = [
+    [1, 'Open'],
+    [2, 'Confirmed'],
+    [3, 'Rejected']
+];
+
+
+Ext.define('comboxConfirmMoneyStatus', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboxConfirmMoneyStatus',
+    fieldLabel: 'Status',
+    displayField: 'text',
+    valueField: 'value',
+    name: 'value',
+    // autoLoad:true,
+    editable: false,
+    triggerAction: 'all',
+    // store: storeProductGrade
+    store: new Ext.data.ArrayStore({
+        fields: ['value', 'text'],
+        data: ArrConfirmMoneyStatus,
+    })
+});
+
 // var ArrSalesQuotationStatus = [
 //     [1, 'Open'],
 //     [2, 'Ordered'],

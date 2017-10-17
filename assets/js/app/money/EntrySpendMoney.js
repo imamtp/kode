@@ -242,6 +242,13 @@ Ext.define(dir_sys + 'money.EntrySpendMoney', {
                     xtype: 'toolbar',
                     dock: 'bottom',
                     items: [
+                        {
+                            xtype:'comboxConfirmMoneyStatus',
+                            name:'status',
+                            id:'comboxConfirmMoneyStatusSpend',
+                            value:1,
+                            allowBlank:false
+                        },
                         '->',
                          {
                             xtype: 'textfield',
@@ -261,6 +268,7 @@ Ext.define(dir_sys + 'money.EntrySpendMoney', {
                 render: {
                     scope: this,
                     fn: function(grid) {
+                        Ext.getCmp('comboxConfirmMoneyStatusSpend').setReadOnly(true);
 //                        disableEntrySpendMoney();
                     }
                 }
@@ -307,6 +315,7 @@ Ext.define(dir_sys + 'money.EntrySpendMoney', {
                     taxSpend: Ext.getCmp('taxSpend').getValue(),
                     subtotalSpend: Ext.getCmp('subtotalSpend').getValue(),
                     idunitSpend : Ext.getCmp('idunitSpend').getValue(),
+                    status : Ext.getCmp('comboxConfirmMoneyStatusSpend').getValue(),
                     dataGrid:json
                 },
                 success: function(form, action) {

@@ -212,7 +212,15 @@ Ext.define(dir_sys + 'money.EntryReceiveMoney', {
                             {
                                 xtype: 'toolbar',
                                 dock: 'bottom',
-                                items: ['->', {
+                                items: [
+                                    {
+                                        xtype:'comboxConfirmMoneyStatus',
+                                        name:'status',
+                                        id:'comboxConfirmMoneyStatusReceive',
+                                        value:1,
+                                        allowBlank:false
+                                    },
+                                    '->', {
                                     xtype: 'textfield',
                                     align: 'right',
                                     readOnly: true,
@@ -223,11 +231,17 @@ Ext.define(dir_sys + 'money.EntryReceiveMoney', {
                                 }]
                             }],
                         listeners: {
-                            cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {},
+                            cellclick: function(gridView, htmlElement, columnIndex, dataRecord) {
+
+                            },
                             render: {
                                 scope: this,
                                 fn: function(grid) {
-                                    //                        disableEntryReceiveMoney();
+                                    // Ext.getCmp('comboxConfirmMoneyStatus').setValue(1);
+                                    // alert('a');
+                                    var comboxConfirmMoneyStatus = Ext.getCmp('comboxConfirmMoneyStatusReceive');
+                                    // comboxConfirmMoneyStatus.setValue(1);
+                                    comboxConfirmMoneyStatus.setReadOnly(true);
                                 }
                             }
                         }
@@ -265,6 +279,7 @@ Ext.define(dir_sys + 'money.EntryReceiveMoney', {
                             taxReceive: Ext.getCmp('taxReceive').getValue(),
                             subtotalReceive: Ext.getCmp('subtotalReceive').getValue(),
                             idunitReceive: Ext.getCmp('idunitReceive').getValue(),
+                            status: Ext.getCmp('comboxConfirmMoneyStatusReceive').getValue(),
                             dataGrid: json
                         },
                         success: function(form, action) {

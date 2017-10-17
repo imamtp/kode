@@ -16,7 +16,7 @@ class m_spendmoney extends CI_Model {
     }
 
     function selectField() {
-        return "a.idspendmoney,d.filename,d.totalamount,a.idaccount,a.idjournal,a.totalpaid,a.userin,b.datein,a.subtotal,a.notrans,a.memo,a.datetrans,a.spendfrom,a.month,a.year,b.accnumber,b.accname,c.namaunit,a.idunit";
+        return "a.idspendmoney,d.filename,d.totalamount,a.idaccount,a.idjournal,a.totalpaid,a.userin,b.datein,a.subtotal,a.notrans,a.memo,a.datetrans,a.spendfrom,a.month,a.year,b.accnumber,b.accname,c.namaunit,a.idunit,a.status";
     }
 
     function fieldCek() {
@@ -48,7 +48,7 @@ class m_spendmoney extends CI_Model {
     }
 
     function orderBy() {
-        return "";
+        return " a.idspendmoney desc";
     }
 
     function updateField() {

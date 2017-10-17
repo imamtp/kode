@@ -1,6 +1,6 @@
 Ext.define('GridSpendMoneyModel', {
     extend: 'Ext.data.Model',
-    fields: ['idspendmoney','idaccount','idjournal','totalpaid','userin','datein','subtotal','notrans','memo','datetrans','spendfrom','month','year','accname','namaunit'],
+    fields: ['idspendmoney','idaccount','idjournal','totalpaid','userin','datein','subtotal','notrans','memo','datetrans','spendfrom','month','year','accname','namaunit','status'],
     idProperty: 'id'
 });
 
@@ -61,6 +61,14 @@ Ext.define(dir_sys + 'money.GridSpendMoney', {
         {header: 'idspendmoney', dataIndex: 'idspendmoney', hidden: true},
         {header: 'idjournal', dataIndex: 'idjournal', hidden: true},
         {header: 'no trans', dataIndex: 'notrans', minWidth: 100},
+        {
+            header: 'Status',
+            dataIndex: 'status',
+            minWidth: 150,
+            renderer: function(value) {
+              return customColumnStatus(ArrConfirmMoneyStatus, value);
+            }
+          },
         {header: 'date trans', dataIndex: 'datetrans', minWidth: 100},
         {header: 'memo', dataIndex: 'memo', minWidth: 200,flex:1},
         {header: 'Total Pengeluaran', dataIndex: 'totalpaid', minWidth: 100, xtype: 'numbercolumn', align: 'right'},
@@ -148,6 +156,52 @@ Ext.define(dir_sys + 'money.GridSpendMoney', {
                                                   Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                                               }
                                           });
+                                     }
+                                 }
+                             });
+                          }
+                           
+                       },
+    //                    disabled: true
+                   },
+                  {
+                       text: 'Konfirmasi',
+                       // iconCls: 'delete-icon',
+                       handler: function() {
+                        var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                           var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                           var data = grid.getSelectionModel().getSelection();
+                           if (data.length == 0)
+                           {
+                               Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
+                           } else {
+                              Ext.Msg.show({
+                                 title: 'Konfirmasi',
+                                 msg: 'Apakah anda yakin untuk konfirmasi pengeluaran ?',
+                                 buttons: Ext.Msg.YESNO,
+                                 fn: function(btn) {
+                                     if (btn == 'yes') {
+                                         // var grid = Ext.ComponentQuery.query('GridPurchaseAll')[0];
+                                         var sm = grid.getSelectionModel();
+                                         selected = [];
+                                         Ext.each(sm.getSelection(), function(item) {
+                                             selected.push(item.data[Object.keys(item.data)[0]]);
+                                         });
+                                          Ext.Ajax.request({
+                                            url: SITE_URL + 'money/confirmSpend',
+                                            method: 'POST',
+                                            params: {postdata: Ext.encode(selected)},
+                                            success: function(form, action) {
+                                                var d = Ext.decode(form.responseText);
+                                                Ext.Msg.alert('Informasi', d.message);
+                                                storeGridSpendMoney.load();
+                                            },
+                                            failure: function(form, action) {
+                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                storeGridSpendMoney.load();
+                                            }
+                                          });
+                                         
                                      }
                                  }
                              });

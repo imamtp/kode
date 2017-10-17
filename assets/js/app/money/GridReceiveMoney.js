@@ -1,6 +1,6 @@
 Ext.define('GridReceiveMoneyModel', {
     extend: 'Ext.data.Model',
-    fields: ['idreceivemoney','idjournal','notrans','datetrans','total','memo','userin','datein','idunit','subtotal','accname','namaunit'],
+    fields: ['idreceivemoney','idjournal','notrans','datetrans','total','memo','userin','datein','idunit','subtotal','accname','namaunit','status'],
     idProperty: 'id'
 });
 
@@ -61,11 +61,19 @@ Ext.define(dir_sys + 'money.GridReceiveMoney', {
         {header: 'idreceivemoney', dataIndex: 'idreceivemoney', hidden: true},
         {header: 'idjournal', dataIndex: 'idjournal', hidden: true},
         {header: 'no trans', dataIndex: 'notrans', minWidth: 100},
+        {
+            header: 'Status',
+            dataIndex: 'status',
+            minWidth: 150,
+            renderer: function(value) {
+              return customColumnStatus(ArrConfirmMoneyStatus, value);
+            }
+          },
         {header: 'date trans', dataIndex: 'datetrans', minWidth: 100},
         {header: 'memo', dataIndex: 'memo', minWidth: 200,flex:1},
         {header: 'total', dataIndex: 'total', minWidth: 100, xtype: 'numbercolumn', align: 'right'},
-        {header: 'Akun Penerimaan Kas', dataIndex: 'accname', minWidth: 150},
-        {header: 'nama unit', dataIndex: 'namaunit', minWidth: 100},
+        {header: 'Akun Penerimaan Kas', dataIndex: 'accname', minWidth: 200},
+        {header: 'nama unit', dataIndex: 'namaunit', minWidth: 200},
         {header: 'user in', dataIndex: 'userin', minWidth: 100},
         {header: 'date in', dataIndex: 'datein', minWidth: 130}
     ]
@@ -156,6 +164,52 @@ Ext.define(dir_sys + 'money.GridReceiveMoney', {
                                       });
                                      storeGridReceiveMoney.remove(sm.getSelection());
                                      sm.select(0);
+                                 }
+                             }
+                         });
+                      }
+                       
+                   },
+//                    disabled: true
+               },
+               {
+                   text: 'Konfirmasi',
+                   // iconCls: 'delete-icon',
+                   handler: function() {
+                    var grid = Ext.ComponentQuery.query('GridReceiveMoney')[0];
+                       var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                       var data = grid.getSelectionModel().getSelection();
+                       if (data.length == 0)
+                       {
+                           Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
+                       } else {
+                          Ext.Msg.show({
+                             title: 'Konfirmasi',
+                             msg: 'Apakah anda yakin untuk konfirmasi penerimaan ?',
+                             buttons: Ext.Msg.YESNO,
+                             fn: function(btn) {
+                                 if (btn == 'yes') {
+                                     // var grid = Ext.ComponentQuery.query('GridPurchaseAll')[0];
+                                     var sm = grid.getSelectionModel();
+                                     selected = [];
+                                     Ext.each(sm.getSelection(), function(item) {
+                                         selected.push(item.data[Object.keys(item.data)[0]]);
+                                     });
+                                      Ext.Ajax.request({
+                                        url: SITE_URL + 'money/confirmReceive',
+                                        method: 'POST',
+                                        params: {postdata: Ext.encode(selected)},
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            Ext.Msg.alert('Informasi', d.message);
+                                            storeGridReceiveMoney.load();
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                            storeGridReceiveMoney.load();
+                                        }
+                                      });
+                                     
                                  }
                              }
                          });
