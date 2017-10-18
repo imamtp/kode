@@ -72,6 +72,8 @@
         var logoheader = '{$logoheader}';
         var companyname = '{$companyname}';
         var dir_sys = '.{$dir_app}.assets.js.app.';
+        var btnDisableConfirmBtnReceiveMoney = {$btnDisableConfirmBtnReceiveMoney};
+        var btnDisableConfirmBtnSpendMoney = {$btnDisableConfirmBtnSpendMoney};
     </script>
 
     <script src='{$assets_url}/ext/ext-all.js'></script>

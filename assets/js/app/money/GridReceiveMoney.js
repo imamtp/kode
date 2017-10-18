@@ -174,6 +174,7 @@ Ext.define(dir_sys + 'money.GridReceiveMoney', {
                },
                {
                    text: 'Konfirmasi',
+                   disabled:btnDisableConfirmBtnReceiveMoney,
                    // iconCls: 'delete-icon',
                    handler: function() {
                     var grid = Ext.ComponentQuery.query('GridReceiveMoney')[0];

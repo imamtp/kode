@@ -77,8 +77,15 @@ class MY_Controller extends CI_Controller{
           //  $this->smarty->assign('menu',$this->m_sistem->getMenu());
         }
         
-                 
-      
+        if($this->session->userdata('group_id')==2){
+            $this->smarty->assign('btnDisableConfirmBtnReceiveMoney','false');
+            $this->smarty->assign('btnDisableConfirmBtnSpendMoney','false');               
+        } else {
+            $this->smarty->assign('btnDisableConfirmBtnReceiveMoney','true');   
+            $this->smarty->assign('btnDisableConfirmBtnSpendMoney','true');
+        }
+              
+        
     }
 
     function cekAksesUser($id,$option)
@@ -118,7 +125,9 @@ class MY_Controller extends CI_Controller{
         return $json;
     }
     
-
+    function btn_access(){
+        // btnDisableConfirmBtnReceiveMoney
+    }
 
     function assets_url()
     {

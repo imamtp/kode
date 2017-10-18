@@ -166,6 +166,7 @@ Ext.define(dir_sys + 'money.GridSpendMoney', {
                    },
                   {
                        text: 'Konfirmasi',
+                       disabled:btnDisableConfirmBtnSpendMoney,
                        // iconCls: 'delete-icon',
                        handler: function() {
                         var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
