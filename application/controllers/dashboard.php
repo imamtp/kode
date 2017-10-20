@@ -28,6 +28,11 @@ class Dashboard extends MY_Controller {
         $this->load->view('/dashboard/dashboard_page');
     }
 
+    function html_page() {
+        $this->load->view('/dashboard/dashboard_html');
+    }
+
+
     function logout() {
         $this->session->sess_destroy();
         redirect('login');
