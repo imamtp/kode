@@ -1475,6 +1475,9 @@ class sales extends MY_Controller {
                     //update hpp
             }
            
+           //ubah status sales menjadi confirm
+           $this->db->where('idsales',$q->idsales);
+            $this->db->update('sales',array('status'=>3));
         } else {
              $json = array('success'=>false,'message'=>'delivery_order_id not found');
             echo json_encode($json); die;
