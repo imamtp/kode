@@ -1621,5 +1621,35 @@ class purchase extends MY_Controller {
             
         }
     }
+
+    function set_status(){
+        $this->db->trans_begin();
+
+        $idpurchase = $this->input->post('idpurchase');
+        $status = $this->input->post('status');
+        $opt = $this->input->post('opt');
+
+        $this->db->where('idpurchase', $idpurchase);
+        if($opt=='PO'){
+            $d = array(
+                'idpurchasestatus'=>$status
+            );
+        } else {
+            $d = array(
+                'status'=>$status
+            );
+        }
+        
+            $this->db->update('purchase', $d);
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'Status has been updated succsessfully');
+        }
+        echo json_encode($json);
+    }
 }
 ?>

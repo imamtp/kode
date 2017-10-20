@@ -1,0 +1,18 @@
+
+if(group_id=='2'){
+	var btnDisableConfirmBtnReceiveMoney = false;
+	var btnDisableConfirmBtnSpendMoney = false;
+	var btnDisableCancelDO = false;
+	var btnDisableOpenSO = false;
+	var btnDisableOpenSQ = false;
+	var btnDisableOpenPR = false;
+	var btnDisableOpenPO = false;
+} else {
+	var btnDisableConfirmBtnReceiveMoney = true;
+	var btnDisableConfirmBtnSpendMoney = true;
+	var btnDisableCancelDO = true;
+	var btnDisableOpenSO = true;
+	var btnDisableOpenSQ = true;
+	var btnDisableOpenPR = true;
+	var btnDisableOpenPO = true;
+}

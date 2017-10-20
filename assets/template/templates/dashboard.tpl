@@ -72,8 +72,7 @@
         var logoheader = '{$logoheader}';
         var companyname = '{$companyname}';
         var dir_sys = '.{$dir_app}.assets.js.app.';
-        var btnDisableConfirmBtnReceiveMoney = {$btnDisableConfirmBtnReceiveMoney};
-        var btnDisableConfirmBtnSpendMoney = {$btnDisableConfirmBtnSpendMoney};
+
     </script>
 
     <script src='{$assets_url}/ext/ext-all.js'></script>
@@ -92,7 +91,7 @@
     <script src='{$assets_url}/js/offline.min.js'></script>        
     <script src='{$assets_url}/ext/NumericField.js'></script>
 
-
+    <script src='{$assets_url}/js/app/buttonaccess.js'></script>
     <script src='{$assets_url}/js/app/pengaturan.js'></script>
     <script src='{$assets_url}/js/app/sistem/UserManagement.js'></script>
     <!-- // <script src='{$assets_url}/js/app/accountList.js'></script> -->

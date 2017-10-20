@@ -520,7 +520,64 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
 
                             }
                         }
-                    }],
+                    },
+
+               {
+                       text: 'Batalkan Pengiriman',
+                       disabled:btnDisableCancelDO,
+                       iconCls: 'delete-icon',
+                       handler: function() {
+                            var grid = Ext.getCmp('deliveryOrderGrid');
+                        // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                           var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                           var data = grid.getSelectionModel().getSelection();
+                           if (data.length == 0)
+                           {
+                               Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
+                           } else {
+
+                              if(selectedRecord.data.delivery_order_id==null){
+                                Ext.Msg.alert('Informasi', 'Tidak bisa melakukan pembatalan untuk data yang memiliki nomor delivery order');
+                                return false;
+                              }
+
+                              if(selectedRecord.data.status=='8'){
+                                Ext.Msg.alert('Informasi', 'Mohon untuk membatalkan invoice terlebih dahulu untuk melakukan pembatalan delivery order');
+                                return false;
+                              }
+
+                              
+                              Ext.Msg.show({
+                                 title: 'Konfirmasi',
+                                 msg: 'Apakah anda yakin untuk membatalkan pengiriman barang ?',
+                                 buttons: Ext.Msg.YESNO,
+                                 fn: function(btn) {
+                                     if (btn == 'yes') {
+                                        console.log(selectedRecord.data.delivery_order_id);
+                                          Ext.Ajax.request({
+                                            url: SITE_URL + 'sales/cancel_do',
+                                            method: 'POST',
+                                            params: {
+                                                delivery_order_id: selectedRecord.data.delivery_order_id,
+                                            },
+                                            success: function(form, action) {
+                                                var d = Ext.decode(form.responseText);
+                                                Ext.Msg.alert('Informasi', d.message);
+                                                storeGriddeliveryOrderGrid.load();
+                                            },
+                                            failure: function(form, action) {
+                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                storeGriddeliveryOrderGrid.load();
+                                            }
+                                          });
+                                         
+                                     }
+                                 }
+                             });
+                          }
+                           
+                       }
+               }],
 
 
                 },

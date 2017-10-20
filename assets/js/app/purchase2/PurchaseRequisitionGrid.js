@@ -300,6 +300,49 @@ Ext.define(dir_sys + 'purchase2.PurchaseRequisitionGrid', {
                         }).show();
                     }
                 }
+            },
+             {
+                text: 'Set Status',
+                iconCls: 'edit-icon',
+                menu: [
+                    {
+                        text: 'Open',
+                        disabled: btnDisableOpenPR,
+                        handler: function() {
+                            // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                            var grid = Ext.getCmp('PurchaseRequisitionGridID');
+                            var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                            var data = grid.getSelectionModel().getSelection();
+                            if (data.length == 0) {
+                                Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                            } else {
+                                if (selectedRecord.data.status * 1 == 2) {
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'purchase/set_status',
+                                        method: 'POST',
+                                        params: {
+                                            status: 1,
+                                            idunit: idunit,
+                                            idpurchase: selectedRecord.data.idpurchase,
+                                            opt: 'PR'
+                                        },
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            Ext.Msg.alert('Informasi', d.message);
+                                            storePurchaseRequisitionGrid.load();
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                        }
+                                    });
+                                } else {
+                                    Ext.Msg.alert('Failure', 'Data yang bisa diubah ke status Open hanya data yang dengan status Confirmed');
+                                }
+
+                            }
+                        }
+                    }
+                ]
             }, {
                 itemId: 'editPurchaseRequisitionGrid',
                 text: 'Edit',

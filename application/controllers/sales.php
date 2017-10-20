@@ -337,6 +337,12 @@ class sales extends MY_Controller {
             $this->db->update('sales',array(
                     'idjournal_do'=>$journal['idjournal']
                 ));
+        } else if($status==1){
+            //confirm -> open
+            $this->db->where('idsales', $idsales);
+            $this->db->update('sales', array(
+                'status'=>$status
+            ));
         }
 
          if($this->db->trans_status() === false){
@@ -344,7 +350,7 @@ class sales extends MY_Controller {
             $json = array('success'=>false,'message'=>'An unknown error was occured');
         } else{
             $this->db->trans_commit();
-            $json = array('success'=>true,'message'=>'Status has been submitted succsessfully');
+            $json = array('success'=>true,'message'=>'Status has been updated succsessfully');
         }
         echo json_encode($json);
     }
@@ -655,12 +661,19 @@ class sales extends MY_Controller {
                 break;
         }
         $data['duedate'] = $duedate;
+        
+
+        //buat jurnal piutang
+        $journal = $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo'),$diskon,$pajak);
+        //$journal['idjournal'];
 
         $this->db->where('idsales',$this->input->post('idsales'));
         $this->db->update('sales',$data);
 
-        //buat jurnal piutang
-        $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo'),$diskon,$pajak);
+        $this->db->insert('sales_invoice',array(
+                'idsales'=>$this->input->post('idsales'),
+                'idjournal'=>$journal['idjournal']
+            ));
 
           if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -1373,6 +1386,109 @@ class sales extends MY_Controller {
             $this->db->where('idsales',$r->idsales);
             $this->db->update('sales_payment',array('idjournal'=>$journal['idjournal']));
         }        
+    }
+
+    function cancel_do(){
+        //pembatalan Delivery order
+
+        $delivery_order_id = $this->input->post('delivery_order_id');
+
+        if($delivery_order_id==''){
+            $json = array('success'=>false,'message'=>'delivery_order_id is null');
+            echo json_encode($json); die;
+        }
+        
+
+        $this->db->trans_begin();
+
+        $q = $this->db->query("select idsales,no_do
+                                from delivery_order a
+                                where delivery_order_id = $delivery_order_id")->row();
+        if($q){
+
+            $qitem = $this->db->query("select idsalesitem,idinventory,qty_kirim,warehouse_id
+                        from salesitem
+                        where idsales = ".$q->idsales."");
+            foreach ($qitem->result() as $r) {
+                 // -- update warehouse
+                $qwr = $this->db->query("select stock
+                                    from warehouse_stock
+                                    where warehouse_id = ".$r->warehouse_id." and idinventory = ".$r->idinventory."");
+                if($qwr->num_rows()>0){
+                    $rwr = $qwr->row();
+                    
+                    $current_stock = $rwr->stock;
+                    $qty_transaction = $r->qty_kirim;
+                    $new_stock = $current_stock+$qty_transaction;
+
+                    $this->db->where(array(
+                            'warehouse_id'=>$r->warehouse_id,
+                            'idinventory'=>$r->idinventory
+                        ));
+                    $this->db->update('warehouse_stock',array('stock'=>$new_stock));
+                } else {
+                    $this->db->insert('warehouse_stock',array(
+                            'warehouse_id'=>$r->warehouse_id,
+                            'idinventory'=>$r->idinventory,
+                            'stock'=>$r->qty_kirim,
+                            'datemod'=>date('Y-m-d H:m:s'),
+                            'idunit'=>$this->session->userdata('idunit')
+                        ));
+
+                    $current_stock = 0;
+                    $qty_transaction = $r->qty_kirim;
+                    $new_stock = $qty_transaction;
+                }
+                   
+
+                    // --update history stok
+                    // select *
+                    // from stock_history
+                    // where warehouse_id = 2 and idinventory = 395
+                    $d = array(
+                            "idinventory" => $r->idinventory,
+                            "idunit" => $r->idinventory,
+                            "type_adjustment" => 10, //cancelation
+                            "no_transaction" => 'id_delivery : '.$delivery_order_id,
+                            "old_qty" => $current_stock,
+                            "qty_transaction" => $qty_transaction,
+                            "balance" => $new_stock,
+                            "warehouse_id"  => $r->warehouse_id,
+                            "datein"  => date('Y-m-d H:m:s'),
+                            "notes"  => 'Pembatalan DO '.$q->no_do,
+                            // "idjournal" => ,
+                        );
+                    $this->db->insert('stock_history',$d);
+
+                    // --update hpp
+
+                    // -- hapus deliveORDER
+                    $this->db->where('delivery_order_id',$delivery_order_id);
+                    $this->db->delete('delivery_order');
+
+                    // -- set 0 qty kirim salesitem
+                    $this->db->where('idsalesitem',$r->idsalesitem);
+                    $this->db->update('salesitem',array('qty_kirim'=>0));
+
+                    // -- update saldo
+
+                    //update hpp
+            }
+           
+        } else {
+             $json = array('success'=>false,'message'=>'delivery_order_id not found');
+            echo json_encode($json); die;
+        }
+        
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'Cancelation delivery order succsessfully');
+        }
+        echo json_encode($json);
     }
 
    
