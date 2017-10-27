@@ -54,7 +54,7 @@ class m_receiptwo extends CI_Model {
     }
 
     function orderBy() {
-        return " a.datein desc";
+        return " a.job_no desc";
     }
 
     function updateField() { 

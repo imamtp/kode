@@ -476,8 +476,9 @@ class journal extends MY_Controller {
         echo json_encode(array('success'=>true,'totaldebit'=>number_format($r->totaldebit,2),'totalcredit'=>number_format($r->totalcredit,2),'selisih'=>number_format($selisih,2)));
     }
 
-    function delete_journal($idjournal){
+    function delete_journal(){
        
+        $idjournal = $this->input->post('idjournal');
 
         $qunit = $this->db->query("select idunit from journal where idjournal = $idjournal");
         if($qunit->num_rows()>0){

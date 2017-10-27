@@ -38,7 +38,7 @@ class m_itempurchaseorder extends CI_Model {
     }
 
     function whereQuery() {
-        return null;
+        return " a.deleted = 0";
     }
 
     function orderBy() {

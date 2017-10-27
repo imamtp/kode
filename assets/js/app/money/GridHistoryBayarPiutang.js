@@ -153,7 +153,7 @@ Ext.define(dir_sys + 'money.GridHistoryBayarPiutang', {
                 }
             }, {
                 text: 'Batalkan Penerimaan',
-                hidden: true,
+                // hidden: true,
                 iconCls: 'delete-icon',
                 handler: function() {
                     var grid = Ext.ComponentQuery.query('GridHistoryBayarPiutang')[0];
@@ -175,23 +175,24 @@ Ext.define(dir_sys + 'money.GridHistoryBayarPiutang', {
                                         selected.push(item.data[Object.keys(item.data)[0]]);
                                     });
                                     Ext.Ajax.request({
-                                        url: SITE_URL + 'money/cancelReceive',
+                                        url: SITE_URL + 'money/cancelReceivePiutang',
                                         method: 'POST',
                                         params: {
                                             postdata: Ext.encode(selected)
                                         },
                                         success: function(form, action) {
                                             var d = Ext.decode(form.responseText);
-                                            if(!d.success) {
+                                            // if(!d.success) {
                                                 Ext.Msg.alert('Informasi', d.message);
-                                            }
+                                                storeGridHistoryBayarPiutang.load();
+                                            // }
                                         },
                                         failure: function(form, action) {
                                             Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                                         }
                                     });
-                                    storeGridHistoryBayarPiutang.remove(sm.getSelection());
-                                    sm.select(0);
+                                    // storeGridHistoryBayarPiutang.remove(sm.getSelection());
+                                    // sm.select(0);
                                 }
                             }
                         });

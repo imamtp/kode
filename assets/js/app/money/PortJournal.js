@@ -278,10 +278,56 @@ Ext.define('GridJurnal', {
                         dock: 'top',
                         items: [
                             {
-                               text: 'Entry Jurnal',
+                               text: 'Tambah Jurnal',
                                iconCls: 'add-icon',
                                handler: function() {
                                 wEntryJurnal.show();
+                               }
+                           },
+                           {
+                               text: 'Hapus Jurnal',
+                               disabled:btnDisableDelJournal,
+                               // iconCls: 'add-icon',
+                               handler: function() {
+                                    var grid = Ext.ComponentQuery.query('GridJurnal')[0];
+                                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                                    var data = grid.getSelectionModel().getSelection();
+                                    if (data.length == 0) {
+                                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                                    } else {
+                                       Ext.Msg.show({
+                                                 title: 'Konfirmasi',
+                                                 msg: 'Apakah anda yakin untuk menghapus Journal ?',
+                                                 buttons: Ext.Msg.YESNO,
+                                                 fn: function(btn) {
+                                                     if (btn == 'yes') {
+                                                        // alert(selectedRecord.data.idjournal)
+                                                         // var grid = Ext.ComponentQuery.query('GridPurchaseAll')[0];
+                                                         // var sm = grid.getSelectionModel();
+                                                         // selected = [];
+                                                         // Ext.each(sm.getSelection(), function(item) {
+                                                         //     selected.push(item.data[Object.keys(item.data)[0]]);
+                                                         // });
+                                                          Ext.Ajax.request({
+                                                            url: SITE_URL + 'journal/delete_journal',
+                                                            method: 'POST',
+                                                            params: {
+                                                                idjournal: selectedRecord.data.idjournal
+                                                            },
+                                                            success: function(form, action) {
+                                                                var d = Ext.decode(form.responseText);
+                                                                Ext.Msg.alert('Informasi', d.message);
+                                                                storeGridJurnal.load();
+                                                            },
+                                                            failure: function(form, action) {
+                                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                            }
+                                                          });
+                                                     }
+                                                 }
+                                             });
+                                    }
+                                // wEntryJurnal.show();
                                }
                            }]
                 }, {

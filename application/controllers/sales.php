@@ -772,7 +772,7 @@ class sales extends MY_Controller {
 
         $idunit = $this->session->userdata('idunit');
 
-        $q = $this->db->query("select totalPaid,totalUnpaid
+        $q = $this->db->query("select totalPaid,totalUnpaid,totalOverdue
                                 from (
                                     select sum(paidtoday) as totalPaid
                                     from sales
@@ -781,14 +781,19 @@ class sales extends MY_Controller {
                                 ( 
                                     select sum(balance) as totalUnpaid
                                     from sales
-                                    where type = 2 and idunit = $idunit and (invoice_status = 1 OR invoice_status = 4) ) b");
+                                    where type = 2 and idunit = $idunit and (invoice_status = 1 OR invoice_status = 4) ) b,
+                                (select sum(balance) as totalOverdue
+                                    from sales
+                                    where type = 2 and idunit =  $idunit 
+                                    and (invoice_status = 1 OR invoice_status = 4) 
+                                and duedate >= now()) c");
         if($q->num_rows()>0)
         {
             $r = $q->row();
             $data = array(
                     'totalPaid'=>isset($r->totalpaid) ? number_format($r->totalpaid) : 0,
                     'totalUnpaid'=>isset($r->totalunpaid) ? number_format($r->totalunpaid) : 0,
-                    'totalDue'=>0
+                    'totalDue'=>isset($r->totaloverdue) ? number_format($r->totaloverdue) : 0,
                 );
         } else {
             $data = array(

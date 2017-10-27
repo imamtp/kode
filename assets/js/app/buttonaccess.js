@@ -7,6 +7,7 @@ if(group_id=='2'){
 	var btnDisableOpenSQ = false;
 	var btnDisableOpenPR = false;
 	var btnDisableOpenPO = false;
+	var btnDisableDelJournal = false;
 } else {
 	var btnDisableConfirmBtnReceiveMoney = true;
 	var btnDisableConfirmBtnSpendMoney = true;
@@ -15,4 +16,5 @@ if(group_id=='2'){
 	var btnDisableOpenSQ = true;
 	var btnDisableOpenPR = true;
 	var btnDisableOpenPO = true;
+	var btnDisableDelJournal = true;
 }

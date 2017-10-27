@@ -988,6 +988,78 @@ class money extends MY_Controller {
         return $ret;
     }
 
+    function cancelReceivePiutang(){
+        $records = json_decode($this->input->post('postdata'));
+
+        $this->db->trans_begin();
+
+        $totalpiutang = 0;
+        foreach ($records as $idpiutanghistory) {
+
+            $q = $this->db->query("select idjournal,diterima,idregistrasipiutang
+                    from piutanghistory
+                    where idpiutanghistory = $idpiutanghistory");
+            if($q->num_rows()>0){
+                $r = $q->row();
+                // --update saldo sisa registrasipiutang
+
+                // select *
+                // from journal
+                // where idjournal = 1978
+
+                 // --credir dan debit saldo dikurang
+                $qjitem = $this->db->get_where('journalitem',array('idjournal'=>$r->idjournal));
+                foreach ($qjitem->result() as $r_j_item) {
+                    $accWer = array('idaccount'=>$r_j_item->idaccount,'idunit'=>$this->session->userdata('idunit'));
+                    $qacc = $this->db->get_where('account',$accWer)->row();
+                    $current_balance = $qacc->balance;
+
+                    if($r_j_item->debit!=0){
+                        $new_balance = $current_balance-$r_j_item->debit;
+                    } else if($r_j_item->credit!=0){
+                        $new_balance = $current_balance-$r_j_item->credit;
+                    }
+
+                    //update saldo baru
+                    $this->db->where($accWer);
+                    $this->db->update('account',array('balance'=>$new_balance));
+                }
+
+                 // --hapus journal & journalitem
+                $this->db->where('idjournal',$r->idjournal);
+                $this->db->delete('journalitem');     
+
+                $this->db->where('idjournal',$r->idjournal);
+                $this->db->delete('journal');  
+
+                //tambah saldo piutang
+                $accWer = array('idregistrasipiutang'=>$r->idregistrasipiutang);
+                $qacc = $this->db->get_where('registrasipiutang',$accWer)->row();
+                $current_balance = $qacc->sisapiutang;
+                $new_balance = $qacc->sisapiutang+$r->diterima;
+                // echo $qacc->sisapiutang.'+'.$r->diterima;
+
+                $this->db->where($accWer);
+                $this->db->update('registrasipiutang',array('sisapiutang'=>$new_balance));
+                // echo $this->db->last_query();
+
+                // --hapus piutanghistory
+                $this->db->where('idpiutanghistory',$idpiutanghistory);
+                $this->db->delete('piutanghistory');  
+            }
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $json = array('success' => false, 'message' => 'Gagal menghapus data');
+        } else {
+            $this->db->trans_commit();
+            $json = array('success' => true, 'message' => 'Berhasil menghapus data');
+        }
+
+        echo json_encode($json);
+    }
+
     function cancelReceive($tipe=null)
     {
         if($tipe=='siswa')
