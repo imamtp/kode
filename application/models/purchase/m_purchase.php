@@ -225,7 +225,7 @@ class m_purchase extends CI_Model {
 
             $dtcetak['notes'] = array(
                 $r->include_tax ? 'Harga di atas sudah termasuk PPN 10%' : 'Harga di atas belum termasuk PPN 10%', 
-                'Alamat pengirian: '. $r->shipaddress,
+                'Alamat pengirmian: '. $r->shipaddress,
                 'Waktu pengiriman: '. $r->req_delivery_date,
                 $r->memo,
                 'Harap cantumkan No PO pada setiap surat jalan',
