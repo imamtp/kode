@@ -16,15 +16,45 @@ class m_salesinvoice extends CI_Model {
     }
 
     function selectField() {
-        return "a.idsales,a.no_sales_order,a.idunit,a.subtotal,a.freight,a.date_sales,a.tax,a.disc,a.totalamount,a.paidtoday,a.balance,a.comments,a.noinvoice,a.ddays,a.eomddays,a.percentagedisc,a.daydisc,a.dmax,a.notes_si,b.nocustomer,b.namecustomer,a.idpayment,a.invoice_status,a.invoice_date,
-        b.address as address_customer, b.telephone as telephone_customer, b.handphone as handphone_customer,a.duedate,total_dpp,a.shipaddress,a.no_faktur,
-        case a.idpayment
-            when 1 then '-'
-            when 2 then '-'
-            when 3 then a.ddays::text
-            when 4 then a.eomddays::text
-            when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
-        end as term, c.no_do";
+        return "a.idsales,
+                a.no_sales_order,
+                a.idunit,
+                a.subtotal,
+                a.freight,
+                a.date_sales,
+                a.tax,
+                a.disc,
+                a.totalamount,
+                a.paidtoday,
+                a.balance,
+                a.comments,
+                a.noinvoice,
+                a.ddays,
+                a.eomddays,
+                a.percentagedisc,
+                a.daydisc,
+                a.dmax,
+                a.notes_si,
+                b.nocustomer,
+                b.namecustomer,
+                a.idpayment,
+                a.invoice_status,
+                a.invoice_date,
+                a.duedate,
+                a.total_dpp,
+                a.shipaddress,
+                a.no_faktur,
+                case a.idpayment
+                    when 1 then '-'
+                    when 2 then '-'
+                    when 3 then a.ddays::text
+                    when 4 then a.eomddays::text
+                    when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
+                end as term,
+                b.address as address_customer,
+                b.telephone as telephone_customer,
+                b.handphone as handphone_customer,
+                c.no_do";
     }
     
     function fieldCek()
@@ -46,12 +76,24 @@ class m_salesinvoice extends CI_Model {
     }
 
     function whereQuery() {
-        if($this->input->post('invoice_status')=='1,4')
-        {
-            $wer = " and (a.invoice_status = 1 OR a.invoice_status = 4)";
-        } else {
-            $wer = null;
+        $wer = null;
+        switch ($this->input->post('option')){
+            case 'unpaid':
+                $wer .= " and a.paidtoday < a.totalamount  and (a.duedate >= now() or a.duedate is null)";
+                break;
+            case 'paid':
+                $wer .= " and a.paidtoday > 0  and (a.duedate >= now() or a.duedate is null)";
+                break;
+            case 'overdue':
+                $wer .= " and a.paidtoday < a.totalamount and a.duedate < now()";
+                break;
         }
+        // if($this->input->post('invoice_status')=='1,4')
+        // {
+        //     $wer = " and (a.invoice_status = 1 OR a.invoice_status = 4)";
+        // } else {
+        //     $wer = null;
+        // }
 
         $sd = substr($this->input->post('startdate'),0,10);
         $nd = substr($this->input->post('enddate'),0,10);
