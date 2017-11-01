@@ -122,7 +122,7 @@ class m_salesorder extends CI_Model {
         if($sd != null && $nd != null)
             $wer .= " AND a.date_sales BETWEEN '$sd' AND '$nd'";
 
-        return " a.type = 2 and a.display is null $wer";
+        return " a.type = 2 and a.display is null $wer and a.id_sales_source is null";
     }
 
     function orderBy() {

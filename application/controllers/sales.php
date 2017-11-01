@@ -672,7 +672,10 @@ class sales extends MY_Controller {
 
         $this->db->insert('sales_invoice',array(
                 'idsales'=>$this->input->post('idsales'),
-                'idjournal'=>$journal['idjournal']
+                'idjournal'=>$journal['idjournal'],
+                'datein'=>date('Y-m-d H:m:s'),
+                'userin'=>$this->session->userdata('userid'),
+                'status'=>1 //active
             ));
 
           if($this->db->trans_status() === false){
@@ -776,15 +779,15 @@ class sales extends MY_Controller {
                                 from (
                                     select sum(paidtoday) as totalPaid
                                     from sales
-                                    where type = 2 and (invoice_status = 2) and idunit = $idunit
+                                    where type = 2 and  id_sales_source is null and (invoice_status = 2) and idunit = $idunit 
                                 ) a,
                                 ( 
                                     select sum(balance) as totalUnpaid
                                     from sales
-                                    where type = 2 and idunit = $idunit and (invoice_status = 1 OR invoice_status = 4) ) b,
+                                    where type = 2 and  id_sales_source is null and idunit = $idunit and (invoice_status = 1 OR invoice_status = 4) ) b,
                                 (select sum(balance) as totalOverdue
                                     from sales
-                                    where type = 2 and idunit =  $idunit 
+                                    where type = 2 and  id_sales_source is null and idunit =  $idunit 
                                     and (invoice_status = 1 OR invoice_status = 4) 
                                 and duedate >= now()) c");
         if($q->num_rows()>0)
@@ -1499,6 +1502,85 @@ class sales extends MY_Controller {
         echo json_encode($json);
     }
 
-   
+    function cancel_invoice(){
+
+        $id = $this->input->post('idsales');
+
+        $qsj = $this->db->get_where('sales_invoice',array('idsales'=>$id));
+        if($qsj->num_rows()>0){
+            $rsj = $qsj->row();
+            $idjournal = $rsj->idjournal;
+
+            $this->db->trans_begin();
+
+            $q = $this->db->get_where('sales',array('idsales'=>$id,'idunit'=>$this->session->userdata('idunit')));
+           
+
+            $data = $q->result_array()[0];
+            $idsales = $data['idsales'];
+            $data['id_sales_source'] = $idsales;
+             // $data_update['invoice_date'] = null;
+            // $data_update['noinvoice'] = null;
+            $data['invoice_status'] = 5; //canceled
+
+            $this->load->model('m_data');
+            $data['idsales'] = $this->m_data->getPrimaryID(null,'sales', 'idsales', $this->session->userdata('idunit'));
+            // echo $this->db->last_query();
+            // echo $data['idsales'];
+            $this->db->insert('sales',$data);
+
+            //insert itemnya
+            $qitem = $this->db->get_where('salesitem',array('idsales'=>$idsales));
+            foreach ($qitem->result_array() as $v) {
+               $v['idsales'] = $data['idsales'];
+               $this->db->insert('salesitem',$v);
+            }
+
+            //set status sales menjadi confirm
+            $data_update['status'] = 7; //delivering
+
+            //set data invoice menjadi null
+            $data_update['invoice_status'] = null;
+            $data_update['invoice_date'] = null;
+            $data_update['noinvoice'] = null;
+            $data_update['duedate'] = null;
+            $data_update['ddays'] = null;
+            $data_update['eomddays'] = null;
+
+            $this->db->where('idsales',$idsales);
+            $this->db->update('sales',$data_update);
+
+            $this->db->where('idsales',$idsales);
+            $this->db->delete('sales_invoice');
+
+            $this->load->library('journal_lib');
+            $json = $this->journal_lib->delete($idjournal);
+
+            if($json['success']===false){
+                // echo json_encode($json);
+                // return false;
+                $this->db->trans_rollback();
+                // $json = array('success'=>false,'message'=>'An unknown error was occured');
+            } else {
+                if($this->db->trans_status() === false){
+                    $this->db->trans_rollback();
+                    $json = array('success'=>false,'message'=>'An unknown error was occured');
+                }else{
+                    $this->db->trans_commit();
+                    $json = array('success'=>true,'message'=>'Faktur penjualan berhasil dibatalkan');
+                }
+            }
+
+        } else {
+            $json = array('success'=>false,'message'=>'Tidak bisa membatalkan invoice. idsales: '.$id);
+        }
+
+        echo json_encode($json);
+    }
+
+   function tes_lib(){
+        $this->load->library('journal_lib');
+        print_r($this->journal_lib->get());
+   }
 }
 ?>
