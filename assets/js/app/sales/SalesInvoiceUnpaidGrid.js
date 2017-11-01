@@ -324,7 +324,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             },
             {
                 text: 'Batalkan Faktur',
-                // disabled:btnDisableCancelDO,
+                disabled:btnDisableCancelSalesInvoice,
                 iconCls: 'delete-icon',
                 handler: function() {
                     var grid = Ext.getCmp('SalesInvoiceUnpaidGrid');
