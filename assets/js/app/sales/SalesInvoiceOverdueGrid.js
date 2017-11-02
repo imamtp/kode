@@ -323,7 +323,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                             disabled:btnDisableCancelSalesInvoice,
                             iconCls: 'delete-icon',
                             handler: function() {
-                                var grid = Ext.getCmp('GridSalesInvoiceOverdueGridID');
+                                var grid = Ext.getCmp('SalesInvoiceOverdueGrid');
                                 // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
                                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
                                 var data = grid.getSelectionModel().getSelection();
@@ -373,7 +373,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                             disabled:btnDisableCancelSalesInvoice,
                             iconCls: 'delete-icon',
                             handler: function() {
-                                var grid = Ext.getCmp('GridSalesInvoiceOverdueGridID');
+                                var grid = Ext.getCmp('SalesInvoiceOverdueGrid');
                                 // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
                                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
                                 var data = grid.getSelectionModel().getSelection();
