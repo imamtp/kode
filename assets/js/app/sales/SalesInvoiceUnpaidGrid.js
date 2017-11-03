@@ -54,6 +54,7 @@ var smGridSalesInvoiceUnpaidGrid = Ext.create('Ext.selection.CheckboxModel', {
             }
         },
         select: function(model, record, index) {
+            console.log(record);
             Ext.getCmp('btnDeleteSalesInvoiceUnpaidGrid').enable();
         }
     }
@@ -280,7 +281,8 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                         loadMemberForm(selectedRecord.data.id_member)
                     }
                 }
-            }, {
+            },
+             {
                 id: 'btnDeleteSalesInvoiceUnpaidGrid',
                 text: 'Hapus',
                 hidden: true,
@@ -324,49 +326,112 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             },
             {
                 text: 'Batalkan Faktur',
-                disabled:btnDisableCancelSalesInvoice,
-                iconCls: 'delete-icon',
-                handler: function() {
-                    var grid = Ext.getCmp('SalesInvoiceUnpaidGrid');
-                    // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
-                    } else {
-                            Ext.Msg.show({
-                              title: 'Confirm',
-                              msg: 'Delete Selected ?',
-                              buttons: Ext.Msg.YESNO,
-                              fn: function(btn) {
-                                  if (btn == 'yes') {
-                                     Ext.Ajax.request({
-                                          url: SITE_URL + 'sales/cancel_invoice',
-                                          method: 'POST',
-                                          params: {
-                                              idsales: selectedRecord.data.idsales,
-                                              idmenu: 95
-                                          },
-                                          success: function(form, action) {
-                                              var d = Ext.decode(form.responseText);
-                                              // if (!d.success) {
-                                                  Ext.Msg.alert('Informasi', d.message);
-                                              // }
-                                              storeGridSalesInvoiceUnpaidGrid.load();
-                                              setHeaderInvoice();
-                                          },
-                                          failure: function(form, action) {
-                                              Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                          }
-                                      });
-                                      
-                                  }
-                              }
-                          });
-                           
-                    }
-                }
+                iconCls: 'edit-icon',
+                menu: [
+                        {
+                            text: 'Batalkan Faktur dan Hapus Jurnal',
+                            disabled:btnDisableCancelSalesInvoice,
+                            iconCls: 'delete-icon',
+                            handler: function() {
+                                var grid = Ext.getCmp('SalesInvoiceUnpaidGrid');
+                                // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                                var data = grid.getSelectionModel().getSelection();
+                                if (data.length == 0) {
+                                    Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
+                                } else {
+                                       if(selectedRecord.data.invoice_status*1==5){
+                                            Ext.Msg.alert('Failure', 'Data terpilih sudah dibatalkan.');
+                                       } else {
+                                            Ext.Msg.show({
+                                                  title: 'Confirm',
+                                                  msg: 'Delete Selected ?',
+                                                  buttons: Ext.Msg.YESNO,
+                                                  fn: function(btn) {
+                                                      if (btn == 'yes') {
+                                                         Ext.Ajax.request({
+                                                              url: SITE_URL + 'sales/cancel_invoice',
+                                                              method: 'POST',
+                                                              params: {
+                                                                  idsales: selectedRecord.data.idsales,
+                                                                  idmenu: 95
+                                                              },
+                                                              success: function(form, action) {
+                                                                  var d = Ext.decode(form.responseText);
+                                                                  // if (!d.success) {
+                                                                      Ext.Msg.alert('Informasi', d.message);
+                                                                  // }
+                                                                  storeGridSalesInvoiceUnpaidGrid.load();
+                                                                  setHeaderInvoice();
+                                                              },
+                                                              failure: function(form, action) {
+                                                                  Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                              }
+                                                          });
+                                                          
+                                                      }
+                                                  }
+                                              });
+                                       }
+                                        
+                                       
+                                }
+                            }
+                        },
+                        {
+                            text: 'Batalkan Faktur',
+                            disabled:btnDisableCancelSalesInvoice,
+                            iconCls: 'delete-icon',
+                            handler: function() {
+                                var grid = Ext.getCmp('SalesInvoiceUnpaidGrid');
+                                // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                                var data = grid.getSelectionModel().getSelection();
+                                if (data.length == 0) {
+                                    Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
+                                } else {
+
+                                    if(selectedRecord.data.invoice_status*1==5){
+                                            Ext.Msg.alert('Failure', 'Data terpilih sudah dibatalkan.');
+                                    } else {
+                                        Ext.Msg.show({
+                                              title: 'Confirm',
+                                              msg: 'Delete Selected ?',
+                                              buttons: Ext.Msg.YESNO,
+                                              fn: function(btn) {
+                                                  if (btn == 'yes') {
+                                                     Ext.Ajax.request({
+                                                          url: SITE_URL + 'sales/cancel_invoice2',
+                                                          method: 'POST',
+                                                          params: {
+                                                              idsales: selectedRecord.data.idsales,
+                                                              idmenu: 95
+                                                          },
+                                                          success: function(form, action) {
+                                                              var d = Ext.decode(form.responseText);
+                                                              // if (!d.success) {
+                                                                  Ext.Msg.alert('Informasi', d.message);
+                                                              // }
+                                                              storeGridSalesInvoiceUnpaidGrid.load();
+                                                              setHeaderInvoice();
+                                                          },
+                                                          failure: function(form, action) {
+                                                              Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                          }
+                                                      });
+                                                      
+                                                  }
+                                              }
+                                          });
+                                    }
+                                        
+                                       
+                                }
+                            }
+                        }
+                ]
             },
+            
             '->', 'Search: ', ' ', {
                 xtype: 'searchGridSalesInvoiceUnpaidGrid',
                 text: 'Left Button'
