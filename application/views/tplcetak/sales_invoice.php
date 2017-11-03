@@ -156,10 +156,13 @@
 			<td class="cell-bordered"><?=$data['shipaddress']?></td>
 			<td colspan="5">&nbsp;</td>
 		</tr>
-		<tr><td colspan="7">&nbsp;</td></tr>
+		
+	</table>
+
+	<table class="table" border="0" cellpadding="0" cellspacing="0" style="page-break-inside:avoid">
 		<tr>
 			<!-- notes -->
-			<td>
+			<td width="45%">
 				<p>Notes:</p>
 				<ul>
 				<?php 
@@ -171,17 +174,20 @@
 				</ul>
 			</td>
 			<!-- end of notes -->
+			
+			<td></td>
 
 			<!-- ttd 1 -->
-			<td colspan="3">&nbsp;</td>
+			<td width="25%" align="center">
+				<!-- Disetujui oleh:<br><br><br><br><br><br><br>((Zora Suzanna))</td> -->
 			<!-- end of ttd1 -->
 
 			<!-- ttd 2 -->
-			<td colspan="2" align="center">
-				<br><br><br><br><br><br><br>(Zora Suzanna)
+			<td width="25%" align="center">
+				Disetujui oleh:<br><br><br><br><br><br><br>(Zora Suzanna)</td>
 			</td>
 			<!-- end of ttd 2 -->
 		</tr>
-	</table>
+	</table>	
 </body>
 </html>
