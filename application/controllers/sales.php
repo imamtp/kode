@@ -279,6 +279,22 @@ class sales extends MY_Controller {
         echo json_encode(array('data'=>$r));
     }
 
+    function get_item_sales_do(){
+        /*
+            ambil item dari penjualan untuk delivery 
+        */
+        $this->load->model('sales/m_salesorder');
+
+        $r = $this->m_salesorder->query_itemsales($this->input->get('idsales'));
+        foreach ($r as $key => $value) {
+           //cek udah dimasukin di deliver_order_item apa blum
+            // $qcek = $this->db->get_where('')
+        }
+
+        $results = $query->num_rows();
+        echo '{success:true,numrow:' . $query->num_rows() . ',results:' . $results .',rows:' . json_encode($arr) . '}';
+    }
+
     function set_status(){
         $this->db->trans_begin();
 
@@ -1659,6 +1675,105 @@ class sales extends MY_Controller {
    function tes_lib(){
         $this->load->library('journal_lib');
         print_r($this->journal_lib->get());
+   }
+
+   function get_item_for_do(){
+        $idunit = $this->session->userdata('idunit');
+        $query = $this->input->post('query');
+        $start = $this->input->post('start');
+        $limit = $this->input->post('limit');
+        $idsales = $this->input->post('idsales');
+        $id_tmp = $this->input->post('id_tmp');
+
+        $limit_offset = "LIMIT $limit OFFSET $start";
+
+        $this->load->model('sales/m_salesorder');
+        
+         $sql = "select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
+                                ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,qty_kirim,sum(qty-qty_kirim) as qtysisakirim
+                                from salesitem a
+                                join inventory b ON a.idinventory = b.idinventory
+                                left join productmeasurement c ON c.measurement_id = a.measurement_id
+                                left join warehouse d ON d.warehouse_id = a.warehouse_id
+                                left join productmeasurement e ON a.measurement_id_size = e.measurement_id
+                                where idsales = $idsales 
+                                group by a.deleted,a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement
+                                order by a.idsalesitem desc";
+
+        $qtotal = $this->db->query($sql);
+
+        $q = $this->db->query($sql.' '.$limit_offset);
+        foreach ($q->result_array() as $v) {
+            //cek do item
+            $qcek = $this->db->get_where('deliver_order_item',array('idsalesitem'=>$v['idsalesitem']));
+            if($qcek->num_rows()>0){
+                $r = $qcek->row();
+                $v['qty_sisakirim'] = $v['qty'] - $r->qty_kirim;
+                $v['qty_terkirim'] = $r->qty_kirim;
+            } else {
+                $v['qty_sisakirim'] = $v['qty'];
+                $v['qty_terkirim'] = 0;
+            }
+            $data[] = $v;
+        }
+        
+        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($data) . ' }';
+
+        $q->free_result(); 
+        $qtotal->free_result(); 
+   }
+
+   function save_do_item(){
+        $this->load->model('m_data');
+
+        $this->db->trans_begin();
+
+        $id_tmp = $this->input->post('id_tmp');
+        $do_item_id = $this->input->post('do_item_id');
+        $idsalesitem = $this->input->post('idsalesitem');
+
+        $total_amount = $this->input->post('idsalesitem')*$this->input->post('qty_kirim');
+
+        $d = array(
+            'idsalesitem'=>$this->input->post('idsalesitem'),
+            'delivery_order_id'=>$this->input->post('delivery_order_id'),
+            'qty_order'=>$this->input->post('qty_order'),
+            'qty_kirim'=>$this->input->post('qty_kirim'),
+            // 'qty_terima'=>$this->input->post('qty_terima'),
+            // 'qty_retur'=>$this->input->post('qty_retur'),
+            'qty_sisa'=>$this->input->post('qty_order')-$this->input->post('qty_kirim'),
+            'warehouse_id'=>$this->input->post('warehouse_id'),
+            'notes'=>$this->input->post('notes'),
+            'userin'=>$this->session->userdata('userid'),
+            'datein'=>date('Y-m-d H:m:s'),
+            'total_amount'=>$total_amount
+        );
+
+        if($id_tmp!=''){
+            $d['id_tmp'] = $id_tmp;
+            $d['is_tmp'] = 1;
+        } else {
+            $d['id_tmp'] = null;
+            $d['is_tmp'] = 0;
+        }
+
+        if($do_item_id==''){
+            $d['do_item_id'] = $this->m_data->getPrimaryID2(null,'deliver_order_item', 'do_item_id');
+            $this->db->insert('deliver_order_item',$d);
+        } else {
+            $this->db->where('do_item_id',$this->input->post('do_item_id'));
+            $this->db->update('deliver_order_item',$d);
+        }
+        
+         if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'Data was saved succsessfully');
+        }
+
+        echo json_encode($json);
    }
 }
 ?>

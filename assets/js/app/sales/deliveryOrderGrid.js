@@ -300,13 +300,17 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             xtype: 'toolbar',
             dock: 'top',
             items: [
-                /*{
-                                            text: 'New Delivery Order',
-                                            iconCls: 'add-icon',
-                                            handler: function () {
-                                                WindowSOList.show();
-                                                Ext.getCmp('GridSalesOrderList').getStore().load();
-                                            },*/
+                {
+                    text: 'Create Delivery Order',
+                    iconCls: 'add-icon',
+                    handler: function () {
+                        WindowEntryDeliveryOrder.show();
+                        Ext.getCmp('id_tmp_do').setValue(randomString(25));
+                        Ext.getCmp('delivery_order_id_do').setValue(null);
+                        
+                        // Ext.getCmp('GridSalesOrderList').getStore().load();
+                    },
+                },
                 {
                     id: 'btnPickingNote',
                     text: 'Print Picking Note',

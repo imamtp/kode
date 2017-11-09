@@ -859,6 +859,7 @@ class Backend extends MY_Controller {
         if (isset($_POST['query'])) {
 
             $field = 0;
+            $start = 0;
 
             foreach ($this->datamodel->searchField() as $key => $value) {
                 if ($field == 0) {

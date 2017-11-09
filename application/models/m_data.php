@@ -22,6 +22,26 @@ class m_data extends CI_Model {
        
     }
 
+    function getPrimaryID2($post_id_data,$table, $kolom)
+    {
+        if($post_id_data==null)
+        {
+            //input baru
+             $q = $this->db->query("select max($kolom) as id from $table");
+            if($q->num_rows()>0)
+            {
+                $r = $q->row();
+                return $r->id+1;
+            } else {
+                return 1;
+            }
+        } else {
+            //edit
+            return $post_id_data;
+        }
+       
+    }
+
     function getID($table, $kolom, $vkolom, $id) {
         if ($id == '0') {
             return null;
