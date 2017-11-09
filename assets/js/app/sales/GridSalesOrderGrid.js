@@ -516,36 +516,16 @@ Ext.define(dir_sys + 'sales.GridSalesOrderGrid', {
 
             }, {
                 itemId: 'editSalesOrderGrid',
-                hidden: true,
+                disabled:btnEditSalesOrderGrid,
                 text: 'Edit',
                 iconCls: 'edit-icon',
                 handler: function() {
-                    supplierTypeStore.load();
 
                     var grid = Ext.ComponentQuery.query('GridSalesOrderGrid')[0];
                     var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data supplier terlebih dahulu!');
-                    } else {
-                        //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
-                        var formSalesOrderGrid = Ext.getCmp('formSalesOrderGrid');
-                        formSalesOrderGrid.getForm().load({
-                            url: SITE_URL + 'backend/loadFormData/SalesOrderGrid/1',
-                            params: {
-                                extraparams: 'a.idsupplier:' + selectedRecord.data.idsupplier
-                            },
-                            success: function(form, action) {
-                                // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                            },
-                            failure: function(form, action) {
-                                Ext.Msg.alert("Load failed", action.result.errorMessage);
-                            }
-                        })
-                        wSalesOrderGrid.show();
-                        Ext.getCmp('statusformSalesOrderGrid').setValue('edit');
-                        Ext.getCmp('TabSupplier').setActiveTab(0);
-                    }
+// console.log(selectedRecord);
+
+                    showSalesOrderData(selectedRecord,'edit');
                 }
             }, {
                 id: 'btnDeleteSalesOrderGrid',

@@ -43,7 +43,7 @@ function loadReturnSOData(record) {
   Ext.getCmp('statusformSalesReturnGrid_sr').setValue('edit');
 }
 
-function showSalesOrderData(record) {
+function showSalesOrderData(record,edit) {
   // console.log(record);
   wSalesOrderGrid.show();
   storeCustomer.load();
@@ -66,12 +66,19 @@ function showSalesOrderData(record) {
   // cb_sales_order_status.getStore().load();
   cb_sales_order_status.setValue(record.data.status * 1);
   cb_sales_order_status.setReadOnly(true);
+
   if (record.data.status * 1 == 1) {
     //status open masih bisa dieedit
     Ext.getCmp('btnRecordSalesOrder').enable();
   } else {
-    Ext.getCmp('btnRecordSalesOrder').disable();
+    if(edit=='edit'){
+      Ext.getCmp('btnRecordSalesOrder').enable();
+    } else {
+      Ext.getCmp('btnRecordSalesOrder').disable();
+    }
+    
   }
+
   if (record.data.idsales_quote === null) {
     Ext.getCmp('is_from_sq_soform').setValue({ is_from_sq: 2 });
   } else {

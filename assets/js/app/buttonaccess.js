@@ -9,6 +9,7 @@ if(group_id=='2'){
 	var btnDisableOpenPO = false;
 	var btnDisableDelJournal = false;
 	var btnDisableCancelSalesInvoice = false;
+	var btnEditSalesOrderGrid = false;
 } else {
 	var btnDisableConfirmBtnReceiveMoney = true;
 	var btnDisableConfirmBtnSpendMoney = true;
@@ -19,4 +20,5 @@ if(group_id=='2'){
 	var btnDisableOpenPO = true;
 	var btnDisableDelJournal = true;
 	var btnDisableCancelSalesInvoice = true;
+	var btnEditSalesOrderGrid = true;
 }
