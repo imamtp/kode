@@ -1196,56 +1196,112 @@ class sales extends MY_Controller {
             exit();
         }
         
-        $sql = "select 
-                    c.sku_no, 
-                    c.nameinventory, 
-                    coalesce(sum(stock),0) as stock_one, 
-                    coalesce((sum(stock)/b.ratio_two),0) as stock_two, 
-                    coalesce((sum(stock)/b.ratio_tre),0) as stock_tre
-                from warehouse_stock a
-                join inventory b on b.idinventory = a.idinventory --child
-                join inventory c on c.idinventory = b.idinventory_parent --parent
-                join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
-                where b.idinventory_parent = $idinventory 
-                and idsalesitem = $idsalesitem
-                and stock > 0
-                group by c.sku_no, c.nameinventory, b.ratio_two, b.ratio_tre";
-        $qcek = $this->db->query($sql);
+        //deteksi inventorynya punya child apa tidak
+        $qcek = $this->db->query("select idinventory_parent
+                                    from inventory
+                                    where idinventory = $idinventory")->row();
+        if($qcek->idinventory_parent==null){
+            //kalau idinventory_parent kosong harus cari stoknya di child si inventory
+            $qinv = $this->db->query("select 
+                                                coalesce(sum(stock),0) as stock_one
+                                            from warehouse_stock a
+                                            left join inventory b ON a.idinventory = b.idinventory
+                                            where b.idinventory IN (select idinventory 
+                                                from inventory
+                                                where idinventory_parent = $idinventory)
+                                            group by sku_no, nameinventory");
+            if($qinv->num_rows()>0){
+                $rinv = $qinv->row();
 
-        $success = true;
-        $msg = null;
+                $success = true;
+                $msg = null;
 
-        if($qcek->num_rows()>0){
-            $r = $qcek->row();
-            $stock = $r->stock_two;
-            
-            if($qty_kirim > $stock){
-                $success = false;
-                $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                $qratio = $this->db->query("select ratio_two,ratio_tre
+                                                from inventory
+                                                where idinventory = $idinventory")->row();
+                if($qratio->ratio_two==null){
+                     $json = array('success'=>false,'message'=>'Rasio ID inventory '.$idinventory.' belum ditentukan');
+                     echo json_encode($json);
+                     return false;
+                }
+
+                $stock = $rinv->stock_one/$qratio->ratio_two;
+                // sum(stock)/b.ratio_two
+
+                 // $stock = $qratio->stock_two;
+                    
+                if($qty_kirim > $stock){
+                    $success = false;
+                    $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                }
+
+                if($stock<=0 || $stock==null){
+                    $success = false;
+                    $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                }
+                // echo $stock;
+                 $json = array('success'=>$success,'message'=>$msg);
+                 echo json_encode($json);
+            } else {
+                 $json = array('success'=>false,'message'=>'Inventory '.$idinventory.' Not found');
+                 echo json_encode($json);
+                 return false;
             }
 
-            if($stock<=0 || $stock==null){
-                $success = false;
-                $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
-            }
         } else {
-            $success = false;
-            $msg = "Stok untuk barang: <b>".$this->input->get('nameinventory'). "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+            $sql = "select 
+                            c.sku_no, 
+                            c.nameinventory, 
+                            coalesce(sum(stock),0) as stock_one, 
+                            coalesce((sum(stock)/b.ratio_two),0) as stock_two, 
+                            coalesce((sum(stock)/b.ratio_tre),0) as stock_tre
+                        from warehouse_stock a
+                        join inventory b on b.idinventory = a.idinventory --child
+                        join inventory c on c.idinventory = b.idinventory_parent --parent
+                        join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
+                        where b.idinventory_parent = $idinventory 
+                        and idsalesitem = $idsalesitem
+                        and stock > 0
+                        group by c.sku_no, c.nameinventory, b.ratio_two, b.ratio_tre";
+                $qcek = $this->db->query($sql);
+
+                $success = true;
+                $msg = null;
+
+                if($qcek->num_rows()>0){
+                    $r = $qcek->row();
+                    $stock = $r->stock_two;
+                    
+                    if($qty_kirim > $stock){
+                        $success = false;
+                        $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                    }
+
+                    if($stock<=0 || $stock==null){
+                        $success = false;
+                        $msg = "Kuantitas kirim untuk barang: <b>".$this->input->get('invno')." ".$this->input->get('nameinventory'). "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                    }
+                } else {
+                    $success = false;
+                    $msg = "Stok untuk barang: <b>".$this->input->get('nameinventory'). "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                }
+
+                //cek status
+                $qstatus = $this->db->query("select a.idinventory,a.warehouse_id,COALESCE( NULLIF(a.stock,null) , 0 ) as stock,a.idunit,c.warehouse_code
+                                            from warehouse_stock a
+                                            left join inventory b ON a.idinventory = b.idinventory
+                                            join warehouse c ON a.warehouse_id = c.warehouse_id
+                                            where a.idinventory = $idinventory and a.idunit = $idunit");
+                 $txt = "<br><br><b>Status Stok</b>:<br>";
+                 foreach ($qstatus->result() as $r) {
+                     $txt.= 'Warehouse '. $r->warehouse_code.' : '.$r->stock.'<br>';
+                 }
+
+                 $json = array('success'=>$success,'message'=>$msg.$txt);
+                 echo json_encode($json);
         }
 
-        //cek status
-        $qstatus = $this->db->query("select a.idinventory,a.warehouse_id,COALESCE( NULLIF(a.stock,null) , 0 ) as stock,a.idunit,c.warehouse_code
-                                    from warehouse_stock a
-                                    left join inventory b ON a.idinventory = b.idinventory
-                                    join warehouse c ON a.warehouse_id = c.warehouse_id
-                                    where a.idinventory = $idinventory and a.idunit = $idunit");
-         $txt = "<br><br><b>Status Stok</b>:<br>";
-         foreach ($qstatus->result() as $r) {
-             $txt.= 'Warehouse '. $r->warehouse_code.' : '.$r->stock.'<br>';
-         }
-
-         $json = array('success'=>$success,'message'=>$msg.$txt);
-         echo json_encode($json);
+        
     }
 
     function check_stock_kirim2(){
