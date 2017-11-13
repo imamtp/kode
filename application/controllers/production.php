@@ -732,14 +732,22 @@ class production extends MY_Controller
                     $this->db->update('prod_material', $data_material);
             }
         } else {
-            $data_job_item['userin'] = $this->session->userdata('userid');
-            $data_job_item['datein'] = date('Y-m-d H:m:s');
-            $data_job_item['deleted'] = 0;
-            $data_job_item['idunit'] = $this->input->post('idunit');
-            $data_job_item['idinventory'] = intval($this->input->post('idinventory'));
-            $data_job_item['cost'] = $this->input->post('cost')=='' ? null : $this->input->post('cost');
+            $qcek = $this->db->get_where('job_item',array(
+                    'job_order_id'=>$job_order_id,
+                    'idinventory'=> intval($this->input->post('idinventory')),
+                    'size'=>$this->input->post('size'),
+                    'qty' => $this->input->post('qty')
+                ));
+            if($qcek->num_rows()<=0){
+                $data_job_item['userin'] = $this->session->userdata('userid');
+                $data_job_item['datein'] = date('Y-m-d H:m:s');
+                $data_job_item['deleted'] = 0;
+                $data_job_item['idunit'] = $this->input->post('idunit');
+                $data_job_item['idinventory'] = intval($this->input->post('idinventory'));
+                $data_job_item['cost'] = $this->input->post('cost')=='' ? null : $this->input->post('cost');
 
-            $this->db->insert('job_item', $data_job_item);
+                $this->db->insert('job_item', $data_job_item);
+            }
         }
         
 
