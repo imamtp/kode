@@ -450,17 +450,84 @@ class sales extends MY_Controller {
         $total_amount_kirim = 0;
         $items = json_decode($this->input->post('datagrid'));
         foreach ($items as $value) {
-            //ambil inventory_parent, hanya utk sementara ambil dr db. biar cepet ngodingnya, nantinya harus ada di $items
-            $sql = "select b.idinventory_parent, b.invno, c.nameinventory, a.idinventory, stock, d.size, b.ratio_two, c.hpp_per_unit as hpp from warehouse_stock a
-                    join inventory b on b.idinventory = a.idinventory --child
-                    join inventory c on c.idinventory = b.idinventory_parent --parent
-                    join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
-                    where b.idinventory_parent = $value->idinventory 
-                    and idsalesitem = $value->idsalesitem
-                    and stock > 0";
-            $qinv = $this->db->query($sql);
-            $inv = $qinv->row();
             
+            //deteksi inventorynya punya child apa tidak
+            $qcek = $this->db->query("select idinventory_parent
+                                        from inventory
+                                        where idinventory = $value->idinventory ")->row();
+            if($qcek->idinventory_parent==null){
+                //kalau idinventory_parent kosong harus cari stoknya di child si inventory
+                $qinv = $this->db->query("select 
+                                                    coalesce(sum(stock),0) as stock_one 
+                                                from warehouse_stock a
+                                                left join inventory b ON a.idinventory = b.idinventory
+                                                where b.idinventory IN (select idinventory 
+                                                    from inventory
+                                                    where idinventory_parent = $value->idinventory )
+                                                group by sku_no, nameinventory");
+                if($qinv->num_rows()>0){
+                    $rinv = $qinv->row();
+
+                    $qratio = $this->db->query("select ratio_two,ratio_tre
+                                                from inventory
+                                                where idinventory = $value->idinventory")->row();
+                    if($qratio->ratio_two==null){
+                        $json = array('success'=>false,'message'=>'Rasio ID inventory '.$value->idinventory.' belum ditentukan');
+                        echo json_encode($json);
+                        return false;
+                    }
+
+                    // $stock = $rinv->stock_one/$qratio->ratio_two;
+
+                    $ratio_two = $qratio->ratio_two;
+                    $idinventory = $value->idinventory;
+                    $qhpp = $this->db->query("select a.hpp_per_unit as hpp_parent, b.hpp_per_unit as hpp_child
+                                                from (
+                                                select hpp_per_unit from inventory where idinventory = $idinventory) a,
+                                                (select hpp_per_unit from inventory where idinventory_parent = $idinventory) b")->row();
+                    $hpp = $qhpp->hpp_parent==null ? $qhpp->hpp_child : $qhpp->hpp_parent;
+                    // echo $stock; die;
+
+                    //mencari child dari idinventory sesuai dari warehouseid 
+                    $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
+                    $q1 = $this->db->query("select idinventory from inventory where idinventory_parent = $idinventory");
+                    foreach($q1->result() as $rq1){
+                        $qwi = $this->db->get_where('warehouse_stock',array(
+                            'idinventory'=>$rq1->idinventory,
+                            'warehouse_id'=>$warehouse_id
+                        ));
+                        if($qwi->num_rows()>0){
+                            $rqwi = $qwi->row();
+                            $idinventory = $rqwi->idinventory;
+                            break;
+                        }
+                    }
+
+                    $idinventory_parent = $idinventory;
+                    
+                } else {
+                    $json = array('success'=>false,'message'=>'Inventory '.$value->idinventory.' Not found');
+                    echo json_encode($json);
+                    return false;
+                }
+            } else {
+                //ambil inventory_parent, hanya utk sementara ambil dr db. biar cepet ngodingnya, nantinya harus ada di $items
+                $sql = "select b.idinventory_parent, b.invno, c.nameinventory, a.idinventory, stock, d.size, b.ratio_two, c.hpp_per_unit as hpp from warehouse_stock a
+                        join inventory b on b.idinventory = a.idinventory --child
+                        join inventory c on c.idinventory = b.idinventory_parent --parent
+                        join salesitem d on d.idinventory = b.idinventory_parent and d.size = b.ratio_two
+                        where b.idinventory_parent = $value->idinventory 
+                        and idsalesitem = $value->idsalesitem
+                        and stock > 0";
+                $qinv = $this->db->query($sql);
+                $inv = $qinv->row();
+                
+               $ratio_two = $inv->ratio_two;
+               $hpp = $inv->hpp;
+               $idinventory = $value->idinventory;
+               $idinventory_parent = $inv->idinventory_parent;
+            }
+
             $warehouse_id = $this->m_data->getIDmaster('warehouse_code',$value->warehouse_code,'warehouse_id','warehouse',$idunit);
             $sisakirim = $value->qtysisakirim==null ? 0 : $value->qtysisakirim;
             $arrWer = array(
@@ -475,8 +542,9 @@ class sales extends MY_Controller {
             $this->db->where($arrWer);
             $this->db->update('salesitem',array('qty_kirim'=>$current_qty+$value->qty_kirim,'warehouse_id'=>$warehouse_id));
 
-            $qty_item = $value->qty_kirim * $inv->ratio_two; //konversi qty_kirim(lbr/btg) jadi satuan terkecil (m)
-            $balance_item = $qty_item * $inv->hpp; // menghitung new balance dalam satuan m
+            $qty_item = $value->qty_kirim * $ratio_two; //konversi qty_kirim(lbr/btg) jadi satuan terkecil (m)
+            $balance_item = $qty_item * $hpp; // menghitung new balance dalam satuan m
+            
             
             // //log hpp history
             // if(!$this->m_stock->update_hpp($inv->idinventory_parent,$idunit, 3, 'out',$balance_item,$qty_item, 'null', $idsales, 'null')){
@@ -487,7 +555,7 @@ class sales extends MY_Controller {
             // }
             
             //update stock history
-            $this->m_stock->update_history(8,$qty_item,$inv->idinventory,$inv->idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
+            $this->m_stock->update_history(8,$qty_item,$idinventory,$idinventory_parent,$idunit,$warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
             $totalkirim+=$value->qty_kirim;
 
             $total_amount_kirim+=$value->qty_kirim*$qkirim->price;
