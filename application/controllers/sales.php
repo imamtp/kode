@@ -306,7 +306,7 @@ class sales extends MY_Controller {
         } else if($status==4){
              //closed
 
-            $qsales = $this->db->query("select no_sales_order,idaccount_hppenjualan,idaccount_persediaan from sales
+            $qsales = $this->db->query("select status,no_sales_order,idaccount_hppenjualan,idaccount_persediaan from sales
                                         where idsales = $idsales and idunit = $idunit")->row();
 
             if($qsales->idaccount_hppenjualan==null){
@@ -321,12 +321,45 @@ class sales extends MY_Controller {
                 return false;
             }
 
-        
+             if($qsales->status==4){
+                $json = array('success'=>false,'message'=>'Data sudah berstatus closed');
+                echo json_encode($json);
+                return false;
+            }
            
             $this->db->where('idsales', $idsales);
             $this->db->update('sales', array(
                 'status'=>$status
             ));
+
+            //kurangi stok
+            $q1 = $this->db->query("select * from salesitem
+                                        where idsales = $idsales");
+            foreach ($q1->result() as $rq1) {
+//echo
+                $q2 = $this->db->query("select idinventory_parent
+                        from inventory
+                        where idinventory = ".$rq1->idinventory." ")->row();
+                if($q2->idinventory_parent==null){
+
+                    $q2 = $this->db->query("select a.idinventory,b.idsalesitem
+                                                from inventory a
+                                                join salesitem b ON a.idinventory_parent = b.idinventory and ratio_two = ".$rq1->size."
+                                                where a.idinventory_parent = ".$rq1->idinventory." and b.idsalesitem = ".$rq1->idsalesitem."");
+                    if($q2->num_rows()>0){
+                        $rq3 = $q2->row();
+
+                        $q3 = $this->db->query("select a.* from warehouse_stock a where idinventory = ".$rq3->idinventory." ")->row();
+
+                        $new_stock = $q3->stock - $rq1->qty; //kurangi stok
+
+                        $this->db->where('idinventory',$rq3->idinventory);
+                        $this->db->update('warehouse_stock',array(
+                            'stock'=>$new_stock
+                        ));
+                    }
+                }
+            }
            
             $total_hpp = $this->m_stock->update_hpp_old($idunit,3,null,$idsales)['total_hpp'];
 
@@ -455,7 +488,7 @@ class sales extends MY_Controller {
             $qcek = $this->db->query("select idinventory_parent
                                         from inventory
                                         where idinventory = $value->idinventory ")->row();
-            if($qcek->idinventory_parent==null){
+            if($qcek->idinventory_parent!==null){
                 //kalau idinventory_parent kosong harus cari stoknya di child si inventory
                 $qinv = $this->db->query("select 
                                                     coalesce(sum(stock),0) as stock_one 
@@ -1267,11 +1300,13 @@ class sales extends MY_Controller {
         }
         
         //deteksi inventorynya punya child apa tidak
-        $qcek = $this->db->query("select idinventory_parent
+        $qcek = $this->db->query("select idinventory_parent,nameinventory,invno
                                     from inventory
                                     where idinventory = $idinventory")->row();
-        if($qcek->idinventory_parent==null){
-           
+                                   
+        if($qcek->idinventory_parent!==null){
+            //inventory yg punya parent
+
             //kalau idinventory_parent kosong harus cari stoknya di child si inventory
             $qinv = $this->db->query("select 
                                                 coalesce(sum(stock),0) as stock_one
@@ -1281,6 +1316,7 @@ class sales extends MY_Controller {
                                                 from inventory
                                                 where idinventory_parent = $idinventory)
                                             group by sku_no, nameinventory");
+            $data_inv = $qinv;
             if($qinv->num_rows()>0){
                 $rinv = $qinv->row();
 
@@ -1371,6 +1407,7 @@ class sales extends MY_Controller {
             }
 
         } else {
+            // dadsa
             $sql = "select 
                             c.sku_no, 
                             c.nameinventory, 
@@ -1389,9 +1426,9 @@ class sales extends MY_Controller {
 
                 $success = true;
                 $msg = null;
-
+                 $r = $qcek->row();
                 if($qcek->num_rows()>0){
-                    $r = $qcek->row();
+                   
                     $stock = $r->stock_two;
                     
                     if($qty_kirim > $stock){
