@@ -1,3 +1,7 @@
+var wCoaDOPersediaanPopup = Ext.create(dir_sys + 'sales.wCoaDOPersediaanPopup');
+var wCoaDOHpPenjualanPopup = Ext.create(dir_sys + 'sales.wCoaDOHpPenjualanPopup');
+var wGridSalesOrderListDOPopup = Ext.create(dir_sys + 'sales.wGridSalesOrderListDOPopup');
+
 var GridItemDeliveryOrder = Ext.create(dir_sys + 'sales.GridItemDeliveryOrder');
 var wGridSalesOrderListDOPopup = Ext.create(dir_sys + 'sales.wGridSalesOrderListDOPopup');
 
@@ -60,6 +64,7 @@ Ext.define('EntryDeliveryOrder', {
                         labelWidth: 120,
                         value: 'Sales Order',
                         id: 'memoSalesOrder_do',
+                        name:'memo',
                         fieldLabel: 'Memo'
                     }
                 ]
@@ -83,7 +88,7 @@ Ext.define('EntryDeliveryOrder', {
                                     //                 'status': '1'
                                     //     };
                                     // });
-                                    Ext.getCmp('GridSalesQuoteListID').getStore().load();
+                                    // Ext.getCmp('GridSalesQuoteListID').getStore().load();
 
                                 });
                             }
@@ -154,6 +159,7 @@ Ext.define('EntryDeliveryOrder', {
                         xtype: 'datefield',
                         labelWidth: 120,
                         id: 'tanggalDeliveryOrder_do',
+                        name:'delivery_date',
                         format: 'd/m/Y',
                         fieldLabel: 'Tgl Pengiriman'
                     },
@@ -215,95 +221,103 @@ Ext.define('EntryDeliveryOrder', {
                 xtype: 'container',
                 flex: 1,
                 layout: 'anchor',
-                items: [{
-                        xtype: 'fieldcontainer',
-                        fieldLabel: 'Akun Harga Pokok Penjualan',
-                        combineErrors: true,
-                        msgTarget: 'side',
-                        layout: 'hbox',
-                        width: 570,
-                        labelWidth: 180,
-                        defaults: {
-                            flex: 1,
-                            hideLabel: true
-                        },
-                        items: [{
-                            xtype: 'textfield',
-                            width: 160,
-                            allowBlank: false,
-                            name: 'accnametujuan',
-                            id: 'accname_coa_hppenjualan_do',
-                            listeners: {
-                                render: function(component) {
-                                    component.getEl().on('click', function(event, el) {
-                                        if (Ext.getCmp('cbUnitGridItemDeliveryOrder').getValue() == null) {
-                                            Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
-                                        } else {
-                                            wCoaDOHpPenjualanPopup.show();
-                                            storeGridAccount.on('beforeload', function(store, operation, eOpts) {
-                                                operation.params = {
-                                                    'idunit': idunit,
-                                                    'idaccounttype': '13'
-                                                };
-                                            });
-                                            storeGridAccount.load();
-                                        }
-                                    });
-                                }
-                            }
-                        }, {
-                            xtype: 'displayfield',
-                            id: 'accnumber_coa_hppenjualan_do',
-                        }, {
-                            xtype: 'hiddenfield',
-                            name: 'idaccount',
-                            id: 'idaccount_coa_hppenjualan_do',
-                        }]
-                    },
-                    {
-                    xtype: 'fieldcontainer',
-                    fieldLabel: 'Akun Persediaan',
-                    combineErrors: true,
-                    msgTarget: 'side',
-                    layout: 'hbox',
-                    width: 570,
-                    labelWidth: 180,
-                    defaults: {
-                        flex: 1,
-                        hideLabel: true
-                    },
-                    items: [{
-                        xtype: 'textfield',
-                        width: 160,
-                        allowBlank: false,
-                        name: 'accnametujuan',
-                        id: 'accname_coa_persediaan_do',
-                        listeners: {
-                            render: function(component) {
-                                component.getEl().on('click', function(event, el) {
-                                    if (Ext.getCmp('cbUnitGridItemDeliveryOrder').getValue() == null) {
-                                        Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
-                                    } else {
-                                        wCoaDOPersediaanPopup.show();
-                                        storeGridAccount.on('beforeload', function(store, operation, eOpts) {
-                                            operation.params = {
-                                                'idunit': idunit,
-                                                'idaccounttype': '3,4,5,20'
-                                            };
-                                        });
-                                        storeGridAccount.load();
-                                    }
-                                });
-                            }
-                        }
-                    }, {
-                        xtype: 'displayfield',
-                        id: 'accnumber_coa_persediaan_do',
-                    }, {
-                        xtype: 'hiddenfield',
-                        name: 'idaccount',
-                        id: 'idaccount_coa_persediaan_do',
-                    }]
+                items: [
+                    // {
+                    //     xtype: 'fieldcontainer',
+                    //     fieldLabel: 'Akun Harga Pokok Penjualan',
+                    //     combineErrors: true,
+                    //     msgTarget: 'side',
+                    //     layout: 'hbox',
+                    //     width: 570,
+                    //     labelWidth: 180,
+                    //     defaults: {
+                    //         flex: 1,
+                    //         hideLabel: true
+                    //     },
+                    //     items: [{
+                    //         xtype: 'textfield',
+                    //         width: 160,
+                    //         allowBlank: false,
+                    //         name: 'accnametujuan',
+                    //         id: 'accname_coa_hppenjualan_do',
+                    //         listeners: {
+                    //             render: function(component) {
+                    //                 component.getEl().on('click', function(event, el) {
+                    //                     if (Ext.getCmp('cbUnitGridItemDeliveryOrder').getValue() == null) {
+                    //                         Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
+                    //                     } else {
+                    //                         wCoaDOHpPenjualanPopup.show();
+                    //                         storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                    //                             operation.params = {
+                    //                                 'idunit': idunit,
+                    //                                 'idaccounttype': '13'
+                    //                             };
+                    //                         });
+                    //                         storeGridAccount.load();
+                    //                     }
+                    //                 });
+                    //             }
+                    //         }
+                    //     }, {
+                    //         xtype: 'displayfield',
+                    //         id: 'accnumber_coa_hppenjualan_do',
+                    //     }, {
+                    //         xtype: 'hiddenfield',
+                    //         name: 'idaccount',
+                    //         id: 'idaccount_coa_hppenjualan_do',
+                    //     }]
+                    // },
+                //     {
+                //     xtype: 'fieldcontainer',
+                //     fieldLabel: 'Akun Persediaan',
+                //     combineErrors: true,
+                //     msgTarget: 'side',
+                //     layout: 'hbox',
+                //     width: 570,
+                //     labelWidth: 180,
+                //     defaults: {
+                //         flex: 1,
+                //         hideLabel: true
+                //     },
+                //     items: [{
+                //         xtype: 'textfield',
+                //         width: 160,
+                //         allowBlank: false,
+                //         name: 'accnametujuan',
+                //         id: 'accname_coa_persediaan_do',
+                //         listeners: {
+                //             render: function(component) {
+                //                 component.getEl().on('click', function(event, el) {
+                //                     if (Ext.getCmp('cbUnitGridItemDeliveryOrder').getValue() == null) {
+                //                         Ext.Msg.alert('Perhatian', 'Unit belum dipilih');
+                //                     } else {
+                //                         wCoaDOPersediaanPopup.show();
+                //                         storeGridAccount.on('beforeload', function(store, operation, eOpts) {
+                //                             operation.params = {
+                //                                 'idunit': idunit,
+                //                                 'idaccounttype': '3,4,5,20'
+                //                             };
+                //                         });
+                //                         storeGridAccount.load();
+                //                     }
+                //                 });
+                //             }
+                //         }
+                //     }, {
+                //         xtype: 'displayfield',
+                //         id: 'accnumber_coa_persediaan_do',
+                //     }, {
+                //         xtype: 'hiddenfield',
+                //         name: 'idaccount',
+                //         id: 'idaccount_coa_persediaan_do',
+                //     }]
+                // },
+                {
+                    xtype:'comboxDeliveryOrderStatus',
+                    allowBlank:false,
+                    labelWidth:180,
+                    id:'status_formdo',
+                    name:'status'
                 }
                 ]
             }, {
@@ -346,12 +360,13 @@ Ext.define(dir_sys + 'sales.WindowEntryDeliveryOrder', {
         }
     }, {
         text: 'Save Delivery Order',
+        id:'btnSaveDo',
         handler: function(button, event, options) {
             // if (validasiQtyKirim()) {
 
             //     if (validasiStockKirim()) {
 
-            //         if (validasiFormDO()) {
+                    if (validasiFormDO()) {
                         var GridItemDeliveryOrderStore = Ext.getCmp('GridItemDeliveryOrder').getStore();
                         var json = Ext.encode(Ext.pluck(GridItemDeliveryOrderStore.data.items, 'data'));
                         // var formData = Ext.getCmp('EntryDeliveryOrder').getForm().getValues();
@@ -382,9 +397,31 @@ Ext.define(dir_sys + 'sales.WindowEntryDeliveryOrder', {
                                 Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                             }
                         });
-            //         }
+                    }
             //     }
             // }
         }
     }]
 });
+
+
+function validasiFormDO() {
+    //    alert(Ext.getCmp('comboxcurrencySalesOrder').getValue());   
+
+    if (Ext.getCmp('nojurnalDO_do').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Tentukan nomor DO');
+    } 
+    // else if (Ext.getCmp('idaccount_coa_persediaan_do').getValue() == null) {
+    //     Ext.Msg.alert('Failed', 'Tentukan akun persediaan');
+    // // } 
+    // else if (Ext.getCmp('idaccount_coa_hppenjualan_do').getValue() == null) {
+    //     Ext.Msg.alert('Failed', 'Tentukan akun harga pokok penjualan');
+    // }
+     else if (Ext.getCmp('tanggalDeliveryOrder_do').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Masukkan tanggal pengiriman');
+    } else if (Ext.getCmp('shipaddressSalesOrder_do').getValue() == null) {
+        Ext.Msg.alert('Failed', 'Tentukan alamat pengiriman');
+    } else {
+        return true;
+    }
+}

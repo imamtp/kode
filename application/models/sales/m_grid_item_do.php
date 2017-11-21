@@ -16,9 +16,9 @@ class m_grid_item_do extends CI_Model {
     }
 
     function selectField() {
-        return "a.do_item_id,a.idsalesitem,b.idinventory,b.invno,b.sku_no,a.qty_order,a.total_amount,f.measurement_id,
+        return "a.do_item_id,a.delivery_order_id,a.idsalesitem,b.idinventory,b.invno,b.sku_no,a.qty_order,a.total_amount,f.measurement_id,
         f.ratetax,f.size,f.measurement_id,f.measurement_id_size,f.deleted,b.invno,b.nameinventory,c.short_desc,
-        d.warehouse_code,e.short_desc as size_measurement,a.qty_kirim,a.qty_terima,a.qty_retur,a.qty_sisa";
+        d.warehouse_code,e.short_desc as size_measurement,a.qty_kirim,a.qty_terima,a.qty_retur,a.qty_sisa,a.id_tmp";
     }
     
     function fieldCek()

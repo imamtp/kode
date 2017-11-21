@@ -8,6 +8,7 @@ class m_data extends CI_Model {
         {
             //input baru
              $q = $this->db->query("select max($kolom) as id from $table where idunit = $idunit");
+             // echo $this->db->last_query(); 
             if($q->num_rows()>0)
             {
                 $r = $q->row();

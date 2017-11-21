@@ -245,6 +245,237 @@ function showSalesQuotationData(record) {
   // updateGridSalesQuotation();
 }
 
+function loadDataFormDO(delivery_order_id){
+   Ext.Ajax.request({
+    url: SITE_URL + 'sales/get_sales_data_do',
+    method: 'GET',
+    params: {
+      delivery_order_id: delivery_order_id
+    },
+    success: function(form, action) {
+      var d = Ext.decode(form.responseText);
+      console.log(d.data)
+      var subtotal = d.data.subtotal * 1;
+      var disc = d.data.disc * 1;
+      var dpp = d.data.total_dpp * 1;
+      var freightcost = d.data.freight * 1;
+      var tax = d.data.tax * 1;
+      var totalamount = d.data.totalamount * 1;
+
+      // Ext.getCmp('discountSalesInvoice_si').setValue(disc.toLocaleString('null', { maximumFractionDigits: 2 }));
+      // Ext.getCmp('dppSalesInvoice_si').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('status_formdo').setValue(d.data.status_do*1);
+      Ext.getCmp('delivery_order_id_do').setValue(d.data.delivery_order_id);
+      Ext.getCmp('no_sales_order_do').setValue(d.data.no_sales_order);
+      Ext.getCmp('nojurnalDO_do').setValue(d.data.no_do);
+      Ext.getCmp('no_faktur_do').setValue(d.data.no_faktur);
+      Ext.getCmp('id_sales_order_do').setValue(d.data.idsales);
+      Ext.getCmp('cbUnitGridItemDeliveryOrder').setValue(d.data.idunit);
+      Ext.getCmp('tanggalSalesOrder_do').setValue(d.data.date_sales);
+      Ext.getCmp('delivery_order_id_do').setValue(d.data.delivery_order_id);
+      
+
+      Ext.getCmp('notes_do').setValue(d.data.note_shipping);
+      Ext.getCmp('customerSalesOrder_do').setValue(d.data.namecustomer);
+      Ext.getCmp('shipaddressSalesOrder_do').setValue(d.data.nameshipping);
+      Ext.getCmp('driver_name_do').setValue(d.data.driver_name);
+      Ext.getCmp('vehicle_number_do').setValue(d.data.vehicle_number);
+      Ext.getCmp('shipaddressSalesOrder_do').setValue(d.data.ship_address);
+      Ext.getCmp('tanggalDeliveryOrder_do').setValue(d.data.delivery_date);
+      // Ext.getCmp('comboxcurrencySalesInvoice_si').setValue(d.data.namecurr);
+      Ext.getCmp('notes_do').setValue(d.data.note_shipping);
+      // Ext.getCmp('cb_tax_id_inv').setValue(d.data.nametax);
+      // Ext.getCmp('subtotalSalesInvoice_si').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
+      // Ext.getCmp('angkutSalesInvoice_si').setValue(freightcost.toLocaleString('null', { maximumFractionDigits: 2 }));
+      // Ext.getCmp('totalSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
+      // Ext.getCmp('totalPajakSalesInvoice_si').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
+      // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('memoSalesOrder_do').setValue(d.data.remarks)
+
+      // Ext.getCmp('comboxpaymentterm_si').setValue(d.data.idpayment);
+      // Ext.getCmp('ddaysSalesInvoice').setVisible(false);
+      // Ext.getCmp('eomddaysSalesInvoice').setVisible(false);
+      // Ext.getCmp('percentagediscSalesInvoice').setVisible(false);
+      // Ext.getCmp('daysdiscSalesInvoice').setVisible(false);
+
+      switch (d.data.idpayment) {
+        case "3":
+          Ext.getCmp('ddaysSalesInvoice').setVisible(true);
+          Ext.getCmp('ddaysSalesInvoice').setDisabled(false);
+          Ext.getCmp('ddaysSalesInvoice').setValue(d.data.ddays * 1);
+          break;
+        case "4":
+          Ext.getCmp('eomddaysSalesInvoice').setVisible(true);
+          Ext.getCmp('eomddaysSalesInvoice').setDisabled(false);
+          Ext.getCmp('eomddaysSalesInvoice').setValue(d.data.eomddays * 1);
+          break;
+        case "5":
+          Ext.getCmp('percentagediscSalesInvoice').setVisible(true);
+          Ext.getCmp('daydiscSalesInvoice').setVisible(true);
+          Ext.getCmp('percentagediscSalesInvoice').setDisabled(false);
+          Ext.getCmp('daydiscSalesInvoice').setDisabled(false);
+          Ext.getCmp('percentagediscSalesInvoice').setValue(d.data.percentagedisc * 1);
+          Ext.getCmp('daydiscSalesInvoice').setValue(d.data.daydisc * 1);
+          break;
+      }
+
+      var GridItemDeliveryOrderStore =  Ext.getCmp('GridItemDeliveryOrder').getStore();
+      GridItemDeliveryOrderStore.on('beforeload', function(store, operation, eOpts) {
+          operation.params = {
+              'extraparams': 'a.delivery_order_id:' + d.data.delivery_order_id
+          };
+      });
+
+     GridItemDeliveryOrderStore.load();
+      // Ext.getCmp('notes_si').setValue(null);
+      // Ext.getCmp('invoice_date_si').setValue(new Date());
+      // var grid = Ext.getCmp('EntrySalesInvoice');
+      // Ext.each(d.items, function(obj, i) {
+      //   console.info(obj)
+      //   var rec = new GridItemSalesInvoiceModel({
+      //     idinventory: obj.idinventory,
+      //     invno: obj.invno,
+      //     sku_no: obj.sku_no,
+      //     warehouse_desc: obj.warehouse_desc,
+      //     warehouse_code: obj.warehouse_code,
+      //     short_desc: obj.short_desc,
+      //     size_measurement: obj.size_measurement,
+      //     nameinventory: obj.nameinventory,
+      //     price: obj.price,
+      //     qty: obj.qty,
+      //     size: obj.size,
+      //     disc: obj.disc,
+      //     total: obj.total,
+      //     ratetax: obj.ratetax
+      //   });
+      //   grid.getStore().insert(0, rec);
+      // });
+
+        if(d.data.status_do!='1'){
+          Ext.getCmp('btnSaveDo').setDisabled(true);
+          Ext.getCmp('addItemFormDO').setDisabled(true);
+          Ext.getCmp('editItemFormDO').setDisabled(true);
+          Ext.getCmp('delItemFormDO').setDisabled(true);
+          
+          // Ext.getCmp('status_formdo').setReadOnly(true);
+        } else {
+          Ext.getCmp('btnSaveDo').setDisabled(false);
+          Ext.getCmp('addItemFormDO').setDisabled(false);
+          Ext.getCmp('editItemFormDO').setDisabled(false);
+          Ext.getCmp('delItemFormDO').setDisabled(false);
+
+          // Ext.getCmp('status_formdo').setReadOnly(false);
+        }
+
+        Ext.getCmp('status_formdo').setReadOnly(true);
+    },
+    failure: function(form, action) {
+      Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+    }
+  });
+}
+
+function loadDataFormInvoiceDO(delivery_order_id){
+   Ext.Ajax.request({
+    url: SITE_URL + 'sales/get_sales_data_do',
+    method: 'GET',
+    params: {
+      delivery_order_id: delivery_order_id
+    },
+    success: function(form, action) {
+      var d = Ext.decode(form.responseText);
+      console.log(d.data)
+      var subtotal = d.data.subtotal * 1;
+      var disc = d.data.disc * 1;
+      var dpp = d.data.total_dpp * 1;
+      var freightcost = d.data.freight * 1;
+      var tax = d.data.tax * 1;
+      var totalamount = d.data.totalamount * 1;
+      // setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'nojurnalSalesInvoice_si', 'INV');
+      // setNoArticle(d.data.idunit, 'idsales', 'noinvoice', 'sales', 'memoSalesInvoice_si', 'Sales Invoice : ' + d.data.namecustomer + ' -  INV');
+      Ext.getCmp('discountSalesInvoice_si').setValue(disc.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('dppSalesInvoice_si').setValue(dpp.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('noSalesSalesInvoice_si').setValue(d.data.no_sales_order);
+      Ext.getCmp('noDeliverySalesInvoice_si').setValue(d.data.no_do);
+      Ext.getCmp('noFakturSalesInvoice_si').setValue(d.data.no_faktur);
+      Ext.getCmp('id_sales_order_si').setValue(d.data.idsales);
+      Ext.getCmp('idunit_si').setValue(d.data.idunit);
+      Ext.getCmp('tanggalSalesInvoice_si').setValue(d.data.date_sales);
+      // Ext.getCmp('cbUnitEntrySalesInvoice').setValue(d.data.idsales);
+      // Ext.getCmp('id_sales_order_si').setValue(d.data.idunit);
+      Ext.getCmp('cbUnitEntrySalesInvoice').setValue(d.data.idunit);
+      Ext.getCmp('customerSalesInvoice_si').setValue(d.data.namecustomer);
+      Ext.getCmp('shippingSalesInvoice_si').setValue(d.data.nameshipping);
+      Ext.getCmp('driver_name_si').setValue(d.data.driver_name);
+      Ext.getCmp('vehicle_number_si').setValue(d.data.vehicle_number);
+      Ext.getCmp('shipaddressSalesInvoice_si').setValue(d.data.ship_address);
+      Ext.getCmp('tanggalDeliverySalesInvoice_si').setValue(d.data.delivery_date);
+      Ext.getCmp('comboxcurrencySalesInvoice_si').setValue(d.data.namecurr);
+      Ext.getCmp('notes_si').setValue(d.data.note_shipping);
+      Ext.getCmp('cb_tax_id_inv').setValue(d.data.nametax);
+      Ext.getCmp('subtotalSalesInvoice_si').setValue(subtotal.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('angkutSalesInvoice_si').setValue(freightcost.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('totalSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('totalPajakSalesInvoice_si').setValue(tax.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('sisaBayarSalesInvoice_si').setValue(totalamount.toLocaleString('null', { maximumFractionDigits: 2 }));
+      Ext.getCmp('memoSalesInvoice_si').setValue('Sales Invoice : ' + d.data.namecustomer)
+
+      Ext.getCmp('comboxpaymentterm_si').setValue(d.data.idpayment);
+      Ext.getCmp('ddaysSalesInvoice').setVisible(false);
+      Ext.getCmp('eomddaysSalesInvoice').setVisible(false);
+      Ext.getCmp('percentagediscSalesInvoice').setVisible(false);
+      Ext.getCmp('daysdiscSalesInvoice').setVisible(false);
+      switch (d.data.idpayment) {
+        case "3":
+          Ext.getCmp('ddaysSalesInvoice').setVisible(true);
+          Ext.getCmp('ddaysSalesInvoice').setDisabled(false);
+          Ext.getCmp('ddaysSalesInvoice').setValue(d.data.ddays * 1);
+          break;
+        case "4":
+          Ext.getCmp('eomddaysSalesInvoice').setVisible(true);
+          Ext.getCmp('eomddaysSalesInvoice').setDisabled(false);
+          Ext.getCmp('eomddaysSalesInvoice').setValue(d.data.eomddays * 1);
+          break;
+        case "5":
+          Ext.getCmp('percentagediscSalesInvoice').setVisible(true);
+          Ext.getCmp('daydiscSalesInvoice').setVisible(true);
+          Ext.getCmp('percentagediscSalesInvoice').setDisabled(false);
+          Ext.getCmp('daydiscSalesInvoice').setDisabled(false);
+          Ext.getCmp('percentagediscSalesInvoice').setValue(d.data.percentagedisc * 1);
+          Ext.getCmp('daydiscSalesInvoice').setValue(d.data.daydisc * 1);
+          break;
+      }
+
+      Ext.getCmp('notes_si').setValue(null);
+      Ext.getCmp('invoice_date_si').setValue(new Date());
+      var grid = Ext.getCmp('EntrySalesInvoice');
+      Ext.each(d.items, function(obj, i) {
+        console.info(obj)
+        var rec = new GridItemSalesInvoiceModel({
+          idinventory: obj.idinventory,
+          invno: obj.invno,
+          sku_no: obj.sku_no,
+          warehouse_desc: obj.warehouse_desc,
+          warehouse_code: obj.warehouse_code,
+          short_desc: obj.short_desc,
+          size_measurement: obj.size_measurement,
+          nameinventory: obj.nameinventory,
+          price: obj.price,
+          qty: obj.qty,
+          size: obj.size,
+          disc: obj.disc,
+          total: obj.total,
+          ratetax: obj.ratetax
+        });
+        grid.getStore().insert(0, rec);
+      });
+    },
+    failure: function(form, action) {
+      Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+    }
+  });
+}
+
 function loadDataFormInvoice(idsales) {
   Ext.Ajax.request({
     url: SITE_URL + 'sales/get_sales_data',

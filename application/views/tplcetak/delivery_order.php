@@ -101,7 +101,7 @@
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
-			<td colspan="3">Sisa Qty Order</td>
+			<td colspan="3">Sisa Qty Kirim</td>
 			<td>:</td>
 			<td align="right"><?=$total_order - $total_kirim?></td>
 		</tr>

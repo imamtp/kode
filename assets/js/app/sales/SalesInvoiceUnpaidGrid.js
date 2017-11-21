@@ -1,7 +1,7 @@
 Ext.define('SalesInvoiceUnpaidGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur'
+       'sales_invoice_id', 'idsales','idjournal', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur'
     ],
     idProperty: 'id'
 });
@@ -68,10 +68,18 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
     store: storeGridSalesInvoiceUnpaidGrid,
     loadMask: true,
     columns: [{
+            header: 'sales_invoice_id',
+            dataIndex: 'sales_invoice_id',
+            hidden: true
+        },{
             header: 'idsales',
             dataIndex: 'idsales',
             hidden: true
-        }, {
+        },{
+            header: 'idjournal',
+            dataIndex: 'idjournal',
+            hidden: true
+        },  {
             header: 'No Sales',
             dataIndex: 'no_sales_order',
             // hidden: true
@@ -199,6 +207,19 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
                 id: 'idunit_grdsi_unpaid',
+            },
+             {
+                text: 'Search',
+                handler: function() {
+                    storeGridSalesInvoiceUnpaidGrid.load();
+                }
+            }, {
+                text: 'Clear Filter',
+                handler: function() {
+                    Ext.getCmp('startdate_grdsi_unpaid').setValue();
+                    Ext.getCmp('enddate_grdsi_unpaid').setValue();
+                    storeGridSalesInvoiceUnpaidGrid.load();
+                }
             }
         ]
     }, {
@@ -240,30 +261,18 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                             height: panelH,
                             items: [{
                                 xtype: 'component',
-                                html: '<iframe src="' + SITE_URL + 'sales/print_invoice/' + selectedRecord.data.idsales + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                                html: '<iframe src="' + SITE_URL + 'sales/print_invoice/' + selectedRecord.data.sales_invoice_id + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
                             }],
                             buttons: [{
                                 text: 'Print',
                                 iconCls: 'print-icon',
                                 handler: function() {
-                                    window.open(SITE_URL + 'sales/print_invoice/' + selectedRecord.data.idsales + '/print');
+                                    window.open(SITE_URL + 'sales/print_invoice/' + selectedRecord.data.sales_invoice_id + '/print');
                                     // storeGridSertifikat.load();
                                 }
                             }]
                         }).show();
                     }
-                }
-            }, {
-                text: 'Search',
-                handler: function() {
-                    storeGridSalesInvoiceUnpaidGrid.load();
-                }
-            }, {
-                text: 'Clear Filter',
-                handler: function() {
-                    Ext.getCmp('startdate_grdsi_unpaid').setValue();
-                    Ext.getCmp('enddate_grdsi_unpaid').setValue();
-                    storeGridSalesInvoiceUnpaidGrid.load();
                 }
             }, {
                 itemId: 'editSalesInvoiceUnpaidGrid',
@@ -353,7 +362,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                                                               url: SITE_URL + 'sales/cancel_invoice',
                                                               method: 'POST',
                                                               params: {
-                                                                  idsales: selectedRecord.data.idsales,
+                                                                   sales_invoice_id: selectedRecord.data.sales_invoice_id,
                                                                   idmenu: 95
                                                               },
                                                               success: function(form, action) {
@@ -404,7 +413,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                                                           url: SITE_URL + 'sales/cancel_invoice2',
                                                           method: 'POST',
                                                           params: {
-                                                              idsales: selectedRecord.data.idsales,
+                                                               sales_invoice_id: selectedRecord.data.sales_invoice_id,
                                                               idmenu: 95
                                                           },
                                                           success: function(form, action) {

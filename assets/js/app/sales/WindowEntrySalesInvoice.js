@@ -464,7 +464,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
               xtype: 'datefield',
               labelWidth: 120,
               id: 'invoice_date_si',
-              format: 'd/m/Y',
+              format: 'd-m-Y',
               fieldLabel: 'Tgl Invoice'
             },
             {
@@ -635,6 +635,12 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
               width: 500,
               fieldLabel: 'Catatan'
             },
+            {
+              xtype: 'hiddenfield',
+              name: 'delivery_order_id',
+              id: 'delivery_order_id_si',
+              fieldLabel: 'delivery_order_id'
+            },
             '->',
             {
               xtype: 'textfield',
@@ -743,6 +749,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
         method: 'POST',
         params: {
           idsales: Ext.getCmp('id_sales_order_si').getValue(),
+          delivery_order_id: Ext.getCmp('delivery_order_id_si').getValue(),
           noinvoice: Ext.getCmp('nojurnalSalesInvoice_si').getValue(),
           idpayment: Ext.getCmp('comboxpaymentterm_si').getValue(),
           memo: Ext.getCmp('memoSalesInvoice_si').getValue(),
@@ -758,6 +765,10 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
           idunit: Ext.getCmp('cbUnitEntrySalesInvoice').getValue(),
           invoice_date: Ext.getCmp('invoice_date_si').getSubmitValue(),
           diskon: Ext.getCmp('discountSalesInvoice_si').getValue(),
+          subtotal: Ext.getCmp('discountSalesInvoice_si').getValue(),
+          total_dpp: Ext.getCmp('dppSalesInvoice_si').getValue(),
+          total_tax: Ext.getCmp('totalPajakSalesInvoice_si').getValue(),
+          total_amount: Ext.getCmp('totalSalesInvoice_si').getValue(),
           biayaangkut: biayaangkut
             // datagrid: json
         },

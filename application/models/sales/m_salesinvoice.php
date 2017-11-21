@@ -3,53 +3,55 @@
 class m_salesinvoice extends CI_Model {
 
     function tableName() {
-        return 'sales';
+        return 'sales_invoice';
     }
 
     function pkField() {
-        return 'idsales';
+        return 'sales_invoice_id';
     }
 
     function searchField() {
-        $field = "no_sales_order,noinvoice,b.nocustomer,b.namecustomer,a.no_faktur";
+        $field = "sales_invoice_id,no_sales_order,z.noinvoice,b.nocustomer,b.namecustomer,c.no_faktur";
         return explode(",", $field);
     }
 
     function selectField() {
         return "a.idsales,
+                z.sales_invoice_id,
                 a.no_sales_order,
+                z.idjournal,
                 a.idunit,
-                a.subtotal,
-                a.freight,
+                z.subtotal,
+                z.freight,
                 a.date_sales,
-                a.tax,
-                a.disc,
-                a.totalamount,
-                a.paidtoday,
-                a.balance,
+                z.tax,
+                z.disc,
+                z.totalamount,
+                z.paidtoday,
+                z.balance,
                 a.comments,
-                a.noinvoice,
-                a.ddays,
-                a.eomddays,
-                a.percentagedisc,
-                a.daydisc,
-                a.dmax,
-                a.notes_si,
+                z.noinvoice,
+                z.ddays,
+                z.eomddays,
+                z.percentagedisc,
+                z.daydisc,
+                z.dmax,
+                z.notes_si,
                 b.nocustomer,
                 b.namecustomer,
-                a.idpayment,
-                a.invoice_status,
-                a.invoice_date,
-                a.duedate,
-                a.total_dpp,
-                a.shipaddress,
-                a.no_faktur,
-                case a.idpayment
+                z.idpayment,
+                z.invoice_status,
+                z.invoice_date,
+                z.duedate,
+                z.total_dpp,
+                c.ship_address,
+                c.no_faktur,
+                case z.idpayment
                     when 1 then '-'
                     when 2 then '-'
-                    when 3 then a.ddays::text
-                    when 4 then a.eomddays::text
-                    when 5 then a.percentagedisc::text || '/' || a.daydisc::text || 'NET ' || a.dmax::text
+                    when 3 then z.ddays::text
+                    when 4 then z.eomddays::text
+                    when 5 then z.percentagedisc::text || '/' || z.daydisc::text || 'NET ' || z.dmax::text
                 end as term,
                 b.address as address_customer,
                 b.telephone as telephone_customer,
@@ -68,7 +70,8 @@ class m_salesinvoice extends CI_Model {
 
     function query() {
         $query = "select " . $this->selectField() . "
-                    from " . $this->tableName()." a 
+                    from " . $this->tableName()." z
+                    join sales a ON a.idsales = z.idsales
                     join customer b ON a.idcustomer = b.idcustomer
                     left join delivery_order c on c.idsales = a.idsales";
 
@@ -79,13 +82,13 @@ class m_salesinvoice extends CI_Model {
         $wer = null;
         switch ($this->input->post('option')){
             case 'unpaid':
-                $wer .= " and a.paidtoday < a.totalamount  and (a.duedate >= now() or a.duedate is null)";
+                $wer .= " and z.paidtoday < z.totalamount  and (z.duedate >= now() or z.duedate is null)";
                 break;
             case 'paid':
-                $wer .= " and a.paidtoday > 0  and (a.duedate >= now() or a.duedate is null)";
+                $wer .= " and z.paidtoday > 0  and (z.duedate >= now() or z.duedate is null)";
                 break;
             case 'overdue':
-                $wer .= " and a.paidtoday < a.totalamount and a.duedate < now()";
+                $wer .= " and z.paidtoday < z.totalamount and z.duedate < now()";
                 break;
         }
         // if($this->input->post('invoice_status')=='1,4')
@@ -98,9 +101,9 @@ class m_salesinvoice extends CI_Model {
         $sd = substr($this->input->post('startdate'),0,10);
         $nd = substr($this->input->post('enddate'),0,10);
         if($sd != null && $nd != null)
-            $wer .= " AND a.invoice_date BETWEEN '$sd' AND '$nd'";
+            $wer .= " AND z.invoice_date BETWEEN '$sd' AND '$nd'";
 
-        return " a.display is null and noinvoice is not null $wer";
+        return " z.display is null and z.noinvoice is not null $wer";
     }
 
     function orderBy() {
@@ -133,6 +136,103 @@ class m_salesinvoice extends CI_Model {
                                         where a.idsales = $idsales");
 
          return $qItem->result_array();
+    }
+
+    function query_item_do($delivery_order_id){
+         $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
+                                ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,z.qty_kirim,sum(qty-z.qty_kirim) as qtysisakirim
+                                from deliver_order_item z
+                                join salesitem a ON a.idsalesitem = z.idsalesitem
+                                join inventory b ON a.idinventory = b.idinventory
+                                left join productmeasurement c ON c.measurement_id = a.measurement_id
+                                left join warehouse d ON d.warehouse_id = a.warehouse_id
+                                left join productmeasurement e ON a.measurement_id_size = e.measurement_id
+                                where z.delivery_order_id = $delivery_order_id
+                                group by a.deleted,a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,z.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement
+                                order by a.idsalesitem desc");
+
+        return $q->result_array();
+    }
+
+    function cetak_invoice($sales_invoice_id) {
+
+        $q = $this->db->query("select idsales,delivery_order_id from sales_invoice where sales_invoice_id = $sales_invoice_id")->row();
+        $delivery_order_id = $q->delivery_order_id;
+        $idsales = $q->idsales;
+          //generate data buat keperluan cetak
+        $dtcetak = array();
+
+        $sql = $this->query();
+        $sql.= " WHERE z.sales_invoice_id=$sales_invoice_id";
+        // echo $sql;
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            //detail pembayaran
+            $i=0;
+            $total=0;
+
+            //build item sales data
+            foreach ($this->query_item_do($delivery_order_id) as $ritem) {
+                $detail[$i] = $ritem;
+                $i++;
+            }
+
+            $dtcetak['customer']['namecustomer'] = $r->namecustomer;
+            $dtcetak['customer']['nocustomer'] = $r->nocustomer;
+            $dtcetak['customer']['address'] = $r->address_customer;
+            $dtcetak['customer']['telephone'] = $r->telephone_customer;
+            $dtcetak['customer']['handphone'] = $r->handphone_customer;
+            $dtcetak['shipaddress'] = $r->ship_address;
+
+            $dtcetak['detail'] = $detail;
+            $dtcetak['detailtotal'] = number_format($r->subtotal);
+
+            $dtcetak['no_si'] = $r->noinvoice;
+            $dtcetak['no_so'] = $r->no_sales_order;
+            $dtcetak['no_do'] = $r->no_do;
+            $dtcetak['no_faktur'] = $r->no_faktur;
+
+            // //get receivefrom,total,memo,tax
+            $dtcetak['dp'] = $r->paidtoday;
+            $dtcetak['freigthcost'] = $r->freight;
+            // $dtcetak['receivefrom'] = $r->userin;
+            $dtcetak['totaltax'] = $r->tax;
+            $dtcetak['total'] = $r->totalamount - $r->freight;
+            $dtcetak['terbilang'] = terbilang($r->totalamount - $r->freight);
+            $dtcetak['totalowed'] = $r->balance - $r->freight;
+            $dtcetak['memo'] = $r->notes_si;
+            $dtcetak['datetrans'] = $r->date_sales;
+            $dtcetak['invoice_date'] = $r->invoice_date;
+            $dtcetak['total_dpp'] = $r->total_dpp;
+
+            // $dtcetak['receivedby'] = $r->userin;
+            //get logo,address,namaunit
+            $runit = $this->m_data->dataunit($r->idunit);
+            $dtcetak['logo'] = $runit['logo'];
+            $dtcetak['namaunit'] = $runit['namaunit'];
+            $dtcetak['alamat'] = $runit['alamat'];
+            $dtcetak['telp'] = $runit['telp'];
+            $dtcetak['fax'] = $runit['fax'];
+
+            //payment term
+            $dtcetak['dmax'] = null;//$r->dmax;
+            $dtcetak['ddays'] = $r->ddays;
+            $dtcetak['eomddays'] = $r->eomddays;
+            $dtcetak['daydisc'] = $r->daydisc;
+            $dtcetak['shipaddress'] = $r->ship_address;
+            $dtcetak['payment_term'] = payment_term_sales($r->idpayment,null,$r->ddays,$r->eomddays,$r->daydisc);
+            
+            $dtcetak['notes'] = array(
+                $r->comments,
+                'No SO #'.$r->no_sales_order,
+                'No DO #'.$r->no_do,
+                'Pembayaran dengan Cek/Giro atau transfer ke Rek. BCA ac. 601.001.5888 an. PT. ALFA PRIMA SENTOSA',
+            );
+        }
+        $q->free_result();
+        return $dtcetak;
     }
 
      function cetak($idsales)
