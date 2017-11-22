@@ -392,6 +392,7 @@ Ext.define(dir_sys + 'sales.WindowEntryDeliveryOrder', {
                                     Ext.getCmp('WindowEntryDeliveryOrder').hide();
                                 }
 
+                                Ext.getCmp('deliveryOrderGrid').getStore().load();
                             },
                             failure: function(form, action) {
                                 Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');

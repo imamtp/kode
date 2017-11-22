@@ -18,6 +18,7 @@ class m_salesinvoice extends CI_Model {
     function selectField() {
         return "a.idsales,
                 z.sales_invoice_id,
+                z.delivery_order_id,
                 a.no_sales_order,
                 z.idjournal,
                 a.idunit,

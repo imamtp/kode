@@ -888,6 +888,8 @@ class sales extends MY_Controller {
     }
 
     function save_sales_invoice(){
+        // print_r($_POST); die;
+
         $this->load->model('journal/m_jsales','jmodel');
         
         $statusform = $this->input->post('statusform');
@@ -970,7 +972,7 @@ class sales extends MY_Controller {
         $journal = $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo'),$diskon,$pajak);
         //$journal['idjournal'];
 
-        $data['delivery_order_id'] = $delivery_order_id;
+        // $data['delivery_order_id'] = $delivery_order_id;
         $data['idsales'] = $this->input->post('idsales');
         $data['idjournal'] = $journal['idjournal'];
         $data['datein'] = date('Y-m-d H:m:s');
@@ -1022,10 +1024,13 @@ class sales extends MY_Controller {
     }
 
     function save_payment(){
+        // print_r($_POST); die;
         $this->load->model('journal/m_jsales','jmodel');
 
         $this->db->trans_begin();
 
+        // $delivery_order_id = $this->input->post('delivery_order_id');
+        $sales_invoice_id = $this->input->post('sales_invoice_id');
         $idsales = $this->input->post('idsales');
         $balance_sales = str_replace('.', '', $this->input->post('balance_sales'));
         $amount = str_replace('.', '', $this->input->post('amount'));
@@ -1049,7 +1054,7 @@ class sales extends MY_Controller {
 
         $data = array(
                 'sales_payment_id'=> $this->m_data->getPrimaryID($this->input->post('sales_payment_id'),'sales_payment', 'sales_payment_id', $idunit),
-                'idsales'=> $this->input->post('idsales'),
+                // 'idsales'=> $this->input->post('idsales'),
                 'idjournal'=> $journal['idjournal'],
                 'idunit'=> $idunit,
                 'amount'=> $amount,
@@ -1057,13 +1062,14 @@ class sales extends MY_Controller {
                 'notes'=> $this->input->post('notes'),
                 'userin' => $this->session->userdata('userid'),
                 'idaccount_coa_kas'=>$idaccount_coa_kas,
-                'datein' => date('Y-m-d H:m:s')
+                'datein' => date('Y-m-d H:m:s'),
+                'sales_invoice_id'=>$sales_invoice_id
             );
         $this->db->insert('sales_payment',$data);
 
         $balance = $balance_sales-$amount;
 
-        $salesCurent = $this->db->query("select paidtoday from sales where idsales = $idsales and idunit = $idunit")->row();
+        $salesCurent = $this->db->query("select paidtoday from sales_invoice where sales_invoice_id = $sales_invoice_id and idunit = $idunit")->row();
 
         $update = array(
             'paidtoday' => ($salesCurent->paidtoday+$amount),
@@ -1071,8 +1077,8 @@ class sales extends MY_Controller {
             'balance' => $selisih
         );
 
-        $this->db->where('idsales',$idsales);
-        $this->db->update('sales',$update);
+        $this->db->where('sales_invoice_id',$sales_invoice_id);
+        $this->db->update('sales_invoice',$update);
 
         if($this->db->trans_status() === false){
             $this->db->trans_rollback();
@@ -1099,7 +1105,7 @@ class sales extends MY_Controller {
                                 ( 
                                     select sum(balance) as totalUnpaid
                                     from sales_invoice
-                                    where invoice_status != 5 and idunit = $idunit and (invoice_status = 1 OR invoice_status = 4) ) b,
+                                    where invoice_status != 5 and idunit = $idunit and (invoice_status = 2) ) b,
                                 (select sum(balance) as totalOverdue
                                     from sales_invoice
                                     where invoice_status != 5 and idunit =  $idunit 
@@ -1868,44 +1874,45 @@ class sales extends MY_Controller {
 
         $this->db->trans_begin();
 
-        $q = $this->db->query("select idsales,no_do
+        $q = $this->db->query("select idsales,no_do,idjournal_do
                                 from delivery_order a
                                 where delivery_order_id = $delivery_order_id")->row();
         if($q){
 
-            $qitem = $this->db->query("select idsalesitem,idinventory,qty_kirim,warehouse_id
-                        from salesitem
-                        where idsales = ".$q->idsales."");
+            $qitem = $this->db->query("select a.qty_kirim,b.price,b.size,b.idinventory,a.warehouse_id
+                        from deliver_order_item a
+                        join salesitem b ON a.idsalesitem = b.idsalesitem
+                        where a.delivery_order_id = ".$delivery_order_id."");
             foreach ($qitem->result() as $r) {
                  // -- update warehouse
-                $qwr = $this->db->query("select stock
+                    $qwr = $this->db->query("select stock
                                     from warehouse_stock
                                     where warehouse_id = ".$r->warehouse_id." and idinventory = ".$r->idinventory."");
-                if($qwr->num_rows()>0){
-                    $rwr = $qwr->row();
-                    
-                    $current_stock = $rwr->stock;
-                    $qty_transaction = $r->qty_kirim;
-                    $new_stock = $current_stock+$qty_transaction;
+                    if($qwr->num_rows()>0){
+                        $rwr = $qwr->row();
+                        
+                        $current_stock = $rwr->stock;
+                        $qty_transaction = $r->qty_kirim;
+                        $new_stock = $current_stock+$qty_transaction;
 
-                    $this->db->where(array(
-                            'warehouse_id'=>$r->warehouse_id,
-                            'idinventory'=>$r->idinventory
-                        ));
-                    $this->db->update('warehouse_stock',array('stock'=>$new_stock));
-                } else {
-                    $this->db->insert('warehouse_stock',array(
-                            'warehouse_id'=>$r->warehouse_id,
-                            'idinventory'=>$r->idinventory,
-                            'stock'=>$r->qty_kirim,
-                            'datemod'=>date('Y-m-d H:m:s'),
-                            'idunit'=>$this->session->userdata('idunit')
-                        ));
+                        $this->db->where(array(
+                                'warehouse_id'=>$r->warehouse_id,
+                                'idinventory'=>$r->idinventory
+                            ));
+                        $this->db->update('warehouse_stock',array('stock'=>$new_stock));
+                    } else {
+                        $this->db->insert('warehouse_stock',array(
+                                'warehouse_id'=>$r->warehouse_id,
+                                'idinventory'=>$r->idinventory,
+                                'stock'=>$r->qty_kirim,
+                                'datemod'=>date('Y-m-d H:m:s'),
+                                'idunit'=>$this->session->userdata('idunit')
+                            ));
 
-                    $current_stock = 0;
-                    $qty_transaction = $r->qty_kirim;
-                    $new_stock = $qty_transaction;
-                }
+                        $current_stock = 0;
+                        $qty_transaction = $r->qty_kirim;
+                        $new_stock = $qty_transaction;
+                    }
                    
 
                     // --update history stok
@@ -1929,22 +1936,30 @@ class sales extends MY_Controller {
 
                     // --update hpp
 
-                    // -- hapus deliveORDER
-                    $this->db->where('delivery_order_id',$delivery_order_id);
-                    $this->db->delete('delivery_order');
+
 
                     // -- set 0 qty kirim salesitem
-                    $this->db->where('idsalesitem',$r->idsalesitem);
-                    $this->db->update('salesitem',array('qty_kirim'=>0));
+                    // $this->db->where('idsalesitem',$r->idsalesitem);
+                    // $this->db->update('salesitem',array('qty_kirim'=>0));
 
                     // -- update saldo
 
                     //update hpp
             }
+
+            $this->load->library('journal_lib');
+            $json = $this->journal_lib->delete($q->idjournal_do);
+
+            // -- hapus deliveORDER
+            $this->db->where('delivery_order_id',$delivery_order_id);
+            $this->db->delete('deliver_order_item');
+            
+            $this->db->where('delivery_order_id',$delivery_order_id);
+            $this->db->delete('delivery_order');
            
            //ubah status sales menjadi confirm
-           $this->db->where('idsales',$q->idsales);
-            $this->db->update('sales',array('status'=>3));
+            // $this->db->where('idsales',$q->idsales);
+            // $this->db->update('sales',array('status'=>3));
         } else {
              $json = array('success'=>false,'message'=>'delivery_order_id not found');
             echo json_encode($json); die;
@@ -2252,11 +2267,16 @@ class sales extends MY_Controller {
         $do_item_id = $this->m_data->getPrimaryID2($this->input->post('do_item_id'),'deliver_order_item','do_item_id');
         $idsalesitem = $this->input->post('idsalesitem');
 
-        $total_amount = $this->input->post('idsalesitem')*$this->input->post('qty_kirim');
+        //get price 
+        $q = $this->db->query("select a.price,a.size
+                                from salesitem a
+                                where a.idsalesitem = $idsalesitem")->row();
+
+        $total_amount = ($q->size*$this->input->post('qty_kirim')) * $q->price;
 
         $d = array(
             'idsalesitem'=>$this->input->post('idsalesitem'),
-            'delivery_order_id'=>$this->input->post('delivery_order_id'),
+            'delivery_order_id'=>$this->input->post('delivery_order_id') == '' ? null : $this->input->post('delivery_order_id'),
             'qty_order'=>$this->input->post('qty_order'),
             // 'qty_kirim'=>$this->input->post('qty_kirim'),
             // 'qty_terima'=>$this->input->post('qty_terima'),
