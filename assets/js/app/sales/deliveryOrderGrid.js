@@ -512,7 +512,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                 if (data.length == 0) {
                                     Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                                 } else {
-                                    if (selectedRecord.data.status * 1 == 4) {
+                                    if (selectedRecord.data.status * 1 == 6) {
                                         Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
                                     } else if (selectedRecord.data.noinvoice === null || selectedRecord.data.noinvoice === '') {
                                         Ext.Msg.alert('Failure', 'Mohon buat invoice terlebih dahulu');
@@ -522,12 +522,13 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                     // } 
                                     else {
                                         Ext.Ajax.request({
-                                            url: SITE_URL + 'sales/set_status',
+                                            url: SITE_URL + 'sales/set_status_do',
                                             method: 'POST',
                                             params: {
-                                                status: 4,
+                                                status: 6,
                                                 idunit: Ext.getCmp('idunit_grddo').getValue(),
-                                                idsales: selectedRecord.data.idsales
+                                                delivery_order_id: selectedRecord.data.delivery_order_id,
+                                                no_do: selectedRecord.data.no_do
                                             },
                                             success: function(form, action) {
                                                 var d = Ext.decode(form.responseText);
@@ -545,7 +546,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                         },
 
                         {
-                            text: 'Batalkan Pengiriman',
+                            text: 'Cancel Delivery',
                             disabled: btnDisableCancelDO,
                             iconCls: 'delete-icon',
                             handler: function() {

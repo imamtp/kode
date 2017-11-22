@@ -304,6 +304,7 @@ class sales extends MY_Controller {
         $delivery_order_id = $this->input->post('delivery_order_id');
         $status = $this->input->post('status');
         $idunit = $this->input->post('idunit');
+        $no_do = $this->input->post('no_do');
 
         if($status==2){
             //confirm
@@ -313,6 +314,30 @@ class sales extends MY_Controller {
                 ));
             $this->db->update('delivery_order', array(
                 'status'=>$status
+            ));
+        } else if($status==6){
+            //closed
+
+            //update stok
+            $total_amount_kirim = $this->update_stock_do($delivery_order_id,$idunit,$no_do);
+
+            //update hpp
+            
+
+            //update status sales
+            $idsales = $this->update_sales_status($delivery_order_id,$idunit);
+
+            //journal do
+            $q = $this->db->query("select idaccount_hppenjualan,idaccount_persediaan from unit where idunit = $idunit")->row();
+            $idjournal = $this->m_jsales->sales_delivery_order($idsales,$total_amount_kirim,$q->idaccount_hppenjualan,$q->idaccount_persediaan,$no_do);
+
+            $this->db->where(array(
+                    'delivery_order_id'=>$delivery_order_id,
+                    'idunit'=>$idunit
+                ));
+            $this->db->update('delivery_order', array(
+                'status'=>$status,
+                'idjournal_do'=>$idjournal
             ));
         }
 
@@ -324,6 +349,59 @@ class sales extends MY_Controller {
             $json = array('success'=>true,'message'=>'Status has been updated succsessfully');
         }
         echo json_encode($json);
+    }
+
+    function update_stock_do($delivery_order_id,$idunit,$no_do){
+        $this->load->model('inventory/m_stock');
+        $total_amount = 0;
+
+        $sql = "select a.qty_kirim,b.idinventory,a.warehouse_id,c.idinventory_parent,a.total_amount
+                from deliver_order_item a
+                join salesitem b ON a.idsalesitem = b.idsalesitem
+                join inventory c ON b.idinventory = c.idinventory
+                where a.delivery_order_id = $delivery_order_id";
+        $q = $this->db->query($sql);
+        foreach ($q->result() as $r) {
+            $total_amount+=$r->total_amount;
+            //update stock history
+            $this->m_stock->update_history(8,$r->qty_kirim,$r->idinventory,$r->idinventory_parent,$idunit,$r->warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
+            // $totalkirim+=$value->qty_kirim;
+        }
+
+        return $total_amount;
+    }
+
+    function update_sales_status($delivery_order_id,$idunit){
+            $q = $this->db->query("select sum(a.qty_kirim) as total_kirim
+                from deliver_order_item a
+                join salesitem b ON a.idsalesitem = b.idsalesitem
+                where a.delivery_order_id = $delivery_order_id")->row();
+            $total_kirim = $q->total_kirim;
+
+            $q = $this->db->query("select idsales
+                                    from delivery_order a
+                                    where a.delivery_order_id = $delivery_order_id")->row();
+            $idsales = $q->idsales;
+
+            $q = $this->db->query("select sum(a.qty) as total_order
+                                    from salesitem a
+                                    where a.idsales = $idsales")->row();
+            $total_order = $q->total_order;
+            
+
+        if($total_order==$total_kirim) {
+            $status_delivery = 7; //Partially Shipped
+        } else {
+            $status_delivery = 6; //full packed/delivering
+        }
+
+        $this->db->where('idsales',$idsales);
+        $this->db->where('idunit',$idunit);
+        $this->db->update('sales',array(
+                'status'=>$status_delivery
+            ));
+
+        return $idsales;
     }
 
     function set_status(){

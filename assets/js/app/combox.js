@@ -368,10 +368,10 @@ Ext.define('comboxWorkOrderStatus', {
 var ArrDeliveryOrder = [
     [1, 'Open'],
     [2, 'Confirmed'],
-    [3, 'Canceled'],
-    [4, 'Delivering'],
-    [5, 'Delivered'],
-    [6, 'Partially Shipped']
+    [3, 'Delivering'],
+    [4, 'Delivered'],
+    [5, 'Canceled'],
+    [6, 'Closed']
 ];
 
 
