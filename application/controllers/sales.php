@@ -789,7 +789,7 @@ class sales extends MY_Controller {
                     left join delivery_order g ON a.idsales = g.idsales
                     left join shipping h ON g.idshipping = h.idshipping
                     left join tax i ON a.idtax = i.idtax
-                    where a.type = 2 and a.idsales = $idsales");
+                    where a.type = 2 and g.delivery_order_id = $delivery_order_id");
         if($qHeader->num_rows()>0)
         {
             $r = $qHeader->result_array()[0];
