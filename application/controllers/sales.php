@@ -2236,6 +2236,8 @@ class sales extends MY_Controller {
 
         $qtotal = $this->db->query($sql);
 
+         $data = array();
+
         $q = $this->db->query($sql.' '.$limit_offset);
         foreach ($q->result_array() as $v) {
             //cek do item
@@ -2386,9 +2388,15 @@ class sales extends MY_Controller {
                             join delivery_order b ON a.delivery_order_id = b.delivery_order_id
                             where idsalesitem = ".$idsalesitem." and a.id_tmp is null and b.status = 1")->row();
         $total_qty_sedang_kirim = $q->total_qty_sedang_kirim;
+        // echo $this->db->last_query();
 
         //qty sisa kirim
         $qty_sisa_kirim = $total_qty_order-$total_terkirim;
+
+        if($total_qty_sedang_kirim>0){
+            //ada barang yang sedang dikirim dan belum di closed
+            $qty_sisa_kirim = $qty_sisa_kirim-$total_qty_sedang_kirim;
+        }
 
         $json = array('success'=>true,
             'total_qty_order'=>$total_qty_order,

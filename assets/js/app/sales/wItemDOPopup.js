@@ -82,7 +82,7 @@ var formEntryItemDO = Ext.create('Ext.form.Panel', {
                     return false;
                 } 
 
-                if(qty_kirim<0){
+                if(qty_kirim<=0){
                     Ext.Msg.alert('Failed', 'Jumlah kuantitas yang akan dikirim tidak boleh kurang dari 1');
                     return false;
                 } 
@@ -114,13 +114,15 @@ var formEntryItemDO = Ext.create('Ext.form.Panel', {
                                     // Ext.Msg.alert('Success', action.result.message);
                                     
 
-                                    // var store = ;
+                                    var GridItemDeliveryOrderStore = Ext.getCmp('GridItemDeliveryOrder').getStore();
 
-                                    Ext.getCmp('GridItemDeliveryOrder').getStore().load({
-                                        params: {
+                                    GridItemDeliveryOrderStore.on('beforeload', function(store, operation, eOpts) {
+                                        operation.params = {
                                             'extraparams':'a.id_tmp:' + Ext.getCmp('id_tmp_formEntryItemDO').getValue()
-                                        }
+                                        };
                                     });
+
+                                    GridItemDeliveryOrderStore.load();
 
                                     Ext.getCmp('windowFormEntryItemDO').hide();
                                     Ext.getCmp('wItemDOPopup').hide();
@@ -265,8 +267,8 @@ Ext.define(dir_sys + 'sales.GridItemDOPopup', {
                         Ext.getCmp('qty_order_formEntryItemDO').setValue(selectedRecord.get('qty'))
                         Ext.getCmp('total_terkirim_formEntryItemDO').setValue(obj.total_terkirim);
 
-                        var sisa = selectedRecord.get('qty')*1 - obj.total_terkirim*1 - obj.total_dikirim*1;
-                        Ext.getCmp('qty_sisa_kirim_formEntryItemDO').setValue(sisa);
+                        // var sisa = selectedRecord.get('qty')*1 - obj.total_terkirim*1 - obj.total_dikirim*1 - obj.total_qty_sedang_kirim*1;
+                        Ext.getCmp('qty_sisa_kirim_formEntryItemDO').setValue(obj.qty_sisa_kirim);
                         // Ext.getCmp('GridItemDeliveryOrder').getStore().load();
 
                          Ext.getCmp('delivery_order_id_formEntryItemDO').setValue(Ext.getCmp('delivery_order_id_do').getValue());
@@ -305,13 +307,13 @@ Ext.define(dir_sys + 'sales.GridItemDOPopup', {
         // { header: 'assetaccount', dataIndex: 'assetaccount', hidden: true },
         { header: 'No. SKU', dataIndex: 'sku_no', minWidth: 150},
         { header: 'Nama Barang', dataIndex: 'nameinventory', minWidth: 400, flex:1 },
-        {
-            xtype: 'numbercolumn',
-            header: 'Harga',
-            dataIndex: 'price',
-            minWidth: 150,
-            align: 'right'
-        },
+        // {
+        //     xtype: 'numbercolumn',
+        //     header: 'Harga',
+        //     dataIndex: 'price',
+        //     minWidth: 150,
+        //     align: 'right'
+        // },
         {
             xtype: 'numbercolumn',
             header: 'Qty Order',
@@ -319,22 +321,22 @@ Ext.define(dir_sys + 'sales.GridItemDOPopup', {
             dataIndex: 'qty',
             align: 'right'
         },
-        {
-            xtype: 'numbercolumn',
-            hidden:true,
-            header: 'Qty Terkirim',
-            minWidth: 120,
-            dataIndex: 'qty_terkirim',
-            align: 'right'
-        },
-        {
-            xtype: 'numbercolumn',
-             hidden:true,
-            header: 'Qty Sisa Kirim',
-            minWidth: 125,
-            dataIndex: 'qty_sisakirim',
-            align: 'right'
-        },
+        // {
+        //     xtype: 'numbercolumn',
+        //     hidden:true,
+        //     header: 'Qty Terkirim',
+        //     minWidth: 120,
+        //     dataIndex: 'qty_terkirim',
+        //     align: 'right'
+        // },
+        // {
+        //     xtype: 'numbercolumn',
+        //      hidden:true,
+        //     header: 'Qty Sisa Kirim',
+        //     minWidth: 125,
+        //     dataIndex: 'qty_sisakirim',
+        //     align: 'right'
+        // },
         {
             header: 'Satuan',
             dataIndex: 'short_desc'
@@ -342,28 +344,28 @@ Ext.define(dir_sys + 'sales.GridItemDOPopup', {
         {
             xtype: 'numbercolumn',
             header: 'Ukuran',
-            minWidth: 100,
+            minWidth: 150,
             dataIndex: 'size',
             align: 'right'
         },
         {
             header: 'Satuan Ukuran',
-            minWidth: 100,
-            dataIndex: 'size_measurement'
-        },
-        {
-            xtype: 'numbercolumn',
-            header: 'Disc (%)',
-            minWidth: 100,
-            dataIndex: 'disc',
-            align: 'right'
-        }, {
-            xtype: 'numbercolumn',
-            header: 'Total',
-            dataIndex: 'total',
             minWidth: 150,
-            align: 'right'
+            dataIndex: 'size_measurement'
         }
+        // {
+        //     xtype: 'numbercolumn',
+        //     header: 'Disc (%)',
+        //     minWidth: 100,
+        //     dataIndex: 'disc',
+        //     align: 'right'
+        // }, {
+        //     xtype: 'numbercolumn',
+        //     header: 'Total',
+        //     dataIndex: 'total',
+        //     minWidth: 150,
+        //     align: 'right'
+        // }
     ],
     dockedItems: [
         // {

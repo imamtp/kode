@@ -61,14 +61,14 @@ class m_deliveryorder extends CI_Model {
                 f.address as address_customer,
                 f.telephone as telephone_customer,
                 f.handphone as handphone_customer,
-                g.no_do,
-                g.delivery_date,
-                g.status as status_do,
+                z.no_do,
+                z.delivery_date,
+                z.status as status_do,
                 totalitem,
                 total_qty_order,
                 total_qty_kirim,
                 ((total_qty_order - COALESCE(total_qty_kirim, 0))) as sisakirim,
-                g.delivery_order_id,
+                z.delivery_order_id,
                 i.no_sales_quote as no_sales_order_quote,
                 i.idsales as idsales_quote,
                 i.date_quote as date_sales_quote,
@@ -97,7 +97,6 @@ class m_deliveryorder extends CI_Model {
                         from salesitem
                         group by idsales) e ON a.idsales = e.idsales
                     left join customer f ON a.idcustomer = f.idcustomer
-                    left join delivery_order g ON a.idsales = g.idsales
                     left join tax j ON a.idtax = j.idtax
                     left join(select
                             idsales,
@@ -121,22 +120,22 @@ class m_deliveryorder extends CI_Model {
 
     function whereQuery() {
         $wer = null;
-        if($this->input->post('option')=='delivery_order'){
-            $wer .= ' and a.status > 2';
-        } else if($this->input->post('option')=='entry_wo'){
-            $wer .= ' and k.idsales IS NULL';
-        }
+        // if($this->input->post('option')=='delivery_order'){
+        //     $wer .= ' and a.status > 2';
+        // } else if($this->input->post('option')=='entry_wo'){
+        //     $wer .= ' and k.idsales IS NULL';
+        // }
 
         $sd = substr($this->input->post('startdate'),0,10);
         $nd = substr($this->input->post('enddate'),0,10);
         if($sd != null && $nd != null)
-            $wer .= " AND a.date_sales BETWEEN '$sd' AND '$nd'";
+            $wer .= " AND z.delivery_date BETWEEN '$sd' AND '$nd'";
 
-        return " a.type = 2 and a.display is null $wer and a.id_sales_source is null";
+        return " z.status is not null and a.display is null $wer and a.id_sales_source is null and z.deleted = 0";
     }
 
     function orderBy() {
-        return " a.no_sales_order desc";
+        return " z.delivery_order_id desc";
     }
 
     function updateField() { 

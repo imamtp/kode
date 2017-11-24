@@ -507,7 +507,7 @@ Ext.define(dir_sys + 'sales.GridItemDeliveryOrder', {
                     success: function(form, action) {
                         var obj = Ext.decode(form.responseText);
 
-                        Ext.getCmp('GridItemDeliveryOrder').getStore().load();
+                        // Ext.getCmp('GridItemDeliveryOrder').getStore().load();
                     },
                     failure: function(form, action) {
                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');

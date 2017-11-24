@@ -135,9 +135,42 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             header: 'job_order_id',
             dataIndex: 'job_order_id',
             hidden: true
+        },
+
+        {
+            header: 'No Delivery',
+            dataIndex: 'no_do',
+            minWidth: 150
+        },
+        {
+            header: 'Status',
+            dataIndex: 'status_do',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right',
+            renderer: function(value) {
+                return customColumnStatus(ArrDeliveryOrder, value);
+            }
+        },
+
+        {
+            header: 'Customer Name',
+            dataIndex: 'namecustomer',
+            minWidth: 150
+        },
+        {
+            header: 'Delivery Order Date',
+            dataIndex: 'delivery_date',
+            minWidth: 150
         }, {
             header: 'No Sales Order',
             dataIndex: 'no_sales_order',
+            minWidth: 150
+        },
+        
+        {
+            header: 'Date Sales',
+            dataIndex: 'date_sales',
             minWidth: 150
         },
         {
@@ -153,6 +186,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         },
         {
             header: 'Status Production',
+            hidden:true,
             dataIndex: 'statuswo',
             minWidth: 150,
             xtype: 'numbercolumn',
@@ -160,36 +194,6 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             renderer: function(value) {
                 return customColumnStatus(arrWorkOrderStatus, value);
             }
-        },
-        {
-            header: 'Status Delivery',
-            dataIndex: 'status_do',
-            minWidth: 150,
-            xtype: 'numbercolumn',
-            align: 'right',
-            renderer: function(value) {
-                return customColumnStatus(ArrDeliveryOrder, value);
-            }
-        },
-        {
-            header: 'No Delivery',
-            dataIndex: 'no_do',
-            minWidth: 150
-        },
-        {
-            header: 'Delivery Order Date',
-            dataIndex: 'delivery_date',
-            minWidth: 150
-        },
-        {
-            header: 'Date Sales',
-            dataIndex: 'date_sales',
-            minWidth: 150
-        },
-        {
-            header: 'Customer Name',
-            dataIndex: 'namecustomer',
-            minWidth: 150
         },
         {
             header: 'Subtotal',
@@ -321,10 +325,24 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                     iconCls: 'add-icon',
                     handler: function() {
                         WindowEntryDeliveryOrder.show();
+
+                        Ext.getCmp('EntryDeliveryOrder').getForm().reset();
+
+                         Ext.getCmp('GridItemDeliveryOrder').getStore().load({
+                                        params: {
+                                            'extraparams':'a.id_tmp:' + 0
+                                        }
+                                    });
+
                         Ext.getCmp('id_tmp_do').setValue(randomString(25));
                         Ext.getCmp('delivery_order_id_do').setValue(null);
                         Ext.getCmp('status_formdo').setValue(1);
                         Ext.getCmp('status_formdo').setReadOnly(true);
+
+                        Ext.getCmp('btnSaveDo').setDisabled(false);
+                        Ext.getCmp('addItemFormDO').setDisabled(false);
+                        Ext.getCmp('editItemFormDO').setDisabled(false);
+                        Ext.getCmp('delItemFormDO').setDisabled(false);
 
                         // Ext.getCmp('GridSalesOrderList').getStore().load();
                     },
@@ -399,6 +417,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                     iconCls: 'add-icon',
                     handler: function() {
                         WindowSaleOrderList.show();
+
                         Ext.getCmp('GridSalesOrderList').getStore().load();
 
                         storeCustomer.load();
@@ -408,8 +427,8 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                         // storeGridSalesOrderList.load();
 
                         //apus dulu data di grid entry delivery order
-                        Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
-                        Ext.getCmp('EntryDeliveryOrder').getStore().sync();
+                        // Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
+                        // Ext.getCmp('EntryDeliveryOrder').getStore().sync();
 
                         Ext.getCmp('status_formdo').setValue(1);
                         Ext.getCmp('status_formdo').setReadOnly(true);

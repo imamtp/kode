@@ -1,6 +1,6 @@
 var wCoaDOPersediaanPopup = Ext.create(dir_sys + 'sales.wCoaDOPersediaanPopup');
 var wCoaDOHpPenjualanPopup = Ext.create(dir_sys + 'sales.wCoaDOHpPenjualanPopup');
-var wGridSalesOrderListDOPopup = Ext.create(dir_sys + 'sales.wGridSalesOrderListDOPopup');
+// var wGridSalesOrderListDOPopup = Ext.create(dir_sys + 'sales.wGridSalesOrderListDOPopup');
 
 var GridItemDeliveryOrder = Ext.create(dir_sys + 'sales.GridItemDeliveryOrder');
 var wGridSalesOrderListDOPopup = Ext.create(dir_sys + 'sales.wGridSalesOrderListDOPopup');

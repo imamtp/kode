@@ -11,7 +11,7 @@ class m_salesorder extends CI_Model {
     }
 
     function searchField() {
-        $field = "no_sales_order,g.no_do,namecustomer";
+        $field = "no_sales_order,namecustomer";
         return explode(",", $field);
     }
 
@@ -62,13 +62,9 @@ class m_salesorder extends CI_Model {
                 f.address as address_customer,
                 f.telephone as telephone_customer,
                 f.handphone as handphone_customer,
-                g.no_do,
-                g.delivery_date,
-                g.status as status_do,
                 totalitem,
                 COALESCE(totalitemkirim, 0) as totalitemkirim,
                 ((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,
-                g.delivery_order_id,
                 i.no_sales_quote as no_sales_order_quote,
                 i.idsales as idsales_quote,
                 i.date_quote as date_sales_quote,
@@ -96,7 +92,6 @@ class m_salesorder extends CI_Model {
                             from salesitem
                             group by idsales) e ON a.idsales = e.idsales
                     left join customer f ON a.idcustomer = f.idcustomer
-                    left join delivery_order g ON a.idsales = g.idsales
                     left join tax j ON a.idtax = j.idtax
                     left join(select
                                     idsales,
