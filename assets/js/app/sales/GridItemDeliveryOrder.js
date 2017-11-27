@@ -420,8 +420,13 @@ Ext.define(dir_sys + 'sales.GridItemDeliveryOrder', {
         console.log('after edit');
     },
     addItemDo:function(data,event){
-        wItemDOPopup.show();
-        Ext.getCmp('GridItemDOPopupID').getStore().load();
+        if(Ext.getCmp('no_sales_order_do').getValue()==''){
+            Ext.Msg.alert('Failure', 'Pilih no SO terlebih dahulu');
+        } else {
+            wItemDOPopup.show();
+            Ext.getCmp('GridItemDOPopupID').getStore().load();
+        }
+        
         // alert(Ext.getCmp('delivery_order_id_do').getValue());
        
     },
