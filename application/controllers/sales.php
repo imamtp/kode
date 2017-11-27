@@ -516,7 +516,7 @@ class sales extends MY_Controller {
         //cek nomor faktur
         // if($this->input->post('delivery_order_id')===''){
             //insert
-        $qfak = $this->db->query("select no_faktur from sales where no_faktur = '".$no_faktur."' and idunit = ".$idunit." ");
+        $qfak = $this->db->query("select no_faktur from delivery_order where no_faktur = '".$no_faktur."' and idunit = ".$idunit." ");
         // } else {
             // edit
             // $qfak = $this->db->query("select no_faktur from sales where no_faktur = '".$no_faktur."' and idunit = ".$idunit." and idsales != ".$idsales."");
@@ -1110,7 +1110,7 @@ class sales extends MY_Controller {
                                     from sales_invoice
                                     where invoice_status != 5 and idunit =  $idunit 
                                     and (invoice_status = 1 OR invoice_status = 4) 
-                                and duedate >= now()) c");
+                                and duedate > now()) c");
         if($q->num_rows()>0)
         {
             $r = $q->row();
