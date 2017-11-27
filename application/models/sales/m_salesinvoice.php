@@ -74,7 +74,7 @@ class m_salesinvoice extends CI_Model {
                     from " . $this->tableName()." z
                     join sales a ON a.idsales = z.idsales
                     join customer b ON a.idcustomer = b.idcustomer
-                    left join delivery_order c on c.idsales = a.idsales";
+                    left join delivery_order c on c.idsales = a.idsales and z.delivery_order_id = c.delivery_order_id";
 
         return $query;
     }
