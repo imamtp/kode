@@ -508,6 +508,15 @@ Ext.define(dir_sys + 'sales.GridItemDeliveryOrder', {
                         var obj = Ext.decode(form.responseText);
 
                         // Ext.getCmp('GridItemDeliveryOrder').getStore().load();
+                        var GridItemDeliveryOrderStore = Ext.getCmp('GridItemDeliveryOrder').getStore();
+
+                        GridItemDeliveryOrderStore.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                'extraparams':'a.id_tmp:' + Ext.getCmp('id_tmp_formEntryItemDO').getValue()
+                            };
+                        });
+
+                        GridItemDeliveryOrderStore.load();
                     },
                     failure: function(form, action) {
                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
