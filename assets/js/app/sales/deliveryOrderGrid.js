@@ -328,11 +328,19 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
 
                         Ext.getCmp('EntryDeliveryOrder').getForm().reset();
 
-                         Ext.getCmp('GridItemDeliveryOrder').getStore().load({
-                                        params: {
+                        var GridItemDeliveryOrderStore = Ext.getCmp('GridItemDeliveryOrder').getStore();
+
+                        GridItemDeliveryOrderStore.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
                                             'extraparams':'a.id_tmp:' + 0
-                                        }
-                                    });
+                                        };
+                        });
+                        GridItemDeliveryOrderStore.load();
+                         // Ext.getCmp('GridItemDeliveryOrder').getStore().load({
+                         //                params: {
+                         //                    'extraparams':'a.id_tmp:' + 0
+                         //                }
+                         //            });
 
                         Ext.getCmp('id_tmp_do').setValue(randomString(25));
                         Ext.getCmp('delivery_order_id_do').setValue(null);
