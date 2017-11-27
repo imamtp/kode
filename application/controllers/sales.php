@@ -1110,7 +1110,7 @@ class sales extends MY_Controller {
                                     from sales_invoice
                                     where invoice_status != 5 and idunit =  $idunit 
                                     and (invoice_status = 1 OR invoice_status = 4) 
-                                and duedate > now()) c");
+                                and now() > duedate) c");
         if($q->num_rows()>0)
         {
             $r = $q->row();
