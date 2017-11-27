@@ -362,7 +362,8 @@ Ext.define(dir_sys + 'sales.WindowEntryDeliveryOrder', {
         text: 'Save Delivery Order',
         id:'btnSaveDo',
         handler: function(button, event, options) {
-            // if (validasiQtyKirim()) {
+
+            if (validasiQtyKirimDO()>0) {
 
             //     if (validasiStockKirim()) {
 
@@ -401,7 +402,10 @@ Ext.define(dir_sys + 'sales.WindowEntryDeliveryOrder', {
                     }
             //     }
             // }
+        } else {
+            Ext.Msg.alert('Failed', 'Tentukan barang yang akan dikirim');
         }
+    }
     }]
 });
 
@@ -411,18 +415,25 @@ function validasiFormDO() {
 
     if (Ext.getCmp('nojurnalDO_do').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan nomor DO');
-    } 
-    // else if (Ext.getCmp('idaccount_coa_persediaan_do').getValue() == null) {
-    //     Ext.Msg.alert('Failed', 'Tentukan akun persediaan');
-    // // } 
-    // else if (Ext.getCmp('idaccount_coa_hppenjualan_do').getValue() == null) {
-    //     Ext.Msg.alert('Failed', 'Tentukan akun harga pokok penjualan');
-    // }
-     else if (Ext.getCmp('tanggalDeliveryOrder_do').getValue() == null) {
+    }   else if (Ext.getCmp('no_faktur_do').getValue() == '') {
+        Ext.Msg.alert('Failed', 'Tentukan no faktur');
+    }  else if (Ext.getCmp('shipaddressSalesOrder_do').getValue() == '') {
+        Ext.Msg.alert('Failed', 'Tentukan alamat pengiriman');
+    } else if (Ext.getCmp('tanggalDeliveryOrder_do').getValue() == null) {
         Ext.Msg.alert('Failed', 'Masukkan tanggal pengiriman');
     } else if (Ext.getCmp('shipaddressSalesOrder_do').getValue() == null) {
         Ext.Msg.alert('Failed', 'Tentukan alamat pengiriman');
     } else {
         return true;
     }
+}
+
+function validasiQtyKirimDO() {
+    var qty_kirim = 0;
+    var GridItemDeliveryOrderStore = Ext.getCmp('GridItemDeliveryOrder').getStore();
+    Ext.each(GridItemDeliveryOrderStore.data.items, function(obj, i) {
+        console.log('obj.data.qtysisakirim:' + obj.data.qtysisakirim);
+        qty_kirim+= obj.data.qty_kirim*1;
+    });
+    return qty_kirim;
 }
