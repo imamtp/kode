@@ -1105,7 +1105,7 @@ class sales extends MY_Controller {
                                 ( 
                                     select sum(balance) as totalUnpaid
                                     from sales_invoice
-                                    where invoice_status != 5 and idunit = $idunit and (invoice_status = 2) ) b,
+                                    where (invoice_status = 1 OR invoice_status = 4) and idunit = $idunit ) b,
                                 (select sum(balance) as totalOverdue
                                     from sales_invoice
                                     where invoice_status != 5 and idunit =  $idunit 
