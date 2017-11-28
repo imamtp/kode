@@ -1235,54 +1235,14 @@ class inventory extends MY_Controller {
 
         $wer_find = "and ( b.sku_no like '%$find%' or b.nameinventory like '%$find%' or a.invno like '%$find%')";
 
-        // $sql = "select 
-        //             b.sku_no,
-        //             b.nameinventory,
-        //             a.invno,
-        //             a.notes,
-        //             a.idinventory,
-        //             a.cost,
-        //             a.no_batch,
-        //             coalesce(c.stock,0) as stock_one,
-        //             d.short_desc as uom_one,
-        //             case 
-        //                 when b.measurement_id_two is null then null
-        //                 else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
-        //             end as stock_two,
-        //             e.short_desc as uom_two,
-        //             a.ratio_two,
-        //             case
-        //                 when b.measurement_id_tre is null then null
-        //                 else ceil(coalesce(c.stock,0) / a.ratio_tre) 
-        //             end as stock_tre,
-        //             a.ratio_tre,
-        //             f.short_desc as uom_tre,
-        //             g.warehouse_code,
-        //             h.received_date,
-        //             coalesce(a.hpp_per_unit,0) as hpp
-        //         from inventoryx a
-        //         join inventory b on a.idinventory_parent = b.idinventory
-        //         join warehouse_stock c on c.idinventory = a.idinventory
-        //         left join productmeasurement d on d.measurement_id = b.measurement_id_one
-        //         left join productmeasurement e on e.measurement_id = b.measurement_id_two
-        //         left join productmeasurement f on f.measurement_id = b.measurement_id_tre
-        //         left join warehouse g on g.warehouse_id = c.warehouse_id
-        //         left join goods_receipt h on h.no_goods_receipt = a.no_transaction
-        //         where true
-        //         and a.deleted = 0
-        //         and a.status = 1
-        //         and a.idunit = $idunit
-        //         $wer_parent
-        //         $wer_type
-        //         $wer_find
-        //         order by a.idinventory_parent, a.idinventory";
-
-         $sql = "select 
+        $sql = "select 
                     b.sku_no,
                     b.nameinventory,
                     a.invno,
                     a.notes,
+                    a.idinventory,
                     a.cost,
+                    a.no_batch,
                     coalesce(c.stock,0) as stock_one,
                     d.short_desc as uom_one,
                     case 
@@ -1296,7 +1256,9 @@ class inventory extends MY_Controller {
                         else ceil(coalesce(c.stock,0) / a.ratio_tre) 
                     end as stock_tre,
                     a.ratio_tre,
+                    f.short_desc as uom_tre,
                     g.warehouse_code,
+                    h.received_date,
                     coalesce(a.hpp_per_unit,0) as hpp
                 from inventory a
                 join inventory b on a.idinventory_parent = b.idinventory
@@ -1313,8 +1275,46 @@ class inventory extends MY_Controller {
                 $wer_parent
                 $wer_type
                 $wer_find
-                group by b.sku_no,b.nameinventory,a.invno,d.short_desc,a .notes,a.ratio_two,e.short_desc,a.cost,b.measurement_id_two,c.stock,b.measurement_id_tre,a.ratio_tre, g .warehouse_code,a .hpp_per_unit,a .idinventory_parent
-                order by a.idinventory_parent";
+                order by a.idinventory_parent, a.idinventory";
+
+        //  $sql = "select 
+        //             b.sku_no,
+        //             b.nameinventory,
+        //             a.invno,
+        //             a.notes,
+        //             a.cost,
+        //             coalesce(c.stock,0) as stock_one,
+        //             d.short_desc as uom_one,
+        //             case 
+        //                 when b.measurement_id_two is null then null
+        //                 else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
+        //             end as stock_two,
+        //             e.short_desc as uom_two,
+        //             a.ratio_two,
+        //             case
+        //                 when b.measurement_id_tre is null then null
+        //                 else ceil(coalesce(c.stock,0) / a.ratio_tre) 
+        //             end as stock_tre,
+        //             a.ratio_tre,
+        //             g.warehouse_code,
+        //             coalesce(a.hpp_per_unit,0) as hpp
+        //         from inventory a
+        //         join inventory b on a.idinventory_parent = b.idinventory
+        //         join warehouse_stock c on c.idinventory = a.idinventory
+        //         left join productmeasurement d on d.measurement_id = b.measurement_id_one
+        //         left join productmeasurement e on e.measurement_id = b.measurement_id_two
+        //         left join productmeasurement f on f.measurement_id = b.measurement_id_tre
+        //         left join warehouse g on g.warehouse_id = c.warehouse_id
+        //         left join goods_receipt h on h.no_goods_receipt = a.no_transaction
+        //         where true
+        //         and a.deleted = 0
+        //         and a.status = 1
+        //         and a.idunit = $idunit
+        //         $wer_parent
+        //         $wer_type
+        //         $wer_find
+        //         group by b.sku_no,b.nameinventory,a.invno,d.short_desc,a .notes,a.ratio_two,e.short_desc,a.cost,b.measurement_id_two,c.stock,b.measurement_id_tre,a.ratio_tre, g .warehouse_code,a .hpp_per_unit,a .idinventory_parent
+        //         order by a.idinventory_parent";
         
         $q = $this->db->query($sql);
         echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . '}';
