@@ -607,6 +607,7 @@ class purchase extends MY_Controller {
 
         //save item received
         foreach($items as $key=>$item){
+
             $nobatch = null;
             $detailItems = json_decode($this->input->post('itembatch'));
             
@@ -715,9 +716,27 @@ class purchase extends MY_Controller {
                     $this->db->where('purchase_batch_id', $v->purchase_batch_id);
                     $this->db->update('purchaseitem_batch', array('no_batch'=>$nobatch));
 
-                    //insert inventory, stock and stock history
-                    $this->db->insert('inventory', $inv);
-                    $this->mstock->update_history(2, $v->qty, $inv['idinventory'], $inv['idinventory_parent'], $v->idunit, $idwarehouse, date('Y-m-d'),'Penerimaan Barang dari PO '.$this->input->post('nopo'), $idjournal, $header['no_goods_receipt']);
+                    /*
+                        cek dulu di inventory dan warehouse_stock. udah ada belum inventory yang rasionya yg sama di gudang yang sama
+                    */
+                    $qcek = $this->db->query("select a.idinventory
+                                                from inventory a
+                                                join warehouse_stock b ON a.idinventory = b.idinventory
+                                                where a.idinventory_parent is not null and a.ratio_two = ".$item->ratio_two." and b.warehouse_id = ".$idwarehouse." and a.grouped is null
+                                                order by idinventory desc
+                                                limit 1");
+
+                    if($qcek->num_rows()>0){
+                        $rqcek = $qcek->row();
+                        // echo $rqcek->idinventory.' ';
+                         //update stock and stock history
+                        $this->mstock->update_history_v2(2,$v->qty, $rqcek->idinventory,$item->ratio_two,$v->idunit,$idwarehouse,date('Y-m-d'),'Penerimaan Barang dari PO '.$this->input->post('nopo'), $idjournal, $header['no_goods_receipt']);
+                    } else {
+                         //insert inventory, stock and stock history
+                        $this->db->insert('inventory', $inv);
+                        $this->mstock->update_history(2, $v->qty, $inv['idinventory'], $inv['idinventory_parent'], $v->idunit, $idwarehouse, date('Y-m-d'),'Penerimaan Barang dari PO '.$this->input->post('nopo'), $idjournal, $header['no_goods_receipt']);
+                    }
+                   
                 }
             } //end loop detail purchaseitem / batch
         } //end loop purchaseitem
