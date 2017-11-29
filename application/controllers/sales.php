@@ -319,26 +319,26 @@ class sales extends MY_Controller {
             //closed
 
             //update stok
-            $total_amount_kirim = $this->update_stock_do($delivery_order_id,$idunit,$no_do);
-
+            $total_amount_kirim = $this->update_stock_do_v2($delivery_order_id,$idunit,$no_do);
+            echo $total_amount_kirim;
             //update hpp
             
 
             //update status sales
-            $idsales = $this->update_sales_status($delivery_order_id,$idunit);
+            // $idsales = $this->update_sales_status($delivery_order_id,$idunit);
 
-            //journal do
-            $q = $this->db->query("select idaccount_hppenjualan,idaccount_persediaan from unit where idunit = $idunit")->row();
-            $idjournal = $this->m_jsales->sales_delivery_order($idsales,$total_amount_kirim,$q->idaccount_hppenjualan,$q->idaccount_persediaan,$no_do);
+            // //journal do
+            // $q = $this->db->query("select idaccount_hppenjualan,idaccount_persediaan from unit where idunit = $idunit")->row();
+            // $idjournal = $this->m_jsales->sales_delivery_order($idsales,$total_amount_kirim,$q->idaccount_hppenjualan,$q->idaccount_persediaan,$no_do);
 
-            $this->db->where(array(
-                    'delivery_order_id'=>$delivery_order_id,
-                    'idunit'=>$idunit
-                ));
-            $this->db->update('delivery_order', array(
-                'status'=>$status,
-                'idjournal_do'=>$idjournal
-            ));
+            // $this->db->where(array(
+            //         'delivery_order_id'=>$delivery_order_id,
+            //         'idunit'=>$idunit
+            //     ));
+            // $this->db->update('delivery_order', array(
+            //     'status'=>$status,
+            //     'idjournal_do'=>$idjournal
+            // ));
         }
 
          if($this->db->trans_status() === false){
@@ -349,6 +349,43 @@ class sales extends MY_Controller {
             $json = array('success'=>true,'message'=>'Status has been updated succsessfully');
         }
         echo json_encode($json);
+    }
+
+    function update_stock_do_v2($delivery_order_id,$idunit,$no_do){
+        $this->load->model('inventory/m_stock');
+        $total_amount = 0;
+
+        $sql = "select a.delivery_order_id,a.idsalesitem,a.qty_kirim,a.warehouse_id,b.idinventory,b.size,a.total_amount
+                from deliver_order_item a
+                join salesitem b ON a.idsalesitem = b.idsalesitem
+                where a.delivery_order_id = $delivery_order_id";
+
+        $q = $this->db->query($sql);
+
+        // echo $sql.' ';
+        foreach ($q->result() as $r) {
+            $total_amount+=$r->total_amount;
+
+             $qinv = $this->db->query("select a.idinventory
+                                        from warehouse_stock a
+                                        join inventory b ON a.idinventory = b.idinventory
+                                        where idinventory_parent = ".$r->idinventory." and b.ratio_two = ".$r->size." and grouped is null");
+
+              // echo $this->db->last_query().' ';
+             if($qinv->num_rows()>0){
+                $rinv = $qinv->row();
+
+                //update stock history
+                $this->m_stock->update_history_v2(8,$r->qty_kirim,$rinv->idinventory,$r->size,$idunit,$r->warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
+             } else {
+                //kudu dikasih log disini
+             }
+
+          
+            // $totalkirim+=$value->qty_kirim;
+        }
+
+        return $total_amount;
     }
 
     function update_stock_do($delivery_order_id,$idunit,$no_do){

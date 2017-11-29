@@ -1268,7 +1268,7 @@ class inventory extends MY_Controller {
                 left join productmeasurement f on f.measurement_id = b.measurement_id_tre
                 left join warehouse g on g.warehouse_id = c.warehouse_id
                 left join goods_receipt h on h.no_goods_receipt = a.no_transaction
-                where true
+                where true and a.grouped is null
                 and a.deleted = 0
                 and a.status = 1
                 and a.idunit = $idunit
@@ -2070,6 +2070,97 @@ function update_fg_name(){
 function remove_space($va){
     return isset($va) ? str_replace(' ','',$va) : null;
 }
+
+    function group_inventory(){
+
+        $idinventory_parent = 486;
+
+        $q = $this->db->query("select * from inventory where idinventory_parent is null and idinventory = ".$idinventory_parent." ");
+        foreach ($q->result() as $r) {
+
+             $q2 = $this->db->query("select  distinct ratio_two
+                                                from inventory
+                                                where idinventory_parent = 486
+                                                order by ratio_two ");
+           
+            foreach ($q2->result() as $r2) {
+
+                $q3 = $this->db->query("select idinventory
+                                                from inventory
+                                                where idinventory_parent = ".$idinventory_parent." and ratio_two = ".$r2->ratio_two. " and grouped is null
+                                                order by idinventory desc
+                                                limit 1")->row();
+
+                //idinventory yang dijadikan penggabungan/penampung dari semua idiventory yang punya rasio yang sama
+                $idinventory = $q3->idinventory;
+                echo $idinventory.' ';
+                //query inventory lainnya kecuali id inventory yg dijadikan penggabungan/penampung
+                $q3 = $this->db->query("select idinventory
+                                                from inventory
+                                                where idinventory_parent = ".$idinventory_parent." and ratio_two = ".$r2->ratio_two. " and idinventory != ".$idinventory." ");
+
+                foreach ($q3->result() as $r3) {
+                    
+                     $qwh = $this->db->get('warehouse');
+                     foreach ($qwh->result() as $rwh) {
+                        
+
+                        //get current stock by warehouse_id
+                        $q4 = $this->db->query("select a.stock
+                                                    from warehouse_stock a
+                                                    where a.idinventory = ".$r3->idinventory." and warehouse_id = ".$rwh->warehouse_id." ");
+                        if($q4->num_rows()>0){
+                            $r4 = $q4->row();
+                            $stok = $r4->stock; //-120
+
+                            //ambil stok terkini dari inventory penampung
+                             $q5= $this->db->query("select a.stock
+                                                    from warehouse_stock a
+                                                    where a.idinventory = ".$idinventory." and warehouse_id = ".$rwh->warehouse_id." ")->row();
+
+                             $new_balance = $stok + $q5->stock;
+
+                             //update new balance
+                             $this->db->where(array(
+                                    'idinventory'=>$idinventory,
+                                    'warehouse_id'=>$rwh->warehouse_id
+                                ));
+                             $this->db->update('warehouse_stock',array(
+                                    'stock'=>$new_balance,
+                                    'datemod'=>date('Y-m-d H:m:s')
+                                ));
+
+
+                             //set flag to grouped and set deleted = 1//penanda udah digroupung
+                               $this->db->where(array(
+                                    'idinventory'=>$r3->idinventory
+                                ));
+                             $this->db->update('inventory',array(
+                                    'grouped'=>1,                                    
+                                    'datemod'=>date('Y-m-d H:m:s')
+                                ));
+
+                             //kosongin stoknya juga
+                                 $this->db->where(array(
+                                    'idinventory'=>$r3->idinventory
+                                ));
+                                 $this->db->update('warehouse_stock',array(
+                                        'stock'=>0,                                    
+                                        'datemod'=>date('Y-m-d H:m:s')
+                                    ));
+                             
+                        }
+
+                     }
+                }
+                    // select * from inventory where idinventory_parent = ".$r2->idinventory.
+
+
+            } //end foreach distinct ratio
+
+
+        }
+    }
 
 }
 

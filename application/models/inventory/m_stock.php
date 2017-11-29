@@ -98,6 +98,83 @@ class m_stock extends CI_Model {
 		
 		$this->db->insert('stock_history',$stock_history);
 	}
+
+	function update_history_v2($type,$qty,$idinventory,$size,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
+		/*
+			1: Order, (+)
+			2: Stock In By PO (+)
+			3: Stock In By Cash  (+)
+			4: Stock Opname Plus (+)
+			5: Stock Opname Minus (-)
+			6: Sales Return (+)
+			7: Purchase Return (-)
+			8: Sales (-)
+			9: Opening Balance (+)
+			10: Stock In By Transfer (+)
+			11: Stock Out By Transfer (-)
+			12: Stock In By Received Material From Production (+)
+			13: Stock In By Received Return PO (+)
+			14: Delivery Sales Return (-)
+			15: Stock Out From Production (-)
+		*/
+		 $q = $this->db->query("select a.stock as old_qty
+								from warehouse_stock a
+								join inventory b ON a.idinventory = b.idinventory
+								where a.idinventory = ".$idinventory." and b.ratio_two = ".$size." and grouped is null");
+
+		// $q = $this->db->query("select stock as old_qty from warehouse_stock where idinventory = $idinventory");
+		$r_inv = $q->row();
+		$old_qty_inv = $q->num_rows() > 0 ? $r_inv->old_qty : 0;
+
+		if($type==2 || $type==4 || $type==6 || $type==10 || $type==12 || $type==13) {
+			$balance = $old_qty_inv + $qty;
+			$balance_inv = $old_qty_inv + $qty;
+		} else if($type==7 || $type==5 || $type==8 || $type==11 || $type==14 || $type==15) {
+			$balance = $old_qty_inv- $qty;
+			$balance_inv = $old_qty_inv - $qty;
+		}
+
+		$stock = array(
+		    'idinventory'=> $idinventory,
+		    'idunit'=> $idunit,
+		    'warehouse_id'=> $idwarehouse,
+		    'stock'=> $balance_inv,
+		    'usermod'=> $this->session->userdata('userid'),
+		    'datemod'=> date('Y-m-d H:i:s'),
+		);
+
+		$stock_history = array(
+			'idinventory'=>$idinventory,
+			'idunit'=>$idunit,
+			'type_adjustment'=>$type,
+			'no_transaction'=> $no_transaction ?: rand(1111,9999),
+			'old_qty'=> $old_qty_inv,
+			'qty_transaction'=>$qty,
+			'balance'=> $balance,
+			'notes'=>$notes,
+			// 'datein'=>date('Y-m-d H:m:s'),
+			'warehouse_id'=>$idwarehouse,
+			'idjournal'=>$idjournal
+		);
+		
+		$qcek = $this->db->get_where('warehouse_stock', array(
+			'idinventory'=> $idinventory,
+		    'idunit'=> $idunit,
+		    'warehouse_id'=> $idwarehouse,
+		));
+		if($qcek->num_rows()==0)
+			$this->db->insert('warehouse_stock',$stock);
+		else{
+			$this->db->where(array(
+				'idinventory'=> $idinventory,
+				'idunit'=> $idunit,
+				'warehouse_id'=> $idwarehouse,
+			));
+			$this->db->update('warehouse_stock', $stock);
+		}
+		
+		$this->db->insert('stock_history',$stock_history);
+	}
 	
 	function update_hpp($idinventory,$idunit,$tipe,$tipe_trx,$balance,$qty_trx,$idpurchase='null',$idsales='null',$idjob='null'){
 		/*
