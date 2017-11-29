@@ -2081,17 +2081,21 @@ function remove_space($va){
              $q = $this->db->query("select * from inventory where idinventory_parent is null and idinventory = ".$idinventory_parent." ");
                 foreach ($q->result() as $r) {
 
-                     $q2 = $this->db->query("select  distinct ratio_two
+                     $q2 = $this->db->query("select distinct ratio_two
                                                         from inventory
-                                                        where idinventory_parent = 486
+                                                        where idinventory_parent = ".$idinventory_parent."
                                                         order by ratio_two ");
                    
                     foreach ($q2->result() as $r2) {
 
+                        if($r2->ratio_two==null){
+                            continue;
+                        }
+
                         $q3 = $this->db->query("select idinventory
                                                         from inventory
                                                         where idinventory_parent = ".$idinventory_parent." and ratio_two = ".$r2->ratio_two. " and grouped is null
-                                                        order by idinventory desc
+                                                        order by idinventory asc
                                                         limit 1")->row();
                         if(!$q3){
                             continue;
