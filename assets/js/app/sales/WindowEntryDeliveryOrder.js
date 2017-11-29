@@ -62,7 +62,7 @@ Ext.define('EntryDeliveryOrder', {
                         // anchor:'150%',
                         width: 600,
                         labelWidth: 120,
-                        value: 'Sales Order',
+                        value: 'Delivery Order',
                         id: 'memoSalesOrder_do',
                         name:'memo',
                         fieldLabel: 'Memo'
