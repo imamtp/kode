@@ -115,7 +115,7 @@ Ext.define('GridSalesOrderWOList', {
                         Ext.Ajax.request({
                             url: SITE_URL + 'production/save_fg',
                             method: 'POST',
-                            async: false,
+                            // async: false,
                             params: {
                                 job_order_id: job_order_id,
                                 token_tmp: token_tmp,

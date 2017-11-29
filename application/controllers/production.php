@@ -444,22 +444,39 @@ class production extends MY_Controller
                     echo json_encode($json);
                     exit();
                 }
-                
-                //insert FG accept ke inventory 
-                $inv = array(
-                    'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
-                    'idinventory_parent'=> $value->idinventory,
-                    'ratio_two'=> $value->size,
-                    'cost'=> $r->cost_prod,
-                    'idunit'=> $idunit,
-                    'userin'=> $this->session->userdata('userid'),
-                    'datein'=> date('Y-m-d H:i:s'),
-                    'no_transaction'=> $job_no,
-                );
-                $this->db->insert('inventory', $inv);
 
-                //insert data FG ke warehouse_stock dan log ke dalam stock_history 
-                $this->m_stock->update_history(12,$qty_item, $inv['idinventory'],$inv['idinventory_parent'],$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                /*
+                    cek dulu di inventory dan warehouse_stock. udah ada belum inventory yang rasionya yg sama di gudang yang sama
+                */
+                $qcek = $this->db->query("select a.idinventory
+                                            from inventory a
+                                            join warehouse_stock b ON a.idinventory = b.idinventory
+                                            where a.idinventory_parent is not null and a.ratio_two = ".$value->size." and b.warehouse_id = ".$warehouse_id_accept." and a.grouped is null
+                                            order by idinventory desc
+                                            limit 1");
+
+                if($qcek->num_rows()>0){
+                    $rqcek = $qcek->row();
+                    //insert data FG ke warehouse_stock dan log ke dalam stock_history 
+                    $this->m_stock->update_history_v2(12,$qty_item, $rqcek->idinventory,$value->size,$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                } else {
+                      //insert FG accept ke inventory 
+                        $inv = array(
+                            'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
+                            'idinventory_parent'=> $value->idinventory,
+                            'ratio_two'=> $value->size,
+                            'cost'=> $r->cost_prod,
+                            'idunit'=> $idunit,
+                            'userin'=> $this->session->userdata('userid'),
+                            'datein'=> date('Y-m-d H:i:s'),
+                            'no_transaction'=> $job_no,
+                        );
+                        $this->db->insert('inventory', $inv);
+
+                    //insert data FG ke warehouse_stock dan log ke dalam stock_history 
+                    $this->m_stock->update_history(12,$qty_item, $inv['idinventory'],$inv['idinventory_parent'],$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                }
+                
 
                 //disable sementara
                 // if ($value->qty_reject != 0) {
