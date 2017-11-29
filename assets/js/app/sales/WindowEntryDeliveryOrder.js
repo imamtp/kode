@@ -96,6 +96,7 @@ Ext.define('EntryDeliveryOrder', {
                     },
                     {
                         xtype: 'textfield',
+                        readOnly:true,
                         fieldLabel: 'Konsumen',
                         id: 'customerSalesOrder_do',
                         labelWidth: 120
