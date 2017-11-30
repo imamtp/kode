@@ -122,7 +122,7 @@ class m_salesorder extends CI_Model {
     }
 
     function orderBy() {
-        return " a.no_sales_order desc";
+        return " a.idsales desc";
     }
 
     function updateField() { 
