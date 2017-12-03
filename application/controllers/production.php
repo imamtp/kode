@@ -440,7 +440,7 @@ class production extends MY_Controller
                 //hitung hpp fg accept
                 if(!$this->m_stock->update_hpp($value->idinventory,$idunit, 3, 'in',$balance_item,$qty_item, 'null', 'null', $job_order_id)){
                     $this->db->trans_rollback();
-                    $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+                    $json = array('success'=>false,'message'=>'Terjadi kesalahan saat hitung hpp');
                     echo json_encode($json);
                     exit();
                 }
@@ -451,9 +451,11 @@ class production extends MY_Controller
                 $qcek = $this->db->query("select a.idinventory
                                             from inventory a
                                             join warehouse_stock b ON a.idinventory = b.idinventory
-                                            where a.idinventory_parent is not null and a.ratio_two = ".$value->size." and b.warehouse_id = ".$warehouse_id_accept." and a.grouped is null
+                                            where a.idinventory_parent = ".$value->idinventory." and a.ratio_two = ".$value->size." and b.warehouse_id = ".$warehouse_id_accept." and a.grouped is null
                                             order by idinventory desc
                                             limit 1");
+
+                // echo $this->db->last_query();
 
                 if($qcek->num_rows()>0){
                     $rqcek = $qcek->row();
@@ -698,6 +700,22 @@ class production extends MY_Controller
         } else {
             return $job_item_id;
         }
+    }
+
+    function delete_grid_fg(){
+        $this->db->trans_begin();
+
+        $this->db->where('job_order_id',$this->input->post('job_order_id'));
+        $this->db->delete('job_item');
+
+         if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else {
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The data has been deleted succsessfully');
+        }
+        echo json_encode($json);
     }
 
     function save_fg()

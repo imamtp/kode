@@ -16,7 +16,7 @@ class m_itemjobwo extends CI_Model {
     }
 
     function selectField() {
-        return "a.job_item_id,a.job_order_id,a.idinventory,a.idunit,a.measurement_id,a.cost,a.qty,a.subtotal,a.subtotal as total,a.qty as total_qty,a.remarks,a.userin,a.datein,a.idunit,a.size,
+        return "distinct a.job_item_id,a.job_order_id,a.idinventory,a.idunit,a.measurement_id,a.cost,a.qty,a.subtotal,a.subtotal as total,a.qty as total_qty,a.remarks,a.userin,a.datein,a.idunit,a.size,
 a.measurement_id_size,a.qty_accept,a.whs_accept_id,a.qty_reject,a.whs_reject_id,a.qty_sisa,a.whs_sisa_id,a.notes,a.token_tmp,
 b.nameinventory,b.invno,b.sku_no,c.short_desc, d.short_desc  as size_measurement,e.warehouse_code as warehouse_code_accept,
 f.warehouse_code as warehouse_code_reject,g.warehouse_code as warehouse_code_sisa, j.namecustomer";

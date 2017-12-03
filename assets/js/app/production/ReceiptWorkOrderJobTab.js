@@ -445,6 +445,8 @@ function updateGridReceiptJobWO() {
         // subtotalSalesQuotation += net;
         // totalPajak += (net / 100) * obj.data.ratetax * 1;
         // obj.set('qty_sisa', obj.data.subtotal-(obj.data.qty_accept+obj.data.qty_reject));
-        obj.set('qty_sisa', obj.data.qty - (obj.data.qty_accept + obj.data.qty_reject));
+        console.log(obj.data.qty*1+' - ('+obj.data.qty_accept*1+' + '+obj.data.qty_reject*1+')');
+
+        obj.set('qty_sisa', obj.data.qty*1 - (obj.data.qty_accept*1 + obj.data.qty_reject*1));
     });
 }

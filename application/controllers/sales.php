@@ -196,7 +196,16 @@ class sales extends MY_Controller {
             $header['userin'] = $this->session->userdata('userid');
             $header['datein'] = date('Y-m-d H:m:s');
             $header['date_sales'] = date('Y-m-d');
-            $this->db->insert('sales', $header);
+
+            //recheck
+            $q = $this->db->get_where('sales',array('idsales'=>$header['idsales']));
+            if($q->num_rows()>0){
+                $this->db->where('idsales', $header['idsales']);
+                $this->db->update('sales', $header);
+            } else {
+                $this->db->insert('sales', $header);
+            }
+            
         }
         else if($statusform == 'edit'){
             $header['usermod'] = $this->session->userdata('userid');

@@ -391,6 +391,8 @@ Ext.define(dir_sys + 'production.ReceiptWOGrid', {
         },
         itemdblclick: function(dv, record, item, index, e) {
             loadWoReceiptData(record.data)
+
+            Ext.getCmp('comboxWorkOrderStatus_receiptwoform').setReadOnly(false);
         }
     }
 });

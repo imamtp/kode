@@ -156,7 +156,8 @@ class m_stock extends CI_Model {
 			'warehouse_id'=>$idwarehouse,
 			'idjournal'=>$idjournal
 		);
-		
+			
+		// print_r($stock_history); 
 		$qcek = $this->db->get_where('warehouse_stock', array(
 			'idinventory'=> $idinventory,
 		    'idunit'=> $idunit,
