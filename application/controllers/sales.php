@@ -329,25 +329,25 @@ class sales extends MY_Controller {
 
             //update stok
             $total_amount_kirim = $this->update_stock_do_v2($delivery_order_id,$idunit,$no_do);
-            echo $total_amount_kirim;
+            // echo $total_amount_kirim;
             //update hpp
             
 
             //update status sales
-            // $idsales = $this->update_sales_status($delivery_order_id,$idunit);
+            $idsales = $this->update_sales_status($delivery_order_id,$idunit);
 
-            // //journal do
-            // $q = $this->db->query("select idaccount_hppenjualan,idaccount_persediaan from unit where idunit = $idunit")->row();
-            // $idjournal = $this->m_jsales->sales_delivery_order($idsales,$total_amount_kirim,$q->idaccount_hppenjualan,$q->idaccount_persediaan,$no_do);
+            //journal do
+            $q = $this->db->query("select idaccount_hppenjualan,idaccount_persediaan from unit where idunit = $idunit")->row();
+            $idjournal = $this->m_jsales->sales_delivery_order($idsales,$total_amount_kirim,$q->idaccount_hppenjualan,$q->idaccount_persediaan,$no_do);
 
-            // $this->db->where(array(
-            //         'delivery_order_id'=>$delivery_order_id,
-            //         'idunit'=>$idunit
-            //     ));
-            // $this->db->update('delivery_order', array(
-            //     'status'=>$status,
-            //     'idjournal_do'=>$idjournal
-            // ));
+            $this->db->where(array(
+                    'delivery_order_id'=>$delivery_order_id,
+                    'idunit'=>$idunit
+                ));
+            $this->db->update('delivery_order', array(
+                'status'=>$status,
+                'idjournal_do'=>$idjournal
+            ));
         }
 
          if($this->db->trans_status() === false){
