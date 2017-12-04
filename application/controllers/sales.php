@@ -2427,12 +2427,12 @@ class sales extends MY_Controller {
         $total_terkirim = $total_qty_kirim+$total_qty_terima+$total_qty_retur;
         $total_dikirim = $q->total_qty_kirim;
 
-        //cek data qty yang sedang dikirim (open)
+        //cek data qty yang sedang dikirim 
         $qty_terkirim = 0;
         $q = $this->db->query("select coalesce(sum(qty_kirim),0) as total_qty_sedang_kirim
                             from deliver_order_item a
                             join delivery_order b ON a.delivery_order_id = b.delivery_order_id
-                            where idsalesitem = ".$idsalesitem." and a.id_tmp is null and b.status = 1")->row();
+                            where idsalesitem = ".$idsalesitem." and a.id_tmp is null")->row();
         $total_qty_sedang_kirim = $q->total_qty_sedang_kirim;
         // echo $this->db->last_query();
 

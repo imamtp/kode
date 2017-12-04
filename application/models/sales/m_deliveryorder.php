@@ -11,7 +11,7 @@ class m_deliveryorder extends CI_Model {
     }
 
     function searchField() {
-        $field = "no_sales_order,g.no_do,namecustomer";
+        $field = "no_sales_order,z.no_do,namecustomer";
         return explode(",", $field);
     }
 
