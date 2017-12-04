@@ -162,7 +162,7 @@ function showEditInv(idinventory) {
         },
         success: function(form, action) {},
         failure: function(form, action) {
-            Ext.Msg.alert("Load failed", action.result.message);
+            // Ext.Msg.alert("Load failed", action.result.message);
         }
     });
 
@@ -173,7 +173,7 @@ function showEditInv(idinventory) {
         },
         success: function(form, action) {},
         failure: function(form, action) {
-            Ext.Msg.alert("Load failed", action.result.message);
+            // Ext.Msg.alert("Load failed", action.result.message);
         }
     });
 
