@@ -1219,8 +1219,17 @@ class inventory extends MY_Controller {
 
     function get_detail_item(){
         $idunit = $this->input->post('idunit');
-        $inventory_type = $this->input->post('inventory_type');
         $idinventory_parent = $this->input->post('idinventory_parent');
+        $inventory_type = $this->input->post('inventory_type');
+
+        if($inventory_type==''){
+             $qrat = $this->db->query("select inventory_type
+                                            from inventory
+                                            where idinventory = ".$idinventory_parent." ")->row();
+             $inventory_type = $qrat->inventory_type;
+        }
+
+        
         $find = strtoupper($this->input->post('query'));
 
         $wer_parent = null;
@@ -1235,27 +1244,35 @@ class inventory extends MY_Controller {
 
         $wer_find = "and ( b.sku_no like '%$find%' or b.nameinventory like '%$find%' or a.invno like '%$find%')";
 
+        if($inventory_type==2){
+            //raw material
+            $prefix = 'b';
+        } else {
+            $prefix = 'a';
+        }
+
         $sql = "select 
                     b.sku_no,
                     b.nameinventory,
                     a.invno,
                     a.notes,
                     a.idinventory,
+                    a.inventory_type,
                     a.cost,
                     a.no_batch,
                     coalesce(c.stock,0) as stock_one,
                     d.short_desc as uom_one,
                     case 
                         when b.measurement_id_two is null then null
-                        else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
+                        else round(cast(coalesce(c.stock,0) / ".$prefix.".ratio_two as numeric),2) 
                     end as stock_two,
                     e.short_desc as uom_two,
-                    a.ratio_two,
+                    ".$prefix.".ratio_two,
                     case
                         when b.measurement_id_tre is null then null
-                        else ceil(coalesce(c.stock,0) / a.ratio_tre) 
+                        else ceil(coalesce(c.stock,0) / ".$prefix.".ratio_tre) 
                     end as stock_tre,
-                    a.ratio_tre,
+                    ".$prefix.".ratio_tre,
                     f.short_desc as uom_tre,
                     g.warehouse_code,
                     h.received_date,
@@ -1315,9 +1332,31 @@ class inventory extends MY_Controller {
         //         $wer_find
         //         group by b.sku_no,b.nameinventory,a.invno,d.short_desc,a .notes,a.ratio_two,e.short_desc,a.cost,b.measurement_id_two,c.stock,b.measurement_id_tre,a.ratio_tre, g .warehouse_code,a .hpp_per_unit,a .idinventory_parent
         //         order by a.idinventory_parent";
-        
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . '}';
+
+        $data = array();
+        foreach ($q->result_array() as $r) {
+            $data[] = $r;
+           //  echo $r['inventory_type'].' ';
+           // if($r['inventory_type']==2){
+           //      //raw material. ambol rasio dari parent
+           //      $qrat = $this->db->query("select ratio_two,ratio_tre,inventory_type
+           //                                  from inventory
+           //                                  where idinventory = ".$r['idinventory_parent']." ");
+           //      echo $this->db->last_query();
+           //      if($qrat->num_rows()>0){
+           //          $rrat = $qrat->row();
+
+           //          $data[]['stock_two'] = $r['stock_one']/$rrat['ratio_two'];
+           //          $data[]['stock_tre'] = $r['stock_one']/$rrat['ratio_tre'];
+           //      }
+           // }
+            // print_r($r);
+           
+        }
+
+        
+        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($data) . '}';
         $q->free_result();
     }
 
