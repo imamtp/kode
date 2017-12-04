@@ -1136,6 +1136,8 @@ class inventory extends MY_Controller {
     function get_by_sku2(){
         $idunit = $this->session->userdata('idunit');
         $inventory_type = $this->input->post('inventory_type');
+
+
         $idinventorycat = $this->input->post('idinventorycat');
         $query = $this->input->post('query');
         $start = $this->input->post('start');
@@ -1156,7 +1158,7 @@ class inventory extends MY_Controller {
             $wer_type = "and inventory_type = $inventory_type";
         }
 
-        $sql = "select 
+         $sql = "select 
                     a.idinventory,
                     a.sku_no,
                     a.invno,
@@ -1205,13 +1207,83 @@ class inventory extends MY_Controller {
                 $search_txt                
                 order by nameinventory
                 ";
+
+        // $sql = "select 
+        //             a.idinventory,
+        //             a.sku_no,
+        //             a.invno,
+        //             a.nameinventory,
+        //             a.minstock,
+        //             a.inventory_type,
+        //             a.measurement_id_one,
+        //             a.measurement_id_two,
+        //             a.measurement_id_tre,
+        //             a.unitmeasure as measurement_id_buy,
+        //             a.unitmeasuresell as measurement_id_sell,
+        //             a.ratio_two,
+        //             a.ratio_tre,
+        //             a.cost,
+        //             a.sellingprice,
+        //             coalesce(a.hpp_per_unit,0) as hpp,
+        //             coalesce(f.stock,0) as stock_one,
+        //             b.short_desc as uom_one,
+        //             case
+        //                 when b.short_desc is null then null
+        //                 else coalesce(f.stock_two,0)
+        //             end as stock_two,
+        //             c.short_desc as uom_two,
+        //             case
+        //                 when d.short_desc is null then null
+        //                 else ceil(coalesce(f.stock_tre,0))
+        //             end as stock_tre,
+        //             d.short_desc as uom_tre,
+        //             g.brand_name
+        //         from inventory a
+        //         left join productmeasurement b on b.measurement_id = a.measurement_id_one
+        //         left join productmeasurement c on c.measurement_id = a.measurement_id_two
+        //         left join productmeasurement d on d.measurement_id = a.measurement_id_tre
+        //         left join (
+        //             select sum(stock) as stock, sum(stock / b.ratio_two) as stock_two, sum(stock / b.ratio_tre) as stock_tre, idinventory_parent from warehouse_stock a
+        //             join inventory b on b.idinventory = a.idinventory
+        //             group by idinventory_parent
+        //         ) f on f.idinventory_parent = a.idinventory
+        //         left join brand g on g.brand_id = a.brand_id
+        //         where true
+        //         and a.deleted = 0
+        //         and a.status = 1
+        //         and a.idunit = $idunit
+        //         and a.idinventory_parent is null
+        //         $wer_type
+        //         $search_txt                
+        //         order by nameinventory
+        //         ";
         
         $qtotal = $this->db->query($sql);
 
         $q = $this->db->query($sql.' '.$limit_offset);
+
+        $data = array();
+        $i=0;
+        foreach ($q->result_array() as $r) {
+            $data[$i] = $r;
+           if($r['inventory_type']==2){
+                //raw material. ambol rasio dari parent
+                $qrat = $this->db->query("select ratio_two,ratio_tre
+                                            from inventory
+                                            where idinventory = ".$r['idinventory']." ");
+                if($qrat->num_rows()>0){
+                    $rrat = $qrat->result_array()[0];
+                    $data[$i]['stock_two'] = $r['stock_one']/$rrat['ratio_two'];
+                    $data[$i]['stock_tre'] = $r['stock_one']/$rrat['ratio_tre'];
+                }
+           }
+           $i++;
+        }
+
+       
                     // echo $sql.' '.$limit_offset;
         
-        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($data) . ' }';
 
         $q->free_result(); 
         $qtotal->free_result(); 
