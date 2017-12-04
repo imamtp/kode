@@ -1273,8 +1273,14 @@ class inventory extends MY_Controller {
                                             where idinventory = ".$r['idinventory']." ");
                 if($qrat->num_rows()>0){
                     $rrat = $qrat->result_array()[0];
-                    $data[$i]['stock_two'] = $r['stock_one']/$rrat['ratio_two'];
-                    $data[$i]['stock_tre'] = $r['stock_one']/$rrat['ratio_tre'];
+                    if($rrat['ratio_two']!=0){
+                         $data[$i]['stock_two'] = $r['stock_one']/$rrat['ratio_two'];
+                    }
+
+                    if($rrat['ratio_tre']!=0){
+                         $data[$i]['stock_tre'] = $r['stock_one']/$rrat['ratio_tre'];
+                    }
+
                 }
            }
            $i++;
