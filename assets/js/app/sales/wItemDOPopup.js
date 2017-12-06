@@ -260,18 +260,23 @@ Ext.define(dir_sys + 'sales.GridItemDOPopup', {
                     success: function(form, action) {
                         var obj = Ext.decode(form.responseText);
 
-                        windowFormEntryItemDO.show();
+                        if(obj.qty_sisa_kirim*1==0){
+                            Ext.Msg.alert('Info', 'Barang sudah dikirim');
+                        } else{
+                            windowFormEntryItemDO.show();
 
-                        Ext.getCmp('idsalesitem_formEntryItemDO').setValue(selectedRecord.get('idsalesitem'));
-                        Ext.getCmp('id_tmp_formEntryItemDO').setValue(Ext.getCmp('id_tmp_do').getValue());
-                        Ext.getCmp('qty_order_formEntryItemDO').setValue(selectedRecord.get('qty'))
-                        Ext.getCmp('total_terkirim_formEntryItemDO').setValue(obj.total_terkirim);
+                            Ext.getCmp('idsalesitem_formEntryItemDO').setValue(selectedRecord.get('idsalesitem'));
+                            Ext.getCmp('id_tmp_formEntryItemDO').setValue(Ext.getCmp('id_tmp_do').getValue());
+                            Ext.getCmp('qty_order_formEntryItemDO').setValue(selectedRecord.get('qty'))
+                            Ext.getCmp('total_terkirim_formEntryItemDO').setValue(obj.total_terkirim);
 
-                        // var sisa = selectedRecord.get('qty')*1 - obj.total_terkirim*1 - obj.total_dikirim*1 - obj.total_qty_sedang_kirim*1;
-                        Ext.getCmp('qty_sisa_kirim_formEntryItemDO').setValue(obj.qty_sisa_kirim);
-                        // Ext.getCmp('GridItemDeliveryOrder').getStore().load();
+                            // var sisa = selectedRecord.get('qty')*1 - obj.total_terkirim*1 - obj.total_dikirim*1 - obj.total_qty_sedang_kirim*1;
+                            Ext.getCmp('qty_sisa_kirim_formEntryItemDO').setValue(obj.qty_sisa_kirim);
+                            // Ext.getCmp('GridItemDeliveryOrder').getStore().load();
 
-                         Ext.getCmp('delivery_order_id_formEntryItemDO').setValue(Ext.getCmp('delivery_order_id_do').getValue());
+                             Ext.getCmp('delivery_order_id_formEntryItemDO').setValue(Ext.getCmp('delivery_order_id_do').getValue());
+                        }
+                        
                     },
                     failure: function(form, action) {
                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');

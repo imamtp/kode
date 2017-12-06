@@ -123,10 +123,6 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             dataIndex: 'idcustomer',
             hidden: true
         }, {
-            header: 'noinvoice',
-            dataIndex: 'noinvoice',
-            hidden: true
-        }, {
             header: 'idsales',
             dataIndex: 'idsales',
             hidden: true
@@ -167,7 +163,10 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             dataIndex: 'no_sales_order',
             minWidth: 150
         },
-        
+        {
+            header: 'No Invoice',
+            dataIndex: 'noinvoice'
+        }, 
         {
             header: 'Date Sales',
             dataIndex: 'date_sales',
@@ -519,7 +518,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                             success: function(form, action) {
                                                 var d = Ext.decode(form.responseText);
                                                 Ext.Msg.alert('Informasi', d.message);
-                                                storeGriddeliveryOrderGrid.load();
+                                                Ext.getCmp('deliveryOrderGrid').getStore().load();
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
@@ -590,11 +589,10 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                         return false;
                                     }
 
-                                    if (selectedRecord.data.status == '8') {
+                                    if (selectedRecord.data.noinvoice !== null) {
                                         Ext.Msg.alert('Informasi', 'Mohon untuk membatalkan invoice terlebih dahulu untuk melakukan pembatalan delivery order');
                                         return false;
                                     }
-
 
                                     Ext.Msg.show({
                                         title: 'Konfirmasi',

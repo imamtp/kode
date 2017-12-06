@@ -28,7 +28,7 @@ var storeGridSalesOrderListDO = Ext.create('Ext.data.Store', {
 
 storeGridSalesOrderListDO.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'option': 'not_in_salesorder'
+        'option': 'entry_delivery_order'
     };
 });
 

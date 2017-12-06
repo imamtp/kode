@@ -83,13 +83,16 @@ class m_salesinvoice extends CI_Model {
         $wer = null;
         switch ($this->input->post('option')){
             case 'unpaid':
-                $wer .= " and z.paidtoday < z.totalamount  and (z.duedate >= now() or z.duedate is null)";
+                $wer .= " and z.paidtoday < z.totalamount  and (z.duedate >= now() or z.duedate is null) and z.invoice_status != 5";
                 break;
             case 'paid':
                 $wer .= " and z.paidtoday > 0  and (z.duedate >= now() or z.duedate is null)";
                 break;
             case 'overdue':
                 $wer .= " and z.paidtoday < z.totalamount and z.duedate < now()";
+                break;
+            case 'canceled':
+                $wer .= " and z.invoice_status = 5";
                 break;
         }
         // if($this->input->post('invoice_status')=='1,4')
@@ -104,7 +107,7 @@ class m_salesinvoice extends CI_Model {
         if($sd != null && $nd != null)
             $wer .= " AND z.invoice_date BETWEEN '$sd' AND '$nd'";
 
-        return " z.display is null and z.noinvoice is not null $wer";
+        return " z.display is null $wer";
     }
 
     function orderBy() {

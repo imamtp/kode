@@ -324,6 +324,8 @@ class sales extends MY_Controller {
             $this->db->update('delivery_order', array(
                 'status'=>$status
             ));
+
+            $this->update_sales_status($delivery_order_id,$idunit);
         } else if($status==6){
             //closed
 
@@ -417,28 +419,49 @@ class sales extends MY_Controller {
         return $total_amount;
     }
 
-    function update_sales_status($delivery_order_id,$idunit){
-            $q = $this->db->query("select sum(a.qty_kirim) as total_kirim
-                from deliver_order_item a
-                join salesitem b ON a.idsalesitem = b.idsalesitem
-                where a.delivery_order_id = $delivery_order_id")->row();
-            $total_kirim = $q->total_kirim;
+    function get_num_item_sales($idsales){
 
-            $q = $this->db->query("select idsales
+    }
+
+    function update_sales_status($delivery_order_id,$idunit,$idsales=null){
+            // $q = $this->db->query("select sum(a.qty_kirim) as total_kirim
+            //     from deliver_order_item a
+            //     join salesitem b ON a.idsalesitem = b.idsalesitem
+            //     where a.delivery_order_id = $delivery_order_id")->row();
+            // $total_kirim = $q->total_kirim;
+
+            if($idsales==null){
+                  $q = $this->db->query("select idsales
                                     from delivery_order a
                                     where a.delivery_order_id = $delivery_order_id")->row();
-            $idsales = $q->idsales;
-
-            $q = $this->db->query("select sum(a.qty) as total_order
-                                    from salesitem a
-                                    where a.idsales = $idsales")->row();
-            $total_order = $q->total_order;
+                $idsales = $q->idsales;
+            }
+          
+            // $q = $this->db->query("select sum(a.qty) as total_order
+            //                         from salesitem a
+            //                         where a.idsales = $idsales")->row();
+            // $total_order = $q->total_order;
             
 
-        if($total_order==$total_kirim) {
-            $status_delivery = 7; //Partially Shipped
-        } else {
-            $status_delivery = 6; //full packed/delivering
+        $q = $this->db->query("select total_order,total_sent
+                                from (select sum(qty) as total_order
+                                from salesitem
+                                where idsales = $idsales) a,
+                                (select sum(a.qty_kirim) as total_sent
+                                from deliver_order_item a
+                                join delivery_order b ON a.delivery_order_id = b.delivery_order_id
+                                where idsales = $idsales) b")->row();
+// echo $this->db->last_query(); die;
+
+        $total_order = $q->total_order;
+        $total_sent = $q->total_sent;
+
+        if($total_order==$total_sent) {
+            $status_delivery = 7; //full packed/delivered
+        } else if($total_sent>0 && $total_sent<$total_order){            
+              $status_delivery = 6; //Partially Shipped
+        }  else {
+            $status_delivery = 2; //confirm
         }
 
         $this->db->where('idsales',$idsales);
@@ -1085,14 +1108,16 @@ class sales extends MY_Controller {
 
         $idunit = $this->session->userdata('idunit');
 
+        $qinv = $this->db->query("select noinvoice from sales_invoice where sales_invoice_id = ".$sales_invoice_id." ")->row();
+
         if($selisih==0)
         {
             $invoice_status = 2; //paid
-            $journal = $this->jmodel->sales_pelunasan_full(date('Y-m-d'),'Pelunasan Piutang',$amount,$idunit,null,$idaccount_coa_kas);
+            $journal = $this->jmodel->sales_pelunasan_full(date('Y-m-d'),'Pelunasan Piutang - INV: '.$qinv->noinvoice,$amount,$idunit,null,$idaccount_coa_kas);
         } else if($amount<$balance_sales)
         {
             $invoice_status = 4; //Partially Paid
-            $journal = $this->jmodel->sales_pelunasan_sebagian(date('Y-m-d'),'Pelunasan Piutang Sebagian',$amount,$idunit,null,$idaccount_coa_kas);
+            $journal = $this->jmodel->sales_pelunasan_sebagian(date('Y-m-d'),'Pelunasan Piutang Sebagian - INV: '.$qinv->noinvoice,$amount,$idunit,null,$idaccount_coa_kas);
         } else {
             $invoice_status = 1; //Unpaid
             $journal['idjournal'] = null;
@@ -1660,7 +1685,7 @@ class sales extends MY_Controller {
                         break;
                     } else {
                         $success = false;
-                        $msg = "Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                        $msg = "1: Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
                         $json = array('success'=>$success,'message'=>$msg.$txt);
                         echo json_encode($json);
                         return false;
@@ -1669,7 +1694,7 @@ class sales extends MY_Controller {
 
                 if($stock==0){
                     $success = false;
-                    $msg = "Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                    $msg = "2: Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> tidak tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
                     $json = array('success'=>$success,'message'=>$msg.$txt);
                     echo json_encode($json);
                     return false;
@@ -1680,12 +1705,12 @@ class sales extends MY_Controller {
                     
                 if($qty_kirim > $stock){
                     $success = false;
-                    $msg = "Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                    $msg = "3: Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
                 }
 
                 if($stock<=0 || $stock==null){
                     $success = false;
-                    $msg = "Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                    $msg = "4: Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
                 }
                 // echo $stock;
                  $json = array('success'=>$success,'message'=>$msg);
@@ -1729,12 +1754,12 @@ class sales extends MY_Controller {
                     
                     if($qty_kirim > $stock){
                         $success = false;
-                        $msg = "Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                        $msg = "6: Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
                     }
 
                     if($stock<=0 || $stock==null){
                         $success = false;
-                        $msg = "Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
+                        $msg = "7: Kuantitas kirim untuk barang: <b>".$invno." ".$nameinventory. "</b> melebihi stok yang tersedia di gudang <b>".$this->input->get('warehouse_code')."</b>";
                     }
                 } else {
                     $success = false;
@@ -1916,6 +1941,18 @@ class sales extends MY_Controller {
             $json = array('success'=>false,'message'=>'delivery_order_id is null');
             echo json_encode($json); die;
         }
+
+        $q = $this->db->query("select noinvoice
+                                    from sales_invoice
+                                    where delivery_order_id = ".$delivery_order_id." ");
+        if($q->num_rows()>0){
+            $r = $q->row();
+            if($r->noinvoice!=null){
+                $json = array('success'=>false,'message'=>'Mohon untuk membatalkan faktur terlebih dahulu');
+                echo json_encode($json); die;
+            }
+            
+        }
         
 
         $this->db->trans_begin();
@@ -1924,6 +1961,8 @@ class sales extends MY_Controller {
                                 from delivery_order a
                                 where delivery_order_id = $delivery_order_id")->row();
         if($q){
+
+            $idsales = $q->idsales;
 
             $qitem = $this->db->query("select a.qty_kirim,b.price,b.size,b.idinventory,a.warehouse_id
                         from deliver_order_item a
@@ -1967,7 +2006,7 @@ class sales extends MY_Controller {
                     // where warehouse_id = 2 and idinventory = 395
                     $d = array(
                             "idinventory" => $r->idinventory,
-                            "idunit" => $r->idinventory,
+                            "idunit" => $this->session->userdata('idunit'),
                             "type_adjustment" => 10, //cancelation
                             "no_transaction" => 'id_delivery : '.$delivery_order_id,
                             "old_qty" => $current_stock,
@@ -1993,8 +2032,16 @@ class sales extends MY_Controller {
                     //update hpp
             }
 
-            $this->load->library('journal_lib');
-            $json = $this->journal_lib->delete($q->idjournal_do);
+            if($q->idjournal_do!=null){
+                //kalo udah do sudah berada di sataus 'closed'. maka id journal baru ada
+                $this->load->library('journal_lib');
+                $json = $this->journal_lib->delete($q->idjournal_do);
+            }
+            
+            $q = $this->db->query("select idsales
+                                    from delivery_order a
+                                    where a.delivery_order_id = $delivery_order_id")->row();
+            $idsales = $q->idsales;
 
             // -- hapus deliveORDER
             $this->db->where('delivery_order_id',$delivery_order_id);
@@ -2003,6 +2050,8 @@ class sales extends MY_Controller {
             $this->db->where('delivery_order_id',$delivery_order_id);
             $this->db->delete('delivery_order');
            
+             $this->update_sales_status($delivery_order_id,$this->session->userdata('idunit'),$idsales);
+
            //ubah status sales menjadi confirm
             // $this->db->where('idsales',$q->idsales);
             // $this->db->update('sales',array('status'=>3));
@@ -2063,7 +2112,7 @@ class sales extends MY_Controller {
             //set data invoice menjadi null
             $data_update['invoice_status'] = 5;
             $data_update['invoice_date'] = null;
-            $data_update['noinvoice'] = null;
+            // $data_update['noinvoice'] = null;
             $data_update['duedate'] = null;
             $data_update['ddays'] = null;
             $data_update['eomddays'] = null;
@@ -2400,9 +2449,12 @@ class sales extends MY_Controller {
                         from salesitem  a
                         left join deliver_order_item b ON a.idsalesitem = b.idsalesitem
                         where a.idsalesitem = $idsalesitem ")->row();
-        $total_qty_order = $q->qty;
-        $id_tmp = $q->id_tmp;
+        $total_qty_order = $q->qty;        
         $warehouse_id = $q->warehouse_id;
+
+        if($id_tmp==''){
+            $id_tmp = $q->id_tmp;
+        }
 
         //cek yg udah dikirim
         $qty_terkirim = 0;
@@ -2418,22 +2470,34 @@ class sales extends MY_Controller {
         $total_qty_retur = $q->total_qty_retur;
 
         //cek yg udah dimasukan ke form do
-        $q = $this->db->query("select coalesce(sum(qty_kirim),0) as total_qty_kirim,
-                                        coalesce(sum(qty_terima),0) as total_qty_terima,
-                                        coalesce(sum(qty_retur),0) as total_qty_retur
-                            from deliver_order_item
-                            where idsalesitem = ".$idsalesitem." and id_tmp = '".$id_tmp."' ")->row();
+        // $q = $this->db->query("select coalesce(sum(qty_kirim),0) as total_qty_kirim,
+        //                                 coalesce(sum(qty_terima),0) as total_qty_terima,
+        //                                 coalesce(sum(qty_retur),0) as total_qty_retur
+        //                     from deliver_order_item
+        //                     where idsalesitem = ".$idsalesitem." and id_tmp = '".$id_tmp."' ")->row();
+        // echo $this->db->last_query();        
+        $q = $this->db->query("select qty_kirim
+                                from deliver_order_item
+                            where idsalesitem = ".$idsalesitem." and id_tmp = '".$id_tmp."' ");
+        if($q->num_rows()>0){
+            $r = $q->row();
+            $total_dikirim = $r->qty_kirim;
+        } else {
+            $total_dikirim = 0;
+        }
+        
+        // echo $total_dikirim;
 
         $total_terkirim = $total_qty_kirim+$total_qty_terima+$total_qty_retur;
-        $total_dikirim = $q->total_qty_kirim;
 
         //cek data qty yang sedang dikirim 
         $qty_terkirim = 0;
         $q = $this->db->query("select coalesce(sum(qty_kirim),0) as total_qty_sedang_kirim
                             from deliver_order_item a
                             join delivery_order b ON a.delivery_order_id = b.delivery_order_id
-                            where idsalesitem = ".$idsalesitem." and a.id_tmp is null")->row();
+                            where idsalesitem = ".$idsalesitem." and (a.id_tmp is null)")->row();
         $total_qty_sedang_kirim = $q->total_qty_sedang_kirim;
+        // echo $total_qty_sedang_kirim;
         // echo $this->db->last_query();
 
         //qty sisa kirim
@@ -2441,13 +2505,18 @@ class sales extends MY_Controller {
 
         if($total_qty_sedang_kirim>0){
             //ada barang yang sedang dikirim dan belum di closed
-            $qty_sisa_kirim = $qty_sisa_kirim-$total_qty_sedang_kirim;
+            $qty_sisa_kirim = $total_qty_order-($total_qty_sedang_kirim+$total_dikirim);
+        }
+
+         if($total_dikirim>0){
+            //ada barang yang sedang dikirim dan belum di closed
+            $qty_sisa_kirim = $total_qty_order-($total_qty_sedang_kirim+$total_dikirim);
         }
 
         $json = array('success'=>true,
             'total_qty_order'=>$total_qty_order,
             'total_terkirim'=>$total_terkirim,
-            'total_dikirim'=>$total_dikirim,
+            // 'total_dikirim'=>$total_dikirim,
             'qty_sisa_kirim'=>$qty_sisa_kirim,
             'total_qty_sedang_kirim'=>$total_qty_sedang_kirim,
             'id_tmp'=>$id_tmp,

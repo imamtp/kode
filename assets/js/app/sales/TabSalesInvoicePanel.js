@@ -1,6 +1,7 @@
 var SalesInvoicePaidGrid = Ext.create(dir_sys + 'sales.SalesInvoicePaidGrid');
 var SalesInvoiceUnpaidGrid = Ext.create(dir_sys + 'sales.SalesInvoiceUnpaidGrid');
 var SalesInvoiceOverdueGrid = Ext.create(dir_sys + 'sales.SalesInvoiceOverdueGrid');
+var SalesInvoiceCanceledGrid = Ext.create(dir_sys + 'sales.SalesInvoiceCanceledGrid');
 
 Ext.define(dir_sys + 'sales.TabSalesInvoice', {
     extend: 'Ext.tab.Panel',
@@ -27,6 +28,9 @@ Ext.define(dir_sys + 'sales.TabSalesInvoice', {
         },
         {
             xtype: 'SalesInvoiceOverdueGrid'
+        },
+        {
+            xtype:'SalesInvoiceCanceledGrid'
         }
     ],
     listeners: {

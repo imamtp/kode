@@ -125,7 +125,7 @@ var ArrSalesStatus = [
     [4, 'Closed'],
     [5, 'Picking Up'],
     [6, 'Partial Delivering'],
-    [7, 'Delivering'],
+    [7, 'Delivered'],
     [8, 'Invoiced']
 ];
 

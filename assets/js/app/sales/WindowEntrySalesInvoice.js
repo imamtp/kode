@@ -74,6 +74,7 @@ Ext.define(dir_sys + 'sales.EntrySalesInvoice', {
         },
         {
           header: 'Warehouse',
+          hidden:true,
           dataIndex: 'warehouse_code',
           // editor: {
           //     xtype: 'comboxWarehouse',

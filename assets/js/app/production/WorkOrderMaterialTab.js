@@ -107,6 +107,11 @@ Ext.define('GridItemRawMaterialWO', {
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
                 var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
 
+                if(selectedRecord.data.stock_one*1<=0){
+                    Ext.Msg.alert('Failed', 'Jumlah stok tidak mencukupi');
+                    return false;
+                }
+                // console.log(selectedRecord.data.stock_one*1);
                 //start get job_item_id
                 var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
                 //end get job_item_id
