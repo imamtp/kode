@@ -72,80 +72,80 @@ class production extends MY_Controller
             $this->db->update('job_order', $header);
         }
 
-        foreach ($gridjob as $value) {
+     //    foreach ($gridjob as $value) {
 
-        	$job_item_id = $this->m_data->getPrimaryID($value->job_item_id,'job_item', 'job_item_id', $idunit);
+     //    	$job_item_id = $this->m_data->getPrimaryID($value->job_item_id,'job_item', 'job_item_id', $idunit);
 
-        	$data_job_item = array(
-        			'job_item_id'=> $job_item_id,
-                    'job_order_id' => $job_order_id,
-                    'idinventory' => intval($value->idinventory),
-                    'measurement_id' => $this->getMeasurement($value->short_desc,$idunit),
-                    'cost' => $value->cost=='' ? null : $value->cost,
-                    'qty' => $value->qty,
-                    'size'=> $value->size,
-                    'measurement_id_size' => $this->getMeasurement($value->size_measurement,$idunit),
-                    'subtotal' => $value->total,
-                    // 'remarks' => $value->cost
-                    'userin' => $this->session->userdata('userid'),
-            		'datein' => date('Y-m-d H:m:s'),
-                    'deleted' => 0,
-                    'idunit' => $idunit,
-        		);
+     //    	$data_job_item = array(
+     //    			'job_item_id'=> $job_item_id,
+                    // 'job_order_id' => $job_order_id,
+                    // 'idinventory' => intval($value->idinventory),
+                    // 'measurement_id' => $this->getMeasurement($value->short_desc,$idunit),
+                    // 'cost' => $value->cost=='' ? null : $value->cost,
+                    // 'qty' => $value->qty,
+                    // 'size'=> $value->size,
+                    // 'measurement_id_size' => $this->getMeasurement($value->size_measurement,$idunit),
+                    // 'subtotal' => $value->total,
+                    // // 'remarks' => $value->cost
+                    // 'userin' => $this->session->userdata('userid'),
+     //        		'datein' => date('Y-m-d H:m:s'),
+                    // 'deleted' => 0,
+                    // 'idunit' => $idunit,
+     //    		);
 
-            $qcek = $this->db->get_where('job_item',array(
-                    'job_item_id'=> $job_item_id,
-                    'job_order_id' => $job_order_id
-            ));
+     //        $qcek = $this->db->get_where('job_item',array(
+     //                'job_item_id'=> $job_item_id,
+     //                'job_order_id' => $job_order_id
+     //        ));
 
-            if($qcek->num_rows()>0){
-                $this->db->where(array(
-                    'job_item_id'=> $job_item_id,
-                    'job_order_id' => $job_order_id
-                ));
-                $this->db->update('job_item', $data_job_item);
-            } else {
-                $this->db->insert('job_item', $data_job_item);
-            }
+     //        if($qcek->num_rows()>0){
+     //            $this->db->where(array(
+     //                'job_item_id'=> $job_item_id,
+     //                'job_order_id' => $job_order_id
+     //            ));
+     //            $this->db->update('job_item', $data_job_item);
+     //        } else {
+     //            $this->db->insert('job_item', $data_job_item);
+     //        }
             
-        }
+     //    }
 
-        foreach ($gridmaterial as $value) {
+     //    foreach ($gridmaterial as $value) {
 
-        		$prod_material_id = $this->m_data->getPrimaryID($value->prod_material_id,'prod_material', 'prod_material_id', $idunit);
+     //    		$prod_material_id = $this->m_data->getPrimaryID($value->prod_material_id,'prod_material', 'prod_material_id', $idunit);
 
-        		$material_type = $value->idinventory == '' ? 2 : 1; //'1:Raw material 2:BoM';
+     //    		$material_type = $value->idinventory == '' ? 2 : 1; //'1:Raw material 2:BoM';
 
-        		$data_material = array(
-                    'prod_material_id' => $prod_material_id,
-                    'job_order_id' => $job_order_id,
-                    'idinventory' => $value->idinventory == '' ? null : $value->idinventory,
-                    'bom_id' => $value->bom_id == '' ? null : $value->bom_id,
-                    'measurement_id' => $this->getMeasurement($value->measurement_name,$idunit),
-                    'qty' =>$value->qty,
-                    'slice' =>$value->slice,
-                    'deleted' => 0,
-                    // 'is_addition' =>,
-                    'idunit' => $idunit,
-                    'material_type' => $material_type
-        		);
+     //    		$data_material = array(
+                    // 'prod_material_id' => $prod_material_id,
+                    // 'job_order_id' => $job_order_id,
+                    // 'idinventory' => $value->idinventory == '' ? null : $value->idinventory,
+                    // 'bom_id' => $value->bom_id == '' ? null : $value->bom_id,
+                    // 'measurement_id' => $this->getMeasurement($value->measurement_name,$idunit),
+                    // 'qty' =>$value->qty,
+     //                'slice' =>$value->slice,
+                    // 'deleted' => 0,
+                    // // 'is_addition' =>,
+                    // 'idunit' => $idunit,
+                    // 'material_type' => $material_type
+     //    		);
 
-            $qcek = $this->db->get_where('job_item',array(
-                    'job_item_id'=> $job_item_id,
-                    'job_order_id' => $job_order_id
-            ));
+     //        $qcek = $this->db->get_where('job_item',array(
+     //                'job_item_id'=> $job_item_id,
+     //                'job_order_id' => $job_order_id
+     //        ));
 
-            if($qcek->num_rows()>0){
-                $this->db->where(array(
-                    'prod_material_id' => $prod_material_id,
-                    'job_order_id' => $job_order_id,
-                ));
-                $this->db->update('prod_material', $data_material);
-            } else {
-                $this->db->insert('prod_material', $data_material);
-            }
+     //        if($qcek->num_rows()>0){
+     //            $this->db->where(array(
+     //                'prod_material_id' => $prod_material_id,
+     //                'job_order_id' => $job_order_id,
+     //            ));
+     //            $this->db->update('prod_material', $data_material);
+     //        } else {
+     //            $this->db->insert('prod_material', $data_material);
+     //        }
             
-        }
+     //    }
 
 
         if ($this->input->post('start_date')!='') {
