@@ -353,6 +353,8 @@ function showGoodsReceiptData(selectedRecord) {
               qty_receipt += (item.qty * 1);
             });
 
+
+
             var recPO = new GridReceiptItemPurchaseOrderModel({
               idpurchaseitem: obj.idpurchaseitem,
               idinventory: obj.idinventory,

@@ -11,7 +11,7 @@ class m_goodsreceipt extends CI_Model {
     }
 
     function searchField() {
-        $field = "";
+        $field = "a.no_invoice,a.no_goods_receipt,b.nopurchase";
         return explode(",", $field);
     }
 

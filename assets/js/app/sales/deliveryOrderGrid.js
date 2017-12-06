@@ -6,7 +6,7 @@ var WindowEntryDeliveryOrder = Ext.create(dir_sys + 'sales.WindowEntryDeliveryOr
 Ext.define('GriddeliveryOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress'
+        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalorder','totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress'
     ],
     idProperty: 'id'
 });
@@ -224,13 +224,19 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         },
 
         {
-            header: 'Total Ordered Qty',
+            header: 'Total Items',
             dataIndex: 'totalitem',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
         },
-
+        {
+            header: 'Total Ordered Qty',
+            dataIndex: 'totalorder',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right'
+        },
         {
             header: 'Total Shipped Qty',
             dataIndex: 'totalitemkirim',

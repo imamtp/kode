@@ -16,7 +16,7 @@ class m_salesorder extends CI_Model {
     }
 
     function selectField() {
-        return "a.idsales,
+        return "distinct a.idsales,
                 a.idemployee,
                 a.idjournal,
                 a.idtax,
@@ -66,14 +66,15 @@ class m_salesorder extends CI_Model {
                 g.delivery_date,
                 totalitem,
                 COALESCE(totalitemkirim, 0) as totalitemkirim,
-                ((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,
+                ((l.totalorder - COALESCE(totalitemkirim, 0))) as sisakirim,
                 g.delivery_order_id,
                 i.no_sales_quote as no_sales_order_quote,
                 i.idsales as idsales_quote,
                 i.date_quote as date_sales_quote,
                 j.rate,
                 k.job_order_id,
-                k.status as statuswo";
+                k.status as statuswo,
+                l.totalorder";
     }
     
     function fieldCek()
@@ -104,7 +105,16 @@ class m_salesorder extends CI_Model {
                                 group by idsales) h ON a .idsales = h.idsales
                     left join (select no_sales_quote,idsales,date_quote
                                 from sales ) i ON a.idsales_quote = i.idsales
-                    LEFT JOIN job_order k ON k.idsales = a.idsales";
+                    LEFT JOIN job_order k ON k.idsales = a.idsales
+                    left join(
+                                select
+                                    idsales,
+                                    sum(qty) as totalorder
+                                from
+                                    salesitem
+                                group by
+                                    idsales
+                            ) l ON a .idsales = l.idsales";
 
         return $query;
     }

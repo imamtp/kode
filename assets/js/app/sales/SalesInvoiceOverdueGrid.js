@@ -229,18 +229,24 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                     if (data.length == 0) {
                         Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                     } else {
-
-                        if (selectedRecord.data.noInvoiceOverdue !== null) {
-                            Ext.Msg.alert('Failure', 'InvoiceOverdue untuk data Invoice Period terpilih sudah terbentuk. Silahkan pilih data Invoice Period yang lain');
-                        } else {
-                            WindowEntrySalesInvoiceOverdue.show();
-
-                            var EntrySalesInvoiceOverdue = Ext.getCmp('EntrySalesInvoiceOverdue').getStore();
-                            EntrySalesInvoiceOverdue.removeAll();
-                            EntrySalesInvoiceOverdue.sync();
-
-                            loadDataFormInvoiceOverdue(selectedRecord.data.idsales);
-                        }
+                        Ext.create('Ext.window.Window', {
+                            title: 'Preview Invoice',
+                            width: panelW,
+                            modal: true,
+                            height: panelH,
+                            items: [{
+                                xtype: 'component',
+                                html: '<iframe src="' + SITE_URL + 'sales/print_invoice/' + selectedRecord.data.idsales + '"  style="position: absolute; border: 0; top:0; left:0; right:0; bottom:0; width:100%; height:100%;"></iframe>',
+                            }],
+                            buttons: [{
+                                text: 'Print',
+                                iconCls: 'print-icon',
+                                handler: function() {
+                                    window.open(SITE_URL + 'sales/print_invoice/' + selectedRecord.data.idsales + '/print');
+                                    // storeGridSertifikat.load();
+                                }
+                            }]
+                        }).show();
                     }
                 }
             },

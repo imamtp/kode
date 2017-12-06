@@ -152,7 +152,7 @@ Ext.define(dir_sys + 'purchase2.PurchaseOrderGrid', {
     align: 'right'
   }, {
     header: 'Total Discount',
-    dataIndex: 'disc',
+    dataIndex: 'total_diskon',
     minWidth: 150,
     xtype: 'numbercolumn',
     align: 'right'

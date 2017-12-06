@@ -159,6 +159,7 @@ class m_purchase extends CI_Model {
                 b.fax,
                 a.subtotal,
                 a.total_dpp,
+                a.total_diskon,
                 a.tax,
                 a.totalamount,
                 a.balance,
@@ -204,6 +205,8 @@ class m_purchase extends CI_Model {
             $dtcetak['tax'] = number_format($r->tax,2);
             $dtcetak['totalamount'] = number_format($r->totalamount,2);
             $dtcetak['balance'] = number_format($r->balance,2);
+            $dtcetak['before_disc'] = number_format(($r->subtotal+$r->total_diskon),2);
+            $dtcetak['total_diskon'] = number_format($r->total_diskon,2);
             $dtcetak['terbilang'] = terbilang($r->totalamount);
             $dtcetak['memo'] = $r->memo;
             $dtcetak['datetrans'] = $r->date;

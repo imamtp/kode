@@ -16,7 +16,7 @@ class m_salesinvoice extends CI_Model {
     }
 
     function selectField() {
-        return "a.idsales,
+        return "distinct a.idsales,
                 a.no_sales_order,
                 a.idunit,
                 a.subtotal,
@@ -44,6 +44,7 @@ class m_salesinvoice extends CI_Model {
                 a.total_dpp,
                 a.shipaddress,
                 a.no_faktur,
+                c.no_do,
                 case a.idpayment
                     when 1 then '-'
                     when 2 then '-'
@@ -53,8 +54,7 @@ class m_salesinvoice extends CI_Model {
                 end as term,
                 b.address as address_customer,
                 b.telephone as telephone_customer,
-                b.handphone as handphone_customer,
-                c.no_do";
+                b.handphone as handphone_customer";
     }
     
     function fieldCek()
@@ -70,7 +70,7 @@ class m_salesinvoice extends CI_Model {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
                     join customer b ON a.idcustomer = b.idcustomer
-                    left join delivery_order c on c.idsales = a.idsales";
+                    join delivery_order c ON a.idsales = c.idsales";
 
         return $query;
     }

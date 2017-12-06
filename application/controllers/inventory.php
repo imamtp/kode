@@ -1138,8 +1138,25 @@ class inventory extends MY_Controller {
         $inventory_type = $this->input->post('inventory_type');
         $idinventorycat = $this->input->post('idinventorycat');
         $query = $this->input->post('query');
-        $start = $this->input->post('start');
-        $limit = $this->input->post('limit');
+        // $start = $this->input->post('start');
+        // $limit = $this->input->post('limit');
+
+        $page = $this->input->post('page');
+
+        $start = isset($_POST['start']) ? $_POST['start'] : 0;
+        $limit = isset($_POST['limit']) ? $_POST['limit'] : 10;
+        $page = $this->input->post('page');
+
+
+        if ($page > 1) {
+            if ($page == 2) {
+                //problem saat clear search box, start-nya hilang
+                $start = $limit;
+            } else {
+                $kali = $page - 1;
+                $start = $limit * $kali;
+            }
+        }
 
         $limit_offset = "LIMIT $limit OFFSET $start";
 

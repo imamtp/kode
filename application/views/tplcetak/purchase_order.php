@@ -54,11 +54,17 @@
         <th>QTY</th>
         <th>SATUAN</th>
         <th>HARGA</th>
+		<!-- 		<th>DISKON %</th>
+				<th>JML DISKON</th> -->
         <th>TOTAL</th>
       </tr>
     </thead>
     <tbody>
-    <?php foreach ($data['detail'] as $key => $value) : ?>
+		<?php 
+			$totaldiskon = 0; 
+			foreach ($data['detail'] as $key => $value){
+					// $diskon = ($value['qty']*$value['price'])*($value['disc']/100); 
+					?>
       <tr>
         <td width="30"><?=$key+1?></td>
         <td><?=$value['sku_no']?></td>
@@ -68,7 +74,10 @@
         <td align="right"><?=number_format($value['price'],2)?></td>
         <td align="right"><?=number_format($value['total'],2)?></td>
       </tr>
-    <?php endforeach; ?>
+		<?php 
+			} 
+
+			?>
     </tbody>
   </table>
 	<br>
