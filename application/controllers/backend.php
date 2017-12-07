@@ -39,7 +39,7 @@ class Backend extends MY_Controller {
         $q3 = $this->db->query("SELECT b.stock
                 from inventory a 
                 join warehouse_stock b ON a.idinventory = b.idinventory
-                where a.idinventory = ".$q->idinventory." and a.ratio_two = ".$q2->size." ");
+                where a.idinventory = ".$q->idinventory." ");
 
         if($q3->num_rows()>0){
             $r3 = $q3->row();
