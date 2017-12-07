@@ -11,8 +11,13 @@ class production extends MY_Controller
     {
     }
 
-    function check_stock_rm(){
-        
+    function get_unit($id){
+        if($id==null){
+            return null;
+        }
+
+        $q = $this->db->get_where('productmeasurement',array('measurement_id'=>$id))->row();
+        return $q->short_desc;
     }
 
     function savewo()
@@ -63,29 +68,88 @@ class production extends MY_Controller
                                 from job_item
                                 where job_order_id = ".$this->input->post('job_order_id')." ");
         foreach ($q->result() as $r) {
-            $q2 = $this->db->query("select a.idinventory,b.idinventory_parent,a.qty,b.sku_no,b.invno
+            $q2 = $this->db->query("select a.idinventory,b.idinventory_parent,a.qty,b.sku_no,b.invno,a.measurement_id as measurement_id_mat,b.measurement_id_one,b.measurement_id_two,b.measurement_id_tre
                                     from prod_material a 
                                     join inventory b ON a.idinventory  = b.idinventory
                                     where a.job_order_id = ".$this->input->post('job_order_id')." and a.job_item_id = ".$r->job_item_id." ");
             foreach ($q2->result() as $r2) {
-               $q3 = $this->db->query("SELECT b.stock
-                                            from inventory a 
-                                            join warehouse_stock b ON a.idinventory = b.idinventory
-                                            where a.idinventory = ".$r2->idinventory." ");
-                if($q3->num_rows()>0){
-                    $r3 = $q3->row();
 
-                    if($r3->stock<$r2->qty){
-                        $json = array('success'=>false,'message'=>'Stok untuk kode Material <b>'.$r2->invno.'</b> tidak mencukupi');
+                $valid = false;
+
+                //cek stok
+                $qstok = $this->db->query("select 
+                                                b.sku_no, 
+                                                b.nameinventory, 
+                                                coalesce(sum(stock),0) as stock_one, 
+                                                coalesce((sum(stock)/b.ratio_two),0) as stock_two, 
+                                                coalesce((sum(stock)/b.ratio_tre),0) as stock_tre
+                                            from warehouse_stock a
+                                            join inventory b on b.idinventory = a.idinventory 
+                                            where a.idinventory = ".$r2->idinventory." and b.grouped is null
+                                            group by b.sku_no,b.nameinventory,b.ratio_two,b.ratio_tre");
+                if($qstok->num_rows()>0){
+                    $rstok = $qstok->row();
+
+                    if($r2->measurement_id_mat == $r2->measurement_id_one){
+                        $stok = $rstok->stock_one;
+                        $valid = true;
+                    } else if($r2->measurement_id_mat == $r2->measurement_id_two){
+                        $stok = $rstok->stock_two;
+                        $valid = true;
+                    } else if($r2->measurement_id_mat == $r2->measurement_id_tre){
+                        $stok = $rstok->stock_tre;
+                        $valid = true;
+                    } else {
+                         $json = array('success'=>false,'message'=>'Satuan untuk kode Material <b>'.$r2->invno.'</b> salah
+                             <br><br>Satuan Stok:<br>
+                            Satuan #1 : '.$this->get_unit($r2->measurement_id_one).'<br>
+                            Satuan #2 : '.$this->get_unit($r2->measurement_id_two).'<br>
+                            Satuan #3 : '.$this->get_unit($r2->measurement_id_tre).'<br>');
+                         echo json_encode($json); die;
+                    }
+
+                    if($stok<$r2->qty){
+                        $json = array('success'=>false,'message'=>'Stok untuk kode Material <b>'.$r2->invno.'</b> tidak mencukupi 
+                            <br><br>Status Stok:<br>
+                            Stok #1 : '.number_format($rstok->stock_one,2).' '.$this->get_unit($r2->measurement_id_one).'<br>
+                            Stok #2 : '.number_format($rstok->stock_two,2).' '.$this->get_unit($r2->measurement_id_two).'<br>
+                            Stok #3 : '.number_format($rstok->stock_tre,2).' '.$this->get_unit($r2->measurement_id_tre).'<br>
+                            ');
                         echo json_encode($json); die;
                     }
                 } else {
                     $json = array('success'=>false,'message'=>'Kode Material <b>'.$r2->invno.'</b> belum ada di gudang');
                     echo json_encode($json); die;
                 }
+
+               //cek satuannya udah sesuai apa belum
+               //  $unit_one = false;
+               //  $unit_two = false;
+               //  $unit_tre = false;
+               //  if($r2->measurement_id_mat == $r2->measurement_id_one){
+               //      $unit_one = true;
+               //  }
+
+               // $q3 = $this->db->query("SELECT b.stock
+               //                              from inventory a 
+               //                              join warehouse_stock b ON a.idinventory = b.idinventory
+               //                              where a.idinventory = ".$r2->idinventory." ");
+               //  if($q3->num_rows()>0){
+               //      $r3 = $q3->row();
+
+               //      if($r3->stock<$r2->qty){
+               //          $json = array('success'=>false,'message'=>'Stok untuk kode Material <b>'.$r2->invno.'</b> tidak mencukupi');
+               //          echo json_encode($json); die;
+               //      }
+               //  } else {
+               //      $json = array('success'=>false,'message'=>'Kode Material <b>'.$r2->invno.'</b> belum ada di gudang');
+               //      echo json_encode($json); die;
+               //  }
             }
         }
-      
+        
+        echo $this->db->last_query(); die;
+
         if ($statusform == 'input') {
             if ($this->input->post('token_tmp')!='') {
                 $data['usermod'] = $this->session->userdata('userid');
@@ -878,7 +942,7 @@ class production extends MY_Controller
 
             $this->db->insert('prod_material', $data_material);
         }
-
+        // echo $this->db->last_query();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');

@@ -930,9 +930,9 @@ class Backend extends MY_Controller {
         $arr = array();
         foreach ($query_page->result() as $obj) {
                 
-            if($table=='ItemMaterialWO'){
-                $obj->valid = $this->check_stock_rm($obj->job_order_id,$obj->prod_material_id);
-            }
+            // if($table=='ItemMaterialWO'){
+            //     $obj->valid = $this->check_stock_rm($obj->job_order_id,$obj->prod_material_id);
+            // }
 
             if($table=='clossinginvgrid')
             {
