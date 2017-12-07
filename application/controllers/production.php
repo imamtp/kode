@@ -11,6 +11,10 @@ class production extends MY_Controller
     {
     }
 
+    function check_stock_rm(){
+        
+    }
+
     function savewo()
     {
         $params = array(
@@ -52,7 +56,35 @@ class production extends MY_Controller
             'remarks' => $this->input->post('remarks'),
             
         );
+        
 
+        //cek stok raw material
+        $q = $this->db->query("select job_item_id,size
+                                from job_item
+                                where job_order_id = ".$this->input->post('job_order_id')." ");
+        foreach ($q->result() as $r) {
+            $q2 = $this->db->query("select a.idinventory,b.idinventory_parent,a.qty,b.sku_no,b.invno
+                                    from prod_material a 
+                                    join inventory b ON a.idinventory  = b.idinventory
+                                    where a.job_order_id = ".$this->input->post('job_order_id')." and a.job_item_id = ".$r->job_item_id." ");
+            foreach ($q2->result() as $r2) {
+               $q3 = $this->db->query("SELECT b.stock
+                                            from inventory a 
+                                            join warehouse_stock b ON a.idinventory = b.idinventory
+                                            where a.idinventory = ".$r2->idinventory." and a.ratio_two = ".$r->size." ");
+                if($q3->num_rows()>0){
+                    $r3 = $q3->row();
+
+                    if($r3->stock<$r2->qty){
+                        $json = array('success'=>false,'message'=>'Stok untuk kode Material <b>'.$r2->invno.'</b> tidak mencukupi');
+                        echo json_encode($json); die;
+                    }
+                } else {
+                    $json = array('success'=>false,'message'=>'Kode Material <b>'.$r2->invno.'</b> belum ada di gudang');
+                    echo json_encode($json); die;
+                }
+            }
+        }
       
         if ($statusform == 'input') {
             if ($this->input->post('token_tmp')!='') {
@@ -846,7 +878,6 @@ class production extends MY_Controller
 
             $this->db->insert('prod_material', $data_material);
         }
-        
 
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();

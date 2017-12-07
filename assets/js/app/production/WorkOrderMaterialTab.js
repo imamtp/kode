@@ -1,6 +1,6 @@
 Ext.define('GridItemMaterialWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['prod_material_id', 'job_order_id', 'idinventory', 'bom_id', 'measurement_id', 'qty', 'slice', 'idunit', 'material_type', 'qty_real', 'qty_sisa', 'whs_sisa_id', 'notes', 'nameinventory', 'invno', 'sku_no', 'measurement_name'],
+    fields: ['prod_material_id', 'valid', 'job_order_id', 'idinventory', 'bom_id', 'measurement_id', 'qty', 'slice', 'idunit', 'material_type', 'qty_real', 'qty_sisa', 'whs_sisa_id', 'notes', 'nameinventory', 'invno', 'sku_no', 'measurement_name'],
     idProperty: 'id'
 });
 
@@ -567,7 +567,14 @@ Ext.define(dir_sys + 'production.WorkOrderMaterialTab', {
             plugins: [this.cellEditing],
             store: storeGridItemMaterialWO,
             viewConfig: {
-                markDirty: false
+                markDirty: false,
+                getRowClass: function(record, index) {
+                    var c = record.get('valid');
+                    console.log(c);
+                    if (c == 2) {
+                        return 'custom';
+                    } 
+                }
             },
             columns: [{
                     header: 'prod_material_id',
