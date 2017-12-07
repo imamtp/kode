@@ -45,20 +45,11 @@ class Backend extends MY_Controller {
             $r3 = $q3->row();
 
             if($r3->stock<$q->qty){
-                $q->free_result();
-                $q2->free_result();
-                $q3->free_result();
                 return 2; //invalid
             } else {
-                $q->free_result();
-                $q2->free_result();
-                $q3->free_result();
                 return 1; //valid
             }
         } else {
-            $q->free_result();
-            $q2->free_result();
-            $q3->free_result();
             return 2; //invalid
         }
         
