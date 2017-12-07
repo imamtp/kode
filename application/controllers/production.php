@@ -148,7 +148,7 @@ class production extends MY_Controller
             }
         }
         
-        echo $this->db->last_query(); die;
+        // echo $this->db->last_query(); die;
 
         if ($statusform == 'input') {
             if ($this->input->post('token_tmp')!='') {
