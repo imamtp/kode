@@ -94,6 +94,7 @@ Ext.define('GridWorkOrderList', {
 
                 Ext.getCmp('WindowEntryWorkOrder').setTitle('Entry Work Order Schedule');
 
+                Ext.getCmp('addItemJobWoBtn').setDisabled(true);
 
                 // Ext.getCmp('idsales_schedulewoform').setValue(selectedRecord.get('idsales'));
                 // Ext.getCmp('job_order_id_schedulewoform').setValue(selectedRecord.get('job_order_id'));

@@ -1038,7 +1038,7 @@ class sales extends MY_Controller {
         
 
         //buat jurnal piutang
-        $journal = $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo'),$diskon,$pajak);
+        $journal = $this->jmodel->sales_kredit(date('Y-m-d'),$saldo,null,$this->input->post('idunit'),$freight,'Piutang Penjualan: '.$this->input->post('memo').' '.$noarticle,$diskon,$pajak);
         //$journal['idjournal'];
 
         // $data['delivery_order_id'] = $delivery_order_id;
@@ -2044,11 +2044,14 @@ class sales extends MY_Controller {
             $idsales = $q->idsales;
 
             // -- hapus deliveORDER
-            $this->db->where('delivery_order_id',$delivery_order_id);
-            $this->db->delete('deliver_order_item');
+            // $this->db->where('delivery_order_id',$delivery_order_id);
+            // $this->db->delete('deliver_order_item');
             
+            // $this->db->where('delivery_order_id',$delivery_order_id);
+            // $this->db->delete('delivery_order');
+
             $this->db->where('delivery_order_id',$delivery_order_id);
-            $this->db->delete('delivery_order');
+            $this->db->update('delivery_order',array('status'=>5));
            
              $this->update_sales_status($delivery_order_id,$this->session->userdata('idunit'),$idsales);
 
