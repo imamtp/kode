@@ -633,6 +633,45 @@ class production extends MY_Controller
             //         }                        
             //     }
             // }
+
+            //update status penerimaan material jika ada sisa
+            $q  = $this->db->query("select prod_material_id
+                            from prod_material
+                            where job_order_id = $job_order_id");
+            // echo $this->db->last_query();
+            foreach ($q->result() as $r) {
+                $q2  = $this->db->query("select idinventory,qty,warehouse_id
+                                            from prod_material_receipt
+                                            where prod_material_id = ".$r->prod_material_id." ");
+                // echo $this->db->last_query();
+                foreach ($q2->result() as $rr) {
+                    if($rr->qty>0){
+
+                        $this->m_stock->update_history_v2($this->session->userdata('idunit'),$rr->qty,$rr->idinventory,null,$this->session->userdata('idunit'),$rr->warehouse_id,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+
+                        // echo $this->db->last_query();
+                        // $qcek = $this->db->get_where('warehouse_stock',array('idinventory'=>$rr->idinventory,'warehouse_id'=>$rr->warehouse_id));
+                        // if($qcek->num_rows()>0){
+                        //     $rcek = $qcek->row();
+                        //     $new_balance = $rcek->stock + $rr->qty;
+
+                        //     $this->db->where(array('idinventory'=>$rr->idinventory,'warehouse_id'=>$rr->warehouse_id));
+                        //     $this->db->update('warehouse_stock',array('stock'=>$new_balance));
+                        // } else {
+                        //     $this->db->insert('warehouse_stock',
+                        //         array(
+                        //             'stock'=>$rr->qty,
+                        //             'idinventory'=>$rr->idinventory,
+                        //             'warehouse_id'=>$rr->warehouse_id,
+                        //             'idunit'=>$this->session->userdata('idunit'),
+                        //             'datemod'=>date('Y-m-d H:m:s')
+                        //         )
+                        //     );
+                        // }
+                    }
+                }
+            }
+
         }
 
         //start grid material

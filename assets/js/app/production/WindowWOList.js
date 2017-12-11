@@ -3,7 +3,7 @@
 Ext.define('GridWorkOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'namecusomer'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'namecustomer'
     ],
     idProperty: 'id'
 });

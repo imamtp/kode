@@ -99,7 +99,7 @@ class m_stock extends CI_Model {
 		$this->db->insert('stock_history',$stock_history);
 	}
 
-	function update_history_v2($type,$qty,$idinventory,$size,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
+	function update_history_v2($type,$qty,$idinventory,$size=null,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
 		/*
 			1: Order, (+)
 			2: Stock In By PO (+)
@@ -117,10 +117,16 @@ class m_stock extends CI_Model {
 			14: Delivery Sales Return (-)
 			15: Stock Out From Production (-)
 		*/
-		 $q = $this->db->query("select a.stock as old_qty
+
+		$where_size = null;
+		if($size!=null){
+			$where_size = " and b.ratio_two = ".$size." ";
+		}
+
+		$q = $this->db->query("select a.stock as old_qty
 								from warehouse_stock a
 								join inventory b ON a.idinventory = b.idinventory
-								where a.idinventory = ".$idinventory." and b.ratio_two = ".$size." and grouped is null");
+								where a.idinventory = ".$idinventory.$where_size." and grouped is null");
 
 		// $q = $this->db->query("select stock as old_qty from warehouse_stock where idinventory = $idinventory");
 		$r_inv = $q->row();
