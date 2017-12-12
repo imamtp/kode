@@ -264,12 +264,13 @@ Ext.define(dir_sys + 'production.WindowEntryWorkOrder', {
     id: 'WindowEntryWorkOrder',
     title: 'Entry Work Order',
     header: {
-        titlePosition: 2,
+        // titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
     autoDestroy: false,
     modal: true,
+    maximizable:true,
     closeAction: 'hide',
     //    autoWidth: true,
     width: panelW - 100,

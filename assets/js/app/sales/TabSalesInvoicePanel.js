@@ -33,14 +33,58 @@ Ext.define(dir_sys + 'sales.TabSalesInvoice', {
             xtype:'SalesInvoiceCanceledGrid'
         }
     ],
-    listeners: {
-        render: {
-            scope: this,
-            fn: function(grid) {
-                setHeaderInvoice();
-            }
+     listeners: {
+        render: function() {
+            setHeaderInvoice();
+
+            this.items.each(function(i) {
+                i.tab.on('click', function() {
+                    // alert('s')
+                });
+            });
         }
-    }
+    },
+    // listeners: {
+    //     render: {
+    //         scope: this,
+    //         fn: function(grid) {
+    //             setHeaderInvoice();
+    //         }
+    //     }
+    // }
+    // listeners: {
+    //     render: function() {
+    //         this.items.each(function(i) {
+    //             i.tab.on('click', function() {
+    //                 var grid = Ext.ComponentQuery.query('GridInventoryAllBySku')[0];
+    //                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
+    //                 if (i.title == 'Akun Persediaan') {
+    //                     storeGridAccInv.load({
+    //                         params: {
+    //                             'extraparams': 'idinventory:' + selectedRecord.data.idinventory
+    //                         }
+    //                     });
+    //                 } else if (i.title == 'Riwayat Penyusutan') {
+    //                     storeGridDepresiasiInventory.on('beforeload', function(store, operation, eOpts) {
+    //                         operation.params = {
+    //                             'extraparams': 'idinventory:' + selectedRecord.data.idinventory
+    //                         };
+    //                     });
+
+    //                     storeGridDepresiasiInventory.load();
+    //                 } else if (i.title == 'Stock') {
+    //                     var GridStockInventoryTabStore = Ext.getCmp('GridStockInventoryTab').getStore();
+    //                     GridStockInventoryTabStore.on('beforeload', function(store, operation, eOpts) {
+    //                         operation.params = {
+    //                             'extraparams': 'a.idinventory:' + selectedRecord.data.idinventory
+    //                         };
+    //                     });
+    //                     GridStockInventoryTabStore.load();
+    //                 }
+    //             });
+    //         });
+    //     }
+    // },
 });
 
 Ext.define(dir_sys + 'sales.TabSalesInvoicePanel', {

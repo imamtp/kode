@@ -136,7 +136,7 @@ Ext.define('GridItemJobWOPopup', {
                         Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
                     }
                 })
-                updateGridJobWO();
+                updateGridJobWO(Ext.getCmp('comboxWorkOrderStatus_woform').getValue());
                 Ext.getCmp('wItemJobWOPopupPopup').hide();
             }
         },
@@ -447,7 +447,7 @@ Ext.define(dir_sys + 'production.WorkOrderJobTab', {
         this.on({
             scope: this,
             edit: function() {
-                updateGridJobWO();
+                updateGridJobWO(Ext.getCmp('comboxWorkOrderStatus_woform').getValue());
             }
         });
     },
@@ -538,43 +538,59 @@ Ext.define(dir_sys + 'production.WorkOrderJobTab', {
 });
 
 
-function updateGridJobWO() {
-    Ext.each(storeGridItemJobWO.data.items, function(obj, i) {
-        var total = obj.data.qty * obj.data.size;
-        obj.set('total', total);
+function updateGridJobWO(status) {
+    var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
+    
+    if(status*1==1){
 
-        var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
-        Ext.Ajax.request({
-            url: SITE_URL + 'production/save_fg',
-            async: false,
-            method: 'POST',
-            params: {
-                job_order_id: job_order_id,
-                job_item_id: obj.data.job_item_id,
-                idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
-                short_desc: obj.data.short_desc,
-                size_measurement: obj.data.size_measurement,
-                qty: obj.data.qty,
-                size: obj.data.size,
-                total: total,
-                update: 'true'
-            },
-            success: function(form, action) {
-                var d = Ext.decode(form.responseText);
+        //kalo statusnya open masih bisa diedit
 
-                storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
-                    operation.params = {
-                        'extraparams': 'a.job_order_id:' + job_order_id
-                    };
-                });
+        Ext.each(storeGridItemJobWO.data.items, function(obj, i) {
+            var total = obj.data.qty * obj.data.size;
+            obj.set('total', total);
 
-                storeGridItemJobWO.load();
-            },
-            failure: function(form, action) {
-                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            }
+            
+            Ext.Ajax.request({
+                url: SITE_URL + 'production/save_fg',
+                async: false,
+                method: 'POST',
+                params: {
+                    job_order_id: job_order_id,
+                    job_item_id: obj.data.job_item_id,
+                    idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
+                    short_desc: obj.data.short_desc,
+                    size_measurement: obj.data.size_measurement,
+                    qty: obj.data.qty,
+                    size: obj.data.size,
+                    total: total,
+                    update: 'true'
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
+
+                    storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + job_order_id
+                        };
+                    });
+
+                    storeGridItemJobWO.load();
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
         });
-    });
+    } else {
+         storeGridItemJobWO.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + job_order_id
+                        };
+                    });
+
+                    storeGridItemJobWO.load();
+    }
+    
 }
 
 

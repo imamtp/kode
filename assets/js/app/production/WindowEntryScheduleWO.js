@@ -218,10 +218,11 @@ Ext.define(dir_sys + 'production.WindowEntryScheduleWO', {
     id: 'WindowEntryScheduleWO',
     title: 'Entry Schedule Production',
     header: {
-        titlePosition: 2,
+        // titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
+    maximizable:true,
     autoDestroy: false,
     modal: true,
     closeAction: 'hide',

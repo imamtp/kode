@@ -227,9 +227,10 @@ Ext.define(dir_sys + 'production.WindowEntryMaterialWorkOrder', {
     id: 'WindowEntryMaterialWorkOrder',
     title: 'Material Usage Work Order',
     header: {
-        titlePosition: 2,
+        // titlePosition: 2,
         titleAlign: 'center'
     },
+    maximizable:true,
     closable: true,
     autoDestroy: false,
     modal: true,

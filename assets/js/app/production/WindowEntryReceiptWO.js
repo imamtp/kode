@@ -280,10 +280,11 @@ Ext.define(dir_sys + 'production.WindowEntryReceiptWO', {
     id: 'WindowEntryReceiptWO',
     title: 'Entry Receipt Production',
     header: {
-        titlePosition: 2,
+        // titlePosition: 2,
         titleAlign: 'center'
     },
     closable: true,
+    maximizable:true,
     autoDestroy: false,
     modal: true,
     closeAction: 'hide',
