@@ -1699,6 +1699,30 @@ class inventory extends MY_Controller {
     //     }
     // }
 
+    function hapusInventory(){
+        $this->db->trans_begin();
+
+        $records = json_decode($this->input->post('postdata'));
+        foreach ($records as $id) {
+            $this->db->where(array(
+                'idinventory'=>$id
+            ));
+            $this->db->update('inventory',array(
+                'display'=>0,
+                'deleted'=>1
+            ));
+        }
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The data has been deleted succsessfully');
+        }
+        echo json_encode($json);
+    }
+
     function import_inventory_fg(){
         $file = '/var/www/html/redsfin/data finished goods per 31 Agt 2017.xlsx';
         // $orig_name = $this->upload->data()['orig_name'];
