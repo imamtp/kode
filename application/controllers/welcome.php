@@ -339,6 +339,10 @@ table_name='".$table."'");
 				//so partial, do delivering
 				$this->db->where('delivery_order_id',$r->delivery_order_id);
 				$this->db->update('delivery_order',array('status'=>3));
+			} else if($r->status_so==7){
+				//so delivered, do delivered
+				$this->db->where('delivery_order_id',$r->delivery_order_id);
+				$this->db->update('delivery_order',array('status'=>4));
 			} else if($r->status_so==8){
 				//so invoiced, do delivered
 				$this->db->where('delivery_order_id',$r->delivery_order_id);
