@@ -11,7 +11,7 @@ class m_salesinvoice extends CI_Model {
     }
 
     function searchField() {
-        $field = "sales_invoice_id,no_sales_order,z.noinvoice,b.nocustomer,b.namecustomer,c.no_faktur";
+        $field = "no_sales_order,z.noinvoice,b.nocustomer,b.namecustomer,c.no_faktur";
         return explode(",", $field);
     }
 

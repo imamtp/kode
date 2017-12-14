@@ -74,15 +74,17 @@ var smGriddeliveryOrderGrid = Ext.create('Ext.selection.CheckboxModel', {
             }
 
 
-            if (record.data.status_do * 1 === 2) {
+            if (record.data.status_do * 1 === 2 || record.data.status_do * 1 === 4) {
                 //kalo udah diconfirm baru bisa bikin invoice
                 if (record.data.noinvoice === null || record.data.noinvoice === '') {
                     Ext.getCmp('createInvoiceDOGrid').enable();
                 } else {
+                    // alert('createInvoiceDOGrid disable '+1);
                     Ext.getCmp('createInvoiceDOGrid').disable();
                 }
             } else {
                 Ext.getCmp('createInvoiceDOGrid').disable();
+                // alert('createInvoiceDOGrid disable '+2);
             }
 
 
@@ -591,6 +593,11 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
 
                                     if (selectedRecord.data.noinvoice !== null) {
                                         Ext.Msg.alert('Informasi', 'Mohon untuk membatalkan invoice terlebih dahulu untuk melakukan pembatalan delivery order');
+                                        return false;
+                                    }
+
+                                    if (selectedRecord.data.status_do !== '6') {
+                                        Ext.Msg.alert('Informasi', 'Pembatalan hanya untuk delivery order yang sudah berada dalam status <b>Closed</b>');
                                         return false;
                                     }
 

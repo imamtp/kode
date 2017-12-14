@@ -2,8 +2,7 @@
 
 class m_stock extends CI_Model {
 
-	function update_history($type,$qty,$idinventory,$idinventory_parent=null,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
-		/*
+	/*
 			1: Order, (+)
 			2: Stock In By PO (+)
 			3: Stock In By Cash  (+)
@@ -20,6 +19,9 @@ class m_stock extends CI_Model {
 			14: Delivery Sales Return (-)
 			15: Stock Out From Production (-)
 		*/
+
+	function update_history($type,$qty,$idinventory,$idinventory_parent=null,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
+		
 		 
 		if($idinventory_parent==null){
 			$sql = "select sum(stock)as old_qty from warehouse_stock
@@ -100,24 +102,7 @@ class m_stock extends CI_Model {
 	}
 
 	function update_history_v2($type,$qty,$idinventory,$size=null,$idunit,$idwarehouse,$tanggal,$notes,$idjournal=null,$no_transaction=null){
-		/*
-			1: Order, (+)
-			2: Stock In By PO (+)
-			3: Stock In By Cash  (+)
-			4: Stock Opname Plus (+)
-			5: Stock Opname Minus (-)
-			6: Sales Return (+)
-			7: Purchase Return (-)
-			8: Sales (-)
-			9: Opening Balance (+)
-			10: Stock In By Transfer (+)
-			11: Stock Out By Transfer (-)
-			12: Stock In By Received Material From Production (+)
-			13: Stock In By Received Return PO (+)
-			14: Delivery Sales Return (-)
-			15: Stock Out From Production (-)
-		*/
-
+		
 		$where_size = null;
 		if($size!=null){
 			$where_size = " and b.ratio_two = ".$size." ";

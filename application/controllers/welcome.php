@@ -410,7 +410,8 @@ table_name='".$table."'");
 									from delivery_order a
 									order by a.delivery_order_id");
 		foreach ($q->result() as $r) {
-			$q2 = $this->db->get_where('sales',array('idsales'=>$r->idsales));
+			// $q2 = $this->db->get_where('sales',array('idsales'=>$r->idsales,''));
+			$q2 = $this->db->query("select * from sales	where noinvoice is not null and idsales = ".$r->idsales." ");
 			if($q2->num_rows()>0){
 				$r2 = $q2->result_array()[0];
 
@@ -480,6 +481,18 @@ table_name='".$table."'");
 						));
 					$this->db->update('delivery_order',array('no_faktur'=>$r2['no_faktur']));
 					
+			}
+		}
+	}
+
+	function search_do(){
+		//search duplicate do
+		$q = $this->db->get('delivery_order');
+		foreach ($q->result() as $r) {
+			$qn = $this->db->get_where('delivery_order',array('delivery_order_id'=>$r->delivery_order_id));
+			if($qn->num_rows()>0){
+				$rn = $qn->row();
+				echo $rn->delivery_order_id.' '.$qn->num_rows().' . <br>'; 
 			}
 		}
 	}

@@ -479,7 +479,7 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                     selected = [];
                     Ext.each(sm.getSelection(), function(item) {
                       selected.push(item.data[Object.keys(item.data)[0]]);
-                    });
+                    }); 
                     // Ext.Ajax.request({
                     //   url: SITE_URL + 'backend/ext_delete/InventoryAllBySku/inventory',
                     //   method: 'POST',

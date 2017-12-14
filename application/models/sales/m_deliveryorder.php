@@ -87,7 +87,7 @@ class m_deliveryorder extends CI_Model {
     }
 
     function query() {
-        $query = "select " . $this->selectField() . "
+        $query = "select distinct " . $this->selectField() . "
                     from " . $this->tableName()." z
                     join sales a ON z.idsales = a.idsales
                     left join payment b ON a.idpayment = b.idpayment

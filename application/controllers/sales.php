@@ -380,7 +380,7 @@ class sales extends MY_Controller {
              $qinv = $this->db->query("select a.idinventory
                                         from warehouse_stock a
                                         join inventory b ON a.idinventory = b.idinventory
-                                        where idinventory_parent = ".$r->idinventory." and b.ratio_two = ".$r->size." and grouped is null");
+                                        where idinventory_parent = ".$r->idinventory." and b.ratio_two = ".$r->size." and a.warehouse_id = ".$r->warehouse_id." and grouped is null");
 
               // echo $this->db->last_query().' ';
              if($qinv->num_rows()>0){
@@ -389,7 +389,7 @@ class sales extends MY_Controller {
                 //update stock history
                 $this->m_stock->update_history_v2(8,$r->qty_kirim,$rinv->idinventory,$r->size,$idunit,$r->warehouse_id,date('Y-m-d'),'Delivery Order: '.$no_do, null, $no_do);
              } else {
-                //kudu dikasih log disini
+                //kasih log bahwa stok ga ada
              }
 
           
@@ -1957,80 +1957,95 @@ class sales extends MY_Controller {
 
         $this->db->trans_begin();
 
-        $q = $this->db->query("select idsales,no_do,idjournal_do
+        $q = $this->db->query("select idsales,no_do,idjournal_do,status
                                 from delivery_order a
                                 where delivery_order_id = $delivery_order_id")->row();
         if($q){
 
             $idsales = $q->idsales;
+            // echo 'status:'.$q->status;
 
-            $qitem = $this->db->query("select a.qty_kirim,b.price,b.size,b.idinventory,a.warehouse_id
+            if($q->status==6){
+                //kalo statusnya udah closed baru bisa rollback stoknya
+
+                $qitem = $this->db->query("select a.qty_kirim,b.price,b.size,b.idinventory,a.warehouse_id
                         from deliver_order_item a
                         join salesitem b ON a.idsalesitem = b.idsalesitem
                         where a.delivery_order_id = ".$delivery_order_id."");
-            foreach ($qitem->result() as $r) {
-                 // -- update warehouse
-                    $qwr = $this->db->query("select stock
-                                    from warehouse_stock
-                                    where warehouse_id = ".$r->warehouse_id." and idinventory = ".$r->idinventory."");
-                    if($qwr->num_rows()>0){
-                        $rwr = $qwr->row();
-                        
-                        $current_stock = $rwr->stock;
-                        $qty_transaction = $r->qty_kirim;
-                        $new_stock = $current_stock+$qty_transaction;
+                // echo $this->db->last_query();
+                foreach ($qitem->result() as $r) {
+                     // -- update warehouse
+                        // $qwr = $this->db->query("select stock
+                        //                 from warehouse_stock
+                        //                 where warehouse_id = ".$r->warehouse_id." and idinventory = ".$r->idinventory."");
 
-                        $this->db->where(array(
-                                'warehouse_id'=>$r->warehouse_id,
-                                'idinventory'=>$r->idinventory
-                            ));
-                        $this->db->update('warehouse_stock',array('stock'=>$new_stock));
-                    } else {
-                        $this->db->insert('warehouse_stock',array(
-                                'warehouse_id'=>$r->warehouse_id,
-                                'idinventory'=>$r->idinventory,
-                                'stock'=>$r->qty_kirim,
-                                'datemod'=>date('Y-m-d H:m:s'),
-                                'idunit'=>$this->session->userdata('idunit')
-                            ));
+                         $qwr = $this->db->query("select a.idinventory,a.stock
+                                        from warehouse_stock a
+                                        join inventory b ON a.idinventory = b.idinventory
+                                        where idinventory_parent = ".$r->idinventory." and b.ratio_two = ".$r->size." and warehouse_id = ".$r->warehouse_id."  and b.grouped is null");
+                          // echo $this->db->last_query();
+                        if($qwr->num_rows()>0){
+                            $rwr = $qwr->row();
+                            
+                            $idinventory_rwr = $rwr->idinventory;
+                            $current_stock = $rwr->stock;
+                            $qty_transaction = $r->qty_kirim;
+                            $new_stock = $current_stock+$qty_transaction;
 
-                        $current_stock = 0;
-                        $qty_transaction = $r->qty_kirim;
-                        $new_stock = $qty_transaction;
-                    }
-                   
+                            $this->db->where(array(
+                                    'warehouse_id'=>$r->warehouse_id,
+                                    'idinventory'=>$idinventory_rwr
+                                ));
+                            $this->db->update('warehouse_stock',array('stock'=>$new_stock));
+                        } else {
+                            // $this->db->insert('warehouse_stock',array(
+                            //         'warehouse_id'=>$r->warehouse_id,
+                            //         'idinventory'=>$idinventory_rwr,
+                            //         'stock'=>$r->qty_kirim,
+                            //         'datemod'=>date('Y-m-d H:m:s'),
+                            //         'idunit'=>$this->session->userdata('idunit')
+                            //     ));
 
-                    // --update history stok
-                    // select *
-                    // from stock_history
-                    // where warehouse_id = 2 and idinventory = 395
-                    $d = array(
-                            "idinventory" => $r->idinventory,
-                            "idunit" => $this->session->userdata('idunit'),
-                            "type_adjustment" => 10, //cancelation
-                            "no_transaction" => 'id_delivery : '.$delivery_order_id,
-                            "old_qty" => $current_stock,
-                            "qty_transaction" => $qty_transaction,
-                            "balance" => $new_stock,
-                            "warehouse_id"  => $r->warehouse_id,
-                            "datein"  => date('Y-m-d H:m:s'),
-                            "notes"  => 'Pembatalan DO '.$q->no_do,
-                            // "idjournal" => ,
-                        );
-                    $this->db->insert('stock_history',$d);
+                            // $current_stock = 0;
+                            // $qty_transaction = $r->qty_kirim;
+                            // $new_stock = $qty_transaction;
+                        }
+                       
+                         // echo $this->db->last_query();
+                        // --update history stok
+                        // select *
+                        // from stock_history
+                        // where warehouse_id = 2 and idinventory = 395
+                        $d = array(
+                                "idinventory" => $r->idinventory,
+                                "idunit" => $this->session->userdata('idunit'),
+                                "type_adjustment" => 10, //cancelation
+                                "no_transaction" => 'id_delivery : '.$delivery_order_id,
+                                "old_qty" => $current_stock,
+                                "qty_transaction" => $qty_transaction,
+                                "balance" => $new_stock,
+                                "warehouse_id"  => $r->warehouse_id,
+                                "datein"  => date('Y-m-d H:m:s'),
+                                "notes"  => 'Pembatalan DO '.$q->no_do,
+                                // "idjournal" => ,
+                            );
+                        $this->db->insert('stock_history',$d);
+                         // echo $this->db->last_query();
+                        // --update hpp
 
-                    // --update hpp
 
 
+                        // -- set 0 qty kirim salesitem
+                        // $this->db->where('idsalesitem',$r->idsalesitem);
+                        // $this->db->update('salesitem',array('qty_kirim'=>0));
 
-                    // -- set 0 qty kirim salesitem
-                    // $this->db->where('idsalesitem',$r->idsalesitem);
-                    // $this->db->update('salesitem',array('qty_kirim'=>0));
+                        // -- update saldo
 
-                    // -- update saldo
+                        //update hpp
+                }
+            } //end if($q->status==6){
 
-                    //update hpp
-            }
+            
 
             if($q->idjournal_do!=null){
                 //kalo udah do sudah berada di sataus 'closed'. maka id journal baru ada
