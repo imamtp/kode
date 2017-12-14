@@ -112,7 +112,7 @@ class m_salesorder extends CI_Model {
         } else if($this->input->post('option')=='entry_wo'){
             $wer .= ' and k.idsales IS NULL';
         } else if($this->input->post('option')=='entry_delivery_order'){
-            $wer .= ' and (a.status = 3 OR a.status = 6)';
+            $wer .= ' and (a.status = 3 OR a.status = 6 OR  a.status = 7)';
         } 
 
         $sd = substr($this->input->post('startdate'),0,10);
