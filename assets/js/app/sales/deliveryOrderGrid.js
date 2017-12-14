@@ -6,7 +6,7 @@ var WindowEntryDeliveryOrder = Ext.create(dir_sys + 'sales.WindowEntryDeliveryOr
 Ext.define('GriddeliveryOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress'
+        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress', 'status_do', 'total_qty_order', 'total_qty_kirim', 'sisakirim'
     ],
     idProperty: 'id'
 });
@@ -17,7 +17,7 @@ var storeGriddeliveryOrderGrid = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/salesorder/sales',
+        url: SITE_URL + 'backend/ext_get_all/deliveryorder/sales',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -64,22 +64,30 @@ var smGriddeliveryOrderGrid = Ext.create('Ext.selection.CheckboxModel', {
                 //sales order lewat work order
                 if (record.data.statuswo * 1 === 5) {
                     //status wo 5/ready for delivery
-                    Ext.getCmp('btnPickingNote').enable();
+                    // Ext.getCmp('btnPickingNote').enable();
                 } else {
-                    Ext.getCmp('btnPickingNote').disable();
+                    // Ext.getCmp('btnPickingNote').disable();
                 }
             } else {
                 //sales ga pake work order langsung bisa delivery
-                Ext.getCmp('btnPickingNote').enable();
+                // Ext.getCmp('btnPickingNote').enable();
             }
 
 
-
-            if (record.data.noinvoice === null || record.data.noinvoice === '') {
-                Ext.getCmp('createInvoiceDOGrid').enable();
+            if (record.data.status_do * 1 === 2 || record.data.status_do * 1 === 4) {
+                //kalo udah diconfirm baru bisa bikin invoice
+                if (record.data.noinvoice === null || record.data.noinvoice === '') {
+                    Ext.getCmp('createInvoiceDOGrid').enable();
+                } else {
+                    // alert('createInvoiceDOGrid disable '+1);
+                    Ext.getCmp('createInvoiceDOGrid').disable();
+                }
             } else {
                 Ext.getCmp('createInvoiceDOGrid').disable();
+                // alert('createInvoiceDOGrid disable '+2);
             }
+
+
 
             // if (record.data.status * 1 === 5 || record.data.status * 1 === 6) {
             Ext.getCmp('createDOformGrid').enable();
@@ -117,10 +125,6 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             dataIndex: 'idcustomer',
             hidden: true
         }, {
-            header: 'noinvoice',
-            dataIndex: 'noinvoice',
-            hidden: true
-        }, {
             header: 'idsales',
             dataIndex: 'idsales',
             hidden: true
@@ -129,13 +133,50 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             header: 'job_order_id',
             dataIndex: 'job_order_id',
             hidden: true
+        },
+
+        {
+            header: 'No Delivery',
+            dataIndex: 'no_do',
+            minWidth: 150
+        },
+        {
+            header: 'Status',
+            dataIndex: 'status_do',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right',
+            renderer: function(value) {
+                return customColumnStatus(ArrDeliveryOrder, value);
+            }
+        },
+
+        {
+            header: 'Customer Name',
+            dataIndex: 'namecustomer',
+            minWidth: 150
+        },
+        {
+            header: 'Delivery Order Date',
+            dataIndex: 'delivery_date',
+            minWidth: 150
         }, {
             header: 'No Sales Order',
             dataIndex: 'no_sales_order',
             minWidth: 150
         },
         {
+            header: 'No Invoice',
+            dataIndex: 'noinvoice'
+        }, 
+        {
+            header: 'Date Sales',
+            dataIndex: 'date_sales',
+            minWidth: 150
+        },
+        {
             header: 'Status Sales',
+            hidden: true,
             dataIndex: 'status',
             minWidth: 150,
             xtype: 'numbercolumn',
@@ -146,6 +187,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         },
         {
             header: 'Status Production',
+            hidden:true,
             dataIndex: 'statuswo',
             minWidth: 150,
             xtype: 'numbercolumn',
@@ -153,26 +195,6 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             renderer: function(value) {
                 return customColumnStatus(arrWorkOrderStatus, value);
             }
-        },
-        {
-            header: 'No Delivery',
-            dataIndex: 'no_do',
-            minWidth: 150
-        },
-        {
-            header: 'Delivery Order Date',
-            dataIndex: 'delivery_date',
-            minWidth: 150
-        },
-        {
-            header: 'Date Sales',
-            dataIndex: 'date_sales',
-            minWidth: 150
-        },
-        {
-            header: 'Customer Name',
-            dataIndex: 'namecustomer',
-            minWidth: 150
         },
         {
             header: 'Subtotal',
@@ -225,7 +247,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
 
         {
             header: 'Total Ordered Qty',
-            dataIndex: 'totalitem',
+            dataIndex: 'total_qty_order',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
@@ -233,7 +255,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
 
         {
             header: 'Total Shipped Qty',
-            dataIndex: 'totalitemkirim',
+            dataIndex: 'total_qty_kirim',
             minWidth: 150,
             xtype: 'numbercolumn',
             align: 'right'
@@ -264,7 +286,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                     format: 'd/m/Y',
                     // value: datenow(),
                     hideLabel: true
-                        // fieldLabel: 'Date Order',
+                    // fieldLabel: 'Date Order',
                 }, '-',
                 {
                     xtype: 'comboxunit',
@@ -299,20 +321,44 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
         }, {
             xtype: 'toolbar',
             dock: 'top',
-            items: [
-                {
+            items: [{
                     text: 'Create Delivery Order',
                     iconCls: 'add-icon',
-                    handler: function () {
+                    handler: function() {
                         WindowEntryDeliveryOrder.show();
+
+                        Ext.getCmp('EntryDeliveryOrder').getForm().reset();
+
+                        var GridItemDeliveryOrderStore = Ext.getCmp('GridItemDeliveryOrder').getStore();
+
+                        GridItemDeliveryOrderStore.on('beforeload', function(store, operation, eOpts) {
+                            operation.params = {
+                                            'extraparams':'a.id_tmp:' + 0
+                                        };
+                        });
+                        GridItemDeliveryOrderStore.load();
+                         // Ext.getCmp('GridItemDeliveryOrder').getStore().load({
+                         //                params: {
+                         //                    'extraparams':'a.id_tmp:' + 0
+                         //                }
+                         //            });
+
                         Ext.getCmp('id_tmp_do').setValue(randomString(25));
                         Ext.getCmp('delivery_order_id_do').setValue(null);
-                        
+                        Ext.getCmp('status_formdo').setValue(1);
+                        Ext.getCmp('status_formdo').setReadOnly(true);
+
+                        Ext.getCmp('btnSaveDo').setDisabled(false);
+                        Ext.getCmp('addItemFormDO').setDisabled(false);
+                        Ext.getCmp('editItemFormDO').setDisabled(false);
+                        Ext.getCmp('delItemFormDO').setDisabled(false);
+
                         // Ext.getCmp('GridSalesOrderList').getStore().load();
                     },
                 },
                 {
                     id: 'btnPickingNote',
+                    hidden: true,
                     text: 'Print Picking Note',
                     iconCls: 'print-icon',
                     handler: function() {
@@ -380,6 +426,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                     iconCls: 'add-icon',
                     handler: function() {
                         WindowSaleOrderList.show();
+
                         Ext.getCmp('GridSalesOrderList').getStore().load();
 
                         storeCustomer.load();
@@ -389,12 +436,16 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                         // storeGridSalesOrderList.load();
 
                         //apus dulu data di grid entry delivery order
-                        Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
-                        Ext.getCmp('EntryDeliveryOrder').getStore().sync();
+                        // Ext.getCmp('EntryDeliveryOrder').getStore().removeAll();
+                        // Ext.getCmp('EntryDeliveryOrder').getStore().sync();
+
+                        Ext.getCmp('status_formdo').setValue(1);
+                        Ext.getCmp('status_formdo').setReadOnly(true);
                     }
                 },
                 {
                     id: 'createDOformGrid',
+                    hidden: true,
                     disabled: true,
                     text: 'Set Delivery Order',
                     iconCls: 'edit-icon',
@@ -441,128 +492,71 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                         }
                     }
                 },
-                {
-                    id: 'createInvoiceDOGrid',
-                    disabled: true,
-                    text: 'Create Invoice',
-                    iconCls: 'edit-icon',
-                    handler: function() {
-                        var grid = Ext.ComponentQuery.query('deliveryOrderGrid')[0];
-                        // var grid = Ext.getCmp('GriddeliveryOrderGridID');
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                        var data = grid.getSelectionModel().getSelection();
-                        if (data.length == 0) {
-                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                        } else {
-
-                            if (selectedRecord.data.noinvoice !== null) {
-                                Ext.Msg.alert('Failure', 'Invoice untuk data Delivery Order terpilih sudah terbentuk. Silahkan pilih data Delivery Order yang lain');
-                            } else {
-                                WindowEntrySalesInvoice.show();
-
-                                var EntrySalesInvoice = Ext.getCmp('EntrySalesInvoice').getStore();
-                                EntrySalesInvoice.removeAll();
-                                EntrySalesInvoice.sync();
-
-                                loadDataFormInvoice(selectedRecord.data.idsales);
-
-                                Ext.getCmp('btnRecordSalesOrderInvoice').show();
-
-                                Ext.getCmp('WindowEntrySalesInvoice').setTitle('Create Sales Invoice');
-
-                                // console.log(Ext.getCmp('totalSalesInvoice_si').getValue());
-
-                                // Ext.getCmp('pembayaranSalesInvoice_si').setValue(renderNomor(0));
-                                // Ext.getCmp('angkutSalesInvoice_si').setValue(0);
-                                // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(213213));
-
-
-
-                            }
-                        }
-                    }
-                },
+                
                 {
                     text: 'Set Status',
                     iconCls: 'edit-icon',
                     menu: [{
-                        text: 'Closed',
-                        handler: function() {
-                            // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
-                            var grid = Ext.getCmp('deliveryOrderGrid');
-                            var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                            var data = grid.getSelectionModel().getSelection();
-                            if (data.length == 0) {
-                                Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                            } else {
-                                if (selectedRecord.data.status * 1 == 4) {
-                                    Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
-                                } else if (selectedRecord.data.noinvoice === null || selectedRecord.data.noinvoice === '') {
-                                    Ext.Msg.alert('Failure', 'Mohon buat invoice terlebih dahulu');
-                                }
-                                // else if (selectedRecord.data.status * 1 == 8) {
-                                //     Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
-                                // } 
-                                else {
-                                    Ext.Ajax.request({
-                                        url: SITE_URL + 'sales/set_status',
-                                        method: 'POST',
-                                        params: {
-                                            status: 4,
-                                            idunit: Ext.getCmp('idunit_grddo').getValue(),
-                                            idsales: selectedRecord.data.idsales
-                                        },
-                                        success: function(form, action) {
-                                            var d = Ext.decode(form.responseText);
-                                            Ext.Msg.alert('Informasi', d.message);
-                                        },
-                                        failure: function(form, action) {
-                                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                        }
-                                    });
-                                }
-
-                            }
-                        }
-                    },
-
-               {
-                       text: 'Batalkan Pengiriman',
-                       disabled:btnDisableCancelDO,
-                       iconCls: 'delete-icon',
-                       handler: function() {
-                            var grid = Ext.getCmp('deliveryOrderGrid');
-                        // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
-                           var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                           var data = grid.getSelectionModel().getSelection();
-                           if (data.length == 0)
-                           {
-                               Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
-                           } else {
-
-                              if(selectedRecord.data.delivery_order_id==null){
-                                Ext.Msg.alert('Informasi', 'Tidak bisa melakukan pembatalan untuk data yang memiliki nomor delivery order');
-                                return false;
-                              }
-
-                              if(selectedRecord.data.status=='8'){
-                                Ext.Msg.alert('Informasi', 'Mohon untuk membatalkan invoice terlebih dahulu untuk melakukan pembatalan delivery order');
-                                return false;
-                              }
-
-                              
-                              Ext.Msg.show({
-                                 title: 'Konfirmasi',
-                                 msg: 'Apakah anda yakin untuk membatalkan pengiriman barang ?',
-                                 buttons: Ext.Msg.YESNO,
-                                 fn: function(btn) {
-                                     if (btn == 'yes') {
-                                        console.log(selectedRecord.data.delivery_order_id);
-                                          Ext.Ajax.request({
-                                            url: SITE_URL + 'sales/cancel_do',
+                            text: 'Confirm',
+                            handler: function() {
+                                // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                                var grid = Ext.getCmp('deliveryOrderGrid');
+                                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                                var data = grid.getSelectionModel().getSelection();
+                                if (data.length == 0) {
+                                    Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                                } else {
+                                    if (selectedRecord.data.status * 1 == 2) {
+                                        Ext.Msg.alert('Failure', 'Data sudah dikonfirmasi');
+                                    } else {
+                                        Ext.Ajax.request({
+                                            url: SITE_URL + 'sales/set_status_do',
                                             method: 'POST',
                                             params: {
+                                                status: 2,
+                                                idunit: Ext.getCmp('idunit_grddo').getValue(),
+                                                delivery_order_id: selectedRecord.data.delivery_order_id
+                                            },
+                                            success: function(form, action) {
+                                                var d = Ext.decode(form.responseText);
+                                                Ext.Msg.alert('Informasi', d.message);
+                                                Ext.getCmp('deliveryOrderGrid').getStore().load();
+                                            },
+                                            failure: function(form, action) {
+                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                            }
+                                        });
+                                    }
+
+                                }
+                            }
+                        }, {
+                            text: 'Closed',
+                            handler: function() {
+                                // var grid = Ext.ComponentQuery.query('GriddeliveryOrderGridID')[0];
+                                var grid = Ext.getCmp('deliveryOrderGrid');
+                                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                                var data = grid.getSelectionModel().getSelection();
+                                if (data.length == 0) {
+                                    Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                                } else {
+                                    if (selectedRecord.data.status_do * 1 == 6) {
+                                        Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
+                                    } else if (selectedRecord.data.noinvoice === null || selectedRecord.data.noinvoice === '') {
+                                        Ext.Msg.alert('Failure', 'Mohon buat invoice terlebih dahulu');
+                                    }
+                                    // else if (selectedRecord.data.status * 1 == 8) {
+                                    //     Ext.Msg.alert('Failure', 'Data sales sudah berstatus closed');
+                                    // } 
+                                    else {
+                                        Ext.Ajax.request({
+                                            url: SITE_URL + 'sales/set_status_do',
+                                            method: 'POST',
+                                            params: {
+                                                status: 6,
+                                                idunit: Ext.getCmp('idunit_grddo').getValue(),
                                                 delivery_order_id: selectedRecord.data.delivery_order_id,
+                                                no_do: selectedRecord.data.no_do
                                             },
                                             success: function(form, action) {
                                                 var d = Ext.decode(form.responseText);
@@ -571,20 +565,78 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                                storeGriddeliveryOrderGrid.load();
                                             }
-                                          });
-                                         
-                                     }
-                                 }
-                             });
-                          }
-                           
-                       }
-               }],
+                                        });
+                                    }
+
+                                }
+                            }
+                        },
+
+                        {
+                            text: 'Cancel Delivery',
+                            disabled: btnDisableCancelDO,
+                            iconCls: 'delete-icon',
+                            handler: function() {
+                                var grid = Ext.getCmp('deliveryOrderGrid');
+                                // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
+                                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                                var data = grid.getSelectionModel().getSelection();
+                                if (data.length == 0) {
+                                    Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
+                                } else {
+
+                                    if (selectedRecord.data.delivery_order_id == null) {
+                                        Ext.Msg.alert('Informasi', 'Tidak bisa melakukan pembatalan untuk data yang memiliki nomor delivery order');
+                                        return false;
+                                    }
+
+                                    if (selectedRecord.data.noinvoice !== null) {
+                                        Ext.Msg.alert('Informasi', 'Mohon untuk membatalkan invoice terlebih dahulu untuk melakukan pembatalan delivery order');
+                                        return false;
+                                    }
+
+                                    if (selectedRecord.data.status_do !== '6') {
+                                        Ext.Msg.alert('Informasi', 'Pembatalan hanya untuk delivery order yang sudah berada dalam status <b>Closed</b>');
+                                        return false;
+                                    }
+
+                                    Ext.Msg.show({
+                                        title: 'Konfirmasi',
+                                        msg: 'Apakah anda yakin untuk membatalkan pengiriman barang ?',
+                                        buttons: Ext.Msg.YESNO,
+                                        fn: function(btn) {
+                                            if (btn == 'yes') {
+                                                console.log(selectedRecord.data.delivery_order_id);
+                                                Ext.Ajax.request({
+                                                    url: SITE_URL + 'sales/cancel_do',
+                                                    method: 'POST',
+                                                    params: {
+                                                        delivery_order_id: selectedRecord.data.delivery_order_id,
+                                                    },
+                                                    success: function(form, action) {
+                                                        var d = Ext.decode(form.responseText);
+                                                        Ext.Msg.alert('Informasi', d.message);
+                                                        storeGriddeliveryOrderGrid.load();
+                                                    },
+                                                    failure: function(form, action) {
+                                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                                        storeGriddeliveryOrderGrid.load();
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    });
+                                }
+
+                            }
+                        }
+                    ],
 
 
                 },
+
                 {
                     itemId: 'editdeliveryOrderGrid',
                     text: 'Ubah',
@@ -645,6 +697,49 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                     //                    disabled: true
                 },
                 '->',
+                {
+                    id: 'createInvoiceDOGrid',
+                    disabled: true,
+                    text: 'Create Invoice',
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        var grid = Ext.ComponentQuery.query('deliveryOrderGrid')[0];
+                        // var grid = Ext.getCmp('GriddeliveryOrderGridID');
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0) {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+
+                            if (selectedRecord.data.noinvoice !== null) {
+                                Ext.Msg.alert('Failure', 'Invoice untuk data Delivery Order terpilih sudah terbentuk. Silahkan pilih data Delivery Order yang lain');
+                            } else {
+                                WindowEntrySalesInvoice.show();
+
+                                var EntrySalesInvoice = Ext.getCmp('EntrySalesInvoice').getStore();
+                                EntrySalesInvoice.removeAll();
+                                EntrySalesInvoice.sync();
+
+                                loadDataFormInvoiceDO(selectedRecord.data.delivery_order_id);
+
+                                Ext.getCmp('delivery_order_id_si').setValue(selectedRecord.data.delivery_order_id);
+
+                                Ext.getCmp('btnRecordSalesOrderInvoice').show();
+
+                                Ext.getCmp('WindowEntrySalesInvoice').setTitle('Create Sales Invoice');
+
+                                // console.log(Ext.getCmp('totalSalesInvoice_si').getValue());
+
+                                // Ext.getCmp('pembayaranSalesInvoice_si').setValue(renderNomor(0));
+                                // Ext.getCmp('angkutSalesInvoice_si').setValue(0);
+                                // Ext.getCmp('sisaBayarSalesInvoice_si').setValue(renderNomor(213213));
+
+
+
+                            }
+                        }
+                    }
+                },
                 'Pencarian: ',
                 ' ',
                 {
@@ -658,7 +753,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             store: storeGriddeliveryOrderGrid, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
-                // pageSize:20
+            // pageSize:20
         }
     ],
     listeners: {
@@ -670,6 +765,13 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
+            console.log(record)
+            WindowEntryDeliveryOrder.show();
+            Ext.getCmp('id_tmp_do').setValue(null);
+
+            loadDataFormDO(record.data.delivery_order_id);
+
+            // Ext.getCmp('deliveryOrderGrid').getStore().load();
             // loadMemberForm(record.data.id_member)
         }
     }
@@ -833,7 +935,7 @@ function formDO(selectedRecord) {
                     ratetax: obj.ratetax * 1,
                     qtysisakirim: obj.qtysisakirim * 1,
                     qty_kirim: 1
-                        //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
+                    //                        ratetax: Ext.getCmp('ratetaxjurnal').getValue()
                 });
 
 

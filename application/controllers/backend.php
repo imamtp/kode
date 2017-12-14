@@ -25,6 +25,37 @@ class Backend extends MY_Controller {
         
     }
 
+
+    function check_stock_rm($job_order_id,$prod_material_id){
+        $q  = $this->db->query("select a.idinventory,b.idinventory_parent,a.qty,b.sku_no,b.invno,a.job_item_id
+                from prod_material a 
+                join inventory b ON a.idinventory  = b.idinventory
+                where a.job_order_id = ".$job_order_id." and a.prod_material_id = ".$prod_material_id."")->row();
+
+        $q2  = $this->db->query("select job_item_id,size
+                from job_item 
+                where job_order_id = ".$job_order_id." and job_item_id = ".$q->job_item_id." ")->row();
+
+        $q3 = $this->db->query("SELECT b.stock
+                from inventory a 
+                join warehouse_stock b ON a.idinventory = b.idinventory
+                where a.idinventory = ".$q->idinventory." ");
+
+        if($q3->num_rows()>0){
+            $r3 = $q3->row();
+
+            if($r3->stock<$q->qty){
+                return 2; //invalid
+            } else {
+                return 1; //valid
+            }
+        } else {
+            return 2; //invalid
+        }
+        
+    }
+
+
     function loadFormData($data, $id = null, $dir = null) {
 
         if ($dir != null) {
@@ -898,7 +929,11 @@ class Backend extends MY_Controller {
         // echo $sql;       
         $arr = array();
         foreach ($query_page->result() as $obj) {
-            
+                
+            // if($table=='ItemMaterialWO'){
+            //     $obj->valid = $this->check_stock_rm($obj->job_order_id,$obj->prod_material_id);
+            // }
+
             if($table=='clossinginvgrid')
             {
                 if($obj->assetaccount==null || $obj->akumpenyusutaccount==null || $obj->depresiasiaccount==null)

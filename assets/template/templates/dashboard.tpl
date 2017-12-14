@@ -57,6 +57,10 @@
         .my-green-field {
             background-color: #e8f5e9;
         }
+        .custom .x-grid-cell {
+            background-color: yellow;
+            color: red;
+        }
     </style>
 
     <script type="text/javascript">

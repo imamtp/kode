@@ -3,7 +3,7 @@
 Ext.define('GridWorkOrderListModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'namecusomer'
+        'job_order_id', 'idsales', 'idunit', 'startdate_job', 'enddate_job', 'job_no', 'req_ship_date', 'status', 'remarks', 'datesales', 'no_sales_order', 'date_sales', 'totaljob', 'totalraw', 'totalbom', 'namecustomer'
     ],
     idProperty: 'id'
 });
@@ -94,6 +94,7 @@ Ext.define('GridWorkOrderList', {
 
                 Ext.getCmp('WindowEntryWorkOrder').setTitle('Entry Work Order Schedule');
 
+                Ext.getCmp('addItemJobWoBtn').setDisabled(true);
 
                 // Ext.getCmp('idsales_schedulewoform').setValue(selectedRecord.get('idsales'));
                 // Ext.getCmp('job_order_id_schedulewoform').setValue(selectedRecord.get('job_order_id'));

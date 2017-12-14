@@ -142,7 +142,7 @@ var formInputBatchMaterialWo = Ext.create('Ext.form.Panel', {
         {
             xtype: 'numericfield',
             fieldLabel: 'Qty',
-            minValue:1,
+            // minValue:1,
             allowBlank: false,
             name: 'qty'
         },

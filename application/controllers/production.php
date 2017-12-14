@@ -11,6 +11,15 @@ class production extends MY_Controller
     {
     }
 
+    function get_unit($id){
+        if($id==null){
+            return null;
+        }
+
+        $q = $this->db->get_where('productmeasurement',array('measurement_id'=>$id))->row();
+        return $q->short_desc;
+    }
+
     function savewo()
     {
         $params = array(
@@ -52,8 +61,95 @@ class production extends MY_Controller
             'remarks' => $this->input->post('remarks'),
             
         );
+        
 
-      
+        //cek stok raw material
+        $q = $this->db->query("select job_item_id,size
+                                from job_item
+                                where job_order_id = ".$this->input->post('job_order_id')." ");
+        foreach ($q->result() as $r) {
+            $q2 = $this->db->query("select a.idinventory,b.idinventory_parent,a.qty,b.sku_no,b.invno,a.measurement_id as measurement_id_mat,b.measurement_id_one,b.measurement_id_two,b.measurement_id_tre
+                                    from prod_material a 
+                                    join inventory b ON a.idinventory  = b.idinventory
+                                    where a.job_order_id = ".$this->input->post('job_order_id')." and a.job_item_id = ".$r->job_item_id." ");
+            foreach ($q2->result() as $r2) {
+
+                $valid = false;
+
+                //cek stok
+                $qstok = $this->db->query("select 
+                                                b.sku_no, 
+                                                b.nameinventory, 
+                                                coalesce(sum(stock),0) as stock_one, 
+                                                coalesce((sum(stock)/b.ratio_two),0) as stock_two, 
+                                                coalesce((sum(stock)/b.ratio_tre),0) as stock_tre
+                                            from warehouse_stock a
+                                            join inventory b on b.idinventory = a.idinventory 
+                                            where a.idinventory = ".$r2->idinventory." and b.grouped is null
+                                            group by b.sku_no,b.nameinventory,b.ratio_two,b.ratio_tre");
+                if($qstok->num_rows()>0){
+                    $rstok = $qstok->row();
+
+                    if($r2->measurement_id_mat == $r2->measurement_id_one){
+                        $stok = $rstok->stock_one;
+                        $valid = true;
+                    } else if($r2->measurement_id_mat == $r2->measurement_id_two){
+                        $stok = $rstok->stock_two;
+                        $valid = true;
+                    } else if($r2->measurement_id_mat == $r2->measurement_id_tre){
+                        $stok = $rstok->stock_tre;
+                        $valid = true;
+                    } else {
+                         $json = array('success'=>false,'message'=>'Satuan untuk kode Material <b>'.$r2->invno.'</b> salah
+                             <br><br>Satuan Stok:<br>
+                            Satuan #1 : '.$this->get_unit($r2->measurement_id_one).'<br>
+                            Satuan #2 : '.$this->get_unit($r2->measurement_id_two).'<br>
+                            Satuan #3 : '.$this->get_unit($r2->measurement_id_tre).'<br>');
+                         echo json_encode($json); die;
+                    }
+
+                    if($stok<$r2->qty){
+                        $json = array('success'=>false,'message'=>'Stok untuk kode Material <b>'.$r2->invno.'</b> tidak mencukupi 
+                            <br><br>Status Stok:<br>
+                            Stok #1 : '.number_format($rstok->stock_one,2).' '.$this->get_unit($r2->measurement_id_one).'<br>
+                            Stok #2 : '.number_format($rstok->stock_two,2).' '.$this->get_unit($r2->measurement_id_two).'<br>
+                            Stok #3 : '.number_format($rstok->stock_tre,2).' '.$this->get_unit($r2->measurement_id_tre).'<br>
+                            ');
+                        echo json_encode($json); die;
+                    }
+                } else {
+                    $json = array('success'=>false,'message'=>'Kode Material <b>'.$r2->invno.'</b> belum ada di gudang');
+                    echo json_encode($json); die;
+                }
+
+               //cek satuannya udah sesuai apa belum
+               //  $unit_one = false;
+               //  $unit_two = false;
+               //  $unit_tre = false;
+               //  if($r2->measurement_id_mat == $r2->measurement_id_one){
+               //      $unit_one = true;
+               //  }
+
+               // $q3 = $this->db->query("SELECT b.stock
+               //                              from inventory a 
+               //                              join warehouse_stock b ON a.idinventory = b.idinventory
+               //                              where a.idinventory = ".$r2->idinventory." ");
+               //  if($q3->num_rows()>0){
+               //      $r3 = $q3->row();
+
+               //      if($r3->stock<$r2->qty){
+               //          $json = array('success'=>false,'message'=>'Stok untuk kode Material <b>'.$r2->invno.'</b> tidak mencukupi');
+               //          echo json_encode($json); die;
+               //      }
+               //  } else {
+               //      $json = array('success'=>false,'message'=>'Kode Material <b>'.$r2->invno.'</b> belum ada di gudang');
+               //      echo json_encode($json); die;
+               //  }
+            }
+        }
+        
+        // echo $this->db->last_query(); die;
+
         if ($statusform == 'input') {
             if ($this->input->post('token_tmp')!='') {
                 $data['usermod'] = $this->session->userdata('userid');
@@ -440,26 +536,45 @@ class production extends MY_Controller
                 //hitung hpp fg accept
                 if(!$this->m_stock->update_hpp($value->idinventory,$idunit, 3, 'in',$balance_item,$qty_item, 'null', 'null', $job_order_id)){
                     $this->db->trans_rollback();
-                    $json = array('success'=>false,'message'=>'Terajadi kesalahan saat hitung hpp');
+                    $json = array('success'=>false,'message'=>'Terjadi kesalahan saat hitung hpp');
                     echo json_encode($json);
                     exit();
                 }
-                
-                //insert FG accept ke inventory 
-                $inv = array(
-                    'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
-                    'idinventory_parent'=> $value->idinventory,
-                    'ratio_two'=> $value->size,
-                    'cost'=> $r->cost_prod,
-                    'idunit'=> $idunit,
-                    'userin'=> $this->session->userdata('userid'),
-                    'datein'=> date('Y-m-d H:i:s'),
-                    'no_transaction'=> $job_no,
-                );
-                $this->db->insert('inventory', $inv);
 
-                //insert data FG ke warehouse_stock dan log ke dalam stock_history 
-                $this->m_stock->update_history(12,$qty_item, $inv['idinventory'],$inv['idinventory_parent'],$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                /*
+                    cek dulu di inventory dan warehouse_stock. udah ada belum inventory yang rasionya yg sama di gudang yang sama
+                */
+                $qcek = $this->db->query("select a.idinventory
+                                            from inventory a
+                                            join warehouse_stock b ON a.idinventory = b.idinventory
+                                            where a.idinventory_parent = ".$value->idinventory." and a.ratio_two = ".$value->size." and b.warehouse_id = ".$warehouse_id_accept." and a.grouped is null
+                                            order by idinventory desc
+                                            limit 1");
+
+                // echo $this->db->last_query();
+
+                if($qcek->num_rows()>0){
+                    $rqcek = $qcek->row();
+                    //insert data FG ke warehouse_stock dan log ke dalam stock_history 
+                    $this->m_stock->update_history_v2(12,$qty_item, $rqcek->idinventory,$value->size,$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                } else {
+                      //insert FG accept ke inventory 
+                        $inv = array(
+                            'idinventory'=> $this->m_data->getPrimaryID(null,'inventory', 'idinventory', $this->input->post('idunit')),
+                            'idinventory_parent'=> $value->idinventory,
+                            'ratio_two'=> $value->size,
+                            'cost'=> $r->cost_prod,
+                            'idunit'=> $idunit,
+                            'userin'=> $this->session->userdata('userid'),
+                            'datein'=> date('Y-m-d H:i:s'),
+                            'no_transaction'=> $job_no,
+                        );
+                        $this->db->insert('inventory', $inv);
+
+                    //insert data FG ke warehouse_stock dan log ke dalam stock_history 
+                    $this->m_stock->update_history(12,$qty_item, $inv['idinventory'],$inv['idinventory_parent'],$idunit,$warehouse_id_accept,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+                }
+                
 
                 //disable sementara
                 // if ($value->qty_reject != 0) {
@@ -518,6 +633,45 @@ class production extends MY_Controller
             //         }                        
             //     }
             // }
+
+            //update status penerimaan material jika ada sisa
+            $q  = $this->db->query("select prod_material_id
+                            from prod_material
+                            where job_order_id = $job_order_id");
+            // echo $this->db->last_query();
+            foreach ($q->result() as $r) {
+                $q2  = $this->db->query("select idinventory,qty,warehouse_id
+                                            from prod_material_receipt
+                                            where prod_material_id = ".$r->prod_material_id." ");
+                // echo $this->db->last_query();
+                foreach ($q2->result() as $rr) {
+                    if($rr->qty>0){
+
+                        $this->m_stock->update_history_v2($this->session->userdata('idunit'),$rr->qty,$rr->idinventory,null,$this->session->userdata('idunit'),$rr->warehouse_id,date('Y-m-d'),'Update accepted stock from Work Order: '.$job_no, $idjournal_receive_wo, $job_no);
+
+                        // echo $this->db->last_query();
+                        // $qcek = $this->db->get_where('warehouse_stock',array('idinventory'=>$rr->idinventory,'warehouse_id'=>$rr->warehouse_id));
+                        // if($qcek->num_rows()>0){
+                        //     $rcek = $qcek->row();
+                        //     $new_balance = $rcek->stock + $rr->qty;
+
+                        //     $this->db->where(array('idinventory'=>$rr->idinventory,'warehouse_id'=>$rr->warehouse_id));
+                        //     $this->db->update('warehouse_stock',array('stock'=>$new_balance));
+                        // } else {
+                        //     $this->db->insert('warehouse_stock',
+                        //         array(
+                        //             'stock'=>$rr->qty,
+                        //             'idinventory'=>$rr->idinventory,
+                        //             'warehouse_id'=>$rr->warehouse_id,
+                        //             'idunit'=>$this->session->userdata('idunit'),
+                        //             'datemod'=>date('Y-m-d H:m:s')
+                        //         )
+                        //     );
+                        // }
+                    }
+                }
+            }
+
         }
 
         //start grid material
@@ -683,6 +837,22 @@ class production extends MY_Controller
         }
     }
 
+    function delete_grid_fg(){
+        $this->db->trans_begin();
+
+        $this->db->where('job_order_id',$this->input->post('job_order_id'));
+        $this->db->delete('job_item');
+
+         if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        } else {
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The data has been deleted succsessfully');
+        }
+        echo json_encode($json);
+    }
+
     function save_fg()
     {
         // saving finished goods
@@ -811,8 +981,7 @@ class production extends MY_Controller
 
             $this->db->insert('prod_material', $data_material);
         }
-        
-
+        // echo $this->db->last_query();
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             $json = array('success'=>false,'message'=>'An unknown error was occured');

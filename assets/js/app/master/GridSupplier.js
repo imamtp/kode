@@ -107,7 +107,7 @@ Ext.define(dir_sys + 'master.GridSupplier', {
                             }
                             return true;
                         });
-                        formSupplier.loadRecord(data);
+                        FormSupplier.loadRecord(data);
                         FormSupplier.show();
                     }
                 }

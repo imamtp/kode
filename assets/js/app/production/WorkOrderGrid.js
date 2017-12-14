@@ -210,6 +210,8 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
                         }
                         Ext.getCmp('WindowEntryWorkOrder').show()
 
+                        Ext.getCmp('addItemJobWoBtn').setDisabled(false);
+
                         //hapus form
                         // var WorkOrderMaterialTab = Ext.getCmp('WorkOrderMaterialTab').getStore();
                         // WorkOrderMaterialTab.removeAll();
@@ -391,6 +393,8 @@ Ext.define(dir_sys + 'production.WorkOrderGrid', {
             Ext.get('start_date_schedulewoform').hide();
             Ext.get('end_date_schedulewoform').hide();
             Ext.get('pic_name_schedulewoform').hide();
+
+            Ext.getCmp('addItemJobWoBtn').setDisabled(false);
         }
     }
 });

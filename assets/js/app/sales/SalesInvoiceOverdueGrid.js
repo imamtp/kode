@@ -1,7 +1,7 @@
 Ext.define('SalesInvoiceOverdueGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'Overduetoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur'
+        'idsales','idjournal', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'Overduetoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur','no_do'
     ],
     idProperty: 'id'
 });
@@ -69,15 +69,23 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
             header: 'idsales',
             dataIndex: 'idsales',
             hidden: true
-        }, {
-            header: 'No Sales',
-            dataIndex: 'no_sales_order',
-            // hidden: true
+        },{
+            header: 'idjournal',
+            dataIndex: 'idjournal',
+            hidden: true
         }, {
             header: 'No Invoice',
             dataIndex: 'noinvoice',
             // hidden: true
         }, {
+            header: 'No Delivery',
+            dataIndex: 'no_do',
+            // hidden: true
+        },   {
+            header: 'No Sales',
+            dataIndex: 'no_sales_order',
+            // hidden: true
+        },  {
             header: 'No Faktur',
             dataIndex: 'no_faktur',
             minWidth: 130,
@@ -197,6 +205,19 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
                 id: 'idunit_grdsi_od',
+            },
+            {
+                text: 'Search',
+                handler: function() {
+                    storeGridSalesInvoiceOverdueGrid.load();
+                }
+            }, {
+                text: 'Clear Filter',
+                handler: function() {
+                    Ext.getCmp('startdate_grdsi_od').setValue();
+                    Ext.getCmp('enddate_grdsi_od').setValue();
+                    storeGridSalesInvoiceOverdueGrid.load();
+                }
             }
         ]
     }, {
@@ -217,46 +238,35 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                         windowSalesPayment(selectedRecord.data);
                     }
                 }
-            }, {
-                itemId: 'createInvoiceOverdueGrid',
-                text: 'Print',
-                iconCls: 'print-icon',
-                handler: function() {
-                    var grid = Ext.ComponentQuery.query('SalesInvoiceOverdueGrid')[0];
-                    // var grid = Ext.getCmp('GridSalesInvoiceOverdueGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                    } else {
+            }, 
+            // {
+            //     itemId: 'createInvoiceOverdueGrid',
+            //     text: 'Print',
+            //     iconCls: 'print-icon',
+            //     handler: function() {
+            //         var grid = Ext.ComponentQuery.query('SalesInvoiceOverdueGrid')[0];
+            //         // var grid = Ext.getCmp('GridSalesInvoiceOverdueGridID');
+            //         var selectedRecord = grid.getSelectionModel().getSelection()[0];
+            //         var data = grid.getSelectionModel().getSelection();
+            //         if (data.length == 0) {
+            //             Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+            //         } else {
 
-                        if (selectedRecord.data.noInvoiceOverdue !== null) {
-                            Ext.Msg.alert('Failure', 'InvoiceOverdue untuk data Invoice Period terpilih sudah terbentuk. Silahkan pilih data Invoice Period yang lain');
-                        } else {
-                            WindowEntrySalesInvoiceOverdue.show();
+            //             if (selectedRecord.data.noInvoiceOverdue !== null) {
+            //                 Ext.Msg.alert('Failure', 'InvoiceOverdue untuk data Invoice Period terpilih sudah terbentuk. Silahkan pilih data Invoice Period yang lain');
+            //             } else {
+            //                 WindowEntrySalesInvoiceOverdue.show();
 
-                            var EntrySalesInvoiceOverdue = Ext.getCmp('EntrySalesInvoiceOverdue').getStore();
-                            EntrySalesInvoiceOverdue.removeAll();
-                            EntrySalesInvoiceOverdue.sync();
+            //                 var EntrySalesInvoiceOverdue = Ext.getCmp('EntrySalesInvoiceOverdue').getStore();
+            //                 EntrySalesInvoiceOverdue.removeAll();
+            //                 EntrySalesInvoiceOverdue.sync();
 
-                            loadDataFormInvoiceOverdue(selectedRecord.data.idsales);
-                        }
-                    }
-                }
-            },
+            //                 loadDataFormInvoiceOverdue(selectedRecord.data.idsales);
+            //             }
+            //         }
+            //     }
+            // },
             {
-                text: 'Search',
-                handler: function() {
-                    storeGridSalesInvoiceOverdueGrid.load();
-                }
-            }, {
-                text: 'Clear Filter',
-                handler: function() {
-                    Ext.getCmp('startdate_grdsi_od').setValue();
-                    Ext.getCmp('enddate_grdsi_od').setValue();
-                    storeGridSalesInvoiceOverdueGrid.load();
-                }
-            }, {
                 itemId: 'editSalesInvoiceOverdueGrid',
                 text: 'Ubah',
                 hidden: true,
@@ -344,6 +354,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                                                               method: 'POST',
                                                               params: {
                                                                   idsales: selectedRecord.data.idsales,
+                                                                  idjournal: selectedRecord.data.idjournal,
                                                                   idmenu: 95
                                                               },
                                                               success: function(form, action) {
@@ -395,6 +406,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceOverdueGrid', {
                                                           method: 'POST',
                                                           params: {
                                                               idsales: selectedRecord.data.idsales,
+                                                              idjournal: selectedRecord.data.idjournal,
                                                               idmenu: 95
                                                           },
                                                           success: function(form, action) {

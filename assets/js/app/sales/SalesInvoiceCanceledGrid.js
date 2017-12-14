@@ -1,13 +1,13 @@
-Ext.define('SalesInvoiceUnpaidGridModel', {
+Ext.define('SalesInvoiceCanceledGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-       'sales_invoice_id', 'idsales','idjournal', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur','no_do'
+       'sales_invoice_id', 'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur','no_do'
     ],
     idProperty: 'id'
 });
-var storeGridSalesInvoiceUnpaidGrid = Ext.create('Ext.data.Store', {
+var storeGridSalesInvoiceCanceledGrid = Ext.create('Ext.data.Store', {
     pageSize: 100,
-    model: 'SalesInvoiceUnpaidGridModel',
+    model: 'SalesInvoiceCanceledGridModel',
     //remoteSort: true,
     // autoload:true,
     proxy: {
@@ -26,46 +26,44 @@ var storeGridSalesInvoiceUnpaidGrid = Ext.create('Ext.data.Store', {
     }]
 });
 
-storeGridSalesInvoiceUnpaidGrid.on('beforeload', function(store, operation, eOpts) {
+storeGridSalesInvoiceCanceledGrid.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdsi_unpaid').getValue(),
-        'option': 'unpaid',
-        'invoice_status': '1,4', //unpaid and partialy paid
-        'startdate': Ext.getCmp('startdate_grdsi_unpaid').getValue(),
-        'enddate': Ext.getCmp('enddate_grdsi_unpaid').getValue()
+        'extraparams': 'a.idunit:' + Ext.getCmp('idunit_grdsi_canceled').getValue(),
+        'option': 'canceled',
+        'startdate': Ext.getCmp('startdate_grdsi_canceled').getValue(),
+        'enddate': Ext.getCmp('enddate_grdsi_canceled').getValue(),
     };
 });
 
-Ext.define('MY.searchGridSalesInvoiceUnpaidGrid', {
+Ext.define('MY.searchGridSalesInvoiceCanceledGrid', {
     extend: 'Ext.ux.form.SearchField',
-    alias: 'widget.searchGridSalesInvoiceUnpaidGrid',
-    store: storeGridSalesInvoiceUnpaidGrid,
+    alias: 'widget.searchGridSalesInvoiceCanceledGrid',
+    store: storeGridSalesInvoiceCanceledGrid,
     width: 180
 });
-var smGridSalesInvoiceUnpaidGrid = Ext.create('Ext.selection.CheckboxModel', {
+var smGridSalesInvoiceCanceledGrid = Ext.create('Ext.selection.CheckboxModel', {
     allowDeselect: true,
     mode: 'SINGLE',
     listeners: {
         deselect: function(model, record, index) {
-            var selectedLen = smGridSalesInvoiceUnpaidGrid.getSelection().length;
+            var selectedLen = smGridSalesInvoiceCanceledGrid.getSelection().length;
             if (selectedLen == 0) {
                 console.log(selectedLen);
-                Ext.getCmp('btnDeleteSalesInvoiceUnpaidGrid').disable();
+                Ext.getCmp('btnDeleteSalesInvoiceCanceledGrid').disable();
             }
         },
         select: function(model, record, index) {
-            console.log(record);
-            Ext.getCmp('btnDeleteSalesInvoiceUnpaidGrid').enable();
+            Ext.getCmp('btnDeleteSalesInvoiceCanceledGrid').enable();
         }
     }
 });
-Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
-    title: 'Unpaid',
-    itemId: 'SalesInvoiceUnpaidGrid',
-    id: 'SalesInvoiceUnpaidGrid',
+Ext.define(dir_sys + 'sales.SalesInvoiceCanceledGrid', {
+    title: 'Canceled',
+    itemId: 'SalesInvoiceCanceledGrid',
+    id: 'SalesInvoiceCanceledGrid',
     extend: 'Ext.grid.Panel',
-    alias: 'widget.SalesInvoiceUnpaidGrid',
-    store: storeGridSalesInvoiceUnpaidGrid,
+    alias: 'widget.SalesInvoiceCanceledGrid',
+    store: storeGridSalesInvoiceCanceledGrid,
     loadMask: true,
     columns: [{
             header: 'sales_invoice_id',
@@ -75,20 +73,11 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             header: 'idsales',
             dataIndex: 'idsales',
             hidden: true
-        },{
-            header: 'idjournal',
-            dataIndex: 'idjournal',
-            hidden: true
-        },
-         {
+        }, {
             header: 'No Invoice',
             dataIndex: 'noinvoice',
             // hidden: true
-        }, {
-            header: 'No Delivery',
-            dataIndex: 'no_do',
-            // hidden: true
-        },   {
+        },  {
             header: 'No Sales',
             dataIndex: 'no_sales_order',
             // hidden: true
@@ -100,7 +89,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
         }, {
             header: 'Customer',
             dataIndex: 'namecustomer',
-            minWidth: 200,
+            minWidth: 200
         },
         {
             header: 'Invoice Date',
@@ -114,7 +103,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             dataIndex: 'date_sales',
             minWidth: 150,
             xtype: 'datecolumn',
-            format: 'd-m-Y',
+            format: 'd-m-Y'
         },
         {
             header: 'Term Payment',
@@ -165,7 +154,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             align: 'right'
         },
         {
-            header: 'Total Unpaid',
+            header: 'Outstanding Payment',
             dataIndex: 'balance',
             minWidth: 150,
             xtype: 'numbercolumn',
@@ -194,7 +183,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
         dock: 'top',
         items: [{
                 xtype: 'datefield',
-                id: 'startdate_grdsi_unpaid',
+                id: 'startdate_grdsi_canceled',
                 format: 'd/m/Y',
                 // value: datenow(),
                 fieldLabel: 'Invoice Period',
@@ -202,7 +191,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             ' to ',
             {
                 xtype: 'datefield',
-                id: 'enddate_grdsi_unpaid',
+                id: 'enddate_grdsi_canceled',
                 format: 'd/m/Y',
                 // value: datenow(),
                 hideLabel: true
@@ -211,19 +200,19 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
             {
                 xtype: 'comboxunit',
                 valueField: 'idunit',
-                id: 'idunit_grdsi_unpaid',
+                id: 'idunit_grdsi_canceled',
             },
-             {
+            {
                 text: 'Search',
                 handler: function() {
-                    storeGridSalesInvoiceUnpaidGrid.load();
+                    storeGridSalesInvoiceCanceledGrid.load();
                 }
             }, {
                 text: 'Clear Filter',
                 handler: function() {
-                    Ext.getCmp('startdate_grdsi_unpaid').setValue();
-                    Ext.getCmp('enddate_grdsi_unpaid').setValue();
-                    storeGridSalesInvoiceUnpaidGrid.load();
+                    Ext.getCmp('startdate_grdsi_canceled').setValue();
+                    Ext.getCmp('enddate_grdsi_canceled').setValue();
+                    storeGridSalesInvoiceCanceledGrid.load();
                 }
             }
         ]
@@ -231,35 +220,18 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
         xtype: 'toolbar',
         dock: 'top',
         items: [{
-                itemId: 'paymentInvoiceUnpaidGrid',
-                text: 'Receive Payment',
-                iconCls: 'add-icon',
-                handler: function() {
-                    var grid = Ext.ComponentQuery.query('SalesInvoiceUnpaidGrid')[0];
-                    // var grid = Ext.getCmp('GridSalesInvoiceUnpaidGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                    } else {
-                        windowSalesPayment(selectedRecord.data);
-                        Ext.getCmp('accname_coa_paymentsales').setValue(null);
-                        Ext.getCmp('idaccount_coa_paymentsales').setValue(null);
-                    }
-                }
-            }, {
-                itemId: 'createInvoiceUnpaidGrid',
-                text: 'Print',
-                iconCls: 'print-icon',
-                handler: function() {
-                    var grid = Ext.ComponentQuery.query('SalesInvoiceUnpaidGrid')[0];
-                    // var grid = Ext.getCmp('GridSalesInvoiceUnpaidGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
-                    } else {
-                        Ext.create('Ext.window.Window', {
+            itemId: 'createInvoiceCanceledGrid',
+            text: 'Print',
+            iconCls: 'print-icon',
+            handler: function() {
+                var grid = Ext.ComponentQuery.query('SalesInvoiceCanceledGrid')[0];
+                // var grid = Ext.getCmp('GridSalesInvoiceCanceledGridID');
+                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                var data = grid.getSelectionModel().getSelection();
+                if (data.length == 0) {
+                    Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                } else {
+                     Ext.create('Ext.window.Window', {
                             title: 'Preview Invoice',
                             width: panelW,
                             modal: true,
@@ -277,68 +249,10 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                                 }
                             }]
                         }).show();
-                    }
                 }
-            }, {
-                itemId: 'editSalesInvoiceUnpaidGrid',
-                text: 'Ubah',
-                hidden: true,
-                iconCls: 'edit-icon',
-                handler: function() {
-                    // var grid = Ext.ComponentQuery.query('GridSalesInvoiceUnpaidGridID')[0];
-                    var grid = Ext.getCmp('GridSalesInvoiceUnpaidGridID');
-                    var selectedRecord = grid.getSelectionModel().getSelection()[0];
-                    var data = grid.getSelectionModel().getSelection();
-                    if (data.length == 0) {
-                        Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
-                    } else {
-                        loadMemberForm(selectedRecord.data.id_member)
-                    }
-                }
-            },
-             {
-                id: 'btnDeleteSalesInvoiceUnpaidGrid',
-                text: 'Hapus',
-                hidden: true,
-                iconCls: 'delete-icon',
-                handler: function() {
-                    Ext.Msg.show({
-                        title: 'Confirm',
-                        msg: 'Delete Selected ?',
-                        buttons: Ext.Msg.YESNO,
-                        fn: function(btn) {
-                            if (btn == 'yes') {
-                                var grid = Ext.getCmp('GridSalesInvoiceUnpaidGridID');
-                                var sm = grid.getSelectionModel();
-                                selected = [];
-                                Ext.each(sm.getSelection(), function(item) {
-                                    selected.push(item.data[Object.keys(item.data)[0]]);
-                                });
-                                Ext.Ajax.request({
-                                    url: SITE_URL + 'backend/ext_delete/SalesInvoiceUnpaidGrid',
-                                    method: 'POST',
-                                    params: {
-                                        postdata: Ext.encode(selected),
-                                        idmenu: 95
-                                    },
-                                    success: function(form, action) {
-                                        var d = Ext.decode(form.responseText);
-                                        if (!d.success) {
-                                            Ext.Msg.alert('Informasi', d.message);
-                                        }
-                                    },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                                    }
-                                });
-                                storeGridSalesInvoiceUnpaidGrid.load();
-                            }
-                        }
-                    });
-                },
-                //                    disabled: true
-            },
-            {
+            }
+        },
+        {
                 text: 'Batalkan Faktur',
                 iconCls: 'edit-icon',
                 menu: [
@@ -347,13 +261,15 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                             disabled:btnDisableCancelSalesInvoice,
                             iconCls: 'delete-icon',
                             handler: function() {
-                                var grid = Ext.getCmp('SalesInvoiceUnpaidGrid');
+                                var grid = Ext.getCmp('SalesInvoiceCanceledGrid');
+                                // var grid = Ext.ComponentQuery.query('SalesInvoiceCanceledGrid')[0];
                                 // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
                                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
                                 var data = grid.getSelectionModel().getSelection();
                                 if (data.length == 0) {
                                     Ext.Msg.alert('Failure', 'Pilih salah satu data terlebih dahulu!');
                                 } else {
+                                    console.log(selectedRecord)
                                        if(selectedRecord.data.invoice_status*1==5){
                                             Ext.Msg.alert('Failure', 'Data terpilih sudah dibatalkan.');
                                        } else {
@@ -375,7 +291,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                                                                   // if (!d.success) {
                                                                       Ext.Msg.alert('Informasi', d.message);
                                                                   // }
-                                                                  grid.getStore().load();
+                                                                  storeGridSalesInvoiceUnpaidGrid.load();
                                                                   setHeaderInvoice();
                                                               },
                                                               failure: function(form, action) {
@@ -397,7 +313,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                             disabled:btnDisableCancelSalesInvoice,
                             iconCls: 'delete-icon',
                             handler: function() {
-                                var grid = Ext.getCmp('SalesInvoiceUnpaidGrid');
+                                var grid = Ext.getCmp('SalesInvoiceCanceledGrid');
                                 // var grid = Ext.ComponentQuery.query('GridSpendMoney')[0];
                                 var selectedRecord = grid.getSelectionModel().getSelection()[0];
                                 var data = grid.getSelectionModel().getSelection();
@@ -426,7 +342,7 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                                                               // if (!d.success) {
                                                                   Ext.Msg.alert('Informasi', d.message);
                                                               // }
-                                                              grid.getStore().load();
+                                                              storeGridSalesInvoiceUnpaidGrid.load();
                                                               setHeaderInvoice();
                                                           },
                                                           failure: function(form, action) {
@@ -444,16 +360,70 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
                             }
                         }
                 ]
-            },
-            
-            '->', 'Search: ', ' ', {
-                xtype: 'searchGridSalesInvoiceUnpaidGrid',
-                text: 'Left Button'
+            }, {
+            itemId: 'editSalesInvoiceCanceledGrid',
+            text: 'Ubah',
+            hidden: true,
+            iconCls: 'edit-icon',
+            handler: function() {
+                // var grid = Ext.ComponentQuery.query('GridSalesInvoiceCanceledGridID')[0];
+                var grid = Ext.getCmp('GridSalesInvoiceCanceledGridID');
+                var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                var data = grid.getSelectionModel().getSelection();
+                if (data.length == 0) {
+                    Ext.Msg.alert('Failure', 'Pilih data anggota terlebih dahulu!');
+                } else {
+                    loadMemberForm(selectedRecord.data.id_member)
+                }
             }
-        ]
+        }, {
+            id: 'btnDeleteSalesInvoiceCanceledGrid',
+            text: 'Hapus',
+            hidden: true,
+            iconCls: 'delete-icon',
+            handler: function() {
+                Ext.Msg.show({
+                    title: 'Confirm',
+                    msg: 'Delete Selected ?',
+                    buttons: Ext.Msg.YESNO,
+                    fn: function(btn) {
+                        if (btn == 'yes') {
+                            var grid = Ext.getCmp('GridSalesInvoiceCanceledGridID');
+                            var sm = grid.getSelectionModel();
+                            selected = [];
+                            Ext.each(sm.getSelection(), function(item) {
+                                selected.push(item.data[Object.keys(item.data)[0]]);
+                            });
+                            Ext.Ajax.request({
+                                url: SITE_URL + 'backend/ext_delete/SalesInvoiceCanceledGrid',
+                                method: 'POST',
+                                params: {
+                                    postdata: Ext.encode(selected),
+                                    idmenu: 95
+                                },
+                                success: function(form, action) {
+                                    var d = Ext.decode(form.responseText);
+                                    if (!d.success) {
+                                        Ext.Msg.alert('Informasi', d.message);
+                                    }
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                }
+                            });
+                            storeGridSalesInvoiceCanceledGrid.load();
+                        }
+                    }
+                });
+            },
+            //                    disabled: true
+        }, '->', 'Search: ', ' ', {
+            xtype: 'searchGridSalesInvoiceCanceledGrid',
+            text: 'Left Button'
+        }]
     }, {
         xtype: 'pagingtoolbar',
-        store: storeGridSalesInvoiceUnpaidGrid, // same store GridPanel is using
+        store: storeGridSalesInvoiceCanceledGrid, // same store GridPanel is using
         dock: 'bottom',
         displayInfo: true
         // pageSize:20
@@ -462,13 +432,53 @@ Ext.define(dir_sys + 'sales.SalesInvoiceUnpaidGrid', {
         render: {
             scope: this,
             fn: function(grid) {
-                storeGridSalesInvoiceUnpaidGrid.load();
+                storeGridSalesInvoiceCanceledGrid.load();
                 // anggotaTypeStore.load();
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
-            // loadMemberForm(record.data.id_member)
             // showDataSales(record.data.idsales)
         }
     }
 });
+
+
+function loadMemberForm(id) {
+    // anggotaTypeStore.load();
+
+    // var formSalesInvoiceCanceledGrid = Ext.getCmp('formSalesInvoiceCanceledGrid');
+    // wSalesInvoiceCanceledGrid.show();
+    // formSalesInvoiceCanceledGrid.getForm().load({
+    //     url: SITE_URL + 'backend/loadFormData/SalesInvoiceCanceledGrid/1/member',
+    //     params: {
+    //         extraparams: 'a.id_member:' + id
+    //     },
+    //     success: function(form, action) {
+    //         var obj = Ext.decode(action.response.responseText); 
+    //         // console.log(obj);
+    //         Ext.getCmp('comboxStatusMember').setValue(obj.data.status*1);
+    //         formSalesInvoiceCanceledGrid.getForm().findField("id_member_type").setValue(obj.data.id_member_type);
+    //         formSalesInvoiceCanceledGrid.getForm().findField("marital_status").setValue(obj.data.marital_status*1);
+    //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
+    //     },
+    //     failure: function(form, action) {
+    //         Ext.Msg.alert("Load failed", action.result.errorMessage);
+    //     }
+    // })
+
+    // Ext.getCmp('memberFormDetailID').getForm().load({
+    //     url: SITE_URL + 'backend/loadFormData/SalesInvoiceCanceledGrid/1/member',
+    //     params: {
+    //         extraparams: 'a.id_member:' + id
+    //     },
+    //     success: function(form, action) {
+    //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
+    //     },
+    //     failure: function(form, action) {
+    //         Ext.Msg.alert("Load failed", action.result.errorMessage);
+    //     }
+    // })
+
+    // Ext.getCmp('statusformSalesInvoiceCanceledGrid').setValue('edit');
+    // Ext.getCmp('Tabanggota').setActiveTab(0);
+}

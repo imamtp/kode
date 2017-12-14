@@ -77,9 +77,37 @@ Ext.define('GridSalesOrderWOList', {
             Ext.getCmp('no_sales_order_woform').setValue(selectedRecord.get('no_sales_order'));
 
             var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
-            var token_tmp = Ext.getCmp('token_tmp_woform').getValue();
 
             var WorkOrderJobTabStore = Ext.getCmp('WorkOrderJobTab').getStore();
+
+            //clear grid job item
+            Ext.Ajax.request({
+                url: SITE_URL + 'production/delete_grid_fg',
+                method: 'POST',
+                async: false,
+                params: {
+                    job_order_id: job_order_id
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
+
+                    WorkOrderJobTabStore.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + job_order_id
+                        };
+                    });
+
+                    WorkOrderJobTabStore.load();
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
+            //end clear grid fg
+
+            var token_tmp = Ext.getCmp('token_tmp_woform').getValue();
+
+            
             var idunit = Ext.getCmp('cbUnitWOForm').getValue();
 
             //insert item to grid job

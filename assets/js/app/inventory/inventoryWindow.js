@@ -64,10 +64,11 @@ Ext.define('TabItemInventory', {
         },
         {
             xtype: 'TabInventorySpecs'
-        },
-        {
-            xtype: 'GridStockInventoryTab'
         }
+        // ,
+        // {
+        //     xtype: 'GridStockInventoryTab'
+        // }
         // {
         //     xtype: 'FormBuy',
         //     id: 'idFormBuy'

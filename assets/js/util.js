@@ -242,6 +242,16 @@ function renderNomor2(value, id, r) {
     return Ext.util.Format.number(value, formatNomor);
 }
 
+function renderNomor3(value, id, r) {
+    var value = str_replace(".00", "", value);
+    // console.log(value);
+    Ext.util.Format.thousandSeparator = ".";
+    Ext.util.Format.decimalSeparator = ".";
+    var formatNomor = "0,000";
+    // console.log(value)
+    return Ext.util.Format.number(value, formatNomor);
+}
+
 function renderNomorNegative(number) {
     number = parseFloat(number.toString().match(/^-?\d+\.?\d{0,2}/));
     //Seperates the components of the number

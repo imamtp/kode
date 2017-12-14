@@ -479,31 +479,44 @@ Ext.define(dir_sys + 'inventory.GridInventoryAllBySku', {
                     selected = [];
                     Ext.each(sm.getSelection(), function(item) {
                       selected.push(item.data[Object.keys(item.data)[0]]);
-                    });
-                    Ext.Ajax.request({
-                      url: SITE_URL + 'backend/ext_delete/InventoryAllBySku/inventory',
-                      method: 'POST',
-                      params: {
-                        postdata: Ext.encode(selected),
-                        idmenu: 19
-                      },
-                      success: function(form, action) {
-                        var d = Ext.decode(form.responseText);
-                        if (!d.success) {
-                          Ext.Msg.alert('Informasi', d.message);
-                        } else {
-                          storeGridInventoryAllBySku.load();
-                        }
-                      },
-                      failure: function(form, action) {
-                        Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-                      }
-                    });
+                    }); 
                     // Ext.Ajax.request({
-                    //     url: SITE_URL + 'inventory/hapusInventory',
-                    //     method: 'POST',
-                    //     params: {postdata: Ext.encode(selected)}
+                    //   url: SITE_URL + 'backend/ext_delete/InventoryAllBySku/inventory',
+                    //   method: 'POST',
+                    //   params: {
+                    //     postdata: Ext.encode(selected),
+                    //     idmenu: 19
+                    //   },
+                    //   success: function(form, action) {
+                    //     var d = Ext.decode(form.responseText);
+                    //     if (!d.success) {
+                    //       Ext.Msg.alert('Informasi', d.message);
+                    //     } else {
+                    //       storeGridInventoryAllBySku.load();
+                    //     }
+                    //   },
+                    //   failure: function(form, action) {
+                    //     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                    //   }
                     // });
+                 
+
+                    Ext.Ajax.request({
+                        url: SITE_URL + 'inventory/hapusInventory',
+                        method: 'POST',
+                        params: {postdata: Ext.encode(selected)},
+                        success: function(form, action) {
+                          var d = Ext.decode(form.responseText);
+                          if (!d.success) {
+                            Ext.Msg.alert('Informasi', d.message);
+                          } else {
+                            storeGridInventoryAllBySku.load();
+                          }
+                        },
+                        failure: function(form, action) {
+                          Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                        }
+                    });
                     // storeGridInventoryAllBySku.remove(sm.getSelection());
                     // sm.select(0);
 

@@ -1136,6 +1136,8 @@ class inventory extends MY_Controller {
     function get_by_sku2(){
         $idunit = $this->session->userdata('idunit');
         $inventory_type = $this->input->post('inventory_type');
+
+
         $idinventorycat = $this->input->post('idinventorycat');
         $query = $this->input->post('query');
         $start = $this->input->post('start');
@@ -1156,7 +1158,7 @@ class inventory extends MY_Controller {
             $wer_type = "and inventory_type = $inventory_type";
         }
 
-        $sql = "select 
+         $sql = "select 
                     a.idinventory,
                     a.sku_no,
                     a.invno,
@@ -1205,13 +1207,89 @@ class inventory extends MY_Controller {
                 $search_txt                
                 order by nameinventory
                 ";
+
+        // $sql = "select 
+        //             a.idinventory,
+        //             a.sku_no,
+        //             a.invno,
+        //             a.nameinventory,
+        //             a.minstock,
+        //             a.inventory_type,
+        //             a.measurement_id_one,
+        //             a.measurement_id_two,
+        //             a.measurement_id_tre,
+        //             a.unitmeasure as measurement_id_buy,
+        //             a.unitmeasuresell as measurement_id_sell,
+        //             a.ratio_two,
+        //             a.ratio_tre,
+        //             a.cost,
+        //             a.sellingprice,
+        //             coalesce(a.hpp_per_unit,0) as hpp,
+        //             coalesce(f.stock,0) as stock_one,
+        //             b.short_desc as uom_one,
+        //             case
+        //                 when b.short_desc is null then null
+        //                 else coalesce(f.stock_two,0)
+        //             end as stock_two,
+        //             c.short_desc as uom_two,
+        //             case
+        //                 when d.short_desc is null then null
+        //                 else ceil(coalesce(f.stock_tre,0))
+        //             end as stock_tre,
+        //             d.short_desc as uom_tre,
+        //             g.brand_name
+        //         from inventory a
+        //         left join productmeasurement b on b.measurement_id = a.measurement_id_one
+        //         left join productmeasurement c on c.measurement_id = a.measurement_id_two
+        //         left join productmeasurement d on d.measurement_id = a.measurement_id_tre
+        //         left join (
+        //             select sum(stock) as stock, sum(stock / b.ratio_two) as stock_two, sum(stock / b.ratio_tre) as stock_tre, idinventory_parent from warehouse_stock a
+        //             join inventory b on b.idinventory = a.idinventory
+        //             group by idinventory_parent
+        //         ) f on f.idinventory_parent = a.idinventory
+        //         left join brand g on g.brand_id = a.brand_id
+        //         where true
+        //         and a.deleted = 0
+        //         and a.status = 1
+        //         and a.idunit = $idunit
+        //         and a.idinventory_parent is null
+        //         $wer_type
+        //         $search_txt                
+        //         order by nameinventory
+        //         ";
         
         $qtotal = $this->db->query($sql);
 
         $q = $this->db->query($sql.' '.$limit_offset);
+
+        $data = array();
+        $i=0;
+        foreach ($q->result_array() as $r) {
+            $data[$i] = $r;
+           if($r['inventory_type']==2){
+                //raw material. ambol rasio dari parent
+                $qrat = $this->db->query("select ratio_two,ratio_tre
+                                            from inventory
+                                            where idinventory = ".$r['idinventory']." ");
+                if($qrat->num_rows()>0){
+                    $rrat = $qrat->result_array()[0];
+                    if($rrat['ratio_two']!=0){
+                         $data[$i]['stock_two'] = $r['stock_one']/$rrat['ratio_two'];
+                    }
+
+                    if($rrat['ratio_tre']!=0){
+                         $data[$i]['stock_tre'] = $r['stock_one']/$rrat['ratio_tre'];
+                    }
+
+                }
+           }
+           $i++;
+        }
+
+       
                     // echo $sql.' '.$limit_offset;
         
-        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($q->result_array()) . ' }';
+        echo '{success:true,results:' .$qtotal->num_rows() . ',numrow:' .$qtotal->num_rows() . ',rows:' . json_encode($data) . ' }';
 
         $q->free_result(); 
         $qtotal->free_result(); 
@@ -1219,8 +1297,17 @@ class inventory extends MY_Controller {
 
     function get_detail_item(){
         $idunit = $this->input->post('idunit');
-        $inventory_type = $this->input->post('inventory_type');
         $idinventory_parent = $this->input->post('idinventory_parent');
+        $inventory_type = $this->input->post('inventory_type');
+
+        if($inventory_type==''){
+             $qrat = $this->db->query("select inventory_type
+                                            from inventory
+                                            where idinventory = ".$idinventory_parent." ")->row();
+             $inventory_type = $qrat->inventory_type;
+        }
+
+        
         $find = strtoupper($this->input->post('query'));
 
         $wer_parent = null;
@@ -1235,27 +1322,35 @@ class inventory extends MY_Controller {
 
         $wer_find = "and ( b.sku_no like '%$find%' or b.nameinventory like '%$find%' or a.invno like '%$find%')";
 
+        if($inventory_type==2){
+            //raw material
+            $prefix = 'b';
+        } else {
+            $prefix = 'a';
+        }
+
         $sql = "select 
                     b.sku_no,
                     b.nameinventory,
                     a.invno,
                     a.notes,
                     a.idinventory,
+                    a.inventory_type,
                     a.cost,
                     a.no_batch,
                     coalesce(c.stock,0) as stock_one,
                     d.short_desc as uom_one,
                     case 
                         when b.measurement_id_two is null then null
-                        else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
+                        else round(cast(coalesce(c.stock,0) / ".$prefix.".ratio_two as numeric),2) 
                     end as stock_two,
                     e.short_desc as uom_two,
-                    a.ratio_two,
+                    ".$prefix.".ratio_two,
                     case
                         when b.measurement_id_tre is null then null
-                        else ceil(coalesce(c.stock,0) / a.ratio_tre) 
+                        else ceil(coalesce(c.stock,0) / ".$prefix.".ratio_tre) 
                     end as stock_tre,
-                    a.ratio_tre,
+                    ".$prefix.".ratio_tre,
                     f.short_desc as uom_tre,
                     g.warehouse_code,
                     h.received_date,
@@ -1268,7 +1363,7 @@ class inventory extends MY_Controller {
                 left join productmeasurement f on f.measurement_id = b.measurement_id_tre
                 left join warehouse g on g.warehouse_id = c.warehouse_id
                 left join goods_receipt h on h.no_goods_receipt = a.no_transaction
-                where true
+                where true and a.grouped is null
                 and a.deleted = 0
                 and a.status = 1
                 and a.idunit = $idunit
@@ -1276,9 +1371,70 @@ class inventory extends MY_Controller {
                 $wer_type
                 $wer_find
                 order by a.idinventory_parent, a.idinventory";
-        
+
+        //  $sql = "select 
+        //             b.sku_no,
+        //             b.nameinventory,
+        //             a.invno,
+        //             a.notes,
+        //             a.cost,
+        //             coalesce(c.stock,0) as stock_one,
+        //             d.short_desc as uom_one,
+        //             case 
+        //                 when b.measurement_id_two is null then null
+        //                 else round(cast(coalesce(c.stock,0) / a.ratio_two as numeric),2) 
+        //             end as stock_two,
+        //             e.short_desc as uom_two,
+        //             a.ratio_two,
+        //             case
+        //                 when b.measurement_id_tre is null then null
+        //                 else ceil(coalesce(c.stock,0) / a.ratio_tre) 
+        //             end as stock_tre,
+        //             a.ratio_tre,
+        //             g.warehouse_code,
+        //             coalesce(a.hpp_per_unit,0) as hpp
+        //         from inventory a
+        //         join inventory b on a.idinventory_parent = b.idinventory
+        //         join warehouse_stock c on c.idinventory = a.idinventory
+        //         left join productmeasurement d on d.measurement_id = b.measurement_id_one
+        //         left join productmeasurement e on e.measurement_id = b.measurement_id_two
+        //         left join productmeasurement f on f.measurement_id = b.measurement_id_tre
+        //         left join warehouse g on g.warehouse_id = c.warehouse_id
+        //         left join goods_receipt h on h.no_goods_receipt = a.no_transaction
+        //         where true
+        //         and a.deleted = 0
+        //         and a.status = 1
+        //         and a.idunit = $idunit
+        //         $wer_parent
+        //         $wer_type
+        //         $wer_find
+        //         group by b.sku_no,b.nameinventory,a.invno,d.short_desc,a .notes,a.ratio_two,e.short_desc,a.cost,b.measurement_id_two,c.stock,b.measurement_id_tre,a.ratio_tre, g .warehouse_code,a .hpp_per_unit,a .idinventory_parent
+        //         order by a.idinventory_parent";
         $q = $this->db->query($sql);
-        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($q->result_array()) . '}';
+
+        $data = array();
+        foreach ($q->result_array() as $r) {
+            $data[] = $r;
+           //  echo $r['inventory_type'].' ';
+           // if($r['inventory_type']==2){
+           //      //raw material. ambol rasio dari parent
+           //      $qrat = $this->db->query("select ratio_two,ratio_tre,inventory_type
+           //                                  from inventory
+           //                                  where idinventory = ".$r['idinventory_parent']." ");
+           //      echo $this->db->last_query();
+           //      if($qrat->num_rows()>0){
+           //          $rrat = $qrat->row();
+
+           //          $data[]['stock_two'] = $r['stock_one']/$rrat['ratio_two'];
+           //          $data[]['stock_tre'] = $r['stock_one']/$rrat['ratio_tre'];
+           //      }
+           // }
+            // print_r($r);
+           
+        }
+
+        
+        echo '{success:true,numrow:' .$q->num_rows() . ',rows:' . json_encode($data) . '}';
         $q->free_result();
     }
 
@@ -1542,6 +1698,30 @@ class inventory extends MY_Controller {
     //         }
     //     }
     // }
+
+    function hapusInventory(){
+        $this->db->trans_begin();
+
+        $records = json_decode($this->input->post('postdata'));
+        foreach ($records as $id) {
+            $this->db->where(array(
+                'idinventory'=>$id
+            ));
+            $this->db->update('inventory',array(
+                'display'=>0,
+                'deleted'=>1
+            ));
+        }
+
+        if($this->db->trans_status() === false){
+            $this->db->trans_rollback();
+            $json = array('success'=>false,'message'=>'An unknown error was occured');
+        }else{
+            $this->db->trans_commit();
+            $json = array('success'=>true,'message'=>'The data has been deleted succsessfully');
+        }
+        echo json_encode($json);
+    }
 
     function import_inventory_fg(){
         $file = '/var/www/html/redsfin/data finished goods per 31 Agt 2017.xlsx';
@@ -2031,6 +2211,111 @@ function update_fg_name(){
 function remove_space($va){
     return isset($va) ? str_replace(' ','',$va) : null;
 }
+
+    function group_inventory(){
+
+        $qparent = $this->db->query("select idinventory from inventory where idinventory_parent is null");
+
+        foreach ($qparent->result() as $rparent) {
+             $idinventory_parent = $rparent->idinventory;
+
+             $q = $this->db->query("select * from inventory where idinventory_parent is null and idinventory = ".$idinventory_parent." ");
+                foreach ($q->result() as $r) {
+
+                     $q2 = $this->db->query("select distinct ratio_two
+                                                        from inventory
+                                                        where idinventory_parent = ".$idinventory_parent."
+                                                        order by ratio_two ");
+                   
+                    foreach ($q2->result() as $r2) {
+
+                        if($r2->ratio_two==null){
+                            continue;
+                        }
+
+                        $q3 = $this->db->query("select idinventory
+                                                        from inventory
+                                                        where idinventory_parent = ".$idinventory_parent." and ratio_two = ".$r2->ratio_two. " and grouped is null
+                                                        order by idinventory asc
+                                                        limit 1")->row();
+                        if(!$q3){
+                            continue;
+                        }
+
+                        //idinventory yang dijadikan penggabungan/penampung dari semua idiventory yang punya rasio yang sama
+                        $idinventory = $q3->idinventory;
+                        echo $idinventory.' ';
+                        //query inventory lainnya kecuali id inventory yg dijadikan penggabungan/penampung
+                        $q3 = $this->db->query("select idinventory
+                                                        from inventory
+                                                        where idinventory_parent = ".$idinventory_parent." and ratio_two = ".$r2->ratio_two. " and idinventory != ".$idinventory." ");
+
+                        foreach ($q3->result() as $r3) {
+                            
+                             $qwh = $this->db->get('warehouse');
+                             foreach ($qwh->result() as $rwh) {
+                                
+
+                                //get current stock by warehouse_id
+                                $q4 = $this->db->query("select a.stock
+                                                            from warehouse_stock a
+                                                            where a.idinventory = ".$r3->idinventory." and warehouse_id = ".$rwh->warehouse_id." ");
+                                if($q4->num_rows()>0){
+                                    $r4 = $q4->row();
+                                    $stok = $r4->stock; //-120
+
+                                    //ambil stok terkini dari inventory penampung
+                                     $q5= $this->db->query("select a.stock
+                                                            from warehouse_stock a
+                                                            where a.idinventory = ".$idinventory." and warehouse_id = ".$rwh->warehouse_id." ")->row();
+
+                                     $new_balance = $stok + $q5->stock;
+
+                                     //update new balance
+                                     $this->db->where(array(
+                                            'idinventory'=>$idinventory,
+                                            'warehouse_id'=>$rwh->warehouse_id
+                                        ));
+                                     $this->db->update('warehouse_stock',array(
+                                            'stock'=>$new_balance,
+                                            'datemod'=>date('Y-m-d H:m:s')
+                                        ));
+
+
+                                     //set flag to grouped and set deleted = 1//penanda udah digroupung
+                                       $this->db->where(array(
+                                            'idinventory'=>$r3->idinventory
+                                        ));
+                                     $this->db->update('inventory',array(
+                                            'grouped'=>1,                                    
+                                            'datemod'=>date('Y-m-d H:m:s')
+                                        ));
+
+                                     //kosongin stoknya juga
+                                         $this->db->where(array(
+                                            'idinventory'=>$r3->idinventory
+                                        ));
+                                         $this->db->update('warehouse_stock',array(
+                                                'stock'=>0,                                    
+                                                'datemod'=>date('Y-m-d H:m:s')
+                                            ));
+                                     
+                                }
+
+                             }
+                        }
+                            // select * from inventory where idinventory_parent = ".$r2->idinventory.
+
+
+                    } //end foreach distinct ratio
+
+
+                }
+            }
+        }
+       
+
+        
 
 }
 

@@ -1,9 +1,9 @@
 <?php
 
-class m_salesorder extends CI_Model {
+class m_deliveryorder extends CI_Model {
 
     function tableName() {
-        return 'sales';
+        return 'delivery_order';
     }
 
     function pkField() {
@@ -11,7 +11,7 @@ class m_salesorder extends CI_Model {
     }
 
     function searchField() {
-        $field = "no_sales_order,namecustomer";
+        $field = "no_sales_order,z.no_do,namecustomer";
         return explode(",", $field);
     }
 
@@ -34,8 +34,8 @@ class m_salesorder extends CI_Model {
                 a.status,
                 a.idcurrency,
                 a.idcustomer,
-                a.noinvoice,
-                a.invoice_status,
+                l.noinvoice,
+                l.invoice_status,
                 a.idpayment,
                 a.ddays,
                 a.eomddays,
@@ -56,15 +56,19 @@ class m_salesorder extends CI_Model {
                 c.namecurr,
                 d.firstname,
                 d.lastname,
-                e.totalitem,
                 f.namecustomer,
                 f.nocustomer,
                 f.address as address_customer,
                 f.telephone as telephone_customer,
                 f.handphone as handphone_customer,
+                z.no_do,
+                z.delivery_date,
+                z.status as status_do,
                 totalitem,
-                COALESCE(totalitemkirim, 0) as totalitemkirim,
-                ((e.totalitem - COALESCE(totalitemkirim, 0))) as sisakirim,
+                total_qty_order,
+                total_qty_kirim,
+                ((total_qty_order - COALESCE(total_qty_kirim, 0))) as sisakirim,
+                z.delivery_order_id,
                 i.no_sales_quote as no_sales_order_quote,
                 i.idsales as idsales_quote,
                 i.date_quote as date_sales_quote,
@@ -83,48 +87,55 @@ class m_salesorder extends CI_Model {
     }
 
     function query() {
-        $query = "select " . $this->selectField() . "
-                    from " . $this->tableName()." a 
+        $query = "select distinct " . $this->selectField() . "
+                    from " . $this->tableName()." z
+                    join sales a ON z.idsales = a.idsales
                     left join payment b ON a.idpayment = b.idpayment
                     left join currency c ON a.idcurrency = c.idcurrency
                     left join employee d ON a.idemployee = d.idemployee
                     left join (select idsales,count(*) as totalitem
-                            from salesitem
-                            group by idsales) e ON a.idsales = e.idsales
+                        from salesitem
+                        group by idsales) e ON a.idsales = e.idsales
                     left join customer f ON a.idcustomer = f.idcustomer
                     left join tax j ON a.idtax = j.idtax
                     left join(select
-                                    idsales,
-                                    sum(qty_kirim) as totalitemkirim
-                                from salesitem
-                                group by idsales) h ON a .idsales = h.idsales
+                            idsales,
+                            sum(qty_kirim) as totalitemkirim
+                        from salesitem
+                        group by idsales) h ON a .idsales = h.idsales
                     left join (select no_sales_quote,idsales,date_quote
-                                from sales ) i ON a.idsales_quote = i.idsales
-                    LEFT JOIN job_order k ON k.idsales = a.idsales";
+                        from sales ) i ON a.idsales_quote = i.idsales
+                    LEFT JOIN job_order k ON k.idsales = a.idsales
+                    LEFT JOIN sales_invoice l ON z.delivery_order_id = l.delivery_order_id  
+                    left join(select
+                        delivery_order_id,
+                        sum(b.qty) as total_qty_order,
+                        sum(a.qty_kirim) as total_qty_kirim
+                    from deliver_order_item a
+                    join salesitem b ON a.idsalesitem = b.idsalesitem
+                    group by delivery_order_id) m ON z .delivery_order_id = m.delivery_order_id";
 
         return $query;
     }
 
     function whereQuery() {
         $wer = null;
-        if($this->input->post('option')=='delivery_order'){
-            $wer .= ' and a.status > 2';
-        } else if($this->input->post('option')=='entry_wo'){
-            $wer .= ' and k.idsales IS NULL';
-        } else if($this->input->post('option')=='entry_delivery_order'){
-            $wer .= ' and (a.status = 3 OR a.status = 6 OR  a.status = 7)';
-        } 
+        // if($this->input->post('option')=='delivery_order'){
+        //     $wer .= ' and a.status > 2';
+        // } else if($this->input->post('option')=='entry_wo'){
+        //     $wer .= ' and k.idsales IS NULL';
+        // }
 
         $sd = substr($this->input->post('startdate'),0,10);
         $nd = substr($this->input->post('enddate'),0,10);
         if($sd != null && $nd != null)
-            $wer .= " AND a.date_sales BETWEEN '$sd' AND '$nd'";
+            $wer .= " AND z.delivery_date BETWEEN '$sd' AND '$nd'";
 
-        return " a.type = 2 and a.display is null $wer and a.id_sales_source is null";
+        return " z.status is not null and a.display is null $wer and a.id_sales_source is null and z.deleted = 0";
     }
 
     function orderBy() {
-        return " a.idsales desc";
+        return " z.delivery_order_id desc";
     }
 
     function updateField() { 
@@ -151,7 +162,7 @@ class m_salesorder extends CI_Model {
             $wer = null;
         }
 
-        $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,sum(a.price*a.size ) as total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
+        $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
                                 ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,qty_kirim,sum(qty-qty_kirim) as qtysisakirim
                                 from salesitem a
                                 join inventory b ON a.idinventory = b.idinventory
@@ -174,7 +185,7 @@ class m_salesorder extends CI_Model {
             $wer = null;
         }
 
-        $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,sum((z.qty_kirim*a.price)*a.size) as total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
+        $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
                                 ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,z.qty_kirim,sum(qty-z.qty_kirim) as qtysisakirim
                                 from deliver_order_item z
                                 join salesitem a ON a.idsalesitem = z.idsalesitem

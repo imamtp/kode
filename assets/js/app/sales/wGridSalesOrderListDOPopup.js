@@ -1,7 +1,7 @@
 Ext.define('GridSalesOrderListDOModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'idsales', 'idpayment', 'idtax', 'idemployee', 'idjournal', 'idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'short_desc', 'rate', 'size_measurement'
+        'idsales', 'idpayment', 'idtax', 'idemployee', 'idjournal', 'statuswo','idcustomer', 'date_sales', 'no_sales_order', 'shipto', 'subtotal', 'freight', 'tax', 'disc', 'totalamount', 'comments', 'userin', 'datein', 'status', 'idcurrency', 'namecurr', 'namepayment', 'firstname', 'lastname', 'totalitem', 'namecustomer', 'idunit', 'short_desc', 'rate', 'size_measurement'
     ],
     idProperty: 'id'
 });
@@ -28,7 +28,7 @@ var storeGridSalesOrderListDO = Ext.create('Ext.data.Store', {
 
 storeGridSalesOrderListDO.on('beforeload', function(store, operation, eOpts) {
     operation.params = {
-        'option': 'not_in_salesorder'
+        'option': 'entry_delivery_order'
     };
 });
 
@@ -186,33 +186,46 @@ Ext.define('GridSalesOrderListDO', {
         minWidth: 150,
         xtype: 'numbercolumn',
         align: 'right'
-    }, {
-        header: 'Biaya Kirim',
-        dataIndex: 'freight',
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Total Pajak',
-        dataIndex: 'tax',
+    },
+    {
+            header: 'Status Production',
         // hidden:true,
+        dataIndex: 'statuswo',
         minWidth: 150,
         xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Total Diskon',
-        hidden:true,
-        dataIndex: 'disc',
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }, {
-        header: 'Total Pembayaran',
-        dataIndex: 'totalamount',
-        minWidth: 150,
-        xtype: 'numbercolumn',
-        align: 'right'
-    }],
+        align: 'right',
+        renderer: function(value) {
+            return customColumnStatus(arrWorkOrderStatus, value);
+        }
+    }
+    //  {
+    //     header: 'Biaya Kirim',
+    //     dataIndex: 'freight',
+    //     minWidth: 150,
+    //     xtype: 'numbercolumn',
+    //     align: 'right'
+    // }, {
+    //     header: 'Total Pajak',
+    //     dataIndex: 'tax',
+    //     // hidden:true,
+    //     minWidth: 150,
+    //     xtype: 'numbercolumn',
+    //     align: 'right'
+    // }, {
+    //     header: 'Total Diskon',
+    //     hidden:true,
+    //     dataIndex: 'disc',
+    //     minWidth: 150,
+    //     xtype: 'numbercolumn',
+    //     align: 'right'
+    // }, {
+    //     header: 'Total Pembayaran',
+    //     dataIndex: 'totalamount',
+    //     minWidth: 150,
+    //     xtype: 'numbercolumn',
+    //     align: 'right'
+    // }
+    ],
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',

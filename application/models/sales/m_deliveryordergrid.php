@@ -86,7 +86,7 @@ class m_deliveryordergrid extends CI_Model {
             // $dtcetak['customer']['handphone'] = $r->handphone_customer;
 
             $this->load->model('sales/m_salesorder');
-            $dtcetak['detail'] = $this->m_salesorder->query_itemsales($r->idsales);
+            $dtcetak['detail'] = $this->m_salesorder->query_itemsales_do($delivery_order_id);
             $dtcetak['detailtotal'] = 0;
 
             $dtcetak['no'] = $r->no_sales_order;

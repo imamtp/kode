@@ -1,6 +1,6 @@
 Ext.define('GridItemMaterialWOModel', {
     extend: 'Ext.data.Model',
-    fields: ['prod_material_id', 'job_order_id', 'idinventory', 'bom_id', 'measurement_id', 'qty', 'slice', 'idunit', 'material_type', 'qty_real', 'qty_sisa', 'whs_sisa_id', 'notes', 'nameinventory', 'invno', 'sku_no', 'measurement_name'],
+    fields: ['prod_material_id', 'valid', 'job_order_id', 'idinventory', 'bom_id', 'measurement_id', 'qty', 'slice', 'idunit', 'material_type', 'qty_real', 'qty_sisa', 'whs_sisa_id', 'notes', 'nameinventory', 'invno', 'sku_no', 'measurement_name'],
     idProperty: 'id'
 });
 
@@ -107,6 +107,11 @@ Ext.define('GridItemRawMaterialWO', {
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
                 var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
 
+                if(selectedRecord.data.stock_one*1<=0){
+                    Ext.Msg.alert('Failed', 'Jumlah stok tidak mencukupi');
+                    return false;
+                }
+                // console.log(selectedRecord.data.stock_one*1);
                 //start get job_item_id
                 var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
                 //end get job_item_id
@@ -562,7 +567,14 @@ Ext.define(dir_sys + 'production.WorkOrderMaterialTab', {
             plugins: [this.cellEditing],
             store: storeGridItemMaterialWO,
             viewConfig: {
-                markDirty: false
+                markDirty: false,
+                getRowClass: function(record, index) {
+                    var c = record.get('valid');
+                    console.log(c);
+                    if (c == 2) {
+                        return 'custom';
+                    } 
+                }
             },
             columns: [{
                     header: 'prod_material_id',
@@ -749,7 +761,7 @@ Ext.define(dir_sys + 'production.WorkOrderMaterialTab', {
         this.on({
             scope: this,
             edit: function() {
-                updateGridMaterialWO();
+                updateGridMaterialWO(Ext.getCmp('comboxWorkOrderStatus_woform').getValue());
             }
         });
     },
@@ -880,7 +892,7 @@ Ext.define(dir_sys + 'production.WorkOrderMaterialTab', {
 
         this.getStore().removeAt(rowIndex);
 
-        updateGridMaterialWO()
+        updateGridMaterialWO(updateGridMaterialWO)
     },
     onEdit: function(editor, e) {
         e.record.commit();
@@ -888,44 +900,61 @@ Ext.define(dir_sys + 'production.WorkOrderMaterialTab', {
 });
 
 
-function updateGridMaterialWO() {
-    Ext.each(storeGridItemMaterialWO.data.items, function(obj, i) {
-        var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
+function updateGridMaterialWO(status) {
+     //start get job_item_id
+    var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
+     var job_order_id = Ext.getCmp('job_order_id_woform').getValue();
 
-        //start get job_item_id
-        var job_item_id = Ext.getCmp('job_item_id_tmpwo').getValue() * 1;
+    if(status*1==1){
+
+        //kalo statusnya open masih bisa diedit
+
+         Ext.each(storeGridItemMaterialWO.data.items, function(obj, i) {
+       
+
+       
         //end get job_item_id
 
         Ext.Ajax.request({
-            url: SITE_URL + 'production/save_rm',
-            async: false,
-            method: 'POST',
-            params: {
-                idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
-                job_order_id: job_order_id,
-                job_item_id: job_item_id,
-                prod_material_id: obj.data.prod_material_id,
-                measurement_name: obj.data.measurement_name,
-                slice: obj.data.slice,
-                qty: obj.data.qty,
-                update: 'true'
-            },
-            success: function(form, action) {
-                var d = Ext.decode(form.responseText);
+                url: SITE_URL + 'production/save_rm',
+                async: false,
+                method: 'POST',
+                params: {
+                    idunit: Ext.getCmp('cbUnitWorkOrderGrid').getValue() * 1,
+                    job_order_id: job_order_id,
+                    job_item_id: job_item_id,
+                    prod_material_id: obj.data.prod_material_id,
+                    measurement_name: obj.data.measurement_name,
+                    slice: obj.data.slice,
+                    qty: obj.data.qty,
+                    update: 'true'
+                },
+                success: function(form, action) {
+                    var d = Ext.decode(form.responseText);
 
-                storeGridItemMaterialWO.on('beforeload', function(store, operation, eOpts) {
-                    operation.params = {
-                        'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
-                    };
-                });
+                    storeGridItemMaterialWO.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                        };
+                    });
 
-                storeGridItemMaterialWO.load();
-            },
-            failure: function(form, action) {
-                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-            }
+                    storeGridItemMaterialWO.load();
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                }
+            });
+            // obj.set('total', obj.data.qty*obj.data.size);
+
         });
-        // obj.set('total', obj.data.qty*obj.data.size);
+    } else {
+        storeGridItemMaterialWO.on('beforeload', function(store, operation, eOpts) {
+                        operation.params = {
+                            'extraparams': 'a.job_order_id:' + job_order_id + ',' + 'a.job_item_id:' + job_item_id
+                        };
+                    });
 
-    });
+        storeGridItemMaterialWO.load();
+    }
+   
 }

@@ -109,6 +109,8 @@ function loadWoReceiptData(data) {
     Ext.getCmp('approve_name_receiptwoform').setValue(data.approveby_name);
     Ext.getCmp('approvedby_id_receiptwoform').setValue(data.approvedby_id * 1);
     Ext.getCmp('finished_date_receiptwoform').setValue(convertDate2(data.finished_date));
+    Ext.getCmp('receiptdate_receiptwoform').setValue(convertDate2(data.receiptdate));
+    
     // console.log(data.finished_date)
 
     //load finished goods
