@@ -1,7 +1,7 @@
 Ext.define('SalesInvoiceCanceledGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-       'sales_invoice_id', 'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur'
+       'sales_invoice_id', 'idsales', 'no_sales_order', 'subtotal', 'freight', 'date_sales', 'tax', 'disc', 'totalamount', 'paidtoday', 'balance', 'comments', 'noinvoice', 'ddays', 'eomddays', 'percentagedisc', 'daydisc', 'notes_si', 'nocustomer', 'namecustomer', 'idpayment', 'invoice_status', 'invoice_date', 'term', 'duedate', 'no_faktur','no_do'
     ],
     idProperty: 'id'
 });
@@ -74,12 +74,12 @@ Ext.define(dir_sys + 'sales.SalesInvoiceCanceledGrid', {
             dataIndex: 'idsales',
             hidden: true
         }, {
-            header: 'No Sales',
-            dataIndex: 'no_sales_order',
-            // hidden: true
-        }, {
             header: 'No Invoice',
             dataIndex: 'noinvoice',
+            // hidden: true
+        },  {
+            header: 'No Sales',
+            dataIndex: 'no_sales_order',
             // hidden: true
         }, {
             header: 'No Faktur',
