@@ -70,7 +70,7 @@
 				<td width="30"><?=$key+1?></td>
 				<td><?=$value['sku_no']?></td>
 				<td><?=$value['nameinventory']?></td>  
-				<td align="right"><?=$value['qty']?></td>
+				<td align="right"><?=$value['qty_kirim']?></td>
 				<td align="center"><?=$value['short_desc']?></td>
 				<td align="right"><?=$value['size']?></td>
 				<td align="center"><?=$value['size_measurement']?></td>

@@ -143,7 +143,7 @@ class m_salesinvoice extends CI_Model {
     }
 
     function query_item_do($delivery_order_id){
-         $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
+         $q = $this->db->query("select a.idsalesitem,a.idinventory,b.sku_no,a.idsales,a.qty,a.price,a.disc,z.total_amount as total,a.measurement_id,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,a.deleted
                                 ,b.invno,b.nameinventory,c.short_desc,d.warehouse_code,e.short_desc as size_measurement,z.qty_kirim,sum(qty-z.qty_kirim) as qtysisakirim
                                 from deliver_order_item z
                                 join salesitem a ON a.idsalesitem = z.idsalesitem
@@ -152,7 +152,7 @@ class m_salesinvoice extends CI_Model {
                                 left join warehouse d ON d.warehouse_id = a.warehouse_id
                                 left join productmeasurement e ON a.measurement_id_size = e.measurement_id
                                 where z.delivery_order_id = $delivery_order_id
-                                group by a.deleted,a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,a.total,a.measurement_id,z.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement
+                                group by a.deleted,a.idsalesitem,a.idinventory,a.idsales,a.qty,a.price,a.disc,z.total_amount,a.measurement_id,z.qty_kirim,a.ratetax,a.size,a.measurement_id,a.measurement_id_size,b.invno,b.sku_no,b.nameinventory,c.short_desc,d.warehouse_code,a.size,size_measurement
                                 order by a.idsalesitem desc");
 
         return $q->result_array();
