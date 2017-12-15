@@ -2559,5 +2559,18 @@ class sales extends MY_Controller {
 
         echo json_encode($json);
    }
+
+   function update_no_faktur(){
+        $q = $this->db->get_where('delivery_order');
+        foreach ($q->result() as $r) {
+            $qs = $this->db->get_where('sales',array('idsales'=>$r->idsales));
+            if($qs->num_rows()>0){
+                $rs = $qs->row();
+                $this->db->where('delivery_order_id',$r->delivery_order_id);
+                $this->db->update('delivery_order',array('no_faktur'=>$rs->no_faktur));
+                
+            }
+        }
+	}
 }
 ?>

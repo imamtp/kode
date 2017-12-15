@@ -18,6 +18,7 @@ class m_deliveryorder extends CI_Model {
     function selectField() {
         return "a.idsales,
                 a.idemployee,
+                z.no_faktur,
                 a.idjournal,
                 a.idtax,
                 a.idcustomer,
