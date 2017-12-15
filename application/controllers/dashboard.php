@@ -29,7 +29,7 @@ class Dashboard extends MY_Controller {
     }
 
     function html_page() {
-        $this->load->view('/dashboard/dashboard_html');
+        // $this->load->view('/dashboard/dashboard_html');
     }
 
 
