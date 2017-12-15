@@ -6,7 +6,7 @@ var WindowEntryDeliveryOrder = Ext.create(dir_sys + 'sales.WindowEntryDeliveryOr
 Ext.define('GriddeliveryOrderGridModel', {
     extend: 'Ext.data.Model',
     fields: [
-        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress', 'status_do', 'total_qty_order', 'total_qty_kirim', 'sisakirim'
+        'delivery_order_id', 'no_do', 'idunit', 'date_created', 'delivery_date', 'idsales', 'idtax', 'idcustomer', 'remarks', 'userin', 'status', 'totalamount', 'tax', 'disc', 'freight', 'paidtoday', 'balance', 'date_sales', 'no_sales_order', 'namecustomer', 'noinvoice', 'qtykirim', 'qtyorder', 'subtotal', 'totalitem', 'totalitemkirim', 'sisakirim', 'job_order_id', 'statuswo', 'total_dpp', 'freight', 'shipaddress', 'status_do', 'total_qty_order', 'total_qty_kirim', 'sisakirim','invoice_status'
     ],
     idProperty: 'id'
 });
@@ -141,7 +141,7 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
             minWidth: 150
         },
         {
-            header: 'Status',
+            header: 'Status Delivery',
             dataIndex: 'status_do',
             minWidth: 150,
             xtype: 'numbercolumn',
@@ -150,7 +150,16 @@ Ext.define(dir_sys + 'sales.deliveryOrderGrid', {
                 return customColumnStatus(ArrDeliveryOrder, value);
             }
         },
-
+        {
+            header: 'Status Invoice',
+            dataIndex: 'invoice_status',
+            minWidth: 150,
+            xtype: 'numbercolumn',
+            align: 'right',
+            renderer: function(value) {
+                return customColumnStatus(ArrInvoiceStatus, value);
+            }
+        },
         {
             header: 'Customer Name',
             dataIndex: 'namecustomer',

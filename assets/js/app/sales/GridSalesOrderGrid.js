@@ -307,16 +307,16 @@ Ext.define(dir_sys + 'sales.GridSalesOrderGrid', {
             xtype: 'numbercolumn',
             align: 'right'
         },
-        {
-            header: 'Invoice Status',
-            dataIndex: 'invoice_status',
-            minWidth: 150,
-            xtype: 'numbercolumn',
-            align: 'right',
-            renderer: function(value) {
-                return customColumnStatus(ArrInvoiceStatus, value);
-            }
-        }
+        // {
+        //     header: 'Invoice Status',
+        //     dataIndex: 'invoice_status',
+        //     minWidth: 150,
+        //     xtype: 'numbercolumn',
+        //     align: 'right',
+        //     renderer: function(value) {
+        //         return customColumnStatus(ArrInvoiceStatus, value);
+        //     }
+        // }
     ],
     dockedItems: [{
             xtype: 'toolbar',
