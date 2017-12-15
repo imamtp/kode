@@ -20,6 +20,25 @@ class production extends MY_Controller
         return $q->short_desc;
     }
 
+    function measurement_featch($idinventory_parent,$measurement_id,$order){
+        if($measurement_id==null){
+            //ambil dari parent
+            $q = $this->db->query("select b.sku_no,b.invno,b.measurement_id_one,b.measurement_id_two,b.measurement_id_tre
+                                    from inventory b 
+                                    where b.idinventory = $idinventory_parent")->row();
+                                    
+            if($order==1){
+                return $q->measurement_id_one;
+            } else if($order==2){
+                return $q->measurement_id_two;
+            } else if($order==3){
+                return $q->measurement_id_tre;
+            }  
+        } else {
+            return $measurement_id;
+        }
+    }
+
     function savewo()
     {
         $params = array(
@@ -73,7 +92,7 @@ class production extends MY_Controller
                                     join inventory b ON a.idinventory  = b.idinventory
                                     where a.job_order_id = ".$this->input->post('job_order_id')." and a.job_item_id = ".$r->job_item_id." ");
             foreach ($q2->result() as $r2) {
-
+                // echo $this->db->last_query();
                 $valid = false;
 
                 //cek stok
@@ -89,14 +108,14 @@ class production extends MY_Controller
                                             group by b.sku_no,b.nameinventory,b.ratio_two,b.ratio_tre");
                 if($qstok->num_rows()>0){
                     $rstok = $qstok->row();
-
-                    if($r2->measurement_id_mat == $r2->measurement_id_one){
+                    // echo $this->db->last_query();
+                    if($r2->measurement_id_mat == $this->measurement_featch($r2->idinventory_parent,$r2->measurement_id_one,1) ) {
                         $stok = $rstok->stock_one;
                         $valid = true;
-                    } else if($r2->measurement_id_mat == $r2->measurement_id_two){
+                    } else if($r2->measurement_id_mat == $this->measurement_featch($r2->idinventory_parent,$r2->measurement_id_two,2) ){
                         $stok = $rstok->stock_two;
                         $valid = true;
-                    } else if($r2->measurement_id_mat == $r2->measurement_id_tre){
+                    } else if($r2->measurement_id_mat == $this->measurement_featch($r2->idinventory_parent,$r2->measurement_id_tre,3) ){
                         $stok = $rstok->stock_tre;
                         $valid = true;
                     } else {
