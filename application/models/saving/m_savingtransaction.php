@@ -48,7 +48,7 @@ class m_savingtransaction extends CI_Model {
 
     function updateField() { 
         $data = array(
-            'id_saving_history' => $this->input->post('id_saving_history') == '' ? $this->m_data->getSeqVal('seq_saving_type') : $this->input->post('id_saving_history'),
+            'id_saving_history' => $this->input->post('id_saving_history') == '' ? $this->m_data->getSeqVal('seq_saving_history') : $this->input->post('id_saving_history'),
             "idunit" => $this->session->userdata('idunit'),
             "id_saving_type" => $this->input->post('id_saving_type'),
             "id_member" => $this->input->post('id_member'),
