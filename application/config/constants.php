@@ -35,9 +35,14 @@ define('FOPEN_WRITE_CREATE',					'ab');
 define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
-define('DIR_APP',''); 
+define('DIR_APP','nusafin2_coop_web'); 
 define('DOCUMENTROOT',$_SERVER['DOCUMENT_ROOT'].'/'.DIR_APP.'/');
-define('DIR_DOWNLOAD', '/var/www/html/redsfin/download');
+define('DIR_DOWNLOAD', '/Application/MAMP/htdocs/nusafin2_coop_web/download');
+
+//virtual account xendit
+define('SECRET_API_KEY','xnd_development_OomFfOVxgbCmlJE7LLZKSTaTYdKipdYolXfk+Rxj9WLV/rSmCAF0jg=='); //dev
+// define('SECRET_API_KEY','xnd_production_NI6FcLlw0LyvwpU7e+VPGzSXYtenp4R5k3Dh/Rlr+mfQ+LOkCwR1'); //live
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

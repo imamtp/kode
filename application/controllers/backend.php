@@ -1517,7 +1517,9 @@ class Backend extends MY_Controller {
             $field = array('alamat', 'alamat2', 'alamat3');
         } else if ($data == 'project') {
             $field = array('idproject', 'projectname');
-        } 
+        }  else if ($data == 'member_type') {
+            $field = array('id_member_type', 'member_type_name');           
+        }
 
         if($orderby)
         {

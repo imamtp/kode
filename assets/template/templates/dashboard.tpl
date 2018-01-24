@@ -454,6 +454,8 @@
         <!-- <p>south - generally for informational stuff, also could be for status bar</p> -->
     </div>
 
+    <script src='{$assets_url}/js/app/member/member_function.js'></script>
+
     <!-- // <script src='{$assets_url}js/app/account/treeAccount.js'></script> -->
     <script src='{$assets_url}/js/app/pelangganGrid.js'></script>
     <script src='{$assets_url}/js/app/supplierGrid.js'></script>

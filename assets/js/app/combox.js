@@ -1,3 +1,8 @@
+var StatusColumnArr = [
+    [2, 'Nonaktif'],
+    [1, 'Aktif']
+];
+
 var supplierStore = Ext.create('Ext.data.Store', {
     fields: ['idsupplier', 'namesupplier'],
     proxy: {
@@ -2140,3 +2145,184 @@ Ext.define('comboxARAgingOptions', {
         data: ArrARAgingOptions,
     })
 });
+
+var anggotaTypeStore = Ext.create('Ext.data.Store', {
+    fields: ['id_member_type', 'member_type_name'],
+    proxy: {
+        type: 'ajax',
+        url: SITE_URL + 'backend/combox/member_type',
+        reader: {
+            type: 'json',
+            root: 'dat'
+        }
+    },
+    autoLoad: false
+});
+Ext.define('comboxanggotatype', {
+    extend: 'Ext.form.field.ComboBox',
+    alias: 'widget.comboxanggotatype',
+    displayField: 'member_type_name',
+    fieldLabel: 'Jenis Anggota',
+    queryMode: 'local',
+    name: 'id_member_type',
+    editable: false,
+    triggerAction: 'all',
+    valueField: 'id_member_type',
+    store: anggotaTypeStore
+});
+
+var StatusMemberArr = [
+    [1, 'Pending'],
+    [2, 'Active'],
+    [3, 'Inactive']
+];
+var storeStatusMember = new Ext.data.ArrayStore({
+    fields: ['status', 'member_status_name'],
+    data: StatusMemberArr
+});
+
+Ext.define('comboxStatusMember', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxStatusMember',
+    fieldLabel: 'Status Anggota',
+    displayField: 'member_status_name',
+    valueField: 'status',
+    name: 'status',
+    store: storeStatusMember
+});
+
+var StatusKawinArr = [
+    [1, 'Kawin'],
+    [2, 'Belum Kawin'],
+    [3, 'Janda/Duda']
+];
+var storeStatusKawin = new Ext.data.ArrayStore({
+    fields: ['marital_status', 'marital_status_name'],
+    data: StatusKawinArr
+});
+
+Ext.define('comboxStatusKawin', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxStatusKawin',
+    fieldLabel: 'Status Perkawinan',
+    displayField: 'marital_status_name',
+    valueField: 'marital_status',
+    name: 'marital_status',
+    store: storeStatusKawin
+});
+
+
+var SavingCategoryArr = [
+    [1, 'Simpanan Modal'],
+    [2, 'Simpanan Berjangka'],
+    [3, 'Simpanan Deposito']
+];
+var StoreSavingCategory = new Ext.data.ArrayStore({
+    fields: ['value', 'name'],
+    data: SavingCategoryArr
+});
+
+Ext.define('comboxSavingCategory', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxSavingCategory',
+    fieldLabel: 'Kategori Simpanan',
+    displayField: 'name',
+    valueField: 'value',
+    name: 'saving_category',
+    store: StoreSavingCategory
+});
+
+var SavingTypeArr = [
+    [1, 'Pokok'],
+    [2, 'Wajib'],
+    [3, 'Sukarela'],
+    [4, 'Setara Modal']
+];
+var StoreSavingType = new Ext.data.ArrayStore({
+    fields: ['value', 'name'],
+    data: SavingTypeArr
+});
+
+Ext.define('comboxSavingType', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxSavingType',
+    fieldLabel: 'Tipe Simpanan',
+    displayField: 'name',
+    valueField: 'value',
+    name: 'saving_type',
+    store: StoreSavingType
+});
+
+var SavingStatusArr = [
+    [1, 'Aktif'],
+    [2, 'Nonaktif'],
+    [3, 'Suspended']
+];
+var StoreSavingStatus = new Ext.data.ArrayStore({
+    fields: ['value', 'name'],
+    data: SavingStatusArr
+});
+
+Ext.define('comboxSavingStatus', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxSavingStatus',
+    fieldLabel: 'Status Simpanan',
+    displayField: 'name',
+    valueField: 'value',
+    name: 'saving_status',
+    store: StoreSavingStatus
+});
+
+var DepositStatusArr = [
+    [1, 'Open'],
+    [2, 'Pending'],
+    [3, 'Completed'],
+    [4, 'Canceled'],
+    [5, 'Rejected']
+];
+var StoreDepositStatus = new Ext.data.ArrayStore({
+    fields: ['value', 'name'],
+    data: DepositStatusArr
+});
+
+Ext.define('comboxDepositStatus', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxDepositStatus',
+    fieldLabel: 'Status',
+    displayField: 'name',
+    valueField: 'value',
+    name: 'saving_status',
+    store: StoreDepositStatus
+});
+
+
+var TrxTypeArr = [
+    [1, 'Cash In'],
+    [2, 'Cash Out']
+];
+var StoreTrxType = new Ext.data.ArrayStore({
+    fields: ['value', 'name'],
+    data: TrxTypeArr
+});
+
+Ext.define('comboxTrxType', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxTrxType',
+    fieldLabel: 'Tipe Transaksi',
+    displayField: 'name',
+    valueField: 'value',
+    name: 'trx_type',
+    store: StoreTrxType
+});
+
+
+
+
+

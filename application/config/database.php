@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'senuserpg';
-$db['default']['password'] = 'senus4!';
-$db['default']['database'] = 'redsfin_dev';
+$db['default']['username'] = 'imm';
+$db['default']['password'] = 'imm';
+$db['default']['database'] = 'nusafin2_coop_dev';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

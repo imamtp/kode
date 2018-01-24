@@ -188,3 +188,9 @@
 .return-icon {
     background: url(../icons/fam/arrow_undo.png) no-repeat center center !important;
 }
+.saving-icon {
+    background: url(../icons/fam/book.png) no-repeat center center !important;
+}
+.loan-icon {
+    background: url(../icons/fam/group_go.png) no-repeat center center !important;
+}

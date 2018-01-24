@@ -63,7 +63,7 @@ class MY_Controller extends CI_Controller{
             $this->smarty->assign('companyname',  $company->companyname);
         }
 
-        $this->smarty->assign('appname','RedsFin - Cloud Enterprise Resource Planning');
+        $this->smarty->assign('appname','Koperakyat - Cloud Cooperatives');
         
         if($this->session->userdata('logged')==false && $this->uri->segment(1)!='login')
         {

@@ -28,7 +28,7 @@
     }
     </style>
     
-    <center><img src="{$assets_url}/images/Logo redsfin.png" width="200" class="logo_centered"/></center>
+    <!-- <center><img src="{$assets_url}/images/Logo redsfin.png" width="200" class="logo_centered"/></center> -->
 
     <script type="text/javascript">
     var SITE_URL = '{$site_url}';

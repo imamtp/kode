@@ -225,7 +225,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '232424f3r2332vrv34rv42r32r';
+$config['encryption_key'] = 'nusafin2_coop_web';
 
 /*
 |--------------------------------------------------------------------------
