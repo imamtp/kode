@@ -205,7 +205,6 @@ function customColumnStatus(arrStatus, value) {
     for (var i = 0; i < arrStatus.length; i++) {
         if (arrStatus[i][0] == value) return arrStatus[i][1];
     }
-
     return 'undefined';
 }
 
