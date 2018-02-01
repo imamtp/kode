@@ -2,7 +2,6 @@ var StatusColumnArr = [
     [2, 'Nonaktif'],
     [1, 'Aktif']
 ];
-
 var supplierStore = Ext.create('Ext.data.Store', {
     fields: ['idsupplier', 'namesupplier'],
     proxy: {
@@ -15,7 +14,6 @@ var supplierStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxidsupplier', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxidsupplier',
@@ -27,7 +25,6 @@ Ext.define('comboxidsupplier', {
     triggerAction: 'all',
     store: supplierStore
 });
-
 var brandStore = Ext.create('Ext.data.Store', {
     fields: ['brand_id', 'brand_name'],
     proxy: {
@@ -40,7 +37,6 @@ var brandStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxbrand', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxbrand',
@@ -52,7 +48,6 @@ Ext.define('comboxbrand', {
     triggerAction: 'all',
     store: brandStore
 });
-
 // Ext.define('comboxthickness', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxthickness',
@@ -75,7 +70,6 @@ Ext.define('comboxbrand', {
 //         autoLoad: false
 //     })
 // });
-
 // Ext.define('comboxproductgrade', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxproductgrade',
@@ -99,7 +93,6 @@ Ext.define('comboxbrand', {
 //         autoLoad: false
 //     })
 // });
-
 Ext.define('comboxthickness', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxthickness',
@@ -122,7 +115,6 @@ Ext.define('comboxthickness', {
         autoLoad: false
     })
 });
-
 var ArrSalesStatus = [
     [1, 'Open'],
     [2, 'Canceled'],
@@ -133,8 +125,6 @@ var ArrSalesStatus = [
     [7, 'Delivered'],
     [8, 'Invoiced']
 ];
-
-
 Ext.define('comboxSalesStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxSalesStatus',
@@ -150,14 +140,11 @@ Ext.define('comboxSalesStatus', {
         data: ArrSalesStatus,
     })
 });
-
 var ArrConfirmMoneyStatus = [
     [1, 'Open'],
     [2, 'Confirmed'],
     [3, 'Rejected']
 ];
-
-
 Ext.define('comboxConfirmMoneyStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxConfirmMoneyStatus',
@@ -174,7 +161,6 @@ Ext.define('comboxConfirmMoneyStatus', {
         data: ArrConfirmMoneyStatus,
     })
 });
-
 // var ArrSalesQuotationStatus = [
 //     [1, 'Open'],
 //     [2, 'Ordered'],
@@ -189,8 +175,6 @@ var ArrSalesQuotationStatus = [
     [3, 'Ordered'],
     [4, 'Canceled']
 ];
-
-
 Ext.define('comboxSalesQuotationStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxSalesQuotationStatus',
@@ -206,13 +190,11 @@ Ext.define('comboxSalesQuotationStatus', {
         data: ArrSalesQuotationStatus,
     })
 });
-
 var ArrPurchaseRequestStatus = [
     [1, 'Open'],
     [2, 'Confirmed'],
     [3, 'Canceled']
 ];
-
 Ext.define('comboxPurchaseReqStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxPurchaseReqStatus',
@@ -228,7 +210,6 @@ Ext.define('comboxPurchaseReqStatus', {
         data: ArrPurchaseRequestStatus,
     })
 });
-
 var ArrReturnSalesStatus = [
     [1, 'Open'],
     [2, 'Canceled'],
@@ -252,7 +233,6 @@ Ext.define('comboxReturnSalesStatus', {
         data: ArrReturnSalesStatus,
     })
 });
-
 var ArrPOReturnStatus = [
     [1, 'Open'],
     [2, 'Canceled'],
@@ -276,7 +256,6 @@ Ext.define('comboxPOReturnStatus', {
         data: ArrPOReturnStatus,
     })
 });
-
 var arrInventoryType = [
     ['1', 'Finished Goods'],
     ['2', 'Raw Material'],
@@ -284,7 +263,6 @@ var arrInventoryType = [
     ['4', 'Package Goods'],
     ['5', 'Reject'],
 ];
-
 Ext.define('comboxInventoryType', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxInventoryType',
@@ -300,14 +278,12 @@ Ext.define('comboxInventoryType', {
         data: arrInventoryType
     })
 });
-
 var arrInventoryRealCount = [
     [1, 'Open'],
     [2, 'Confirmed'],
     [3, 'Closed'],
     [4, 'Canceled']
 ];
-
 Ext.define('comboInventoryRealCountStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboInventoryRealCountStatus',
@@ -323,12 +299,10 @@ Ext.define('comboInventoryRealCountStatus', {
         data: arrInventoryRealCount
     })
 });
-
 var arrInventoryRealCountType = [
     [1, 'Expense'],
     [2, 'Sales']
 ];
-
 Ext.define('comboInventoryRealCountType', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboInventoryRealCountType',
@@ -344,7 +318,6 @@ Ext.define('comboInventoryRealCountType', {
         data: arrInventoryRealCountType
     })
 });
-
 var arrWorkOrderStatus = [
     [1, 'Open'],
     [2, 'Confirmed'],
@@ -353,7 +326,6 @@ var arrWorkOrderStatus = [
     [5, 'Ready To Deliver'],
     [6, 'Canceled']
 ];
-
 Ext.define('comboxWorkOrderStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxWorkOrderStatus',
@@ -369,7 +341,6 @@ Ext.define('comboxWorkOrderStatus', {
         data: arrWorkOrderStatus
     })
 });
-
 var ArrDeliveryOrder = [
     [1, 'Open'],
     [2, 'Confirmed'],
@@ -378,8 +349,6 @@ var ArrDeliveryOrder = [
     [5, 'Canceled'],
     [6, 'Closed']
 ];
-
-
 Ext.define('comboxDeliveryOrderStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxDeliveryOrderStatus',
@@ -395,8 +364,6 @@ Ext.define('comboxDeliveryOrderStatus', {
         data: ArrDeliveryOrder
     })
 });
-
-
 var ArrInvoiceStatus = [
     [1, 'Unpaid'],
     [2, 'Paid'],
@@ -404,7 +371,6 @@ var ArrInvoiceStatus = [
     [4, 'Partially Paid'],
     [5, 'Canceled']
 ];
-
 Ext.define('comboxInvoiceStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxInvoiceStatus',
@@ -420,7 +386,6 @@ Ext.define('comboxInvoiceStatus', {
         data: ArrInvoiceStatus
     })
 });
-
 Ext.define('comboxproductgrade', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxproductgrade',
@@ -440,8 +405,6 @@ Ext.define('comboxproductgrade', {
         ],
     })
 });
-
-
 Ext.define('comboxdatalocation', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxdatalocation',
@@ -464,8 +427,6 @@ Ext.define('comboxdatalocation', {
         autoLoad: false
     })
 });
-
-
 var InventoryTransferStatusarr = [
     ['1', 'Pending'],
     ['2', 'Rejected'],
@@ -477,7 +438,6 @@ var storeInventoryTransferStatus = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: InventoryTransferStatusarr
 });
-
 Ext.define('comboxInventoryTransferStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxInventoryTransferStatus',
@@ -488,7 +448,6 @@ Ext.define('comboxInventoryTransferStatus', {
     store: storeInventoryTransferStatus,
     name: 'status'
 });
-
 var InventoryAdjustTypeArr = [
     ['1', 'Correction']
 ];
@@ -496,7 +455,6 @@ var storeInventoryAdjustType = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: InventoryAdjustTypeArr
 });
-
 Ext.define('comboxInventoryAdjustType', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxInventoryAdjustType',
@@ -507,7 +465,6 @@ Ext.define('comboxInventoryAdjustType', {
     store: storeInventoryAdjustType,
     name: 'adjustment_type'
 });
-
 var requisitionstatusarr = [
     ['1', 'Draft'],
     ['2', 'Open'],
@@ -521,7 +478,6 @@ var storeRequisitionStatus = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: requisitionstatusarr
 });
-
 Ext.define('comboxrequisitionstatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxrequisitionstatus',
@@ -531,14 +487,10 @@ Ext.define('comboxrequisitionstatus', {
     store: storeRequisitionStatus,
     name: 'status'
 });
-
-
-
 var Adjustmentarr = [
     [1, 'Open'],
     [2, 'Confirm']
 ];
-
 Ext.define('comboInventoryAdjustmentStatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboInventoryAdjustmentStatus',
@@ -551,7 +503,6 @@ Ext.define('comboInventoryAdjustmentStatus', {
         data: Adjustmentarr
     }),
 });
-
 var paymenttermarr = [
     ['1', 'Cash in Advance'],
     ['2', 'Cash in Delivery'],
@@ -563,7 +514,6 @@ var storePaymentTerm = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: paymenttermarr
 });
-
 Ext.define('comboxpaymentterm', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpaymentterm',
@@ -573,7 +523,6 @@ Ext.define('comboxpaymentterm', {
     valueField: 'value',
     store: storePaymentTerm,
 });
-
 var projectstatusarr = [
     ['1', 'Open'],
     ['2', 'Pending'],
@@ -587,7 +536,6 @@ var storeProjectStatus = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: projectstatusarr
 });
-
 Ext.define('comboxprojectstatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxprojectstatus',
@@ -597,8 +545,6 @@ Ext.define('comboxprojectstatus', {
     store: storeProjectStatus,
     name: 'status'
 });
-
-
 var companytypearr = [
     ['1', 'Head Office'],
     ['1', 'Branch']
@@ -607,7 +553,6 @@ var storeCompanyType = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: companytypearr
 });
-
 Ext.define('comboxcompanytype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxcompanytype',
@@ -617,14 +562,11 @@ Ext.define('comboxcompanytype', {
     store: storeCompanyType,
     name: 'type'
 });
-
 // var switcharr = [['0', 'False'], ['1', 'True']];
 // var storeSwitch = new Ext.data.ArrayStore({
 //     fields: ['value', 'text'],
 //     data: switcharr
 // });
-
-
 var modelreportsalesorderdetailarr = [
     ['all', 'Tampilkan Semua Data'],
     ['delivered', 'Tampilkan Data Terkirim'],
@@ -634,7 +576,6 @@ var storeModelReportSalesOrderDetail = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: modelreportsalesorderdetailarr
 });
-
 Ext.define('comboxmodelreportsalesorderdetail', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmodelreportsalesorderdetail',
@@ -644,8 +585,6 @@ Ext.define('comboxmodelreportsalesorderdetail', {
     name: 'modelreportsalesorderdetailarr',
     store: storeModelReportSalesOrderDetail
 });
-
-
 var modelreportsalesbycustomerarr = [
     ['all', 'Tampilkan Semua Data'],
     ['detail', 'Detail']
@@ -654,7 +593,6 @@ var storeModelReportSalesByCustomer = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: modelreportsalesbycustomerarr
 });
-
 Ext.define('comboxmodelreportsalesbycustomer', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmodelreportsalesbycustomer',
@@ -664,7 +602,6 @@ Ext.define('comboxmodelreportsalesbycustomer', {
     name: 'modelreportsalesbycustomerarr',
     store: storeModelReportSalesByCustomer
 });
-
 var modelreportsalesbysalesmanarr = [
     ['all', 'Tampilkan Semua Data'],
     ['detail', 'Detail']
@@ -673,7 +610,6 @@ var storeModelReportSalesBySalesman = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: modelreportsalesbysalesmanarr
 });
-
 Ext.define('comboxmodelreportsalesbysalesman', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmodelreportsalesbysalesman',
@@ -683,7 +619,6 @@ Ext.define('comboxmodelreportsalesbysalesman', {
     name: 'modelreportsalesbysalesmanarr',
     store: storeModelReportSalesBySalesman
 });
-
 var modelreportsalesreturndetailarr = [
     ['all', 'Tampilkan Semua Data'],
     ['detail', 'Detail']
@@ -692,7 +627,6 @@ var storeModelReportSalesReturnDetail = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: modelreportsalesreturndetailarr
 });
-
 Ext.define('comboxmodelreportsalesreturndetail', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmodelreportsalesreturndetail',
@@ -702,7 +636,6 @@ Ext.define('comboxmodelreportsalesreturndetail', {
     name: 'modelreportsalesreturndetailarr',
     store: storeModelReportSalesReturnDetail
 });
-
 var modelreportsalesbookarr = [
     ['all', 'Tampilkan Semua Data'],
     ['detail', 'Detail']
@@ -711,7 +644,6 @@ var storeModelReportSalesBook = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: modelreportsalesbookarr
 });
-
 Ext.define('comboxmodelreportsalesbook', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmodelreportsalesbook',
@@ -721,7 +653,6 @@ Ext.define('comboxmodelreportsalesbook', {
     name: 'modelreportsalesbookarr',
     store: storeModelReportSalesBook
 });
-
 var modelreportpurchaseorderoutstandingdetailarr = [
     ['all', 'Tampilkan Semua Data'],
     ['detail', 'Detail']
@@ -730,7 +661,6 @@ var storeModelReportPurchaseOrderOutstandingDetail = new Ext.data.ArrayStore({
     fields: ['value', 'text'],
     data: modelreportpurchaseorderoutstandingdetailarr
 });
-
 Ext.define('comboxmodelreportpurchaseorderoutstandingdetail', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmodelreportpurchaseorderoutstandingdetail',
@@ -740,7 +670,6 @@ Ext.define('comboxmodelreportpurchaseorderoutstandingdetail', {
     name: 'modelreportpurchaseorderoutstandingdetailarr',
     store: storeModelReportPurchaseOrderOutstandingDetail
 });
-
 var bulanarr = [
     ['01', 'Januari'],
     ['02', 'Februari'],
@@ -759,7 +688,6 @@ var storeBulan = new Ext.data.ArrayStore({
     fields: ['nobulan', 'namabulan'],
     data: bulanarr
 });
-
 Ext.define('comboxbulan', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxbulan',
@@ -769,7 +697,6 @@ Ext.define('comboxbulan', {
     name: 'namabulan',
     store: storeBulan
 });
-
 Ext.define('comboxbulan2', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxbulan2',
@@ -779,7 +706,6 @@ Ext.define('comboxbulan2', {
     name: 'namabulan',
     store: storeBulan
 });
-
 Ext.define('comboxbussinestype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxbussinestype',
@@ -800,7 +726,6 @@ Ext.define('comboxbussinestype', {
         autoLoad: false
     })
 });
-
 // Ext.define('comboxproducttype', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxproducttype',
@@ -821,7 +746,6 @@ Ext.define('comboxbussinestype', {
 //         autoLoad: false
 //     })
 // });
-
 // Ext.define('comboxmeasurement', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxmeasurement',
@@ -849,7 +773,6 @@ Ext.define('comboxbussinestype', {
 //         autoLoad: false
 //     })
 // });
-
 var productMeasurementStore = Ext.create('Ext.data.Store', {
     fields: ['measurement_id', 'short_desc', 'long_desc'],
     proxy: {
@@ -862,7 +785,6 @@ var productMeasurementStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxmeasurement', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxmeasurement',
@@ -874,7 +796,6 @@ Ext.define('comboxmeasurement', {
     triggerAction: 'all',
     store: productMeasurementStore
 });
-
 Ext.define('comboxbussinestype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxbussinestype',
@@ -895,8 +816,6 @@ Ext.define('comboxbussinestype', {
         autoLoad: false
     })
 });
-
-
 Ext.define('comboxAccountType', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxAccountType',
@@ -919,7 +838,6 @@ Ext.define('comboxAccountType', {
         autoLoad: true
     })
 })
-
 var taxStore = Ext.create('Ext.data.Store', {
     fields: ['idtax', 'nametax', 'rate'],
     proxy: {
@@ -932,7 +850,6 @@ var taxStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxtaxtype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxtaxtype',
@@ -949,7 +866,6 @@ Ext.define('comboxtaxtype', {
     },
     store: taxStore
 });
-
 var inventoryCategoryStore = Ext.create('Ext.data.Store', {
     fields: ['idinventorycat', 'namecat'],
     proxy: {
@@ -962,7 +878,6 @@ var inventoryCategoryStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 })
-
 Ext.define('comboxinventorycat', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxinventorycat',
@@ -974,7 +889,6 @@ Ext.define('comboxinventorycat', {
     triggerAction: 'all',
     store: inventoryCategoryStore
 });
-
 Ext.define('comboxtax', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxtax',
@@ -998,7 +912,6 @@ Ext.define('comboxtax', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxidtax', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxidtax',
@@ -1021,7 +934,6 @@ Ext.define('comboxidtax', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxclassificationcf', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxclassificationcf',
@@ -1044,7 +956,6 @@ Ext.define('comboxclassificationcf', {
         autoLoad: false
     })
 });
-
 // var storeUnit = Ext.create('Ext.data.Store', {
 //         fields: ['idunit', 'namaunit'],
 //         proxy: {
@@ -1058,7 +969,6 @@ Ext.define('comboxclassificationcf', {
 //         queryMode:'remote',
 //         autoLoad: false
 //     });
-
 // Ext.define('comboxunit', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxunit',
@@ -1081,7 +991,6 @@ Ext.define('comboxclassificationcf', {
 //         queryMode:'remote',
 //         autoLoad: false
 // });
-
 var storeCustomer = Ext.create('Ext.data.Store', {
     fields: ['idcustomer', 'namecustomer'],
     proxy: {
@@ -1095,7 +1004,6 @@ var storeCustomer = Ext.create('Ext.data.Store', {
     queryMode: 'remote',
     autoLoad: false
 });
-
 Ext.define('comboxCustomer', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxCustomer',
@@ -1109,7 +1017,6 @@ Ext.define('comboxCustomer', {
     queryParam: 'searchStr',
     store: storeCustomer
 });
-
 // var storeCustomer = Ext.create('Ext.data.Store', {
 //         fields: ['idcustomer', 'namecustomer'],
 //         proxy: {
@@ -1123,8 +1030,6 @@ Ext.define('comboxCustomer', {
 //         queryMode:'remote',
 //         autoLoad: false
 //     });
-
-
 // Ext.define('comboxcustomer', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxcustomer',
@@ -1136,7 +1041,6 @@ Ext.define('comboxCustomer', {
 //     triggerAction: 'all',
 //     store: storeCustomer
 // });
-
 var comboxemployeeStore = Ext.create('Ext.data.Store', {
     fields: ['idemployeetype', 'nametype'],
     proxy: {
@@ -1149,7 +1053,6 @@ var comboxemployeeStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxemployee', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxemployee',
@@ -1161,7 +1064,6 @@ Ext.define('comboxemployee', {
     triggerAction: 'all',
     store: comboxemployeeStore
 });
-
 var comboxWarehouseStore = Ext.create('Ext.data.Store', {
     fields: ['warehouse_id', 'warehouse_desc', 'warehouse_code'],
     proxy: {
@@ -1174,7 +1076,6 @@ var comboxWarehouseStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxWarehouse', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxWarehouse',
@@ -1186,8 +1087,6 @@ Ext.define('comboxWarehouse', {
     triggerAction: 'all',
     store: comboxWarehouseStore
 });
-
-
 Ext.define('comboxscheduletype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxscheduletype',
@@ -1210,7 +1109,6 @@ Ext.define('comboxscheduletype', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxsys_user', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxsys_user',
@@ -1233,7 +1131,6 @@ Ext.define('comboxsys_user', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxfrequency', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxfrequency',
@@ -1256,8 +1153,6 @@ Ext.define('comboxfrequency', {
         autoLoad: false
     })
 });
-
-
 Ext.define('comboxshipping', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxshipping',
@@ -1280,7 +1175,6 @@ Ext.define('comboxshipping', {
         autoLoad: false
     })
 });
-
 var StorePayment = Ext.create('Ext.data.Store', {
     fields: ['idpayment', 'namepayment'],
     proxy: {
@@ -1293,7 +1187,6 @@ var StorePayment = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxpayment', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpayment',
@@ -1305,16 +1198,10 @@ Ext.define('comboxpayment', {
     triggerAction: 'all',
     store: StorePayment
 });
-
 var journalSearchStore = Ext.create('Ext.data.Store', {
     fields: ['nosearchJ', 'nmsearchJ'],
-    data: [
-        { "nosearchJ": 1, "nmsearchJ": "No Ref" },
-        { "nosearchJ": 2, "nmsearchJ": "Memo" },
-        { "nosearchJ": 3, "nmsearchJ": "Nama Akun" }
-    ]
+    data: [{ "nosearchJ": 1, "nmsearchJ": "No Ref" }, { "nosearchJ": 2, "nmsearchJ": "Memo" }, { "nosearchJ": 3, "nmsearchJ": "Nama Akun" }]
 });
-
 Ext.define('comboxSearchJ', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxSearchJ',
@@ -1329,7 +1216,6 @@ Ext.define('comboxSearchJ', {
     store: journalSearchStore,
     value: 1
 });
-
 Ext.define('comboxjournaltype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxjournaltype',
@@ -1352,7 +1238,6 @@ Ext.define('comboxjournaltype', {
         autoLoad: false
     })
 });
-
 var storeUnit = Ext.create('Ext.data.Store', {
     fields: ['idunit', 'namaunit'],
     proxy: {
@@ -1365,7 +1250,6 @@ var storeUnit = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 // Ext.define('comboxunit', {
 //     extend: 'Ext.form.ComboBox',
 //     alias: 'widget.comboxunit',
@@ -1378,7 +1262,6 @@ var storeUnit = Ext.create('Ext.data.Store', {
 //     triggerAction: 'all',
 //     store: storeUnit
 // });
-
 Ext.define('comboxcurrency', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxcurrency',
@@ -1407,9 +1290,6 @@ Ext.define('comboxcurrency', {
         autoLoad: false
     })
 });
-
-
-
 var headerAkunStore = Ext.create('Ext.data.Store', {
     fields: ['idpos', 'namepos'],
     proxy: {
@@ -1422,7 +1302,6 @@ var headerAkunStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: true
 });
-
 Ext.define('comboxheaderAkun', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxheaderAkun',
@@ -1436,7 +1315,6 @@ Ext.define('comboxheaderAkun', {
     store: headerAkunStore
         //    autoLoad: false
 });
-
 var sys_groupStore = Ext.create('Ext.data.Store', {
     fields: ['group_id', 'group_name'],
     proxy: {
@@ -1449,7 +1327,6 @@ var sys_groupStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxsys_group', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxsys_group',
@@ -1462,7 +1339,6 @@ Ext.define('comboxsys_group', {
     valueField: 'group_name',
     store: sys_groupStore
 });
-
 var storetunjangan = Ext.create('Ext.data.Store', {
     fields: ['idtunjtype', 'nametunj'],
     proxy: {
@@ -1475,7 +1351,6 @@ var storetunjangan = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxtunjangantype', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxtunjangantype',
@@ -1488,7 +1363,6 @@ Ext.define('comboxtunjangantype', {
     valueField: 'nametunj',
     store: storetunjangan
 });
-
 var siklusStore = Ext.create('Ext.data.Store', {
     fields: ['idsiklus', 'namasiklus'],
     proxy: {
@@ -1501,7 +1375,6 @@ var siklusStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxsiklus', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxsiklus',
@@ -1514,7 +1387,6 @@ Ext.define('comboxsiklus', {
     valueField: 'namasiklus',
     store: siklusStore
 });
-
 var potongantypeStore = Ext.create('Ext.data.Store', {
     fields: ['idpotongantype', 'namepotongan'],
     proxy: {
@@ -1527,7 +1399,6 @@ var potongantypeStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxpotongantype', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxpotongantype',
@@ -1540,7 +1411,6 @@ Ext.define('comboxpotongantype', {
     valueField: 'namepotongan',
     store: potongantypeStore
 });
-
 Ext.define('comboxamounttype', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxamounttype',
@@ -1564,7 +1434,6 @@ Ext.define('comboxamounttype', {
         autoLoad: false
     })
 });
-
 var payrolltypeStore = Ext.create('Ext.data.Store', {
     fields: ['payrolltypeid', 'payname'],
     proxy: {
@@ -1577,7 +1446,6 @@ var payrolltypeStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxpayrolltype', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxpayrolltype',
@@ -1590,7 +1458,6 @@ Ext.define('comboxpayrolltype', {
     valueField: 'payname',
     store: payrolltypeStore
 });
-
 var tambahangajitypeStore = Ext.create('Ext.data.Store', {
     fields: ['idtambahangajitype', 'tambahantype'],
     proxy: {
@@ -1603,7 +1470,6 @@ var tambahangajitypeStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxtambahangajitype', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxtambahangajitype',
@@ -1616,7 +1482,6 @@ Ext.define('comboxtambahangajitype', {
     valueField: 'tambahantype',
     store: tambahangajitypeStore
 });
-
 var jenisptkpStore = Ext.create('Ext.data.Store', {
     fields: ['idjenisptkp', 'namaptkp', 'deskripsi'],
     proxy: {
@@ -1646,8 +1511,6 @@ Ext.define('comboxjenisptkp', {
         }
     }
 });
-
-
 //di remarks. karna address harus diload pada saat dibutuhkan saja
 // var tmpStoreShippingAddress = Ext.create('Ext.data.Store', {
 //     fields: ['alamat', 'alamat2', 'alamat3'],
@@ -1661,18 +1524,15 @@ Ext.define('comboxjenisptkp', {
 //     },
 //     autoLoad: true
 // });
-
 var storeShippingAddress = new Ext.data.ArrayStore({
     fields: ['address'],
     // data: requisitionstatusarr
 });
-
 Ext.onReady(function() {
     // var data = tmpStoreShippingAddress.data.items[0].data;
     // var addressarr = [[data.alamat], [data.alamat2], [data.alamat3]];
     // storeShippingAddress.loadData(addressarr);
 });
-
 Ext.define('comboxshippingaddress', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxshippingaddress',
@@ -1690,7 +1550,6 @@ Ext.define('comboxshippingaddress', {
     //     }
     // }
 });
-
 var pelangganTypeStore = Ext.create('Ext.data.Store', {
     fields: ['idpelanggantype', 'pelanggantype'],
     proxy: {
@@ -1715,7 +1574,6 @@ Ext.define('comboxpelanggantype', {
     valueField: 'pelanggantype',
     store: pelangganTypeStore
 });
-
 var tahunPayrollStore = Ext.create('Ext.data.Store', {
     fields: ['year'],
     proxy: {
@@ -1728,7 +1586,6 @@ var tahunPayrollStore = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
 Ext.define('comboxtahunPayroll', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxtahunPayroll',
@@ -1741,8 +1598,6 @@ Ext.define('comboxtahunPayroll', {
     valueField: 'year',
     store: tahunPayrollStore
 });
-
-
 // var UnitItemStore = Ext.create('Ext.data.Store', {
 //     fields: ['unit_item_id', 'unit_name'],
 //     proxy: {
@@ -1768,8 +1623,6 @@ Ext.define('comboxtahunPayroll', {
 //     valueField: 'unit_item_id',
 //     store: UnitItemStore
 // });
-
-
 var MachineTypeStore = Ext.create('Ext.data.Store', {
     fields: ['machine_type_id', 'machine_type_name'],
     proxy: {
@@ -1794,9 +1647,7 @@ Ext.define('comboxMachineType', {
     valueField: 'machine_type_id',
     store: MachineTypeStore
 });
-
 //-----------------------------------------//
-
 Ext.define('comboxswitch', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxswitch',
@@ -1809,7 +1660,6 @@ Ext.define('comboxswitch', {
         data: togglearr
     }),
 });
-
 Ext.define('comboxunit', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxunit',
@@ -1835,7 +1685,6 @@ Ext.define('comboxunit', {
         autoLoad: true
     }),
 });
-
 var ArrPurchaseOrderStatus = [
     [1, 'Open'],
     [2, 'Confirmed'],
@@ -1844,9 +1693,7 @@ var ArrPurchaseOrderStatus = [
     [5, 'Partial Received'],
     [6, 'Canceled'],
     [7, 'Closed'],
-
 ];
-
 Ext.define('comboxpurchasestatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpurchasestatus',
@@ -1862,14 +1709,12 @@ Ext.define('comboxpurchasestatus', {
         data: ArrPurchaseOrderStatus
     })
 });
-
 var ArrGoodsReceiptStatus = [
     [1, 'Open'],
     [2, 'Canceled'],
     [3, 'Confirmed'],
     [4, 'Invoiced'],
 ];
-
 Ext.define('comboxgoodsreceiptstatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxgoodsreceiptstatus',
@@ -1885,7 +1730,6 @@ Ext.define('comboxgoodsreceiptstatus', {
         data: ArrGoodsReceiptStatus
     })
 });
-
 Ext.define('comboxpurchasetype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxpurchasetype',
@@ -1910,7 +1754,6 @@ Ext.define('comboxpurchasetype', {
         autoLoad: false
     }),
 });
-
 Ext.define('comboxcurrency', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxcurrency',
@@ -1940,7 +1783,6 @@ Ext.define('comboxcurrency', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxshipping', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxshipping',
@@ -1964,7 +1806,6 @@ Ext.define('comboxshipping', {
         autoLoad: false
     })
 });
-
 //shipping address//
 // var tmpStoreShipAddress = Ext.create('Ext.data.Store', {
 //     fields: ['alamat', 'alamat2', 'alamat3'],
@@ -1978,11 +1819,9 @@ Ext.define('comboxshipping', {
 //     },
 //     autoLoad: true
 // });
-
 var storeShipAddress = new Ext.data.ArrayStore({
     fields: ['address'],
 });
-
 Ext.onReady(function() {
     // console.log(tmpStoreShipAddress)
     // var data = tmpStoreShipAddress.data.items[0].data;
@@ -1993,7 +1832,6 @@ Ext.onReady(function() {
     // ];
     // storeShipAddress.loadData(addressarr);
 });
-
 Ext.define('comboxshipaddress', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.comboxshipaddress',
@@ -2007,7 +1845,6 @@ Ext.define('comboxshipaddress', {
     valueField: 'address',
     store: storeShipAddress,
 });
-
 //shipping address//
 //
 Ext.define('comboxsuppliertype', {
@@ -2035,7 +1872,6 @@ Ext.define('comboxsuppliertype', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxsupplier', {
     // id: 'comboxsupplier',
     extend: 'Ext.form.field.ComboBox',
@@ -2061,7 +1897,6 @@ Ext.define('comboxsupplier', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxprojectstatus', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxprojectstatus',
@@ -2074,7 +1909,6 @@ Ext.define('comboxprojectstatus', {
     }),
     name: 'projectstatus'
 });
-
 Ext.define('comboxcustomertype', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxcustomertype',
@@ -2097,7 +1931,6 @@ Ext.define('comboxcustomertype', {
         autoLoad: false
     })
 });
-
 Ext.define('comboxproject', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxproject',
@@ -2121,15 +1954,12 @@ Ext.define('comboxproject', {
         autoLoad: false
     })
 });
-
 var ArrARAgingOptions = [
     [1, '0 - 30 hari'],
     [2, '30 - 60 hari'],
     [3, '60 - 90 hari'],
     [4, '> 90 hari'],
 ];
-
-
 Ext.define('comboxARAgingOptions', {
     extend: 'Ext.form.ComboBox',
     alias: 'widget.comboxARAgingOptions',
@@ -2145,7 +1975,6 @@ Ext.define('comboxARAgingOptions', {
         data: ArrARAgingOptions,
     })
 });
-
 var anggotaTypeStore = Ext.create('Ext.data.Store', {
     fields: ['id_member_type', 'member_type_name'],
     proxy: {
@@ -2170,7 +1999,6 @@ Ext.define('comboxanggotatype', {
     valueField: 'id_member_type',
     store: anggotaTypeStore
 });
-
 var StatusMemberArr = [
     [1, 'Pending'],
     [2, 'Active'],
@@ -2180,7 +2008,6 @@ var storeStatusMember = new Ext.data.ArrayStore({
     fields: ['status', 'member_status_name'],
     data: StatusMemberArr
 });
-
 Ext.define('comboxStatusMember', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2191,7 +2018,6 @@ Ext.define('comboxStatusMember', {
     name: 'status',
     store: storeStatusMember
 });
-
 var StatusKawinArr = [
     [1, 'Kawin'],
     [2, 'Belum Kawin'],
@@ -2201,7 +2027,6 @@ var storeStatusKawin = new Ext.data.ArrayStore({
     fields: ['marital_status', 'marital_status_name'],
     data: StatusKawinArr
 });
-
 Ext.define('comboxStatusKawin', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2212,8 +2037,6 @@ Ext.define('comboxStatusKawin', {
     name: 'marital_status',
     store: storeStatusKawin
 });
-
-
 var SavingCategoryArr = [
     [1, 'Simpanan Modal'],
     [2, 'Simpanan Berjangka'],
@@ -2223,7 +2046,6 @@ var StoreSavingCategory = new Ext.data.ArrayStore({
     fields: ['value', 'name'],
     data: SavingCategoryArr
 });
-
 Ext.define('comboxSavingCategory', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2234,7 +2056,6 @@ Ext.define('comboxSavingCategory', {
     name: 'saving_category',
     store: StoreSavingCategory
 });
-
 var SavingTypeArr = [
     [1, 'Pokok'],
     [2, 'Wajib'],
@@ -2245,7 +2066,6 @@ var StoreSavingType = new Ext.data.ArrayStore({
     fields: ['value', 'name'],
     data: SavingTypeArr
 });
-
 Ext.define('comboxSavingType', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2256,7 +2076,6 @@ Ext.define('comboxSavingType', {
     name: 'saving_type',
     store: StoreSavingType
 });
-
 var SavingStatusArr = [
     [1, 'Aktif'],
     [2, 'Nonaktif'],
@@ -2266,7 +2085,6 @@ var StoreSavingStatus = new Ext.data.ArrayStore({
     fields: ['value', 'name'],
     data: SavingStatusArr
 });
-
 Ext.define('comboxSavingStatus', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2277,7 +2095,6 @@ Ext.define('comboxSavingStatus', {
     name: 'saving_status',
     store: StoreSavingStatus
 });
-
 var DepositStatusArr = [
     [1, 'Open'],
     [2, 'Pending'],
@@ -2289,7 +2106,6 @@ var StoreDepositStatus = new Ext.data.ArrayStore({
     fields: ['value', 'name'],
     data: DepositStatusArr
 });
-
 Ext.define('comboxDepositStatus', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2300,8 +2116,6 @@ Ext.define('comboxDepositStatus', {
     name: 'saving_status',
     store: StoreDepositStatus
 });
-
-
 var TrxTypeArr = [
     [1, 'Cash In'],
     [2, 'Cash Out']
@@ -2310,7 +2124,6 @@ var StoreTrxType = new Ext.data.ArrayStore({
     fields: ['value', 'name'],
     data: TrxTypeArr
 });
-
 Ext.define('comboxTrxType', {
     extend: 'Ext.form.ComboBox',
     editable: false,
@@ -2321,8 +2134,24 @@ Ext.define('comboxTrxType', {
     name: 'trx_type',
     store: StoreTrxType
 });
-
-
-
-
-
+var StatusSavingTransactionArr = [
+    [1, 'Open'],
+    [2, 'Completed'],
+    [3, 'Canceled'],
+    [4, 'Rejected'],
+    [5, 'Pending']
+];
+var StoreStatusSaving = new Ext.data.ArrayStore({
+    fields: ['value', 'name'],
+    data: StatusSavingTransactionArr
+});
+Ext.define('comboxStatusSaving', {
+    extend: 'Ext.form.ComboBox',
+    editable: false,
+    alias: 'widget.comboxStatusSaving',
+    fieldLabel: 'Status',
+    displayField: 'name',
+    valueField: 'value',
+    name: 'status',
+    store: StoreStatusSaving
+});

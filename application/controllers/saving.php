@@ -39,11 +39,15 @@ class saving extends MY_Controller {
         	$data['date_activated'] = date('Y-m-d H:m:s');
 
         	//buat no va
-        	$no_rek = $this->create_va(array(
-        			'id_member_saving'=>$data['id_member_saving'],
-        			'id_member'=>$data['id_member']
-        		));
-        	$data['no_account'] = $no_rek;
+        	$va = $this->create_fixed_va(array(
+        			'id_member_saving'=>$data['id_member_saving']
+				));
+
+			$data['bank_code'] = $va['bank_code'];
+			$data['description'] = $va['name'];
+			$data['expiration_date'] = $va['expiration_date'];
+			$data['id_va'] = $va['id'];
+			$data['no_account'] = $va['account_number'];
         }
 
         if($statusform=='input'){
@@ -93,6 +97,38 @@ class saving extends MY_Controller {
 
     function tes_va(){
     	// $data
+	}
+	
+    function create_fixed_va($data=null){
+        require DOCUMENTROOT.'/vendor/autoload.php'; 
+        
+         $id_invoice =  $this->m_data->getSeqVal('seq_invoice');
+
+         $options['secret_api_key'] = SECRET_API_KEY; 
+
+         $xenditPHPClient = new XenditClient\XenditPHPClient($options); 
+
+         $external_id = $data['id_member_saving'];
+         $bank_code = 'BRI';
+         $name = 'Simpanan Wajib Budi Susanto';
+        //  $virtual_account_number = 1689085719191442;
+
+         $response = $xenditPHPClient->createCallbackVirtualAccount($external_id, $bank_code, $name, $virtual_account_number = null);
+		/*
+			Array ( 
+				[owner_id] => 59ed590fbb5fc1374146d534 
+				[external_id] => 160989 [
+				bank_code] => BRI 
+				[merchant_code] => 26215 
+				[name] => Simpanan Wajib Budi Susanto
+				[account_number] => 262159999550086 
+				[is_single_use] => 
+				[status] => ACTIVE
+				[expiration_date] => 2049-01-31T17:00:00.000Z 
+				[is_closed] =>
+				[id] => 5a72cb90ff2b85a2210083ea )
+		*/
+         return $response;
     }
 
     function create_va($data=null){
@@ -107,8 +143,8 @@ class saving extends MY_Controller {
 		 $id_member_saving = $data['id_member_saving']; //id_member_saving
 		 $external_id = $id_member_saving;
 		 $payer_email = 'senusaid@gmail.com';
-		 $description = 'Top Up Member. No Member:'.$data['id_member'];
-		 $amount = 5000;
+		 $description = 'Top Up ';
+		 $amount = 26000;
 		 $options['should_send_email'] = 'false';
 
 		 $response = $xenditPHPClient->createInvoice((string) $external_id, $amount, $payer_email, $description, $options);
@@ -165,6 +201,19 @@ class saving extends MY_Controller {
 		 }
 
 		 return $norek;
-    }
+	}
+	
+	function get_total_saving_member(){
+		$q = $this->db->query("select sum(balance) as total_balance
+								from member_saving
+								where id_member = ".$this->input->get('id_member')." ")->row();
+		if($q->total_balance==null){
+			$total = 0;
+		} else {
+			$total = $q->total_balance;
+		}
+		$json = array('success' => true, 'total' => number_format($total));
+		echo json_encode($json);
+	}
 
 }

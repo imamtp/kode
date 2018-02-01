@@ -197,6 +197,7 @@ Ext.define(dir_sys + 'saving.OpeningAccountGrid', {
                         });
 
                         Ext.getCmp('BtnWindowFormOpeningAccountSimpan').enable();
+                        Ext.getCmp('statusWindowFormOpeningAccount').enable();
                     }
                 }
             }, {

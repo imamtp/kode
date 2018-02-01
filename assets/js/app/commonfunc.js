@@ -202,11 +202,11 @@ function romanize(num) {
 }
 
 function customColumnStatus(arrStatus, value) {
-    var idx = (value * 1) - 1;
-    var str = String(arrStatus[idx]);
-    var status = str.split(',');
-    // console.info(status);
-    return status[1]; //status name
+    for (var i = 0; i < arrStatus.length; i++) {
+        if (arrStatus[i][0] == value) return arrStatus[i][1];
+    }
+
+    return 'undefined';
 }
 
 function getTaxRate(idtax) {

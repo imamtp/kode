@@ -11,12 +11,12 @@ class m_savingtransaction extends CI_Model {
     }
 
     function searchField() {
-        $field = "remarks,member_name,no_member";
+        $field = "remarks,member_name,no_member,e.no_account";
         return explode(",", $field);
     }
 
     function selectField() {
-        return "id_saving_history,a.id_saving_type,a.id_member,a.idunit,a.idjournal,a.datein,tellerid,approvedby,amount,fee_adm,a.status,trx_type,id_saving_type_dest,id_member_dest,remarks,trx_time_type,trx_date,b.member_name,no_member,a.userin,c.username,d.saving_name";
+        return "id_saving_history,e.no_account,a.remarks,a.id_member_saving,a.idunit,a.idjournal,a.datein,tellerid,approvedby,a.amount,fee_adm,a.status,trx_type,id_saving_type_dest,id_member_dest,remarks,trx_time_type,trx_date,b.member_name,no_member,a.userin,c.username,d.saving_name";
     }
     
     function fieldCek()
@@ -31,15 +31,22 @@ class m_savingtransaction extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join member b ON a.id_member = b.id_member
-                    join sys_user c ON a.userin = c.user_id
-                    join saving_type d ON a.id_saving_type = d.id_saving_type";
+                    join member_saving e ON a.id_member_saving = e.id_member_saving
+                    join member b ON e.id_member = b.id_member
+                    left join sys_user c ON a.userin = c.user_id
+                    join saving_type d ON e.id_saving_type = d.id_saving_type";
 
         return $query;
     }
 
     function whereQuery() {
-        return " trx_type = 1" ;
+        $wer = null;
+
+        $sd = cleartanggal($this->input->post('startdate'));
+        $nd = cleartanggal($this->input->post('enddate'));
+        if($sd != null && $nd != null)
+            $wer .= " AND a.trx_date BETWEEN '$sd' AND '$nd'";
+        return " a.deleted = 0 $wer " ;
     }
 
     function orderBy() {
